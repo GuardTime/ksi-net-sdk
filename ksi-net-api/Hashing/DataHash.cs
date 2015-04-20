@@ -123,6 +123,7 @@ namespace Guardtime.KSI.Hashing
         /// <returns>hash code of current object</returns>
         public override int GetHashCode()
         {
+            // TODO: Generate correct hashcode
             return base.GetHashCode();
         }
 
