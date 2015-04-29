@@ -123,4 +123,16 @@
   <data name="DataHasher_TestString" xml:space="preserve">
     <value>LongString1ReallyLongString2EvenLongerString3</value>
   </data>
+  <data name="PublicationData_CorrectStructureFile" xml:space="preserve">
+    <value>resources/publication/publicationdata/publicationdata.tlv</value>
+  </data>
+  <data name="PublicationData_MissingTagFile" xml:space="preserve">
+    <value>resources/publication/publicationdata/missingtag.tlv</value>
+  </data>
+  <data name="PublicationData_NonCriticalTagFile" xml:space="preserve">
+    <value>resources/publication/publicationdata/noncriticaltag.tlv</value>
+  </data>
+  <data name="PublicationData_UnknownTagFile" xml:space="preserve">
+    <value>resources/publication/publicationdata/unknowntag.tlv</value>
+  </data>
 </root>

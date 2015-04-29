@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Guardtime.KSI.Test", "ksi-n
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E924C5E6-8740-4AC7-8BEF-46611DF66E7F}"
 	ProjectSection(SolutionItems) = preProject
-		gitignore.txt = gitignore.txt
+		.gitignore = .gitignore
 	EndProjectSection
 EndProject
 Global

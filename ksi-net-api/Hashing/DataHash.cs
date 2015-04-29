@@ -133,7 +133,7 @@ namespace Guardtime.KSI.Hashing
         /// <returns>String representing algorithm name and value</returns>
         public override string ToString()
         {
-            return _algorithm.Name + ":[" + BitConverter.ToString(_valueBytes).Replace("-", string.Empty) + "]";
+            return _algorithm.Name + ":[" + Util.Util.ConvertByteArrayToHex(_valueBytes) + "]";
         }
     }
 }

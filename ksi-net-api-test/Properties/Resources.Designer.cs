@@ -77,5 +77,41 @@ namespace Guardtime.KSI.Properties {
                 return ResourceManager.GetString("DataHasher_TestString", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/publication/publicationdata/publicationdata.tlv.
+        /// </summary>
+        internal static string PublicationData_CorrectStructureFile {
+            get {
+                return ResourceManager.GetString("PublicationData_CorrectStructureFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/publication/publicationdata/missingtag.tlv.
+        /// </summary>
+        internal static string PublicationData_MissingTagFile {
+            get {
+                return ResourceManager.GetString("PublicationData_MissingTagFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/publication/publicationdata/noncriticaltag.tlv.
+        /// </summary>
+        internal static string PublicationData_NonCriticalTagFile {
+            get {
+                return ResourceManager.GetString("PublicationData_NonCriticalTagFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/publication/publicationdata/unknowntag.tlv.
+        /// </summary>
+        internal static string PublicationData_UnknownTagFile {
+            get {
+                return ResourceManager.GetString("PublicationData_UnknownTagFile", resourceCulture);
+            }
+        }
     }
 }

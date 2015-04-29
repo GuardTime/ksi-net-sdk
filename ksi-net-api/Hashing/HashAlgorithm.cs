@@ -14,7 +14,6 @@ namespace Guardtime.KSI.Hashing
         public static readonly HashAlgorithm Sha2224 = new HashAlgorithm("SHA-224", 0x03, 28, AlgorithmStatus.Normal, new string[] { "SHA2-224" });
         public static readonly HashAlgorithm Sha2384 = new HashAlgorithm("SHA-384", 0x04, 48, AlgorithmStatus.Normal, new string[] { "SHA2-384" });
         public static readonly HashAlgorithm Sha2512 = new HashAlgorithm("SHA-512", 0x05, 64, AlgorithmStatus.Normal, new string[] { "SHA2-512" });
-        public static readonly HashAlgorithm Ripemd256 = new HashAlgorithm("RIPEMD256", 0x06, 32, AlgorithmStatus.NotImplemented);
         public static readonly HashAlgorithm Sha3224 = new HashAlgorithm("SHA3-224", 0x07, 28, AlgorithmStatus.NotImplemented);
         public static readonly HashAlgorithm Sha3256 = new HashAlgorithm("SHA3-256", 0x08, 32, AlgorithmStatus.NotImplemented);
         public static readonly HashAlgorithm Sha3384 = new HashAlgorithm("SHA3-384", 0x09, 48, AlgorithmStatus.NotImplemented);
@@ -155,7 +154,7 @@ namespace Guardtime.KSI.Hashing
         private static IEnumerable<HashAlgorithm> Values()
         {
             return new HashAlgorithm[]
-                {Sha1, Sha2256, Ripemd160, Sha2224, Sha2384, Sha2512, Ripemd256, Sha3224, Sha3256, Sha3384, Sha3512, Sm3};
+                {Sha1, Sha2256, Ripemd160, Sha2224, Sha2384, Sha2512, Sha3224, Sha3256, Sha3384, Sha3512, Sm3};
         }
 
         /// <summary>
