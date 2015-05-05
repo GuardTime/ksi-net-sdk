@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Guardtime.KSI.Parser
 {
     [TestClass]
-    public class StringTagTest
+    public class StringTagTests
     {
 
         [TestMethod]
@@ -16,6 +16,8 @@ namespace Guardtime.KSI.Parser
             Assert.IsFalse(tag.Forward, "Tag forward flag should be correct");
             Assert.AreEqual("test message", tag.Value, "Tag value should be decoded correctly");
             Assert.AreEqual("TLV[0x1]:\"test message\"", tag.ToString(), "Tag string representation should be correct");
+
+            Assert.AreEqual(new StringTag(new RawTag(0x1, false, false, new byte[] { 0x74, 0x65, 0x73, 0x74, 0x20, 0x6D, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x0 })), tag, "Tags should be equal");
         }
 
         [TestMethod]

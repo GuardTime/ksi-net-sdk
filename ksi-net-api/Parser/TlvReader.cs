@@ -14,6 +14,7 @@ namespace Guardtime.KSI.Parser
         public const byte ForwardFlag = 0x20;
 
         public const byte TypeMask = 0x1f;
+        public const ushort MaxType = 0x1fff;
 
         public const byte ByteBits = 8;
 
@@ -48,11 +49,11 @@ namespace Guardtime.KSI.Parser
 
                 var type = (uint) (firstByte & TypeMask);
                 ushort length;
-
+                
                 if (tlv16) {
                     var typeLsb = ReadByte();
                     type = (type << ByteBits) | typeLsb;
-                    length = ReadUInt16();
+                    length = (ushort)((ReadByte() << ByteBits) | ReadByte());
                 } else {
                     length = ReadByte();
                 }

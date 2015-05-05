@@ -37,5 +37,15 @@ namespace Guardtime.KSI.Parser
             builder.Append("\"").Append(Value).Append("\"");
             return builder.ToString();
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || obj.GetType() != GetType()) return false;
+            var b = (StringTag)obj;
+            return b.Type == Type &&
+                   b.Forward == Forward &&
+                   b.NonCritical == NonCritical &&
+                   b.Value.Equals(Value);
+        }
     }
 }

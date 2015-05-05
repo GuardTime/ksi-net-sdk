@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using Guardtime.KSI.Hashing;
+﻿using System.IO;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Properties;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -17,7 +15,7 @@ namespace Guardtime.KSI.Publication
             var stream = new FileStream(Resources.PublicationData_CorrectStructureFile, FileMode.Open);
             var reader = new TlvReader(stream);
 
-            var tag = new PublicationData(reader.ReadTag());
+            var tag = new CompositeTag<PublicationData>(reader.ReadTag(), new PublicationData());
 
             Assert.AreEqual((uint)0x10, tag.Type, "Tag type should be correct");
             Assert.IsFalse(tag.NonCritical, "Tag non critical flag should be correct");

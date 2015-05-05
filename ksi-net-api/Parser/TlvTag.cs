@@ -37,7 +37,7 @@ namespace Guardtime.KSI.Parser
         {
             if (value == null)
             {
-                throw new ArgumentNullException("Invalid TLV value");
+                throw new ArgumentNullException("value");
             }
 
             Type = type;
@@ -54,7 +54,7 @@ namespace Guardtime.KSI.Parser
         {
             if (tag == null)
             {
-                throw new ArgumentNullException("Invalid base TLV");
+                throw new ArgumentNullException("tag");
             }
 
             Type = tag.Type;
@@ -97,6 +97,5 @@ namespace Guardtime.KSI.Parser
         /// </summary>
         /// <returns>TLV tag data as byte array</returns>
         public abstract byte[] EncodeValue();
-
     }
 }

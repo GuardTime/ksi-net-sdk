@@ -20,44 +20,28 @@ namespace Guardtime.KSI.Hashing
         public static readonly HashAlgorithm Sha3512 = new HashAlgorithm("SHA3-512", 0x0A, 64, AlgorithmStatus.NotImplemented);
         public static readonly HashAlgorithm Sm3 = new HashAlgorithm("SM3", 0x0B, 32, AlgorithmStatus.NotImplemented);
 
-        private readonly string _name;
-        private readonly byte _id;
-        private readonly int _length;
-        private readonly AlgorithmStatus _status;
         private readonly string[] _alternatives;
         private static readonly Dictionary<string, HashAlgorithm> Lookup = new Dictionary<string, HashAlgorithm>();
 
         /// <summary>
         /// Return Guardtime id of algorithm.
         /// </summary>
-        public byte Id
-        {
-            get { return _id; }
-        }
+        public byte Id { get; }
 
         /// <summary>
         /// Return name of algorithm.
         /// </summary>
-        public string Name
-        {
-            get { return _name; }
-        }
+        public string Name { get; }
 
         /// <summary>
         /// Return length of the algorithm value.
         /// </summary>
-        public int Length
-        {
-            get { return _length; }
-        }
+        public int Length { get; }
 
         /// <summary>
         /// Return status of the algorithm.
         /// </summary>
-        public AlgorithmStatus Status
-        {
-            get { return _status; }
-        }
+        public AlgorithmStatus Status { get; }
 
         /// <summary>
         /// Static constructor for creating lookup table for names.
@@ -89,11 +73,11 @@ namespace Guardtime.KSI.Hashing
                 alternatives = new string[] { };
             }
 
-            this._name = name;
-            this._id = id;
-            this._length = length;
-            this._status = status;
-            this._alternatives = alternatives;
+            Name = name;
+            Id = id;
+            Length = length;
+            Status = status;
+            _alternatives = alternatives;
         }
 
         /// <summary>

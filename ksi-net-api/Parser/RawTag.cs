@@ -42,7 +42,15 @@ namespace Guardtime.KSI.Parser
             return builder.ToString();
         }
 
-        
+        public override bool Equals(object obj)
+        {
+            if (obj == null || obj.GetType() != GetType()) return false;
+            var b = (RawTag)obj;
+            return b.Type == Type &&
+                   b.Forward == Forward &&
+                   b.NonCritical == NonCritical &&
+                   Util.Util.IsArrayEqual(b.Value, Value);
+        }
     }
 
 }

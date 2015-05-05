@@ -1,19 +1,13 @@
-﻿using System;
-using Guardtime.KSI.Parser;
+﻿using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Publication
 {
-    public class PublicationData : CompositeTag
+    public class PublicationData : ICompositeTag
     {
         private IntegerTag _publicationTime;
         private ImprintTag _publicationHash;
 
-        public PublicationData(ITlvTag tag) : base(tag)
-        {
-            
-        }
-
-        public override ITlvTag GetMember(ITlvTag tag)
+        public ITlvTag GetMember(ITlvTag tag)
         {
             switch (tag.Type)
             {

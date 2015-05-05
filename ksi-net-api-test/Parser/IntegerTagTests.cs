@@ -16,6 +16,8 @@ namespace Guardtime.KSI.Parser
             Assert.IsFalse(tag.Forward, "Tag forward flag should be correct");
             Assert.AreEqual((ulong)1, tag.Value, "Tag value should be decoded correctly");
             Assert.AreEqual("TLV[0x1]:i1", tag.ToString(), "Tag string representation should be correct");
+
+            Assert.AreEqual(new IntegerTag(new RawTag(0x1, false, false, new byte[] { 0x1 })), tag, "Tags should be equal");
         }
 
         [TestMethod]

@@ -3,22 +3,16 @@ using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Publication
 {
-    public class PublicationsFile : CompositeTag
+    public class PublicationsFile : ICompositeTag
     {
-        private PublicationData _publicationData;
+        private CompositeTag<PublicationData> _publicationData;
 
-        public PublicationsFile(ITlvTag tag)
-            : base(tag)
-        {
-            
-        }
-
-        public override ITlvTag GetMember(ITlvTag tag)
+        public ITlvTag GetMember(ITlvTag tag)
         {
             switch (tag.Type)
             {
                 case 0x10:
-                    _publicationData = new PublicationData(tag);
+                    _publicationData = new CompositeTag<PublicationData>(tag, new PublicationData());
                     return _publicationData;
             }
 

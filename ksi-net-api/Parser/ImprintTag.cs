@@ -29,5 +29,15 @@ namespace Guardtime.KSI.Parser
             builder.Append("0x").Append(Value == null ? null : Util.Util.ConvertByteArrayToHex(Value.Imprint));
             return builder.ToString();
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || obj.GetType() != GetType()) return false;
+            var b = (ImprintTag)obj;
+            return b.Type == Type &&
+                   b.Forward == Forward &&
+                   b.NonCritical == NonCritical &&
+                   b.Value.Equals(Value);
+        }
     }
 }

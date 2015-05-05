@@ -16,6 +16,11 @@ namespace Guardtime.KSI.Parser
         }
 
         public void WriteTag(ITlvTag tag) {
+            if (tag.Type > TlvReader.MaxType)
+            {
+                throw new ArgumentOutOfRangeException("tag");
+            }
+
             var data = tag.EncodeValue();
             var tlv16 = tag.Type > TlvReader.TypeMask
                     || (data != null && data.Length > byte.MaxValue);
@@ -31,8 +36,12 @@ namespace Guardtime.KSI.Parser
                 if (data == null) {
                     Write(0);
                 } else {
-                    // TODO: If data is longer than 13 bits then throw exception
-                    Write((ushort)data.Length);
+                    if (data.Length > ushort.MaxValue)
+                    {
+                        throw new ArgumentOutOfRangeException("tag");
+                    }
+                    Write((byte)(data.Length >> TlvReader.ByteBits));
+                    Write((byte)data.Length);
                     Write(data);
                 }
             } else {

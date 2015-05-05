@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace Guardtime.KSI.Hashing
 {
+    [Serializable]
     class HashingException : Exception
     {
 

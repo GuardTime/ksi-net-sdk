@@ -1,7 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Security.Cryptography;
-using System.Text;
 using Microsoft.Win32.SafeHandles;
 
 
@@ -12,14 +10,14 @@ namespace Guardtime.KSI.Hashing
         private const int DefaultStreamBufferSize = 8192;
 
         private readonly HashAlgorithm _algorithm;
-        private readonly System.Security.Cryptography.HashAlgorithm messageHasher;
-        private DataHash _outputHash = null;
+        private readonly System.Security.Cryptography.HashAlgorithm _messageHasher;
+        private DataHash _outputHash;
 
         public DataHasher(HashAlgorithm algorithm)
         {
             if (algorithm == null)
             {
-                throw new ArgumentNullException("Invalid algorithm added to hasher: null");
+                throw new ArgumentNullException("algorithm");
             }
 
             /*
@@ -33,13 +31,13 @@ namespace Guardtime.KSI.Hashing
 
             _algorithm = algorithm;
 
-            messageHasher = System.Security.Cryptography.HashAlgorithm.Create(algorithm.Name);
-            if (messageHasher == null)
+            _messageHasher = System.Security.Cryptography.HashAlgorithm.Create(algorithm.Name);
+            if (_messageHasher == null)
             {
                 throw new ArgumentException("Hash algorithm not supported: " + algorithm.Name);
             }
 
-            messageHasher.Initialize();
+            _messageHasher.Initialize();
             
         }
 
@@ -70,7 +68,7 @@ namespace Guardtime.KSI.Hashing
                 throw new InvalidOperationException("Invalid data added to hasher: null");
             }
 
-            messageHasher.TransformBlock(data, offset, length, null, 0);
+            _messageHasher.TransformBlock(data, offset, length, null, 0);
             return this;
         }
 
@@ -157,17 +155,9 @@ namespace Guardtime.KSI.Hashing
                 throw new ArgumentException("Invalid file added to hasher: null");
             }
 
-            FileStream inStream = null;
-            try 
+            using (var inStream = new FileStream(fileHandle, FileAccess.Read))
             {
-                inStream = new FileStream(fileHandle, FileAccess.Read);
                 return AddData(inStream, bufferSize);
-            } 
-            finally 
-            {
-                if (inStream != null) {
-                    inStream.Close();
-                }
             }
         }
 
@@ -182,8 +172,8 @@ namespace Guardtime.KSI.Hashing
          */
         public DataHash GetHash() {
             if (_outputHash != null) return _outputHash;
-            messageHasher.TransformFinalBlock(new byte[] { }, 0, 0);
-            var hash = messageHasher.Hash;
+            _messageHasher.TransformFinalBlock(new byte[] { }, 0, 0);
+            var hash = _messageHasher.Hash;
             _outputHash = new DataHash(_algorithm, hash);
 
             return _outputHash;
@@ -197,8 +187,8 @@ namespace Guardtime.KSI.Hashing
          */
         public DataHasher Reset() {
             _outputHash = null;
-            messageHasher.Clear();
-            messageHasher.Initialize();
+            _messageHasher.Clear();
+            _messageHasher.Initialize();
 
             return this;
         }

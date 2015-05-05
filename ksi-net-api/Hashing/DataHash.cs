@@ -8,35 +8,23 @@ namespace Guardtime.KSI.Hashing
     /// </summary>
     public class DataHash
     {
-        private readonly HashAlgorithm _algorithm;
-        private readonly byte[] _valueBytes;
-        private readonly byte[] _imprintBytes;
-
         /// <summary>
         /// Get the HashAlgorithm used to compute this DataHash.
         /// </summary>
-        public HashAlgorithm Algorithm
-        {
-            get { return _algorithm;  }
-        }
+        public HashAlgorithm Algorithm { get; }
 
         /// <summary>
         /// Get data imprint.
         /// <p>
         /// Imprint is created by concatenating hash algorithm id with hash value.
+        /// </p>
         /// </summary>
-        public byte[] Imprint
-        {
-            get { return _imprintBytes; }
-        }
+        public byte[] Imprint { get; }
 
         /// <summary>
         /// Get the computed hash value for DataHash.
         /// </summary>
-        public byte[] Value
-        {
-            get { return _valueBytes;  }
-        }
+        public byte[] Value { get; }
 
         /// <summary>
         /// Constructor which initializes the DataHash with algorithm and value.
@@ -47,12 +35,12 @@ namespace Guardtime.KSI.Hashing
         {
             if (algorithm == null)
             {
-                throw new ArgumentNullException("Algorithm missing");
+                throw new ArgumentNullException("algorithm");
             }
 
             if (valueBytes == null)
             {
-                throw new ArgumentNullException("Hash value missing");
+                throw new ArgumentNullException("valueBytes");
             }
 
             if (valueBytes.Length != algorithm.Length)
@@ -61,12 +49,12 @@ namespace Guardtime.KSI.Hashing
                             + algorithm.Name + " size(" + algorithm.Length + ")");
             }
 
-            _algorithm = algorithm;
-            _valueBytes = valueBytes;
+            Algorithm = algorithm;
+            Value = valueBytes;
 
-            _imprintBytes = new byte[_algorithm.Length + 1];
-            _imprintBytes[0] = (byte) _algorithm.Id;
-            Array.Copy(_valueBytes, 0, _imprintBytes, 1, _algorithm.Length);
+            Imprint = new byte[Algorithm.Length + 1];
+            Imprint[0] = (byte) Algorithm.Id;
+            Array.Copy(Value, 0, Imprint, 1, Algorithm.Length);
         }
 
         /// <summary>
@@ -77,7 +65,7 @@ namespace Guardtime.KSI.Hashing
         {
             if (imprintBytes == null)
             {
-                throw new ArgumentNullException("Hash imprint null");
+                throw new ArgumentNullException("imprintBytes");
             }
 
             if (imprintBytes.Length < 1)
@@ -85,22 +73,22 @@ namespace Guardtime.KSI.Hashing
                 throw new ArgumentException("Hash imprint too short");
             }
 
-            _algorithm = HashAlgorithm.GetById(imprintBytes[0]);
+            Algorithm = HashAlgorithm.GetById(imprintBytes[0]);
 
-            if (_algorithm == null)
+            if (Algorithm == null)
             {
                 throw new FormatException("Hash algorithm ID unknown: " + imprintBytes[0]);
             }
 
-            if (_algorithm.Length + 1 != imprintBytes.Length)
+            if (Algorithm.Length + 1 != imprintBytes.Length)
             {
                 throw new FormatException("Hash size(" + (imprintBytes.Length - 1) + ") does not match "
-                           + _algorithm.Name + " size(" + _algorithm.Length + ")");
+                           + Algorithm.Name + " size(" + Algorithm.Length + ")");
             }
 
-            _valueBytes = new byte[_algorithm.Length];
-            Array.Copy(imprintBytes, 1, _valueBytes, 0, _algorithm.Length);
-            _imprintBytes = imprintBytes;
+            Value = new byte[Algorithm.Length];
+            Array.Copy(imprintBytes, 1, Value, 0, Algorithm.Length);
+            Imprint = imprintBytes;
         }
 
         /// <summary>
@@ -112,9 +100,9 @@ namespace Guardtime.KSI.Hashing
         {
             if (obj == null || obj.GetType() != typeof (DataHash)) return false;
             var b = (DataHash) obj;
-            return Util.Util.IsArrayEqual(b._imprintBytes, _imprintBytes) &&
-                   Util.Util.IsArrayEqual(b._valueBytes, _valueBytes) &&
-                   b._algorithm.Equals(_algorithm);
+            return Util.Util.IsArrayEqual(b.Imprint, Imprint) &&
+                   Util.Util.IsArrayEqual(b.Value, Value) &&
+                   b.Algorithm.Equals(Algorithm);
         }
 
         /// <summary>
@@ -133,7 +121,7 @@ namespace Guardtime.KSI.Hashing
         /// <returns>String representing algorithm name and value</returns>
         public override string ToString()
         {
-            return _algorithm.Name + ":[" + Util.Util.ConvertByteArrayToHex(_valueBytes) + "]";
+            return Algorithm.Name + ":[" + Util.Util.ConvertByteArrayToHex(Value) + "]";
         }
     }
 }

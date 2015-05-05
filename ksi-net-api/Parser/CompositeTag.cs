@@ -6,49 +6,65 @@ using System.Text;
 
 namespace Guardtime.KSI.Parser
 {
-    public abstract class CompositeTag : TlvTag<List<ITlvTag>>
+    public class CompositeTag<T> : TlvTag<List<ITlvTag>> where T : ICompositeTag
     {
 
-        protected CompositeTag(ITlvTag tag) : base(tag)
+        public T ObjectTag {
+            get;
+        }
+
+        public CompositeTag(ITlvTag tag, T objectTag) : base(tag)
         {
+            // TODO: Correct exception
+            if (objectTag == null)
+            {
+                throw new Exception("Invalid composite object: null");
+            }
+            ObjectTag = objectTag;
             DecodeValue(tag.EncodeValue());
         }
 
         public sealed override void DecodeValue(byte[] valueBytes)
         {
             Value = new List<ITlvTag>();
-            using (var stream = new MemoryStream(valueBytes))
+            using (var tlvReader = new TlvReader(new MemoryStream(valueBytes)))
             {
-                using (var tlvReader = new TlvReader(stream))
+                while (tlvReader.BaseStream.Position < tlvReader.BaseStream.Length)
                 {
-                    while (tlvReader.BaseStream.Position < tlvReader.BaseStream.Length)
-                    {
-                        var tag = tlvReader.ReadTag();
-                        
-                        var resultMember = GetMember(tag);
-                        if (resultMember == null)
-                        {
-                            if (!tag.NonCritical)
-                            {
-                                // TODO: Create correct handling
-                                throw new Exception("BROKEN STRUCTURE");
-                            }
+                    var tag = tlvReader.ReadTag();
 
-                            resultMember = tag;
+                    var resultMember = ObjectTag.GetMember(tag);
+                    if (resultMember == null)
+                    {
+                        if (!tag.NonCritical)
+                        {
+                            // TODO: Create correct handling
+                            throw new Exception("BROKEN STRUCTURE [" + tag.Type + "] in " + ObjectTag);
                         }
 
-                        Value.Add(resultMember);
+                        resultMember = tag;
                     }
+
+                    Value.Add(resultMember);
                 }
             }
         }
 
         public sealed override byte[] EncodeValue()
         {
-            return new byte[] {0x2, 0x0};
-        }
+            byte[] output;
+            using (var writer = new TlvWriter(new MemoryStream()))
+            {
+                foreach (var tag in Value)
+                {
+                    writer.WriteTag(tag);
+                }
 
-        public abstract ITlvTag GetMember(ITlvTag tag);
+                output = ((MemoryStream)writer.BaseStream).ToArray();
+            }
+
+            return output;
+        }
 
         public sealed override string ToString()
         {
