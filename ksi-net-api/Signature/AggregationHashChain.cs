@@ -1,144 +1,145 @@
-﻿using Guardtime.KSI.Hashing;
+﻿using System;
+using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
-using System;
 using System.Collections.Generic;
 
 namespace Guardtime.KSI.Signature
 {
-    public class AggregationHashChain : ICompositeTag
+    public class AggregationHashChain : CompositeTag
     {
-        protected IntegerTag aggregationTime;
+        protected IntegerTag AggregationTime;
 
-        protected List<IntegerTag> chainIndex;
+        protected List<IntegerTag> ChainIndex;
 
-        protected RawTag inputData;
+        protected RawTag InputData;
 
-        protected ImprintTag inputHash;
+        protected ImprintTag InputHash;
 
-        protected IntegerTag aggrAlgorithmId;
+        protected IntegerTag AggrAlgorithmId;
 
-        protected List<CompositeTag<Link>> chain;
+        protected List<Link> Chain;
 
         // the hash algorithm identified by aggrAlgorithmId
-        protected HashAlgorithm aggrAlgorithm;
+        protected HashAlgorithm AggrAlgorithm;
 
-        public ITlvTag GetMember(ITlvTag tag)
+        public AggregationHashChain(ITlvTag tag) : base(tag)
         {
-
-            switch (tag.Type)
+            for (var i = 0; i < Value.Count; i++)
             {
-                case 0x2:
-                    aggregationTime = new IntegerTag(tag);
-                    return aggregationTime;
-                case 0x3:
-                    if (chainIndex == null)
-                    {
-                        chainIndex = new List<IntegerTag>();
-                    }
+                switch (Value[i].Type)
+                {
+                    case 0x2:
+                        Value[i] = AggregationTime = new IntegerTag(Value[i]);
+                        break;
+                    case 0x3:
+                        if (ChainIndex == null)
+                        {
+                            ChainIndex = new List<IntegerTag>();
+                        }
 
-                    var chainIndexTag = new IntegerTag(tag);
-                    chainIndex.Add(chainIndexTag);
+                        var chainIndexTag = new IntegerTag(Value[i]);
+                        ChainIndex.Add(chainIndexTag);
+                        Value[i] = chainIndexTag;
+                        break;
+                    case 0x4:
+                        Value[i] = InputData = new RawTag(Value[i]);
+                        break;
+                    case 0x5:
+                        Value[i] = InputHash = new ImprintTag(Value[i]);
+                        break;
+                    case 0x6:
+                        Value[i] = AggrAlgorithmId = new IntegerTag(Value[i]);
+                        break;
+                    case 0x7:
+                    case 0x8:
+                        if (Chain == null)
+                        {
+                            Chain = new List<Link>();
+                        }
 
-                    return chainIndexTag;
-                case 0x4:
-                    inputData = new RawTag(tag);
-                    return inputData;
-                case 0x5:
-                    inputHash = new ImprintTag(tag);
-                    return inputHash;
-                case 0x6:
-                    aggrAlgorithmId = new IntegerTag(tag);
-                    return aggrAlgorithmId;
-                case 0x7:
-                case 0x8:
-                    if (chain == null)
-                    {
-                        chain = new List<CompositeTag<Link>>();
-                    }
-
-                    var linkTag = new CompositeTag<Link>(tag, new Link((LinkDirection)Enum.ToObject(typeof(LinkDirection), (byte)tag.Type)));
-                    chain.Add(linkTag);
-                    return linkTag;
+                        var linkTag = new Link(Value[i], (LinkDirection)Enum.ToObject(typeof(LinkDirection), (byte)Value[i].Type));
+                        Chain.Add(linkTag);
+                        Value[i] = linkTag;
+                        break;
+                }
             }
-
-            return null;
         }
 
-        protected class Link : ICompositeTag
+        protected class Link : CompositeTag
         {
 
-            protected IntegerTag levelCorrection;
+            protected IntegerTag LevelCorrection;
 
-            protected ImprintTag siblingHash;
+            protected ImprintTag SiblingHash;
 
-            protected ImprintTag metaHash;
+            protected ImprintTag MetaHash;
 
-            private CompositeTag<MetaData> metaData;
+            private MetaData _metaData;
 
             private LinkDirection _direction;
 
             // the client ID extracted from metaHash
-            protected String metaHashId;
+            protected string metaHashId;
 
-            public Link(LinkDirection direction)
-            {
-                _direction = direction;
-            }
 
-            public ITlvTag GetMember(ITlvTag tag)
+            public Link(ITlvTag tag, LinkDirection direction) : base(tag)
             {
-                switch (tag.Type)
+                for (var i = 0; i < Value.Count; i++)
                 {
-                    case 0x1:
-                        levelCorrection = new IntegerTag(tag);
-                        return levelCorrection;
-                    case 0x2:
-                        siblingHash = new ImprintTag(tag);
-                        return siblingHash;
-                    case 0x3:
-                        metaHash = new ImprintTag(tag);
-                        return metaHash;
-                    case 0x4:
-                        metaData = new CompositeTag<MetaData>(tag, new MetaData());
-                        return metaData;
+                    switch (Value[i].Type)
+                    {
+                        case 0x1:
+                            Value[i] = LevelCorrection = new IntegerTag(Value[i]);
+                            break;
+                        case 0x2:
+                            Value[i] = SiblingHash = new ImprintTag(Value[i]);
+                            break;
+                        case 0x3:
+                            Value[i] = MetaHash = new ImprintTag(Value[i]);
+                            break;
+                        case 0x4:
+                            Value[i] = _metaData = new MetaData(Value[i]);
+                            break;
+                    }
                 }
-
-                return null;
             }
+            
         }
 
-        class MetaData : ICompositeTag
+        class MetaData : CompositeTag
         {
 
-            private StringTag clientId;
+            private StringTag _clientId;
 
-            private StringTag machineId;
+            private StringTag _machineId;
 
-            private IntegerTag sequenceNr;
+            private IntegerTag _sequenceNr;
 
             //Please do keep in mind that request time is in milliseconds!
-            private IntegerTag requestTime;
+            private IntegerTag _requestTime;
 
-            public ITlvTag GetMember(ITlvTag tag)
+            public MetaData(ITlvTag tag) : base(tag)
             {
-                switch (tag.Type)
+                for (var i = 0; i < Value.Count; i++)
                 {
-                    case 0x1:
-                        clientId = new StringTag(tag);
-                        return clientId;
-                    case 0x2:
-                        machineId = new StringTag(tag);
-                        return machineId;
-                    case 0x3:
-                        sequenceNr = new IntegerTag(tag);
-                        return sequenceNr;
-                    case 0x4:
-                        requestTime = new IntegerTag(tag);
-                        return requestTime;
+                    switch (Value[i].Type)
+                    {
+                        case 0x1:
+                            Value[i] = _clientId = new StringTag(Value[i]);
+                            break;
+                        case 0x2:
+                            Value[i] = _machineId = new StringTag(Value[i]);
+                            break;
+                        case 0x3:
+                            Value[i] = _sequenceNr = new IntegerTag(Value[i]);
+                            break;
+                        case 0x4:
+                            Value[i] = _requestTime = new IntegerTag(Value[i]);
+                            break;
+                    }
                 }
-
-                return null;
             }
+            
         } 
 
         class ChainResult
@@ -146,6 +147,9 @@ namespace Guardtime.KSI.Signature
             private DataHash lastHash;
             private int level;
 
-        } 
+        }
+
+
+        
     }
 }

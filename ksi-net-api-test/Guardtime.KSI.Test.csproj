@@ -62,6 +62,7 @@
     <Compile Include="Parser\RawTagTests.cs" />
     <Compile Include="Parser\ImprintTagTests.cs" />
     <Compile Include="Parser\StringTagTests.cs" />
+    <Compile Include="Parser\TestTests.cs" />
     <Compile Include="Parser\TlvReaderTests.cs" />
     <Compile Include="Parser\TlvWriterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -70,8 +71,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Publication\PublicationData.cs" />
-    <Compile Include="Signature\KsiSignatureDOTests.cs" />
+    <Compile Include="Publication\PublicationsFileDoTests.cs" />
+    <Compile Include="Publication\PublicationDataTests.cs" />
+    <Compile Include="Signature\KsiSignatureDoTests.cs" />
+    <Compile Include="Trust\PkiTrustStoreProviderTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ksi-net-api\Guardtime.KSI.csproj">
@@ -99,10 +102,19 @@
     <None Include="resources\publication\publicationdata\unknowntag.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="resources\publication\publicationsfile\ksi-publications.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="resources\signature\signature-ok.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\testdata.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\trust\pkitrustprovider\data.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\trust\pkitrustprovider\sigbytes.bin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

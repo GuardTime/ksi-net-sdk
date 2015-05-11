@@ -60,7 +60,7 @@ namespace Guardtime.KSI.Parser
             Type = tag.Type;
             NonCritical = tag.NonCritical;
             Forward = tag.Forward;
-        } 
+        }
 
         /// <summary>
         /// Return string representation of TLV tag

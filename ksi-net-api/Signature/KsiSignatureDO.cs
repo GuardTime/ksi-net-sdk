@@ -1,55 +1,56 @@
-﻿using Guardtime.KSI.Parser;
-using Guardtime.KSI.Publication;
+﻿using Guardtime.KSI.Publication;
 using System.Collections.Generic;
+using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Signature
 {
-    public class KsiSignatureDO : ICompositeTag
+    public class KsiSignatureDo : CompositeTag
     {
-        protected List<CompositeTag<AggregationHashChain>> aggregationChains;
+        protected List<AggregationHashChain> AggregationChains;
 
-        private CompositeTag<CalendarHashChain> calendarChain;
+        private CalendarHashChain _calendarChain;
 
-        private CompositeTag<PublicationRecord> publicationRecord;
+        private PublicationRecord _publicationRecord;
 
-        private CompositeTag<AggregationAuthenticationRecord> aggregationAuthenticationRecord;
+        private AggregationAuthenticationRecord _aggregationAuthenticationRecord;
 
-        private CompositeTag<CalendarAuthenticationRecord> calendarAuthenticationRecord;
+        private CalendarAuthenticationRecord _calendarAuthenticationRecord;
 
-        protected CompositeTag<Rfc3161Record> rfc3161Record;
+        protected Rfc3161Record Rfc3161Record;
 
-        public ITlvTag GetMember(ITlvTag tag)
+        public KsiSignatureDo(ITlvTag tag) : base(tag)
         {
-            switch (tag.Type)
+            for (var i = 0; i < Value.Count; i++)
             {
-                case 0x801:
-                    if (aggregationChains == null)
-                    {
-                        aggregationChains = new List<CompositeTag<AggregationHashChain>>();
-                    }
+                switch (Value[i].Type)
+                {
+                    case 0x801:
+                        if (AggregationChains == null)
+                        {
+                            AggregationChains = new List<AggregationHashChain>();
+                        }
 
-                    var aggregationChainTag = new CompositeTag<AggregationHashChain>(tag, new AggregationHashChain());
-                    aggregationChains.Add(aggregationChainTag);
-
-                    return aggregationChainTag;
-                case 0x802:
-                    calendarChain = new CompositeTag<CalendarHashChain>(tag, new CalendarHashChain());
-                    return calendarChain;
-                case 0x803:
-                    publicationRecord = new CompositeTag<PublicationRecord>(tag, new PublicationRecord());
-                    return publicationRecord;
-                case 0x804:
-                    aggregationAuthenticationRecord = new CompositeTag<AggregationAuthenticationRecord>(tag, new AggregationAuthenticationRecord());
-                    return aggregationAuthenticationRecord;
-                case 0x805:
-                    calendarAuthenticationRecord = new CompositeTag<CalendarAuthenticationRecord>(tag, new CalendarAuthenticationRecord());
-                    return calendarAuthenticationRecord;
-                case 0x806:
-                    rfc3161Record = new CompositeTag<Rfc3161Record>(tag, new Rfc3161Record());
-                    return rfc3161Record;
+                        var aggregationChainTag = new AggregationHashChain(Value[i]);
+                        AggregationChains.Add(aggregationChainTag);
+                        Value[i] = aggregationChainTag;
+                        break;
+                    case 0x802:
+                        Value[i] = _calendarChain = new CalendarHashChain(Value[i]);
+                        break;
+                    case 0x803:
+                        Value[i] = _publicationRecord = new PublicationRecord(Value[i]);
+                        break;
+                    case 0x804:
+                        Value[i] = _aggregationAuthenticationRecord = new AggregationAuthenticationRecord(Value[i]);
+                        break;
+                    case 0x805:
+                        Value[i] = _calendarAuthenticationRecord = new CalendarAuthenticationRecord(Value[i]);
+                        break;
+                    case 0x806:
+                        Value[i] = Rfc3161Record = new Rfc3161Record(Value[i]);
+                        break;
+                }
             }
-
-            return null;
         }
     }
 }

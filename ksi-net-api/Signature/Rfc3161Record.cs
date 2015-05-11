@@ -1,65 +1,64 @@
-﻿using Guardtime.KSI.Parser;
-using System.Collections.Generic;
-using System;
+﻿using System.Collections.Generic;
+using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Signature
 {
-    public class Rfc3161Record : ICompositeTag
+    public class Rfc3161Record : CompositeTag
     {
-        protected IntegerTag aggregationTime;
-        protected List<IntegerTag> chainIndex;
-        protected ImprintTag inputHash;
+        protected IntegerTag AggregationTime;
+        protected List<IntegerTag> ChainIndex;
+        protected ImprintTag InputHash;
 
-        protected RawTag tstInfoPrefix;
-        protected RawTag tstInfoSuffix;
-        protected IntegerTag tstInfoAlgorithm;
+        protected RawTag TstInfoPrefix;
+        protected RawTag TstInfoSuffix;
+        protected IntegerTag TstInfoAlgorithm;
 
-        protected RawTag signedAttributesPrefix;
-        protected RawTag signedAttributesSuffix;
-        protected IntegerTag signedAttributesAlgorithm;
+        protected RawTag SignedAttributesPrefix;
+        protected RawTag SignedAttributesSuffix;
+        protected IntegerTag SignedAttributesAlgorithm;
 
-        public ITlvTag GetMember(ITlvTag tag)
+        public Rfc3161Record(ITlvTag tag) : base(tag)
         {
-
-            switch (tag.Type)
+            for (var i = 0; i < Value.Count; i++)
             {
-                case 0x2:
-                    aggregationTime = new IntegerTag(tag);
-                    return aggregationTime;
-                case 0x3:
-                    if (chainIndex == null)
-                    {
-                        chainIndex = new List<IntegerTag>();
-                    }
+                switch (Value[i].Type)
+                {
+                    case 0x2:
+                        Value[i] = AggregationTime = new IntegerTag(Value[i]);
+                        break;
+                    case 0x3:
+                        if (ChainIndex == null)
+                        {
+                            ChainIndex = new List<IntegerTag>();
+                        }
 
-                    var classTag = new IntegerTag(tag);
-                    chainIndex.Add(classTag);
-                    return classTag;
-                case 0x5:
-                    inputHash = new ImprintTag(tag);
-                    return inputHash;
-                case 0x10:
-                    tstInfoPrefix = new RawTag(tag);
-                    return tstInfoPrefix;
-                case 0x11:
-                    tstInfoSuffix = new RawTag(tag);
-                    return tstInfoSuffix;
-                case 0x12:
-                    tstInfoAlgorithm = new IntegerTag(tag);
-                    return tstInfoAlgorithm;
-                case 0x13:
-                    signedAttributesPrefix = new RawTag(tag);
-                    return signedAttributesPrefix;
-                case 0x14:
-                    signedAttributesSuffix = new RawTag(tag);
-                    return signedAttributesSuffix;
-                case 0x15:
-                    signedAttributesAlgorithm = new IntegerTag(tag);
-                    return signedAttributesAlgorithm;
+                        var chainTag = new IntegerTag(Value[i]);
+                        ChainIndex.Add(chainTag);
+                        Value[i] = chainTag;
+                        break;
+                    case 0x5:
+                        Value[i] = InputHash = new ImprintTag(Value[i]);
+                        break;
+                    case 0x10:
+                        Value[i] = TstInfoPrefix = new RawTag(Value[i]);
+                        break;
+                    case 0x11:
+                        Value[i] = TstInfoSuffix = new RawTag(Value[i]);
+                        break;
+                    case 0x12:
+                        Value[i] = TstInfoAlgorithm = new IntegerTag(Value[i]);
+                        break;
+                    case 0x13:
+                        Value[i] = SignedAttributesPrefix = new RawTag(Value[i]);
+                        break;
+                    case 0x14:
+                        Value[i] = SignedAttributesSuffix = new RawTag(Value[i]);
+                        break;
+                    case 0x15:
+                        Value[i] = SignedAttributesAlgorithm = new IntegerTag(Value[i]);
+                        break;
+                }
             }
-
-            return null;
-
         }
     }
 }

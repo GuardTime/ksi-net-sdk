@@ -1,37 +1,41 @@
-﻿using System;
-using Guardtime.KSI.Parser;
+﻿using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Signature
 {
-    public class SignatureData : ICompositeTag
+    public class SignatureData : CompositeTag
     {
-        protected StringTag signatureType;
+        protected StringTag SignatureType;
 
-        protected RawTag signatureValue;
+        protected RawTag SignatureValue;
 
-        protected RawTag certificateId;
+        protected RawTag CertificateId;
 
-        protected StringTag certificateRepositoryUri;
+        protected StringTag CertificateRepositoryUri;
 
-        public ITlvTag GetMember(ITlvTag tag)
+        public SignatureData(ITlvTag tag) : base(tag)
         {
-            switch (tag.Type)
+            for (var i = 0; i < Value.Count; i++)
             {
-                case 0x1:
-                    signatureType = new StringTag(tag);
-                    return signatureType;
-                case 0x2:
-                    signatureValue = new RawTag(tag);
-                    return signatureValue;
-                case 0x3:
-                    certificateId = new RawTag(tag);
-                    return certificateId;
-                case 0x4:
-                    certificateRepositoryUri = new StringTag(tag);
-                    return certificateRepositoryUri;
+                switch (Value[i].Type)
+                {
+                    case 0x1:
+                        SignatureType = new StringTag(Value[i]);
+                        Value[i] = SignatureType;
+                        break;
+                    case 0x2:
+                        SignatureValue = new RawTag(Value[i]);
+                        Value[i] = SignatureValue;
+                        break;
+                    case 0x3:
+                        CertificateId = new RawTag(Value[i]);
+                        Value[i] = CertificateId;
+                        break;
+                    case 0x4:
+                        CertificateRepositoryUri = new StringTag(Value[i]);
+                        Value[i] = CertificateRepositoryUri;
+                        break;
+                }
             }
-
-            return null;
         }
     }
 }

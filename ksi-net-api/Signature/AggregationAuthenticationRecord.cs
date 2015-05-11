@@ -1,9 +1,9 @@
-﻿using Guardtime.KSI.Parser;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Signature
 {
-    public class AggregationAuthenticationRecord : ICompositeTag
+    public class AggregationAuthenticationRecord : CompositeTag
     {
 
         private IntegerTag _aggregationTime;
@@ -12,34 +12,35 @@ namespace Guardtime.KSI.Signature
 
         private ImprintTag _inputHash;
 
-        private CompositeTag<SignatureData> _signatureData;
+        private SignatureData _signatureData;
 
-        public ITlvTag GetMember(ITlvTag tag)
+        public AggregationAuthenticationRecord(ITlvTag tag) : base(tag)
         {
-            switch (tag.Type)
+            for (var i = 0; i < Value.Count; i++)
             {
-                case 0x2:
-                    _aggregationTime = new IntegerTag(tag);
-                    return _aggregationTime;
-                case 0x3:
-                    if (_chainIndex == null)
-                    {
-                        _chainIndex = new List<IntegerTag>();
-                    }
+                switch (Value[i].Type)
+                {
+                    case 0x2:
+                        Value[i] = _aggregationTime = new IntegerTag(Value[i]);
+                        break;
+                    case 0x3:
+                        if (_chainIndex == null)
+                        {
+                            _chainIndex = new List<IntegerTag>();
+                        }
 
-                    var chainIndexTag = new IntegerTag(tag);
-                    _chainIndex.Add(chainIndexTag);
-                    return chainIndexTag;
-                case 0x5:
-                    _inputHash = new ImprintTag(tag);
-                    return _inputHash;
-                case 0xB:
-                    _signatureData = new CompositeTag<SignatureData>(tag, new SignatureData());
-                    return _signatureData;
-
+                        var chainIndexTag = new IntegerTag(Value[i]);
+                        _chainIndex.Add(chainIndexTag);
+                        Value[i] = chainIndexTag;
+                        break;
+                    case 0x5:
+                        Value[i] = _inputHash = new ImprintTag(Value[i]);
+                        break;
+                    case 0xB:
+                        Value[i] = _signatureData = new SignatureData(Value[i]);
+                        break;
+                }
             }
-
-            return null;
         }
     }
 }

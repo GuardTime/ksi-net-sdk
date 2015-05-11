@@ -53,7 +53,7 @@ namespace Guardtime.KSI.Hashing
             Value = valueBytes;
 
             Imprint = new byte[Algorithm.Length + 1];
-            Imprint[0] = (byte) Algorithm.Id;
+            Imprint[0] = Algorithm.Id;
             Array.Copy(Value, 0, Imprint, 1, Algorithm.Length);
         }
 
@@ -112,7 +112,7 @@ namespace Guardtime.KSI.Hashing
         public override int GetHashCode()
         {
             // TODO: Generate correct hashcode
-            return base.GetHashCode();
+            return 1;
         }
 
         /// <summary>

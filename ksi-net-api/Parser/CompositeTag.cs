@@ -1,26 +1,14 @@
-﻿
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
 namespace Guardtime.KSI.Parser
 {
-    public class CompositeTag<T> : TlvTag<List<ITlvTag>> where T : ICompositeTag
+    public abstract class CompositeTag : TlvTag<List<ITlvTag>>
     {
 
-        public T ObjectTag {
-            get;
-        }
-
-        public CompositeTag(ITlvTag tag, T objectTag) : base(tag)
+        protected CompositeTag(ITlvTag tag) : base(tag)
         {
-            // TODO: Correct exception
-            if (objectTag == null)
-            {
-                throw new Exception("Invalid composite object: null");
-            }
-            ObjectTag = objectTag;
             DecodeValue(tag.EncodeValue());
         }
 
@@ -31,21 +19,7 @@ namespace Guardtime.KSI.Parser
             {
                 while (tlvReader.BaseStream.Position < tlvReader.BaseStream.Length)
                 {
-                    var tag = tlvReader.ReadTag();
-
-                    var resultMember = ObjectTag.GetMember(tag);
-                    if (resultMember == null)
-                    {
-                        if (!tag.NonCritical)
-                        {
-                            // TODO: Create correct handling
-                            throw new Exception("BROKEN STRUCTURE [" + tag.Type + "] in " + ObjectTag);
-                        }
-
-                        resultMember = tag;
-                    }
-
-                    Value.Add(resultMember);
+                    Value.Add(tlvReader.ReadTag());
                 }
             }
         }
@@ -55,9 +29,9 @@ namespace Guardtime.KSI.Parser
             byte[] output;
             using (var writer = new TlvWriter(new MemoryStream()))
             {
-                foreach (var tag in Value)
+                for (var i = 0; i < Value.Count; i++)
                 {
-                    writer.WriteTag(tag);
+                    writer.WriteTag(Value[i]);
                 }
 
                 output = ((MemoryStream)writer.BaseStream).ToArray();
@@ -71,9 +45,9 @@ namespace Guardtime.KSI.Parser
             var builder = new StringBuilder();
             builder.Append(base.ToString()).Append('\n');
 
-            foreach (var tag in Value)
+            for (var i = 0; i < Value.Count; i++)
             {
-                builder.Append(TabPrefix(tag.ToString()));
+                builder.Append(TabPrefix(Value[i].ToString()));
                 builder.Append("\n");
             }
 
@@ -86,17 +60,17 @@ namespace Guardtime.KSI.Parser
             var builder = new StringBuilder();
             
             var lines = s.Split('\n');
-            foreach (var str in lines)
+            for (var i = 0; i < lines.Length; i++)
             {
                 builder.Append("  ");
-                builder.Append(str);
-                if (!str.Equals(lines[lines.Length - 1])) {
+                builder.Append(lines[i]);
+                if (!lines[i].Equals(lines[lines.Length - 1])) {
                     builder.Append("\n");
                 }
             }
 
             return builder.ToString();
         }
+        
     }
-
 }

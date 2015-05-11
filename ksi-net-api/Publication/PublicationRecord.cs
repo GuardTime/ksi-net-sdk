@@ -1,46 +1,50 @@
-﻿using Guardtime.KSI.Parser;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Publication
 {
-    public class PublicationRecord : ICompositeTag
+    public class PublicationRecord : CompositeTag
     {
 
-        protected CompositeTag<PublicationData> publicationData;
+        protected PublicationData PublicationData;
 
-        protected List<StringTag> publicationReferences;
+        protected List<StringTag> PublicationReferences;
 
-        protected List<StringTag> pubRepUri;
+        protected List<StringTag> PubRepUri;
 
-        public ITlvTag GetMember(ITlvTag tag)
+        public PublicationRecord(ITlvTag tag) : base(tag)
         {
-
-            switch (tag.Type)
+            for (var i = 0; i < Value.Count; i++)
             {
-                case 0x10:
-                    publicationData = new CompositeTag<PublicationData>(tag, new PublicationData());
-                    return publicationData;
-                case 0x9:
-                    if (publicationReferences == null)
-                    {
-                        publicationReferences = new List<StringTag>();
-                    }
+                switch (Value[i].Type)
+                {
+                    case 0x10:
+                        Value[i] = PublicationData = new PublicationData(Value[i]);
+                        break;
+                    case 0x9:
+                        if (PublicationReferences == null)
+                        {
+                            PublicationReferences = new List<StringTag>();
+                        }
 
-                    var publicationReferenceTag = new StringTag(tag);
-                    publicationReferences.Add(publicationReferenceTag);
-                    return publicationReferenceTag;
-                case 0xA:
-                    if (pubRepUri == null)
-                    {
-                        pubRepUri = new List<StringTag>();
-                    }
+                        var publicationReferenceTag = new StringTag(Value[i]);
+                        PublicationReferences.Add(publicationReferenceTag);
+                        Value[i] = publicationReferenceTag;
+                        break;
+                    case 0xA:
+                        if (PubRepUri == null)
+                        {
+                            PubRepUri = new List<StringTag>();
+                        }
 
-                    var pubRepUriTag = new StringTag(tag);
-                    pubRepUri.Add(pubRepUriTag);
-                    return pubRepUriTag;
+                        var pubRepUriTag = new StringTag(Value[i]);
+                        PubRepUri.Add(pubRepUriTag);
+                        Value[i] = pubRepUriTag;
+                        break;
+                }
             }
+        }
 
-            return null;
-    }
+        
     }
 }

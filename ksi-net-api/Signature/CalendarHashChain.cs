@@ -1,75 +1,75 @@
-﻿using Guardtime.KSI.Parser;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Signature
 {
-    public class CalendarHashChain : ICompositeTag
+    public class CalendarHashChain : CompositeTag
     {
-        protected IntegerTag publicationTime;
+        protected IntegerTag PublicationTime;
 
-        protected IntegerTag aggregationTime;
+        protected IntegerTag AggregationTime;
 
-        protected ImprintTag inputHash;
+        protected ImprintTag InputHash;
 
-        protected List<Link> chain;
+        protected List<Link> Chain;
 
-        public ITlvTag GetMember(ITlvTag tag)
+        public CalendarHashChain(ITlvTag tag) : base(tag)
         {
-
-            switch (tag.Type)
+            for (var i = 0; i < Value.Count; i++)
             {
-                case 0x1:
-                    publicationTime = new IntegerTag(tag);
-                    return publicationTime;
-                case 0x2:
-                    aggregationTime = new IntegerTag(tag);
-                    return aggregationTime;
-                case 0x5:
-                    inputHash = new ImprintTag(tag);
-                    return inputHash;
-                case 0x7:
-                case 0x8:
-                    if (chain == null)
-                    {
-                        chain = new List<Link>();
-                    }
+                switch (Value[i].Type)
+                {
+                    case 0x1:
+                        Value[i] = PublicationTime = new IntegerTag(Value[i]);
+                        break;
+                    case 0x2:
+                        Value[i] = AggregationTime = new IntegerTag(Value[i]);
+                        break;
+                    case 0x5:
+                        Value[i] = InputHash = new ImprintTag(Value[i]);
+                        break;
+                    case 0x7:
+                    case 0x8:
+                        if (Chain == null)
+                        {
+                            Chain = new List<Link>();
+                        }
 
-                    var chainTag = new Link(tag);
-                    chain.Add(chainTag);
-                    return chainTag;
+                        var chainTag = new Link(Value[i]);
+                        Chain.Add(chainTag);
+                        Value[i] = chainTag;
+                        break;
+                }
             }
-
-            return null;
         }
 
         protected class Link : ImprintTag
         {
-            private LinkDirection direction;
+            private LinkDirection _direction;
 
-            /**
-             * Create new hash chain link.
-             * @param tag base TLVTag
-             * @throws FormatException if parsing object from TLVTag fails
-             */
             public Link(ITlvTag tag) : base(tag)
             {
-                if (Type == (uint)LinkDirection.LEFT)
+                if (tag.Type == (int) LinkDirection.Left)
                 {
-                    direction = LinkDirection.LEFT;
+                    _direction = LinkDirection.Left;
                 }
 
-                if (Type == (uint)LinkDirection.RIGHT)
+                if (tag.Type == (int) LinkDirection.Right)
                 {
-                    direction = LinkDirection.RIGHT;
+                    _direction = LinkDirection.Right;
                 }
 
-                if (direction == 0)
+                if ((int)_direction == 0)
                 {
-                    throw new FormatException("Attempt to construct calendar link form tag type " + Type);
+                    // TODO: Correct exception
+                    throw new Exception("Invalid link direction");
                 }
+                
             }
+            
         }
+
 
         
     }

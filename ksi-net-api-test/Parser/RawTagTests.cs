@@ -21,8 +21,9 @@ namespace Guardtime.KSI.Parser
         [TestMethod]
         public void TestRawTagCreateFromTag()
         {
-            var tag = new RawTag(0x1, false, false, new byte[] { 0x1, 0x2, 0x3 });
-            tag = new RawTag(tag);
+            var rawTag = new RawTag(0x1, false, false, new byte[] { 0x1, 0x2, 0x3 });
+            var tag = new RawTag(rawTag);
+            tag.DecodeValue(rawTag.Value);
             Assert.AreEqual((uint)0x1, tag.Type, "Tag type should be correct");
             Assert.IsFalse(tag.NonCritical, "Tag non critical flag should be correct");
             Assert.IsFalse(tag.Forward, "Tag forward flag should be correct");

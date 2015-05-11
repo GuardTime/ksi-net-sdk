@@ -2,24 +2,27 @@
 
 namespace Guardtime.KSI.Publication
 {
-    public class PublicationData : ICompositeTag
+    public class PublicationData : CompositeTag
     {
         private IntegerTag _publicationTime;
         private ImprintTag _publicationHash;
 
-        public ITlvTag GetMember(ITlvTag tag)
+        public PublicationData(ITlvTag tag) : base(tag)
         {
-            switch (tag.Type)
+            for (var i = 0; i < Value.Count; i++)
             {
-                case 0x2:
-                    _publicationTime = new IntegerTag(tag);
-                    return _publicationTime;
-                case 0x4:
-                    _publicationHash = new ImprintTag(tag);
-                    return _publicationHash;
+                switch (Value[i].Type)
+                {
+                    case 0x2:
+                        Value[i] = _publicationTime = new IntegerTag(Value[i]);
+                        break;
+                    case 0x4:
+                        Value[i] = _publicationHash = new ImprintTag(Value[i]);
+                        break;
+                }
             }
-
-            return null;
         }
+
+
     }
 }

@@ -3,25 +3,26 @@ using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Signature
 {
-    public class CalendarAuthenticationRecord : ICompositeTag
+    public class CalendarAuthenticationRecord : CompositeTag
     {
-        protected CompositeTag<PublicationData> publicationData;
+        protected PublicationData PublicationData;
 
-        protected CompositeTag<SignatureData> signatureData;
+        protected SignatureData SignatureData;
 
-        public ITlvTag GetMember(ITlvTag tag)
+        public CalendarAuthenticationRecord(ITlvTag tag) : base(tag)
         {
-            switch (tag.Type)
+            for (var i = 0; i < Value.Count; i++)
             {
-                case 0x10:
-                    publicationData = new CompositeTag<PublicationData>(tag, new PublicationData());
-                    return publicationData;
-                case 0xb:
-                    signatureData = new CompositeTag<SignatureData>(tag, new SignatureData());
-                    return signatureData;
+                switch (Value[i].Type)
+                {
+                    case 0x10:
+                        Value[i] = PublicationData = new PublicationData(Value[i]);
+                        break;
+                    case 0xb:
+                        Value[i] = SignatureData = new SignatureData(Value[i]);
+                        break;
+                }
             }
-
-            return null;
         }
     }
 }

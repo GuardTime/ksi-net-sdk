@@ -1,12 +1,12 @@
-﻿using Guardtime.KSI.Parser;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.IO;
+using Guardtime.KSI.Parser;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Guardtime.KSI.Signature.Tests.Signature
+namespace Guardtime.KSI.Signature
 {
     [TestClass()]
-    public class KsiSignatureDOTests
+    public class KsiSignatureDoTests
     {
         [TestMethod()]
         public void GetMemberTest()
@@ -20,16 +20,19 @@ namespace Guardtime.KSI.Signature.Tests.Signature
 
             using (var reader = new TlvReader(new MemoryStream(data)))
             {
+                var test = new KsiSignatureDo(reader.ReadTag());
+                reader.BaseStream.Position = 0;
                 var time = Environment.TickCount;
                 var i = 0;
+
                 while (Environment.TickCount - time < 1000)
                 {
-                    var tag = reader.ReadTag();
-                    new CompositeTag<KsiSignatureDO>(tag, new KsiSignatureDO());
+                    test = new KsiSignatureDo(reader.ReadTag());
                     reader.BaseStream.Position = 0;
                     i++;
                 }
                 Console.WriteLine(i);
+                Console.WriteLine(test);
             }
             
         }

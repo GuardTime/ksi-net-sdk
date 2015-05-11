@@ -9,11 +9,11 @@ namespace Guardtime.KSI.Hashing
     public class HashAlgorithm
     {
         public static readonly HashAlgorithm Sha1 = new HashAlgorithm("SHA1", 0x0, 20, AlgorithmStatus.NotTrusted);
-        public static readonly HashAlgorithm Sha2256 = new HashAlgorithm("SHA-256", 0x01, 32, AlgorithmStatus.Normal, new string[] { "SHA2-256", "SHA2", "DEFAULT" });
+        public static readonly HashAlgorithm Sha2256 = new HashAlgorithm("SHA-256", 0x01, 32, AlgorithmStatus.Normal, new [] { "SHA2-256", "SHA2", "DEFAULT" });
         public static readonly HashAlgorithm Ripemd160 = new HashAlgorithm("RIPEMD160", 0x02, 20, AlgorithmStatus.Normal);
-        public static readonly HashAlgorithm Sha2224 = new HashAlgorithm("SHA-224", 0x03, 28, AlgorithmStatus.Normal, new string[] { "SHA2-224" });
-        public static readonly HashAlgorithm Sha2384 = new HashAlgorithm("SHA-384", 0x04, 48, AlgorithmStatus.Normal, new string[] { "SHA2-384" });
-        public static readonly HashAlgorithm Sha2512 = new HashAlgorithm("SHA-512", 0x05, 64, AlgorithmStatus.Normal, new string[] { "SHA2-512" });
+        public static readonly HashAlgorithm Sha2224 = new HashAlgorithm("SHA-224", 0x03, 28, AlgorithmStatus.Normal, new [] { "SHA2-224" });
+        public static readonly HashAlgorithm Sha2384 = new HashAlgorithm("SHA-384", 0x04, 48, AlgorithmStatus.Normal, new [] { "SHA2-384" });
+        public static readonly HashAlgorithm Sha2512 = new HashAlgorithm("SHA-512", 0x05, 64, AlgorithmStatus.Normal, new [] { "SHA2-512" });
         public static readonly HashAlgorithm Sha3224 = new HashAlgorithm("SHA3-224", 0x07, 28, AlgorithmStatus.NotImplemented);
         public static readonly HashAlgorithm Sha3256 = new HashAlgorithm("SHA3-256", 0x08, 32, AlgorithmStatus.NotImplemented);
         public static readonly HashAlgorithm Sha3384 = new HashAlgorithm("SHA3-384", 0x09, 48, AlgorithmStatus.NotImplemented);
@@ -87,7 +87,6 @@ namespace Guardtime.KSI.Hashing
         /// <returns>HashAlgorithm when a match is found, otherwise null</returns>
         public static HashAlgorithm GetById(byte id) 
         {
-
             foreach (var algorithm in Values()) {
                 if (algorithm.Id == id) {
                     return algorithm;
@@ -137,7 +136,7 @@ namespace Guardtime.KSI.Hashing
         /// <returns>Defined HashAlgorithm objects</returns>
         private static IEnumerable<HashAlgorithm> Values()
         {
-            return new HashAlgorithm[]
+            return new []
                 {Sha1, Sha2256, Ripemd160, Sha2224, Sha2384, Sha2512, Sha3224, Sha3256, Sha3384, Sha3512, Sm3};
         }
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Runtime.Remoting.Channels;
 using Guardtime.KSI.Properties;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

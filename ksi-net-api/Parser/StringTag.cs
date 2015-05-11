@@ -19,7 +19,7 @@ namespace Guardtime.KSI.Parser
             }
             else
             {
-                // TODO: Catch exception
+                // TODO: Use correct exception
                 throw new FormatException("String must be null terminated");
             }
             
@@ -27,7 +27,10 @@ namespace Guardtime.KSI.Parser
 
         public sealed override byte[] EncodeValue()
         {
-            return Encoding.UTF8.GetBytes(Value);
+            var stringBytes = Encoding.UTF8.GetBytes(Value);
+            var bytes = new byte[stringBytes.Length + 1];
+            Array.Copy(stringBytes, 0, bytes, 0, stringBytes.Length);
+            return bytes;
         }
 
         public sealed override string ToString()
