@@ -11,7 +11,7 @@ namespace Guardtime.KSI.Parser
         [TestMethod]
         public void TestImprintTagCreateFromTag()
         {
-            var rawTag = new RawTag(0x1, false, false,
+            var rawTag = new TlvTag(0x1, false, false,
                 new byte[]
                 {
                     0x1, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18,
@@ -27,13 +27,13 @@ namespace Guardtime.KSI.Parser
 
             var newTag = new ImprintTag(rawTag);
             newTag.DecodeValue(rawTag.Value);
-            Assert.AreEqual(newTag, tag, "Tags should be equal");
+            Assert.AreEqual(newTag, tag, "Value should be equal");
         }
 
         [TestMethod]
         public void TestImprintTagProperties()
         {
-            var rawTag = new RawTag(0x1, true, true,
+            var rawTag = new TlvTag(0x1, true, true,
                 new byte[]
                 {
                     0x1, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18,
@@ -62,7 +62,7 @@ namespace Guardtime.KSI.Parser
         [TestMethod, ExpectedException(typeof(ArgumentNullException), "Tag should throw null exception when created with tlv tag null value")]
         public void TestImprintTagCreateFromNullTag()
         {
-            var tag = new ImprintTag(null);
+            var tag = new ImprintTag((TlvTag)null);
         }
 
     }

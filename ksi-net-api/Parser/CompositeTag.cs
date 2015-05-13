@@ -4,18 +4,25 @@ using System.Text;
 
 namespace Guardtime.KSI.Parser
 {
-    public abstract class CompositeTag : TlvTag<List<ITlvTag>>
+    public class CompositeTag : TlvTag
     {
+        protected new List<TlvTag> Value;
 
-        protected CompositeTag(ITlvTag tag) : base(tag)
+        public CompositeTag(byte[] bytes) : base(bytes)
+        {
+            DecodeValue(base.EncodeValue());
+        }
+
+        public CompositeTag(TlvTag tag) : base(tag)
         {
             DecodeValue(tag.EncodeValue());
         }
 
-        public sealed override void DecodeValue(byte[] valueBytes)
+        private void DecodeValue(byte[] bytes)
         {
-            Value = new List<ITlvTag>();
-            using (var tlvReader = new TlvReader(new MemoryStream(valueBytes)))
+            Value = new List<TlvTag>();
+
+            using (var tlvReader = new TlvReader(new MemoryStream(bytes)))
             {
                 while (tlvReader.BaseStream.Position < tlvReader.BaseStream.Length)
                 {
@@ -24,9 +31,8 @@ namespace Guardtime.KSI.Parser
             }
         }
 
-        public sealed override byte[] EncodeValue()
+        public override byte[] EncodeValue()
         {
-            byte[] output;
             using (var writer = new TlvWriter(new MemoryStream()))
             {
                 for (var i = 0; i < Value.Count; i++)
@@ -34,16 +40,26 @@ namespace Guardtime.KSI.Parser
                     writer.WriteTag(Value[i]);
                 }
 
-                output = ((MemoryStream)writer.BaseStream).ToArray();
+                return ((MemoryStream)writer.BaseStream).ToArray();
             }
-
-            return output;
         }
 
-        public sealed override string ToString()
+        public override string ToString()
         {
             var builder = new StringBuilder();
-            builder.Append(base.ToString()).Append('\n');
+            builder.Append("TLV[0x").Append(Type.ToString("X"));
+
+            if (NonCritical)
+            {
+                builder.Append(",N");
+            }
+
+            if (Forward)
+            {
+                builder.Append(",F");
+            }
+
+            builder.Append("]:").Append('\n');
 
             for (var i = 0; i < Value.Count; i++)
             {
@@ -56,21 +72,24 @@ namespace Guardtime.KSI.Parser
             return builder.ToString();
         }
 
-        protected string TabPrefix(string s) {
+        protected string TabPrefix(string s)
+        {
             var builder = new StringBuilder();
-            
+
             var lines = s.Split('\n');
             for (var i = 0; i < lines.Length; i++)
             {
                 builder.Append("  ");
                 builder.Append(lines[i]);
-                if (!lines[i].Equals(lines[lines.Length - 1])) {
+                if (!lines[i].Equals(lines[lines.Length - 1]))
+                {
                     builder.Append("\n");
                 }
             }
 
             return builder.ToString();
         }
-        
+
     }
+
 }

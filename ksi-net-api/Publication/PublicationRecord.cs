@@ -12,14 +12,14 @@ namespace Guardtime.KSI.Publication
 
         protected List<StringTag> PubRepUri;
 
-        public PublicationRecord(ITlvTag tag) : base(tag)
+        public PublicationRecord(TlvTag tag) : base(tag)
         {
             for (var i = 0; i < Value.Count; i++)
             {
                 switch (Value[i].Type)
                 {
                     case 0x10:
-                        Value[i] = PublicationData = new PublicationData(Value[i]);
+                        PublicationData = new PublicationData(Value[i]);
                         break;
                     case 0x9:
                         if (PublicationReferences == null)

@@ -3,7 +3,7 @@ using Guardtime.KSI.Parser;
 using Guardtime.KSI.Properties;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Guardtime.KSI.Parse
+namespace Guardtime.KSI.Publication
 {
     [TestClass]
     public class PublicationDataTest
@@ -17,7 +17,7 @@ namespace Guardtime.KSI.Parse
             {
                 var data = new byte[stream.Length];
                 stream.Read(data, 0, (int) stream.Length);
-                new PublicationData(data);
+//                new PublicationData(data);
             }
             
         }

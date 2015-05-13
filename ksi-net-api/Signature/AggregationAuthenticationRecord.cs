@@ -14,14 +14,15 @@ namespace Guardtime.KSI.Signature
 
         private SignatureData _signatureData;
 
-        public AggregationAuthenticationRecord(ITlvTag tag) : base(tag)
+        public AggregationAuthenticationRecord(TlvTag tag) : base(tag)
         {
             for (var i = 0; i < Value.Count; i++)
             {
                 switch (Value[i].Type)
                 {
                     case 0x2:
-                        Value[i] = _aggregationTime = new IntegerTag(Value[i]);
+                        _aggregationTime = new IntegerTag(Value[i]);
+                        Value[i] = _aggregationTime;
                         break;
                     case 0x3:
                         if (_chainIndex == null)
@@ -34,10 +35,12 @@ namespace Guardtime.KSI.Signature
                         Value[i] = chainIndexTag;
                         break;
                     case 0x5:
-                        Value[i] = _inputHash = new ImprintTag(Value[i]);
+                        _inputHash = new ImprintTag(Value[i]);
+                        Value[i] = _inputHash;
                         break;
                     case 0xB:
-                        Value[i] = _signatureData = new SignatureData(Value[i]);
+                        _signatureData = new SignatureData(Value[i]);
+                        Value[i] = _signatureData;
                         break;
                 }
             }

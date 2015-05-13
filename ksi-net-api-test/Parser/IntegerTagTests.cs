@@ -10,7 +10,7 @@ namespace Guardtime.KSI.Parser
         [TestMethod]
         public void TestIntegerTagCreateFromTag()
         {
-            var rawTag = new RawTag(0x1, false, false, new byte[] {0x1});
+            var rawTag = new TlvTag(0x1, false, false, new byte[] {0x1});
             var tag = new IntegerTag(rawTag);
             tag.DecodeValue(rawTag.Value);
             Assert.AreEqual((uint)0x1, tag.Type, "Tag type should be correct");
@@ -21,13 +21,13 @@ namespace Guardtime.KSI.Parser
 
             var newTag = new IntegerTag(rawTag);
             newTag.DecodeValue(rawTag.Value);
-            Assert.AreEqual(newTag, tag, "Tags should be equal");
+            Assert.AreEqual(newTag, tag, "Value should be equal");
         }
 
         [TestMethod]
         public void TestIntegerTagProperties()
         {
-            var rawTag = new RawTag(0x1, true, true, new byte[] {0x1});
+            var rawTag = new TlvTag(0x1, true, true, new byte[] {0x1});
             var tag = new IntegerTag(rawTag);
             tag.DecodeValue(rawTag.Value);
             Assert.AreEqual((uint)0x1, tag.Type, "Tag type should be preserved");
@@ -51,7 +51,7 @@ namespace Guardtime.KSI.Parser
         [TestMethod, ExpectedException(typeof(ArgumentNullException), "Tag should throw null exception when created with tlv tag null value")]
         public void TestIntegerTagCreateFromNullTag()
         {
-            var tag = new IntegerTag(null);
+            var tag = new IntegerTag((TlvTag)null);
         }
     }
 }

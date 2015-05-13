@@ -1,42 +1,45 @@
-﻿
-using System.Text;
-using Guardtime.KSI.Hashing;
+﻿using Guardtime.KSI.Hashing;
 
 namespace Guardtime.KSI.Parser
 {
-    public class ImprintTag : TlvTag<DataHash>
+    public class ImprintTag : TlvTag
     {
-        public ImprintTag(ITlvTag tag) : base(tag)
+        public new DataHash Value;
+
+        public ImprintTag(byte[] bytes) : base(bytes)
+        {
+            DecodeValue(base.EncodeValue());
+        }
+
+        public ImprintTag(TlvTag tag) : base(tag)
         {
             DecodeValue(tag.EncodeValue());
         }
 
-        public sealed override void DecodeValue(byte[] valueBytes)
+        public void DecodeValue(byte[] bytes)
         {
-            Value = new DataHash(valueBytes);
+            Value = new DataHash(bytes);
         }
 
-        public sealed override byte[] EncodeValue()
+        public override byte[] EncodeValue()
         {
             return Value.Imprint;
         }
 
-        public sealed override string ToString()
-        {
-            var builder = new StringBuilder();
-            builder.Append(base.ToString());
-            builder.Append("0x").Append(Value == null ? null : Util.Util.ConvertByteArrayToHex(Value.Imprint));
-            return builder.ToString();
-        }
-
         public override bool Equals(object obj)
         {
-            if (obj == null || obj.GetType() != GetType()) return false;
-            var b = (ImprintTag)obj;
-            return b.Type == Type &&
-                   b.Forward == Forward &&
-                   b.NonCritical == NonCritical &&
-                   b.Value.Equals(Value);
+            var tag = obj as ImprintTag;
+            if (tag == null)
+            {
+                return false;
+            }
+
+            return tag.Type == Type &&
+                   tag.Forward == Forward &&
+                   tag.NonCritical == NonCritical &&
+                   tag.Value.Equals(Value);
         }
+
     }
+
 }

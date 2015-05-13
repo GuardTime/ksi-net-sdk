@@ -5,10 +5,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Guardtime.KSI.Signature
 {
-    [TestClass()]
+    [TestClass]
     public class KsiSignatureDoTests
     {
-        [TestMethod()]
+        [TestMethod]
         public void GetMemberTest()
         {
             byte[] data;

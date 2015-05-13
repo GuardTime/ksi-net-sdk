@@ -6,13 +6,13 @@ namespace Guardtime.KSI.Signature
     {
         protected StringTag SignatureType;
 
-        protected RawTag SignatureValue;
+        protected TlvTag SignatureValue;
 
-        protected RawTag CertificateId;
+        protected TlvTag CertificateId;
 
         protected StringTag CertificateRepositoryUri;
 
-        public SignatureData(ITlvTag tag) : base(tag)
+        public SignatureData(TlvTag tag) : base(tag)
         {
             for (var i = 0; i < Value.Count; i++)
             {
@@ -23,11 +23,10 @@ namespace Guardtime.KSI.Signature
                         Value[i] = SignatureType;
                         break;
                     case 0x2:
-                        SignatureValue = new RawTag(Value[i]);
-                        Value[i] = SignatureValue;
+                        SignatureValue = Value[i];
                         break;
                     case 0x3:
-                        CertificateId = new RawTag(Value[i]);
+                        CertificateId = Value[i];
                         Value[i] = CertificateId;
                         break;
                     case 0x4:

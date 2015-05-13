@@ -13,7 +13,7 @@ namespace Guardtime.KSI.Parser
             using (var reader = new TlvReader(new MemoryStream(new byte[] { 0x21, 0x4, 0x0, 0x1, 0x2, 0x3 })))
             {
                 var tag = reader.ReadTag();
-                Assert.AreEqual(new RawTag(0x1, false, true, new byte[] { 0x0, 0x1, 0x2, 0x3 }), tag, "Reader should output correct tag");
+                Assert.AreEqual(new TlvTag(0x1, false, true, new byte[] { 0x0, 0x1, 0x2, 0x3 }), tag, "Reader should output correct tag");
             }
         }
 
@@ -22,7 +22,7 @@ namespace Guardtime.KSI.Parser
         {
             using (var reader = new TlvReader(new MemoryStream(new byte[] { 0xa0, 0x33, 0x0, 0x4, 0x0, 0x1, 0x2, 0x3 })))
             {
-                Assert.AreEqual(new RawTag(0x33, false, true, new byte[] { 0x0, 0x1, 0x2, 0x3 }), reader.ReadTag(), "Reader should output correct byte array");
+                Assert.AreEqual(new TlvTag(0x33, false, true, new byte[] { 0x0, 0x1, 0x2, 0x3 }), reader.ReadTag(), "Reader should output correct byte array");
             }
         }
 
@@ -38,7 +38,7 @@ namespace Guardtime.KSI.Parser
             Array.Copy(new byte[256], 0, data, 4, 256);
             using (var reader = new TlvReader(new MemoryStream(data)))
             {
-                Assert.AreEqual(new RawTag(0x1, true, true, new byte[256]), reader.ReadTag(), "Reader should output correct byte array");
+                Assert.AreEqual(new TlvTag(0x1, true, true, new byte[256]), reader.ReadTag(), "Reader should output correct byte array");
             }
         }
 
@@ -54,7 +54,7 @@ namespace Guardtime.KSI.Parser
 
             using (var reader = new TlvReader(new MemoryStream(data)))
             {
-                Assert.AreEqual(new RawTag(0x257, true, true, new byte[256]), reader.ReadTag(), "Reader should output correct byte array");
+                Assert.AreEqual(new TlvTag(0x257, true, true, new byte[256]), reader.ReadTag(), "Reader should output correct byte array");
             }
         }
     }

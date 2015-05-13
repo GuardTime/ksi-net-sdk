@@ -18,7 +18,7 @@ namespace Guardtime.KSI.Signature
 
         protected Rfc3161Record Rfc3161Record;
 
-        public KsiSignatureDo(ITlvTag tag) : base(tag)
+        public KsiSignatureDo(TlvTag tag) : base(tag)
         {
             for (var i = 0; i < Value.Count; i++)
             {
@@ -35,19 +35,24 @@ namespace Guardtime.KSI.Signature
                         Value[i] = aggregationChainTag;
                         break;
                     case 0x802:
-                        Value[i] = _calendarChain = new CalendarHashChain(Value[i]);
+                        _calendarChain = new CalendarHashChain(Value[i]);
+                        Value[i] = _calendarChain;
                         break;
                     case 0x803:
-                        Value[i] = _publicationRecord = new PublicationRecord(Value[i]);
+                        _publicationRecord = new PublicationRecord(Value[i]);
+                        Value[i] = _publicationRecord;
                         break;
                     case 0x804:
-                        Value[i] = _aggregationAuthenticationRecord = new AggregationAuthenticationRecord(Value[i]);
+                        _aggregationAuthenticationRecord = new AggregationAuthenticationRecord(Value[i]);
+                        Value[i] = _aggregationAuthenticationRecord;
                         break;
                     case 0x805:
-                        Value[i] = _calendarAuthenticationRecord = new CalendarAuthenticationRecord(Value[i]);
+                        _calendarAuthenticationRecord = new CalendarAuthenticationRecord(Value[i]);
+                        Value[i] = _calendarAuthenticationRecord;
                         break;
                     case 0x806:
-                        Value[i] = Rfc3161Record = new Rfc3161Record(Value[i]);
+                        Rfc3161Record = new Rfc3161Record(Value[i]);
+                        Value[i] = Rfc3161Record;
                         break;
                 }
             }

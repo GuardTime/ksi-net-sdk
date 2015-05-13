@@ -10,20 +10,23 @@ namespace Guardtime.KSI.Publication
 
         private StringTag _repUri;
 
-        public PublicationFileHeader(ITlvTag tag) : base(tag)
+        public PublicationFileHeader(TlvTag tag) : base(tag)
         {
             for (var i = 0; i < Value.Count; i++)
             {
                 switch (Value[i].Type)
                 {
                     case 0x1:
-                        Value[i] = _version = new IntegerTag(Value[i]);
+                        _version = new IntegerTag(Value[i]);
+                        Value[i] = _version;
                         break;
                     case 0x2:
-                        Value[i] = _creationTime = new IntegerTag(Value[i]);
+                        _creationTime = new IntegerTag(Value[i]);
+                        Value[i] = _creationTime;
                         break;
                     case 0x3:
-                        Value[i] = _repUri = new StringTag(Value[i]);
+                        _repUri = new StringTag(Value[i]);
+                        Value[i] = _repUri;
                         break;
                 }
             }

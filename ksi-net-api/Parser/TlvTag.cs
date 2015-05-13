@@ -1,71 +1,87 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 
 namespace Guardtime.KSI.Parser
 {
-    /// <summary>
-    /// Abstract base class for Java objects representing TLV elements.
-    /// </summary>
-    /// <typeparam name="T">type of data contained in the tag.</typeparam>
-    public abstract class TlvTag<T> : ITlvTag
+    public class TlvTag
     {
         /// <summary>
         /// Tlv tag type.
         /// </summary>
-        public uint Type { get; set; }
+        public uint Type;
+
         /// <summary>
         /// Is tlv tag non critical.
         /// </summary>
-        public bool NonCritical { get; set; }
+        public bool NonCritical;
+
         /// <summary>
         /// Is tlv forwarded.
         /// </summary>
-        public bool Forward { get; set; }
-        /// <summary>
-        /// Tlv value.
-        /// </summary>
-        public T Value { get; set; }
+        public bool Forward;
 
         /// <summary>
-        /// Initiates TLVTag object.
+        /// Tlv content.
         /// </summary>
-        /// <param name="type">tag type</param>
-        /// <param name="nonCritical">is tag non critical</param>
-        /// <param name="forward">is tag forwarded</param>
-        /// <param name="value">tag data</param>
-        protected TlvTag(uint type, bool nonCritical, bool forward, T value)
+        public byte[] Value;
+
+        public TlvTag(uint type, bool nonCritical, bool forward, byte[] value)
         {
             if (value == null)
             {
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
             }
-
             Type = type;
             NonCritical = nonCritical;
             Forward = forward;
             Value = value;
         }
 
-        /// <summary>
-        /// Initiates TLVTag object from base tag.
-        /// </summary>
-        /// <param name="tag">base tag</param>
-        protected TlvTag(ITlvTag tag)
+        public TlvTag(byte[] bytes)
+        {
+            using (var reader = new TlvReader(new MemoryStream(bytes)))
+            {
+                var tag = reader.ReadTag();
+                Type = tag.Type;
+                NonCritical = tag.NonCritical;
+                Forward = tag.Forward;
+                Value = tag.EncodeValue();
+            }
+        }
+
+        public TlvTag(TlvTag tag)
         {
             if (tag == null)
             {
-                throw new ArgumentNullException("tag");
+                throw new ArgumentNullException(nameof(tag));
             }
 
             Type = tag.Type;
             NonCritical = tag.NonCritical;
             Forward = tag.Forward;
+            Value = tag.EncodeValue();
         }
 
-        /// <summary>
-        /// Return string representation of TLV tag
-        /// </summary>
-        /// <returns>string representation of TLV tag</returns>
+        public virtual byte[] EncodeValue()
+        {
+            return Value;
+        }
+
+        public override bool Equals(object obj)
+        {
+            var tag = obj as TlvTag;
+            if (tag == null)
+            {
+                return false;
+            }
+
+            return tag.Type == Type &&
+                   tag.Forward == Forward &&
+                   tag.NonCritical == NonCritical &&
+                   Util.Util.IsArrayEqual(tag.Value, Value);
+        }
+
         public override string ToString()
         {
             var builder = new StringBuilder();
@@ -83,19 +99,13 @@ namespace Guardtime.KSI.Parser
 
             builder.Append("]:");
 
+            if (Value != null)
+            {
+                builder.Append("0x").Append(Util.Util.ConvertByteArrayToHex(EncodeValue()));
+            }
+
             return builder.ToString();
         }
-
-        /// <summary>
-        /// Parse binary data to TLVTag object.
-        /// </summary>
-        /// <param name="valueBytes">binary data</param>
-        public abstract void DecodeValue(byte[] valueBytes);
-
-        /// <summary>
-        /// Get TLVTag as bytes.
-        /// </summary>
-        /// <returns>TLV tag data as byte array</returns>
-        public abstract byte[] EncodeValue();
     }
+
 }

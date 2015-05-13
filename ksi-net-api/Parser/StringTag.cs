@@ -1,31 +1,37 @@
-﻿
-using System;
+﻿using System;
 using System.Text;
 
 namespace Guardtime.KSI.Parser
 {
-    public class StringTag : TlvTag<string>
+    public class StringTag : TlvTag
     {
-        public StringTag(ITlvTag tag) : base(tag)
+        public new string Value;
+
+        public StringTag(byte[] bytes) : base(bytes)
+        {
+            DecodeValue(base.EncodeValue());
+        }
+
+        public StringTag(TlvTag tag) : base(tag)
         {
             DecodeValue(tag.EncodeValue());
         }
 
-        public sealed override void DecodeValue(byte[] valueBytes)
+        public void DecodeValue(byte[] bytes)
         {
-            if (valueBytes.Length > 0 && valueBytes[valueBytes.Length - 1] == 0)
+            if (bytes.Length > 0 && bytes[bytes.Length - 1] == 0)
             {
-                Value = Encoding.UTF8.GetString(valueBytes, 0, valueBytes.Length - 1);
+                Value = Encoding.UTF8.GetString(bytes, 0, bytes.Length - 1);
             }
             else
             {
                 // TODO: Use correct exception
                 throw new FormatException("String must be null terminated");
             }
-            
+
         }
 
-        public sealed override byte[] EncodeValue()
+        public override byte[] EncodeValue()
         {
             var stringBytes = Encoding.UTF8.GetBytes(Value);
             var bytes = new byte[stringBytes.Length + 1];
@@ -33,22 +39,40 @@ namespace Guardtime.KSI.Parser
             return bytes;
         }
 
+        public override bool Equals(object obj)
+        {
+            var tag = obj as StringTag;
+            if (tag == null)
+            {
+                return false;
+            }
+
+            return tag.Type == Type &&
+                   tag.Forward == Forward &&
+                   tag.NonCritical == NonCritical &&
+                   tag.Value == Value;
+        }
+
         public sealed override string ToString()
         {
             var builder = new StringBuilder();
-            builder.Append(base.ToString());
+            builder.Append("TLV[0x").Append(Type.ToString("X"));
+
+            if (NonCritical)
+            {
+                builder.Append(",N");
+            }
+
+            if (Forward)
+            {
+                builder.Append(",F");
+            }
+
+            builder.Append("]:");
             builder.Append("\"").Append(Value).Append("\"");
             return builder.ToString();
         }
 
-        public override bool Equals(object obj)
-        {
-            if (obj == null || obj.GetType() != GetType()) return false;
-            var b = (StringTag)obj;
-            return b.Type == Type &&
-                   b.Forward == Forward &&
-                   b.NonCritical == NonCritical &&
-                   b.Value.Equals(Value);
-        }
     }
+
 }

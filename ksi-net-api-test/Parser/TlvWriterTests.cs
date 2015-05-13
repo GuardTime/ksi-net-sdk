@@ -12,7 +12,7 @@ namespace Guardtime.KSI.Parser
         {
             using (var writer = new TlvWriter(new MemoryStream()))
             {
-                writer.WriteTag(new RawTag(0x1, false, true, new byte[] { 0x0, 0x1, 0x2, 0x3 }));
+                writer.WriteTag(new TlvTag(0x1, false, true, new byte[] { 0x0, 0x1, 0x2, 0x3 }));
                 CollectionAssert.AreEqual(new byte[] { 0x21, 0x4, 0x0, 0x1, 0x2, 0x3 }, ((MemoryStream)writer.BaseStream).ToArray(), "Writer should output correct byte array");
             }
         }
@@ -22,7 +22,7 @@ namespace Guardtime.KSI.Parser
         {
             using (var writer = new TlvWriter(new MemoryStream()))
             {
-                writer.WriteTag(new RawTag(0x33, false, true, new byte[] { 0x0, 0x1, 0x2, 0x3 }));
+                writer.WriteTag(new TlvTag(0x33, false, true, new byte[] { 0x0, 0x1, 0x2, 0x3 }));
                 CollectionAssert.AreEqual(new byte[] { 0xa0, 0x33, 0x0, 0x4, 0x0, 0x1, 0x2, 0x3 }, ((MemoryStream)writer.BaseStream).ToArray(), "Writer should output correct byte array");
             }
         }
@@ -32,7 +32,7 @@ namespace Guardtime.KSI.Parser
         {
             using (var writer = new TlvWriter(new MemoryStream()))
             {
-                writer.WriteTag(new RawTag(0x1, true, true, new byte[256]));
+                writer.WriteTag(new TlvTag(0x1, true, true, new byte[256]));
 
                 var result = new byte[260];
                 result[0] = 0xe0;
@@ -49,7 +49,7 @@ namespace Guardtime.KSI.Parser
         {
             using (var writer = new TlvWriter(new MemoryStream()))
             {
-                writer.WriteTag(new RawTag(0x257, true, true, new byte[256]));
+                writer.WriteTag(new TlvTag(0x257, true, true, new byte[256]));
 
                 var result = new byte[260];
                 result[0] = 0xe2;
@@ -66,7 +66,7 @@ namespace Guardtime.KSI.Parser
         {
             using (var writer = new TlvWriter(new MemoryStream()))
             {
-                writer.WriteTag(new RawTag(0x2000, true, true, new byte[256]));
+                writer.WriteTag(new TlvTag(0x2000, true, true, new byte[256]));
                 Console.WriteLine(BitConverter.ToString(((MemoryStream)writer.BaseStream).ToArray()));
             }
         }
@@ -76,7 +76,7 @@ namespace Guardtime.KSI.Parser
         {
             using (var writer = new TlvWriter(new MemoryStream()))
             {
-                writer.WriteTag(new RawTag(0x1, true, true, new byte[ushort.MaxValue + 1]));
+                writer.WriteTag(new TlvTag(0x1, true, true, new byte[ushort.MaxValue + 1]));
             }
         }
     }

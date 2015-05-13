@@ -11,7 +11,7 @@ namespace Guardtime.KSI.Signature
 
         protected List<IntegerTag> ChainIndex;
 
-        protected RawTag InputData;
+        protected TlvTag InputData;
 
         protected ImprintTag InputHash;
 
@@ -22,14 +22,15 @@ namespace Guardtime.KSI.Signature
         // the hash algorithm identified by aggrAlgorithmId
         protected HashAlgorithm AggrAlgorithm;
 
-        public AggregationHashChain(ITlvTag tag) : base(tag)
+        public AggregationHashChain(TlvTag tag) : base(tag)
         {
             for (var i = 0; i < Value.Count; i++)
             {
                 switch (Value[i].Type)
                 {
                     case 0x2:
-                        Value[i] = AggregationTime = new IntegerTag(Value[i]);
+                        AggregationTime = new IntegerTag(Value[i]);
+                        Value[i] = AggregationTime;
                         break;
                     case 0x3:
                         if (ChainIndex == null)
@@ -42,13 +43,16 @@ namespace Guardtime.KSI.Signature
                         Value[i] = chainIndexTag;
                         break;
                     case 0x4:
-                        Value[i] = InputData = new RawTag(Value[i]);
+                        InputData = new TlvTag(Value[i]);
+                        Value[i] = InputData;
                         break;
                     case 0x5:
-                        Value[i] = InputHash = new ImprintTag(Value[i]);
+                        InputHash = new ImprintTag(Value[i]);
+                        Value[i] = InputHash;
                         break;
                     case 0x6:
-                        Value[i] = AggrAlgorithmId = new IntegerTag(Value[i]);
+                        AggrAlgorithmId = new IntegerTag(Value[i]);
+                        Value[i] = AggrAlgorithmId;
                         break;
                     case 0x7:
                     case 0x8:
@@ -82,23 +86,27 @@ namespace Guardtime.KSI.Signature
             protected string metaHashId;
 
 
-            public Link(ITlvTag tag, LinkDirection direction) : base(tag)
+            public Link(TlvTag tag, LinkDirection direction) : base(tag)
             {
                 for (var i = 0; i < Value.Count; i++)
                 {
                     switch (Value[i].Type)
                     {
                         case 0x1:
-                            Value[i] = LevelCorrection = new IntegerTag(Value[i]);
+                            LevelCorrection = new IntegerTag(Value[i]);
+                            Value[i] = LevelCorrection;
                             break;
                         case 0x2:
-                            Value[i] = SiblingHash = new ImprintTag(Value[i]);
+                            SiblingHash = new ImprintTag(Value[i]);
+                            Value[i] = SiblingHash;
                             break;
                         case 0x3:
-                            Value[i] = MetaHash = new ImprintTag(Value[i]);
+                            MetaHash = new ImprintTag(Value[i]);
+                            Value[i] = MetaHash;
                             break;
                         case 0x4:
-                            Value[i] = _metaData = new MetaData(Value[i]);
+                            _metaData = new MetaData(Value[i]);
+                            Value[i] = _metaData;
                             break;
                     }
                 }
@@ -118,23 +126,27 @@ namespace Guardtime.KSI.Signature
             //Please do keep in mind that request time is in milliseconds!
             private IntegerTag _requestTime;
 
-            public MetaData(ITlvTag tag) : base(tag)
+            public MetaData(TlvTag tag) : base(tag)
             {
                 for (var i = 0; i < Value.Count; i++)
                 {
                     switch (Value[i].Type)
                     {
                         case 0x1:
-                            Value[i] = _clientId = new StringTag(Value[i]);
+                            _clientId = new StringTag(Value[i]);
+                            Value[i] = _clientId;
                             break;
                         case 0x2:
-                            Value[i] = _machineId = new StringTag(Value[i]);
+                            _machineId = new StringTag(Value[i]);
+                            Value[i] = _machineId;
                             break;
                         case 0x3:
-                            Value[i] = _sequenceNr = new IntegerTag(Value[i]);
+                            _sequenceNr = new IntegerTag(Value[i]);
+                            Value[i] = _sequenceNr;
                             break;
                         case 0x4:
-                            Value[i] = _requestTime = new IntegerTag(Value[i]);
+                            _requestTime = new IntegerTag(Value[i]);
+                            Value[i] = _requestTime;
                             break;
                     }
                 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Guardtime.KSI.Parser
@@ -10,7 +11,7 @@ namespace Guardtime.KSI.Parser
         [TestMethod]
         public void TestStringTagCreateFromTag()
         {
-            var rawTag = new RawTag(0x1, false, false,
+            var rawTag = new TlvTag(0x1, false, false,
                 new byte[] {0x74, 0x65, 0x73, 0x74, 0x20, 0x6D, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x0});
             var tag = new StringTag(rawTag);
             tag.DecodeValue(rawTag.Value);
@@ -22,13 +23,13 @@ namespace Guardtime.KSI.Parser
 
             var newTag = new StringTag(rawTag);
             newTag.DecodeValue(rawTag.Value);
-            Assert.AreEqual(newTag, tag, "Tags should be equal");
+            Assert.AreEqual(newTag, tag, "Value should be equal");
         }
 
         [TestMethod]
         public void TestStringTagProperties()
         {
-            var rawTag = new RawTag(0x1, true, true,
+            var rawTag = new TlvTag(0x1, true, true,
                 new byte[] {0x74, 0x65, 0x73, 0x74, 0x20, 0x6D, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x0});
             var tag = new StringTag(rawTag);
             tag.DecodeValue(rawTag.Value);
@@ -53,7 +54,7 @@ namespace Guardtime.KSI.Parser
         [TestMethod, ExpectedException(typeof(FormatException))]
         public void TestStringTagDecodeNotEndingWithNullByte()
         {
-            var rawTag = new RawTag(0x1, true, true,
+            var rawTag = new TlvTag(0x1, true, true,
                 new byte[] { 0x74, 0x65, 0x73, 0x74, 0x20, 0x6D, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65});
             var tag = new StringTag(rawTag);
             tag.DecodeValue(rawTag.Value);
@@ -62,7 +63,7 @@ namespace Guardtime.KSI.Parser
         [TestMethod, ExpectedException(typeof(ArgumentNullException), "Tag should throw null exception when created with tlv tag null value")]
         public void TestStringTagCreateFromNullTag()
         {
-            var tag = new StringTag(null);
+            var tag = new StringTag((TlvTag)null);
         }
     }
 }

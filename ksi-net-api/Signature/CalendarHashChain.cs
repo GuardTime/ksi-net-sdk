@@ -14,20 +14,23 @@ namespace Guardtime.KSI.Signature
 
         protected List<Link> Chain;
 
-        public CalendarHashChain(ITlvTag tag) : base(tag)
+        public CalendarHashChain(TlvTag tag) : base(tag)
         {
             for (var i = 0; i < Value.Count; i++)
             {
                 switch (Value[i].Type)
                 {
                     case 0x1:
-                        Value[i] = PublicationTime = new IntegerTag(Value[i]);
+                        PublicationTime = new IntegerTag(Value[i]);
+                        Value[i] = PublicationTime;
                         break;
                     case 0x2:
-                        Value[i] = AggregationTime = new IntegerTag(Value[i]);
+                        AggregationTime = new IntegerTag(Value[i]);
+                        Value[i] = AggregationTime;
                         break;
                     case 0x5:
-                        Value[i] = InputHash = new ImprintTag(Value[i]);
+                        InputHash = new ImprintTag(Value[i]);
+                        Value[i] = InputHash;
                         break;
                     case 0x7:
                     case 0x8:
@@ -48,7 +51,7 @@ namespace Guardtime.KSI.Signature
         {
             private LinkDirection _direction;
 
-            public Link(ITlvTag tag) : base(tag)
+            public Link(TlvTag tag) : base(tag)
             {
                 if (tag.Type == (int) LinkDirection.Left)
                 {

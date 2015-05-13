@@ -39,7 +39,7 @@ namespace Guardtime.KSI.Parser
         /// Reads a complete TLV item from the wrapped stream.
         /// </summary>
         /// <returns>raw tlv tag</returns>
-        public RawTag ReadTag() {
+        public TlvTag ReadTag() {
             try {
                 var firstByte = ReadByte();
 
@@ -61,7 +61,7 @@ namespace Guardtime.KSI.Parser
                 var data = new byte[length];
                 Read(data, 0, length);
 
-                return new RawTag(type, nonCritical, forward, data);
+                return new TlvTag(type, nonCritical, forward, data);
             } catch (EndOfStreamException e) {
                 throw new FormatException("Premature end of data", e);
             }

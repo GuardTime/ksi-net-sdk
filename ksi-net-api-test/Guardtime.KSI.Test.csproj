@@ -59,7 +59,7 @@
     <Compile Include="Hashing\DataHashTests.cs" />
     <Compile Include="Hashing\HashAlgorithmTests.cs" />
     <Compile Include="Parser\IntegerTagTests.cs" />
-    <Compile Include="Parser\RawTagTests.cs" />
+    <Compile Include="Parser\TlvTagTests.cs" />
     <Compile Include="Parser\ImprintTagTests.cs" />
     <Compile Include="Parser\StringTagTests.cs" />
     <Compile Include="Parser\TestTests.cs" />

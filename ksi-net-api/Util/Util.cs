@@ -71,7 +71,6 @@ namespace Guardtime.KSI.Util
 
             return res;
         }
-
-        
+      
     }
 }
