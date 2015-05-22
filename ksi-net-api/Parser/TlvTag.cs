@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Guardtime.KSI.Parser
 {
-    public class TlvTag
+    public abstract class TlvTag
     {
         /// <summary>
         /// Tlv tag type.
@@ -24,21 +24,22 @@ namespace Guardtime.KSI.Parser
         /// <summary>
         /// Tlv content.
         /// </summary>
-        public byte[] Value;
+        protected byte[] ValueBytes;
 
-        public TlvTag(uint type, bool nonCritical, bool forward, byte[] value)
+        protected TlvTag(uint type, bool nonCritical, bool forward, byte[] value)
         {
             if (value == null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
+
             Type = type;
             NonCritical = nonCritical;
             Forward = forward;
-            Value = value;
+            ValueBytes = value;
         }
 
-        public TlvTag(byte[] bytes)
+        protected TlvTag(byte[] bytes)
         {
             using (var reader = new TlvReader(new MemoryStream(bytes)))
             {
@@ -46,11 +47,11 @@ namespace Guardtime.KSI.Parser
                 Type = tag.Type;
                 NonCritical = tag.NonCritical;
                 Forward = tag.Forward;
-                Value = tag.EncodeValue();
+                ValueBytes = tag.EncodeValue();
             }
         }
 
-        public TlvTag(TlvTag tag)
+        protected TlvTag(TlvTag tag)
         {
             if (tag == null)
             {
@@ -60,12 +61,18 @@ namespace Guardtime.KSI.Parser
             Type = tag.Type;
             NonCritical = tag.NonCritical;
             Forward = tag.Forward;
-            Value = tag.EncodeValue();
+            ValueBytes = tag.EncodeValue();
         }
 
-        public virtual byte[] EncodeValue()
+        public abstract byte[] EncodeValue();
+
+        public byte[] Encode()
         {
-            return Value;
+            using (var writer = new TlvWriter(new MemoryStream()))
+            {
+                writer.WriteTag(this);
+                return ((MemoryStream)writer.BaseStream).ToArray();
+            }
         }
 
         public override bool Equals(object obj)
@@ -79,7 +86,7 @@ namespace Guardtime.KSI.Parser
             return tag.Type == Type &&
                    tag.Forward == Forward &&
                    tag.NonCritical == NonCritical &&
-                   Util.Util.IsArrayEqual(tag.Value, Value);
+                   Util.Util.IsArrayEqual(tag.EncodeValue(), EncodeValue());
         }
 
         public override string ToString()
@@ -99,10 +106,7 @@ namespace Guardtime.KSI.Parser
 
             builder.Append("]:");
 
-            if (Value != null)
-            {
-                builder.Append("0x").Append(Util.Util.ConvertByteArrayToHex(EncodeValue()));
-            }
+            builder.Append("0x").Append(Util.Util.ConvertByteArrayToHex(EncodeValue()));
 
             return builder.ToString();
         }

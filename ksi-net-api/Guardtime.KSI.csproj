@@ -39,12 +39,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\InvalidTlvStructureException.cs" />
+    <Compile Include="Exceptions\KsiException.cs" />
     <Compile Include="Hashing\DataHash.cs" />
     <Compile Include="Hashing\DataHasher.cs" />
     <Compile Include="Hashing\HashAlgorithm.cs" />
     <Compile Include="Hashing\HashingException.cs" />
     <Compile Include="Parser\ImprintTag.cs" />
     <Compile Include="Parser\IntegerTag.cs" />
+    <Compile Include="Parser\RawTag.cs" />
     <Compile Include="Parser\StringTag.cs" />
     <Compile Include="Parser\CompositeTag.cs" />
     <Compile Include="Parser\TlvTag.cs" />
@@ -52,9 +55,15 @@
     <Compile Include="Parser\TlvWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Publication\CertificateRecord.cs" />
-    <Compile Include="Publication\PublicationFileHeader.cs" />
+    <Compile Include="Publication\PublicationsFileHeader.cs" />
+    <Compile Include="Publication\PublicationsFile.cs" />
     <Compile Include="Publication\PublicationsFileDo.cs" />
     <Compile Include="Publication\PublicationData.cs" />
+    <Compile Include="Service\AggregationRequest.cs" />
+    <Compile Include="Service\AggregationPdu.cs" />
+    <Compile Include="Service\HttpAggregationRequest.cs" />
+    <Compile Include="Service\AggregationPduPayload.cs" />
+    <Compile Include="Service\PduHeader.cs" />
     <Compile Include="Signature\AggregationAuthenticationRecord.cs" />
     <Compile Include="Signature\AggregationHashChain.cs" />
     <Compile Include="Signature\CalendarAuthenticationRecord.cs" />
@@ -67,6 +76,7 @@
     <Compile Include="Trust\IKsiTrustProvider.cs" />
     <Compile Include="Trust\IPkiTrustProvider.cs" />
     <Compile Include="Trust\PkiTrustStoreProvider.cs" />
+    <Compile Include="Util\EmptyEnumerator.cs" />
     <Compile Include="Util\Util.cs" />
   </ItemGroup>
   <ItemGroup />

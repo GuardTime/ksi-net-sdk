@@ -4,8 +4,8 @@ namespace Guardtime.KSI.Publication
 {
     public class PublicationData : CompositeTag
     {
-        private IntegerTag _publicationTime;
-        private ImprintTag _publicationHash;
+        public IntegerTag PublicationTime;
+        public ImprintTag PublicationHash;
 
         public PublicationData(TlvTag tag) : base(tag)
         {
@@ -14,17 +14,21 @@ namespace Guardtime.KSI.Publication
                 switch (Value[i].Type)
                 {
                     case 0x2:
-                        _publicationTime = new IntegerTag(Value[i]);
-                        Value[i] = _publicationTime;
+                        PublicationTime = new IntegerTag(Value[i]);
+                        Value[i] = PublicationTime;
                         break;
                     case 0x4:
-                        _publicationHash = new ImprintTag(Value[i]);
-                        Value[i] = _publicationHash;
+                        PublicationHash = new ImprintTag(Value[i]);
+                        Value[i] = PublicationHash;
                         break;
                 }
             }
         }
 
 
+        public override bool IsValidStructure()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

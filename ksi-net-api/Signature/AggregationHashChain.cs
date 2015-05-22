@@ -43,7 +43,7 @@ namespace Guardtime.KSI.Signature
                         Value[i] = chainIndexTag;
                         break;
                     case 0x4:
-                        InputData = new TlvTag(Value[i]);
+                        InputData = new RawTag(Value[i]);
                         Value[i] = InputData;
                         break;
                     case 0x5:
@@ -83,7 +83,7 @@ namespace Guardtime.KSI.Signature
             private LinkDirection _direction;
 
             // the client ID extracted from metaHash
-            protected string metaHashId;
+            protected string MetaHashId;
 
 
             public Link(TlvTag tag, LinkDirection direction) : base(tag)
@@ -111,7 +111,11 @@ namespace Guardtime.KSI.Signature
                     }
                 }
             }
-            
+
+            public override bool IsValidStructure()
+            {
+                throw new NotImplementedException();
+            }
         }
 
         class MetaData : CompositeTag
@@ -151,7 +155,11 @@ namespace Guardtime.KSI.Signature
                     }
                 }
             }
-            
+
+            public override bool IsValidStructure()
+            {
+                throw new NotImplementedException();
+            }
         } 
 
         class ChainResult
@@ -162,6 +170,9 @@ namespace Guardtime.KSI.Signature
         }
 
 
-        
+        public override bool IsValidStructure()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

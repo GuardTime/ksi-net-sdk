@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Publication
@@ -6,11 +7,17 @@ namespace Guardtime.KSI.Publication
     public class PublicationRecord : CompositeTag
     {
 
-        protected PublicationData PublicationData;
+        public PublicationData PublicationData;
+        public List<StringTag> PublicationReferences;
+        public List<StringTag> PubRepUri;
 
-        protected List<StringTag> PublicationReferences;
-
-        protected List<StringTag> PubRepUri;
+        public DateTime PublicationTime
+        {
+            get
+            {
+                return Util.Util.ConvertUnixTimeToDateTime(PublicationData.PublicationTime.Value);
+            } 
+        } 
 
         public PublicationRecord(TlvTag tag) : base(tag)
         {
@@ -45,6 +52,10 @@ namespace Guardtime.KSI.Publication
             }
         }
 
-        
+
+        public override bool IsValidStructure()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

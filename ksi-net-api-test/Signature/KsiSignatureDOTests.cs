@@ -18,17 +18,17 @@ namespace Guardtime.KSI.Signature
                 stream.Read(data, 0, (int)stream.Length);
             }
 
+            var tag = new RawTag(data);
+
             using (var reader = new TlvReader(new MemoryStream(data)))
             {
-                var test = new KsiSignatureDo(reader.ReadTag());
-                reader.BaseStream.Position = 0;
+                var test = new KsiSignatureDo(tag);
                 var time = Environment.TickCount;
                 var i = 0;
 
                 while (Environment.TickCount - time < 1000)
                 {
-                    test = new KsiSignatureDo(reader.ReadTag());
-                    reader.BaseStream.Position = 0;
+                    test = new KsiSignatureDo(tag);
                     i++;
                 }
                 Console.WriteLine(i);

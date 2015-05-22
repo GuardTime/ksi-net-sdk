@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Signature
@@ -44,6 +45,11 @@ namespace Guardtime.KSI.Signature
                         break;
                 }
             }
+        }
+
+        public override bool IsValidStructure()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

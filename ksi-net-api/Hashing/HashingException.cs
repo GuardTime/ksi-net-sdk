@@ -3,14 +3,14 @@
 namespace Guardtime.KSI.Hashing
 {
     [Serializable]
-    class HashingException : Exception
+    class HashingException : System.Exception
     {
 
         public HashingException(string message) : base(message)
         {
         }
 
-        public HashingException(string message, Exception innerException) : base(message, innerException)
+        public HashingException(string message, System.Exception innerException) : base(message, innerException)
         {
         }
     }

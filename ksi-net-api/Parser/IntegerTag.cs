@@ -4,11 +4,11 @@ namespace Guardtime.KSI.Parser
 {
     public class IntegerTag : TlvTag
     {
-        public new ulong Value;
+        public ulong Value;
 
         public IntegerTag(byte[] bytes) : base(bytes)
         {
-            DecodeValue(base.EncodeValue());
+            DecodeValue(ValueBytes);
         }
 
         public IntegerTag(TlvTag tag) : base(tag)
@@ -16,7 +16,13 @@ namespace Guardtime.KSI.Parser
             DecodeValue(tag.EncodeValue());
         }
 
-        public void DecodeValue(byte[] bytes)
+        public IntegerTag(uint type, bool nonCritical, bool forward, ulong value)
+            : base(type, nonCritical, forward, Util.Util.EncodeUnsignedLong(value))
+        {
+            Value = value;
+        }
+
+        private void DecodeValue(byte[] bytes)
         {
             Value = Util.Util.DecodeUnsignedLong(bytes, 0, bytes.Length);
         }

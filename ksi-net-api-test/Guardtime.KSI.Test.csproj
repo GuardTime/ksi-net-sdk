@@ -58,6 +58,7 @@
     <Compile Include="Hashing\DataHasherTests.cs" />
     <Compile Include="Hashing\DataHashTests.cs" />
     <Compile Include="Hashing\HashAlgorithmTests.cs" />
+    <Compile Include="Parser\CompositeTagTests.cs" />
     <Compile Include="Parser\IntegerTagTests.cs" />
     <Compile Include="Parser\TlvTagTests.cs" />
     <Compile Include="Parser\ImprintTagTests.cs" />
@@ -71,10 +72,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Publication\PublicationsFileDoTests.cs" />
     <Compile Include="Publication\PublicationDataTests.cs" />
+    <Compile Include="Publication\PublicationsFileTests.cs" />
+    <Compile Include="Service\HttpAggregationRequestTests.cs" />
     <Compile Include="Signature\KsiSignatureDoTests.cs" />
     <Compile Include="Trust\PkiTrustStoreProviderTests.cs" />
+    <Compile Include="Util\EmptyEnumeratorTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ksi-net-api\Guardtime.KSI.csproj">
@@ -100,6 +103,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\publication\publicationdata\unknowntag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\publication\publicationrecord\pub-record-18-09-2014.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\publication\publicationrecord\pub-record-invalid-hash-18-09-2014.bin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\publication\publicationsfile\ksi-publications.bin">

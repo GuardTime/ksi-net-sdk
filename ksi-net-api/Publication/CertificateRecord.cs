@@ -4,9 +4,8 @@ namespace Guardtime.KSI.Publication
 {
     public class CertificateRecord : CompositeTag
     {
-        private TlvTag _certificateId;
-
-        private TlvTag _x509Certificate;
+        public TlvTag CertificateId;
+        public TlvTag X509Certificate;
 
         public CertificateRecord(TlvTag tag) : base(tag)
         {
@@ -15,13 +14,18 @@ namespace Guardtime.KSI.Publication
                 switch (Value[i].Type)
                 {
                     case 0x1:
-                        _certificateId = Value[i];
+                        CertificateId = Value[i];
                         break;
                     case 0x2:
-                        _x509Certificate = Value[i];
+                        X509Certificate = Value[i];
                         break;
                 }
             }
+        }
+
+        public override bool IsValidStructure()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

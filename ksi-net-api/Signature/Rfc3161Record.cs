@@ -45,7 +45,7 @@ namespace Guardtime.KSI.Signature
                         TstInfoPrefix = Value[i];
                         break;
                     case 0x11:
-                        TstInfoSuffix = new TlvTag(Value[i]);
+                        TstInfoSuffix = new RawTag(Value[i]);
                         Value[i] = TstInfoSuffix;
                         break;
                     case 0x12:
@@ -64,6 +64,11 @@ namespace Guardtime.KSI.Signature
                         break;
                 }
             }
+        }
+
+        public override bool IsValidStructure()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

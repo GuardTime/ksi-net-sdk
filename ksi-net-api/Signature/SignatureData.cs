@@ -36,5 +36,10 @@ namespace Guardtime.KSI.Signature
                 }
             }
         }
+
+        public override bool IsValidStructure()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -1,27 +1,34 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
 namespace Guardtime.KSI.Parser
 {
-    public class CompositeTag : TlvTag
+    public abstract class CompositeTag : TlvTag
     {
-        protected new List<TlvTag> Value;
+        // TODO: Make list thread safe
+        public List<TlvTag> Value;
+        // TODO: Create possibility to check composite tag validity
 
-        public CompositeTag(byte[] bytes) : base(bytes)
+        protected CompositeTag(byte[] bytes) : base(bytes)
         {
-            DecodeValue(base.EncodeValue());
+            DecodeValue(ValueBytes);
         }
 
-        public CompositeTag(TlvTag tag) : base(tag)
+        protected CompositeTag(TlvTag tag) : base(tag)
         {
             DecodeValue(tag.EncodeValue());
+        }
+
+        protected CompositeTag(uint type, bool nonCritical, bool forward) : base(type, nonCritical, forward, new byte[] {})
+        {
+            Value = new List<TlvTag>();
         }
 
         private void DecodeValue(byte[] bytes)
         {
             Value = new List<TlvTag>();
-
             using (var tlvReader = new TlvReader(new MemoryStream(bytes)))
             {
                 while (tlvReader.BaseStream.Position < tlvReader.BaseStream.Length)
@@ -42,6 +49,29 @@ namespace Guardtime.KSI.Parser
 
                 return ((MemoryStream)writer.BaseStream).ToArray();
             }
+        }
+
+        public abstract bool IsValidStructure(); 
+
+        public override bool Equals(object obj)
+        {
+            var tag = obj as CompositeTag;
+            if (tag == null || (tag.Type != Type && tag.Forward != Forward && tag.NonCritical != NonCritical))
+            {
+                return false;
+            }
+            
+            var tagEnumerator = tag.Value == null ? (IEnumerator) new Util.EmptyEnumerator() : tag.Value.GetEnumerator();
+            var enumerator = Value == null ? (IEnumerator)new Util.EmptyEnumerator() : Value.GetEnumerator();
+            var match = true;
+            while (match && tagEnumerator.MoveNext() && enumerator.MoveNext())
+            {
+                var value1 = tagEnumerator.Current;
+                var value2 = enumerator.Current;
+                match = value1 == null ? value2 == null : value1.Equals(value2);
+            }
+
+            return match;
         }
 
         public override string ToString()

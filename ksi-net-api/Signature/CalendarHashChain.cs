@@ -65,8 +65,8 @@ namespace Guardtime.KSI.Signature
 
                 if ((int)_direction == 0)
                 {
-                    // TODO: Correct exception
-                    throw new Exception("Invalid link direction");
+                    // TODO: Correct exception and fix all System.Exception
+                    throw new System.Exception("Invalid link direction");
                 }
                 
             }
@@ -74,6 +74,9 @@ namespace Guardtime.KSI.Signature
         }
 
 
-        
+        public override bool IsValidStructure()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

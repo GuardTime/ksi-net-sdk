@@ -61,7 +61,7 @@ namespace Guardtime.KSI.Parser
                 var data = new byte[length];
                 Read(data, 0, length);
 
-                return new TlvTag(type, nonCritical, forward, data);
+                return new RawTag(type, nonCritical, forward, data);
             } catch (EndOfStreamException e) {
                 throw new FormatException("Premature end of data", e);
             }

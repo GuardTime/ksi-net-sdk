@@ -5,38 +5,27 @@ namespace Guardtime.KSI.Parser
 {
     public class StringTag : TlvTag
     {
-        public new string Value;
+        public string Value;
 
         public StringTag(byte[] bytes) : base(bytes)
         {
-            DecodeValue(base.EncodeValue());
+            Util.Util.DecodeNullTerminatedUtf8String(ValueBytes);
         }
 
         public StringTag(TlvTag tag) : base(tag)
         {
-            DecodeValue(tag.EncodeValue());
+            Util.Util.DecodeNullTerminatedUtf8String(tag.EncodeValue());
         }
 
-        public void DecodeValue(byte[] bytes)
+        public StringTag(uint type, bool nonCritical, bool forward, string value)
+            : base(type, nonCritical, forward, Util.Util.EncodeNullTerminatedUtf8String(value))
         {
-            if (bytes.Length > 0 && bytes[bytes.Length - 1] == 0)
-            {
-                Value = Encoding.UTF8.GetString(bytes, 0, bytes.Length - 1);
-            }
-            else
-            {
-                // TODO: Use correct exception
-                throw new FormatException("String must be null terminated");
-            }
-
+            Value = value;
         }
 
         public override byte[] EncodeValue()
         {
-            var stringBytes = Encoding.UTF8.GetBytes(Value);
-            var bytes = new byte[stringBytes.Length + 1];
-            Array.Copy(stringBytes, 0, bytes, 0, stringBytes.Length);
-            return bytes;
+            return Util.Util.EncodeNullTerminatedUtf8String(Value);
         }
 
         public override bool Equals(object obj)

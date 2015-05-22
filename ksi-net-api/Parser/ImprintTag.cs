@@ -4,11 +4,11 @@ namespace Guardtime.KSI.Parser
 {
     public class ImprintTag : TlvTag
     {
-        public new DataHash Value;
+        public DataHash Value;
 
         public ImprintTag(byte[] bytes) : base(bytes)
         {
-            DecodeValue(base.EncodeValue());
+            DecodeValue(ValueBytes);
         }
 
         public ImprintTag(TlvTag tag) : base(tag)
@@ -16,7 +16,13 @@ namespace Guardtime.KSI.Parser
             DecodeValue(tag.EncodeValue());
         }
 
-        public void DecodeValue(byte[] bytes)
+        public ImprintTag(uint type, bool nonCritical, bool forward, DataHash value)
+            : base(type, nonCritical, forward, value.Imprint)
+        {
+            Value = value;
+        }
+
+        private void DecodeValue(byte[] bytes)
         {
             Value = new DataHash(bytes);
         }
