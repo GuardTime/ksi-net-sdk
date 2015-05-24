@@ -19,7 +19,7 @@ namespace Guardtime.KSI.Signature
 
         public Rfc3161Record(TlvTag tag) : base(tag)
         {
-            for (var i = 0; i < Value.Count; i++)
+            for (int i = 0; i < Value.Count; i++)
             {
                 switch (Value[i].Type)
                 {
@@ -33,7 +33,7 @@ namespace Guardtime.KSI.Signature
                             ChainIndex = new List<IntegerTag>();
                         }
 
-                        var chainTag = new IntegerTag(Value[i]);
+                        IntegerTag chainTag = new IntegerTag(Value[i]);
                         ChainIndex.Add(chainTag);
                         Value[i] = chainTag;
                         break;

@@ -13,6 +13,7 @@ namespace Guardtime.KSI.Publication
         public static readonly byte[] FileBeginningMagicBytes = { 0x4b, 0x53, 0x49, 0x50, 0x55, 0x42, 0x4c, 0x46 };
 
         private readonly PublicationsFileDo _publicationsFileDo;
+        private string _name;
 
         // TODO: Problem with too big value
         public DateTime? CreationTime
@@ -25,13 +26,16 @@ namespace Guardtime.KSI.Publication
             get { return _publicationsFileDo.RepUri; }
         }
 
-        public string Name { get; }
+        public string Name
+        {
+            get { return _name; }
+        }
 
         private PublicationsFile(PublicationsFileDo publicationFileDo)
         {
             if (publicationFileDo == null)
             {
-                throw new ArgumentNullException(nameof(publicationFileDo));
+                throw new ArgumentNullException("publicationFileDo");
             }
 
             _publicationsFileDo = publicationFileDo;
@@ -41,7 +45,7 @@ namespace Guardtime.KSI.Publication
         {
             if (bytes == null)
             {
-                throw new ArgumentNullException(nameof(bytes));
+                throw new ArgumentNullException("bytes");
             }
 
             return GetInstance(new MemoryStream(bytes));
@@ -52,11 +56,11 @@ namespace Guardtime.KSI.Publication
             // TODO: Java api check if stream is null
             if (stream == null)
             {
-                throw new ArgumentNullException(nameof(stream));
+                throw new ArgumentNullException("stream");
             }
 
-            var data = new byte[FileBeginningMagicBytes.Length];
-            var bytesRead = stream.Read(data, 0, data.Length);
+            byte[] data = new byte[FileBeginningMagicBytes.Length];
+            int bytesRead = stream.Read(data, 0, data.Length);
 
             if (bytesRead != FileBeginningMagicBytes.Length || !Util.Util.IsArrayEqual(data, FileBeginningMagicBytes))
             {
@@ -75,14 +79,14 @@ namespace Guardtime.KSI.Publication
 
         public PublicationRecord GetLatestPublication()
         {
-            var publicationRecordCount = _publicationsFileDo.PublicationRecords.Count;
+            int publicationRecordCount = _publicationsFileDo.PublicationRecords.Count;
             if (publicationRecordCount == 0)
             {
                 return null;
             }
 
             PublicationRecord latest = null;
-            for (var i = 0; i < publicationRecordCount; i++)
+            for (int i = 0; i < publicationRecordCount; i++)
             {
                 if (latest == null)
                 {
@@ -103,7 +107,7 @@ namespace Guardtime.KSI.Publication
         {
             if (publicationRecord == null) return false;
 
-            for (var i = 0; i < _publicationsFileDo.PublicationRecords.Count; i++)
+            for (int i = 0; i < _publicationsFileDo.PublicationRecords.Count; i++)
             {
                 if (_publicationsFileDo.PublicationRecords[i].PublicationData == null) continue;
 
@@ -121,7 +125,7 @@ namespace Guardtime.KSI.Publication
 
         public X509Certificate FindCertificateById(byte[] certificateId)
         {
-            for (var i = 0; i < _publicationsFileDo.CertificateRecords.Count; i++)
+            for (int i = 0; i < _publicationsFileDo.CertificateRecords.Count; i++)
             {
                 if (Util.Util.IsArrayEqual(_publicationsFileDo.CertificateRecords[i].CertificateId.EncodeValue(),
                     certificateId))
@@ -136,7 +140,7 @@ namespace Guardtime.KSI.Publication
 
         public override string ToString()
         {
-            var builder = new StringBuilder();
+            StringBuilder builder = new StringBuilder();
             builder.Append("Publications file");
 
             builder.Append(", created: ").Append(CreationTime);

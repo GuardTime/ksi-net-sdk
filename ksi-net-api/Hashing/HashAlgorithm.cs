@@ -9,11 +9,11 @@ namespace Guardtime.KSI.Hashing
     public class HashAlgorithm
     {
         public static readonly HashAlgorithm Sha1 = new HashAlgorithm("SHA1", 0x0, 20, AlgorithmStatus.NotTrusted);
-        public static readonly HashAlgorithm Sha2256 = new HashAlgorithm("SHA-256", 0x01, 32, AlgorithmStatus.Normal, new [] { "SHA2-256", "SHA2", "DEFAULT" });
+        public static readonly HashAlgorithm Sha2256 = new HashAlgorithm("SHA-256", 0x01, 32, AlgorithmStatus.Normal, new string[] { "SHA2-256", "SHA2", "DEFAULT" });
         public static readonly HashAlgorithm Ripemd160 = new HashAlgorithm("RIPEMD160", 0x02, 20, AlgorithmStatus.Normal);
-        public static readonly HashAlgorithm Sha2224 = new HashAlgorithm("SHA-224", 0x03, 28, AlgorithmStatus.Normal, new [] { "SHA2-224" });
-        public static readonly HashAlgorithm Sha2384 = new HashAlgorithm("SHA-384", 0x04, 48, AlgorithmStatus.Normal, new [] { "SHA2-384" });
-        public static readonly HashAlgorithm Sha2512 = new HashAlgorithm("SHA-512", 0x05, 64, AlgorithmStatus.Normal, new [] { "SHA2-512" });
+        public static readonly HashAlgorithm Sha2224 = new HashAlgorithm("SHA-224", 0x03, 28, AlgorithmStatus.Normal, new string[] { "SHA2-224" });
+        public static readonly HashAlgorithm Sha2384 = new HashAlgorithm("SHA-384", 0x04, 48, AlgorithmStatus.Normal, new string[] { "SHA2-384" });
+        public static readonly HashAlgorithm Sha2512 = new HashAlgorithm("SHA-512", 0x05, 64, AlgorithmStatus.Normal, new string[] { "SHA2-512" });
         public static readonly HashAlgorithm Sha3224 = new HashAlgorithm("SHA3-224", 0x07, 28, AlgorithmStatus.NotImplemented);
         public static readonly HashAlgorithm Sha3256 = new HashAlgorithm("SHA3-256", 0x08, 32, AlgorithmStatus.NotImplemented);
         public static readonly HashAlgorithm Sha3384 = new HashAlgorithm("SHA3-384", 0x09, 48, AlgorithmStatus.NotImplemented);
@@ -23,35 +23,53 @@ namespace Guardtime.KSI.Hashing
         private readonly string[] _alternatives;
         private static readonly Dictionary<string, HashAlgorithm> Lookup = new Dictionary<string, HashAlgorithm>();
 
+        private readonly byte _id;
+        private readonly string _name;
+        private readonly int _length;
+        private readonly AlgorithmStatus _status;
+
+
         /// <summary>
         /// Return Guardtime id of algorithm.
         /// </summary>
-        public byte Id { get; }
+        public byte Id
+        {
+            get { return _id; }
+        }
 
         /// <summary>
         /// Return name of algorithm.
         /// </summary>
-        public string Name { get; }
+        public string Name
+        {
+            get { return _name; }
+        }
 
         /// <summary>
         /// Return length of the algorithm value.
         /// </summary>
-        public int Length { get; }
+        public int Length
+        {
+            get { return _length; }
+        }
 
         /// <summary>
         /// Return status of the algorithm.
         /// </summary>
-        public AlgorithmStatus Status { get; }
+        public AlgorithmStatus Status
+        {
+            get { return _status; }
+        }
 
         /// <summary>
         /// Static constructor for creating lookup table for names.
         /// </summary>
         static HashAlgorithm()
         {
-            foreach (var algorithm in Values())
+            foreach (HashAlgorithm algorithm in Values())
             {
                 Lookup.Add(NameNormalize(algorithm.Name), algorithm);
-                foreach (var alternative in algorithm._alternatives)
+                foreach (string alternative in algorithm._alternatives)
                 {
                     Lookup.Add(NameNormalize(alternative), algorithm);
                 }
@@ -65,18 +83,29 @@ namespace Guardtime.KSI.Hashing
         /// <param name="id">algorithm Guardtime id</param>
         /// <param name="length">algorithm value length</param>
         /// <param name="status">algorithm status</param>
+        private HashAlgorithm(string name, byte id, int length, AlgorithmStatus status) : this(name, id, length, status, null)
+        {
+        }
+
+        /// <summary>
+        /// Private constructor for HashAlgorithm object.
+        /// </summary>
+        /// <param name="name">algorithm name</param>
+        /// <param name="id">algorithm Guardtime id</param>
+        /// <param name="length">algorithm value length</param>
+        /// <param name="status">algorithm status</param>
         /// <param name="alternatives">algorithm alternative names</param>
-        private HashAlgorithm(string name, byte id, int length, AlgorithmStatus status, string[] alternatives = null)
+        private HashAlgorithm(string name, byte id, int length, AlgorithmStatus status, string[] alternatives)
         {
             if (alternatives == null)
             {
                 alternatives = new string[] { };
             }
 
-            Name = name;
-            Id = id;
-            Length = length;
-            Status = status;
+            _name = name;
+            _id = id;
+            _length = length;
+            _status = status;
             _alternatives = alternatives;
         }
 
@@ -87,7 +116,7 @@ namespace Guardtime.KSI.Hashing
         /// <returns>HashAlgorithm when a match is found, otherwise null</returns>
         public static HashAlgorithm GetById(byte id) 
         {
-            foreach (var algorithm in Values()) {
+            foreach (HashAlgorithm algorithm in Values()) {
                 if (algorithm.Id == id) {
                     return algorithm;
                 }
@@ -113,8 +142,8 @@ namespace Guardtime.KSI.Hashing
         /// <returns>List of supported hash algorithm names</returns>
         public static List<string> GetNamesList() 
         {
-            var names = new List<string>();
-            foreach (var algorithm in Values()) {
+            List<string> names = new List<string>();
+            foreach (HashAlgorithm algorithm in Values()) {
                 names.Add(algorithm.Name);
             }
             return names;
@@ -127,7 +156,7 @@ namespace Guardtime.KSI.Hashing
         /// <returns>name stripped of all non-alphanumeric characters</returns>
         static string NameNormalize(string name)
         {
-            return Regex.Replace(name.ToLower(), "[^a-zA-Z0-9]", "");
+            return Regex.Replace(name.ToLower(), "[^a-z0-9]", "", RegexOptions.Compiled);
         }
 
         /// <summary>
@@ -136,7 +165,7 @@ namespace Guardtime.KSI.Hashing
         /// <returns>Defined HashAlgorithm objects</returns>
         private static IEnumerable<HashAlgorithm> Values()
         {
-            return new []
+            return new HashAlgorithm[]
                 {Sha1, Sha2256, Ripemd160, Sha2224, Sha2384, Sha2512, Sha3224, Sha3256, Sha3384, Sha3512, Sm3};
         }
 

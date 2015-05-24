@@ -8,7 +8,7 @@ namespace Guardtime.KSI.Exceptions
         {
         }
 
-        public KsiException(string message, System.Exception innerException) : base(message, innerException)
+        public KsiException(string message, Exception innerException) : base(message, innerException)
         {
         }
     }

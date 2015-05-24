@@ -16,7 +16,7 @@ namespace Guardtime.KSI.Signature
 
         public CalendarHashChain(TlvTag tag) : base(tag)
         {
-            for (var i = 0; i < Value.Count; i++)
+            for (int i = 0; i < Value.Count; i++)
             {
                 switch (Value[i].Type)
                 {
@@ -39,7 +39,7 @@ namespace Guardtime.KSI.Signature
                             Chain = new List<Link>();
                         }
 
-                        var chainTag = new Link(Value[i]);
+                        Link chainTag = new Link(Value[i]);
                         Chain.Add(chainTag);
                         Value[i] = chainTag;
                         break;
@@ -63,10 +63,10 @@ namespace Guardtime.KSI.Signature
                     _direction = LinkDirection.Right;
                 }
 
-                if ((int)_direction == 0)
+                if (_direction == 0)
                 {
                     // TODO: Correct exception and fix all System.Exception
-                    throw new System.Exception("Invalid link direction");
+                    throw new Exception("Invalid link direction");
                 }
                 
             }

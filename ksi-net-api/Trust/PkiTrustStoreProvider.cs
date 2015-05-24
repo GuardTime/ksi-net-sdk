@@ -12,11 +12,11 @@ namespace Guardtime.KSI.Trust
         {
             if (x509SignatureBytes == null)
             {
-                throw new ArgumentNullException(nameof(x509SignatureBytes));
+                throw new ArgumentNullException("x509SignatureBytes");
             }
 
             // TODO: Java API email verification does not check email correctly, if its missing then it skips it
-            var signedCms = new SignedCms(new ContentInfo(signedBytes), true);
+            SignedCms signedCms = new SignedCms(new ContentInfo(signedBytes), true);
             signedCms.Decode(x509SignatureBytes);
             signedCms.CheckSignature(false);
             // TODO: Check the email

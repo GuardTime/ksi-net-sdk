@@ -16,15 +16,21 @@ namespace Guardtime.KSI.Parser
         }
 
         public void WriteTag(TlvTag tag) {
-            if (tag.Type > TlvReader.MaxType)
+            // TODO: What to do on null tag, exception or skip?
+            if (tag == null)
             {
-                throw new ArgumentOutOfRangeException(nameof(tag));
+                return;
             }
 
-            var data = tag.EncodeValue();
-            var tlv16 = tag.Type > TlvReader.TypeMask
+            if (tag.Type > TlvReader.MaxType)
+            {
+                throw new ArgumentOutOfRangeException("tag");
+            }
+
+            byte[] data = tag.EncodeValue();
+            bool tlv16 = tag.Type > TlvReader.TypeMask
                     || (data != null && data.Length > byte.MaxValue);
-            var firstByte = (byte)((tlv16 ? TlvReader.Tlv16Flag : 0)
+            byte firstByte = (byte)((tlv16 ? TlvReader.Tlv16Flag : 0)
                                      + (tag.NonCritical ? TlvReader.NonCriticalFlag : 0)
                                      + (tag.Forward ? TlvReader.ForwardFlag : 0));
 
@@ -42,7 +48,7 @@ namespace Guardtime.KSI.Parser
                 {
                     if (data.Length > ushort.MaxValue)
                     {
-                        throw new ArgumentOutOfRangeException(nameof(tag));
+                        throw new ArgumentOutOfRangeException("tag");
                     }
                     Write((byte)(data.Length >> TlvReader.ByteBits));
                     Write((byte)data.Length);

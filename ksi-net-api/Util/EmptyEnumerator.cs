@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
 
 namespace Guardtime.KSI.Util
 {
-    public class EmptyEnumerator : IEnumerator
+    public class EmptyEnumerator<T> : IEnumerator<T>
     {
         public bool MoveNext()
         {
@@ -14,11 +14,20 @@ namespace Guardtime.KSI.Util
         {
         }
 
+        T IEnumerator<T>.Current
+        {
+            get { throw new InvalidOperationException(); }
+        }
+
         public object Current {
             get
             {
                 throw new InvalidOperationException();
             }
+        }
+
+        public void Dispose()
+        {
         }
     }
 }

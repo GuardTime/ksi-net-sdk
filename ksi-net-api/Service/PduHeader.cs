@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Service
@@ -13,6 +11,24 @@ namespace Guardtime.KSI.Service
 
         public PduHeader(TlvTag tag) : base(tag)
         {
+            for (int i = 0; i < Value.Count; i++)
+            {
+                switch (Value[i].Type)
+                {
+                    case 0x1:
+                        _loginId = new StringTag(Value[i]);
+                        Value[i] = _loginId;
+                        break;
+                    case 0x2:
+                        _instanceId = new IntegerTag(Value[i]);
+                        Value[i] = _instanceId;
+                        break;
+                    case 0x3:
+                        _messageId = new IntegerTag(Value[i]);
+                        Value[i] = _messageId;
+                        break;
+                }
+            }
         }
         
         // TODO: Create correct constructor

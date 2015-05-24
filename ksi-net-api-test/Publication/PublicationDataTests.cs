@@ -1,15 +1,13 @@
 ﻿using System.IO;
-using Guardtime.KSI.Parser;
-using Guardtime.KSI.Properties;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Guardtime.KSI.Publication
 {
-    [TestClass]
+    [TestFixture]
     public class PublicationDataTest
     {
 
-        [TestMethod]
+        [Test]
         public void TestPublicationDataFromTag()
         {
             using (
@@ -22,7 +20,7 @@ namespace Guardtime.KSI.Publication
             
         }
 
-//        [TestMethod]
+//        [Test]
 //        public void TestPublicationDataCreate()
 //        {
 //            Stream stream = new MemoryStream();

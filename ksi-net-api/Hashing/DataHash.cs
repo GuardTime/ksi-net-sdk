@@ -8,10 +8,20 @@ namespace Guardtime.KSI.Hashing
     /// </summary>
     public class DataHash
     {
+        private readonly HashAlgorithm _algorithm;
+        private readonly byte[] _imprint;
+        private readonly byte[] _value;
+
         /// <summary>
         /// Get the HashAlgorithm used to compute this DataHash.
         /// </summary>
-        public HashAlgorithm Algorithm { get; }
+        public HashAlgorithm Algorithm
+        {
+            get
+            {
+                return _algorithm;
+            }
+        }
 
         /// <summary>
         /// Get data imprint.
@@ -19,12 +29,17 @@ namespace Guardtime.KSI.Hashing
         /// Imprint is created by concatenating hash algorithm id with hash value.
         /// </p>
         /// </summary>
-        public byte[] Imprint { get; }
+        public byte[] Imprint
+        {
+            get { return _imprint; }
+        }
 
         /// <summary>
         /// Get the computed hash value for DataHash.
         /// </summary>
-        public byte[] Value { get; }
+        public byte[] Value {
+            get { return _value; }
+        }
 
         /// <summary>
         /// Constructor which initializes the DataHash with algorithm and value.
@@ -35,12 +50,12 @@ namespace Guardtime.KSI.Hashing
         {
             if (algorithm == null)
             {
-                throw new ArgumentNullException(nameof(algorithm));
+                throw new ArgumentNullException("algorithm");
             }
 
             if (valueBytes == null)
             {
-                throw new ArgumentNullException(nameof(valueBytes));
+                throw new ArgumentNullException("valueBytes");
             }
 
             if (valueBytes.Length != algorithm.Length)
@@ -49,10 +64,10 @@ namespace Guardtime.KSI.Hashing
                             + algorithm.Name + " size(" + algorithm.Length + ")");
             }
 
-            Algorithm = algorithm;
-            Value = valueBytes;
+            _algorithm = algorithm;
+            _value = valueBytes;
 
-            Imprint = new byte[Algorithm.Length + 1];
+            _imprint = new byte[Algorithm.Length + 1];
             Imprint[0] = Algorithm.Id;
             Array.Copy(Value, 0, Imprint, 1, Algorithm.Length);
         }
@@ -65,7 +80,7 @@ namespace Guardtime.KSI.Hashing
         {
             if (imprintBytes == null)
             {
-                throw new ArgumentNullException(nameof(imprintBytes));
+                throw new ArgumentNullException("imprintBytes");
             }
 
             if (imprintBytes.Length < 1)
@@ -73,22 +88,22 @@ namespace Guardtime.KSI.Hashing
                 throw new ArgumentException("Hash imprint too short");
             }
 
-            Algorithm = HashAlgorithm.GetById(imprintBytes[0]);
+            _algorithm = HashAlgorithm.GetById(imprintBytes[0]);
 
-            if (Algorithm == null)
+            if (_algorithm == null)
             {
                 throw new FormatException("Hash algorithm ID unknown: " + imprintBytes[0]);
             }
 
-            if (Algorithm.Length + 1 != imprintBytes.Length)
+            if (_algorithm.Length + 1 != imprintBytes.Length)
             {
                 throw new FormatException("Hash size(" + (imprintBytes.Length - 1) + ") does not match "
-                           + Algorithm.Name + " size(" + Algorithm.Length + ")");
+                           + _algorithm.Name + " size(" + _algorithm.Length + ")");
             }
 
-            Value = new byte[Algorithm.Length];
-            Array.Copy(imprintBytes, 1, Value, 0, Algorithm.Length);
-            Imprint = imprintBytes;
+            _value = new byte[_algorithm.Length];
+            Array.Copy(imprintBytes, 1, Value, 0, _algorithm.Length);
+            _imprint = imprintBytes;
         }
 
         /// <summary>
@@ -99,7 +114,7 @@ namespace Guardtime.KSI.Hashing
         public override bool Equals(object obj)
         {
             if (obj == null || obj.GetType() != typeof (DataHash)) return false;
-            var b = (DataHash) obj;
+            DataHash b = (DataHash) obj;
             return Util.Util.IsArrayEqual(b.Imprint, Imprint) &&
                    Util.Util.IsArrayEqual(b.Value, Value) &&
                    b.Algorithm.Equals(Algorithm);

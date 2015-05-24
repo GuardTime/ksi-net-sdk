@@ -4,27 +4,35 @@ namespace Guardtime.KSI.Parser
 {
     public class ImprintTag : TlvTag
     {
-        public DataHash Value;
+        public new DataHash Value;
 
-        public ImprintTag(byte[] bytes) : base(bytes)
+        public ImprintTag(byte[] bytes) : this(null, bytes)
         {
-            DecodeValue(ValueBytes);
         }
 
-        public ImprintTag(TlvTag tag) : base(tag)
+        public ImprintTag(TlvTag parent, byte[] bytes) : base(parent, bytes)
         {
-            DecodeValue(tag.EncodeValue());
+            Value = new DataHash(base.Value);
+        }
+
+        public ImprintTag(TlvTag tag) : this(null, tag)
+        {
+        }
+
+        public ImprintTag(TlvTag parent, TlvTag tag) : base(parent, tag)
+        {
+            Value = new DataHash(tag.EncodeValue());
         }
 
         public ImprintTag(uint type, bool nonCritical, bool forward, DataHash value)
-            : base(type, nonCritical, forward, value.Imprint)
+            : this(null, type, nonCritical, forward, value)
         {
-            Value = value;
         }
 
-        private void DecodeValue(byte[] bytes)
+        public ImprintTag(TlvTag parent, uint type, bool nonCritical, bool forward, DataHash value)
+            : base(parent, type, nonCritical, forward, value.Imprint)
         {
-            Value = new DataHash(bytes);
+            Value = value;
         }
 
         public override byte[] EncodeValue()
@@ -32,9 +40,17 @@ namespace Guardtime.KSI.Parser
             return Value.Imprint;
         }
 
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return Value.GetHashCode() + Type.GetHashCode() + Forward.GetHashCode() + NonCritical.GetHashCode();
+            }
+        }
+
         public override bool Equals(object obj)
         {
-            var tag = obj as ImprintTag;
+            ImprintTag tag = obj as ImprintTag;
             if (tag == null)
             {
                 return false;

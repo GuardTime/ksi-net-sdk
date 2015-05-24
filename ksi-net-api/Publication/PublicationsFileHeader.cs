@@ -5,13 +5,13 @@ namespace Guardtime.KSI.Publication
 {
     internal class PublicationsFileHeader : CompositeTag
     {
-        public IntegerTag Version { get; }
-        public IntegerTag CreationTime { get; }
-        public StringTag RepUri { get; }
+        public IntegerTag Version;
+        public IntegerTag CreationTime;
+        public StringTag RepUri;
 
         public PublicationsFileHeader(TlvTag tag) : base(tag)
         {
-            for (var i = 0; i < Value.Count; i++)
+            for (int i = 0; i < Value.Count; i++)
             {
                 switch (Value[i].Type)
                 {

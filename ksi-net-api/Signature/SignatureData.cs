@@ -14,7 +14,7 @@ namespace Guardtime.KSI.Signature
 
         public SignatureData(TlvTag tag) : base(tag)
         {
-            for (var i = 0; i < Value.Count; i++)
+            for (int i = 0; i < Value.Count; i++)
             {
                 switch (Value[i].Type)
                 {

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -15,11 +14,37 @@ namespace Guardtime.KSI.Service
         private AggregationPduPayload _payload;
         private ImprintTag _mac;
 
+        public AggregationPdu(byte[] bytes) : base(bytes)
+        {
+            for (int i = 0; i < Value.Count; i++)
+            {
+                switch (Value[i].Type)
+                {
+                    case 0x1:
+                        _header = new PduHeader(Value[i]);
+                        Value[i] = _header;
+                        break;
+                    case 0x202:
+                        _payload = new AggregationResponse(Value[i]);
+                        Value[i] = _payload;
+                        break;
+                    case 0x203:
+                        _payload = new AggregationResponse(Value[i]);
+                        Value[i] = _payload;
+                        break;
+                    case 0x1f:
+                        _mac = new ImprintTag(Value[i]);
+                        Value[i] = _mac;
+                        break;
+                }
+            }
+        }
+
         public AggregationPdu(TlvTag tag) : base(tag)
         {
         }
 
-        // Create correct constructor
+        // TODO: Create correct constructor
         public AggregationPdu() : base(0x200, false, false)
         {
             _header = new PduHeader();
@@ -28,7 +53,8 @@ namespace Guardtime.KSI.Service
             _payload = new AggregationRequest();
             Value.Add(_payload);
 
-            using (var writer = new TlvWriter(new MemoryStream()))
+            using (MemoryStream stream = new MemoryStream())
+            using (TlvWriter writer = new TlvWriter(stream))
             {
                 writer.WriteTag(_header);
                 writer.WriteTag(_payload);
@@ -40,7 +66,7 @@ namespace Guardtime.KSI.Service
 
         private static byte[] CalculateMac(byte[] key, byte[] data)
         {
-            var hmac = new HMACSHA256(key);
+            HMACSHA256 hmac = new HMACSHA256(key);
             return hmac.ComputeHash(data);
         }
 

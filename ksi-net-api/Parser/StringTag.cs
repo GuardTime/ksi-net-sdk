@@ -1,24 +1,36 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 
 namespace Guardtime.KSI.Parser
 {
     public class StringTag : TlvTag
     {
-        public string Value;
+        public new string Value;
 
-        public StringTag(byte[] bytes) : base(bytes)
+        public StringTag(byte[] bytes) : this(null, bytes)
         {
-            Util.Util.DecodeNullTerminatedUtf8String(ValueBytes);
         }
 
-        public StringTag(TlvTag tag) : base(tag)
+        public StringTag(TlvTag parent, byte[] bytes) : base(parent, bytes)
         {
-            Util.Util.DecodeNullTerminatedUtf8String(tag.EncodeValue());
+            Value = Util.Util.DecodeNullTerminatedUtf8String(base.Value);
+        }
+
+        public StringTag(TlvTag tag) : this(null, tag)
+        {
+        }
+
+        public StringTag(TlvTag parent, TlvTag tag) : base(parent, tag)
+        {
+            Value = Util.Util.DecodeNullTerminatedUtf8String(tag.EncodeValue());
         }
 
         public StringTag(uint type, bool nonCritical, bool forward, string value)
-            : base(type, nonCritical, forward, Util.Util.EncodeNullTerminatedUtf8String(value))
+            : this(null, type, nonCritical, forward, value)
+        {
+        }
+
+        public StringTag(TlvTag parent, uint type, bool nonCritical, bool forward, string value)
+            : base(parent, type, nonCritical, forward, Util.Util.EncodeNullTerminatedUtf8String(value))
         {
             Value = value;
         }
@@ -28,9 +40,17 @@ namespace Guardtime.KSI.Parser
             return Util.Util.EncodeNullTerminatedUtf8String(Value);
         }
 
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return Value.GetHashCode() + Type.GetHashCode() + Forward.GetHashCode() + NonCritical.GetHashCode();
+            }
+        }
+
         public override bool Equals(object obj)
         {
-            var tag = obj as StringTag;
+            StringTag tag = obj as StringTag;
             if (tag == null)
             {
                 return false;
@@ -44,7 +64,7 @@ namespace Guardtime.KSI.Parser
 
         public sealed override string ToString()
         {
-            var builder = new StringBuilder();
+            StringBuilder builder = new StringBuilder();
             builder.Append("TLV[0x").Append(Type.ToString("X"));
 
             if (NonCritical)

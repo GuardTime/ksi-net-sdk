@@ -1,16 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Guardtime.KSI.Service;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿
+using NUnit.Framework;
 
 namespace Guardtime.KSI.Service
 {
-    [TestClass]
+    [TestFixture]
     public class HttpAggregationRequestTests
     {
-        [TestMethod]
+        [Test]
         public void TestHttpAggregationRequest()
         {
             var request = new HttpAggregationRequest();

@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace Guardtime.KSI.Util
 {
     public class Util
     {
-        private static Random _random = new Random();
+        private static readonly Random _random = new Random();
 
         private Util()
         {
@@ -25,7 +24,7 @@ namespace Guardtime.KSI.Util
                 return false;
             }
 
-            for (var i = 0; i < arr1.Length; i++)
+            for (int i = 0; i < arr1.Length; i++)
             {
                 if (!Equals(arr1[i], arr2[i]))
                 {
@@ -52,7 +51,7 @@ namespace Guardtime.KSI.Util
             }
             
             ulong t = 0;
-            for (var i = 0; i < len; ++i) {
+            for (int i = 0; i < len; ++i) {
                 t = (t << 8) | ((ulong) buf[ofs + i] & 0xff);
             }
 
@@ -61,15 +60,15 @@ namespace Guardtime.KSI.Util
 
 
         public static byte[] EncodeUnsignedLong(ulong value) {
-            var n = 0;
+            int n = 0;
 
-            for (var t = value; t > 0; t >>= 8) {
+            for (ulong t = value; t > 0; t >>= 8) {
                 ++n;
             }
 
-            var res = new byte[n];
+            byte[] res = new byte[n];
 
-            for (var t = value; t > 0; t >>= 8) {
+            for (ulong t = value; t > 0; t >>= 8) {
                 res[--n] = (byte) t;
             }
 
@@ -78,7 +77,7 @@ namespace Guardtime.KSI.Util
 
         public static ulong ConvertDateTimeToUnixTime(DateTime time)
         {
-            var timeSpan = (time - new DateTime(1970, 1, 1, 0, 0, 0));
+            TimeSpan timeSpan = (time - new DateTime(1970, 1, 1, 0, 0, 0));
             return (ulong) timeSpan.TotalSeconds;
         }
 
@@ -100,15 +99,15 @@ namespace Guardtime.KSI.Util
 
         public static byte[] EncodeNullTerminatedUtf8String(string value)
         {
-            var stringBytes = Encoding.UTF8.GetBytes(value);
-            var bytes = new byte[stringBytes.Length + 1];
+            byte[] stringBytes = Encoding.UTF8.GetBytes(value);
+            byte[] bytes = new byte[stringBytes.Length + 1];
             Array.Copy(stringBytes, 0, bytes, 0, stringBytes.Length);
             return bytes;
         }
 
         public static ulong GetRandomUnsignedLong()
         {
-            var bytes = new byte[32];
+            byte[] bytes = new byte[32];
             _random.NextBytes(bytes);
             return BitConverter.ToUInt32(bytes, 0);
         }

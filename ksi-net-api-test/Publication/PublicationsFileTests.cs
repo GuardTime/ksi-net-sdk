@@ -1,29 +1,29 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 using Guardtime.KSI.Parser;
+using NUnit.Framework;
 
 namespace Guardtime.KSI.Publication
 {
     // TODO: Possibility to change file easily because signature certificate expires
-    [TestClass]
+    [TestFixture]
     public class PublicationsFileTests
     {
-        [TestMethod]
+        [Test]
         public void TestCreatePublicationsFileFromFile()
         {
             var publicationsFile = PublicationsFile.GetInstance(new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open));
             Console.WriteLine(publicationsFile);
         }
 
-        [TestMethod]
+        [Test]
         public void TestFindCertificateById()
         {
             var publicationsFile = PublicationsFile.GetInstance(new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open));
             Assert.AreEqual("O=Guardtime, CN=H5", publicationsFile.FindCertificateById(new byte[] { 0x9a, 0x65, 0x82, 0x94 }).Subject, "Certificate should be correct");
         }
 
-        [TestMethod]
+        [Test]
         public void TestContainsPublicationRecord()
         {
             var publicationsFile = PublicationsFile.GetInstance(new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open));
@@ -37,7 +37,7 @@ namespace Guardtime.KSI.Publication
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestDoesNotContainPublicationRecord()
         {
             var publicationsFile = PublicationsFile.GetInstance(new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open));
@@ -50,7 +50,7 @@ namespace Guardtime.KSI.Publication
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetLatestPublication()
         {
             var publicationsFile = PublicationsFile.GetInstance(new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open));

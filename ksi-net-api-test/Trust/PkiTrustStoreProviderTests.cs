@@ -1,12 +1,12 @@
 ﻿using System.IO;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Guardtime.KSI.Trust
 {
-    [TestClass()]
+    [TestFixture()]
     public class PkiTrustStoreProviderTests
     {
-        [TestMethod()]
+        [Test()]
         public void VerifyTest()
         {
             byte[] data;

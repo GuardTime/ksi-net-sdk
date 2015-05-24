@@ -7,10 +7,30 @@ namespace Guardtime.KSI.Publication
 {
     internal class PublicationsFileDo : CompositeTag
     {
-        public PublicationsFileHeader PublicationsHeader { get; }
-        public List<CertificateRecord> CertificateRecords { get; }
-        public List<PublicationRecord> PublicationRecords { get; }
-        public TlvTag CmsSignature { get; private set; }
+        private PublicationsFileHeader _publicationsHeader;
+        private List<CertificateRecord> _certificateRecords;
+        private List<PublicationRecord> _publicationRecords;
+        private TlvTag _cmsSignature;
+
+        public PublicationsFileHeader PublicationsHeader
+        {
+            get { return _publicationsHeader; }
+        }
+
+        public List<CertificateRecord> CertificateRecords
+        {
+            get { return _certificateRecords; }
+        }
+
+        public List<PublicationRecord> PublicationRecords
+        {
+            get { return _publicationRecords; }
+        }
+
+        public TlvTag CmsSignature
+        {
+            get { return _cmsSignature; }
+        }
 
         public DateTime? CreationTime
         {
@@ -24,36 +44,36 @@ namespace Guardtime.KSI.Publication
 
         public PublicationsFileDo(TlvTag tag) : base(tag)
         {
-            for (var i = 0; i < Value.Count; i++)
+            for (int i = 0; i < Value.Count; i++)
             {
                 switch (Value[i].Type)
                 {
                     case 0x701:
-                        PublicationsHeader = new PublicationsFileHeader(Value[i]);
-                        Value[i] = PublicationsHeader;
+                        _publicationsHeader = new PublicationsFileHeader(Value[i]);
+                        Value[i] = _publicationsHeader;
                         break;
                     case 0x702:
-                        if (CertificateRecords == null)
+                        if (_certificateRecords == null)
                         {
-                            CertificateRecords = new List<CertificateRecord>();
+                            _certificateRecords = new List<CertificateRecord>();
                         }
 
-                        var certificateRecordTag = new CertificateRecord(Value[i]);
+                        CertificateRecord certificateRecordTag = new CertificateRecord(Value[i]);
                         CertificateRecords.Add(certificateRecordTag);
                         Value[i] = certificateRecordTag;
                         break;
                     case 0x703:
-                        if (PublicationRecords == null)
+                        if (_publicationRecords == null)
                         {
-                            PublicationRecords = new List<PublicationRecord>();
+                            _publicationRecords = new List<PublicationRecord>();
                         }
 
-                        var publicationRecordTag = new PublicationRecord(Value[i]);
+                        PublicationRecord publicationRecordTag = new PublicationRecord(Value[i]);
                         PublicationRecords.Add(publicationRecordTag);
                         Value[i] = publicationRecordTag;
                         break;
                     case 0x704:
-                        CmsSignature = Value[i];
+                        _cmsSignature = Value[i];
                         break;
                     default:
                         // TODO: throw correct exception, also display invalid row in full tree

@@ -4,27 +4,37 @@ namespace Guardtime.KSI.Parser
 {
     public class IntegerTag : TlvTag
     {
-        public ulong Value;
+        public new ulong Value;
 
-        public IntegerTag(byte[] bytes) : base(bytes)
+        public IntegerTag(byte[] bytes) : this(null, bytes)
         {
-            DecodeValue(ValueBytes);
         }
 
-        public IntegerTag(TlvTag tag) : base(tag)
+        public IntegerTag(TlvTag parent, byte[] bytes) : base(parent, bytes)
         {
-            DecodeValue(tag.EncodeValue());
+            byte[] data = base.Value;
+            Value = Util.Util.DecodeUnsignedLong(data, 0, data.Length);
+        }
+
+        public IntegerTag(TlvTag tag) : this(null, tag)
+        {
+        }
+
+        public IntegerTag(TlvTag parent, TlvTag tag) : base(parent, tag)
+        {
+            byte[] data = tag.EncodeValue();
+            Value = Util.Util.DecodeUnsignedLong(data, 0, data.Length);
         }
 
         public IntegerTag(uint type, bool nonCritical, bool forward, ulong value)
-            : base(type, nonCritical, forward, Util.Util.EncodeUnsignedLong(value))
+            : this(null, type, nonCritical, forward, value)
         {
-            Value = value;
         }
 
-        private void DecodeValue(byte[] bytes)
+        public IntegerTag(TlvTag parent, uint type, bool nonCritical, bool forward, ulong value)
+            : base(parent, type, nonCritical, forward, Util.Util.EncodeUnsignedLong(value))
         {
-            Value = Util.Util.DecodeUnsignedLong(bytes, 0, bytes.Length);
+            Value = value;
         }
 
         public override byte[] EncodeValue()
@@ -32,9 +42,17 @@ namespace Guardtime.KSI.Parser
             return Util.Util.EncodeUnsignedLong(Value);
         }
 
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return Value.GetHashCode() + Type.GetHashCode() + Forward.GetHashCode() + NonCritical.GetHashCode();
+            }
+        }
+
         public override bool Equals(object obj)
         {
-            var tag = obj as IntegerTag;
+            IntegerTag tag = obj as IntegerTag;
             if (tag == null)
             {
                 return false;
@@ -48,7 +66,7 @@ namespace Guardtime.KSI.Parser
 
         public sealed override string ToString()
         {
-            var builder = new StringBuilder();
+            StringBuilder builder = new StringBuilder();
             builder.Append("TLV[0x").Append(Type.ToString("X"));
 
             if (NonCritical)

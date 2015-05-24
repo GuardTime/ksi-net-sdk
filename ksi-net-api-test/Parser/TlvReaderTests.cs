@@ -1,13 +1,13 @@
 ﻿using System;
 using System.IO;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Guardtime.KSI.Parser
 {
-    [TestClass()]
+    [TestFixture()]
     public class TlvReaderTests
     {
-        [TestMethod()]
+        [Test()]
         public void TestReadTagShort()
         {
             using (var reader = new TlvReader(new MemoryStream(new byte[] { 0x21, 0x4, 0x0, 0x1, 0x2, 0x3 })))
@@ -17,7 +17,7 @@ namespace Guardtime.KSI.Parser
             }
         }
 
-        [TestMethod()]
+        [Test()]
         public void ReadTagShortWithLongTypeTest()
         {
             using (var reader = new TlvReader(new MemoryStream(new byte[] { 0xa0, 0x33, 0x0, 0x4, 0x0, 0x1, 0x2, 0x3 })))
@@ -26,7 +26,7 @@ namespace Guardtime.KSI.Parser
             }
         }
 
-        [TestMethod()]
+        [Test()]
         public void TestReadTagLongWithShortType()
         {
 
@@ -42,7 +42,7 @@ namespace Guardtime.KSI.Parser
             }
         }
 
-        [TestMethod()]
+        [Test()]
         public void TestReadTagLongWithLongType()
         {
             var data = new byte[260];

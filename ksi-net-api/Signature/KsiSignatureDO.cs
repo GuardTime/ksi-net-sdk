@@ -20,7 +20,7 @@ namespace Guardtime.KSI.Signature
 
         public KsiSignatureDo(TlvTag tag) : base(tag)
         {
-            for (var i = 0; i < Value.Count; i++)
+            for (int i = 0; i < Value.Count; i++)
             {
                 switch (Value[i].Type)
                 {
@@ -30,7 +30,7 @@ namespace Guardtime.KSI.Signature
                             AggregationChains = new List<AggregationHashChain>();
                         }
 
-                        var aggregationChainTag = new AggregationHashChain(Value[i]);
+                        AggregationHashChain aggregationChainTag = new AggregationHashChain(Value[i]);
                         AggregationChains.Add(aggregationChainTag);
                         Value[i] = aggregationChainTag;
                         break;

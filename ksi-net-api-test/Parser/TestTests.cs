@@ -1,12 +1,13 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿
+using NUnit.Framework;
 
 namespace Guardtime.KSI.Parser
 {
-    [TestClass]
+    [TestFixture]
     public class TestTests
     {
 
-        [TestMethod]
+        [Test]
         public void TestTest()
         {
 //            var pubdata = new PublicationData(new byte[]

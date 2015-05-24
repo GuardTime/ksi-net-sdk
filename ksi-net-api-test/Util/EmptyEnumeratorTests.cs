@@ -1,27 +1,23 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Guardtime.KSI.Util;
-using System;
+﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using NUnit.Framework;
 
 namespace Guardtime.KSI.Util
 {
-    [TestClass]
+    [TestFixture]
     public class EmptyEnumeratorTests
     {
-        [TestMethod]
+        [Test]
         public void TestMoveNext()
         {
-            IEnumerator enumerator = new EmptyEnumerator();
+            IEnumerator enumerator = new EmptyEnumerator<int>();
             Assert.IsFalse(enumerator.MoveNext());
         }
 
-        [TestMethod, ExpectedException(typeof(InvalidOperationException))]
+        [Test, ExpectedException(typeof(InvalidOperationException))]
         public void TestCurrentPropertyException()
         {
-            IEnumerator enumerator = new EmptyEnumerator();
+            IEnumerator enumerator = new EmptyEnumerator<int>();
             var value = enumerator.Current;
         }
     }

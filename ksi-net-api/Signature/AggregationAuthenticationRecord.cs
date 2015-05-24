@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Signature
@@ -17,7 +16,7 @@ namespace Guardtime.KSI.Signature
 
         public AggregationAuthenticationRecord(TlvTag tag) : base(tag)
         {
-            for (var i = 0; i < Value.Count; i++)
+            for (int i = 0; i < Value.Count; i++)
             {
                 switch (Value[i].Type)
                 {
@@ -31,7 +30,7 @@ namespace Guardtime.KSI.Signature
                             _chainIndex = new List<IntegerTag>();
                         }
 
-                        var chainIndexTag = new IntegerTag(Value[i]);
+                        IntegerTag chainIndexTag = new IntegerTag(Value[i]);
                         _chainIndex.Add(chainIndexTag);
                         Value[i] = chainIndexTag;
                         break;

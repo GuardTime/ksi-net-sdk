@@ -1,14 +1,14 @@
 ﻿using System;
 using System.IO;
 using Guardtime.KSI.Parser;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Guardtime.KSI.Signature
 {
-    [TestClass]
+    [TestFixture]
     public class KsiSignatureDoTests
     {
-        [TestMethod]
+        [Test]
         public void GetMemberTest()
         {
             byte[] data;
@@ -19,7 +19,6 @@ namespace Guardtime.KSI.Signature
             }
 
             var tag = new RawTag(data);
-
             using (var reader = new TlvReader(new MemoryStream(data)))
             {
                 var test = new KsiSignatureDo(tag);
@@ -34,7 +33,7 @@ namespace Guardtime.KSI.Signature
                 Console.WriteLine(i);
                 Console.WriteLine(test);
             }
-            
+
         }
     }
 }

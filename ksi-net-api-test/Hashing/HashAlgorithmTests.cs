@@ -1,11 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
 
 namespace Guardtime.KSI.Hashing
 {
-    [TestClass]
+    [TestFixture]
     public class HashAlgorithmTests
     {
-        [TestMethod]
+        [Test]
         public void TestAlgorithmFromStaticVariable()
         {
             var algorithm = HashAlgorithm.Sha2256;
@@ -15,7 +15,7 @@ namespace Guardtime.KSI.Hashing
             Assert.AreEqual(32, algorithm.Length, "Hash algorithm length should be correct");
         }
 
-        [TestMethod]
+        [Test]
         public void TestAlgorithmGetById()
         {
             var algorithm = HashAlgorithm.GetById(1);
@@ -27,7 +27,7 @@ namespace Guardtime.KSI.Hashing
             Assert.AreEqual(HashAlgorithm.Sha2256, algorithm);
         }
 
-        [TestMethod]
+        [Test]
         public void TestAlgorithmGetByName()
         {
             var algorithm = HashAlgorithm.GetByName("DEFAULT");
@@ -37,14 +37,14 @@ namespace Guardtime.KSI.Hashing
             Assert.AreEqual(32, algorithm.Length, "Hash algorithm length should be correct");
         }
 
-        [TestMethod]
+        [Test]
         public void TestAlgorithmGetByIdWithInvalidId()
         {
             var algorithm = HashAlgorithm.GetById(255);
             Assert.IsNull(algorithm, "Algorithm should not be found with given id");
         }
 
-        [TestMethod]
+        [Test]
         public void TestAlgorithmGetByIdWithInvalidName()
         {
             var algorithm = HashAlgorithm.GetByName("TEST");

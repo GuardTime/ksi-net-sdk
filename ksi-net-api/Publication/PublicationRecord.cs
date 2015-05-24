@@ -7,9 +7,29 @@ namespace Guardtime.KSI.Publication
     public class PublicationRecord : CompositeTag
     {
 
-        public PublicationData PublicationData;
-        public List<StringTag> PublicationReferences;
-        public List<StringTag> PubRepUri;
+        private PublicationData _publicationData;
+        private List<StringTag> _publicationReferences;
+        private List<StringTag> _publicationRepositoryUri;
+
+        public PublicationData PublicationData
+        {
+            get { return _publicationData; }
+            set
+            {
+                PutTag(value, _publicationData);
+                _publicationData = value;
+            }
+        }
+
+        public List<StringTag> PublicationReferences
+        {
+            get { return _publicationReferences; }
+        }
+
+        public List<StringTag> PubRepUri
+        {
+            get { return _publicationRepositoryUri; }
+        }
 
         public DateTime PublicationTime
         {
@@ -21,37 +41,49 @@ namespace Guardtime.KSI.Publication
 
         public PublicationRecord(TlvTag tag) : base(tag)
         {
-            for (var i = 0; i < Value.Count; i++)
+            for (int i = 0; i < Value.Count; i++)
             {
+                StringTag listTag;
+
                 switch (Value[i].Type)
                 {
                     case 0x10:
-                        PublicationData = new PublicationData(Value[i]);
+                        _publicationData = new PublicationData(Value[i]);
+                        Value[i] = _publicationData;
                         break;
                     case 0x9:
-                        if (PublicationReferences == null)
-                        {
-                            PublicationReferences = new List<StringTag>();
-                        }
-
-                        var publicationReferenceTag = new StringTag(Value[i]);
-                        PublicationReferences.Add(publicationReferenceTag);
-                        Value[i] = publicationReferenceTag;
+                        listTag = new StringTag(Value[i]);
+                        AddPublicationReference(listTag);
+                        Value[i] = listTag;
                         break;
                     case 0xA:
-                        if (PubRepUri == null)
-                        {
-                            PubRepUri = new List<StringTag>();
-                        }
-
-                        var pubRepUriTag = new StringTag(Value[i]);
-                        PubRepUri.Add(pubRepUriTag);
-                        Value[i] = pubRepUriTag;
+                        listTag = new StringTag(Value[i]);
+                        AddPublicationRepositoryUri(listTag);
+                        Value[i] = listTag;
                         break;
                 }
             }
         }
 
+        public void AddPublicationReference(StringTag tag)
+        {
+            if (_publicationReferences == null)
+            {
+                _publicationReferences = new List<StringTag>();
+            }
+
+            _publicationReferences.Add(tag);
+        }
+
+        public void AddPublicationRepositoryUri(StringTag tag)
+        {
+            if (_publicationRepositoryUri == null)
+            {
+                _publicationRepositoryUri = new List<StringTag>();
+            }
+
+            _publicationRepositoryUri.Add(tag);
+        }
 
         public override bool IsValidStructure()
         {

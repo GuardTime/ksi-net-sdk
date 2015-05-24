@@ -125,10 +125,10 @@ namespace Guardtime.KSI.Hashing
                 throw new ArgumentException("Invalid inputstream added to hasher: null");
             }
 
-            var buffer = new byte[bufferSize];
+            byte[] buffer = new byte[bufferSize];
             while (true) 
             {
-                var bytesRead = inStream.Read(buffer, 0, bufferSize);
+                int bytesRead = inStream.Read(buffer, 0, bufferSize);
 
                 if (bytesRead == 0) 
                 {
@@ -155,7 +155,7 @@ namespace Guardtime.KSI.Hashing
                 throw new ArgumentException("Invalid file added to hasher: null");
             }
 
-            using (var inStream = new FileStream(fileHandle, FileAccess.Read))
+            using (FileStream inStream = new FileStream(fileHandle, FileAccess.Read))
             {
                 return AddData(inStream, bufferSize);
             }
@@ -173,7 +173,7 @@ namespace Guardtime.KSI.Hashing
         public DataHash GetHash() {
             if (_outputHash != null) return _outputHash;
             _messageHasher.TransformFinalBlock(new byte[] { }, 0, 0);
-            var hash = _messageHasher.Hash;
+            byte[] hash = _messageHasher.Hash;
             _outputHash = new DataHash(_algorithm, hash);
 
             return _outputHash;

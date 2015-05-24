@@ -24,7 +24,7 @@ namespace Guardtime.KSI.Signature
 
         public AggregationHashChain(TlvTag tag) : base(tag)
         {
-            for (var i = 0; i < Value.Count; i++)
+            for (int i = 0; i < Value.Count; i++)
             {
                 switch (Value[i].Type)
                 {
@@ -38,7 +38,7 @@ namespace Guardtime.KSI.Signature
                             ChainIndex = new List<IntegerTag>();
                         }
 
-                        var chainIndexTag = new IntegerTag(Value[i]);
+                        IntegerTag chainIndexTag = new IntegerTag(Value[i]);
                         ChainIndex.Add(chainIndexTag);
                         Value[i] = chainIndexTag;
                         break;
@@ -61,7 +61,7 @@ namespace Guardtime.KSI.Signature
                             Chain = new List<Link>();
                         }
 
-                        var linkTag = new Link(Value[i], (LinkDirection)Enum.ToObject(typeof(LinkDirection), (byte)Value[i].Type));
+                        Link linkTag = new Link(Value[i], (LinkDirection)Enum.ToObject(typeof(LinkDirection), (byte)Value[i].Type));
                         Chain.Add(linkTag);
                         Value[i] = linkTag;
                         break;
@@ -88,7 +88,7 @@ namespace Guardtime.KSI.Signature
 
             public Link(TlvTag tag, LinkDirection direction) : base(tag)
             {
-                for (var i = 0; i < Value.Count; i++)
+                for (int i = 0; i < Value.Count; i++)
                 {
                     switch (Value[i].Type)
                     {
@@ -132,7 +132,7 @@ namespace Guardtime.KSI.Signature
 
             public MetaData(TlvTag tag) : base(tag)
             {
-                for (var i = 0; i < Value.Count; i++)
+                for (int i = 0; i < Value.Count; i++)
                 {
                     switch (Value[i].Type)
                     {

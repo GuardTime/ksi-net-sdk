@@ -35,33 +35,38 @@ namespace Guardtime.KSI.Parser
         {
         }
 
+        public TlvTag ReadTag()
+        {
+            return ReadTag(null);
+        }
+
         /// <summary>
         /// Reads a complete TLV item from the wrapped stream.
         /// </summary>
         /// <returns>raw tlv tag</returns>
-        public TlvTag ReadTag() {
+        public TlvTag ReadTag(TlvTag parent) {
             try {
-                var firstByte = ReadByte();
+                byte firstByte = ReadByte();
 
-                var tlv16 = (firstByte & Tlv16Flag) != 0;
-                var nonCritical = (firstByte & NonCriticalFlag) != 0;
-                var forward = (firstByte & ForwardFlag) != 0;
+                bool tlv16 = (firstByte & Tlv16Flag) != 0;
+                bool nonCritical = (firstByte & NonCriticalFlag) != 0;
+                bool forward = (firstByte & ForwardFlag) != 0;
 
-                var type = (uint) (firstByte & TypeMask);
+                uint type = (uint) (firstByte & TypeMask);
                 ushort length;
                 
                 if (tlv16) {
-                    var typeLsb = ReadByte();
+                    byte typeLsb = ReadByte();
                     type = (type << ByteBits) | typeLsb;
                     length = (ushort)((ReadByte() << ByteBits) | ReadByte());
                 } else {
                     length = ReadByte();
                 }
 
-                var data = new byte[length];
+                byte[] data = new byte[length];
                 Read(data, 0, length);
 
-                return new RawTag(type, nonCritical, forward, data);
+                return new RawTag(parent, type, nonCritical, forward, data);
             } catch (EndOfStreamException e) {
                 throw new FormatException("Premature end of data", e);
             }

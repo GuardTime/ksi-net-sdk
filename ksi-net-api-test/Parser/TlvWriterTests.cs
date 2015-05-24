@@ -1,13 +1,13 @@
 ﻿using System;
 using System.IO;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Guardtime.KSI.Parser
 {
-    [TestClass()]
+    [TestFixture()]
     public class TlvWriterTests
     {
-        [TestMethod()]
+        [Test()]
         public void TestWriteTagShort()
         {
             using (var writer = new TlvWriter(new MemoryStream()))
@@ -17,7 +17,7 @@ namespace Guardtime.KSI.Parser
             }
         }
 
-        [TestMethod()]
+        [Test()]
         public void TestWriteTagShortWithLongType()
         {
             using (var writer = new TlvWriter(new MemoryStream()))
@@ -27,7 +27,7 @@ namespace Guardtime.KSI.Parser
             }
         }
 
-        [TestMethod()]
+        [Test()]
         public void TestWriteTagLongWithShortType()
         {
             using (var writer = new TlvWriter(new MemoryStream()))
@@ -44,7 +44,7 @@ namespace Guardtime.KSI.Parser
             }
         }
 
-        [TestMethod()]
+        [Test()]
         public void TestWriteTagLongWithLongType()
         {
             using (var writer = new TlvWriter(new MemoryStream()))
@@ -61,7 +61,7 @@ namespace Guardtime.KSI.Parser
             }
         }
 
-        [TestMethod(), ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test(), ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void TestWriteTagWithTooLongType()
         {
             using (var writer = new TlvWriter(new MemoryStream()))
@@ -70,7 +70,7 @@ namespace Guardtime.KSI.Parser
             }
         }
 
-        [TestMethod(), ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test(), ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void TestWriteTagWithTooLongData()
         {
             using (var writer = new TlvWriter(new MemoryStream()))

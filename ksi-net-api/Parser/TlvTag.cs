@@ -6,6 +6,8 @@ namespace Guardtime.KSI.Parser
 {
     public abstract class TlvTag
     {
+        private TlvTag _parent;
+
         /// <summary>
         /// Tlv tag type.
         /// </summary>
@@ -24,74 +26,71 @@ namespace Guardtime.KSI.Parser
         /// <summary>
         /// Tlv content.
         /// </summary>
-        protected byte[] ValueBytes;
+        protected byte[] Value;
 
-        protected TlvTag(uint type, bool nonCritical, bool forward, byte[] value)
+        protected TlvTag(TlvTag parent, uint type, bool nonCritical, bool forward, byte[] value)
         {
             if (value == null)
             {
-                throw new ArgumentNullException(nameof(value));
+                throw new ArgumentNullException("value");
             }
 
+            _parent = parent;
             Type = type;
             NonCritical = nonCritical;
             Forward = forward;
-            ValueBytes = value;
+            Value = value;
         }
 
-        protected TlvTag(byte[] bytes)
+        protected TlvTag(TlvTag parent, byte[] bytes)
         {
-            using (var reader = new TlvReader(new MemoryStream(bytes)))
+            if (bytes == null)
             {
-                var tag = reader.ReadTag();
+                throw new ArgumentNullException("bytes");
+            }
+
+            using (MemoryStream stream = new MemoryStream(bytes))
+            using (TlvReader reader = new TlvReader(stream))
+            {
+                TlvTag tag = reader.ReadTag();
+                _parent = parent;
                 Type = tag.Type;
                 NonCritical = tag.NonCritical;
                 Forward = tag.Forward;
-                ValueBytes = tag.EncodeValue();
+                Value = tag.EncodeValue();
             }
         }
 
-        protected TlvTag(TlvTag tag)
+        protected TlvTag(TlvTag parent, TlvTag tag)
         {
             if (tag == null)
             {
-                throw new ArgumentNullException(nameof(tag));
+                throw new ArgumentNullException("tag");
             }
 
+            _parent = parent;
             Type = tag.Type;
             NonCritical = tag.NonCritical;
             Forward = tag.Forward;
-            ValueBytes = tag.EncodeValue();
+            Value = tag.EncodeValue();
         }
 
         public abstract byte[] EncodeValue();
 
         public byte[] Encode()
         {
-            using (var writer = new TlvWriter(new MemoryStream()))
+            using (MemoryStream stream = new MemoryStream())
+            using (TlvWriter writer = new TlvWriter(stream))
             {
                 writer.WriteTag(this);
-                return ((MemoryStream)writer.BaseStream).ToArray();
+                return stream.ToArray();
             }
         }
-
-        public override bool Equals(object obj)
-        {
-            var tag = obj as TlvTag;
-            if (tag == null)
-            {
-                return false;
-            }
-
-            return tag.Type == Type &&
-                   tag.Forward == Forward &&
-                   tag.NonCritical == NonCritical &&
-                   Util.Util.IsArrayEqual(tag.EncodeValue(), EncodeValue());
-        }
+        
 
         public override string ToString()
         {
-            var builder = new StringBuilder();
+            StringBuilder builder = new StringBuilder();
             builder.Append("TLV[0x").Append(Type.ToString("X"));
 
             if (NonCritical)
