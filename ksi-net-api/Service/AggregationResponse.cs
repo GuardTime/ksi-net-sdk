@@ -3,7 +3,7 @@ using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Service
 {
-    class AggregationResponse : AggregationPduPayload
+    public class AggregationResponse : AggregationPduPayload
     {
         private IntegerTag _requestId;
         private IntegerTag _status;
@@ -44,7 +44,7 @@ namespace Guardtime.KSI.Service
             }
         }
 
-        public override bool IsValidStructure()
+        protected override void CheckStructure()
         {
             throw new NotImplementedException();
         }

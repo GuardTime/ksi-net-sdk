@@ -4,35 +4,28 @@ namespace Guardtime.KSI.Parser
 {
     public class ImprintTag : TlvTag
     {
-        public new DataHash Value;
+        private readonly DataHash _value;
 
-        public ImprintTag(byte[] bytes) : this(null, bytes)
+        public new DataHash Value
         {
+            get { return _value; }
         }
 
-        public ImprintTag(TlvTag parent, byte[] bytes) : base(parent, bytes)
+        public ImprintTag(byte[] bytes) : base(bytes)
         {
-            Value = new DataHash(base.Value);
+            _value = new DataHash(base.Value);
         }
 
-        public ImprintTag(TlvTag tag) : this(null, tag)
+        public ImprintTag(TlvTag tag) : base(tag)
         {
+            _value = new DataHash(tag.EncodeValue());
         }
 
-        public ImprintTag(TlvTag parent, TlvTag tag) : base(parent, tag)
-        {
-            Value = new DataHash(tag.EncodeValue());
-        }
-
+        // TODO: Check null on imprint
         public ImprintTag(uint type, bool nonCritical, bool forward, DataHash value)
-            : this(null, type, nonCritical, forward, value)
+            : base(type, nonCritical, forward, value.Imprint)
         {
-        }
-
-        public ImprintTag(TlvTag parent, uint type, bool nonCritical, bool forward, DataHash value)
-            : base(parent, type, nonCritical, forward, value.Imprint)
-        {
-            Value = value;
+            _value = value;
         }
 
         public override byte[] EncodeValue()

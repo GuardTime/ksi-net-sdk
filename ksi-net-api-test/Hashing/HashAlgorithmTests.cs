@@ -38,6 +38,13 @@ namespace Guardtime.KSI.Hashing
         }
 
         [Test]
+        public void TestGetNamesList()
+        {
+            var names = HashAlgorithm.GetNamesList();
+            Assert.AreEqual(11, names.Count);
+        }
+
+        [Test]
         public void TestAlgorithmGetByIdWithInvalidId()
         {
             var algorithm = HashAlgorithm.GetById(255);

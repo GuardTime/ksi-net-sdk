@@ -85,7 +85,7 @@ namespace Guardtime.KSI.Publication
             _publicationRepositoryUri.Add(tag);
         }
 
-        public override bool IsValidStructure()
+        protected override void CheckStructure()
         {
             throw new NotImplementedException();
         }

@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 
 namespace Guardtime.KSI.Hashing
 {
@@ -36,6 +37,46 @@ namespace Guardtime.KSI.Hashing
             Assert.AreEqual("SHA-256:[0102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F20]", dataHash.ToString(), "Hash string representation should be in correct format");
         }
 
+        [Test, ExpectedException(typeof(ArgumentNullException))]
+        public void TestDataHashCreateWithNullAlgorithm()
+        {
+            var dataHash = new DataHash(null, new byte[] {});
+        }
 
+        [Test, ExpectedException(typeof(ArgumentNullException))]
+        public void TestDataHashCreateWithNullValue()
+        {
+            var dataHash = new DataHash(HashAlgorithm.Sha2256, null);
+        }
+
+        [Test, ExpectedException(typeof(FormatException))]
+        public void TestDataHashCreateWithInvalidValueLength()
+        {
+            var dataHash = new DataHash(HashAlgorithm.Sha2256, new byte[] {});
+        }
+
+        [Test, ExpectedException(typeof(ArgumentNullException))]
+        public void TestDataHashCreateWithNullBytes()
+        {
+            var dataHash = new DataHash(null);
+        }
+
+        [Test, ExpectedException(typeof(ArgumentException))]
+        public void TestDataHashCreateWithZeroLengthBytes()
+        {
+            var dataHash = new DataHash(new byte[] { });
+        }
+
+        [Test, ExpectedException(typeof(FormatException))]
+        public void TestDataHashCreateWithInvalidAlgorithmFromBytes()
+        {
+            var dataHash = new DataHash(new byte[] { 255 });
+        }
+
+        [Test, ExpectedException(typeof(FormatException))]
+        public void TestDataHashCreateWithInvalidValueLengthFromBytes()
+        {
+            var dataHash = new DataHash(new byte[] { 1, 1, 2, 3, 4, 5, 6 });
+        }
     }
 }

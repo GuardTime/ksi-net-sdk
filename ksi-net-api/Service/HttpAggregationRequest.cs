@@ -1,7 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Net;
-using Guardtime.KSI.Parser;
+using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Signature;
 
 namespace Guardtime.KSI.Service
 {
@@ -21,6 +22,7 @@ namespace Guardtime.KSI.Service
             stream.Write(data, 0, data.Length);
             stream.Close();
             Console.WriteLine(tag);
+            Console.WriteLine();
             try
             {
                 //TODO: Check java api response handling, KSISignatureDO when handles list then skips unnessessary tags, in other cases will give error
@@ -37,7 +39,19 @@ namespace Guardtime.KSI.Service
 
                     byte[] dataResponse = memoryStream.ToArray();
                     s.Read(dataResponse, 0, dataResponse.Length);
-                    Console.WriteLine(new AggregationPdu(dataResponse));
+
+                    AggregationPdu response = new AggregationPdu(dataResponse);
+                    // TODO: Check structure
+                    //                    response.IsValidStructure();
+                    // TODO: Create signature from payload, remove unwanted tags and check if payload is correct
+                    AggregationResponse responsePayload = response.Payload as AggregationResponse;
+                    if (responsePayload == null)
+                    {
+                        throw new KsiException("Invalid aggregation response with http code 200");
+                    }
+                    
+                    KsiSignature signature = new KsiSignature(responsePayload);
+                    Console.WriteLine(signature);
                 }
             }
             catch (WebException e)

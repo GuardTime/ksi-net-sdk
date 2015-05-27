@@ -86,7 +86,7 @@ namespace Guardtime.KSI.Publication
             }
         }
 
-        public override bool IsValidStructure()
+        protected override void CheckStructure()
         {
             if (PublicationsHeader == null)
             {
@@ -107,8 +107,6 @@ namespace Guardtime.KSI.Publication
             {
                 throw new InvalidTlvStructureException("Publication file signature is missing");
             }
-
-            return true;
         }
     }
 }

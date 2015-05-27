@@ -112,9 +112,9 @@ namespace Guardtime.KSI.Signature
                 }
             }
 
-            public override bool IsValidStructure()
+            protected override void CheckStructure()
             {
-                throw new NotImplementedException();
+                // TODO
             }
         }
 
@@ -156,9 +156,9 @@ namespace Guardtime.KSI.Signature
                 }
             }
 
-            public override bool IsValidStructure()
+            protected override void CheckStructure()
             {
-                throw new NotImplementedException();
+                // TODO
             }
         } 
 
@@ -170,9 +170,9 @@ namespace Guardtime.KSI.Signature
         }
 
 
-        public override bool IsValidStructure()
+        protected override void CheckStructure()
         {
-            throw new NotImplementedException();
+            // TODO
         }
     }
 }

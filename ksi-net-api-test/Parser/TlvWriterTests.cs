@@ -61,6 +61,29 @@ namespace Guardtime.KSI.Parser
             }
         }
 
+        [Test]
+        public void TestWriteNullValue()
+        {
+            using (var stream = new MemoryStream())
+            using (var writer = new TlvWriter(stream))
+            {
+                writer.WriteTag(new AllowNullValueTlvTag(new byte[] { 0x1, 0x0 }));
+                writer.WriteTag(new AllowNullValueTlvTag(new byte[] { 0xe2, 0x57, 0x0, 0x0 }));
+                Console.WriteLine(Util.Util.ConvertByteArrayToHex(stream.ToArray()));
+                CollectionAssert.AreEqual(new byte[] {0x1, 0x0, 0xe2, 0x57, 0x0}, stream.ToArray(), "Writer should output correct byte array");
+            }
+        }
+
+        [Test]
+        public void TestWriteNullTag()
+        {
+            using (var writer = new TlvWriter(new MemoryStream()))
+            {
+                writer.WriteTag(null);
+                CollectionAssert.AreEqual(new byte[] {}, ((MemoryStream)writer.BaseStream).ToArray(), "Writer should output correct byte array");
+            }
+        }
+
         [Test(), ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void TestWriteTagWithTooLongType()
         {
@@ -76,6 +99,19 @@ namespace Guardtime.KSI.Parser
             using (var writer = new TlvWriter(new MemoryStream()))
             {
                 writer.WriteTag(new RawTag(0x1, true, true, new byte[ushort.MaxValue + 1]));
+            }
+        }
+
+        private class AllowNullValueTlvTag : TlvTag
+        {
+            public AllowNullValueTlvTag(byte[] bytes) : base(bytes)
+            {
+                
+            }
+
+            public override byte[] EncodeValue()
+            {
+                return null;
             }
         }
     }

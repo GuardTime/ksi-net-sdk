@@ -1,17 +1,11 @@
 ﻿using System;
 using System.IO;
-using System.Text;
 
 namespace Guardtime.KSI.Parser
 {
     public class TlvWriter : BinaryWriter
     {
         public TlvWriter(Stream input) : base(input)
-        {
-        }
-
-        public TlvWriter(Stream input, Encoding encoding)
-            : base(input, encoding)
         {
         }
 
@@ -42,7 +36,7 @@ namespace Guardtime.KSI.Parser
                 Write((byte)tag.Type);
                 if (data == null)
                 {
-                    Write(0);
+                    Write((byte)0);
                 }
                 else
                 {
@@ -61,7 +55,7 @@ namespace Guardtime.KSI.Parser
                 Write(firstByte);
                 if (data == null)
                 {
-                    Write(0);
+                    Write((byte)0);
                 }
                 else
                 {

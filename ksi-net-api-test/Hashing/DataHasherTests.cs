@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Guardtime.KSI.Properties;
+using Microsoft.Win32.SafeHandles;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Hashing
@@ -47,11 +48,36 @@ namespace Guardtime.KSI.Hashing
         }
 
         [Test]
+        public void TestDataHasherReset()
+        {
+            var hasher = new DataHasher();
+            var data = System.Text.Encoding.UTF8.GetBytes(Resources.DataHasher_TestString);
+            hasher.AddData(data, 0, data.Length);
+            Assert.AreEqual(HashAlgorithm.Sha2256.Length, hasher.GetHash().Value.Length, "Hash length should be correct");
+            Assert.AreEqual("CF-00-FC-3A-72-A2-F7-1C-7D-E2-B7-18-C0-A4-DF-F3-8D-83-C0-E1-95-7E-C2-19-C3-B2-66-F8-CC-38-B9-EA", BitConverter.ToString(hasher.GetHash().Value), "Hash value should be calculated correctly");
+            hasher.Reset();
+            hasher.AddData(data, 0, data.Length);
+            Assert.AreEqual(HashAlgorithm.Sha2256.Length, hasher.GetHash().Value.Length, "Hash length should be correct");
+            Assert.AreEqual("CF-00-FC-3A-72-A2-F7-1C-7D-E2-B7-18-C0-A4-DF-F3-8D-83-C0-E1-95-7E-C2-19-C3-B2-66-F8-CC-38-B9-EA", BitConverter.ToString(hasher.GetHash().Value), "Hash value should be calculated correctly");
+        }
+
+        [Test]
         public void TestDataHasherWithRipemd160Algorithm()
         {
             var hasher = new DataHasher(HashAlgorithm.Ripemd160);
             Assert.AreEqual(HashAlgorithm.Ripemd160.Length, hasher.GetHash().Value.Length, "Hash length should be correct");
             Assert.AreEqual("9C-11-85-A5-C5-E9-FC-54-61-28-08-97-7E-E8-F5-48-B2-25-8D-31", BitConverter.ToString(hasher.GetHash().Value), "Hash value should be calculated correctly");
+        }
+
+        [Test]
+        public void TestDataHasherWithDefaultAlgorithmAndSafeFileHandle()
+        {
+            var hasher = new DataHasher();
+            var stream = new FileStream(Resources.DataHasher_TestFile, FileMode.Open);
+            hasher.AddData(stream.SafeFileHandle);
+            Assert.AreEqual(HashAlgorithm.Sha2256.Length, hasher.GetHash().Value.Length, "Hash length should be correct");
+            Assert.AreEqual("54-66-E3-CB-A1-4A-84-3A-5E-93-B7-8E-3D-6A-B8-D3-49-1E-DC-AC-7E-06-43-1C-E1-A7-F4-98-28-C3-40-C3", BitConverter.ToString(hasher.GetHash().Value), "Hash value should be calculated correctly");
+            stream.Close();
         }
 
         [Test]
@@ -88,7 +114,45 @@ namespace Guardtime.KSI.Hashing
             var hasher = new DataHasher(HashAlgorithm.Sha3256);
         }
 
-        
+        [Test, ExpectedException(typeof(ArgumentNullException))]
+        public void TestDataHasherWithNullBytes()
+        {
+            var hasher = new DataHasher();
+            hasher.AddData((byte[]) null);
+        }
+
+        [Test, ExpectedException(typeof(ArgumentNullException))]
+        public void TestDataHasherWithNullBytesAndNoLength()
+        {
+            var hasher = new DataHasher();
+            hasher.AddData(null, 0, 0);
+        }
+
+        [Test, ExpectedException(typeof(ArgumentNullException))]
+        public void TestDataHasherWithNullSafeFileHandle()
+        {
+            var hasher = new DataHasher();
+            hasher.AddData((SafeFileHandle)null);
+        }
+
+        [Test, ExpectedException(typeof(ArgumentNullException))]
+        public void TestDataHasherWithNullStream()
+        {
+            var hasher = new DataHasher();
+            hasher.AddData((Stream)null);
+        }
+
+        [Test, ExpectedException(typeof(InvalidOperationException))]
+        public void TestDataHasherWithAddingDataAfterHashHasBeenCalculated()
+        {
+            var hasher = new DataHasher();
+            var data = System.Text.Encoding.UTF8.GetBytes(Resources.DataHasher_TestString);
+            hasher.AddData(data);
+            hasher.GetHash();
+            hasher.AddData(data);
+        }
+
+
 
     }
 }

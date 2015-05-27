@@ -1,12 +1,10 @@
-﻿using Guardtime.KSI.Parser;
+﻿using System.Collections.Generic;
+using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Service
 {
-    internal abstract class AggregationPduPayload : CompositeTag
+    public abstract class AggregationPduPayload : CompositeTag
     {
-        protected AggregationPduPayload(uint type, bool nonCritical, bool forward) : base(type, nonCritical, forward)
-        {
-        }
 
         protected AggregationPduPayload(byte[] bytes) : base(bytes)
         {
@@ -16,6 +14,9 @@ namespace Guardtime.KSI.Service
         {
         }
 
-        
+        protected AggregationPduPayload(uint type, bool nonCritical, bool forward, List<TlvTag> value) : base(type, nonCritical, forward, value)
+        {
+        }
+
     }
 }

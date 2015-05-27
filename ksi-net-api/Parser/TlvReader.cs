@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Text;
 
 namespace Guardtime.KSI.Parser
 {
@@ -27,24 +26,10 @@ namespace Guardtime.KSI.Parser
         }
 
         /// <summary>
-        /// Reads from given input stream with specified encoding for TLV data.
-        /// </summary>
-        /// <param name="input">input stream to read data from</param>
-        /// <param name="encoding">data encoding</param>
-        public TlvReader(Stream input, Encoding encoding) : base(input, encoding)
-        {
-        }
-
-        public TlvTag ReadTag()
-        {
-            return ReadTag(null);
-        }
-
-        /// <summary>
         /// Reads a complete TLV item from the wrapped stream.
         /// </summary>
         /// <returns>raw tlv tag</returns>
-        public TlvTag ReadTag(TlvTag parent) {
+        public TlvTag ReadTag() {
             try {
                 byte firstByte = ReadByte();
 
@@ -64,10 +49,16 @@ namespace Guardtime.KSI.Parser
                 }
 
                 byte[] data = new byte[length];
-                Read(data, 0, length);
+                int bytesRead = Read(data, 0, length);
 
-                return new RawTag(parent, type, nonCritical, forward, data);
+                if (bytesRead != length)
+                {
+                    throw new EndOfStreamException("Could not read TLV data with expected length of " + length + ", instead could only read " + bytesRead);
+                }
+
+                return new RawTag(type, nonCritical, forward, data);
             } catch (EndOfStreamException e) {
+                // TODO: Throw better exception
                 throw new FormatException("Premature end of data", e);
             }
         }

@@ -1,4 +1,5 @@
-﻿using Guardtime.KSI.Parser;
+﻿using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Publication
 {
@@ -46,9 +47,19 @@ namespace Guardtime.KSI.Publication
         }
 
 
-        public override bool IsValidStructure()
+        protected override void CheckStructure()
         {
-            throw new System.NotImplementedException();
+            for (int i = 0; i < Value.Count; i++)
+            {
+                switch (Value[i].Type)
+                {
+                    case 0x2:
+                    case 0x4:
+                        break;
+                    default:
+                        throw new InvalidTlvStructureException("Invalid tag", Value[i]);
+                }
+            }
         }
     }
 }

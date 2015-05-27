@@ -6,7 +6,7 @@ namespace Guardtime.KSI.Hashing
     /// <summary>
     /// List of supported hash functions and also some convenience functions.
     /// </summary>
-    public class HashAlgorithm
+    public sealed class HashAlgorithm
     {
         public static readonly HashAlgorithm Sha1 = new HashAlgorithm("SHA1", 0x0, 20, AlgorithmStatus.NotTrusted);
         public static readonly HashAlgorithm Sha2256 = new HashAlgorithm("SHA-256", 0x01, 32, AlgorithmStatus.Normal, new string[] { "SHA2-256", "SHA2", "DEFAULT" });

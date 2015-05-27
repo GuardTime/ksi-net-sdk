@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -8,11 +9,20 @@ using HashAlgorithm = Guardtime.KSI.Hashing.HashAlgorithm;
 
 namespace Guardtime.KSI.Service
 {
-    class AggregationPdu : CompositeTag
+    public class AggregationPdu : CompositeTag
     {
         private PduHeader _header;
         private AggregationPduPayload _payload;
         private ImprintTag _mac;
+
+        // TODO: Fix null problem
+        public AggregationPduPayload Payload
+        {
+            get
+            {
+                return _payload;
+            }
+        }
 
         public AggregationPdu(byte[] bytes) : base(bytes)
         {
@@ -29,7 +39,7 @@ namespace Guardtime.KSI.Service
                         Value[i] = _payload;
                         break;
                     case 0x203:
-                        _payload = new AggregationResponse(Value[i]);
+                        _payload = new AggregationError(Value[i]);
                         Value[i] = _payload;
                         break;
                     case 0x1f:
@@ -45,7 +55,7 @@ namespace Guardtime.KSI.Service
         }
 
         // TODO: Create correct constructor
-        public AggregationPdu() : base(0x200, false, false)
+        public AggregationPdu() : base(0x200, false, false, new List<TlvTag>())
         {
             _header = new PduHeader();
             Value.Add(_header);
@@ -70,7 +80,7 @@ namespace Guardtime.KSI.Service
             return hmac.ComputeHash(data);
         }
 
-    public override bool IsValidStructure()
+        protected override void CheckStructure()
         {
             throw new NotImplementedException();
         }

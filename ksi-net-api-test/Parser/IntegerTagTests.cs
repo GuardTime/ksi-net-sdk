@@ -36,10 +36,42 @@ namespace Guardtime.KSI.Parser
             Assert.AreEqual(newTag, tag, "Value should be equal");
         }
 
+        [Test]
+        public void TestIntegerTagEquals()
+        {
+            var tag = new IntegerTag(0x1, false, false, 10);
+            Assert.AreEqual(new IntegerTag(0x1, false, false, 10), tag, "Tag Equals function should compare correctly");
+            Assert.IsFalse(tag.Equals(new StringTag(0x1, false, false, "test")), "Tag Equals function should compare correctly with other objects");
+            Assert.IsFalse(tag.Equals(new object()), "Tag Equals function should compare correctly with other objects");
+        }
+
+        [Test]
+        public void TestIntegerTagHashCode()
+        {
+            var tag = new IntegerTag(0x1, false, false, 10);
+            Assert.AreEqual(11, tag.GetHashCode(), "Hash code should be correct");
+        }
+
+        [Test]
+        public void TestIntegerTagToString()
+        {
+            var tag = new IntegerTag(0x1, false, false, 10);
+            Assert.AreEqual("TLV[0x1]:i10", tag.ToString(), "Tag unsigned long representation should be correct");
+
+            tag = new IntegerTag(0x1, true, true, 11);
+            Assert.AreEqual("TLV[0x1,N,F]:i11", tag.ToString(), "Tag unsigned long representation should be correct");
+        }
+
         [Test, ExpectedException(typeof(ArgumentNullException))]
         public void TestIntegerTagCreateFromNullTag()
         {
             var tag = new IntegerTag((TlvTag)null);
+        }
+
+        [Test, ExpectedException(typeof(ArgumentNullException))]
+        public void TestIntegerTagCreateFromNullBytes()
+        {
+            var tag = new IntegerTag((byte[])null);
         }
     }
 }

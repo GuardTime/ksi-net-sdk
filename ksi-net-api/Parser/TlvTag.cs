@@ -6,43 +6,57 @@ namespace Guardtime.KSI.Parser
 {
     public abstract class TlvTag
     {
-        private TlvTag _parent;
+        private readonly uint _type;
+        private readonly bool _nonCritical;
+        private readonly bool _forward;
+        private readonly byte[] _value;
 
         /// <summary>
         /// Tlv tag type.
         /// </summary>
-        public uint Type;
+        public uint Type
+        {
+            get { return _type; }
+        }
 
         /// <summary>
         /// Is tlv tag non critical.
         /// </summary>
-        public bool NonCritical;
+        public bool NonCritical
+        {
+            get { return _nonCritical; }
+        }
 
         /// <summary>
         /// Is tlv forwarded.
         /// </summary>
-        public bool Forward;
+        public bool Forward
+        {
+            get { return _forward; }
+        }
 
         /// <summary>
         /// Tlv content.
         /// </summary>
-        protected byte[] Value;
+        public byte[] Value
+        {
+            get { return _value; }
+        }
 
-        protected TlvTag(TlvTag parent, uint type, bool nonCritical, bool forward, byte[] value)
+        protected TlvTag(uint type, bool nonCritical, bool forward, byte[] value)
         {
             if (value == null)
             {
                 throw new ArgumentNullException("value");
             }
 
-            _parent = parent;
-            Type = type;
-            NonCritical = nonCritical;
-            Forward = forward;
-            Value = value;
+            _type = type;
+            _nonCritical = nonCritical;
+            _forward = forward;
+            _value = value;
         }
 
-        protected TlvTag(TlvTag parent, byte[] bytes)
+        protected TlvTag(byte[] bytes)
         {
             if (bytes == null)
             {
@@ -53,26 +67,24 @@ namespace Guardtime.KSI.Parser
             using (TlvReader reader = new TlvReader(stream))
             {
                 TlvTag tag = reader.ReadTag();
-                _parent = parent;
-                Type = tag.Type;
-                NonCritical = tag.NonCritical;
-                Forward = tag.Forward;
-                Value = tag.EncodeValue();
+                _type = tag.Type;
+                _nonCritical = tag.NonCritical;
+                _forward = tag.Forward;
+                _value = tag.EncodeValue();
             }
         }
 
-        protected TlvTag(TlvTag parent, TlvTag tag)
+        protected TlvTag(TlvTag tag)
         {
             if (tag == null)
             {
                 throw new ArgumentNullException("tag");
             }
 
-            _parent = parent;
-            Type = tag.Type;
-            NonCritical = tag.NonCritical;
-            Forward = tag.Forward;
-            Value = tag.EncodeValue();
+            _type = tag.Type;
+            _nonCritical = tag.NonCritical;
+            _forward = tag.Forward;
+            _value = tag.EncodeValue();
         }
 
         public abstract byte[] EncodeValue();
@@ -86,7 +98,6 @@ namespace Guardtime.KSI.Parser
                 return stream.ToArray();
             }
         }
-        
 
         public override string ToString()
         {

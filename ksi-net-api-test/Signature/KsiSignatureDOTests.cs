@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 using NUnit.Framework;
 
@@ -19,20 +20,31 @@ namespace Guardtime.KSI.Signature
             }
 
             var tag = new RawTag(data);
-            using (var reader = new TlvReader(new MemoryStream(data)))
+            var test = new KsiSignatureDo(tag);
+            try
             {
-                var test = new KsiSignatureDo(tag);
-                var time = Environment.TickCount;
-                var i = 0;
-
-                while (Environment.TickCount - time < 1000)
-                {
-                    test = new KsiSignatureDo(tag);
-                    i++;
-                }
-                Console.WriteLine(i);
-                Console.WriteLine(test);
+                test.IsValidStructure();
             }
+            catch (InvalidTlvStructureException e)
+            {
+                Console.WriteLine(e);
+                Console.WriteLine(e.GetTlvTagTrace());
+            }
+            
+//            using (var reader = new TlvReader(new MemoryStream(data)))
+//            {
+//                test = new KsiSignatureDo(tag);
+//                var time = Environment.TickCount;
+//                var i = 0;
+//
+//                while (Environment.TickCount - time < 1000)
+//                {
+//                    test = new KsiSignatureDo(tag);
+//                    i++;
+//                }
+//                Console.WriteLine(i);
+//                Console.WriteLine(test);
+//            }
 
         }
     }

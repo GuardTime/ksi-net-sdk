@@ -31,7 +31,7 @@ namespace Guardtime.KSI.Publication
             }
         }
 
-        public override bool IsValidStructure()
+        protected override void CheckStructure()
         {
             throw new NotImplementedException();
         }

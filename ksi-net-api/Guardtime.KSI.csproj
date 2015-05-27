@@ -59,6 +59,7 @@
     <Compile Include="Publication\PublicationsFile.cs" />
     <Compile Include="Publication\PublicationsFileDo.cs" />
     <Compile Include="Publication\PublicationData.cs" />
+    <Compile Include="Service\AggregationError.cs" />
     <Compile Include="Service\AggregationResponse.cs" />
     <Compile Include="Service\AggregationRequest.cs" />
     <Compile Include="Service\AggregationPdu.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="Signature\AggregationHashChain.cs" />
     <Compile Include="Signature\CalendarAuthenticationRecord.cs" />
     <Compile Include="Signature\CalendarHashChain.cs" />
+    <Compile Include="Signature\KsiSignature.cs" />
     <Compile Include="Signature\KsiSignatureDo.cs" />
     <Compile Include="Signature\LinkDirection.cs" />
     <Compile Include="Publication\PublicationRecord.cs" />

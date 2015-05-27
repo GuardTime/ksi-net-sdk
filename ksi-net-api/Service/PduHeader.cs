@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Service
@@ -32,7 +33,7 @@ namespace Guardtime.KSI.Service
         }
         
         // TODO: Create correct constructor
-        public PduHeader() : base(0x1, false, false)
+        public PduHeader() : base(0x1, false, false, new List<TlvTag>())
         {
             _loginId = new StringTag(0x1, false, false, "anon");
             Value.Add(_loginId);
@@ -44,7 +45,7 @@ namespace Guardtime.KSI.Service
             Value.Add(_messageId);
         }
 
-        public override bool IsValidStructure()
+        protected override void CheckStructure()
         {
             throw new NotImplementedException();
         }

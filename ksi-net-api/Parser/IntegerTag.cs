@@ -4,37 +4,30 @@ namespace Guardtime.KSI.Parser
 {
     public class IntegerTag : TlvTag
     {
-        public new ulong Value;
+        private readonly ulong _value;
 
-        public IntegerTag(byte[] bytes) : this(null, bytes)
+        public new ulong Value
         {
+            get { return _value; }
         }
 
-        public IntegerTag(TlvTag parent, byte[] bytes) : base(parent, bytes)
+        // TODO: Fix problems with base null and encode returning null
+        public IntegerTag(byte[] bytes) : base(bytes)
         {
             byte[] data = base.Value;
-            Value = Util.Util.DecodeUnsignedLong(data, 0, data.Length);
+            _value = Util.Util.DecodeUnsignedLong(data, 0, data.Length);
         }
 
-        public IntegerTag(TlvTag tag) : this(null, tag)
-        {
-        }
-
-        public IntegerTag(TlvTag parent, TlvTag tag) : base(parent, tag)
+        public IntegerTag(TlvTag tag) : base(tag)
         {
             byte[] data = tag.EncodeValue();
-            Value = Util.Util.DecodeUnsignedLong(data, 0, data.Length);
+            _value = Util.Util.DecodeUnsignedLong(data, 0, data.Length);
         }
 
         public IntegerTag(uint type, bool nonCritical, bool forward, ulong value)
-            : this(null, type, nonCritical, forward, value)
+            : base(type, nonCritical, forward, Util.Util.EncodeUnsignedLong(value))
         {
-        }
-
-        public IntegerTag(TlvTag parent, uint type, bool nonCritical, bool forward, ulong value)
-            : base(parent, type, nonCritical, forward, Util.Util.EncodeUnsignedLong(value))
-        {
-            Value = value;
+            _value = value;
         }
 
         public override byte[] EncodeValue()

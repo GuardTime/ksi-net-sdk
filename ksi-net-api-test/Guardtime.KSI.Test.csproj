@@ -67,7 +67,6 @@
     <Compile Include="Parser\RawTagTests.cs" />
     <Compile Include="Parser\ImprintTagTests.cs" />
     <Compile Include="Parser\StringTagTests.cs" />
-    <Compile Include="Parser\TestTests.cs" />
     <Compile Include="Parser\TlvReaderTests.cs" />
     <Compile Include="Parser\TlvWriterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

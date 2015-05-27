@@ -1,5 +1,4 @@
-﻿using System;
-using Guardtime.KSI.Parser;
+﻿using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Publication
 {
@@ -54,7 +53,7 @@ namespace Guardtime.KSI.Publication
             }
         }
 
-        public override bool IsValidStructure()
+        protected override void CheckStructure()
         {
             throw new System.NotImplementedException();
         }

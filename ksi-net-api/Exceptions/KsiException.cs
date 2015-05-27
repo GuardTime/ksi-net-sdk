@@ -2,7 +2,7 @@
 
 namespace Guardtime.KSI.Exceptions
 {
-    class KsiException : Exception
+    public class KsiException : Exception
     {
         public KsiException(string message) : base(message)
         {

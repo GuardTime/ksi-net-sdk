@@ -7,7 +7,12 @@ namespace Guardtime.KSI.Trust
     public class PkiTrustStoreProvider : IPkiTrustProvider
     {
 
-        public string Name { get; }
+        public string Name
+        {
+            // TODO: Correct return
+            get { return ""; } 
+        }
+
         public void Verify(byte[] signedBytes, byte[] x509SignatureBytes)
         {
             if (x509SignatureBytes == null)

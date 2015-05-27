@@ -8,29 +8,16 @@ namespace Guardtime.KSI.Parser
             get { return base.Value; }
         }
 
-        public RawTag(byte[] bytes) : this(null, bytes)
+        public RawTag(byte[] bytes) : base(bytes)
         {
         }
 
-        public RawTag(TlvTag parent, byte[] bytes) : base(parent, bytes)
-        {
-        }
-
-        public RawTag(TlvTag tag) : this(null, tag)
-        {
-        }
-
-        public RawTag(TlvTag parent, TlvTag tag) : base(parent, tag)
+        public RawTag(TlvTag tag) : base(tag)
         {
         }
 
         public RawTag(uint type, bool nonCritical, bool forward, byte[] data)
-            : this(null, type, nonCritical, forward, data)
-        {
-        }
-
-        public RawTag(TlvTag parent, uint type, bool nonCritical, bool forward, byte[] data)
-            : base(parent, type, nonCritical, forward, data)
+            : base(type, nonCritical, forward, data)
         {
         }
 
@@ -43,7 +30,13 @@ namespace Guardtime.KSI.Parser
         {
             unchecked
             {
-                return Value.GetHashCode() + Type.GetHashCode() + Forward.GetHashCode() + NonCritical.GetHashCode();
+                int res = 1;
+                for (int i = 0; i < Value.Length; i++)
+                {
+                    res = 31 * res + Value[i];
+                }
+
+                return res + Type.GetHashCode() + Forward.GetHashCode() + NonCritical.GetHashCode();
             }
         }
 

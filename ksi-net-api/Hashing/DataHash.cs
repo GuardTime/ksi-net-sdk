@@ -17,10 +17,7 @@ namespace Guardtime.KSI.Hashing
         /// </summary>
         public HashAlgorithm Algorithm
         {
-            get
-            {
-                return _algorithm;
-            }
+            get { return _algorithm; }
         }
 
         /// <summary>
@@ -60,6 +57,7 @@ namespace Guardtime.KSI.Hashing
 
             if (valueBytes.Length != algorithm.Length)
             {
+                // TODO: Better exception here
                 throw new FormatException("Hash size(" + valueBytes.Length + ") does not match "
                             + algorithm.Name + " size(" + algorithm.Length + ")");
             }
@@ -83,7 +81,7 @@ namespace Guardtime.KSI.Hashing
                 throw new ArgumentNullException("imprintBytes");
             }
 
-            if (imprintBytes.Length < 1)
+            if (imprintBytes.Length == 0)
             {
                 throw new ArgumentException("Hash imprint too short");
             }
@@ -92,11 +90,13 @@ namespace Guardtime.KSI.Hashing
 
             if (_algorithm == null)
             {
+                // TODO: Better exception
                 throw new FormatException("Hash algorithm ID unknown: " + imprintBytes[0]);
             }
 
             if (_algorithm.Length + 1 != imprintBytes.Length)
             {
+                // TODO: Better exception
                 throw new FormatException("Hash size(" + (imprintBytes.Length - 1) + ") does not match "
                            + _algorithm.Name + " size(" + _algorithm.Length + ")");
             }
@@ -126,8 +126,16 @@ namespace Guardtime.KSI.Hashing
         /// <returns>hash code of current object</returns>
         public override int GetHashCode()
         {
-            // TODO: Generate correct hashcode
-            return 1;
+            unchecked
+            {
+                int res = 1;
+                for (int i = 0; i < _imprint.Length; i++)
+                {
+                    res = 31 * res + _imprint[i];
+                }
+
+                return res;
+            }
         }
 
         /// <summary>

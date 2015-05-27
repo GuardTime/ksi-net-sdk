@@ -5,7 +5,7 @@ namespace Guardtime.KSI.Util
 {
     public class Util
     {
-        private static readonly Random _random = new Random();
+        private static readonly Random Random = new Random();
 
         private Util()
         {
@@ -37,16 +37,20 @@ namespace Guardtime.KSI.Util
 
         public static string ConvertByteArrayToHex(byte[] valueBytes)
         {
-            return BitConverter.ToString(valueBytes).Replace("-", string.Empty);
-
+            return valueBytes == null ? "" : BitConverter.ToString(valueBytes).Replace("-", string.Empty);
         }
 
         public static ulong DecodeUnsignedLong(byte[] buf, int ofs, int len) {
+            if (buf == null)
+            {
+                throw new ArgumentNullException("buf");
+            }
+
             if (ofs < 0 || len < 0 || ofs + len < 0 || ofs + len > buf.Length) {
                 throw new IndexOutOfRangeException();
             }
             if (len > 8) {
-                // TODO: Catch exception
+                // TODO: better exception and handling
                 throw new FormatException("Integers of at most 63 unsigned bits supported by this implementation");
             }
             
@@ -88,6 +92,11 @@ namespace Guardtime.KSI.Util
 
         public static string DecodeNullTerminatedUtf8String(byte[] bytes)
         {
+            if (bytes == null)
+            {
+                throw new ArgumentNullException("bytes");
+            }
+
             if (bytes.Length == 0 || bytes[bytes.Length - 1] != 0)
             {
                 // TODO: Use correct exception
@@ -99,6 +108,11 @@ namespace Guardtime.KSI.Util
 
         public static byte[] EncodeNullTerminatedUtf8String(string value)
         {
+            if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
+
             byte[] stringBytes = Encoding.UTF8.GetBytes(value);
             byte[] bytes = new byte[stringBytes.Length + 1];
             Array.Copy(stringBytes, 0, bytes, 0, stringBytes.Length);
@@ -108,7 +122,7 @@ namespace Guardtime.KSI.Util
         public static ulong GetRandomUnsignedLong()
         {
             byte[] bytes = new byte[32];
-            _random.NextBytes(bytes);
+            Random.NextBytes(bytes);
             return BitConverter.ToUInt32(bytes, 0);
         }
 

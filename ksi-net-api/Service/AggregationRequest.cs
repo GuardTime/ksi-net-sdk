@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Service
 {
-    class AggregationRequest : AggregationPduPayload
+    public class AggregationRequest : AggregationPduPayload
     {
         private IntegerTag _requestId;
         private ImprintTag _requestHash;
@@ -20,7 +21,7 @@ namespace Guardtime.KSI.Service
         }
 
         // Create correct constructor
-        public AggregationRequest() : base(0x201, false, false)
+        public AggregationRequest() : base(0x201, false, false, new List<TlvTag>())
         {
             _requestId = new IntegerTag(0x1, false, false, Util.Util.GetRandomUnsignedLong());
             Value.Add(_requestId);
@@ -29,7 +30,7 @@ namespace Guardtime.KSI.Service
             Value.Add(_requestHash);
         }
 
-        public override bool IsValidStructure()
+        protected override void CheckStructure()
         {
             throw new NotImplementedException();
         }

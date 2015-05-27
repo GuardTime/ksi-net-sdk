@@ -2,59 +2,99 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Parser
 {
     public abstract class CompositeTag : TlvTag
     {
+        private readonly List<TlvTag> _value;
         // TODO: Make list thread safe
-        public new List<TlvTag> Value;
-        // TODO: Create possibility to check composite tag validity
-
-        protected CompositeTag(byte[] bytes) : this(null, bytes)
+        public new List<TlvTag> Value
         {
+            get { return _value; }
         }
 
-        protected CompositeTag(TlvTag parent, byte[] bytes) : base(parent, bytes)
+        // TODO: Create possibility to check composite tag validity and check for null tags in child objects
+        protected CompositeTag(byte[] bytes) : base(bytes)
         {
-            Value = new List<TlvTag>();
+            _value = new List<TlvTag>();
             DecodeValue(base.Value);
         }
 
-        protected CompositeTag(TlvTag tag) : this(null, tag)
+        protected CompositeTag(TlvTag tag) : base(tag)
         {
-        }
-
-        protected CompositeTag(TlvTag parent, TlvTag tag) : base(parent, tag)
-        {
-            Value = new List<TlvTag>();
+            _value = new List<TlvTag>();
             DecodeValue(tag.EncodeValue());
         }
 
-        protected CompositeTag(uint type, bool nonCritical, bool forward)
-            : this(null, type, nonCritical, forward)
+        protected CompositeTag(uint type, bool nonCritical, bool forward, List<TlvTag> value)
+            : base(type, nonCritical, forward, EncodeTlvTagList(value))
         {
+            _value = value;
         }
 
-        protected CompositeTag(TlvTag parent, uint type, bool nonCritical, bool forward)
-            : base(parent, type, nonCritical, forward, new byte[] {})
+        private void DecodeValue(byte[] bytes)
         {
-            Value = new List<TlvTag>();
+            
+            using (MemoryStream stream = new MemoryStream(bytes))
+            using (TlvReader tlvReader = new TlvReader(stream))
+            {
+                while (stream.Position < stream.Length)
+                {
+                    Value.Add(tlvReader.ReadTag());
+                }
+            }
         }
 
-        
-
-        public T PutTag<T>(T tag, TlvTag previousTag) where T : TlvTag
+        public override byte[] EncodeValue()
         {
+            return EncodeTlvTagList(Value);
+        }
+
+        protected abstract void CheckStructure();
+
+        public void IsValidStructure()
+        {
+            try
+            {
+                CheckStructure();
+                for (int i = 0; i < Value.Count; i++)
+                {
+                    CompositeTag tag = Value[i] as CompositeTag;
+                    if (tag == null) continue;
+
+
+                    tag.IsValidStructure();
+                }
+
+            }
+            catch (InvalidTlvStructureException e)
+            {
+                e.TlvList.Add(this);
+                throw;
+            }
+        }
+
+        // TODO: Use better name
+        protected T PutTag<T>(T tag, TlvTag previousTag) where T : TlvTag
+        {
+            if (tag == null && previousTag != null)
+            {
+                RemoveTag(previousTag);
+                return null;
+            }
+
             if (ReplaceTag(tag, previousTag) == null && tag != null)
             {
                 AddTag(tag);
             }
 
             return tag;
+
         }
 
-        public T AddTag<T>(T tag) where T : TlvTag
+        protected T AddTag<T>(T tag) where T : TlvTag
         {
             if (tag == null)
             {
@@ -65,7 +105,7 @@ namespace Guardtime.KSI.Parser
             return tag;
         }
 
-        public T ReplaceTag<T>(T tag, TlvTag previousTag) where T : TlvTag
+        protected T ReplaceTag<T>(T tag, TlvTag previousTag) where T : TlvTag
         {
             if (previousTag == null)
             {
@@ -82,41 +122,44 @@ namespace Guardtime.KSI.Parser
             return tag;
         }
 
-        private void DecodeValue(byte[] bytes)
+        protected void RemoveTag<T>(T tag) where T : TlvTag
         {
-            
-            using (MemoryStream stream = new MemoryStream(bytes))
-            using (TlvReader tlvReader = new TlvReader(stream))
+            if (tag != null)
             {
-                while (tlvReader.BaseStream.Position < tlvReader.BaseStream.Length)
-                {
-                    Value.Add(tlvReader.ReadTag(this));
-                }
+                Value.Remove(tag);
             }
         }
 
-        public override byte[] EncodeValue()
+        private static byte[] EncodeTlvTagList(IList<TlvTag> list)
         {
+            if (list == null)
+            {
+                return null;
+            }
+
             using (MemoryStream stream = new MemoryStream())
             using (TlvWriter writer = new TlvWriter(stream))
             {
-                for (int i = 0; i < Value.Count; i++)
+                for (int i = 0; i < list.Count; i++)
                 {
-                    writer.WriteTag(Value[i]);
+                    writer.WriteTag(list[i]);
                 }
 
                 return stream.ToArray();
             }
         }
 
-        public abstract bool IsValidStructure();
-
-
         public override int GetHashCode()
         {
             unchecked
             {
-                return Value.GetHashCode() + Type.GetHashCode() + Forward.GetHashCode() + NonCritical.GetHashCode();
+                int res = 1;
+                for (int i = 0; i < _value.Count; i++)
+                {
+                    res = 31 * res + (_value[i] == null ? 0 : _value[i].GetHashCode());
+                }
+
+                return res + Type.GetHashCode() + Forward.GetHashCode() + NonCritical.GetHashCode();
             }
         }
 

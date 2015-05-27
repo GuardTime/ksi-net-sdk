@@ -10,7 +10,7 @@ namespace Guardtime.KSI.Hashing
         private const int DefaultStreamBufferSize = 8192;
 
         private readonly HashAlgorithm _algorithm;
-        private readonly System.Security.Cryptography.HashAlgorithm _messageHasher;
+        private System.Security.Cryptography.HashAlgorithm _messageHasher;
         private DataHash _outputHash;
 
         public DataHasher(HashAlgorithm algorithm)
@@ -65,7 +65,7 @@ namespace Guardtime.KSI.Hashing
 
             if (data == null)
             {
-                throw new InvalidOperationException("Invalid data added to hasher: null");
+                throw new ArgumentNullException("data");
             }
 
             _messageHasher.TransformBlock(data, offset, length, null, 0);
@@ -82,6 +82,12 @@ namespace Guardtime.KSI.Hashing
             /*
              * TODO: JAVA HAS TO BE CHECKED HERE
              */
+
+            if (data == null)
+            {
+                throw new ArgumentNullException("data");
+            }
+            
             return AddData(data, 0, data.Length);
         }
 
@@ -122,7 +128,7 @@ namespace Guardtime.KSI.Hashing
         public DataHasher AddData(Stream inStream, int bufferSize) {
             if (inStream == null)
             {
-                throw new ArgumentException("Invalid inputstream added to hasher: null");
+                throw new ArgumentNullException("inStream");
             }
 
             byte[] buffer = new byte[bufferSize];
@@ -152,7 +158,7 @@ namespace Guardtime.KSI.Hashing
         {
             if (fileHandle == null)
             {
-                throw new ArgumentException("Invalid file added to hasher: null");
+                throw new ArgumentNullException("fileHandle");
             }
 
             using (FileStream inStream = new FileStream(fileHandle, FileAccess.Read))
@@ -188,7 +194,7 @@ namespace Guardtime.KSI.Hashing
         public DataHasher Reset() {
             _outputHash = null;
             _messageHasher.Clear();
-            _messageHasher.Initialize();
+            _messageHasher = System.Security.Cryptography.HashAlgorithm.Create(_algorithm.Name);
 
             return this;
         }

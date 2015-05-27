@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Guardtime.KSI.Exceptions;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Parser
@@ -11,7 +13,7 @@ namespace Guardtime.KSI.Parser
         {
             var tag = new CompositeTestTag(new byte[] { 0x1, 0x8, 0x1, 0x2, 0x1, 0x2, 0x2, 0x2, 0x3, 0x4 });
 
-            Assert.AreEqual((uint)0x1, tag.Type, "Tag type should be correct");
+            Assert.AreEqual(0x1, tag.Type, "Tag type should be correct");
             Assert.IsFalse(tag.NonCritical, "Tag non critical flag should be correct");
             Assert.IsFalse(tag.Forward, "Tag forward flag should be correct");
             CollectionAssert.AreEqual(new List<TlvTag> { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }) }, tag.Value, "Tag value should be decoded correctly");
@@ -22,10 +24,41 @@ namespace Guardtime.KSI.Parser
         {
             var tag = new CompositeTestTag(new RawTag(0x1, false, false, new byte[] { 0x1, 0x2, 0x1, 0x2, 0x2, 0x2, 0x3, 0x4 }));
 
-            Assert.AreEqual((uint)0x1, tag.Type, "Tag type should be correct");
+            Assert.AreEqual(0x1, tag.Type, "Tag type should be correct");
             Assert.IsFalse(tag.NonCritical, "Tag non critical flag should be correct");
             Assert.IsFalse(tag.Forward, "Tag forward flag should be correct");
             CollectionAssert.AreEqual(new List<TlvTag> { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }) }, tag.Value, "Tag value should be decoded correctly");
+        }
+
+        [Test]
+        public void TestCompositeTagCreateFromData()
+        {
+            var tag = new CompositeTestTag(0x1, false, false, new List<TlvTag>() {new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 })});
+
+            Assert.AreEqual(0x1, tag.Type, "Tag type should be correct");
+            Assert.IsFalse(tag.NonCritical, "Tag non critical flag should be correct");
+            Assert.IsFalse(tag.Forward, "Tag forward flag should be correct");
+            CollectionAssert.AreEqual(new List<TlvTag> { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }) }, tag.Value, "Tag value should be decoded correctly");
+        }
+
+        [Test]
+        public void TestCompositeTagSettingAndGettingValue()
+        {
+            var tag = new CompositeTestTag(0x1, false, false, new List<TlvTag>() { new CompositeTestTag(0x5, false, false, new List<TlvTag>() { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }) }) });
+            CollectionAssert.AreEqual(new List<TlvTag> { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }) }, tag.CompositeTestTagValue.Value, "Tag child value should be decoded correctly");
+            CollectionAssert.AreEqual(new byte[] { 0x5, 0x8, 0x1, 0x2, 0x1, 0x2, 0x2, 0x2, 0x3, 0x4 }, tag.EncodeValue(), "Tag value should be encoded correctly");
+
+            tag.SetCompositeTestTagValue(new CompositeTestTag(0x6, false, false, new List<TlvTag>() { new RawTag(0x3, false, false, new byte[] { 0x0 }) }));
+            CollectionAssert.AreEqual(new List<TlvTag> { new RawTag(0x3, false, false, new byte[] { 0x0 }) }, tag.CompositeTestTagValue.Value, "Tag child value should be decoded correctly");
+            CollectionAssert.AreEqual(new byte[] { 0x6, 0x3, 0x3, 0x1, 0x0 }, tag.EncodeValue(), "Tag value should be encoded correctly");
+
+            tag.SetCompositeTestTagValue(null);
+            Assert.IsNull(tag.CompositeTestTagValue, "Tag child value should be decoded correctly");
+            CollectionAssert.AreEqual(new byte[] { }, tag.EncodeValue(), "Tag value should be encoded correctly");
+
+            tag.SetCompositeTestTagValue(new CompositeTestTag(0x6, false, false, new List<TlvTag>() { new RawTag(0x3, false, false, new byte[] { 0x0 }) }));
+            CollectionAssert.AreEqual(new List<TlvTag> { new RawTag(0x3, false, false, new byte[] { 0x0 }) }, tag.CompositeTestTagValue.Value, "Tag child value should be decoded correctly");
+            CollectionAssert.AreEqual(new byte[] { 0x6, 0x3, 0x3, 0x1, 0x0 }, tag.EncodeValue(), "Tag value should be encoded correctly");
         }
 
         [Test]
@@ -36,45 +69,126 @@ namespace Guardtime.KSI.Parser
         }
 
         [Test]
-        public void ToStringTest()
+        public void TestHashCode()
         {
             var tag = new CompositeTestTag(new byte[] { 0x1, 0x8, 0x1, 0x2, 0x1, 0x2, 0x2, 0x2, 0x3, 0x4 });
-            Assert.AreEqual("TLV[0x1]:\n  TLV[0x1]:0x0102\n  TLV[0x2]:0x0304", tag.ToString(), "Tag string representation should be correct");
+            Assert.AreEqual(32867, tag.GetHashCode(), "Tag hash code should be correct");
         }
 
-        // TODO: Make some more tests
-        class CompositeTestTag : CompositeTag
+        [Test]
+        public void TestEquals()
         {
+            var tag = new CompositeTestTag(new byte[] { 0x1, 0x8, 0x1, 0x2, 0x1, 0x2, 0x2, 0x2, 0x3, 0x4 });
+            Assert.AreEqual(new CompositeTestTag(0x1, false, false, new List<TlvTag>() { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }) }), tag, "Tags should be equal");
+            Assert.IsFalse(tag.Equals(new RawTag(0x1, false, false, new byte[] { })), "Tags should not be equal");
+        }
+
+        [Test]
+        public void TestToString()
+        {
+            var tag = new CompositeTestTag(new byte[] { 0x61, 0xC, 0x1, 0x2, 0x1, 0x2, 0x2, 0x2, 0x3, 0x4, 0x5, 0x2, 0x1, 0x0 });
+            Assert.AreEqual("TLV[0x1,N,F]:\n  TLV[0x1]:0x0102\n  TLV[0x2]:0x0304\n  TLV[0x5]:\n    TLV[0x1]:0x", tag.ToString(), "Tag string representation should be correct");
+        }
+
+        [Test]
+        public void TestIsValidStructure()
+        {
+            var tag = new CompositeTestTag(new byte[] { 0x1, 0xA, 0x1, 0x2, 0x1, 0x2, 0x2, 0x2, 0x3, 0x4, 0x5, 0x0 });
+            tag.IsValidStructure();
+        }
+
+        [Test]
+        public void TestTryReplaceTagNotInCompositeTagList()
+        {
+            var tag = new CompositeTestTag(new byte[] { 0x61, 0x8, 0x1, 0x2, 0x1, 0x2, 0x2, 0x2, 0x3, 0x4 });
+            Assert.IsNull(tag.ReplaceTagImpl(tag, new RawTag(0x6, false, false, new byte[] { })));
+        }
+
+        [Test, ExpectedException(typeof(ArgumentNullException))]
+        public void TestAddNullTagToCompositeTagList()
+        {
+            var tag = new CompositeTestTag(new byte[] { 0x61, 0x8, 0x1, 0x2, 0x1, 0x2, 0x2, 0x2, 0x3, 0x4 });
+            tag.AddTagImpl(null);
+        }
+
+        [Test, ExpectedException(typeof(ArgumentNullException))]
+        public void TestCompositeTagCreateFromDataNullValue()
+        {
+            var tag = new CompositeTestTag(0x1, false, false, null);
+        }
+
+        [Test, ExpectedException(typeof(InvalidTlvStructureException))]
+        public void TestIsInvalidStructure()
+        {
+            var tag = new CompositeTestTag(new byte[] { 0x1, 0x8, 0x1, 0x2, 0x1, 0x2, 0x3, 0x2, 0x3, 0x4 });
+            tag.IsValidStructure();
+        }
+
+        private class CompositeTestTag : CompositeTag
+        {
+            public CompositeTestTag CompositeTestTagValue { get; private set; }
+
             public CompositeTestTag(byte[] bytes) : base(bytes)
             {
+                BuildStructure();
             }
 
             public CompositeTestTag(TlvTag tag) : base(tag)
             {
+                BuildStructure();
             }
 
-            public override bool IsValidStructure()
+            public CompositeTestTag(uint type, bool nonCritical, bool forward, List<TlvTag> value)
+            : base(type, nonCritical, forward, value)
             {
-                throw new System.NotImplementedException();
+                BuildStructure();
             }
-        }
 
-        [Test()]
-        public void TestReplaceTag()
-        {
-//            Assert.Fail();
-        }
+            private void BuildStructure()
+            {
+                for (var i = 0; i < Value.Count; i++)
+                {
+                    switch (Value[i].Type)
+                    {
+                        case 0x5:
+                            CompositeTestTagValue = new CompositeTestTag(Value[i]);
+                            Value[i] = CompositeTestTagValue;
+                            break;
+                    }
+                }
+            }
 
-        [Test()]
-        public void TestAddTag()
-        {
-//            Assert.Fail();
-        }
+            public void SetCompositeTestTagValue(CompositeTestTag tag)
+            {
+                PutTag(tag, CompositeTestTagValue);
+                CompositeTestTagValue = tag;
+            }
 
-        [Test()]
-        public void TestPutTag()
-        {
-//            Assert.Fail();
+            public TlvTag AddTagImpl(TlvTag tag)
+            {
+                return AddTag(tag);
+            }
+
+            public TlvTag ReplaceTagImpl(TlvTag tag, TlvTag previousTag)
+            {
+                return ReplaceTag(tag, previousTag);
+            }
+
+            protected override void CheckStructure()
+            {
+                foreach (var tag in Value)
+                {
+                    switch (tag.Type)
+                    {
+                        case 0x1:
+                        case 0x2:
+                        case 0x5:
+                            break;
+                        default:
+                            throw new InvalidTlvStructureException("Invalid tag", tag);
+                    }
+                }
+            }
         }
     }
 }

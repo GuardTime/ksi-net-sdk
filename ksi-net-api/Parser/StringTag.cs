@@ -4,35 +4,26 @@ namespace Guardtime.KSI.Parser
 {
     public class StringTag : TlvTag
     {
-        public new string Value;
-
-        public StringTag(byte[] bytes) : this(null, bytes)
+        private readonly string _value;
+        public new string Value
         {
+            get { return _value; }
         }
 
-        public StringTag(TlvTag parent, byte[] bytes) : base(parent, bytes)
+        public StringTag(byte[] bytes) : base(bytes)
         {
-            Value = Util.Util.DecodeNullTerminatedUtf8String(base.Value);
+            _value = Util.Util.DecodeNullTerminatedUtf8String(base.Value);
         }
 
-        public StringTag(TlvTag tag) : this(null, tag)
+        public StringTag(TlvTag tag) : base(tag)
         {
-        }
-
-        public StringTag(TlvTag parent, TlvTag tag) : base(parent, tag)
-        {
-            Value = Util.Util.DecodeNullTerminatedUtf8String(tag.EncodeValue());
+            _value = Util.Util.DecodeNullTerminatedUtf8String(tag.EncodeValue());
         }
 
         public StringTag(uint type, bool nonCritical, bool forward, string value)
-            : this(null, type, nonCritical, forward, value)
+            : base(type, nonCritical, forward, Util.Util.EncodeNullTerminatedUtf8String(value))
         {
-        }
-
-        public StringTag(TlvTag parent, uint type, bool nonCritical, bool forward, string value)
-            : base(parent, type, nonCritical, forward, Util.Util.EncodeNullTerminatedUtf8String(value))
-        {
-            Value = value;
+            _value = value;
         }
 
         public override byte[] EncodeValue()
