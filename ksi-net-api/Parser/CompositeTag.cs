@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -6,22 +7,27 @@ using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Parser
 {
-    public abstract class CompositeTag : TlvTag
+    public abstract class CompositeTag : TlvTag, IEnumerable<TlvTag>
     {
-        private readonly List<TlvTag> _value;
+
         // TODO: Make list thread safe
-        public new List<TlvTag> Value
+        private readonly List<TlvTag> _value;
+
+        // TODO: Make checks for array
+        public TlvTag this[int i]
         {
-            get { return _value; }
+            get { return _value[i]; }
+            set { _value[i] = value; }
         }
+
+        // TODO: can be null?
+        public int Count
+        {
+            get { return _value.Count; }
+        }
+
 
         // TODO: Create possibility to check composite tag validity and check for null tags in child objects
-        protected CompositeTag(byte[] bytes) : base(bytes)
-        {
-            _value = new List<TlvTag>();
-            DecodeValue(base.Value);
-        }
-
         protected CompositeTag(TlvTag tag) : base(tag)
         {
             _value = new List<TlvTag>();
@@ -29,8 +35,12 @@ namespace Guardtime.KSI.Parser
         }
 
         protected CompositeTag(uint type, bool nonCritical, bool forward, List<TlvTag> value)
-            : base(type, nonCritical, forward, EncodeTlvTagList(value))
+            : base(type, nonCritical, forward)
         {
+            if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
             _value = value;
         }
 
@@ -42,14 +52,23 @@ namespace Guardtime.KSI.Parser
             {
                 while (stream.Position < stream.Length)
                 {
-                    Value.Add(tlvReader.ReadTag());
+                    _value.Add(tlvReader.ReadTag());
                 }
             }
         }
 
         public override byte[] EncodeValue()
         {
-            return EncodeTlvTagList(Value);
+            using (MemoryStream stream = new MemoryStream())
+            using (TlvWriter writer = new TlvWriter(stream))
+            {
+                for (int i = 0; i < Count; i++)
+                {
+                    writer.WriteTag(this[i]);
+                }
+
+                return stream.ToArray();
+            }
         }
 
         protected abstract void CheckStructure();
@@ -59,9 +78,9 @@ namespace Guardtime.KSI.Parser
             try
             {
                 CheckStructure();
-                for (int i = 0; i < Value.Count; i++)
+                for (int i = 0; i < Count; i++)
                 {
-                    CompositeTag tag = Value[i] as CompositeTag;
+                    CompositeTag tag = this[i] as CompositeTag;
                     if (tag == null) continue;
 
 
@@ -101,7 +120,7 @@ namespace Guardtime.KSI.Parser
                 throw new ArgumentNullException("tag");
             }
 
-            Value.Add(tag);
+            _value.Add(tag);
             return tag;
         }
 
@@ -112,13 +131,13 @@ namespace Guardtime.KSI.Parser
                 return null;
             }
 
-            int i = Value.IndexOf(previousTag);
+            int i = _value.IndexOf(previousTag);
             if (i == -1)
             {
                 return null;
             }
 
-            Value[i] = tag;
+            _value[i] = tag;
             return tag;
         }
 
@@ -126,27 +145,18 @@ namespace Guardtime.KSI.Parser
         {
             if (tag != null)
             {
-                Value.Remove(tag);
+                _value.Remove(tag);
             }
         }
 
-        private static byte[] EncodeTlvTagList(IList<TlvTag> list)
+        public IEnumerator<TlvTag> GetEnumerator()
         {
-            if (list == null)
-            {
-                return null;
-            }
+            return _value.GetEnumerator();
+        }
 
-            using (MemoryStream stream = new MemoryStream())
-            using (TlvWriter writer = new TlvWriter(stream))
-            {
-                for (int i = 0; i < list.Count; i++)
-                {
-                    writer.WriteTag(list[i]);
-                }
-
-                return stream.ToArray();
-            }
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         public override int GetHashCode()
@@ -171,8 +181,8 @@ namespace Guardtime.KSI.Parser
                 return false;
             }
             
-            IEnumerator<TlvTag> tagEnumerator = tag.Value == null ? (IEnumerator<TlvTag>) new Util.EmptyEnumerator<TlvTag>() : tag.Value.GetEnumerator();
-            IEnumerator<TlvTag> enumerator = Value == null ? (IEnumerator<TlvTag>) new Util.EmptyEnumerator<TlvTag>() : Value.GetEnumerator();
+            IEnumerator<TlvTag> tagEnumerator = tag._value == null ? new Util.EmptyEnumerator<TlvTag>() : tag.GetEnumerator();
+            IEnumerator<TlvTag> enumerator = _value == null ? new Util.EmptyEnumerator<TlvTag>() : GetEnumerator();
             bool match = true;
             while (match && tagEnumerator.MoveNext() && enumerator.MoveNext())
             {
@@ -201,9 +211,9 @@ namespace Guardtime.KSI.Parser
 
             builder.Append("]:").Append('\n');
 
-            for (int i = 0; i < Value.Count; i++)
+            for (int i = 0; i < Count; i++)
             {
-                builder.Append(TabPrefix(Value[i].ToString()));
+                builder.Append(TabPrefix(_value[i].ToString()));
                 builder.Append("\n");
             }
 
@@ -230,6 +240,8 @@ namespace Guardtime.KSI.Parser
             return builder.ToString();
         }
 
+
+        
     }
 
 }

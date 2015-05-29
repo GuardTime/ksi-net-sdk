@@ -28,9 +28,9 @@ namespace Guardtime.KSI.Signature
 
         private void BuildStructure()
         {
-            for (int i = 0; i < Value.Count; i++)
+            for (int i = 0; i < this.Count; i++)
             {
-                switch (Value[i].Type)
+                switch (this[i].Type)
                 {
                     case 0x801:
                         if (_aggregationChains == null)
@@ -38,29 +38,29 @@ namespace Guardtime.KSI.Signature
                             _aggregationChains = new List<AggregationHashChain>();
                         }
 
-                        AggregationHashChain aggregationChainTag = new AggregationHashChain(Value[i]);
+                        AggregationHashChain aggregationChainTag = new AggregationHashChain(this[i]);
                         _aggregationChains.Add(aggregationChainTag);
-                        Value[i] = aggregationChainTag;
+                        this[i] = aggregationChainTag;
                         break;
                     case 0x802:
-                        _calendarChain = new CalendarHashChain(Value[i]);
-                        Value[i] = _calendarChain;
+                        _calendarChain = new CalendarHashChain(this[i]);
+                        this[i] = _calendarChain;
                         break;
                     case 0x803:
-                        _publicationRecord = new PublicationRecord(Value[i]);
-                        Value[i] = _publicationRecord;
+                        _publicationRecord = new PublicationRecord(this[i]);
+                        this[i] = _publicationRecord;
                         break;
                     case 0x804:
-                        _aggregationAuthenticationRecord = new AggregationAuthenticationRecord(Value[i]);
-                        Value[i] = _aggregationAuthenticationRecord;
+                        _aggregationAuthenticationRecord = new AggregationAuthenticationRecord(this[i]);
+                        this[i] = _aggregationAuthenticationRecord;
                         break;
                     case 0x805:
-                        _calendarAuthenticationRecord = new CalendarAuthenticationRecord(Value[i]);
-                        Value[i] = _calendarAuthenticationRecord;
+                        _calendarAuthenticationRecord = new CalendarAuthenticationRecord(this[i]);
+                        this[i] = _calendarAuthenticationRecord;
                         break;
                     case 0x806:
-                        _rfc3161Record = new Rfc3161Record(Value[i]);
-                        Value[i] = _rfc3161Record;
+                        _rfc3161Record = new Rfc3161Record(this[i]);
+                        this[i] = _rfc3161Record;
                         break;
                 }
             }
@@ -69,11 +69,11 @@ namespace Guardtime.KSI.Signature
         protected override void CheckStructure()
         {
             Dictionary<uint, int> tagCount = new Dictionary<uint, int>(); 
-            for (int i = 0; i < Value.Count; i++)
+            for (int i = 0; i < this.Count; i++)
             {
-                tagCount[Value[i].Type] = tagCount.ContainsKey(Value[i].Type) ? tagCount[Value[i].Type] + 1 : 1;
+                tagCount[this[i].Type] = tagCount.ContainsKey(this[i].Type) ? tagCount[this[i].Type] + 1 : 1;
 
-                switch (Value[i].Type)
+                switch (this[i].Type)
                 {
                     case 0x801:
                     case 0x802:
@@ -83,7 +83,7 @@ namespace Guardtime.KSI.Signature
                     case 0x806:
                         break;
                     default:
-                        throw new InvalidTlvStructureException("Invalid tag", Value[i]);
+                        throw new InvalidTlvStructureException("Invalid tag", this[i]);
                 }
             }
 

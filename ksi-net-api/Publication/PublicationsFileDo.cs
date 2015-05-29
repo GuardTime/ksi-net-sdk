@@ -44,13 +44,13 @@ namespace Guardtime.KSI.Publication
 
         public PublicationsFileDo(TlvTag tag) : base(tag)
         {
-            for (int i = 0; i < Value.Count; i++)
+            for (int i = 0; i < Count; i++)
             {
-                switch (Value[i].Type)
+                switch (this[i].Type)
                 {
                     case 0x701:
-                        _publicationsHeader = new PublicationsFileHeader(Value[i]);
-                        Value[i] = _publicationsHeader;
+                        _publicationsHeader = new PublicationsFileHeader(this[i]);
+                        this[i] = _publicationsHeader;
                         break;
                     case 0x702:
                         if (_certificateRecords == null)
@@ -58,9 +58,9 @@ namespace Guardtime.KSI.Publication
                             _certificateRecords = new List<CertificateRecord>();
                         }
 
-                        CertificateRecord certificateRecordTag = new CertificateRecord(Value[i]);
+                        CertificateRecord certificateRecordTag = new CertificateRecord(this[i]);
                         CertificateRecords.Add(certificateRecordTag);
-                        Value[i] = certificateRecordTag;
+                        this[i] = certificateRecordTag;
                         break;
                     case 0x703:
                         if (_publicationRecords == null)
@@ -68,18 +68,18 @@ namespace Guardtime.KSI.Publication
                             _publicationRecords = new List<PublicationRecord>();
                         }
 
-                        PublicationRecord publicationRecordTag = new PublicationRecord(Value[i]);
+                        PublicationRecord publicationRecordTag = new PublicationRecord(this[i]);
                         PublicationRecords.Add(publicationRecordTag);
-                        Value[i] = publicationRecordTag;
+                        this[i] = publicationRecordTag;
                         break;
                     case 0x704:
-                        _cmsSignature = Value[i];
+                        _cmsSignature = this[i];
                         break;
                     default:
                         // TODO: throw correct exception, also display invalid row in full tree
-                        if (!Value[i].NonCritical)
+                        if (!this[i].NonCritical)
                         {
-                            throw new FormatException("Invalid tag[" + Value[i].Type + "]: " + this);
+                            throw new FormatException("Invalid tag[" + this[i].Type + "]: " + this);
                         }
                         break;
                 }

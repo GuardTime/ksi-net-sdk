@@ -6,18 +6,12 @@ namespace Guardtime.KSI.Parser
     {
         private readonly ulong _value;
 
-        public new ulong Value
+        public ulong Value
         {
             get { return _value; }
         }
 
         // TODO: Fix problems with base null and encode returning null
-        public IntegerTag(byte[] bytes) : base(bytes)
-        {
-            byte[] data = base.Value;
-            _value = Util.Util.DecodeUnsignedLong(data, 0, data.Length);
-        }
-
         public IntegerTag(TlvTag tag) : base(tag)
         {
             byte[] data = tag.EncodeValue();
@@ -25,7 +19,7 @@ namespace Guardtime.KSI.Parser
         }
 
         public IntegerTag(uint type, bool nonCritical, bool forward, ulong value)
-            : base(type, nonCritical, forward, Util.Util.EncodeUnsignedLong(value))
+            : base(type, nonCritical, forward)
         {
             _value = value;
         }

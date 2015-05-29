@@ -1,18 +1,14 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 namespace Guardtime.KSI.Parser
 {
     public class StringTag : TlvTag
     {
         private readonly string _value;
-        public new string Value
+        public string Value
         {
             get { return _value; }
-        }
-
-        public StringTag(byte[] bytes) : base(bytes)
-        {
-            _value = Util.Util.DecodeNullTerminatedUtf8String(base.Value);
         }
 
         public StringTag(TlvTag tag) : base(tag)
@@ -21,8 +17,12 @@ namespace Guardtime.KSI.Parser
         }
 
         public StringTag(uint type, bool nonCritical, bool forward, string value)
-            : base(type, nonCritical, forward, Util.Util.EncodeNullTerminatedUtf8String(value))
+            : base(type, nonCritical, forward)
         {
+            if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
             _value = value;
         }
 

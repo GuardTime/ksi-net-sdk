@@ -11,21 +11,21 @@ namespace Guardtime.KSI.Publication
 
         public PublicationsFileHeader(TlvTag tag) : base(tag)
         {
-            for (int i = 0; i < Value.Count; i++)
+            for (int i = 0; i < this.Count; i++)
             {
-                switch (Value[i].Type)
+                switch (this[i].Type)
                 {
                     case 0x1:
-                        Version = new IntegerTag(Value[i]);
-                        Value[i] = Version;
+                        Version = new IntegerTag(this[i]);
+                        this[i] = Version;
                         break;
                     case 0x2:
-                        CreationTime = new IntegerTag(Value[i]);
-                        Value[i] = CreationTime;
+                        CreationTime = new IntegerTag(this[i]);
+                        this[i] = CreationTime;
                         break;
                     case 0x3:
-                        RepUri = new StringTag(Value[i]);
-                        Value[i] = RepUri;
+                        RepUri = new StringTag(this[i]);
+                        this[i] = RepUri;
                         break;
                 }
             }

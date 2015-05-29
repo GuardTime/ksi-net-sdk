@@ -11,36 +11,26 @@ namespace Guardtime.KSI.Publication
         public IntegerTag PublicationTime
         {
             get { return _publicationTime; }
-            set
-            {
-                PutTag(value, _publicationTime);
-                _publicationTime = value;
-            }
         }
 
         public ImprintTag PublicationHash
         {
             get { return _publicationHash; }
-            set
-            {
-                PutTag(value, _publicationHash);
-                _publicationHash = value;
-            }
         }
 
         public PublicationData(TlvTag tag) : base(tag)
         {
-            for (int i = 0; i < Value.Count; i++)
+            for (int i = 0; i < Count; i++)
             {
-                switch (Value[i].Type)
+                switch (this[i].Type)
                 {
                     case 0x2:
-                        _publicationTime = new IntegerTag(Value[i]);
-                        Value[i] = _publicationTime;
+                        _publicationTime = new IntegerTag(this[i]);
+                        this[i] = _publicationTime;
                         break;
                     case 0x4:
-                        _publicationHash = new ImprintTag(Value[i]);
-                        Value[i] = _publicationHash;
+                        _publicationHash = new ImprintTag(this[i]);
+                        this[i] = _publicationHash;
                         break;
                 }
             }
@@ -49,15 +39,15 @@ namespace Guardtime.KSI.Publication
 
         protected override void CheckStructure()
         {
-            for (int i = 0; i < Value.Count; i++)
+            for (int i = 0; i < Count; i++)
             {
-                switch (Value[i].Type)
+                switch (this[i].Type)
                 {
                     case 0x2:
                     case 0x4:
                         break;
                     default:
-                        throw new InvalidTlvStructureException("Invalid tag", Value[i]);
+                        throw new InvalidTlvStructureException("Invalid tag", this[i]);
                 }
             }
         }

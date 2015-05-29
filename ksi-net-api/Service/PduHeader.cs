@@ -12,37 +12,37 @@ namespace Guardtime.KSI.Service
 
         public PduHeader(TlvTag tag) : base(tag)
         {
-            for (int i = 0; i < Value.Count; i++)
+            for (int i = 0; i < this.Count; i++)
             {
-                switch (Value[i].Type)
+                switch (this[i].Type)
                 {
                     case 0x1:
-                        _loginId = new StringTag(Value[i]);
-                        Value[i] = _loginId;
+                        _loginId = new StringTag(this[i]);
+                        this[i] = _loginId;
                         break;
                     case 0x2:
-                        _instanceId = new IntegerTag(Value[i]);
-                        Value[i] = _instanceId;
+                        _instanceId = new IntegerTag(this[i]);
+                        this[i] = _instanceId;
                         break;
                     case 0x3:
-                        _messageId = new IntegerTag(Value[i]);
-                        Value[i] = _messageId;
+                        _messageId = new IntegerTag(this[i]);
+                        this[i] = _messageId;
                         break;
                 }
             }
         }
         
         // TODO: Create correct constructor
-        public PduHeader() : base(0x1, false, false, new List<TlvTag>())
+        public PduHeader(string loginId) : base(0x1, false, false, new List<TlvTag>())
         {
-            _loginId = new StringTag(0x1, false, false, "anon");
-            Value.Add(_loginId);
+            _loginId = new StringTag(0x1, false, false, loginId);
+            this.AddTag(_loginId);
 
             _instanceId = new IntegerTag(0x2, false, false, 0);
-            Value.Add(_instanceId);
+            this.AddTag(_instanceId);
 
             _messageId = new IntegerTag(0x3, false, false, 0);
-            Value.Add(_messageId);
+            this.AddTag(_messageId);
         }
 
         protected override void CheckStructure()

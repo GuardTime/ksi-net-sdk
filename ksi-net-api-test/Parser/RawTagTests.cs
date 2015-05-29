@@ -71,10 +71,5 @@ namespace Guardtime.KSI.Parser
             var tag = new RawTag((TlvTag)null);
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
-        public void TestImprintTagCreateFromNullBytes()
-        {
-            var tag = new RawTag((byte[])null);
-        }
     }
 }

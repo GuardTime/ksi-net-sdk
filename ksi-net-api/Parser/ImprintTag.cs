@@ -1,4 +1,5 @@
-﻿using Guardtime.KSI.Hashing;
+﻿using System;
+using Guardtime.KSI.Hashing;
 
 namespace Guardtime.KSI.Parser
 {
@@ -6,14 +7,9 @@ namespace Guardtime.KSI.Parser
     {
         private readonly DataHash _value;
 
-        public new DataHash Value
+        public DataHash Value
         {
             get { return _value; }
-        }
-
-        public ImprintTag(byte[] bytes) : base(bytes)
-        {
-            _value = new DataHash(base.Value);
         }
 
         public ImprintTag(TlvTag tag) : base(tag)
@@ -23,8 +19,12 @@ namespace Guardtime.KSI.Parser
 
         // TODO: Check null on imprint
         public ImprintTag(uint type, bool nonCritical, bool forward, DataHash value)
-            : base(type, nonCritical, forward, value.Imprint)
+            : base(type, nonCritical, forward)
         {
+            if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
             _value = value;
         }
 

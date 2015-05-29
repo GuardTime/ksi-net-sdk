@@ -67,9 +67,9 @@ namespace Guardtime.KSI.Parser
             using (var stream = new MemoryStream())
             using (var writer = new TlvWriter(stream))
             {
-                writer.WriteTag(new AllowNullValueTlvTag(new byte[] { 0x1, 0x0 }));
-                writer.WriteTag(new AllowNullValueTlvTag(new byte[] { 0xe2, 0x57, 0x0, 0x0 }));
-                Console.WriteLine(Util.Util.ConvertByteArrayToHex(stream.ToArray()));
+                writer.WriteTag(new AllowNullValueTlvTag(0x1, false, false));
+                writer.WriteTag(new AllowNullValueTlvTag(0x257, true, true));
+                Console.WriteLine(Util.Util.ConvertByteArrayToString(stream.ToArray()));
                 CollectionAssert.AreEqual(new byte[] {0x1, 0x0, 0xe2, 0x57, 0x0}, stream.ToArray(), "Writer should output correct byte array");
             }
         }
@@ -104,14 +104,14 @@ namespace Guardtime.KSI.Parser
 
         private class AllowNullValueTlvTag : TlvTag
         {
-            public AllowNullValueTlvTag(byte[] bytes) : base(bytes)
-            {
-                
-            }
 
             public override byte[] EncodeValue()
             {
                 return null;
+            }
+
+            public AllowNullValueTlvTag(uint type, bool nonCritical, bool forward) : base(type, nonCritical, forward)
+            {
             }
         }
     }

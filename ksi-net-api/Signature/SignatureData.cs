@@ -14,24 +14,24 @@ namespace Guardtime.KSI.Signature
 
         public SignatureData(TlvTag tag) : base(tag)
         {
-            for (int i = 0; i < Value.Count; i++)
+            for (int i = 0; i < this.Count; i++)
             {
-                switch (Value[i].Type)
+                switch (this[i].Type)
                 {
                     case 0x1:
-                        SignatureType = new StringTag(Value[i]);
-                        Value[i] = SignatureType;
+                        SignatureType = new StringTag(this[i]);
+                        this[i] = SignatureType;
                         break;
                     case 0x2:
-                        SignatureValue = Value[i];
+                        SignatureValue = this[i];
                         break;
                     case 0x3:
-                        CertificateId = Value[i];
-                        Value[i] = CertificateId;
+                        CertificateId = this[i];
+                        this[i] = CertificateId;
                         break;
                     case 0x4:
-                        CertificateRepositoryUri = new StringTag(Value[i]);
-                        Value[i] = CertificateRepositoryUri;
+                        CertificateRepositoryUri = new StringTag(this[i]);
+                        this[i] = CertificateRepositoryUri;
                         break;
                 }
             }

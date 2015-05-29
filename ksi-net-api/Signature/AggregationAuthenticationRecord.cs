@@ -16,13 +16,13 @@ namespace Guardtime.KSI.Signature
 
         public AggregationAuthenticationRecord(TlvTag tag) : base(tag)
         {
-            for (int i = 0; i < Value.Count; i++)
+            for (int i = 0; i < this.Count; i++)
             {
-                switch (Value[i].Type)
+                switch (this[i].Type)
                 {
                     case 0x2:
-                        _aggregationTime = new IntegerTag(Value[i]);
-                        Value[i] = _aggregationTime;
+                        _aggregationTime = new IntegerTag(this[i]);
+                        this[i] = _aggregationTime;
                         break;
                     case 0x3:
                         if (_chainIndex == null)
@@ -30,17 +30,17 @@ namespace Guardtime.KSI.Signature
                             _chainIndex = new List<IntegerTag>();
                         }
 
-                        IntegerTag chainIndexTag = new IntegerTag(Value[i]);
+                        IntegerTag chainIndexTag = new IntegerTag(this[i]);
                         _chainIndex.Add(chainIndexTag);
-                        Value[i] = chainIndexTag;
+                        this[i] = chainIndexTag;
                         break;
                     case 0x5:
-                        _inputHash = new ImprintTag(Value[i]);
-                        Value[i] = _inputHash;
+                        _inputHash = new ImprintTag(this[i]);
+                        this[i] = _inputHash;
                         break;
                     case 0xB:
-                        _signatureData = new SignatureData(Value[i]);
-                        Value[i] = _signatureData;
+                        _signatureData = new SignatureData(this[i]);
+                        this[i] = _signatureData;
                         break;
                 }
             }

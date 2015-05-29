@@ -10,17 +10,17 @@ namespace Guardtime.KSI.Signature
 
         public CalendarAuthenticationRecord(TlvTag tag) : base(tag)
         {
-            for (int i = 0; i < Value.Count; i++)
+            for (int i = 0; i < this.Count; i++)
             {
-                switch (Value[i].Type)
+                switch (this[i].Type)
                 {
                     case 0x10:
-                        PublicationData = new PublicationData(Value[i]);
-                        Value[i] = PublicationData;
+                        PublicationData = new PublicationData(this[i]);
+                        this[i] = PublicationData;
                         break;
                     case 0xb:
-                        SignatureData = new SignatureData(Value[i]);
-                        Value[i] = SignatureData;
+                        SignatureData = new SignatureData(this[i]);
+                        this[i] = SignatureData;
                         break;
                 }
             }

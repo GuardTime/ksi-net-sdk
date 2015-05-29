@@ -12,39 +12,32 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void GetMemberTest()
         {
-            byte[] data;
             using (var stream = new FileStream("resources/signature/signature-ok.tlv", FileMode.Open))
+            using (var reader = new TlvReader(stream))
             {
-                data = new byte[stream.Length];
-                stream.Read(data, 0, (int)stream.Length);
-            }
+                var tag = reader.ReadTag();
+                var test = new KsiSignatureDo(tag);
+                try
+                {
+                    test.IsValidStructure();
+                }
+                catch (InvalidTlvStructureException e)
+                {
+                    Console.WriteLine(e);
+                    Console.WriteLine(e.GetTlvTagTrace());
+                }
 
-            var tag = new RawTag(data);
-            var test = new KsiSignatureDo(tag);
-            try
-            {
-                test.IsValidStructure();
+                var time = Environment.TickCount;
+                var i = 0;
+                
+                while (Environment.TickCount - time < 1000)
+                {
+                    test = new KsiSignatureDo(tag);
+                    i++;
+                }
+                Console.WriteLine(i);
+                Console.WriteLine(test);
             }
-            catch (InvalidTlvStructureException e)
-            {
-                Console.WriteLine(e);
-                Console.WriteLine(e.GetTlvTagTrace());
-            }
-            
-//            using (var reader = new TlvReader(new MemoryStream(data)))
-//            {
-//                test = new KsiSignatureDo(tag);
-//                var time = Environment.TickCount;
-//                var i = 0;
-//
-//                while (Environment.TickCount - time < 1000)
-//                {
-//                    test = new KsiSignatureDo(tag);
-//                    i++;
-//                }
-//                Console.WriteLine(i);
-//                Console.WriteLine(test);
-//            }
 
         }
     }

@@ -60,12 +60,13 @@
     <Compile Include="Publication\PublicationsFileDo.cs" />
     <Compile Include="Publication\PublicationData.cs" />
     <Compile Include="Service\AggregationError.cs" />
-    <Compile Include="Service\AggregationResponse.cs" />
-    <Compile Include="Service\AggregationRequest.cs" />
+    <Compile Include="Service\AggregationResponsePayload.cs" />
+    <Compile Include="Service\AggregationRequestPayload.cs" />
     <Compile Include="Service\AggregationPdu.cs" />
     <Compile Include="Service\HttpAggregationRequest.cs" />
     <Compile Include="Service\AggregationPduPayload.cs" />
     <Compile Include="Service\PduHeader.cs" />
+    <Compile Include="Service\ServiceCredentials.cs" />
     <Compile Include="Signature\AggregationAuthenticationRecord.cs" />
     <Compile Include="Signature\AggregationHashChain.cs" />
     <Compile Include="Signature\CalendarAuthenticationRecord.cs" />

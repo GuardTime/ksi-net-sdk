@@ -24,13 +24,13 @@ namespace Guardtime.KSI.Signature
 
         public AggregationHashChain(TlvTag tag) : base(tag)
         {
-            for (int i = 0; i < Value.Count; i++)
+            for (int i = 0; i < this.Count; i++)
             {
-                switch (Value[i].Type)
+                switch (this[i].Type)
                 {
                     case 0x2:
-                        AggregationTime = new IntegerTag(Value[i]);
-                        Value[i] = AggregationTime;
+                        AggregationTime = new IntegerTag(this[i]);
+                        this[i] = AggregationTime;
                         break;
                     case 0x3:
                         if (ChainIndex == null)
@@ -38,21 +38,21 @@ namespace Guardtime.KSI.Signature
                             ChainIndex = new List<IntegerTag>();
                         }
 
-                        IntegerTag chainIndexTag = new IntegerTag(Value[i]);
+                        IntegerTag chainIndexTag = new IntegerTag(this[i]);
                         ChainIndex.Add(chainIndexTag);
-                        Value[i] = chainIndexTag;
+                        this[i] = chainIndexTag;
                         break;
                     case 0x4:
-                        InputData = new RawTag(Value[i]);
-                        Value[i] = InputData;
+                        InputData = new RawTag(this[i]);
+                        this[i] = InputData;
                         break;
                     case 0x5:
-                        InputHash = new ImprintTag(Value[i]);
-                        Value[i] = InputHash;
+                        InputHash = new ImprintTag(this[i]);
+                        this[i] = InputHash;
                         break;
                     case 0x6:
-                        AggrAlgorithmId = new IntegerTag(Value[i]);
-                        Value[i] = AggrAlgorithmId;
+                        AggrAlgorithmId = new IntegerTag(this[i]);
+                        this[i] = AggrAlgorithmId;
                         break;
                     case 0x7:
                     case 0x8:
@@ -61,9 +61,9 @@ namespace Guardtime.KSI.Signature
                             Chain = new List<Link>();
                         }
 
-                        Link linkTag = new Link(Value[i], (LinkDirection)Enum.ToObject(typeof(LinkDirection), (byte)Value[i].Type));
+                        Link linkTag = new Link(this[i], (LinkDirection)Enum.ToObject(typeof(LinkDirection), (byte)this[i].Type));
                         Chain.Add(linkTag);
-                        Value[i] = linkTag;
+                        this[i] = linkTag;
                         break;
                 }
             }
@@ -88,25 +88,25 @@ namespace Guardtime.KSI.Signature
 
             public Link(TlvTag tag, LinkDirection direction) : base(tag)
             {
-                for (int i = 0; i < Value.Count; i++)
+                for (int i = 0; i < this.Count; i++)
                 {
-                    switch (Value[i].Type)
+                    switch (this[i].Type)
                     {
                         case 0x1:
-                            LevelCorrection = new IntegerTag(Value[i]);
-                            Value[i] = LevelCorrection;
+                            LevelCorrection = new IntegerTag(this[i]);
+                            this[i] = LevelCorrection;
                             break;
                         case 0x2:
-                            SiblingHash = new ImprintTag(Value[i]);
-                            Value[i] = SiblingHash;
+                            SiblingHash = new ImprintTag(this[i]);
+                            this[i] = SiblingHash;
                             break;
                         case 0x3:
-                            MetaHash = new ImprintTag(Value[i]);
-                            Value[i] = MetaHash;
+                            MetaHash = new ImprintTag(this[i]);
+                            this[i] = MetaHash;
                             break;
                         case 0x4:
-                            _metaData = new MetaData(Value[i]);
-                            Value[i] = _metaData;
+                            _metaData = new MetaData(this[i]);
+                            this[i] = _metaData;
                             break;
                     }
                 }
@@ -132,25 +132,25 @@ namespace Guardtime.KSI.Signature
 
             public MetaData(TlvTag tag) : base(tag)
             {
-                for (int i = 0; i < Value.Count; i++)
+                for (int i = 0; i < this.Count; i++)
                 {
-                    switch (Value[i].Type)
+                    switch (this[i].Type)
                     {
                         case 0x1:
-                            _clientId = new StringTag(Value[i]);
-                            Value[i] = _clientId;
+                            _clientId = new StringTag(this[i]);
+                            this[i] = _clientId;
                             break;
                         case 0x2:
-                            _machineId = new StringTag(Value[i]);
-                            Value[i] = _machineId;
+                            _machineId = new StringTag(this[i]);
+                            this[i] = _machineId;
                             break;
                         case 0x3:
-                            _sequenceNr = new IntegerTag(Value[i]);
-                            Value[i] = _sequenceNr;
+                            _sequenceNr = new IntegerTag(this[i]);
+                            this[i] = _sequenceNr;
                             break;
                         case 0x4:
-                            _requestTime = new IntegerTag(Value[i]);
-                            Value[i] = _requestTime;
+                            _requestTime = new IntegerTag(this[i]);
+                            this[i] = _requestTime;
                             break;
                     }
                 }

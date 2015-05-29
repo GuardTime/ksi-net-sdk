@@ -10,17 +10,17 @@ namespace Guardtime.KSI.Service
 
         public AggregationError(TlvTag tag) : base(tag)
         {
-            for (int i = 0; i < Value.Count; i++)
+            for (int i = 0; i < this.Count; i++)
             {
-                switch (Value[i].Type)
+                switch (this[i].Type)
                 {
                     case 0x4:
-                        _status = new IntegerTag(Value[i]);
-                        Value[i] = _status;
+                        _status = new IntegerTag(this[i]);
+                        this[i] = _status;
                         break;
                     case 0x5:
-                        _errorMessage = new StringTag(Value[i]);
-                        Value[i] = _errorMessage;
+                        _errorMessage = new StringTag(this[i]);
+                        this[i] = _errorMessage;
                         break;
                 }
             }

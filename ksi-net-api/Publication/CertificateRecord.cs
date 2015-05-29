@@ -13,12 +13,6 @@ namespace Guardtime.KSI.Publication
             {
                 return _certificateId;
             }
-
-            set
-            {
-                PutTag(value, _certificateId);
-                _certificateId = value;
-            }
         }
 
         public RawTag X509Certificate
@@ -27,27 +21,21 @@ namespace Guardtime.KSI.Publication
             {
                 return _x509Certificate;
             }
-
-            set
-            {
-                PutTag(value, _x509Certificate);
-                _x509Certificate = value;
-            }
         }
 
         public CertificateRecord(TlvTag tag) : base(tag)
         {
-            for (int i = 0; i < Value.Count; i++)
+            for (int i = 0; i < Count; i++)
             {
-                switch (Value[i].Type)
+                switch (this[i].Type)
                 {
                     case 0x1:
-                        _certificateId = new RawTag(Value[i]);
-                        Value[i] = _certificateId;
+                        _certificateId = new RawTag(this[i]);
+                        this[i] = _certificateId;
                         break;
                     case 0x2:
-                        _x509Certificate = new RawTag(Value[i]);
-                        Value[i] = _x509Certificate;
+                        _x509Certificate = new RawTag(this[i]);
+                        this[i] = _x509Certificate;
                         break;
                 }
             }

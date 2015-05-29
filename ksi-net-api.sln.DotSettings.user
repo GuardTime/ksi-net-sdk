@@ -2,6 +2,9 @@
 	
 	
 	
+	
+	
+	
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
   &lt;Assembly Path="C:\Users\martt\Documents\Visual Studio 2015\Projects\ksi-net-api\packages\NUnit.2.6.4\lib\nunit.framework.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String>

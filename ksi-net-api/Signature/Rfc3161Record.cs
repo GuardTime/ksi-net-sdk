@@ -19,13 +19,13 @@ namespace Guardtime.KSI.Signature
 
         public Rfc3161Record(TlvTag tag) : base(tag)
         {
-            for (int i = 0; i < Value.Count; i++)
+            for (int i = 0; i < this.Count; i++)
             {
-                switch (Value[i].Type)
+                switch (this[i].Type)
                 {
                     case 0x2:
-                        AggregationTime = new IntegerTag(Value[i]);
-                        Value[i] = AggregationTime;
+                        AggregationTime = new IntegerTag(this[i]);
+                        this[i] = AggregationTime;
                         break;
                     case 0x3:
                         if (ChainIndex == null)
@@ -33,34 +33,34 @@ namespace Guardtime.KSI.Signature
                             ChainIndex = new List<IntegerTag>();
                         }
 
-                        IntegerTag chainTag = new IntegerTag(Value[i]);
+                        IntegerTag chainTag = new IntegerTag(this[i]);
                         ChainIndex.Add(chainTag);
-                        Value[i] = chainTag;
+                        this[i] = chainTag;
                         break;
                     case 0x5:
-                        InputHash = new ImprintTag(Value[i]);
-                        Value[i] = InputHash;
+                        InputHash = new ImprintTag(this[i]);
+                        this[i] = InputHash;
                         break;
                     case 0x10:
-                        TstInfoPrefix = Value[i];
+                        TstInfoPrefix = this[i];
                         break;
                     case 0x11:
-                        TstInfoSuffix = new RawTag(Value[i]);
-                        Value[i] = TstInfoSuffix;
+                        TstInfoSuffix = new RawTag(this[i]);
+                        this[i] = TstInfoSuffix;
                         break;
                     case 0x12:
-                        TstInfoAlgorithm = new IntegerTag(Value[i]);
-                        Value[i] = TstInfoAlgorithm;
+                        TstInfoAlgorithm = new IntegerTag(this[i]);
+                        this[i] = TstInfoAlgorithm;
                         break;
                     case 0x13:
-                        SignedAttributesPrefix =Value[i];
+                        SignedAttributesPrefix = this[i];
                         break;
                     case 0x14:
-                        SignedAttributesSuffix = Value[i];
+                        SignedAttributesSuffix = this[i];
                         break;
                     case 0x15:
-                        SignedAttributesAlgorithm = new IntegerTag(Value[i]);
-                        Value[i] = SignedAttributesAlgorithm;
+                        SignedAttributesAlgorithm = new IntegerTag(this[i]);
+                        this[i] = SignedAttributesAlgorithm;
                         break;
                 }
             }

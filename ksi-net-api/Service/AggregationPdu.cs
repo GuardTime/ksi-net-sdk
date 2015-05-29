@@ -24,44 +24,40 @@ namespace Guardtime.KSI.Service
             }
         }
 
-        public AggregationPdu(byte[] bytes) : base(bytes)
+        public AggregationPdu(TlvTag tag) : base(tag)
         {
-            for (int i = 0; i < Value.Count; i++)
+            for (int i = 0; i < this.Count; i++)
             {
-                switch (Value[i].Type)
+                switch (this[i].Type)
                 {
                     case 0x1:
-                        _header = new PduHeader(Value[i]);
-                        Value[i] = _header;
+                        _header = new PduHeader(this[i]);
+                        this[i] = _header;
                         break;
                     case 0x202:
-                        _payload = new AggregationResponse(Value[i]);
-                        Value[i] = _payload;
+                        _payload = new AggregationResponsePayload(this[i]);
+                        this[i] = _payload;
                         break;
                     case 0x203:
-                        _payload = new AggregationError(Value[i]);
-                        Value[i] = _payload;
+                        _payload = new AggregationError(this[i]);
+                        this[i] = _payload;
                         break;
                     case 0x1f:
-                        _mac = new ImprintTag(Value[i]);
-                        Value[i] = _mac;
+                        _mac = new ImprintTag(this[i]);
+                        this[i] = _mac;
                         break;
                 }
             }
         }
 
-        public AggregationPdu(TlvTag tag) : base(tag)
-        {
-        }
-
         // TODO: Create correct constructor
         public AggregationPdu() : base(0x200, false, false, new List<TlvTag>())
         {
-            _header = new PduHeader();
-            Value.Add(_header);
+            _header = new PduHeader("anon");
+            this.AddTag(_header);
 
-            _payload = new AggregationRequest();
-            Value.Add(_payload);
+            _payload = new AggregationRequestPayload();
+            this.AddTag(_payload);
 
             using (MemoryStream stream = new MemoryStream())
             using (TlvWriter writer = new TlvWriter(stream))
@@ -69,7 +65,7 @@ namespace Guardtime.KSI.Service
                 writer.WriteTag(_header);
                 writer.WriteTag(_payload);
                 _mac = new ImprintTag(0x1F, false, false, new DataHash(HashAlgorithm.Sha2256, CalculateMac(Encoding.UTF8.GetBytes("anon"), ((MemoryStream)writer.BaseStream).ToArray())));
-                Value.Add(_mac);
+                this.AddTag(_mac);
             }
             
         }

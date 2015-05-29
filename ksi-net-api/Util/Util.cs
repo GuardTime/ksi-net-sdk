@@ -35,7 +35,7 @@ namespace Guardtime.KSI.Util
             return true;
         }
 
-        public static string ConvertByteArrayToHex(byte[] valueBytes)
+        public static string ConvertByteArrayToString(byte[] valueBytes)
         {
             return valueBytes == null ? "" : BitConverter.ToString(valueBytes).Replace("-", string.Empty);
         }

@@ -11,12 +11,11 @@ namespace Guardtime.KSI.Signature
         public KsiSignature(CompositeTag response)
         {
             List<TlvTag> signatureTags = new List<TlvTag>();
-            List<TlvTag> tlvTags = response.Value;
-            for (int i = 0; i < tlvTags.Count; i++)
+            for (int i = 0; i < response.Count; i++)
             {
-                if (tlvTags[i].Type > 0x800 && tlvTags[i].Type < 0x900)
+                if (response[i].Type > 0x800 && response[i].Type < 0x900)
                 {
-                    signatureTags.Add(tlvTags[i]);
+                    signatureTags.Add(response[i]);
                 }
             }
 

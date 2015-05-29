@@ -1,29 +1,35 @@
 ﻿
+using System;
+
 namespace Guardtime.KSI.Parser
 {
     public class RawTag : TlvTag
     {
-        public new byte[] Value
+        private readonly byte[] _value;
+        public byte[] Value
         {
-            get { return base.Value; }
+            get { return _value; }
         }
 
-        public RawTag(byte[] bytes) : base(bytes)
-        {
-        }
-
+        // TODO: Test with encode returning null
         public RawTag(TlvTag tag) : base(tag)
         {
+            _value = tag.EncodeValue();
         }
 
-        public RawTag(uint type, bool nonCritical, bool forward, byte[] data)
-            : base(type, nonCritical, forward, data)
+        public RawTag(uint type, bool nonCritical, bool forward, byte[] value)
+            : base(type, nonCritical, forward)
         {
+            if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
+            _value = value;
         }
 
         public override byte[] EncodeValue()
         {
-            return Value;
+            return _value;
         }
 
         public override int GetHashCode()

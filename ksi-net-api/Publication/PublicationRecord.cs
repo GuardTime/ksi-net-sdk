@@ -14,11 +14,6 @@ namespace Guardtime.KSI.Publication
         public PublicationData PublicationData
         {
             get { return _publicationData; }
-            set
-            {
-                PutTag(value, _publicationData);
-                _publicationData = value;
-            }
         }
 
         public List<StringTag> PublicationReferences
@@ -41,25 +36,25 @@ namespace Guardtime.KSI.Publication
 
         public PublicationRecord(TlvTag tag) : base(tag)
         {
-            for (int i = 0; i < Value.Count; i++)
+            for (int i = 0; i < Count; i++)
             {
                 StringTag listTag;
 
-                switch (Value[i].Type)
+                switch (this[i].Type)
                 {
                     case 0x10:
-                        _publicationData = new PublicationData(Value[i]);
-                        Value[i] = _publicationData;
+                        _publicationData = new PublicationData(this[i]);
+                        this[i] = _publicationData;
                         break;
                     case 0x9:
-                        listTag = new StringTag(Value[i]);
+                        listTag = new StringTag(this[i]);
                         AddPublicationReference(listTag);
-                        Value[i] = listTag;
+                        this[i] = listTag;
                         break;
                     case 0xA:
-                        listTag = new StringTag(Value[i]);
+                        listTag = new StringTag(this[i]);
                         AddPublicationRepositoryUri(listTag);
-                        Value[i] = listTag;
+                        this[i] = listTag;
                         break;
                 }
             }
