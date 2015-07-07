@@ -2,22 +2,43 @@
 using System.Collections.Generic;
 using System.Text;
 using Guardtime.KSI.Parser;
+using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Exceptions
 {
+    /// <summary>
+    /// Invalid TLV Structure exception
+    /// </summary>
     public class InvalidTlvStructureException : KsiException
     {
+        /// <summary>
+        /// TLV element list
+        /// </summary>
         public List<TlvTag> TlvList = new List<TlvTag>();
 
+        /// <summary>
+        /// Create new InvalidTlvStructure exception.
+        /// </summary>
+        /// <param name="message">exception message</param>
         public InvalidTlvStructureException(string message) : base(message)
         {
 
         }
 
+        /// <summary>
+        /// Create new InvalidTlvStructure exception.
+        /// </summary>
+        /// <param name="message">exception message</param>
+        /// <param name="innerException">inner exception</param>
         public InvalidTlvStructureException(string message, Exception innerException) : base(message, innerException)
         {
         }
 
+        /// <summary>
+        /// Create new InvalidTlvStructure exception.
+        /// </summary>
+        /// <param name="message">exception message</param>
+        /// <param name="tag">invalid tlv tag</param>
         public InvalidTlvStructureException(string message, TlvTag tag) : this(message)
         {
             if (tag == null)
@@ -28,6 +49,10 @@ namespace Guardtime.KSI.Exceptions
             TlvList.Add(tag);
         }
 
+        /// <summary>
+        /// Get TLV tag trace as string
+        /// </summary>
+        /// <returns>tlv trace as string</returns>
         public string GetTlvTagTrace()
         {
             if (TlvList.Count == 0) return "";
@@ -50,7 +75,7 @@ namespace Guardtime.KSI.Exceptions
                 builder.Append("]:");
             }
 
-            builder.Append("0x").Append(Util.Util.ConvertByteArrayToString(TlvList[0].EncodeValue()));
+            builder.Append("0x").Append(Util.ConvertByteArrayToString(TlvList[0].EncodeValue()));
 
             return builder.ToString();
         }
