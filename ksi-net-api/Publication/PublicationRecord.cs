@@ -1,15 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using Guardtime.KSI.Parser;
+using Guardtime.KSI.Utils;
+using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Publication
 {
     public class PublicationRecord : CompositeTag
     {
+        // TODO: Better name
+        public const uint TagType = 0x703;
+        private const uint PublicationReferencesTagType = 0x9;
+        private const uint PublicationRepositoryUriTagType = 0xa;
 
-        private PublicationData _publicationData;
-        private List<StringTag> _publicationReferences;
-        private List<StringTag> _publicationRepositoryUri;
+        private readonly PublicationData _publicationData;
+        private readonly List<StringTag> _publicationReferences = new List<StringTag>();
+        private readonly List<StringTag> _publicationRepositoryUri = new List<StringTag>();
 
         public PublicationData PublicationData
         {
@@ -30,7 +36,7 @@ namespace Guardtime.KSI.Publication
         {
             get
             {
-                return Util.Util.ConvertUnixTimeToDateTime(PublicationData.PublicationTime.Value);
+                return Util.ConvertUnixTimeToDateTime(PublicationData.PublicationTime.Value);
             } 
         } 
 
@@ -42,47 +48,56 @@ namespace Guardtime.KSI.Publication
 
                 switch (this[i].Type)
                 {
-                    case 0x10:
+                    case PublicationData.TagType:
                         _publicationData = new PublicationData(this[i]);
                         this[i] = _publicationData;
                         break;
-                    case 0x9:
+                    case PublicationReferencesTagType:
                         listTag = new StringTag(this[i]);
-                        AddPublicationReference(listTag);
+                        _publicationReferences.Add(listTag);
                         this[i] = listTag;
                         break;
-                    case 0xA:
+                    case PublicationRepositoryUriTagType:
                         listTag = new StringTag(this[i]);
-                        AddPublicationRepositoryUri(listTag);
+                        _publicationRepositoryUri.Add(listTag);
                         this[i] = listTag;
                         break;
                 }
             }
         }
 
-        public void AddPublicationReference(StringTag tag)
-        {
-            if (_publicationReferences == null)
-            {
-                _publicationReferences = new List<StringTag>();
-            }
-
-            _publicationReferences.Add(tag);
-        }
-
-        public void AddPublicationRepositoryUri(StringTag tag)
-        {
-            if (_publicationRepositoryUri == null)
-            {
-                _publicationRepositoryUri = new List<StringTag>();
-            }
-
-            _publicationRepositoryUri.Add(tag);
-        }
-
         protected override void CheckStructure()
         {
-            throw new NotImplementedException();
+            if (Type != TagType)
+            {
+                throw new InvalidTlvStructureException("Invalid publication record type: " + Type);
+            }
+
+            uint[] tags = new uint[3];
+
+            for (int i = 0; i < Count; i++)
+            {
+                switch (this[i].Type)
+                {
+                    case PublicationData.TagType:
+                        tags[0]++;
+                        break;
+                    case PublicationReferencesTagType:
+                        tags[1]++;
+                        break;
+                    case PublicationRepositoryUriTagType:
+                        tags[2]++;
+                        break;
+                    default:
+                        throw new InvalidTlvStructureException("Invalid tag", this[i]);
+                }
+            }
+
+            if (tags[0] != 1)
+            {
+                throw new InvalidTlvStructureException("Only one publication data is allowed in publication record");
+            }
+
         }
     }
 }

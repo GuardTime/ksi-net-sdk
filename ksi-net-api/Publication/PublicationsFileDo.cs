@@ -7,10 +7,13 @@ namespace Guardtime.KSI.Publication
 {
     internal class PublicationsFileDo : CompositeTag
     {
-        private PublicationsFileHeader _publicationsHeader;
-        private List<CertificateRecord> _certificateRecords;
-        private List<PublicationRecord> _publicationRecords;
-        private TlvTag _cmsSignature;
+        // TODO: Better name, const?
+        private const uint CmsSignatureTagType = 0x704;
+
+        private readonly PublicationsFileHeader _publicationsHeader;
+        private readonly List<CertificateRecord> _certificateRecords = new List<CertificateRecord>();
+        private readonly List<PublicationRecord> _publicationRecords = new List<PublicationRecord>();
+        private readonly TlvTag _cmsSignature;
 
         public PublicationsFileHeader PublicationsHeader
         {
@@ -34,12 +37,12 @@ namespace Guardtime.KSI.Publication
 
         public DateTime? CreationTime
         {
-            get { return PublicationsHeader.CreationTime != null ? Util.Util.ConvertUnixTimeToDateTime(PublicationsHeader.CreationTime.Value / 1000) : (DateTime?) null; }
+            get { return _publicationsHeader.CreationTime; }
         }
 
         public string RepUri
         {
-            get { return PublicationsHeader.RepUri != null ? PublicationsHeader.RepUri.Value : null; }
+            get { return _publicationsHeader.RepUri; }
         }
 
         public PublicationsFileDo(TlvTag tag) : base(tag)
@@ -48,39 +51,22 @@ namespace Guardtime.KSI.Publication
             {
                 switch (this[i].Type)
                 {
-                    case 0x701:
+                    case PublicationsFileHeader.TagType:
                         _publicationsHeader = new PublicationsFileHeader(this[i]);
                         this[i] = _publicationsHeader;
                         break;
-                    case 0x702:
-                        if (_certificateRecords == null)
-                        {
-                            _certificateRecords = new List<CertificateRecord>();
-                        }
-
+                    case CertificateRecord.TagType:
                         CertificateRecord certificateRecordTag = new CertificateRecord(this[i]);
                         CertificateRecords.Add(certificateRecordTag);
                         this[i] = certificateRecordTag;
                         break;
-                    case 0x703:
-                        if (_publicationRecords == null)
-                        {
-                            _publicationRecords = new List<PublicationRecord>();
-                        }
-
+                    case PublicationRecord.TagType:
                         PublicationRecord publicationRecordTag = new PublicationRecord(this[i]);
                         PublicationRecords.Add(publicationRecordTag);
                         this[i] = publicationRecordTag;
                         break;
-                    case 0x704:
+                    case CmsSignatureTagType:
                         _cmsSignature = this[i];
-                        break;
-                    default:
-                        // TODO: throw correct exception, also display invalid row in full tree
-                        if (!this[i].NonCritical)
-                        {
-                            throw new FormatException("Invalid tag[" + this[i].Type + "]: " + this);
-                        }
                         break;
                 }
             }
@@ -88,24 +74,37 @@ namespace Guardtime.KSI.Publication
 
         protected override void CheckStructure()
         {
-            if (PublicationsHeader == null)
+            uint[] tags = new uint[4];
+
+            for (int i = 0; i < Count; i++)
             {
-                throw new InvalidTlvStructureException("Publications File Header is missing");
+                switch (this[i].Type)
+                {
+                    case PublicationsFileHeader.TagType:
+                        tags[0]++;
+                        break;
+                    case CertificateRecord.TagType:
+                        tags[1]++;
+                        break;
+                    case PublicationRecord.TagType:
+                        tags[2]++;
+                        break;
+                    case CmsSignatureTagType:
+                        tags[3]++;
+                        break;
+                    default:
+                        throw new InvalidTlvStructureException("Invalid tag", this[i]);
+                }
             }
 
-            if (CertificateRecords == null || CertificateRecords.Count == 0)
+            if (tags[0] != 1)
             {
-                throw new InvalidTlvStructureException("Certificate records are missing");
+                throw new InvalidTlvStructureException("Only one publications file header must exist in publications file");
             }
 
-            if (PublicationRecords == null || PublicationRecords.Count == 0)
+            if (tags[3] != 1)
             {
-                throw new InvalidTlvStructureException("Publication records are missing");
-            }
-
-            if (CmsSignature == null)
-            {
-                throw new InvalidTlvStructureException("Publication file signature is missing");
+                throw new InvalidTlvStructureException("Only one signature must exist in publications file");
             }
         }
     }

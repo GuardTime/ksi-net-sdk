@@ -5,8 +5,13 @@ namespace Guardtime.KSI.Publication
 {
     public class PublicationData : CompositeTag
     {
-        private IntegerTag _publicationTime;
-        private ImprintTag _publicationHash;
+        // TODO: Better name
+        public const uint TagType = 0x10;
+        private const uint PublicationTimeTagType = 0x2;
+        private const uint PublicationHashTagType = 0x4;
+
+        private readonly IntegerTag _publicationTime;
+        private readonly ImprintTag _publicationHash;
 
         public IntegerTag PublicationTime
         {
@@ -24,11 +29,11 @@ namespace Guardtime.KSI.Publication
             {
                 switch (this[i].Type)
                 {
-                    case 0x2:
+                    case PublicationTimeTagType:
                         _publicationTime = new IntegerTag(this[i]);
                         this[i] = _publicationTime;
                         break;
-                    case 0x4:
+                    case PublicationHashTagType:
                         _publicationHash = new ImprintTag(this[i]);
                         this[i] = _publicationHash;
                         break;
@@ -39,17 +44,38 @@ namespace Guardtime.KSI.Publication
 
         protected override void CheckStructure()
         {
+            if (Type != TagType)
+            {
+                throw new InvalidTlvStructureException("Invalid publication record type: " + Type);
+            }
+
+            uint[] tags = new uint[2];
+
             for (int i = 0; i < Count; i++)
             {
                 switch (this[i].Type)
                 {
-                    case 0x2:
-                    case 0x4:
+                    case PublicationTimeTagType:
+                        tags[0]++;
+                        break;
+                    case PublicationHashTagType:
+                        tags[1]++;
                         break;
                     default:
                         throw new InvalidTlvStructureException("Invalid tag", this[i]);
                 }
             }
+
+            if (tags[0] != 1)
+            {
+                throw new InvalidTlvStructureException("Only one publication time must exist in publication data");
+            }
+
+            if (tags[1] != 1)
+            {
+                throw new InvalidTlvStructureException("Only one publication hash must exist in publication data");
+            }
+
         }
     }
 }

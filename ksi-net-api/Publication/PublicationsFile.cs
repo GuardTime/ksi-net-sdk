@@ -5,15 +5,14 @@ using System.Text;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Trust;
+using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Publication
 {
     public sealed class PublicationsFile : IKsiTrustProvider
     {
         public static readonly byte[] FileBeginningMagicBytes = { 0x4b, 0x53, 0x49, 0x50, 0x55, 0x42, 0x4c, 0x46 };
-
         private readonly PublicationsFileDo _publicationsFileDo;
-        private string _name;
 
         // TODO: Problem with too big value
         public DateTime? CreationTime
@@ -24,11 +23,6 @@ namespace Guardtime.KSI.Publication
         public string RepUri
         {
             get { return _publicationsFileDo.RepUri; }
-        }
-
-        public string Name
-        {
-            get { return _name; }
         }
 
         private PublicationsFile(PublicationsFileDo publicationFileDo)
@@ -62,19 +56,24 @@ namespace Guardtime.KSI.Publication
             byte[] data = new byte[FileBeginningMagicBytes.Length];
             int bytesRead = stream.Read(data, 0, data.Length);
 
-            if (bytesRead != FileBeginningMagicBytes.Length || !Util.Util.IsArrayEqual(data, FileBeginningMagicBytes))
+            if (bytesRead != FileBeginningMagicBytes.Length || !Util.IsArrayEqual(data, FileBeginningMagicBytes))
             {
-                stream.Close();
                 // TODO: Correct exception
                 throw new KsiException("Invalid publications file: incorrect file header");
             }
 
             // TODO: Check for too long file
-            data = new byte[stream.Length - 8];
-            stream.Read(data, 0, data.Length);
-            stream.Close();
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                // TODO: Make buffer configurable
+                byte[] buffer = new byte[8092];
+                while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    memoryStream.Write(buffer, 0, bytesRead);
+                }
 
-            return new PublicationsFile(new PublicationsFileDo(new RawTag(0x0, false, false, data)));
+                return new PublicationsFile(new PublicationsFileDo(new RawTag(0x0, false, false, memoryStream.ToArray())));
+            }
         }
 
         public PublicationRecord GetLatestPublication()
@@ -127,7 +126,7 @@ namespace Guardtime.KSI.Publication
         {
             for (int i = 0; i < _publicationsFileDo.CertificateRecords.Count; i++)
             {
-                if (Util.Util.IsArrayEqual(_publicationsFileDo.CertificateRecords[i].CertificateId.EncodeValue(),
+                if (Util.IsArrayEqual(_publicationsFileDo.CertificateRecords[i].CertificateId.EncodeValue(),
                     certificateId))
                 {
                     return new X509Certificate(_publicationsFileDo.CertificateRecords[i].X509Certificate.EncodeValue());
@@ -135,8 +134,6 @@ namespace Guardtime.KSI.Publication
             }
             return null;
         }
-
-        
 
         public override string ToString()
         {
