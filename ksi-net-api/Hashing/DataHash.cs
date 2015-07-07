@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Guardtime.KSI.Utils;
+using System;
 
 namespace Guardtime.KSI.Hashing
 {
@@ -22,9 +23,7 @@ namespace Guardtime.KSI.Hashing
 
         /// <summary>
         /// Get data imprint.
-        /// <p>
         /// Imprint is created by concatenating hash algorithm id with hash value.
-        /// </p>
         /// </summary>
         public byte[] Imprint
         {
@@ -113,11 +112,13 @@ namespace Guardtime.KSI.Hashing
         /// <returns>boolean where true means that objects are equal</returns>
         public override bool Equals(object obj)
         {
-            if (obj == null || obj.GetType() != typeof (DataHash)) return false;
-            DataHash b = (DataHash) obj;
-            return Util.Util.IsArrayEqual(b.Imprint, Imprint) &&
-                   Util.Util.IsArrayEqual(b.Value, Value) &&
-                   b.Algorithm.Equals(Algorithm);
+            DataHash hash = obj as DataHash;
+            if (hash == null)
+            {
+                return false;
+            }
+
+            return Util.IsArrayEqual(hash.Imprint, Imprint);
         }
 
         /// <summary>
@@ -144,7 +145,7 @@ namespace Guardtime.KSI.Hashing
         /// <returns>String representing algorithm name and value</returns>
         public override string ToString()
         {
-            return Algorithm.Name + ":[" + Util.Util.ConvertByteArrayToString(Value) + "]";
+            return Algorithm.Name + ":[" + Util.ConvertByteArrayToString(Value) + "]";
         }
     }
 }
