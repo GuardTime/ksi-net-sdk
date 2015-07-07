@@ -116,8 +116,8 @@
     <Compile Include="Service\HttpAggregationRequestTests.cs" />
     <Compile Include="Signature\KsiSignatureDoTests.cs" />
     <Compile Include="Trust\PkiTrustStoreProviderTests.cs" />
+    <Compile Include="Utils\EmptyEnumeratorTests.cs" />
     <Compile Include="Utils\InvalidEncodeTlvTag.cs" />
-    <Compile Include="Util\EmptyEnumeratorTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ksi-net-api\Guardtime.KSI.csproj">
