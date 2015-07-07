@@ -3,9 +3,8 @@ using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Service
 {
-    public abstract class AggregationPduPayload : CompositeTag
+    public abstract class AggregationPduPayload : KsiPduPayload
     {
-
         protected AggregationPduPayload(TlvTag tag) : base(tag)
         {
         }
@@ -13,6 +12,5 @@ namespace Guardtime.KSI.Service
         protected AggregationPduPayload(uint type, bool nonCritical, bool forward, List<TlvTag> value) : base(type, nonCritical, forward, value)
         {
         }
-
     }
 }

@@ -2,28 +2,34 @@
 using System.Collections.Generic;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
+using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Service
 {
     public class AggregationRequestPayload : AggregationPduPayload
     {
-        private IntegerTag _requestId;
-        private ImprintTag _requestHash;
-        private IntegerTag _requestLevel;
-        private RawTag _config;
+        // TODO: Better name
+        public const uint TagType = 0x201;
+        private const uint RequestIdTagType = 0x1;
+        private const uint RequestHashTagType = 0x2;
+
+        private readonly IntegerTag _requestId;
+        private readonly ImprintTag _requestHash;
+        private readonly IntegerTag _requestLevel;
+        private readonly RawTag _config;
 
         public AggregationRequestPayload(TlvTag tag) : base(tag)
         {
         }
 
         // Create correct constructor
-        public AggregationRequestPayload() : base(0x201, false, false, new List<TlvTag>())
+        public AggregationRequestPayload(DataHash hash) : base(TagType, false, false, new List<TlvTag>())
         {
-            _requestId = new IntegerTag(0x1, false, false, Util.Util.GetRandomUnsignedLong());
-            this.AddTag(_requestId);
+            _requestId = new IntegerTag(RequestIdTagType, false, false, Util.GetRandomUnsignedLong());
+            AddTag(_requestId);
 
-            _requestHash = new ImprintTag(0x2, false, false, new DataHash(HashAlgorithm.Sha2256, new byte[] {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}));
-            this.AddTag(_requestHash);
+            _requestHash = new ImprintTag(RequestHashTagType, false, false, hash);
+            AddTag(_requestHash);
         }
 
         protected override void CheckStructure()

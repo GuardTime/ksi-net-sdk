@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Guardtime.KSI.Parser;
+using System;
 using System.Collections.Generic;
-using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Service
 {
-    public class AggregationPdu : KsiPdu
+    internal class ExtendPdu : KsiPdu
     {
         // TODO: Better name
-        public const uint TagType = 0x200;
+        public const uint TagType = 0x300;
 
-        private readonly AggregationPduPayload _payload;
+        private readonly ExtendPduPayload _payload;
 
         public override KsiPduPayload Payload
         {
@@ -19,25 +19,26 @@ namespace Guardtime.KSI.Service
             }
         }
 
-        public AggregationPdu(TlvTag tag) : base(tag)
+        public ExtendPdu(TlvTag tag) : base(tag)
         {
             for (int i = 0; i < Count; i++)
             {
                 switch (this[i].Type)
                 {
-                    case AggregationResponsePayload.TagType:
-                        _payload = new AggregationResponsePayload(this[i]);
+                    case ExtendResponsePayload.TagType:
+                        _payload = new ExtendResponsePayload(this[i]);
                         this[i] = _payload;
                         break;
-                    case AggregationError.TagType:
-                        _payload = new AggregationError(this[i]);
+                    case ExtendError.TagType:
+                        _payload = new ExtendError(this[i]);
                         this[i] = _payload;
                         break;
                 }
             }
         }
 
-        public AggregationPdu(KsiPduHeader header, AggregationPduPayload payload) : base(header, TagType, false, false, new List<TlvTag>())
+        // TODO: Create correct constructor
+        public ExtendPdu(KsiPduHeader header, ExtendPduPayload payload) : base(header, TagType, false, false, new List<TlvTag>())
         {
             _payload = payload;
             if (payload != null)
@@ -46,9 +47,11 @@ namespace Guardtime.KSI.Service
             }
         }
 
+        
+
         protected override void CheckStructure()
         {
-            throw new NotImplementedException();
+            // TODO: Check if payload exists
         }
     }
 }

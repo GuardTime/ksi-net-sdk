@@ -3,15 +3,15 @@ using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Service
 {
-    public class AggregationError : AggregationPduPayload
+    public class ExtendError : ExtendPduPayload
     {
         // TODO: Better name
-        public const uint TagType = 0x203;
+        public const uint TagType = 0x303;
 
         private readonly IntegerTag _status;
         private readonly StringTag _errorMessage;
 
-        public AggregationError(TlvTag tag) : base(tag)
+        public ExtendError(TlvTag tag) : base(tag)
         {
             for (int i = 0; i < Count; i++)
             {

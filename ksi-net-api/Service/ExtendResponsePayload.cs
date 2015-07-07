@@ -1,26 +1,33 @@
 ﻿using System;
 using Guardtime.KSI.Parser;
+using Guardtime.KSI.Signature;
 
 namespace Guardtime.KSI.Service
 {
-    public class AggregationResponsePayload : AggregationPduPayload
+    public class ExtendResponsePayload : ExtendPduPayload
     {
-        // Better name
-        public const uint TagType = 0x202;
+        // TODO: Better name
+        public const uint TagType = 0x302;
         private const uint RequestIdTagType = 0x1;
-        private const uint ConfigTagType = 0x10;
-        private const uint RequestAcknowledgmentTagType = 0x11;
+        private const uint LastTimeTagType = 0x10;
 
         private readonly IntegerTag _requestId;
         private readonly IntegerTag _status;
         private readonly StringTag _errorMessage;
 
-        // TODO: Create config
-        private readonly RawTag _config;
-        // TODO: Create request acknowledgement 
-        private readonly RawTag _requestAcknowledgment;
+        private readonly IntegerTag _lastTime;
 
-        public AggregationResponsePayload(TlvTag tag) : base(tag)
+        private readonly CalendarHashChain _calendarHashChain;
+
+        public CalendarHashChain CalendarHashChain
+        {
+            get
+            {
+                return _calendarHashChain;
+            }
+        }
+
+        public ExtendResponsePayload(TlvTag tag) : base(tag)
         {
             for (int i = 0; i < Count; i++)
             {
@@ -38,13 +45,13 @@ namespace Guardtime.KSI.Service
                         _errorMessage = new StringTag(this[i]);
                         this[i] = _errorMessage;
                         break;
-                    case ConfigTagType:
-                        _config = new RawTag(this[i]);
-                        this[i] = _config;
+                    case LastTimeTagType:
+                        _lastTime = new IntegerTag(this[i]);
+                        this[i] = _lastTime;
                         break;
-                    case RequestAcknowledgmentTagType:
-                        _requestAcknowledgment = new RawTag(this[i]);
-                        this[i] = _requestAcknowledgment;
+                    case CalendarHashChain.TagType:
+                        _calendarHashChain = new CalendarHashChain(this[i]);
+                        this[i] = _calendarHashChain;
                         break;
                 }
             }
@@ -52,7 +59,7 @@ namespace Guardtime.KSI.Service
 
         protected override void CheckStructure()
         {
-            throw new NotImplementedException();
+            // TODO: Check structure
         }
 
     }
