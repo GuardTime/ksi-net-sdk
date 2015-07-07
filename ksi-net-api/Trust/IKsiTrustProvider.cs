@@ -7,7 +7,6 @@ namespace Guardtime.KSI.Trust
     {
         bool Contains(PublicationRecord publicationRecord);
         X509Certificate FindCertificateById(byte[] certificateId);
-        string Name { get; }
         // TODO: Create verification
 //        VerificationResult GetVerificationResult();
 
