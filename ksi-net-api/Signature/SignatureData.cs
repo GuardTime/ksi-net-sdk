@@ -1,37 +1,43 @@
-﻿using Guardtime.KSI.Parser;
+﻿using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Signature
 {
     public class SignatureData : CompositeTag
     {
-        protected StringTag SignatureType;
+        // TODO: Better name
+        public const uint TagType = 0xb;
+        private const uint SignatureTypeTagType = 0x1;
+        private const uint SignatureValueTagType = 0x2;
+        private const uint CertificateIdTagType = 0x3;
+        private const uint CertificateRepositoryUriTagType = 0x4;
 
-        protected TlvTag SignatureValue;
-
-        protected TlvTag CertificateId;
-
-        protected StringTag CertificateRepositoryUri;
+        private readonly StringTag _signatureType;
+        private readonly RawTag _signatureValue;
+        private readonly RawTag _certificateId;
+        private readonly StringTag _certificateRepositoryUri;
 
         public SignatureData(TlvTag tag) : base(tag)
         {
-            for (int i = 0; i < this.Count; i++)
+            for (int i = 0; i < Count; i++)
             {
                 switch (this[i].Type)
                 {
-                    case 0x1:
-                        SignatureType = new StringTag(this[i]);
-                        this[i] = SignatureType;
+                    case SignatureTypeTagType:
+                        _signatureType = new StringTag(this[i]);
+                        this[i] = _signatureType;
                         break;
-                    case 0x2:
-                        SignatureValue = this[i];
+                    case SignatureValueTagType:
+                        _signatureValue = new RawTag(this[i]);
+                        this[i] = _signatureValue;
                         break;
-                    case 0x3:
-                        CertificateId = this[i];
-                        this[i] = CertificateId;
+                    case CertificateIdTagType:
+                        _certificateId = new RawTag(this[i]);
+                        this[i] = _certificateId;
                         break;
-                    case 0x4:
-                        CertificateRepositoryUri = new StringTag(this[i]);
-                        this[i] = CertificateRepositoryUri;
+                    case CertificateRepositoryUriTagType:
+                        _certificateRepositoryUri = new StringTag(this[i]);
+                        this[i] = _certificateRepositoryUri;
                         break;
                 }
             }
@@ -39,7 +45,53 @@ namespace Guardtime.KSI.Signature
 
         protected override void CheckStructure()
         {
-            // TODO:
+            if (Type != TagType)
+            {
+                throw new InvalidTlvStructureException("Invalid signature data type: " + Type);
+            }
+
+            uint[] tags = new uint[4];
+
+            for (int i = 0; i < Count; i++)
+            {
+                switch (this[i].Type)
+                {
+                    case SignatureTypeTagType:
+                        tags[0]++;
+                        break;
+                    case SignatureValueTagType:
+                        tags[1]++;
+                        break;
+                    case CertificateIdTagType:
+                        tags[2]++;
+                        break;
+                    case CertificateRepositoryUriTagType:
+                        tags[3]++;
+                        break;
+                    default:
+                        throw new InvalidTlvStructureException("Invalid tag", this[i]);
+                }
+            }
+
+            if (tags[0] != 1)
+            {
+                throw new InvalidTlvStructureException("Only one signature type must exist in signature data");
+            }
+
+            if (tags[1] != 1)
+            {
+                throw new InvalidTlvStructureException("Only one signature value must exist in signature data");
+            }
+
+            if (tags[2] != 1)
+            {
+                throw new InvalidTlvStructureException("Only one certificate id must exist in signature data");
+            }
+
+            if (tags[3] > 1)
+            {
+                throw new InvalidTlvStructureException("Only one certificate repository uri is allowed in signature data");
+            }
         }
     }
 }

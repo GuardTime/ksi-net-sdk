@@ -2,167 +2,310 @@
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using System.Collections.Generic;
+using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Signature
 {
     public class AggregationHashChain : CompositeTag
     {
-        protected IntegerTag AggregationTime;
-
-        protected List<IntegerTag> ChainIndex;
-
-        protected TlvTag InputData;
-
-        protected ImprintTag InputHash;
-
-        protected IntegerTag AggrAlgorithmId;
-
-        protected List<Link> Chain;
+        // TODO: Better name
+        public const uint TagType = 0x801;
+        private const uint AggregationTimeTagType = 0x2;
+        private const uint ChainIndexTagType = 0x3;
+        private const uint InputDataTagType = 0x4;
+        private const uint InputHashTagType = 0x5;
+        private const uint AggregationAlgorithmIdTagType = 0x6;
+        
+        private readonly IntegerTag _aggregationTime;
+        private readonly List<IntegerTag> _chainIndex = new List<IntegerTag>();
+        private readonly RawTag _inputData;
+        private readonly ImprintTag _inputHash;
+        private readonly IntegerTag _aggrAlgorithmId;
+        private readonly List<Link> _chain = new List<Link>();
 
         // the hash algorithm identified by aggrAlgorithmId
         protected HashAlgorithm AggrAlgorithm;
 
         public AggregationHashChain(TlvTag tag) : base(tag)
         {
-            for (int i = 0; i < this.Count; i++)
+            for (int i = 0; i < Count; i++)
             {
                 switch (this[i].Type)
                 {
-                    case 0x2:
-                        AggregationTime = new IntegerTag(this[i]);
-                        this[i] = AggregationTime;
+                    case AggregationTimeTagType:
+                        _aggregationTime = new IntegerTag(this[i]);
+                        this[i] = _aggregationTime;
                         break;
-                    case 0x3:
-                        if (ChainIndex == null)
-                        {
-                            ChainIndex = new List<IntegerTag>();
-                        }
-
+                    case ChainIndexTagType:
                         IntegerTag chainIndexTag = new IntegerTag(this[i]);
-                        ChainIndex.Add(chainIndexTag);
+                        _chainIndex.Add(chainIndexTag);
                         this[i] = chainIndexTag;
                         break;
-                    case 0x4:
-                        InputData = new RawTag(this[i]);
-                        this[i] = InputData;
+                    case InputDataTagType:
+                        _inputData = new RawTag(this[i]);
+                        this[i] = _inputData;
                         break;
-                    case 0x5:
-                        InputHash = new ImprintTag(this[i]);
-                        this[i] = InputHash;
+                    case InputHashTagType:
+                        _inputHash = new ImprintTag(this[i]);
+                        this[i] = _inputHash;
                         break;
-                    case 0x6:
-                        AggrAlgorithmId = new IntegerTag(this[i]);
-                        this[i] = AggrAlgorithmId;
+                    case AggregationAlgorithmIdTagType:
+                        _aggrAlgorithmId = new IntegerTag(this[i]);
+                        this[i] = _aggrAlgorithmId;
                         break;
-                    case 0x7:
-                    case 0x8:
-                        if (Chain == null)
-                        {
-                            Chain = new List<Link>();
-                        }
-
-                        Link linkTag = new Link(this[i], (LinkDirection)Enum.ToObject(typeof(LinkDirection), (byte)this[i].Type));
-                        Chain.Add(linkTag);
+                    case (uint)LinkDirection.Left:
+                    case (uint)LinkDirection.Right:
+                        Link linkTag = new Link(this[i], (LinkDirection)this[i].Type);
+                        _chain.Add(linkTag);
                         this[i] = linkTag;
                         break;
                 }
             }
         }
 
-        protected class Link : CompositeTag
+        protected override void CheckStructure()
         {
+            if (Type != TagType)
+            {
+                throw new InvalidTlvStructureException("Invalid aggregation hash chain type: " + Type);
+            }
 
-            protected IntegerTag LevelCorrection;
+            uint[] tags = new uint[7];
 
-            protected ImprintTag SiblingHash;
+            for (int i = 0; i < Count; i++)
+            {
+                switch (this[i].Type)
+                {
+                    case AggregationTimeTagType:
+                        tags[0]++;
+                        break;
+                    case ChainIndexTagType:
+                        tags[1]++;
+                        break;
+                    case InputDataTagType:
+                        tags[2]++;
+                        break;
+                    case InputHashTagType:
+                        tags[3]++;
+                        break;
+                    case AggregationAlgorithmIdTagType:
+                        tags[4]++;
+                        break;
+                    case (uint)LinkDirection.Left:
+                        tags[5]++;
+                        break;
+                    case (uint)LinkDirection.Right:
+                        tags[6]++;
+                        break;
+                    default:
+                        throw new InvalidTlvStructureException("Invalid tag", this[i]);
+                }
+            }
 
-            protected ImprintTag MetaHash;
+            if (tags[0] != 1)
+            {
+                throw new InvalidTlvStructureException("Aggregation time missing in aggregation hash chain");
+            }
 
-            private MetaData _metaData;
+            if (tags[1] == 0)
+            {
+                throw new InvalidTlvStructureException("Chain index missing in aggregation hash chain");
+            }
+
+            if (tags[2] > 1)
+            {
+                throw new InvalidTlvStructureException("Only one input data is allowed aggregation hash chain");
+            }
+
+            if (tags[3] != 1)
+            {
+                throw new InvalidTlvStructureException("Input hash missing in aggregation hash chain");
+            }
+
+            if (tags[4] != 1)
+            {
+                throw new InvalidTlvStructureException("Algorithm missing in aggregation hash chain");
+            }
+
+            if ((tags[5] + tags[6]) == 0)
+            {
+                throw new InvalidTlvStructureException("Links missing in aggregation hash chain");
+            }
+        }
+
+        private class Link : CompositeTag
+        {
+            // TODO: Better name
+            private const uint LevelCorrectionTagType = 0x1;
+            private const uint SiblingHashTagType = 0x2;
+            private const uint MetaHashTagType = 0x3;
+
+            private readonly IntegerTag _levelCorrection;
+            private readonly ImprintTag _siblingHash;
+            private readonly ImprintTag _metaHash;
+            private readonly MetaData _metaData;
 
             private LinkDirection _direction;
 
             // the client ID extracted from metaHash
-            protected string MetaHashId;
+            private string _metaHashId;
 
 
             public Link(TlvTag tag, LinkDirection direction) : base(tag)
             {
-                for (int i = 0; i < this.Count; i++)
+                for (int i = 0; i < Count; i++)
                 {
                     switch (this[i].Type)
                     {
-                        case 0x1:
-                            LevelCorrection = new IntegerTag(this[i]);
-                            this[i] = LevelCorrection;
+                        case LevelCorrectionTagType:
+                            _levelCorrection = new IntegerTag(this[i]);
+                            this[i] = _levelCorrection;
                             break;
-                        case 0x2:
-                            SiblingHash = new ImprintTag(this[i]);
-                            this[i] = SiblingHash;
+                        case SiblingHashTagType:
+                            _siblingHash = new ImprintTag(this[i]);
+                            this[i] = _siblingHash;
                             break;
-                        case 0x3:
-                            MetaHash = new ImprintTag(this[i]);
-                            this[i] = MetaHash;
+                        case MetaHashTagType:
+                            _metaHash = new ImprintTag(this[i]);
+                            this[i] = _metaHash;
                             break;
-                        case 0x4:
+                        case MetaData.TagType:
                             _metaData = new MetaData(this[i]);
                             this[i] = _metaData;
                             break;
                     }
                 }
+
+                _direction = direction;
             }
 
             protected override void CheckStructure()
             {
-                // TODO
-            }
-        }
+                uint[] tags = new uint[4];
 
-        class MetaData : CompositeTag
-        {
-
-            private StringTag _clientId;
-
-            private StringTag _machineId;
-
-            private IntegerTag _sequenceNr;
-
-            //Please do keep in mind that request time is in milliseconds!
-            private IntegerTag _requestTime;
-
-            public MetaData(TlvTag tag) : base(tag)
-            {
-                for (int i = 0; i < this.Count; i++)
+                for (int i = 0; i < Count; i++)
                 {
                     switch (this[i].Type)
                     {
-                        case 0x1:
+                        case LevelCorrectionTagType:
+                            tags[0]++;
+                            break;
+                        case SiblingHashTagType:
+                            tags[1]++;
+                            break;
+                        case MetaHashTagType:
+                            tags[2]++;
+                            break;
+                        case MetaData.TagType:
+                            tags[3]++;
+                            break;
+                        default:
+                            throw new InvalidTlvStructureException("Invalid tag", this[i]);
+                    }
+                }
+
+                if ((tags[1] == 1 && tags[2] == 1 && tags[3] == 1) || !(tags[1] == 1 ^ tags[2] == 1 ^ tags[3] == 1))
+                {
+                    throw new InvalidTlvStructureException("Only one of three from siblinghash, metahash or metadata is allowed in aggregation hash chain link");
+                }
+            }
+        }
+
+        private class MetaData : CompositeTag
+        {
+            // TODO: Better name
+            public const uint TagType = 0x4;
+            private const uint ClientIdTagType = 0x1;
+            private const uint MachineIdTagType = 0x2;
+            private const uint SequenceNumberTagType = 0x3;
+            private const uint RequestTimeTagType = 0x4;
+
+            private readonly StringTag _clientId;
+            private readonly StringTag _machineId;
+            private readonly IntegerTag _sequenceNr;
+
+            // Please do keep in mind that request time is in milliseconds!
+            private readonly IntegerTag _requestTime;
+
+            public MetaData(TlvTag tag) : base(tag)
+            {
+                for (int i = 0; i < Count; i++)
+                {
+                    switch (this[i].Type)
+                    {
+                        case ClientIdTagType:
                             _clientId = new StringTag(this[i]);
                             this[i] = _clientId;
                             break;
-                        case 0x2:
+                        case MachineIdTagType:
                             _machineId = new StringTag(this[i]);
                             this[i] = _machineId;
                             break;
-                        case 0x3:
+                        case SequenceNumberTagType:
                             _sequenceNr = new IntegerTag(this[i]);
                             this[i] = _sequenceNr;
                             break;
-                        case 0x4:
+                        case RequestTimeTagType:
                             _requestTime = new IntegerTag(this[i]);
                             this[i] = _requestTime;
                             break;
                     }
                 }
             }
-
+            
             protected override void CheckStructure()
             {
-                // TODO
+                if (Type != TagType)
+                {
+                    throw new InvalidTlvStructureException("Invalid aggregation hash chain link metadata type: " + Type);
+                }
+
+                uint[] tags = new uint[4];
+
+                for (int i = 0; i < Count; i++)
+                {
+                    switch (this[i].Type)
+                    {
+                        case ClientIdTagType:
+                            tags[0]++;
+                            break;
+                        case MachineIdTagType:
+                            tags[1]++;
+                            break;
+                        case SequenceNumberTagType:
+                            tags[2]++;
+                            break;
+                        case RequestTimeTagType:
+                            tags[3]++;
+                            break;
+                        default:
+                            throw new InvalidTlvStructureException("Invalid tag", this[i]);
+                    }
+                }
+
+                if (tags[0] != 1)
+                {
+                    throw new InvalidTlvStructureException("Client id missing in aggregation hash chain link metadata");
+                }
+
+                if (tags[1] > 1)
+                {
+                    throw new InvalidTlvStructureException("Only one machine id is allowed in aggregation hash chain link metadata");
+                }
+
+                if (tags[2] > 1)
+                {
+                    throw new InvalidTlvStructureException("Only one sequence number is allowed in aggregation hash chain link metadata");
+                }
+
+                if (tags[3] > 1)
+                {
+                    throw new InvalidTlvStructureException("Only one request time is allowed in aggregation hash chain link metadata");
+                }
             }
         } 
 
-        class ChainResult
+        private class ChainResult
         {
             private DataHash lastHash;
             private int level;
@@ -170,9 +313,6 @@ namespace Guardtime.KSI.Signature
         }
 
 
-        protected override void CheckStructure()
-        {
-            // TODO
-        }
+        
     }
 }

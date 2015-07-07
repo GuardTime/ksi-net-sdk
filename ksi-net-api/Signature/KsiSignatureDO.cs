@@ -7,58 +7,53 @@ namespace Guardtime.KSI.Signature
 {
     public class KsiSignatureDo : CompositeTag
     {
-        private List<AggregationHashChain> _aggregationChains;
-        private CalendarHashChain _calendarChain;
-        private PublicationRecord _publicationRecord;
-        private AggregationAuthenticationRecord _aggregationAuthenticationRecord;
-        private CalendarAuthenticationRecord _calendarAuthenticationRecord;
-        private Rfc3161Record _rfc3161Record;
+        public const uint TagType = 0x800;
 
+        private readonly List<AggregationHashChain> _aggregationChains = new List<AggregationHashChain>();
+        private readonly CalendarHashChain _calendarChain;
+        private readonly PublicationRecord _publicationRecord;
+        private readonly AggregationAuthenticationRecord _aggregationAuthenticationRecord;
+        private readonly CalendarAuthenticationRecord _calendarAuthenticationRecord;
+        private readonly Rfc3161Record _rfc3161Record;
+
+        public ulong AggregationTime
+        {
+            get
+            {
+                return _calendarChain.AggregationTime;
+            }
+        }
+
+        // Order aggregation chain list to correct order
         // TODO: Create interface for tags list
         public KsiSignatureDo(List<TlvTag> response) : base(0x800, false, false, response)
         {
-            BuildStructure();
-        }
-
-
-        public KsiSignatureDo(TlvTag tag) : base(tag)
-        {
-            BuildStructure();
-        }
-
-        private void BuildStructure()
-        {
-            for (int i = 0; i < this.Count; i++)
+            for (int i = 0; i < Count; i++)
             {
                 switch (this[i].Type)
                 {
-                    case 0x801:
-                        if (_aggregationChains == null)
-                        {
-                            _aggregationChains = new List<AggregationHashChain>();
-                        }
-
+                    case AggregationHashChain.TagType:
                         AggregationHashChain aggregationChainTag = new AggregationHashChain(this[i]);
                         _aggregationChains.Add(aggregationChainTag);
                         this[i] = aggregationChainTag;
                         break;
-                    case 0x802:
+                    case CalendarHashChain.TagType:
                         _calendarChain = new CalendarHashChain(this[i]);
                         this[i] = _calendarChain;
                         break;
-                    case 0x803:
+                    case PublicationRecord.TagType:
                         _publicationRecord = new PublicationRecord(this[i]);
                         this[i] = _publicationRecord;
                         break;
-                    case 0x804:
+                    case AggregationAuthenticationRecord.TagType:
                         _aggregationAuthenticationRecord = new AggregationAuthenticationRecord(this[i]);
                         this[i] = _aggregationAuthenticationRecord;
                         break;
-                    case 0x805:
+                    case CalendarAuthenticationRecord.TagType:
                         _calendarAuthenticationRecord = new CalendarAuthenticationRecord(this[i]);
                         this[i] = _calendarAuthenticationRecord;
                         break;
-                    case 0x806:
+                    case Rfc3161Record.TagType:
                         _rfc3161Record = new Rfc3161Record(this[i]);
                         this[i] = _rfc3161Record;
                         break;
@@ -66,40 +61,91 @@ namespace Guardtime.KSI.Signature
             }
         }
 
-        protected override void CheckStructure()
-        {
-            Dictionary<uint, int> tagCount = new Dictionary<uint, int>(); 
-            for (int i = 0; i < this.Count; i++)
-            {
-                tagCount[this[i].Type] = tagCount.ContainsKey(this[i].Type) ? tagCount[this[i].Type] + 1 : 1;
 
+        public KsiSignatureDo(TlvTag tag) : base(tag)
+        {
+            for (int i = 0; i < Count; i++)
+            {
                 switch (this[i].Type)
                 {
-                    case 0x801:
-                    case 0x802:
-                    case 0x803:
-                    case 0x804:
-                    case 0x805:
-                    case 0x806:
+                    case AggregationHashChain.TagType:
+                        AggregationHashChain aggregationChainTag = new AggregationHashChain(this[i]);
+                        _aggregationChains.Add(aggregationChainTag);
+                        this[i] = aggregationChainTag;
+                        break;
+                    case CalendarHashChain.TagType:
+                        _calendarChain = new CalendarHashChain(this[i]);
+                        this[i] = _calendarChain;
+                        break;
+                    case PublicationRecord.TagType:
+                        _publicationRecord = new PublicationRecord(this[i]);
+                        this[i] = _publicationRecord;
+                        break;
+                    case AggregationAuthenticationRecord.TagType:
+                        _aggregationAuthenticationRecord = new AggregationAuthenticationRecord(this[i]);
+                        this[i] = _aggregationAuthenticationRecord;
+                        break;
+                    case CalendarAuthenticationRecord.TagType:
+                        _calendarAuthenticationRecord = new CalendarAuthenticationRecord(this[i]);
+                        this[i] = _calendarAuthenticationRecord;
+                        break;
+                    case Rfc3161Record.TagType:
+                        _rfc3161Record = new Rfc3161Record(this[i]);
+                        this[i] = _rfc3161Record;
+                        break;
+                }
+            }
+        }
+        
+        protected override void CheckStructure()
+        {
+            if (Type != TagType)
+            {
+                throw new InvalidTlvStructureException("Invalid signature type: " + Type);
+            }
+
+            uint[] tags = new uint[6];
+
+            for (int i = 0; i < Count; i++)
+            {
+                switch (this[i].Type)
+                {
+                    case AggregationHashChain.TagType:
+                        tags[0]++;
+                        break;
+                    case CalendarHashChain.TagType:
+                        tags[1]++;
+                        break;
+                    case PublicationRecord.TagType:
+                        tags[2]++;
+                        break;
+                    case AggregationAuthenticationRecord.TagType:
+                        tags[3]++;
+                        break;
+                    case CalendarAuthenticationRecord.TagType:
+                        tags[4]++;
+                        break;
+                    case Rfc3161Record.TagType:
+                        tags[5]++;
                         break;
                     default:
                         throw new InvalidTlvStructureException("Invalid tag", this[i]);
                 }
             }
 
-            if (!tagCount.ContainsKey(0x801) || tagCount[0x801] == 0)
+            if (tags[0] == 0)
             {
                 throw new InvalidTlvStructureException("Signature data object must have one or more aggregation hash chains");
             }
 
-            if (!tagCount.ContainsKey(0x802))
+            if (tags[1] != 1)
             {
-                throw new InvalidTlvStructureException("Signature data object must contain calendar hash chain");
+                throw new InvalidTlvStructureException("Signature data object must contain one calendar hash chain");
             }
 
-            if (!(tagCount.ContainsKey(0x803) ^ tagCount.ContainsKey(0x805)))
+            if (!(tags[2] == 1 ^ tags[4] == 1))
             {
-                throw new InvalidTlvStructureException("Signature data object must contain publication record or calendar authentication record");
+                throw new InvalidTlvStructureException("Only one of publication record ord calendar authentication record can be in signature data object");
             }
 
             // TODO: Aggregation hash chain if defined

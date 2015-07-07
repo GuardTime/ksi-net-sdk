@@ -1,55 +1,118 @@
 ﻿using System;
 using System.Collections.Generic;
 using Guardtime.KSI.Parser;
+using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Signature
 {
     public class CalendarHashChain : CompositeTag
     {
-        protected IntegerTag PublicationTime;
+        // TODO: Better name
+        public const uint TagType = 0x802;
+        private const uint PublicationTimeTagType = 0x1;
+        private const uint AggregationTimeTagType = 0x2;
+        private const uint InputHashTagType = 0x5;
 
-        protected IntegerTag AggregationTime;
+        private readonly IntegerTag _publicationTime;
+        private readonly IntegerTag _aggregationTime;
+        private readonly ImprintTag _inputHash;
+        private readonly List<Link> _chain = new List<Link>();
 
-        protected ImprintTag InputHash;
-
-        protected List<Link> Chain;
+        public ulong AggregationTime
+        {
+            get
+            {
+                return _aggregationTime.Value;
+            }
+        }
 
         public CalendarHashChain(TlvTag tag) : base(tag)
         {
-            for (int i = 0; i < this.Count; i++)
+            for (int i = 0; i < Count; i++)
             {
                 switch (this[i].Type)
                 {
-                    case 0x1:
-                        PublicationTime = new IntegerTag(this[i]);
-                        this[i] = PublicationTime;
+                    case PublicationTimeTagType:
+                        _publicationTime = new IntegerTag(this[i]);
+                        this[i] = _publicationTime;
                         break;
-                    case 0x2:
-                        AggregationTime = new IntegerTag(this[i]);
-                        this[i] = AggregationTime;
+                    case AggregationTimeTagType:
+                        _aggregationTime = new IntegerTag(this[i]);
+                        this[i] = _aggregationTime;
                         break;
-                    case 0x5:
-                        InputHash = new ImprintTag(this[i]);
-                        this[i] = InputHash;
+                    case InputHashTagType:
+                        _inputHash = new ImprintTag(this[i]);
+                        this[i] = _inputHash;
                         break;
-                    case 0x7:
-                    case 0x8:
-                        if (Chain == null)
-                        {
-                            Chain = new List<Link>();
-                        }
-
+                    case (uint)LinkDirection.Left:
+                    case (uint)LinkDirection.Right:
                         Link chainTag = new Link(this[i]);
-                        Chain.Add(chainTag);
+                        _chain.Add(chainTag);
                         this[i] = chainTag;
                         break;
                 }
             }
         }
 
-        protected class Link : ImprintTag
+        protected override void CheckStructure()
         {
-            private LinkDirection _direction;
+            if (Type != TagType)
+            {
+                throw new InvalidTlvStructureException("Invalid calendar hash chain type: " + Type);
+            }
+
+            uint[] tags = new uint[5];
+
+            for (int i = 0; i < Count; i++)
+            {
+                switch (this[i].Type)
+                {
+                    case PublicationTimeTagType:
+                        tags[0]++;
+                        break;
+                    case AggregationTimeTagType:
+                        tags[1]++;
+                        break;
+                    case InputHashTagType:
+                        tags[2]++;
+                        break;
+                    case (uint)LinkDirection.Left:
+                        tags[3]++;
+                        break;
+                    case (uint)LinkDirection.Right:
+                        tags[4]++;
+                        break;
+                    default:
+                        throw new InvalidTlvStructureException("Invalid tag", this[i]);
+                }
+            }
+
+            if (tags[0] != 1)
+            {
+                throw new InvalidTlvStructureException("Calendar hash chain must contain only one publication time");
+            }
+
+            if (tags[1] != 1)
+            {
+                throw new InvalidTlvStructureException("Calendar hash chain must contain only one aggregation time");
+            }
+
+            if (tags[2] != 1)
+            {
+                throw new InvalidTlvStructureException("Calendar hash chain must contain only one input hash");
+            }
+
+            if ((tags[3] + tags[4]) == 0)
+            {
+                throw new InvalidTlvStructureException("Links missing in calendar hash chain");
+            }
+
+            // TODO: Aggregation hash chain if defined
+        }
+
+        private class Link : ImprintTag
+        {
+            private readonly LinkDirection _direction;
 
             public Link(TlvTag tag) : base(tag)
             {
@@ -74,9 +137,6 @@ namespace Guardtime.KSI.Signature
         }
 
 
-        protected override void CheckStructure()
-        {
-            // TODO:
-        }
+        
     }
 }
