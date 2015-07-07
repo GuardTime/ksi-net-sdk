@@ -41,10 +41,6 @@ namespace Guardtime.KSI.Parser
             CollectionAssert.AreEqual(new List<TlvTag> { new RawTag(0x3, false, false, new byte[] { 0x0 }) }, tag.CompositeTestTagValue, "Tag child value should be decoded correctly");
             CollectionAssert.AreEqual(new byte[] { 0x6, 0x3, 0x3, 0x1, 0x0 }, tag.EncodeValue(), "Tag value should be encoded correctly");
 
-            tag.SetCompositeTestTagValue(null);
-            Assert.IsNull(tag.CompositeTestTagValue, "Tag child value should be decoded correctly");
-            CollectionAssert.AreEqual(new byte[] { }, tag.EncodeValue(), "Tag value should be encoded correctly");
-
             tag.SetCompositeTestTagValue(new CompositeTestTag(0x6, false, false, new List<TlvTag>() { new RawTag(0x3, false, false, new byte[] { 0x0 }) }));
             CollectionAssert.AreEqual(new List<TlvTag> { new RawTag(0x3, false, false, new byte[] { 0x0 }) }, tag.CompositeTestTagValue, "Tag child value should be decoded correctly");
             CollectionAssert.AreEqual(new byte[] { 0x6, 0x3, 0x3, 0x1, 0x0 }, tag.EncodeValue(), "Tag value should be encoded correctly");
@@ -93,11 +89,37 @@ namespace Guardtime.KSI.Parser
             Assert.IsNull(tag.ReplaceTagImpl(tag, new RawTag(0x6, false, false, new byte[] { })));
         }
 
+        [Test]
+        public void TestRemoveTagInCompositeTagList()
+        {
+            var childTag = new RawTag(0x2, false, false, new byte[] {0x3, 0x4});
+            var tag = new CompositeTestTag(0x1, false, false, new List<TlvTag>() { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), childTag, new RawTag(0x3, false, false, new byte[] { 0x4 }) });
+            Assert.AreEqual(3, tag.Count, "Tag should contain 3 elements");
+            tag.RemoveTagImpl(childTag);
+            Assert.AreEqual(2, tag.Count, "Tag should contain 2 elements");
+            tag.RemoveTagImpl(null);
+            Assert.AreEqual(2, tag.Count, "Tag should contain 2 elements");
+        }
+
         [Test, ExpectedException(typeof(ArgumentNullException))]
         public void TestAddNullTagToCompositeTagList()
         {
             var tag = new CompositeTestTag(0x1, false, false, new List<TlvTag>() { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }) });
             tag.AddTagImpl(null);
+        }
+
+        [Test, ExpectedException(typeof(ArgumentNullException))]
+        public void TestPutNullTagToCompositeTagList()
+        {
+            var tag = new CompositeTestTag(0x1, false, false, new List<TlvTag>() { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }) });
+            tag.SetCompositeTestTagValue(null);
+        }
+
+        [Test, ExpectedException(typeof(ArgumentNullException))]
+        public void TestCompositeTagAddNullValueToSpecificPosition()
+        {
+            var tag = new CompositeTestTag(0x1, false, false, new List<TlvTag>() { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }) });
+            tag.SetTagToFirstPosition(null);
         }
 
         [Test, ExpectedException(typeof(ArgumentNullException))]
@@ -130,7 +152,7 @@ namespace Guardtime.KSI.Parser
 
             private void BuildStructure()
             {
-                for (var i = 0; i < this.Count; i++)
+                for (var i = 0; i < Count; i++)
                 {
                     switch (this[i].Type)
                     {
@@ -156,6 +178,16 @@ namespace Guardtime.KSI.Parser
             public TlvTag ReplaceTagImpl(TlvTag tag, TlvTag previousTag)
             {
                 return ReplaceTag(tag, previousTag);
+            }
+
+            public void RemoveTagImpl(TlvTag tag)
+            {
+                RemoveTag(tag);
+            }
+
+            public void SetTagToFirstPosition(TlvTag tag)
+            {
+                this[0] = tag;
             }
 
             protected override void CheckStructure()

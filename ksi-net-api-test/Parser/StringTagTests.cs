@@ -1,4 +1,5 @@
 ﻿using System;
+using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Parser
@@ -33,7 +34,7 @@ namespace Guardtime.KSI.Parser
         {
             var tag = new StringTag(new RawTag(0x1, false, false,
                 new byte[] { 0x74, 0x65, 0x73, 0x74, 0x20, 0x6D, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x0 }));
-            Assert.AreEqual(-1364332390, tag.GetHashCode(), "Hash code should be correct");
+            Assert.AreEqual(1246573819, tag.GetHashCode(), "Hash code should be correct");
         }
 
         [Test]
@@ -46,6 +47,20 @@ namespace Guardtime.KSI.Parser
             tag = new StringTag(new RawTag(0x1, true, true,
                 new byte[] { 0x74, 0x65, 0x73, 0x74, 0x20, 0x6D, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x0 }));
             Assert.AreEqual("TLV[0x1,N,F]:\"test message\"", tag.ToString(), "Tag string representation should be correct");
+        }
+
+        [Test]
+        public void TestStringTagCastToString()
+        {
+            var tag = new StringTag(new RawTag(0x1, false, false,
+                new byte[] { 0x74, 0x65, 0x73, 0x74, 0x20, 0x6D, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x0 }));
+            Assert.AreEqual("test message", (string)tag, "Tag should cast correctly to string");
+        }
+
+        [Test, ExpectedException(typeof(ArgumentException))]
+        public void TestTlvTagCreateFromInvalidEncodeTlvTag()
+        {
+            var tag = new StringTag(new InvalidEncodeTlvTag(0x0, false, false));
         }
 
         [Test, ExpectedException(typeof(FormatException))]

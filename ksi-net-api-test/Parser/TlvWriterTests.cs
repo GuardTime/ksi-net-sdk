@@ -69,7 +69,6 @@ namespace Guardtime.KSI.Parser
             {
                 writer.WriteTag(new AllowNullValueTlvTag(0x1, false, false));
                 writer.WriteTag(new AllowNullValueTlvTag(0x257, true, true));
-                Console.WriteLine(Util.Util.ConvertByteArrayToString(stream.ToArray()));
                 CollectionAssert.AreEqual(new byte[] {0x1, 0x0, 0xe2, 0x57, 0x0}, stream.ToArray(), "Writer should output correct byte array");
             }
         }

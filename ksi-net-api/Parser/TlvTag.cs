@@ -1,9 +1,13 @@
-﻿using System;
+﻿using Guardtime.KSI.Utils;
+using System;
 using System.IO;
 using System.Text;
 
 namespace Guardtime.KSI.Parser
 {
+    /// <summary>
+    /// TLV objects base class.
+    /// </summary>
     public abstract class TlvTag
     {
         private readonly uint _type;
@@ -34,6 +38,12 @@ namespace Guardtime.KSI.Parser
             get { return _forward; }
         }
 
+        /// <summary>
+        /// Create new TLV element from data.
+        /// </summary>
+        /// <param name="type">TLV element type</param>
+        /// <param name="nonCritical">Is TLV element non critical</param>
+        /// <param name="forward">Is TLV element forwarded</param>
         protected TlvTag(uint type, bool nonCritical, bool forward)
         {
             _type = type;
@@ -41,6 +51,10 @@ namespace Guardtime.KSI.Parser
             _forward = forward;
         }
 
+        /// <summary>
+        /// Create new TLV element from TLV element.
+        /// </summary>
+        /// <param name="tag">TLV element</param>
         protected TlvTag(TlvTag tag)
         {
             if (tag == null)
@@ -53,8 +67,16 @@ namespace Guardtime.KSI.Parser
             _forward = tag.Forward;
         }
 
+        /// <summary>
+        /// Encode TLV object value.
+        /// </summary>
+        /// <returns>TLV object value as bytes</returns>
         public abstract byte[] EncodeValue();
 
+        /// <summary>
+        /// Encode TLV object.
+        /// </summary>
+        /// <returns>TLV object as bytes</returns>
         public byte[] Encode()
         {
             using (MemoryStream stream = new MemoryStream())
@@ -65,6 +87,10 @@ namespace Guardtime.KSI.Parser
             }
         }
 
+        /// <summary>
+        /// Convert TLV object to string.
+        /// </summary>
+        /// <returns>TLV object as string</returns>
         public override string ToString()
         {
             StringBuilder builder = new StringBuilder();
@@ -81,7 +107,7 @@ namespace Guardtime.KSI.Parser
             }
 
             builder.Append("]:");
-            builder.Append("0x").Append(Util.Util.ConvertByteArrayToString(EncodeValue()));
+            builder.Append("0x").Append(Util.ConvertByteArrayToString(EncodeValue()));
 
             return builder.ToString();
         }

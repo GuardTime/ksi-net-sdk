@@ -39,6 +39,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>bin\x86\Debug\ksi-net-api.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -46,6 +47,24 @@
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
@@ -76,13 +95,24 @@
     <Compile Include="Publication\PublicationsFile.cs" />
     <Compile Include="Publication\PublicationsFileDo.cs" />
     <Compile Include="Publication\PublicationData.cs" />
+    <Compile Include="Service\ExtendRequestPayload.cs" />
+    <Compile Include="Service\ExtendError.cs" />
     <Compile Include="Service\AggregationError.cs" />
     <Compile Include="Service\AggregationResponsePayload.cs" />
     <Compile Include="Service\AggregationRequestPayload.cs" />
     <Compile Include="Service\AggregationPdu.cs" />
-    <Compile Include="Service\HttpAggregationRequest.cs" />
     <Compile Include="Service\AggregationPduPayload.cs" />
-    <Compile Include="Service\PduHeader.cs" />
+    <Compile Include="Service\ExtendPdu.cs" />
+    <Compile Include="Service\ExtendPduPayload.cs" />
+    <Compile Include="Service\ExtendResponsePayload.cs" />
+    <Compile Include="Service\HttpServiceProtocol.cs" />
+    <Compile Include="Service\IKsiService.cs" />
+    <Compile Include="Service\IKsiServiceProtocol.cs" />
+    <Compile Include="Service\IKsiServiceSettings.cs" />
+    <Compile Include="Service\KsiPduPayload.cs" />
+    <Compile Include="Service\KsiPdu.cs" />
+    <Compile Include="Service\KsiService.cs" />
+    <Compile Include="Service\KsiPduHeader.cs" />
     <Compile Include="Service\ServiceCredentials.cs" />
     <Compile Include="Signature\AggregationAuthenticationRecord.cs" />
     <Compile Include="Signature\AggregationHashChain.cs" />
@@ -97,8 +127,8 @@
     <Compile Include="Trust\IKsiTrustProvider.cs" />
     <Compile Include="Trust\IPkiTrustProvider.cs" />
     <Compile Include="Trust\PkiTrustStoreProvider.cs" />
-    <Compile Include="Util\EmptyEnumerator.cs" />
-    <Compile Include="Util\Util.cs" />
+    <Compile Include="Utils\EmptyEnumerator.cs" />
+    <Compile Include="Utils\Util.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

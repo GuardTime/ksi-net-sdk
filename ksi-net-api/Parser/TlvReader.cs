@@ -8,13 +8,31 @@ namespace Guardtime.KSI.Parser
     /// </summary>
     public class TlvReader : BinaryReader
     {
+        /// <summary>
+        /// TLV element 16 bit flag
+        /// </summary>
         public const byte Tlv16Flag = 0x80;
+        /// <summary>
+        /// TLV element non critical flag
+        /// </summary>
         public const byte NonCriticalFlag = 0x40;
+        /// <summary>
+        /// TLV element forward flag
+        /// </summary>
         public const byte ForwardFlag = 0x20;
 
+        /// <summary>
+        /// TLV element type mask.
+        /// </summary>
         public const byte TypeMask = 0x1f;
+        /// <summary>
+        /// TLV element max type.
+        /// </summary>
         public const ushort MaxType = 0x1fff;
 
+        /// <summary>
+        /// Bits in byte
+        /// </summary>
         public const byte ByteBits = 8;
 
         /// <summary>
@@ -59,6 +77,7 @@ namespace Guardtime.KSI.Parser
                 return new RawTag(type, nonCritical, forward, data);
             } catch (EndOfStreamException e) {
                 // TODO: Throw better exception
+
                 throw new FormatException("Premature end of data", e);
             }
         }

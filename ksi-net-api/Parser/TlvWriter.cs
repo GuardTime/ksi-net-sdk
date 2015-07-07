@@ -3,12 +3,23 @@ using System.IO;
 
 namespace Guardtime.KSI.Parser
 {
+    /// <summary>
+    /// TLV object writer for stream.
+    /// </summary>
     public class TlvWriter : BinaryWriter
     {
+        /// <summary>
+        /// Create TLV object writer instance.
+        /// </summary>
+        /// <param name="input">Output stream</param>
         public TlvWriter(Stream input) : base(input)
         {
         }
 
+        /// <summary>
+        /// Write TLV object to given stream.
+        /// </summary>
+        /// <param name="tag">TLV object</param>
         public void WriteTag(TlvTag tag) {
             // TODO: What to do on null tag, exception or skip?
             if (tag == null)

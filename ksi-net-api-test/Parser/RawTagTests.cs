@@ -1,4 +1,5 @@
 ﻿using System;
+using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Parser
@@ -69,6 +70,12 @@ namespace Guardtime.KSI.Parser
         public void TestTlvTagCreateFromNullTag()
         {
             var tag = new RawTag((TlvTag)null);
+        }
+
+        [Test, ExpectedException(typeof(ArgumentNullException))]
+        public void TestTlvTagCreateFromInvalidEncodeTlvTag()
+        {
+            var tag = new RawTag(new InvalidEncodeTlvTag(0x0, false, false));
         }
 
     }
