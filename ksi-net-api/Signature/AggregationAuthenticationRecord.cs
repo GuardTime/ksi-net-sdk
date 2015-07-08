@@ -4,9 +4,15 @@ using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Signature
 {
+    /// <summary>
+    /// Aggregation authentication record TLV element
+    /// </summary>
     public class AggregationAuthenticationRecord : CompositeTag
     {
         // TODO: Better name
+        /// <summary>
+        /// Aggregation authentication record tag type
+        /// </summary>
         public const uint TagType = 0x804;
         private const uint AggregationTimeTagType = 0x2;
         private const uint ChainIndexTagType = 0x3;
@@ -17,6 +23,10 @@ namespace Guardtime.KSI.Signature
         private readonly ImprintTag _inputHash;
         private readonly SignatureData _signatureData;
 
+        /// <summary>
+        /// Create new aggregation authentication record TLV element from TLV element
+        /// </summary>
+        /// <param name="tag">TLV element</param>
         public AggregationAuthenticationRecord(TlvTag tag) : base(tag)
         {
             for (int i = 0; i < Count; i++)
@@ -44,6 +54,9 @@ namespace Guardtime.KSI.Signature
             }
         }
 
+        /// <summary>
+        /// Check TLV structure.
+        /// </summary>
         protected override void CheckStructure()
         {
             if (Type != TagType)

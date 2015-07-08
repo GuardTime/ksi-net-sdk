@@ -1,14 +1,19 @@
-﻿using System;
-using Guardtime.KSI.Hashing;
+﻿using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using System.Collections.Generic;
 using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Signature
 {
+    /// <summary>
+    /// Aggregation hash chain TLV element
+    /// </summary>
     public class AggregationHashChain : CompositeTag
     {
         // TODO: Better name
+        /// <summary>
+        /// Aggregation authentication record tag type
+        /// </summary>
         public const uint TagType = 0x801;
         private const uint AggregationTimeTagType = 0x2;
         private const uint ChainIndexTagType = 0x3;
@@ -24,8 +29,13 @@ namespace Guardtime.KSI.Signature
         private readonly List<Link> _chain = new List<Link>();
 
         // the hash algorithm identified by aggrAlgorithmId
-        protected HashAlgorithm AggrAlgorithm;
+        // TODO: Protected?
+        private HashAlgorithm AggrAlgorithm;
 
+        /// <summary>
+        /// Create new aggregation hash chain TLV element from TLV element
+        /// </summary>
+        /// <param name="tag">TLV element</param>
         public AggregationHashChain(TlvTag tag) : base(tag)
         {
             for (int i = 0; i < Count; i++)
@@ -63,6 +73,9 @@ namespace Guardtime.KSI.Signature
             }
         }
 
+        /// <summary>
+        /// Check TLV structure.
+        /// </summary>
         protected override void CheckStructure()
         {
             if (Type != TagType)
@@ -104,32 +117,32 @@ namespace Guardtime.KSI.Signature
 
             if (tags[0] != 1)
             {
-                throw new InvalidTlvStructureException("Aggregation time missing in aggregation hash chain");
+                throw new InvalidTlvStructureException("Only one aggregation time must exist in aggregation hash chain");
             }
 
             if (tags[1] == 0)
             {
-                throw new InvalidTlvStructureException("Chain index missing in aggregation hash chain");
+                throw new InvalidTlvStructureException("Chain index is missing in aggregation hash chain");
             }
 
             if (tags[2] > 1)
             {
-                throw new InvalidTlvStructureException("Only one input data is allowed aggregation hash chain");
+                throw new InvalidTlvStructureException("Only one input data value is allowed in aggregation hash chain");
             }
 
             if (tags[3] != 1)
             {
-                throw new InvalidTlvStructureException("Input hash missing in aggregation hash chain");
+                throw new InvalidTlvStructureException("Only one input hash must exist in aggregation hash chain");
             }
 
             if (tags[4] != 1)
             {
-                throw new InvalidTlvStructureException("Algorithm missing in aggregation hash chain");
+                throw new InvalidTlvStructureException("Only one algorithm must exist in aggregation hash chain");
             }
 
             if ((tags[5] + tags[6]) == 0)
             {
-                throw new InvalidTlvStructureException("Links missing in aggregation hash chain");
+                throw new InvalidTlvStructureException("Links are missing in aggregation hash chain");
             }
         }
 
@@ -179,6 +192,9 @@ namespace Guardtime.KSI.Signature
                 _direction = direction;
             }
 
+            /// <summary>
+            /// Check TLV structure.
+            /// </summary>
             protected override void CheckStructure()
             {
                 uint[] tags = new uint[4];
@@ -204,9 +220,14 @@ namespace Guardtime.KSI.Signature
                     }
                 }
 
+                if (tags[0] > 1)
+                {
+                    throw new InvalidTlvStructureException("Only one levelcorrection value is allowed in aggregation hash chain link");
+                }
+
                 if ((tags[1] == 1 && tags[2] == 1 && tags[3] == 1) || !(tags[1] == 1 ^ tags[2] == 1 ^ tags[3] == 1))
                 {
-                    throw new InvalidTlvStructureException("Only one of three from siblinghash, metahash or metadata is allowed in aggregation hash chain link");
+                    throw new InvalidTlvStructureException("Only one of three from siblinghash, metahash or metadata must exist in aggregation hash chain link");
                 }
             }
         }
@@ -252,14 +273,12 @@ namespace Guardtime.KSI.Signature
                     }
                 }
             }
-            
+
+            /// <summary>
+            /// Check TLV structure.
+            /// </summary>
             protected override void CheckStructure()
             {
-                if (Type != TagType)
-                {
-                    throw new InvalidTlvStructureException("Invalid aggregation hash chain link metadata type: " + Type);
-                }
-
                 uint[] tags = new uint[4];
 
                 for (int i = 0; i < Count; i++)
@@ -285,7 +304,7 @@ namespace Guardtime.KSI.Signature
 
                 if (tags[0] != 1)
                 {
-                    throw new InvalidTlvStructureException("Client id missing in aggregation hash chain link metadata");
+                    throw new InvalidTlvStructureException("Only one client id must exist in aggregation hash chain link metadata");
                 }
 
                 if (tags[1] > 1)
@@ -304,15 +323,6 @@ namespace Guardtime.KSI.Signature
                 }
             }
         } 
-
-        private class ChainResult
-        {
-            private DataHash lastHash;
-            private int level;
-
-        }
-
-
         
     }
 }

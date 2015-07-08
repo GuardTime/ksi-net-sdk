@@ -115,6 +115,7 @@
     <Compile Include="Publication\PublicationsFileTests.cs" />
     <Compile Include="Service\HttpAggregationRequestTests.cs" />
     <Compile Include="Signature\KsiSignatureDoTests.cs" />
+    <Compile Include="Signature\AggregationHashChainTests.cs" />
     <Compile Include="Signature\SignatureDataTests.cs" />
     <Compile Include="Trust\PkiTrustStoreProviderTests.cs" />
     <Compile Include="Utils\EmptyEnumeratorTests.cs" />
@@ -156,6 +157,99 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\publication\publicationsfile\ksi-publications.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-invalid-extra-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-invalid-missing-aggregation-algorithm.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-invalid-missing-aggregation-time.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-invalid-missing-chain-index.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-invalid-missing-input-hash.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-invalid-missing-links.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-invalid-multiple-aggregation-algorithm.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-invalid-multiple-aggregation-time.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-invalid-multiple-input-data.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-invalid-multiple-input-hash.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-invalid-type.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-link-invalid-all-tags-exist.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-link-invalid-empty.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-link-invalid-extra-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-link-invalid-metadata-metahash-no-siblinghash.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-link-invalid-multiple-levelcorrection.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-link-invalid-multiple-metadata.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-link-invalid-multiple-metahash.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-link-invalid-multiple-siblinghash.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-link-invalid-sibling-metadata-no-metahash.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-link-invalid-sibling-metahash-and-no-metadata.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-link-ok-missing-optionals.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-metadata-invalid-missing-client-id.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-metadata-invalid-extra-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-metadata-invalid-multiple-client-id.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-metadata-invalid-multiple-machine-id.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-metadata-invalid-multiple-request-time.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-metadata-invalid-multiple-sequence-nr.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-metadata-ok-missing-optionals.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-ok-missing-optionals.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-ok.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\signature-ok.tlv">

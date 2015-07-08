@@ -61,6 +61,285 @@ namespace Guardtime.KSI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/aggregation-hash-chain-invalid-extra-tag.tlv.
+        /// </summary>
+        internal static string AggregationHashChain_Invalid_Extra_Tag {
+            get {
+                return ResourceManager.GetString("AggregationHashChain_Invalid_Extra_Tag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/aggregation-hash-chain-invalid-missing-aggregation-algorithm.tlv.
+        /// </summary>
+        internal static string AggregationHashChain_Invalid_Missing_Aggregation_Algorithm {
+            get {
+                return ResourceManager.GetString("AggregationHashChain_Invalid_Missing_Aggregation_Algorithm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/aggregation-hash-chain-invalid-missing-aggregation-time.tlv.
+        /// </summary>
+        internal static string AggregationHashChain_Invalid_Missing_Aggregation_Time {
+            get {
+                return ResourceManager.GetString("AggregationHashChain_Invalid_Missing_Aggregation_Time", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/aggregation-hash-chain-invalid-missing-chain-index.tlv.
+        /// </summary>
+        internal static string AggregationHashChain_Invalid_Missing_Chain_Index {
+            get {
+                return ResourceManager.GetString("AggregationHashChain_Invalid_Missing_Chain_Index", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/aggregation-hash-chain-invalid-missing-input-hash.tlv.
+        /// </summary>
+        internal static string AggregationHashChain_Invalid_Missing_Input_Hash {
+            get {
+                return ResourceManager.GetString("AggregationHashChain_Invalid_Missing_Input_Hash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/aggregation-hash-chain-invalid-missing-links.tlv.
+        /// </summary>
+        internal static string AggregationHashChain_Invalid_Missing_Links {
+            get {
+                return ResourceManager.GetString("AggregationHashChain_Invalid_Missing_Links", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/aggregation-hash-chain-invalid-multiple-aggregation-algorithm.tlv.
+        /// </summary>
+        internal static string AggregationHashChain_Invalid_Multiple_Aggregation_Algorithm {
+            get {
+                return ResourceManager.GetString("AggregationHashChain_Invalid_Multiple_Aggregation_Algorithm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/aggregation-hash-chain-invalid-multiple-aggregation-time.tlv.
+        /// </summary>
+        internal static string AggregationHashChain_Invalid_Multiple_Aggregation_Time {
+            get {
+                return ResourceManager.GetString("AggregationHashChain_Invalid_Multiple_Aggregation_Time", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/aggregation-hash-chain-invalid-multiple-input-data.tlv.
+        /// </summary>
+        internal static string AggregationHashChain_Invalid_Multiple_Input_Data {
+            get {
+                return ResourceManager.GetString("AggregationHashChain_Invalid_Multiple_Input_Data", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/aggregation-hash-chain-invalid-multiple-input-hash.tlv.
+        /// </summary>
+        internal static string AggregationHashChain_Invalid_Multiple_Input_Hash {
+            get {
+                return ResourceManager.GetString("AggregationHashChain_Invalid_Multiple_Input_Hash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/aggregation-hash-chain-invalid-type.tlv.
+        /// </summary>
+        internal static string AggregationHashChain_Invalid_Type {
+            get {
+                return ResourceManager.GetString("AggregationHashChain_Invalid_Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/aggregation-hash-chain-link-invalid-all-tags-exist.tlv.
+        /// </summary>
+        internal static string AggregationHashChain_Link_Invalid_All_Tags_Defined {
+            get {
+                return ResourceManager.GetString("AggregationHashChain_Link_Invalid_All_Tags_Defined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/aggregation-hash-chain-link-invalid-empty.tlv.
+        /// </summary>
+        internal static string AggregationHashChain_Link_Invalid_Empty {
+            get {
+                return ResourceManager.GetString("AggregationHashChain_Link_Invalid_Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/aggregation-hash-chain-link-invalid-extra-tag.tlv.
+        /// </summary>
+        internal static string AggregationHashChain_Link_Invalid_Extra_Tag {
+            get {
+                return ResourceManager.GetString("AggregationHashChain_Link_Invalid_Extra_Tag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/aggregation-hash-chain-link-invalid-metadata-metahash-no-siblinghash.tlv.
+        /// </summary>
+        internal static string AggregationHashChain_Link_Invalid_Metadata_Metahash_No_SiblingHash {
+            get {
+                return ResourceManager.GetString("AggregationHashChain_Link_Invalid_Metadata_Metahash_No_SiblingHash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/aggregation-hash-chain-link-invalid-multiple-levelcorrection.tlv.
+        /// </summary>
+        internal static string AggregationHashChain_Link_Invalid_Multiple_LevelCorrection {
+            get {
+                return ResourceManager.GetString("AggregationHashChain_Link_Invalid_Multiple_LevelCorrection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/aggregation-hash-chain-link-invalid-multiple-metadata.tlv.
+        /// </summary>
+        internal static string AggregationHashChain_Link_Invalid_Multiple_Metadata {
+            get {
+                return ResourceManager.GetString("AggregationHashChain_Link_Invalid_Multiple_Metadata", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/aggregation-hash-chain-link-invalid-multiple-metahash.tlv.
+        /// </summary>
+        internal static string AggregationHashChain_Link_Invalid_Multiple_Metahash {
+            get {
+                return ResourceManager.GetString("AggregationHashChain_Link_Invalid_Multiple_Metahash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/aggregation-hash-chain-link-invalid-multiple-siblinghash.tlv.
+        /// </summary>
+        internal static string AggregationHashChain_Link_Invalid_Multiple_Siblinghash {
+            get {
+                return ResourceManager.GetString("AggregationHashChain_Link_Invalid_Multiple_Siblinghash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/aggregation-hash-chain-link-invalid-sibling-metadata-no-metahash.tlv.
+        /// </summary>
+        internal static string AggregationHashChain_Link_Invalid_SiblingHash_Metadata_No_MetaHash {
+            get {
+                return ResourceManager.GetString("AggregationHashChain_Link_Invalid_SiblingHash_Metadata_No_MetaHash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/aggregation-hash-chain-link-invalid-sibling-metahash-and-no-metadata.tlv.
+        /// </summary>
+        internal static string AggregationHashChain_Link_Invalid_SiblingHash_MetaHash_No_Metadata {
+            get {
+                return ResourceManager.GetString("AggregationHashChain_Link_Invalid_SiblingHash_MetaHash_No_Metadata", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/aggregation-hash-chain-link-ok-missing-optionals.tlv.
+        /// </summary>
+        internal static string AggregationHashChain_Link_Ok_Missing_Optionals {
+            get {
+                return ResourceManager.GetString("AggregationHashChain_Link_Ok_Missing_Optionals", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/aggregation-hash-chain-metadata-invalid-extra-tag.tlv.
+        /// </summary>
+        internal static string AggregationHashChain_Metadata_Invalid_Extra_Tag {
+            get {
+                return ResourceManager.GetString("AggregationHashChain_Metadata_Invalid_Extra_Tag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/aggregation-hash-chain-metadata-invalid-missing-client-id.tlv.
+        /// </summary>
+        internal static string AggregationHashChain_Metadata_Invalid_Missing_Client_id {
+            get {
+                return ResourceManager.GetString("AggregationHashChain_Metadata_Invalid_Missing_Client_id", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/aggregation-hash-chain-metadata-invalid-multiple-client-id.tlv.
+        /// </summary>
+        internal static string AggregationHashChain_Metadata_Invalid_Multiple_Client_Id {
+            get {
+                return ResourceManager.GetString("AggregationHashChain_Metadata_Invalid_Multiple_Client_Id", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/aggregation-hash-chain-metadata-invalid-multiple-machine-id.tlv.
+        /// </summary>
+        internal static string AggregationHashChain_Metadata_Invalid_Multiple_Machine_Id {
+            get {
+                return ResourceManager.GetString("AggregationHashChain_Metadata_Invalid_Multiple_Machine_Id", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/aggregation-hash-chain-metadata-invalid-multiple-request-time.tlv.
+        /// </summary>
+        internal static string AggregationHashChain_Metadata_Invalid_Multiple_Request_Time {
+            get {
+                return ResourceManager.GetString("AggregationHashChain_Metadata_Invalid_Multiple_Request_Time", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/aggregation-hash-chain-metadata-invalid-multiple-sequence-nr.tlv.
+        /// </summary>
+        internal static string AggregationHashChain_Metadata_Invalid_Multiple_Sequence_Number {
+            get {
+                return ResourceManager.GetString("AggregationHashChain_Metadata_Invalid_Multiple_Sequence_Number", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/aggregation-hash-chain-metadata-ok-missing-optionals.tlv.
+        /// </summary>
+        internal static string AggregationHashChain_Metadata_Ok_Missing_Optionals {
+            get {
+                return ResourceManager.GetString("AggregationHashChain_Metadata_Ok_Missing_Optionals", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/aggregation-hash-chain-ok.tlv.
+        /// </summary>
+        internal static string AggregationHashChain_Ok {
+            get {
+                return ResourceManager.GetString("AggregationHashChain_Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/aggregation-hash-chain-ok-missing-optionals.tlv.
+        /// </summary>
+        internal static string AggregationHashChain_Ok_Missing_Optionals {
+            get {
+                return ResourceManager.GetString("AggregationHashChain_Ok_Missing_Optionals", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/testdata.txt.
         /// </summary>
         internal static string DataHasher_TestFile {
@@ -75,42 +354,6 @@ namespace Guardtime.KSI.Properties {
         internal static string DataHasher_TestString {
             get {
                 return ResourceManager.GetString("DataHasher_TestString", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/publication/publicationdata/publicationdata.tlv.
-        /// </summary>
-        internal static string PublicationData_CorrectStructureFile {
-            get {
-                return ResourceManager.GetString("PublicationData_CorrectStructureFile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/publication/publicationdata/missingtag.tlv.
-        /// </summary>
-        internal static string PublicationData_MissingTagFile {
-            get {
-                return ResourceManager.GetString("PublicationData_MissingTagFile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/publication/publicationdata/noncriticaltag.tlv.
-        /// </summary>
-        internal static string PublicationData_NonCriticalTagFile {
-            get {
-                return ResourceManager.GetString("PublicationData_NonCriticalTagFile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/publication/publicationdata/unknowntag.tlv.
-        /// </summary>
-        internal static string PublicationData_UnknownTagFile {
-            get {
-                return ResourceManager.GetString("PublicationData_UnknownTagFile", resourceCulture);
             }
         }
         
