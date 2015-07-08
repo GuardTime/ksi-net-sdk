@@ -72,7 +72,7 @@ namespace Guardtime.KSI.Parser
             var tag = new RawTag((TlvTag)null);
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test, ExpectedException(typeof(ArgumentException))]
         public void TestTlvTagCreateFromInvalidEncodeTlvTag()
         {
             var tag = new RawTag(new InvalidEncodeTlvTag(0x0, false, false));

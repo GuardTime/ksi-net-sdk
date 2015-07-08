@@ -131,7 +131,10 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="resources\signature\aggregation-authentication-record\" />
+    <Folder Include="resources\signature\signaturedata\" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="resources\publication\publicationdata\missingtag.tlv">
