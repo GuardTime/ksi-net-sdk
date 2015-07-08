@@ -3,9 +3,16 @@ using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Signature
 {
+
+    /// <summary>
+    /// Signature data TLV element
+    /// </summary>
     public class SignatureData : CompositeTag
     {
         // TODO: Better name
+        /// <summary>
+        /// Signature data tag type
+        /// </summary>
         public const uint TagType = 0xb;
         private const uint SignatureTypeTagType = 0x1;
         private const uint SignatureValueTagType = 0x2;
@@ -17,6 +24,10 @@ namespace Guardtime.KSI.Signature
         private readonly RawTag _certificateId;
         private readonly StringTag _certificateRepositoryUri;
 
+        /// <summary>
+        /// Create new signature data TLV element from TLV element
+        /// </summary>
+        /// <param name="tag">TLV element</param>
         public SignatureData(TlvTag tag) : base(tag)
         {
             for (int i = 0; i < Count; i++)
@@ -43,6 +54,9 @@ namespace Guardtime.KSI.Signature
             }
         }
 
+        /// <summary>
+        /// Check TLV structure.
+        /// </summary>
         protected override void CheckStructure()
         {
             if (Type != TagType)

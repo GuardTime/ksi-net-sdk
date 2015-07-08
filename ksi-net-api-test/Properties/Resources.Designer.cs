@@ -113,5 +113,104 @@ namespace Guardtime.KSI.Properties {
                 return ResourceManager.GetString("PublicationData_UnknownTagFile", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/signaturedata/signature-data-invalid-certificate-id-missing.tlv.
+        /// </summary>
+        internal static string SignatureData_Invalid_Certificate_Id_Missing {
+            get {
+                return ResourceManager.GetString("SignatureData_Invalid_Certificate_Id_Missing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/signaturedata/signature-data-invalid-extra-tag.tlv.
+        /// </summary>
+        internal static string SignatureData_Invalid_Extra_Tag {
+            get {
+                return ResourceManager.GetString("SignatureData_Invalid_Extra_Tag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/signaturedata/signature-data-invalid-multiple-certificate-id.tlv.
+        /// </summary>
+        internal static string SignatureData_Invalid_Multiple_Certificate_Id {
+            get {
+                return ResourceManager.GetString("SignatureData_Invalid_Multiple_Certificate_Id", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/signaturedata/signature-data-invalid-multiple-certificate-rep-uri.tlv.
+        /// </summary>
+        internal static string SignatureData_Invalid_Multiple_Certificate_Rep_Uri {
+            get {
+                return ResourceManager.GetString("SignatureData_Invalid_Multiple_Certificate_Rep_Uri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/signaturedata/signature-data-invalid-multiple-type.tlv.
+        /// </summary>
+        internal static string SignatureData_Invalid_Multiple_Signature_Type {
+            get {
+                return ResourceManager.GetString("SignatureData_Invalid_Multiple_Signature_Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/signaturedata/signature-data-invalid-multiple-value.tlv.
+        /// </summary>
+        internal static string SignatureData_Invalid_Multiple_Signature_Value {
+            get {
+                return ResourceManager.GetString("SignatureData_Invalid_Multiple_Signature_Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/signaturedata/signature-data-invalid-type-missing.tlv.
+        /// </summary>
+        internal static string SignatureData_Invalid_Signature_Type_Missing {
+            get {
+                return ResourceManager.GetString("SignatureData_Invalid_Signature_Type_Missing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/signaturedata/signature-data-invalid-value-missing.tlv.
+        /// </summary>
+        internal static string SignatureData_Invalid_Signature_Value_Missing {
+            get {
+                return ResourceManager.GetString("SignatureData_Invalid_Signature_Value_Missing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/signaturedata/signature-data-invalid-type.tlv.
+        /// </summary>
+        internal static string SignatureData_Invalid_Wrong_Type {
+            get {
+                return ResourceManager.GetString("SignatureData_Invalid_Wrong_Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/signaturedata/signature-data-ok.tlv.
+        /// </summary>
+        internal static string SignatureData_Ok {
+            get {
+                return ResourceManager.GetString("SignatureData_Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/signaturedata/signature-data-ok-no-uri.tlv.
+        /// </summary>
+        internal static string SignatureData_Ok_No_Uri {
+            get {
+                return ResourceManager.GetString("SignatureData_Ok_No_Uri", resourceCulture);
+            }
+        }
     }
 }

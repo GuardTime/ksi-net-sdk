@@ -115,6 +115,7 @@
     <Compile Include="Publication\PublicationsFileTests.cs" />
     <Compile Include="Service\HttpAggregationRequestTests.cs" />
     <Compile Include="Signature\KsiSignatureDoTests.cs" />
+    <Compile Include="Signature\SignatureDataTests.cs" />
     <Compile Include="Trust\PkiTrustStoreProviderTests.cs" />
     <Compile Include="Utils\EmptyEnumeratorTests.cs" />
     <Compile Include="Utils\InvalidEncodeTlvTag.cs" />
@@ -133,7 +134,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="resources\signature\aggregation-authentication-record\" />
-    <Folder Include="resources\signature\signaturedata\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -159,6 +159,39 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\signature-ok.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\signaturedata\signature-data-invalid-certificate-id-missing.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\signaturedata\signature-data-invalid-extra-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\signaturedata\signature-data-invalid-multiple-certificate-id.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\signaturedata\signature-data-invalid-multiple-certificate-rep-uri.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\signaturedata\signature-data-invalid-multiple-type.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\signaturedata\signature-data-invalid-multiple-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\signaturedata\signature-data-invalid-type-missing.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\signaturedata\signature-data-invalid-type.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\signaturedata\signature-data-invalid-value-missing.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\signaturedata\signature-data-ok-no-uri.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\signaturedata\signature-data-ok.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\testdata.txt">

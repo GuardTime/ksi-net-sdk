@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="DataHasher_TestFile" xml:space="preserve">
     <value>resources/testdata.txt</value>
@@ -134,5 +134,38 @@
   </data>
   <data name="PublicationData_UnknownTagFile" xml:space="preserve">
     <value>resources/publication/publicationdata/unknowntag.tlv</value>
+  </data>
+  <data name="SignatureData_Invalid_Certificate_Id_Missing" xml:space="preserve">
+    <value>resources/signature/signaturedata/signature-data-invalid-certificate-id-missing.tlv</value>
+  </data>
+  <data name="SignatureData_Invalid_Extra_Tag" xml:space="preserve">
+    <value>resources/signature/signaturedata/signature-data-invalid-extra-tag.tlv</value>
+  </data>
+  <data name="SignatureData_Invalid_Multiple_Certificate_Id" xml:space="preserve">
+    <value>resources/signature/signaturedata/signature-data-invalid-multiple-certificate-id.tlv</value>
+  </data>
+  <data name="SignatureData_Invalid_Multiple_Certificate_Rep_Uri" xml:space="preserve">
+    <value>resources/signature/signaturedata/signature-data-invalid-multiple-certificate-rep-uri.tlv</value>
+  </data>
+  <data name="SignatureData_Invalid_Multiple_Signature_Type" xml:space="preserve">
+    <value>resources/signature/signaturedata/signature-data-invalid-multiple-type.tlv</value>
+  </data>
+  <data name="SignatureData_Invalid_Multiple_Signature_Value" xml:space="preserve">
+    <value>resources/signature/signaturedata/signature-data-invalid-multiple-value.tlv</value>
+  </data>
+  <data name="SignatureData_Invalid_Signature_Type_Missing" xml:space="preserve">
+    <value>resources/signature/signaturedata/signature-data-invalid-type-missing.tlv</value>
+  </data>
+  <data name="SignatureData_Invalid_Signature_Value_Missing" xml:space="preserve">
+    <value>resources/signature/signaturedata/signature-data-invalid-value-missing.tlv</value>
+  </data>
+  <data name="SignatureData_Invalid_Wrong_Type" xml:space="preserve">
+    <value>resources/signature/signaturedata/signature-data-invalid-type.tlv</value>
+  </data>
+  <data name="SignatureData_Ok" xml:space="preserve">
+    <value>resources/signature/signaturedata/signature-data-ok.tlv</value>
+  </data>
+  <data name="SignatureData_Ok_No_Uri" xml:space="preserve">
+    <value>resources/signature/signaturedata/signature-data-ok-no-uri.tlv</value>
   </data>
 </root>

@@ -58,7 +58,7 @@ namespace Guardtime.KSI.Parser
 
         // TODO: Create possibility to check composite tag validity and check for null tags in child objects
         /// <summary>
-        /// Create new composite TLV element from tlv element
+        /// Create new composite TLV element from TLV element
         /// </summary>
         /// <param name="tag">TLV element</param>
         protected CompositeTag(TlvTag tag) : base(tag)
