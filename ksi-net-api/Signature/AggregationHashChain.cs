@@ -12,7 +12,7 @@ namespace Guardtime.KSI.Signature
     {
         // TODO: Better name
         /// <summary>
-        /// Aggregation authentication record tag type
+        /// Aggregation hash chain tag type
         /// </summary>
         public const uint TagType = 0x801;
         private const uint AggregationTimeTagType = 0x2;
@@ -225,7 +225,7 @@ namespace Guardtime.KSI.Signature
                     throw new InvalidTlvStructureException("Only one levelcorrection value is allowed in aggregation hash chain link");
                 }
 
-                if ((tags[1] == 1 && tags[2] == 1 && tags[3] == 1) || !(tags[1] == 1 ^ tags[2] == 1 ^ tags[3] == 1))
+                if ((tags[1] > 1 || tags[2] > 1 || tags[3] > 1) || !(tags[1] == 1 ^ tags[2] == 1 ^ tags[3] == 1) || (tags[1] == 1 && tags[2] == 1 && tags[3] == 1))
                 {
                     throw new InvalidTlvStructureException("Only one of three from siblinghash, metahash or metadata must exist in aggregation hash chain link");
                 }
