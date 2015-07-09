@@ -4,13 +4,24 @@ using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Signature
 {
+    /// <summary>
+    /// Calendar authentication record TLV element
+    /// </summary>
     public class CalendarAuthenticationRecord : CompositeTag
     {
+        // TODO: Better name
+        /// <summary>
+        /// Calendar authentication record tag type
+        /// </summary>
         public const uint TagType = 0x805;
 
         private readonly PublicationData _publicationData;
         private readonly SignatureData _signatureData;
 
+        /// <summary>
+        /// Create new calendar authentication record TLV element from TLV element
+        /// </summary>
+        /// <param name="tag">TLV element</param>
         public CalendarAuthenticationRecord(TlvTag tag) : base(tag)
         {
             for (int i = 0; i < Count; i++)
@@ -29,6 +40,9 @@ namespace Guardtime.KSI.Signature
             }
         }
 
+        /// <summary>
+        /// Check TLV structure.
+        /// </summary>
         protected override void CheckStructure()
         {
             if (Type != TagType)

@@ -147,8 +147,6 @@
   <data name="AggregationAuthenticationRecord_Invalid_Multiple_Signature_Data" xml:space="preserve">
     <value>resources/signature/aggregation-authentication-record/aggregation-authentication-record-invalid-multiple-signature-data.tlv</value>
   </data>
-  
-  
   <data name="AggregationHashChain_Ok" xml:space="preserve">
     <value>resources/signature/aggregation-hash-chain/aggregation-hash-chain-ok.tlv</value>
   </data>
@@ -241,6 +239,27 @@
   </data>
   <data name="AggregationHashChain_Metadata_Invalid_Missing_Client_id" xml:space="preserve">
     <value>resources/signature/aggregation-hash-chain/aggregation-hash-chain-metadata-invalid-missing-client-id.tlv</value>
+  </data>
+  <data name="CalendarAuthenticationRecord_Ok" xml:space="preserve">
+    <value>resources/signature/calendar-authentication-record/calendar-authentication-record-ok.tlv</value>
+  </data>
+  <data name="CalendarAuthenticationRecord_Invalid_Type" xml:space="preserve">
+    <value>resources/signature/calendar-authentication-record/calendar-authentication-record-invalid-type.tlv</value>
+  </data>
+  <data name="CalendarAuthenticationRecord_Invalid_Extra_Tag" xml:space="preserve">
+    <value>resources/signature/calendar-authentication-record/calendar-authentication-record-invalid-extra-tag.tlv</value>
+  </data>
+  <data name="CalendarAuthenticationRecord_Invalid_Missing_Publication_Data" xml:space="preserve">
+    <value>resources/signature/calendar-authentication-record/calendar-authentication-record-invalid-missing-publicationdata.tlv</value>
+  </data>
+  <data name="CalendarAuthenticationRecord_Invalid_Missing_Signature_Data" xml:space="preserve">
+    <value>resources/signature/calendar-authentication-record/calendar-authentication-record-invalid-missing-signaturedata.tlv</value>
+  </data>
+  <data name="CalendarAuthenticationRecord_Invalid_Multiple_Publication_Data" xml:space="preserve">
+    <value>resources/signature/calendar-authentication-record/calendar-authentication-record-invalid-multiple-publicationdata.tlv</value>
+  </data>
+  <data name="CalendarAuthenticationRecord_Invalid_Multiple_Signature_Data" xml:space="preserve">
+    <value>resources/signature/calendar-authentication-record/calendar-authentication-record-invalid-multiple-signaturedata.tlv</value>
   </data>
   <data name="DataHasher_TestFile" xml:space="preserve">
     <value>resources/testdata.txt</value>

@@ -430,6 +430,69 @@ namespace Guardtime.KSI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/calendar-authentication-record/calendar-authentication-record-invalid-extra-tag.tlv.
+        /// </summary>
+        internal static string CalendarAuthenticationRecord_Invalid_Extra_Tag {
+            get {
+                return ResourceManager.GetString("CalendarAuthenticationRecord_Invalid_Extra_Tag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/calendar-authentication-record/calendar-authentication-record-invalid-missing-publicationdata.tlv.
+        /// </summary>
+        internal static string CalendarAuthenticationRecord_Invalid_Missing_Publication_Data {
+            get {
+                return ResourceManager.GetString("CalendarAuthenticationRecord_Invalid_Missing_Publication_Data", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/calendar-authentication-record/calendar-authentication-record-invalid-missing-signaturedata.tlv.
+        /// </summary>
+        internal static string CalendarAuthenticationRecord_Invalid_Missing_Signature_Data {
+            get {
+                return ResourceManager.GetString("CalendarAuthenticationRecord_Invalid_Missing_Signature_Data", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/calendar-authentication-record/calendar-authentication-record-invalid-multiple-publicationdata.tlv.
+        /// </summary>
+        internal static string CalendarAuthenticationRecord_Invalid_Multiple_Publication_Data {
+            get {
+                return ResourceManager.GetString("CalendarAuthenticationRecord_Invalid_Multiple_Publication_Data", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/calendar-authentication-record/calendar-authentication-record-invalid-multiple-signaturedata.tlv.
+        /// </summary>
+        internal static string CalendarAuthenticationRecord_Invalid_Multiple_Signature_Data {
+            get {
+                return ResourceManager.GetString("CalendarAuthenticationRecord_Invalid_Multiple_Signature_Data", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/calendar-authentication-record/calendar-authentication-record-invalid-type.tlv.
+        /// </summary>
+        internal static string CalendarAuthenticationRecord_Invalid_Type {
+            get {
+                return ResourceManager.GetString("CalendarAuthenticationRecord_Invalid_Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/calendar-authentication-record/calendar-authentication-record-ok.tlv.
+        /// </summary>
+        internal static string CalendarAuthenticationRecord_Ok {
+            get {
+                return ResourceManager.GetString("CalendarAuthenticationRecord_Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/testdata.txt.
         /// </summary>
         internal static string DataHasher_TestFile {

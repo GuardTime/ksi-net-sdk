@@ -114,6 +114,7 @@
     <Compile Include="Publication\PublicationDataTests.cs" />
     <Compile Include="Publication\PublicationsFileTests.cs" />
     <Compile Include="Service\HttpAggregationRequestTests.cs" />
+    <Compile Include="Signature\CalendarAuthenticationRecordTests.cs" />
     <Compile Include="Signature\AggregationAuthenticationRecordTests.cs" />
     <Compile Include="Signature\KsiSignatureDoTests.cs" />
     <Compile Include="Signature\AggregationHashChainTests.cs" />
@@ -279,6 +280,27 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-ok.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\calendar-authentication-record\calendar-authentication-record-invalid-extra-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\calendar-authentication-record\calendar-authentication-record-invalid-missing-publicationdata.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\calendar-authentication-record\calendar-authentication-record-invalid-missing-signaturedata.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\calendar-authentication-record\calendar-authentication-record-invalid-multiple-publicationdata.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\calendar-authentication-record\calendar-authentication-record-invalid-multiple-signaturedata.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\calendar-authentication-record\calendar-authentication-record-invalid-type.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\calendar-authentication-record\calendar-authentication-record-ok.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\signature-ok.tlv">
