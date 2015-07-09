@@ -114,6 +114,7 @@
     <Compile Include="Publication\PublicationDataTests.cs" />
     <Compile Include="Publication\PublicationsFileTests.cs" />
     <Compile Include="Service\HttpAggregationRequestTests.cs" />
+    <Compile Include="Signature\AggregationAuthenticationRecordTests.cs" />
     <Compile Include="Signature\KsiSignatureDoTests.cs" />
     <Compile Include="Signature\AggregationHashChainTests.cs" />
     <Compile Include="Signature\SignatureDataTests.cs" />
@@ -133,9 +134,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="resources\signature\aggregation-authentication-record\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="resources\publication\publicationdata\missingtag.tlv">
@@ -157,6 +156,36 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\publication\publicationsfile\ksi-publications.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-authentication-record\aggregation-authentication-record-invalid-extra-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-authentication-record\aggregation-authentication-record-invalid-missing-aggregation-time.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-authentication-record\aggregation-authentication-record-invalid-missing-chain-index.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-authentication-record\aggregation-authentication-record-invalid-missing-input-hash.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-authentication-record\aggregation-authentication-record-invalid-missing-signature-data.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-authentication-record\aggregation-authentication-record-invalid-multiple-aggregation-time.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-authentication-record\aggregation-authentication-record-invalid-multiple-input-hash.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-authentication-record\aggregation-authentication-record-invalid-multiple-signature-data.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-authentication-record\aggregation-authentication-record-invalid-type.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-authentication-record\aggregation-authentication-record-ok.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-invalid-extra-tag.tlv">

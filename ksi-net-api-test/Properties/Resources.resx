@@ -117,6 +117,38 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AggregationAuthenticationRecord_Ok" xml:space="preserve">
+    <value>resources/signature/aggregation-authentication-record/aggregation-authentication-record-ok.tlv</value>
+  </data>
+  <data name="AggregationAuthenticationRecord_Invalid_Type" xml:space="preserve">
+    <value>resources/signature/aggregation-authentication-record/aggregation-authentication-record-invalid-type.tlv</value>
+  </data>
+  <data name="AggregationAuthenticationRecord_Invalid_Extra_Tag" xml:space="preserve">
+    <value>resources/signature/aggregation-authentication-record/aggregation-authentication-record-invalid-extra-tag.tlv</value>
+  </data>
+  <data name="AggregationAuthenticationRecord_Invalid_Missing_Aggregation_Time" xml:space="preserve">
+    <value>resources/signature/aggregation-authentication-record/aggregation-authentication-record-invalid-missing-aggregation-time.tlv</value>
+  </data>
+  <data name="AggregationAuthenticationRecord_Invalid_Missing_Chain_Index" xml:space="preserve">
+    <value>resources/signature/aggregation-authentication-record/aggregation-authentication-record-invalid-missing-chain-index.tlv</value>
+  </data>
+  <data name="AggregationAuthenticationRecord_Invalid_Missing_Input_Hash" xml:space="preserve">
+    <value>resources/signature/aggregation-authentication-record/aggregation-authentication-record-invalid-missing-input-hash.tlv</value>
+  </data>
+  <data name="AggregationAuthenticationRecord_Invalid_Missing_Signature_Data" xml:space="preserve">
+    <value>resources/signature/aggregation-authentication-record/aggregation-authentication-record-invalid-missing-signature-data.tlv</value>
+  </data>
+  <data name="AggregationAuthenticationRecord_Invalid_Multiple_Aggregation_Time" xml:space="preserve">
+    <value>resources/signature/aggregation-authentication-record/aggregation-authentication-record-invalid-multiple-aggregation-time.tlv</value>
+  </data>
+  <data name="AggregationAuthenticationRecord_Invalid_Multiple_Input_Hash" xml:space="preserve">
+    <value>resources/signature/aggregation-authentication-record/aggregation-authentication-record-invalid-multiple-input-hash.tlv</value>
+  </data>
+  <data name="AggregationAuthenticationRecord_Invalid_Multiple_Signature_Data" xml:space="preserve">
+    <value>resources/signature/aggregation-authentication-record/aggregation-authentication-record-invalid-multiple-signature-data.tlv</value>
+  </data>
+  
+  
   <data name="AggregationHashChain_Ok" xml:space="preserve">
     <value>resources/signature/aggregation-hash-chain/aggregation-hash-chain-ok.tlv</value>
   </data>

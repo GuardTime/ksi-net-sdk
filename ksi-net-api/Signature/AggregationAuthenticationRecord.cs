@@ -89,22 +89,22 @@ namespace Guardtime.KSI.Signature
 
             if (tags[0] != 1)
             {
-                throw new InvalidTlvStructureException("Aggregation authentication record must contain only one aggregation time");
+                throw new InvalidTlvStructureException("Only one aggregation time must exist in aggregation authentication record");
             }
 
             if (tags[1] == 0)
             {
-                throw new InvalidTlvStructureException("Aggregation authentication record must contain chain indexes");
+                throw new InvalidTlvStructureException("Chain indexes must exist in aggregation authentication record");
             }
 
             if (tags[2] != 1)
             {
-                throw new InvalidTlvStructureException("Aggregation authentication record must contain only one input hash");
+                throw new InvalidTlvStructureException("Only one input hash must exist in aggregation authentication record");
             }
 
             if (tags[3] != 1)
             {
-                throw new InvalidTlvStructureException("Aggregation authentication record must contain only one signature data");
+                throw new InvalidTlvStructureException("Only one signature data must exist in aggregation authentication record");
             }
         }
     }
