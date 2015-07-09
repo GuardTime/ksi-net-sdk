@@ -56,6 +56,7 @@ namespace Guardtime.KSI.Service
             {
                 throw new ArgumentNullException("data");
             }
+            // TODO: URLs from conf
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://ksigw.test.guardtime.com:3333/gt-signingservice");
 
             // TODO: Seems to work with expect100
