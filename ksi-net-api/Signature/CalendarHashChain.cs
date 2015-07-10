@@ -121,8 +121,6 @@ namespace Guardtime.KSI.Signature
             {
                 throw new InvalidTlvStructureException("Links are missing in calendar hash chain");
             }
-
-            // TODO: Aggregation hash chain if defined
         }
 
         /// <summary>
