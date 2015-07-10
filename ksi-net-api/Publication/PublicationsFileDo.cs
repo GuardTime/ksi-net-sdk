@@ -5,9 +5,12 @@ using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Publication
 {
+    /// <summary>
+    /// Publications file TLV element
+    /// </summary>
     internal class PublicationsFileDo : CompositeTag
     {
-        // TODO: Better name, const?
+        public const uint PublicationRecordTagType = 0x703;
         private const uint CmsSignatureTagType = 0x704;
 
         private readonly PublicationsFileHeader _publicationsHeader;
@@ -15,36 +18,58 @@ namespace Guardtime.KSI.Publication
         private readonly List<PublicationRecord> _publicationRecords = new List<PublicationRecord>();
         private readonly TlvTag _cmsSignature;
 
+        /// <summary>
+        /// Get publications file header
+        /// </summary>
         public PublicationsFileHeader PublicationsHeader
         {
             get { return _publicationsHeader; }
         }
 
+        /// <summary>
+        /// Get certificate records
+        /// </summary>
         public List<CertificateRecord> CertificateRecords
         {
             get { return _certificateRecords; }
         }
 
+        /// <summary>
+        /// Get publication records
+        /// </summary>
         public List<PublicationRecord> PublicationRecords
         {
             get { return _publicationRecords; }
         }
 
+        /// <summary>
+        /// Get cms signature
+        /// </summary>
         public TlvTag CmsSignature
         {
             get { return _cmsSignature; }
         }
 
+        /// <summary>
+        /// Get creation time
+        /// </summary>
         public DateTime? CreationTime
         {
             get { return _publicationsHeader.CreationTime; }
         }
 
+        /// <summary>
+        /// Get repository uri
+        /// </summary>
         public string RepUri
         {
             get { return _publicationsHeader.RepUri; }
         }
 
+        /// <summary>
+        /// Create new publications file TLV element from TLV element
+        /// </summary>
+        /// <param name="tagList">TLV tag list</param>
         public PublicationsFileDo(TlvTag tag) : base(tag)
         {
             for (int i = 0; i < Count; i++)
@@ -60,7 +85,7 @@ namespace Guardtime.KSI.Publication
                         CertificateRecords.Add(certificateRecordTag);
                         this[i] = certificateRecordTag;
                         break;
-                    case PublicationRecord.TagType:
+                    case PublicationRecordTagType:
                         PublicationRecord publicationRecordTag = new PublicationRecord(this[i]);
                         PublicationRecords.Add(publicationRecordTag);
                         this[i] = publicationRecordTag;
@@ -72,6 +97,9 @@ namespace Guardtime.KSI.Publication
             }
         }
 
+        /// <summary>
+        /// Check TLV structure.
+        /// </summary>
         protected override void CheckStructure()
         {
             uint[] tags = new uint[4];
@@ -86,7 +114,7 @@ namespace Guardtime.KSI.Publication
                     case CertificateRecord.TagType:
                         tags[1]++;
                         break;
-                    case PublicationRecord.TagType:
+                    case PublicationRecordTagType:
                         tags[2]++;
                         break;
                     case CmsSignatureTagType:
