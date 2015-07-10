@@ -5,9 +5,17 @@ using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Signature
 {
+    /// <summary>
+    /// KSI Signature TLV element
+    /// </summary>
     public class KsiSignatureDo : CompositeTag
     {
+        // TODO: Better name
+        /// <summary>
+        /// KSI signature tag type
+        /// </summary>
         public const uint TagType = 0x800;
+        public const uint PublicationRecordTagType = 0x803;
 
         private readonly List<AggregationHashChain> _aggregationChains = new List<AggregationHashChain>();
         private readonly CalendarHashChain _calendarChain;
@@ -16,6 +24,9 @@ namespace Guardtime.KSI.Signature
         private readonly CalendarAuthenticationRecord _calendarAuthenticationRecord;
         private readonly Rfc3161Record _rfc3161Record;
 
+        /// <summary>
+        /// Get aggregation time
+        /// </summary>
         public ulong AggregationTime
         {
             get
@@ -26,7 +37,11 @@ namespace Guardtime.KSI.Signature
 
         // Order aggregation chain list to correct order
         // TODO: Create interface for tags list
-        public KsiSignatureDo(List<TlvTag> response) : base(0x800, false, false, response)
+        /// <summary>
+        /// Create new KSI signature TLV element from TLV element
+        /// </summary>
+        /// <param name="tagList">TLV tag list</param>
+        public KsiSignatureDo(List<TlvTag> tagList) : base(0x800, false, false, tagList)
         {
             for (int i = 0; i < Count; i++)
             {
@@ -41,7 +56,7 @@ namespace Guardtime.KSI.Signature
                         _calendarChain = new CalendarHashChain(this[i]);
                         this[i] = _calendarChain;
                         break;
-                    case PublicationRecord.TagType:
+                    case PublicationRecordTagType:
                         _publicationRecord = new PublicationRecord(this[i]);
                         this[i] = _publicationRecord;
                         break;
@@ -61,7 +76,10 @@ namespace Guardtime.KSI.Signature
             }
         }
 
-
+        /// <summary>
+        /// Create new KSI signature TLV element from TLV element
+        /// </summary>
+        /// <param name="tag">TLV element</param>
         public KsiSignatureDo(TlvTag tag) : base(tag)
         {
             for (int i = 0; i < Count; i++)
@@ -77,7 +95,7 @@ namespace Guardtime.KSI.Signature
                         _calendarChain = new CalendarHashChain(this[i]);
                         this[i] = _calendarChain;
                         break;
-                    case PublicationRecord.TagType:
+                    case PublicationRecordTagType:
                         _publicationRecord = new PublicationRecord(this[i]);
                         this[i] = _publicationRecord;
                         break;
@@ -96,7 +114,10 @@ namespace Guardtime.KSI.Signature
                 }
             }
         }
-        
+
+        /// <summary>
+        /// Check TLV structure.
+        /// </summary>
         protected override void CheckStructure()
         {
             if (Type != TagType)
@@ -116,7 +137,7 @@ namespace Guardtime.KSI.Signature
                     case CalendarHashChain.TagType:
                         tags[1]++;
                         break;
-                    case PublicationRecord.TagType:
+                    case PublicationRecordTagType:
                         tags[2]++;
                         break;
                     case AggregationAuthenticationRecord.TagType:
@@ -135,17 +156,22 @@ namespace Guardtime.KSI.Signature
 
             if (tags[0] == 0)
             {
-                throw new InvalidTlvStructureException("Signature data object must have one or more aggregation hash chains");
+                throw new InvalidTlvStructureException("Aggregation hash chains must exist in signature data object");
             }
 
             if (tags[1] != 1)
             {
-                throw new InvalidTlvStructureException("Signature data object must contain one calendar hash chain");
+                throw new InvalidTlvStructureException("Only one calendar hash chain must exist in signature data object");
             }
 
-            if (!(tags[2] == 1 ^ tags[4] == 1))
+            if ((tags[2] != 1 || tags[4] != 0) && (tags[2] != 0 || tags[4] != 1))
             {
-                throw new InvalidTlvStructureException("Only one of publication record ord calendar authentication record can be in signature data object");
+                throw new InvalidTlvStructureException("Only one from publication record or calendar authentication record must exist in signature data object");
+            }
+
+            if (tags[5] > 1)
+            {
+                throw new InvalidTlvStructureException("Only one RFC 3161 record is allowed in signature data object");
             }
 
             // TODO: Aggregation hash chain if defined

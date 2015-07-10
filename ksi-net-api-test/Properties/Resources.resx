@@ -297,6 +297,46 @@
   <data name="DataHasher_TestString" xml:space="preserve">
     <value>LongString1ReallyLongString2EvenLongerString3</value>
   </data>
+  <data name="KsiSignatureDo_Ok" xml:space="preserve">
+    <value>resources/signature/ksi-signature-do/ksi-signature-ok.tlv</value>
+  </data>
+  <data name="KsiSignatureDo_Legacy_Ok" xml:space="preserve">
+    <value>resources/signature/ksi-signature-do/legacy-ksi-signature-ok.tlv</value>
+  </data>
+  <data name="KsiSignatureDo_Invalid_Type" xml:space="preserve">
+    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-type.tlv</value>
+  </data>
+  <data name="KsiSignatureDo_Invalid_Extra_Tag" xml:space="preserve">
+    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-extra-tag.tlv</value>
+  </data>
+  <data name="KsiSignatureDo_Invalid_Contain_Publication_Record_And_Calendar_Authentication_Record" xml:space="preserve">
+    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-contain-both-publication-record-and-calendar-authentication-record.tlv</value>
+  </data>
+  <data name="KsiSignatureDo_Invalid_Missing_Aggregation_Hash_Chain" xml:space="preserve">
+    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-missing-aggregation-hash-chains.tlv</value>
+  </data>
+  <data name="KsiSignatureDo_Invalid_Missing_Calendar_Hash_Chain" xml:space="preserve">
+    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-missing-calendar-hash-chain.tlv</value>
+  </data>
+  <data name="KsiSignatureDo_Invalid_Missing_Publication_Record" xml:space="preserve">
+    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-missing-publication-record-and-calendar-authentication-record.tlv</value>
+  </data>
+  <data name="KsiSignatureDo_Invalid_Multiple_Calendar_Authentication_Records" xml:space="preserve">
+    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-multiple-calendar-authentication-records.tlv</value>
+  </data>
+  <data name="KsiSignatureDo_Invalid_Multiple_Calendar_Hash_Chains" xml:space="preserve">
+    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-multiple-calendar-hash-chains.tlv</value>
+  </data>
+  <data name="KsiSignatureDo_Invalid_Multiple_Publication_Records" xml:space="preserve">
+    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-multiple-publication-records.tlv</value>
+  </data>
+  <data name="KsiSignatureDo_Invalid_Multiple_Rfc_3161_Records" xml:space="preserve">
+    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-multiple-rfc3161-records.tlv</value>
+  </data>
+  <data name="CalendarHashChain_Ok_Missing_Optionals" xml:space="preserve">
+    <value>resources/signature/calendar-hash-chain/calendar-hash-chain-ok-missing-optionals.tlv</value>
+  </data>
+  
   <data name="Rfc3161Record_Ok" xml:space="preserve">
     <value>resources/signature/rfc3161-record/rfc3161-record-ok.tlv</value>
   </data>
@@ -357,7 +397,6 @@
   <data name="Rfc3161Record_Invalid_Multiple_TstInfo_Suffix" xml:space="preserve">
     <value>resources/signature/rfc3161-record/rfc3161-record-invalid-multiple-tstinfo-suffix.tlv</value>
   </data>
-  
   <data name="SignatureData_Invalid_Certificate_Id_Missing" xml:space="preserve">
     <value>resources/signature/signaturedata/signature-data-invalid-certificate-id-missing.tlv</value>
   </data>

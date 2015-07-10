@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Utils;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Signature;
 
 namespace Guardtime.KSI.Publication
 {
+    /// <summary>
+    /// Publication record TLV element
+    /// </summary>
     public class PublicationRecord : CompositeTag
     {
-        // TODO: Better name
-        public const uint TagType = 0x703;
         private const uint PublicationReferencesTagType = 0x9;
         private const uint PublicationRepositoryUriTagType = 0xa;
 
@@ -17,29 +19,45 @@ namespace Guardtime.KSI.Publication
         private readonly List<StringTag> _publicationReferences = new List<StringTag>();
         private readonly List<StringTag> _publicationRepositoryUri = new List<StringTag>();
 
+        /// <summary>
+        /// Get publication data
+        /// </summary>
         public PublicationData PublicationData
         {
             get { return _publicationData; }
         }
 
+        /// <summary>
+        /// Get publication references
+        /// </summary>
         public List<StringTag> PublicationReferences
         {
             get { return _publicationReferences; }
         }
 
+        /// <summary>
+        /// Get publication repository uri
+        /// </summary>
         public List<StringTag> PubRepUri
         {
             get { return _publicationRepositoryUri; }
         }
 
+        /// <summary>
+        /// Get publication time
+        /// </summary>
         public DateTime PublicationTime
         {
             get
             {
                 return Util.ConvertUnixTimeToDateTime(PublicationData.PublicationTime.Value);
             } 
-        } 
+        }
 
+        /// <summary>
+        /// Create new publication record TLV element from TLV element
+        /// </summary>
+        /// <param name="tagList">TLV tag list</param>
         public PublicationRecord(TlvTag tag) : base(tag)
         {
             for (int i = 0; i < Count; i++)
@@ -66,9 +84,12 @@ namespace Guardtime.KSI.Publication
             }
         }
 
+        /// <summary>
+        /// Check TLV structure.
+        /// </summary>
         protected override void CheckStructure()
         {
-            if (Type != TagType)
+            if (Type != KsiSignatureDo.PublicationRecordTagType && Type != PublicationsFileDo.PublicationRecordTagType)
             {
                 throw new InvalidTlvStructureException("Invalid publication record type: " + Type);
             }
