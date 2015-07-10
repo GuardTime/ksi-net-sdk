@@ -297,6 +297,67 @@
   <data name="DataHasher_TestString" xml:space="preserve">
     <value>LongString1ReallyLongString2EvenLongerString3</value>
   </data>
+  <data name="Rfc3161Record_Ok" xml:space="preserve">
+    <value>resources/signature/rfc3161-record/rfc3161-record-ok.tlv</value>
+  </data>
+  <data name="Rfc3161Record_Invalid_Type" xml:space="preserve">
+    <value>resources/signature/rfc3161-record/rfc3161-record-invalid-type.tlv</value>
+  </data>
+  <data name="Rfc3161Record_Invalid_Extra_Tag" xml:space="preserve">
+    <value>resources/signature/rfc3161-record/rfc3161-record-invalid-extra-tag.tlv</value>
+  </data>
+  <data name="Rfc3161Record_Invalid_Missing_Aggregation_Time" xml:space="preserve">
+    <value>resources/signature/rfc3161-record/rfc3161-record-invalid-missing-aggregation-time.tlv</value>
+  </data>
+  <data name="Rfc3161Record_Invalid_Missing_Chain_Index" xml:space="preserve">
+    <value>resources/signature/rfc3161-record/rfc3161-record-invalid-missing-chain-index.tlv</value>
+  </data>
+  <data name="Rfc3161Record_Invalid_Missing_Input_Hash" xml:space="preserve">
+    <value>resources/signature/rfc3161-record/rfc3161-record-invalid-missing-input-hash.tlv</value>
+  </data>
+  <data name="Rfc3161Record_Invalid_Missing_Signed_Attributes_Algorithm" xml:space="preserve">
+    <value>resources/signature/rfc3161-record/rfc3161-record-invalid-missing-signed-attributes-algorithm.tlv</value>
+  </data>
+  <data name="Rfc3161Record_Invalid_Missing_Signed_Attributes_Prefix" xml:space="preserve">
+    <value>resources/signature/rfc3161-record/rfc3161-record-invalid-missing-signed-attributes-prefix.tlv</value>
+  </data>
+  <data name="Rfc3161Record_Invalid_Missing_Signed_Attributes_Suffix" xml:space="preserve">
+    <value>resources/signature/rfc3161-record/rfc3161-record-invalid-missing-signed-attributes-suffix.tlv</value>
+  </data>
+  <data name="Rfc3161Record_Invalid_Missing_TstInfo_Algorithm" xml:space="preserve">
+    <value>resources/signature/rfc3161-record/rfc3161-record-invalid-missing-tstinfo-algorithm.tlv</value>
+  </data>
+  <data name="Rfc3161Record_Invalid_Missing_TstInfo_Prefix" xml:space="preserve">
+    <value>resources/signature/rfc3161-record/rfc3161-record-invalid-missing-tstinfo-prefix.tlv</value>
+  </data>
+  <data name="Rfc3161Record_Invalid_Missing_TstInfo_Suffix" xml:space="preserve">
+    <value>resources/signature/rfc3161-record/rfc3161-record-invalid-missing-tstinfo-suffix.tlv</value>
+  </data>
+  <data name="Rfc3161Record_Invalid_Multiple_Aggregation_Time" xml:space="preserve">
+    <value>resources/signature/rfc3161-record/rfc3161-record-invalid-multiple-aggregation-time.tlv</value>
+  </data>
+  <data name="Rfc3161Record_Invalid_Multiple_Input_Hash" xml:space="preserve">
+    <value>resources/signature/rfc3161-record/rfc3161-record-invalid-multiple-input-hash.tlv</value>
+  </data>
+  <data name="Rfc3161Record_Invalid_Multiple_Signed_Attributes_Algorithm" xml:space="preserve">
+    <value>resources/signature/rfc3161-record/rfc3161-record-invalid-multiple-signed-attributes-algorithm.tlv</value>
+  </data>
+  <data name="Rfc3161Record_Invalid_Multiple_Signed_Attributes_Prefix" xml:space="preserve">
+    <value>resources/signature/rfc3161-record/rfc3161-record-invalid-multiple-signed-attributes-prefix.tlv</value>
+  </data>
+  <data name="Rfc3161Record_Invalid_Multiple_Signed_Attributes_Suffix" xml:space="preserve">
+    <value>resources/signature/rfc3161-record/rfc3161-record-invalid-multiple-signed-attributes-suffix.tlv</value>
+  </data>
+  <data name="Rfc3161Record_Invalid_Multiple_TstInfo_Algorithm" xml:space="preserve">
+    <value>resources/signature/rfc3161-record/rfc3161-record-invalid-multiple-tstinfo-algorithm.tlv</value>
+  </data>
+  <data name="Rfc3161Record_Invalid_Multiple_TstInfo_Prefix" xml:space="preserve">
+    <value>resources/signature/rfc3161-record/rfc3161-record-invalid-multiple-tstinfo-prefix.tlv</value>
+  </data>
+  <data name="Rfc3161Record_Invalid_Multiple_TstInfo_Suffix" xml:space="preserve">
+    <value>resources/signature/rfc3161-record/rfc3161-record-invalid-multiple-tstinfo-suffix.tlv</value>
+  </data>
+  
   <data name="SignatureData_Invalid_Certificate_Id_Missing" xml:space="preserve">
     <value>resources/signature/signaturedata/signature-data-invalid-certificate-id-missing.tlv</value>
   </data>

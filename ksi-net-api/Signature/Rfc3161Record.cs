@@ -4,8 +4,15 @@ using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Signature
 {
+    /// <summary>
+    /// RFC3161 record TLV element
+    /// </summary>
     public class Rfc3161Record : CompositeTag
     {
+        // TODO: Better name
+        /// <summary>
+        /// RFC3161 record tag type
+        /// </summary>
         public const uint TagType = 0x806;
         private const uint AggregationTimeTagType = 0x2;
         private const uint ChainIndexTagType = 0x3;
@@ -29,6 +36,10 @@ namespace Guardtime.KSI.Signature
         private readonly RawTag _signedAttributesSuffix;
         private readonly IntegerTag _signedAttributesAlgorithm;
 
+        /// <summary>
+        /// Create new RFC3161 record TLV element from TLV element
+        /// </summary>
+        /// <param name="tag">TLV element</param>
         public Rfc3161Record(TlvTag tag) : base(tag)
         {
             for (int i = 0; i < Count; i++)
@@ -76,11 +87,14 @@ namespace Guardtime.KSI.Signature
             }
         }
 
+        /// <summary>
+        /// Check TLV structure.
+        /// </summary>
         protected override void CheckStructure()
         {
             if (Type != TagType)
             {
-                throw new InvalidTlvStructureException("Invalid rfc3161 record type: " + Type);
+                throw new InvalidTlvStructureException("Invalid RFC 3161 record type: " + Type);
             }
 
             uint[] tags = new uint[9];
@@ -123,47 +137,47 @@ namespace Guardtime.KSI.Signature
 
             if (tags[0] != 1)
             {
-                throw new InvalidTlvStructureException("Only one aggregation time must exist in rfc3161 record");
+                throw new InvalidTlvStructureException("Only one aggregation time must exist in RFC 3161 record");
             }
 
             if (tags[1] == 0)
             {
-                throw new InvalidTlvStructureException("Chain indexes must exist in rfc3161 record");
+                throw new InvalidTlvStructureException("Chain indexes must exist in RFC 3161 record");
             }
 
             if (tags[2] != 1)
             {
-                throw new InvalidTlvStructureException("Only one input hash must exist in rfc3161 record");
+                throw new InvalidTlvStructureException("Only one input hash must exist in RFC 3161 record");
             }
 
             if (tags[3] != 1)
             {
-                throw new InvalidTlvStructureException("Only one tstInfo prefix must exist in rfc3161 record");
+                throw new InvalidTlvStructureException("Only one tstInfo prefix must exist in RFC 3161 record");
             }
 
             if (tags[4] != 1)
             {
-                throw new InvalidTlvStructureException("Only one tstInfo suffix must exist in rfc3161 record");
+                throw new InvalidTlvStructureException("Only one tstInfo suffix must exist in RFC 3161 record");
             }
 
             if (tags[5] != 1)
             {
-                throw new InvalidTlvStructureException("Only one tstInfo algorithm must exist in rfc3161 record");
+                throw new InvalidTlvStructureException("Only one tstInfo algorithm must exist in RFC 3161 record");
             }
 
             if (tags[6] != 1)
             {
-                throw new InvalidTlvStructureException("Only one signed attributes prefix must exist in rfc3161 record");
+                throw new InvalidTlvStructureException("Only one signed attributes prefix must exist in RFC 3161 record");
             }
 
             if (tags[7] != 1)
             {
-                throw new InvalidTlvStructureException("Only one signed attributes suffix must exist in rfc3161 record");
+                throw new InvalidTlvStructureException("Only one signed attributes suffix must exist in RFC 3161 record");
             }
 
             if (tags[8] != 1)
             {
-                throw new InvalidTlvStructureException("Only one signed attributes algorithm must exist in rfc3161 record");
+                throw new InvalidTlvStructureException("Only one signed attributes algorithm must exist in RFC 3161 record");
             }
         }
     }

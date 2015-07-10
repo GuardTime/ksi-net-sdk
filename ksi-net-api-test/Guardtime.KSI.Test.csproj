@@ -119,6 +119,7 @@
     <Compile Include="Signature\KsiSignatureDoTests.cs" />
     <Compile Include="Signature\AggregationHashChainTests.cs" />
     <Compile Include="Signature\CalendarHashChainTests.cs" />
+    <Compile Include="Signature\Rfc3161RecordTests.cs" />
     <Compile Include="Signature\SignatureDataTests.cs" />
     <Compile Include="Trust\PkiTrustStoreProviderTests.cs" />
     <Compile Include="Utils\EmptyEnumeratorTests.cs" />
@@ -333,6 +334,66 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\calendar-hash-chain\calendar-hash-chain-ok.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\rfc3161-record\rfc3161-record-invalid-extra-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\rfc3161-record\rfc3161-record-invalid-missing-aggregation-time.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\rfc3161-record\rfc3161-record-invalid-missing-chain-index.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\rfc3161-record\rfc3161-record-invalid-missing-input-hash.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\rfc3161-record\rfc3161-record-invalid-missing-signed-attributes-algorithm.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\rfc3161-record\rfc3161-record-invalid-missing-signed-attributes-prefix.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\rfc3161-record\rfc3161-record-invalid-missing-signed-attributes-suffix.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\rfc3161-record\rfc3161-record-invalid-missing-tstinfo-algorithm.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\rfc3161-record\rfc3161-record-invalid-missing-tstinfo-prefix.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\rfc3161-record\rfc3161-record-invalid-missing-tstinfo-suffix.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\rfc3161-record\rfc3161-record-invalid-multiple-aggregation-time.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\rfc3161-record\rfc3161-record-invalid-multiple-input-hash.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\rfc3161-record\rfc3161-record-invalid-multiple-signed-attributes-algorithm.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\rfc3161-record\rfc3161-record-invalid-multiple-signed-attributes-prefix.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\rfc3161-record\rfc3161-record-invalid-multiple-signed-attributes-suffix.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\rfc3161-record\rfc3161-record-invalid-multiple-tstinfo-algorithm.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\rfc3161-record\rfc3161-record-invalid-multiple-tstinfo-prefix.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\rfc3161-record\rfc3161-record-invalid-multiple-tstinfo-suffix.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\rfc3161-record\rfc3161-record-invalid-type.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\rfc3161-record\rfc3161-record-ok.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\signature-ok.tlv">

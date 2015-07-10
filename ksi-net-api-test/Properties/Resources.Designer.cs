@@ -601,6 +601,186 @@ namespace Guardtime.KSI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/rfc3161-record/rfc3161-record-invalid-extra-tag.tlv.
+        /// </summary>
+        internal static string Rfc3161Record_Invalid_Extra_Tag {
+            get {
+                return ResourceManager.GetString("Rfc3161Record_Invalid_Extra_Tag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/rfc3161-record/rfc3161-record-invalid-missing-aggregation-time.tlv.
+        /// </summary>
+        internal static string Rfc3161Record_Invalid_Missing_Aggregation_Time {
+            get {
+                return ResourceManager.GetString("Rfc3161Record_Invalid_Missing_Aggregation_Time", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/rfc3161-record/rfc3161-record-invalid-missing-chain-index.tlv.
+        /// </summary>
+        internal static string Rfc3161Record_Invalid_Missing_Chain_Index {
+            get {
+                return ResourceManager.GetString("Rfc3161Record_Invalid_Missing_Chain_Index", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/rfc3161-record/rfc3161-record-invalid-missing-input-hash.tlv.
+        /// </summary>
+        internal static string Rfc3161Record_Invalid_Missing_Input_Hash {
+            get {
+                return ResourceManager.GetString("Rfc3161Record_Invalid_Missing_Input_Hash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/rfc3161-record/rfc3161-record-invalid-missing-signed-attributes-algorithm.tlv.
+        /// </summary>
+        internal static string Rfc3161Record_Invalid_Missing_Signed_Attributes_Algorithm {
+            get {
+                return ResourceManager.GetString("Rfc3161Record_Invalid_Missing_Signed_Attributes_Algorithm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/rfc3161-record/rfc3161-record-invalid-missing-signed-attributes-prefix.tlv.
+        /// </summary>
+        internal static string Rfc3161Record_Invalid_Missing_Signed_Attributes_Prefix {
+            get {
+                return ResourceManager.GetString("Rfc3161Record_Invalid_Missing_Signed_Attributes_Prefix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/rfc3161-record/rfc3161-record-invalid-missing-signed-attributes-suffix.tlv.
+        /// </summary>
+        internal static string Rfc3161Record_Invalid_Missing_Signed_Attributes_Suffix {
+            get {
+                return ResourceManager.GetString("Rfc3161Record_Invalid_Missing_Signed_Attributes_Suffix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/rfc3161-record/rfc3161-record-invalid-missing-tstinfo-algorithm.tlv.
+        /// </summary>
+        internal static string Rfc3161Record_Invalid_Missing_TstInfo_Algorithm {
+            get {
+                return ResourceManager.GetString("Rfc3161Record_Invalid_Missing_TstInfo_Algorithm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/rfc3161-record/rfc3161-record-invalid-missing-tstinfo-prefix.tlv.
+        /// </summary>
+        internal static string Rfc3161Record_Invalid_Missing_TstInfo_Prefix {
+            get {
+                return ResourceManager.GetString("Rfc3161Record_Invalid_Missing_TstInfo_Prefix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/rfc3161-record/rfc3161-record-invalid-missing-tstinfo-suffix.tlv.
+        /// </summary>
+        internal static string Rfc3161Record_Invalid_Missing_TstInfo_Suffix {
+            get {
+                return ResourceManager.GetString("Rfc3161Record_Invalid_Missing_TstInfo_Suffix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/rfc3161-record/rfc3161-record-invalid-multiple-aggregation-time.tlv.
+        /// </summary>
+        internal static string Rfc3161Record_Invalid_Multiple_Aggregation_Time {
+            get {
+                return ResourceManager.GetString("Rfc3161Record_Invalid_Multiple_Aggregation_Time", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/rfc3161-record/rfc3161-record-invalid-multiple-input-hash.tlv.
+        /// </summary>
+        internal static string Rfc3161Record_Invalid_Multiple_Input_Hash {
+            get {
+                return ResourceManager.GetString("Rfc3161Record_Invalid_Multiple_Input_Hash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/rfc3161-record/rfc3161-record-invalid-multiple-signed-attributes-algorithm.tlv.
+        /// </summary>
+        internal static string Rfc3161Record_Invalid_Multiple_Signed_Attributes_Algorithm {
+            get {
+                return ResourceManager.GetString("Rfc3161Record_Invalid_Multiple_Signed_Attributes_Algorithm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/rfc3161-record/rfc3161-record-invalid-multiple-signed-attributes-prefix.tlv.
+        /// </summary>
+        internal static string Rfc3161Record_Invalid_Multiple_Signed_Attributes_Prefix {
+            get {
+                return ResourceManager.GetString("Rfc3161Record_Invalid_Multiple_Signed_Attributes_Prefix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/rfc3161-record/rfc3161-record-invalid-multiple-signed-attributes-suffix.tlv.
+        /// </summary>
+        internal static string Rfc3161Record_Invalid_Multiple_Signed_Attributes_Suffix {
+            get {
+                return ResourceManager.GetString("Rfc3161Record_Invalid_Multiple_Signed_Attributes_Suffix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/rfc3161-record/rfc3161-record-invalid-multiple-tstinfo-algorithm.tlv.
+        /// </summary>
+        internal static string Rfc3161Record_Invalid_Multiple_TstInfo_Algorithm {
+            get {
+                return ResourceManager.GetString("Rfc3161Record_Invalid_Multiple_TstInfo_Algorithm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/rfc3161-record/rfc3161-record-invalid-multiple-tstinfo-prefix.tlv.
+        /// </summary>
+        internal static string Rfc3161Record_Invalid_Multiple_TstInfo_Prefix {
+            get {
+                return ResourceManager.GetString("Rfc3161Record_Invalid_Multiple_TstInfo_Prefix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/rfc3161-record/rfc3161-record-invalid-multiple-tstinfo-suffix.tlv.
+        /// </summary>
+        internal static string Rfc3161Record_Invalid_Multiple_TstInfo_Suffix {
+            get {
+                return ResourceManager.GetString("Rfc3161Record_Invalid_Multiple_TstInfo_Suffix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/rfc3161-record/rfc3161-record-invalid-type.tlv.
+        /// </summary>
+        internal static string Rfc3161Record_Invalid_Type {
+            get {
+                return ResourceManager.GetString("Rfc3161Record_Invalid_Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/rfc3161-record/rfc3161-record-ok.tlv.
+        /// </summary>
+        internal static string Rfc3161Record_Ok {
+            get {
+                return ResourceManager.GetString("Rfc3161Record_Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/signaturedata/signature-data-invalid-certificate-id-missing.tlv.
         /// </summary>
         internal static string SignatureData_Invalid_Certificate_Id_Missing {
