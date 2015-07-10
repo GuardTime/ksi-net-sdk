@@ -493,6 +493,96 @@ namespace Guardtime.KSI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/calendar-hash-chain/calendar-hash-chain-invalid-extra-tag.tlv.
+        /// </summary>
+        internal static string CalendarHashChain_Invalid_Extra_Tag {
+            get {
+                return ResourceManager.GetString("CalendarHashChain_Invalid_Extra_Tag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/calendar-hash-chain/calendar-hash-chain-invalid-missing-input-hash.tlv.
+        /// </summary>
+        internal static string CalendarHashChain_Invalid_Missing_Input_Hash {
+            get {
+                return ResourceManager.GetString("CalendarHashChain_Invalid_Missing_Input_Hash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/calendar-hash-chain/calendar-hash-chain-invalid-missing-links.tlv.
+        /// </summary>
+        internal static string CalendarHashChain_Invalid_Missing_Links {
+            get {
+                return ResourceManager.GetString("CalendarHashChain_Invalid_Missing_Links", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/calendar-hash-chain/calendar-hash-chain-invalid-missing-publication-time.tlv.
+        /// </summary>
+        internal static string CalendarHashChain_Invalid_Missing_Publication_Time {
+            get {
+                return ResourceManager.GetString("CalendarHashChain_Invalid_Missing_Publication_Time", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/calendar-hash-chain/calendar-hash-chain-invalid-multiple-aggregation-time.tlv.
+        /// </summary>
+        internal static string CalendarHashChain_Invalid_Multiple_Aggregation_Time {
+            get {
+                return ResourceManager.GetString("CalendarHashChain_Invalid_Multiple_Aggregation_Time", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/calendar-hash-chain/calendar-hash-chain-invalid-multiple-input-hash.tlv.
+        /// </summary>
+        internal static string CalendarHashChain_Invalid_Multiple_Input_Hash {
+            get {
+                return ResourceManager.GetString("CalendarHashChain_Invalid_Multiple_Input_Hash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/calendar-hash-chain/calendar-hash-chain-invalid-multiple-publication-time.tlv.
+        /// </summary>
+        internal static string CalendarHashChain_Invalid_Multiple_Publication_Time {
+            get {
+                return ResourceManager.GetString("CalendarHashChain_Invalid_Multiple_Publication_Time", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/calendar-hash-chain/calendar-hash-chain-invalid-type.tlv.
+        /// </summary>
+        internal static string CalendarHashChain_Invalid_Type {
+            get {
+                return ResourceManager.GetString("CalendarHashChain_Invalid_Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/calendar-hash-chain/calendar-hash-chain-ok.tlv.
+        /// </summary>
+        internal static string CalendarHashChain_Ok {
+            get {
+                return ResourceManager.GetString("CalendarHashChain_Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/calendar-hash-chain/calendar-hash-chain-ok-missing-optionals.tlv.
+        /// </summary>
+        internal static string CalendarHashChain_Ok_Missing_Optionals {
+            get {
+                return ResourceManager.GetString("CalendarHashChain_Ok_Missing_Optionals", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/testdata.txt.
         /// </summary>
         internal static string DataHasher_TestFile {

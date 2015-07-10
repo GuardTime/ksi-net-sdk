@@ -1,13 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Signature
 {
+    /// <summary>
+    /// Calendar hash chain TLV element
+    /// </summary>
     public class CalendarHashChain : CompositeTag
     {
         // TODO: Better name
+        /// <summary>
+        /// Calendar hash chain tag type
+        /// </summary>
         public const uint TagType = 0x802;
         private const uint PublicationTimeTagType = 0x1;
         private const uint AggregationTimeTagType = 0x2;
@@ -18,6 +23,9 @@ namespace Guardtime.KSI.Signature
         private readonly ImprintTag _inputHash;
         private readonly List<Link> _chain = new List<Link>();
 
+        /// <summary>
+        /// Get aggregation time
+        /// </summary>
         public ulong AggregationTime
         {
             get
@@ -26,6 +34,10 @@ namespace Guardtime.KSI.Signature
             }
         }
 
+        /// <summary>
+        /// Create new calendar hash chain TLV element from TLV element
+        /// </summary>
+        /// <param name="tag">TLV element</param>
         public CalendarHashChain(TlvTag tag) : base(tag)
         {
             for (int i = 0; i < Count; i++)
@@ -54,6 +66,9 @@ namespace Guardtime.KSI.Signature
             }
         }
 
+        /// <summary>
+        /// Check TLV structure.
+        /// </summary>
         protected override void CheckStructure()
         {
             if (Type != TagType)
@@ -89,27 +104,30 @@ namespace Guardtime.KSI.Signature
 
             if (tags[0] != 1)
             {
-                throw new InvalidTlvStructureException("Calendar hash chain must contain only one publication time");
+                throw new InvalidTlvStructureException("Only one publication time must exist in calendar hash chain");
             }
 
-            if (tags[1] != 1)
+            if (tags[1] > 1)
             {
-                throw new InvalidTlvStructureException("Calendar hash chain must contain only one aggregation time");
+                throw new InvalidTlvStructureException("Only one aggregation time is allowed in calendar hash chain");
             }
 
             if (tags[2] != 1)
             {
-                throw new InvalidTlvStructureException("Calendar hash chain must contain only one input hash");
+                throw new InvalidTlvStructureException("Only one input hash must exist in calendar hash chain");
             }
 
             if ((tags[3] + tags[4]) == 0)
             {
-                throw new InvalidTlvStructureException("Links missing in calendar hash chain");
+                throw new InvalidTlvStructureException("Links are missing in calendar hash chain");
             }
 
             // TODO: Aggregation hash chain if defined
         }
 
+        /// <summary>
+        /// Calendar hash chain link object which is imprint containing link direction
+        /// </summary>
         private class Link : ImprintTag
         {
             private readonly LinkDirection _direction;
@@ -124,12 +142,6 @@ namespace Guardtime.KSI.Signature
                 if (tag.Type == (int) LinkDirection.Right)
                 {
                     _direction = LinkDirection.Right;
-                }
-
-                if (_direction == 0)
-                {
-                    // TODO: Correct exception and fix all System.Exception
-                    throw new Exception("Invalid link direction");
                 }
                 
             }
