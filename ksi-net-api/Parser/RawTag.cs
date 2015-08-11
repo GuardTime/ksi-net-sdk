@@ -1,6 +1,7 @@
 ﻿
 using Guardtime.KSI.Utils;
 using System;
+using System.Collections.Generic;
 
 namespace Guardtime.KSI.Parser
 {
@@ -30,7 +31,7 @@ namespace Guardtime.KSI.Parser
             if (data == null)
             {
                 // TODO: Check exception message
-                throw new ArgumentException("Invalid TLV element encoded value: null");
+                throw new ArgumentException("Invalid TLV element encoded value: null", "tag");
             }
             _value = data;
         }
@@ -97,6 +98,16 @@ namespace Guardtime.KSI.Parser
                    tag.NonCritical == NonCritical &&
                    Util.IsArrayEqual(tag.EncodeValue(), EncodeValue());
         }
+
+        /// <summary>
+        /// Cast TLV element to byte array.
+        /// </summary>
+        /// <param name="tag">Raw TLV element</param>
+        public static implicit operator byte[] (RawTag tag)
+        {
+            return tag.Value;
+        }
+
     }
 
 }

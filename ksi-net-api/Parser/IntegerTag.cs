@@ -29,7 +29,7 @@ namespace Guardtime.KSI.Parser
             if (data == null)
             {
                 // TODO: Check exception message
-                throw new ArgumentException("Invalid TLV element encoded value: null");
+                throw new ArgumentException("Invalid TLV element encoded value: null", "tag");
             }
             _value = Util.DecodeUnsignedLong(data, 0, data.Length);
         }

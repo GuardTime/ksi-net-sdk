@@ -28,7 +28,7 @@ namespace Guardtime.KSI.Parser
             if (data == null)
             {
                 // TODO: Check exception message
-                throw new ArgumentException("Invalid TLV element encoded value: null");
+                throw new ArgumentException("Invalid TLV element encoded value: null", "tag");
             }
             _value = new DataHash(data);
         }
@@ -57,7 +57,7 @@ namespace Guardtime.KSI.Parser
         /// <returns>Data hash as byte array</returns>
         public override byte[] EncodeValue()
         {
-            return Value.Imprint;
+            return _value.Imprint;
         }
 
         /// <summary>

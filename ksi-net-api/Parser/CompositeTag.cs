@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Utils;
+using System.Collections.Generic;
+using System.Collections;
+using System.Threading;
 
 namespace Guardtime.KSI.Parser
 {
@@ -14,11 +14,8 @@ namespace Guardtime.KSI.Parser
     public abstract class CompositeTag : TlvTag, IEnumerable<TlvTag>
     {
         private readonly object _lock = new object();
-
         private readonly List<TlvTag> _value = new List<TlvTag>();
 
-        // TODO: Make checks for array and do not allow to write to object from outside
-        // TODO: Make it thread safe?
         /// <summary>
         /// Get or set TLV child object
         /// </summary>
@@ -26,14 +23,16 @@ namespace Guardtime.KSI.Parser
         /// <returns>TLV element at given position</returns>
         public TlvTag this[int i]
         {
-            get {
+            get
+            {
                 lock (_lock)
                 {
                     return _value[i];
                 }
             }
 
-            protected set {
+            protected set
+            {
                 lock (_lock)
                 {
                     if (value == null)
@@ -52,7 +51,12 @@ namespace Guardtime.KSI.Parser
         /// </summary>
         public int Count
         {
-            get { return _value.Count; }
+            get {
+                lock (_lock)
+                {
+                    return _value.Count;
+                }
+            }
         }
 
 
@@ -144,7 +148,7 @@ namespace Guardtime.KSI.Parser
             }
         }
 
-        // TODO: Use better name
+        // TODO: Use better name or replace this functionality
         /// <summary>
         /// Put TLV element to child list, if null, remove it from list.
         /// </summary>
@@ -170,13 +174,16 @@ namespace Guardtime.KSI.Parser
         /// <returns>Added TLV element</returns>
         protected T AddTag<T>(T tag) where T : TlvTag
         {
-            if (tag == null)
+            lock (_lock)
             {
-                throw new ArgumentNullException("tag");
-            }
+                if (tag == null)
+                {
+                    throw new ArgumentNullException("tag");
+                }
 
-            _value.Add(tag);
-            return tag;
+                _value.Add(tag);
+                return tag;
+            }
         }
 
         /// <summary>
@@ -188,36 +195,26 @@ namespace Guardtime.KSI.Parser
         /// <returns>Replaced TLV element</returns>
         protected T ReplaceTag<T>(T tag, TlvTag previousTag) where T : TlvTag
         {
-            if (tag == null)
+            lock (_lock)
             {
-                throw new ArgumentNullException("tag");
-            }
+                if (tag == null)
+                {
+                    throw new ArgumentNullException("tag");
+                }
 
-            if (previousTag == null)
-            {
-                return null;
-            }
+                if (previousTag == null)
+                {
+                    return null;
+                }
 
-            int i = _value.IndexOf(previousTag);
-            if (i == -1)
-            {
-                return null;
-            }
+                int i = _value.IndexOf(previousTag);
+                if (i == -1)
+                {
+                    return null;
+                }
 
-            _value[i] = tag;
-            return tag;
-        }
-
-        /// <summary>
-        /// Remove TLV element from list.
-        /// </summary>
-        /// <typeparam name="T">TLV element type</typeparam>
-        /// <param name="tag">TLV element in list</param>
-        protected void RemoveTag<T>(T tag) where T : TlvTag
-        {
-            if (tag != null)
-            {
-                _value.Remove(tag);
+                _value[i] = tag;
+                return tag;
             }
         }
 
@@ -227,7 +224,7 @@ namespace Guardtime.KSI.Parser
         /// <returns>TLV composite elemnet enumerator.</returns>
         public IEnumerator<TlvTag> GetEnumerator()
         {
-            return _value.GetEnumerator();
+            return new ThreadSafeIEnumerator<TlvTag>(_value.GetEnumerator(), _lock);
         }
 
         /// <summary>
@@ -265,19 +262,15 @@ namespace Guardtime.KSI.Parser
         public override bool Equals(object obj)
         {
             CompositeTag tag = obj as CompositeTag;
-            if (tag == null || (tag.Type != Type && tag.Forward != Forward && tag.NonCritical != NonCritical))
+            if (tag == null || (tag.Count != Count) || (tag.Type != Type && tag.Forward != Forward && tag.NonCritical != NonCritical))
             {
                 return false;
             }
             
-            IEnumerator<TlvTag> tagEnumerator = tag._value == null ? new EmptyEnumerator<TlvTag>() : tag.GetEnumerator();
-            IEnumerator<TlvTag> enumerator = _value == null ? new EmptyEnumerator<TlvTag>() : GetEnumerator();
             bool match = true;
-            while (match && tagEnumerator.MoveNext() && enumerator.MoveNext())
+            for (int i = 0; i < Count && match; i++)
             {
-                TlvTag value1 = tagEnumerator.Current;
-                TlvTag value2 = enumerator.Current;
-                match = value1 == null ? value2 == null : value1.Equals(value2);
+                match = tag[i].Equals(this[i]);
             }
 
             return match;
@@ -333,8 +326,52 @@ namespace Guardtime.KSI.Parser
             return builder.ToString();
         }
 
-
         
+
+        private class ThreadSafeIEnumerator<T> : IEnumerator<T>
+        {
+            private readonly object _lock;
+            private readonly IEnumerator<T> _childEnumerator;
+
+            public T Current
+            {
+                get
+                {
+                    return _childEnumerator.Current;
+                }
+            }
+
+            object IEnumerator.Current
+            {
+                get
+                {
+                    return _childEnumerator.Current;
+                }
+            }
+
+            public ThreadSafeIEnumerator(IEnumerator<T> childEnumerator, object lockObject)
+            {
+                _childEnumerator = childEnumerator;
+                _lock = lockObject;
+
+                Monitor.Enter(_lock);
+            }
+
+            public void Dispose()
+            {
+                Monitor.Exit(_lock);
+            }
+
+            public bool MoveNext()
+            {
+                return _childEnumerator.MoveNext();
+            }
+
+            public void Reset()
+            {
+                _childEnumerator.Reset();
+            }
+        }
     }
 
 }
