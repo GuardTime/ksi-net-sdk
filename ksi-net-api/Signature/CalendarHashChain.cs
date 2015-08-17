@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Hashing;
 
 namespace Guardtime.KSI.Signature
 {
@@ -23,6 +24,7 @@ namespace Guardtime.KSI.Signature
         private readonly ImprintTag _inputHash;
         private readonly List<Link> _chain = new List<Link>();
 
+        // TODO: Check if null
         /// <summary>
         /// Get aggregation time
         /// </summary>
@@ -30,7 +32,16 @@ namespace Guardtime.KSI.Signature
         {
             get
             {
-                return _aggregationTime.Value;
+                // TODO: null or 0
+                return _aggregationTime == null ? 0 : _aggregationTime.Value;
+            }
+        }
+
+        public DataHash InputHash
+        {
+            get
+            {
+                return _inputHash == null ? null : _inputHash.Value;
             }
         }
 

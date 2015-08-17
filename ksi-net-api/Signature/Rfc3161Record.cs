@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Hashing;
+using System;
 
 namespace Guardtime.KSI.Signature
 {
@@ -35,6 +37,17 @@ namespace Guardtime.KSI.Signature
         private readonly RawTag _signedAttributesPrefix;
         private readonly RawTag _signedAttributesSuffix;
         private readonly IntegerTag _signedAttributesAlgorithm;
+
+        /// <summary>
+        /// Get RFC3161 input hash
+        /// </summary>
+        public DataHash InputHash
+        {
+            get
+            {
+                return _inputHash.Value;
+            }
+        }
 
         /// <summary>
         /// Create new RFC3161 record TLV element from TLV element
@@ -85,6 +98,35 @@ namespace Guardtime.KSI.Signature
                         break;
                 }
             }
+        }
+
+        /// <summary>
+        /// Get output hash for RFC 3161 from document hash
+        /// </summary>
+        /// <param name="inputHash">document hash</param>
+        /// <returns>aggregation input hash</returns>
+        public DataHash GetOutputHash(DataHash inputHash)
+        {
+            if (inputHash == null)
+            {
+                throw new ArgumentNullException("inputHash");
+            }
+
+            // TODO: Check data before using them
+
+            DataHasher hasher = new DataHasher(HashAlgorithm.GetById((byte)_tstInfoAlgorithm.Value));
+            hasher.AddData(_tstInfoPrefix.Value);
+            hasher.AddData(inputHash.Imprint);
+            hasher.AddData(_tstInfoSuffix.Value);
+
+            inputHash = hasher.GetHash();
+
+            hasher = new DataHasher(HashAlgorithm.GetById((byte)_signedAttributesAlgorithm.Value));
+            hasher.AddData(_signedAttributesPrefix.Value);
+            hasher.AddData(inputHash.Imprint);
+            hasher.AddData(_signedAttributesSuffix.Value);
+
+            return hasher.GetHash();
         }
 
         /// <summary>

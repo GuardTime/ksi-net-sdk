@@ -2,6 +2,8 @@
 using Guardtime.KSI.Parser;
 using System.Collections.Generic;
 using Guardtime.KSI.Exceptions;
+using System;
+using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Signature
 {
@@ -28,9 +30,24 @@ namespace Guardtime.KSI.Signature
         private readonly IntegerTag _aggrAlgorithmId;
         private readonly List<Link> _chain = new List<Link>();
 
-        // the hash algorithm identified by aggrAlgorithmId
-        // TODO: Protected?
-        private HashAlgorithm AggrAlgorithm;
+        /// <summary>
+        /// Get hash chain input hash
+        /// </summary>
+        public DataHash InputHash
+        {
+            get
+            {
+                return _inputHash == null ? null : _inputHash.Value;
+            }
+        }
+
+        public DateTime? AggregationTime
+        {
+            get
+            {
+                return _aggregationTime == null ? (DateTime?)null : Util.ConvertUnixTimeToDateTime(_aggregationTime.Value);
+            }
+        }
 
         /// <summary>
         /// Create new aggregation hash chain TLV element from TLV element
@@ -72,6 +89,51 @@ namespace Guardtime.KSI.Signature
                 }
             }
         }
+
+        /// <summary>
+        /// Get output hash
+        /// </summary>
+        /// <param name="level">hash chain input level</param>
+        /// <returns>output hash chain result</returns>
+        public ChainResult GetOutputHash(ulong level)
+        {
+            // TODO: Check if not null
+            DataHash lastHash = _inputHash.Value;
+            for (int i = 0; i < _chain.Count; i++)
+            {
+                Link link = _chain[i];
+                level += link.LevelCorrection + 1;
+
+                if (link.Direction == LinkDirection.Left)
+                {
+                    lastHash = HashTogether(lastHash.Imprint, link.SiblingData, level);
+                }
+                if (link.Direction == LinkDirection.Right)
+                {
+                    lastHash = HashTogether(link.SiblingData, lastHash.Imprint, level);
+                }
+            }
+
+            return new ChainResult(level, lastHash);
+        }
+
+         // TODO: Better name
+        /// <summary>
+        /// Hash two hashes together
+        /// </summary>
+        /// <param name="hashA">first hash</param>
+        /// <param name="hashB">second hash</param>
+        /// <param name="level">hash chain level</param>
+        /// <returns>resulting hash</returns>
+        private DataHash HashTogether(byte[] hashA, byte[] hashB, ulong level)
+        {
+            DataHasher hasher = new DataHasher(HashAlgorithm.GetById((byte)_aggrAlgorithmId.Value));
+            hasher.AddData(hashA);
+            hasher.AddData(hashB);
+            hasher.AddData(Util.EncodeUnsignedLong(level));
+            return hasher.GetHash();
+        }
+
 
         /// <summary>
         /// Check TLV structure.
@@ -162,6 +224,56 @@ namespace Guardtime.KSI.Signature
 
             // the client ID extracted from metaHash
             private string _metaHashId;
+
+            /// <summary>
+            /// Get level correction
+            /// </summary>
+            public ulong LevelCorrection
+            {
+                get
+                {
+                    return _levelCorrection == null ? 0UL : _levelCorrection.Value;
+                }
+            }
+
+            // TODO: Better name
+            /// <summary>
+            /// Get data byte array
+            /// </summary>
+            public byte[] SiblingData
+            {
+                get
+                {
+                    if (_siblingHash != null)
+                    {
+                        return _siblingHash.EncodeValue();
+                    }
+
+                    if (_metaHash != null)
+                    {
+                        return _metaHash.EncodeValue();
+                    }
+
+                    if (_metaData != null)
+                    {
+                        return _metaData.EncodeValue();
+                    }
+
+                    // TODO: Throw exception?
+                    return null;
+                }
+            }
+
+            /// <summary>
+            ///  Get direction
+            /// </summary>
+            public LinkDirection Direction
+            {
+                get
+                {
+                    return _direction;
+                }
+            }
 
 
             public Link(TlvTag tag, LinkDirection direction) : base(tag)
@@ -322,7 +434,77 @@ namespace Guardtime.KSI.Signature
                     throw new InvalidTlvStructureException("Only one request time is allowed in aggregation hash chain link metadata");
                 }
             }
-        } 
-        
+        }
+
+        public class ChainIndexOrdering : IComparer<AggregationHashChain>
+        {
+            public int Compare(AggregationHashChain x, AggregationHashChain y)
+            {
+                int i = 0;
+                for (i = 0; i < x._chainIndex.Count; i++)
+                {
+                    if (i >= y._chainIndex.Count)
+                    {
+                        return -1;
+                    }
+
+                    if (x._chainIndex[i].Value != y._chainIndex[i].Value)
+                    {
+                        // TODO: throw better exception
+                        throw new KsiException("Chain index mismatch");
+                    }
+                }
+
+                if (x._chainIndex.Count == y._chainIndex.Count)
+                {
+                    return 0;
+                }
+
+                return 1;
+            }
+        }
+
+        /// <summary>
+        /// Aggregation chain output result
+        /// </summary>
+        public class ChainResult
+        {
+            private readonly DataHash _hash;
+            private readonly ulong _level;
+
+            /// <summary>
+            /// Get aggregation chain output hash
+            /// </summary>
+            public DataHash Hash
+            {
+                get
+                {
+                    return _hash;
+                }
+            }
+
+            /// <summary>
+            /// Get aggregation chain output hash level
+            /// </summary>
+            public ulong Level
+            {
+                get
+                {
+                    return _level;
+                }
+            }
+
+            public ChainResult(ulong level, DataHash hash)
+            {
+                _level = level;
+                _hash = hash;
+            }
+
+            public override string ToString()
+            {
+                return _hash + " " + _level;
+            }
+        }
+
     }
 }

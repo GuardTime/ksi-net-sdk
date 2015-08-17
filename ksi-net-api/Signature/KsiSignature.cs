@@ -3,6 +3,8 @@ using Guardtime.KSI.Parser;
 using Guardtime.KSI.Service;
 using System.IO;
 using System;
+using System.Collections.ObjectModel;
+using Guardtime.KSI.Hashing;
 
 namespace Guardtime.KSI.Signature
 {
@@ -10,10 +12,48 @@ namespace Guardtime.KSI.Signature
     {
         private readonly KsiSignatureDo _ksiSignatureDo;
 
+        /// <summary>
+        /// Get KSI signature aggregation time
+        /// </summary>
         public ulong AggregationTime {
             get { return _ksiSignatureDo.AggregationTime; }
         }
 
+        
+
+        /// <summary>
+        /// Is signature in RFC 3161 format
+        /// </summary>
+        public bool IsRfc3161Signature
+        {
+            get
+            {
+                return _ksiSignatureDo.IsRfc3161Signature;
+            }
+        }
+
+        /// <summary>
+        /// Get RFC 3161 record
+        /// </summary>
+        public Rfc3161Record Rfc3161Record
+        {
+            get
+            {
+                return _ksiSignatureDo.Rfc3161Record;
+            }
+        }
+
+        public CalendarHashChain CalendarHashChain {
+            get
+            {
+                return _ksiSignatureDo.CalendarHashChain;
+            }
+        }
+
+        /// <summary>
+        /// Create KSI signature instance
+        /// </summary>
+        /// <param name="response">KSI PDU payload</param>
         public KsiSignature(KsiPduPayload response)
         {
             List<TlvTag> signatureTags = new List<TlvTag>();
@@ -25,6 +65,7 @@ namespace Guardtime.KSI.Signature
                 }
             }
 
+            // TODO: Make signature data object to interface
             _ksiSignatureDo = new KsiSignatureDo(signatureTags);
             _ksiSignatureDo.IsValidStructure();
         }
@@ -41,6 +82,11 @@ namespace Guardtime.KSI.Signature
             _ksiSignatureDo = ksiSignatureDo;
         }
 
+        /// <summary>
+        /// Extend KSI signature
+        /// </summary>
+        /// <param name="calendarHashChain">Calendar hash chain</param>
+        /// <returns>Extended KSI signature</returns>
         public KsiSignature Extend(CalendarHashChain calendarHashChain)
         {
             if (calendarHashChain == null)
@@ -52,7 +98,7 @@ namespace Guardtime.KSI.Signature
             for (int i = 0; i < _ksiSignatureDo.Count; i++)
             {
                 // TODO: Change type to constant
-                if (_ksiSignatureDo[i].Type == 0x802)
+                if (_ksiSignatureDo[i].Type == CalendarAuthenticationRecord.TagType)
                 {
                     signatureTags.Add(calendarHashChain);
                     continue;
@@ -64,9 +110,13 @@ namespace Guardtime.KSI.Signature
             return new KsiSignature(new KsiSignatureDo(signatureTags));
         }
 
+        /// <summary>
+        /// Get KSI signature instance
+        /// </summary>
+        /// <param name="stream">Signature data stream</param>
+        /// <returns>KSI signature</returns>
         public static KsiSignature GetInstance(Stream stream)
         {
-            // TODO: Java api check if stream is null
             if (stream == null)
             {
                 throw new ArgumentNullException("stream");
@@ -80,6 +130,24 @@ namespace Guardtime.KSI.Signature
             }
         }
 
+        public ReadOnlyCollection<AggregationHashChain> GetAggregationHashChains()
+        {
+            return _ksiSignatureDo.GetAggregationHashChains();
+        }
+
+        /// <summary>
+        /// Get aggregation hash chain output hash
+        /// </summary>
+        /// <returns></returns>
+        public DataHash GetAggregationHashChainRootHash()
+        {
+            return _ksiSignatureDo.GetAggregationHashChainRootHash();
+        }
+
+        /// <summary>
+        /// Convert signature to string format
+        /// </summary>
+        /// <returns>Signature string representation</returns>
         public override string ToString()
         {
             return _ksiSignatureDo.ToString();
