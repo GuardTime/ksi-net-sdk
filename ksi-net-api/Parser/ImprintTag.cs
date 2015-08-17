@@ -79,25 +79,32 @@ namespace Guardtime.KSI.Parser
         /// <returns>Is given object equal</returns>
         public override bool Equals(object obj)
         {
-            ImprintTag tag = obj as ImprintTag;
-            if (tag == null)
+            return this == obj as ImprintTag;
+        }
+
+        public static bool operator ==(ImprintTag a, ImprintTag b)
+        {
+            // If both are null, or both are same instance, return true.
+            if (ReferenceEquals(a, b))
+            {
+                return true;
+            }
+
+            // If one is null, but not both, return false.
+            if (((object)a == null) || ((object)b == null))
             {
                 return false;
             }
 
-            return tag.Type == Type &&
-                   tag.Forward == Forward &&
-                   tag.NonCritical == NonCritical &&
-                   tag.Value.Equals(Value);
+            return a.Type == b.Type &&
+                    a.Forward == b.Forward &&
+                    a.NonCritical == b.NonCritical &&
+                    a.Value == b.Value;
         }
 
-        /// <summary>
-        /// Cast TLV element to DataHash
-        /// </summary>
-        /// <param name="tag">Imprint TLV element</param>
-        public static implicit operator DataHash(ImprintTag tag)
+        public static bool operator !=(ImprintTag a, ImprintTag b)
         {
-            return tag.Value;
+            return !(a == b);
         }
 
     }

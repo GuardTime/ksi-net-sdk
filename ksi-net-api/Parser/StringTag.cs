@@ -84,16 +84,7 @@ namespace Guardtime.KSI.Parser
         /// <returns>Is TLV element equal to object</returns>
         public override bool Equals(object obj)
         {
-            StringTag tag = obj as StringTag;
-            if (tag == null)
-            {
-                return false;
-            }
-
-            return tag.Type == Type &&
-                   tag.Forward == Forward &&
-                   tag.NonCritical == NonCritical &&
-                   tag.Value == Value;
+            return this == obj as StringTag;
         }
 
         /// <summary>
@@ -120,13 +111,29 @@ namespace Guardtime.KSI.Parser
             return builder.ToString();
         }
 
-        /// <summary>
-        /// Cast TLV element to string.
-        /// </summary>
-        /// <param name="tag">string TLV element</param>
-        public static implicit operator string (StringTag tag)
+        public static bool operator ==(StringTag a, StringTag b)
         {
-            return tag.Value;
+            // If both are null, or both are same instance, return true.
+            if (ReferenceEquals(a, b))
+            {
+                return true;
+            }
+
+            // If one is null, but not both, return false.
+            if (((object)a == null) || ((object)b == null))
+            {
+                return false;
+            }
+
+            return  a.Type == b.Type &&
+                    a.Forward == b.Forward &&
+                    a.NonCritical == b.NonCritical &&
+                    a.Value == b.Value;
+        }
+
+        public static bool operator !=(StringTag a, StringTag b)
+        {
+            return !(a == b);
         }
 
     }

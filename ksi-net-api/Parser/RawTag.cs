@@ -99,13 +99,29 @@ namespace Guardtime.KSI.Parser
                    Util.IsArrayEqual(tag.EncodeValue(), EncodeValue());
         }
 
-        /// <summary>
-        /// Cast TLV element to byte array.
-        /// </summary>
-        /// <param name="tag">Raw TLV element</param>
-        public static implicit operator byte[] (RawTag tag)
+        public static bool operator ==(RawTag a, RawTag b)
         {
-            return tag.Value;
+            // If both are null, or both are same instance, return true.
+            if (ReferenceEquals(a, b))
+            {
+                return true;
+            }
+
+            // If one is null, but not both, return false.
+            if (((object)a == null) || ((object)b == null))
+            {
+                return false;
+            }
+
+            return a.Type == b.Type &&
+                    a.Forward == b.Forward &&
+                    a.NonCritical == b.NonCritical &&
+                    Util.IsArrayEqual(a.Value, b.Value);
+        }
+
+        public static bool operator !=(RawTag a, RawTag b)
+        {
+            return !(a == b);
         }
 
     }

@@ -82,32 +82,6 @@ namespace Guardtime.KSI.Parser
             tag.IsValidStructure();
         }
 
-        [Test]
-        public void TestTryReplaceTagNotInCompositeTagList()
-        {
-            var tag = new CompositeTestTag(0x1, false, false, new List<TlvTag>() { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }), new RawTag(0x3, false, false, new byte[] { 0x4 }) });
-            Assert.IsNull(tag.ReplaceTagImpl(tag, new RawTag(0x6, false, false, new byte[] { })));
-        }
-
-        [Test]
-        public void TestRemoveTagInCompositeTagList()
-        {
-            var childTag = new RawTag(0x2, false, false, new byte[] {0x3, 0x4});
-            var tag = new CompositeTestTag(0x1, false, false, new List<TlvTag>() { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), childTag, new RawTag(0x3, false, false, new byte[] { 0x4 }) });
-            Assert.AreEqual(3, tag.Count, "Tag should contain 3 elements");
-            tag.RemoveTagImpl(childTag);
-            Assert.AreEqual(2, tag.Count, "Tag should contain 2 elements");
-            tag.RemoveTagImpl(null);
-            Assert.AreEqual(2, tag.Count, "Tag should contain 2 elements");
-        }
-
-        [Test, ExpectedException(typeof(ArgumentNullException))]
-        public void TestAddNullTagToCompositeTagList()
-        {
-            var tag = new CompositeTestTag(0x1, false, false, new List<TlvTag>() { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }) });
-            tag.AddTagImpl(null);
-        }
-
         [Test, ExpectedException(typeof(ArgumentNullException))]
         public void TestPutNullTagToCompositeTagList()
         {
@@ -120,6 +94,20 @@ namespace Guardtime.KSI.Parser
         {
             var tag = new CompositeTestTag(0x1, false, false, new List<TlvTag>() { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }) });
             tag.SetTagToFirstPosition(null);
+        }
+
+        [Test]
+        public void TestTryReplaceTagNotInCompositeTagList()
+        {
+            var tag = new CompositeTestTag(0x1, false, false, new List<TlvTag>() { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }), new RawTag(0x3, false, false, new byte[] { 0x4 }) });
+            Assert.IsNull(tag.ReplaceTagImpl(tag, new RawTag(0x6, false, false, new byte[] { })));
+        }
+
+        [Test, ExpectedException(typeof(ArgumentNullException))]
+        public void TestAddNullTagToCompositeTagList()
+        {
+            var tag = new CompositeTestTag(0x1, false, false, new List<TlvTag>() { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }) });
+            tag.AddTagImpl(null);
         }
 
         [Test, ExpectedException(typeof(ArgumentNullException))]
@@ -180,11 +168,6 @@ namespace Guardtime.KSI.Parser
                 return ReplaceTag(tag, previousTag);
             }
 
-            public void RemoveTagImpl(TlvTag tag)
-            {
-                RemoveTag(tag);
-            }
-
             public void SetTagToFirstPosition(TlvTag tag)
             {
                 this[0] = tag;
@@ -192,16 +175,16 @@ namespace Guardtime.KSI.Parser
 
             protected override void CheckStructure()
             {
-                foreach (var tag in this)
+                for (int i = 0; i < Count; i++)
                 {
-                    switch (tag.Type)
+                    switch (this[i].Type)
                     {
                         case 0x1:
                         case 0x2:
                         case 0x5:
                             break;
                         default:
-                            throw new InvalidTlvStructureException("Invalid tag", tag);
+                            throw new InvalidTlvStructureException("Invalid tag", this[i]);
                     }
                 }
             }

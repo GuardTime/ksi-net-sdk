@@ -29,7 +29,7 @@ namespace Guardtime.KSI.Parser
         }
 
         [Test()]
-        public void ReadTagShortWithLongTypeTest()
+        public void TestReadTagShortWithLongType()
         {
             using (var reader = new TlvReader(new MemoryStream(new byte[] { 0xa0, 0x33, 0x0, 0x4, 0x0, 0x1, 0x2, 0x3 })))
             {

@@ -54,7 +54,7 @@ namespace Guardtime.KSI.Parser
         {
             var tag = new StringTag(new RawTag(0x1, false, false,
                 new byte[] { 0x74, 0x65, 0x73, 0x74, 0x20, 0x6D, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x0 }));
-            Assert.AreEqual("test message", (string)tag, "Tag should cast correctly to string");
+            Assert.AreEqual("test message", tag.Value, "Tag should cast correctly to string");
         }
 
         [Test, ExpectedException(typeof(ArgumentException))]

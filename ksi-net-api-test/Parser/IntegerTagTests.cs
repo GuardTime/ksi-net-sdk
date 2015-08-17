@@ -49,14 +49,6 @@ namespace Guardtime.KSI.Parser
             Assert.AreEqual("TLV[0x1,N,F]:i11", tag.ToString(), "Tag unsigned long representation should be correct");
         }
 
-        [Test]
-        public void TestStringTagCastToString()
-        {
-            var tag = new IntegerTag(0x1, false, false, 10);
-            Assert.AreEqual(10, tag, "Tag should cast correctly to ulong");
-            Assert.AreEqual(new DateTime(1970, 01, 01, 0, 0, 10), (DateTime)tag, "Tag should cast correctly to DateTime");
-        }
-
         [Test, ExpectedException(typeof(ArgumentException))]
         public void TestTlvTagCreateFromInvalidEncodeTlvTag()
         {
