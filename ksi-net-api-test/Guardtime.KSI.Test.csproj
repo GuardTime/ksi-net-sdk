@@ -121,8 +121,8 @@
     <Compile Include="Signature\CalendarHashChainTests.cs" />
     <Compile Include="Signature\Rfc3161RecordTests.cs" />
     <Compile Include="Signature\SignatureDataTests.cs" />
+    <Compile Include="Signature\Verification\SignatureVerificationTests.cs" />
     <Compile Include="Trust\PkiTrustStoreProviderTests.cs" />
-    <Compile Include="Utils\EmptyEnumeratorTests.cs" />
     <Compile Include="Utils\InvalidEncodeTlvTag.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -138,7 +138,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="resources\signature\ksi-signature\" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="resources\publication\publicationdata\missingtag.tlv">
@@ -348,7 +350,10 @@
     <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-missing-calendar-hash-chain.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-missing-publication-record-and-calendar-authentication-record.tlv">
+    <None Include="resources\signature\ksi-signature-do\ksi-signature-ok-missing-calendar-hash-chain.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\ksi-signature-do\ksi-signature-ok-missing-publication-record-and-calendar-authentication-record.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-multiple-calendar-authentication-records.tlv">

@@ -40,6 +40,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <DocumentationFile>bin\x86\Debug\ksi-net-api.XML</DocumentationFile>
+    <LangVersion>ISO-2</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -90,6 +91,11 @@
     <Compile Include="Parser\TlvReader.cs" />
     <Compile Include="Parser\TlvWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Publication\CertificateRecord.cs" />
     <Compile Include="Publication\PublicationsFileHeader.cs" />
     <Compile Include="Publication\PublicationsFile.cs" />
@@ -124,13 +130,31 @@
     <Compile Include="Publication\PublicationRecord.cs" />
     <Compile Include="Signature\Rfc3161Record.cs" />
     <Compile Include="Signature\SignatureData.cs" />
+    <Compile Include="Signature\Verification\KsiTrustProvider.cs" />
+    <Compile Include="Signature\Verification\Policy\IPolicy.cs" />
+    <Compile Include="Signature\Verification\Rule\AggregationHashChainTimeConsistencyRule.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarHashChainInputHashVerificationRule.cs" />
+    <Compile Include="Signature\Verification\Rule\IRule.cs" />
+    <Compile Include="Signature\Verification\Policy\Policy.cs" />
+    <Compile Include="Signature\Verification\Rule\AggregationHashChainConsistencyRule.cs" />
+    <Compile Include="Signature\Verification\Rule\AggregationHashChainInputHashVerificationRule.cs" />
+    <Compile Include="Signature\Verification\IVerificationContext.cs" />
+    <Compile Include="Signature\Verification\VerificationContext.cs" />
+    <Compile Include="Signature\Verification\VerificationError.cs" />
+    <Compile Include="Signature\Verification\Verifier.cs" />
+    <Compile Include="Signature\Verification\VerificationResult.cs" />
     <Compile Include="Trust\IKsiTrustProvider.cs" />
     <Compile Include="Trust\IPkiTrustProvider.cs" />
     <Compile Include="Trust\PkiTrustStoreProvider.cs" />
-    <Compile Include="Utils\EmptyEnumerator.cs" />
     <Compile Include="Utils\Util.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

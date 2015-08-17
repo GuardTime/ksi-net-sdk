@@ -638,15 +638,6 @@ namespace Guardtime.KSI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-missing-publication-record-and-calendar-authentication-record.tlv.
-        /// </summary>
-        internal static string KsiSignatureDo_Invalid_Missing_Publication_Record {
-            get {
-                return ResourceManager.GetString("KsiSignatureDo_Invalid_Missing_Publication_Record", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-multiple-calendar-authentication-records.tlv.
         /// </summary>
         internal static string KsiSignatureDo_Invalid_Multiple_Calendar_Authentication_Records {
@@ -706,6 +697,24 @@ namespace Guardtime.KSI.Properties {
         internal static string KsiSignatureDo_Ok {
             get {
                 return ResourceManager.GetString("KsiSignatureDo_Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-ok-missing-calendar-hash-chain.tlv.
+        /// </summary>
+        internal static string KsiSignatureDo_Ok_Missing_Calendar_Hash_Chain {
+            get {
+                return ResourceManager.GetString("KsiSignatureDo_Ok_Missing_Calendar_Hash_Chain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-ok-missing-publication-record-and-calendar-authentication-record.tlv.
+        /// </summary>
+        internal static string KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record {
+            get {
+                return ResourceManager.GetString("KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record", resourceCulture);
             }
         }
         
