@@ -6,7 +6,7 @@ namespace Guardtime.KSI.Parser
     /// <summary>
     /// Imprint TLV element
     /// </summary>
-    public class ImprintTag : TlvTag
+    public class ImprintTag : TlvTag, IEquatable<ImprintTag>
     {
         private readonly DataHash _value;
 
@@ -75,31 +75,52 @@ namespace Guardtime.KSI.Parser
         /// <summary>
         /// Compare TLV element to object.
         /// </summary>
-        /// <param name="obj">Comparable object</param>
+        /// <param name="obj">Comparable object.</param>
         /// <returns>Is given object equal</returns>
         public override bool Equals(object obj)
         {
-            return this == obj as ImprintTag;
+            return Equals(obj as ImprintTag);
         }
 
-        public static bool operator ==(ImprintTag a, ImprintTag b)
+        public bool Equals(ImprintTag tag)
         {
-            // If both are null, or both are same instance, return true.
-            if (ReferenceEquals(a, b))
-            {
-                return true;
-            }
-
-            // If one is null, but not both, return false.
-            if (((object)a == null) || ((object)b == null))
+            // If parameter is null, return false. 
+            if (ReferenceEquals(tag, null))
             {
                 return false;
             }
 
-            return a.Type == b.Type &&
-                    a.Forward == b.Forward &&
-                    a.NonCritical == b.NonCritical &&
-                    a.Value == b.Value;
+            if (ReferenceEquals(this, tag))
+            {
+                return true;
+            }
+
+            // If run-time types are not exactly the same, return false. 
+            if (GetType() != tag.GetType())
+            {
+                return false;
+            }
+
+            return Type == tag.Type &&
+                    Forward == tag.Forward &&
+                    NonCritical == tag.NonCritical &&
+                    Value == tag.Value;
+        }
+
+        public static bool operator ==(ImprintTag a, ImprintTag b)
+        {
+            if (ReferenceEquals(a, null))
+            {
+                if (ReferenceEquals(b, null))
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
+            // Equals handles case of null on right side. 
+            return a.Equals(b);
         }
 
         public static bool operator !=(ImprintTag a, ImprintTag b)

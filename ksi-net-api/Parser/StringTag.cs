@@ -7,7 +7,7 @@ namespace Guardtime.KSI.Parser
     /// <summary>
     /// String TLV element.
     /// </summary>
-    public class StringTag : TlvTag
+    public class StringTag : TlvTag, IEquatable<StringTag>
     {
         private readonly string _value;
         /// <summary>
@@ -80,11 +80,36 @@ namespace Guardtime.KSI.Parser
         /// <summary>
         /// Compare TLV element to object.
         /// </summary>
-        /// <param name="obj">Comparable object</param>
-        /// <returns>Is TLV element equal to object</returns>
+        /// <param name="obj">Comparable object.</param>
+        /// <returns>Is given object equal</returns>
         public override bool Equals(object obj)
         {
-            return this == obj as StringTag;
+            return Equals(obj as StringTag);
+        }
+
+        public bool Equals(StringTag tag)
+        {
+            // If parameter is null, return false. 
+            if (ReferenceEquals(tag, null))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, tag))
+            {
+                return true;
+            }
+
+            // If run-time types are not exactly the same, return false. 
+            if (GetType() != tag.GetType())
+            {
+                return false;
+            }
+
+            return  Type == tag.Type &&
+                    Forward == tag.Forward &&
+                    NonCritical == tag.NonCritical &&
+                    Value == tag.Value;
         }
 
         /// <summary>
@@ -113,22 +138,18 @@ namespace Guardtime.KSI.Parser
 
         public static bool operator ==(StringTag a, StringTag b)
         {
-            // If both are null, or both are same instance, return true.
-            if (ReferenceEquals(a, b))
+            if (ReferenceEquals(a, null))
             {
-                return true;
-            }
+                if (ReferenceEquals(b, null))
+                {
+                    return true;
+                }
 
-            // If one is null, but not both, return false.
-            if (((object)a == null) || ((object)b == null))
-            {
                 return false;
             }
 
-            return  a.Type == b.Type &&
-                    a.Forward == b.Forward &&
-                    a.NonCritical == b.NonCritical &&
-                    a.Value == b.Value;
+            // Equals handles case of null on right side. 
+            return a.Equals(b);
         }
 
         public static bool operator !=(StringTag a, StringTag b)

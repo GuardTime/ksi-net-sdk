@@ -8,7 +8,7 @@ namespace Guardtime.KSI.Parser
     /// <summary>
     /// Octet String TLV element.
     /// </summary>
-    public class RawTag : TlvTag
+    public class RawTag : TlvTag, IEquatable<RawTag>
     {
         private readonly byte[] _value;
 
@@ -83,40 +83,52 @@ namespace Guardtime.KSI.Parser
         /// <summary>
         /// Compare TLV element to object.
         /// </summary>
-        /// <param name="obj">Comparable object</param>
-        /// <returns>Is TLV element equal to object</returns>
+        /// <param name="obj">Comparable object.</param>
+        /// <returns>Is given object equal</returns>
         public override bool Equals(object obj)
         {
-            TlvTag tag = obj as TlvTag;
-            if (tag == null)
+            return Equals(obj as RawTag);
+        }
+
+        public bool Equals(RawTag tag)
+        {
+            // If parameter is null, return false. 
+            if (ReferenceEquals(tag, null))
             {
                 return false;
             }
 
-            return tag.Type == Type &&
-                   tag.Forward == Forward &&
-                   tag.NonCritical == NonCritical &&
-                   Util.IsArrayEqual(tag.EncodeValue(), EncodeValue());
-        }
-
-        public static bool operator ==(RawTag a, RawTag b)
-        {
-            // If both are null, or both are same instance, return true.
-            if (ReferenceEquals(a, b))
+            if (ReferenceEquals(this, tag))
             {
                 return true;
             }
 
-            // If one is null, but not both, return false.
-            if (((object)a == null) || ((object)b == null))
+            // If run-time types are not exactly the same, return false. 
+            if (GetType() != tag.GetType())
             {
                 return false;
             }
 
-            return a.Type == b.Type &&
-                    a.Forward == b.Forward &&
-                    a.NonCritical == b.NonCritical &&
-                    Util.IsArrayEqual(a.Value, b.Value);
+            return Type == tag.Type &&
+                    Forward == tag.Forward &&
+                    NonCritical == tag.NonCritical &&
+                    Util.IsArrayEqual(EncodeValue(), tag.EncodeValue());
+        }
+
+        public static bool operator ==(RawTag a, RawTag b)
+        {
+            if (ReferenceEquals(a, null))
+            {
+                if (ReferenceEquals(b, null))
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
+            // Equals handles case of null on right side. 
+            return a.Equals(b);
         }
 
         public static bool operator !=(RawTag a, RawTag b)

@@ -11,7 +11,7 @@ namespace Guardtime.KSI.Parser
     /// <summary>
     /// TLV element containing other TLV elements
     /// </summary>
-    public abstract class CompositeTag : TlvTag, IEnumerable<TlvTag>
+    public abstract class CompositeTag : TlvTag, IEnumerable<TlvTag>, IEquatable<CompositeTag>
     {
         private readonly object _lock = new object();
         private readonly List<TlvTag> _value = new List<TlvTag>();
@@ -261,19 +261,42 @@ namespace Guardtime.KSI.Parser
         /// <returns>Is given object equal</returns>
         public override bool Equals(object obj)
         {
-            CompositeTag tag = obj as CompositeTag;
-            if (tag == null || (tag.Count != Count) || (tag.Type != Type && tag.Forward != Forward && tag.NonCritical != NonCritical))
+            return Equals(obj as CompositeTag);
+        }
+
+        public bool Equals(CompositeTag tag)
+        {
+            // If parameter is null, return false. 
+            if (ReferenceEquals(tag, null))
             {
                 return false;
             }
-            
-            bool match = true;
-            for (int i = 0; i < Count && match; i++)
+
+            if (ReferenceEquals(this, tag))
             {
-                match = tag[i].Equals(this[i]);
+                return true;
             }
 
-            return match;
+            // If run-time types are not exactly the same, return false. 
+            if (GetType() != tag.GetType())
+            {
+                return false;
+            }
+
+            if (Count != tag.Count || Type != tag.Type || Forward != tag.Forward || NonCritical != tag.NonCritical)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < Count; i++)
+            {
+                if (!this[i].Equals(tag[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -326,7 +349,28 @@ namespace Guardtime.KSI.Parser
             return builder.ToString();
         }
 
-        
+        public static bool operator ==(CompositeTag a, CompositeTag b)
+        {
+            if (ReferenceEquals(a, null))
+            {
+                if (ReferenceEquals(b, null))
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
+            // Equals handles case of null on right side. 
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(CompositeTag a, CompositeTag b)
+        {
+            return !(a == b);
+        }
+
+
 
         private class ThreadSafeIEnumerator<T> : IEnumerator<T>
         {
