@@ -1,5 +1,6 @@
 ﻿using Guardtime.KSI.Utils;
 using System;
+using System.Collections.ObjectModel;
 
 namespace Guardtime.KSI.Hashing
 {
@@ -7,7 +8,7 @@ namespace Guardtime.KSI.Hashing
     /// Representation of hash values as hash computation results.
     /// Includes name of the algorithm used and computed hash value.
     /// </summary>
-    public class DataHash
+    public class DataHash : IEquatable<DataHash>
     {
         private readonly HashAlgorithm _algorithm;
         private readonly byte[] _imprint;
@@ -27,14 +28,16 @@ namespace Guardtime.KSI.Hashing
         /// </summary>
         public byte[] Imprint
         {
-            get { return _imprint; }
+            // TODO: Fix the clone with immutable array
+            get { return (byte[])_imprint.Clone(); }
         }
 
         /// <summary>
         /// Get the computed hash value for DataHash.
         /// </summary>
         public byte[] Value {
-            get { return _value; }
+            // TODO: Fix the clone with immutable array
+            get { return (byte[])_value.Clone(); }
         }
 
         /// <summary>
@@ -65,8 +68,8 @@ namespace Guardtime.KSI.Hashing
             _value = valueBytes;
 
             _imprint = new byte[Algorithm.Length + 1];
-            Imprint[0] = Algorithm.Id;
-            Array.Copy(Value, 0, Imprint, 1, Algorithm.Length);
+            _imprint[0] = Algorithm.Id;
+            Array.Copy(_value, 0, _imprint, 1, Algorithm.Length);
         }
 
         /// <summary>
@@ -82,7 +85,7 @@ namespace Guardtime.KSI.Hashing
 
             if (imprintBytes.Length == 0)
             {
-                throw new ArgumentException("Hash imprint too short");
+                throw new ArgumentException("Hash imprint too short", "imprintBytes");
             }
 
             _algorithm = HashAlgorithm.GetById(imprintBytes[0]);
@@ -101,24 +104,40 @@ namespace Guardtime.KSI.Hashing
             }
 
             _value = new byte[_algorithm.Length];
-            Array.Copy(imprintBytes, 1, Value, 0, _algorithm.Length);
+            Array.Copy(imprintBytes, 1, _value, 0, _algorithm.Length);
             _imprint = imprintBytes;
         }
 
         /// <summary>
-        /// Check if object is equal to current DataHash.
+        /// Compare TLV element to object.
         /// </summary>
-        /// <param name="obj">Object</param>
-        /// <returns>boolean where true means that objects are equal</returns>
+        /// <param name="obj">Comparable object.</param>
+        /// <returns>Is given object equal</returns>
         public override bool Equals(object obj)
         {
-            DataHash hash = obj as DataHash;
-            if (hash == null)
+            return Equals(obj as DataHash);
+        }
+
+        public bool Equals(DataHash hash)
+        {
+            // If parameter is null, return false. 
+            if (ReferenceEquals(hash, null))
             {
                 return false;
             }
 
-            return Util.IsArrayEqual(hash.Imprint, Imprint);
+            if (ReferenceEquals(this, hash))
+            {
+                return true;
+            }
+
+            // If run-time types are not exactly the same, return false. 
+            if (GetType() != hash.GetType())
+            {
+                return false;
+            }
+
+            return Util.IsArrayEqual(_imprint, hash._imprint);
         }
 
         /// <summary>
@@ -145,7 +164,28 @@ namespace Guardtime.KSI.Hashing
         /// <returns>String representing algorithm name and value</returns>
         public override string ToString()
         {
-            return Algorithm.Name + ":[" + Util.ConvertByteArrayToString(Value) + "]";
+            return Algorithm.Name + ":[" + Util.ConvertByteArrayToString(_value) + "]";
+        }
+
+        public static bool operator ==(DataHash a, DataHash b)
+        {
+            if (ReferenceEquals(a, null))
+            {
+                if (ReferenceEquals(b, null))
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
+            // Equals handles case of null on right side. 
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(DataHash a, DataHash b)
+        {
+            return !(a == b);
         }
     }
 }

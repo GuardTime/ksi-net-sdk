@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using Microsoft.Win32.SafeHandles;
-
+using System.Collections.Generic;
 
 namespace Guardtime.KSI.Hashing
 {
@@ -33,7 +33,7 @@ namespace Guardtime.KSI.Hashing
              */
             if (algorithm.Status == HashAlgorithm.AlgorithmStatus.NotImplemented)
             {
-                throw new ArgumentException("Hash algorithm is not implemented");
+                throw new ArgumentException("Hash algorithm is not implemented", "algorithm");
             }
 
             _algorithm = algorithm;
@@ -41,7 +41,7 @@ namespace Guardtime.KSI.Hashing
             _messageHasher = System.Security.Cryptography.HashAlgorithm.Create(algorithm.Name);
             if (_messageHasher == null)
             {
-                throw new ArgumentException("Hash algorithm not supported: " + algorithm.Name);
+                throw new ArgumentException("Hash algorithm not supported: " + algorithm.Name, "algorithm");
             }
 
             _messageHasher.Initialize();
@@ -59,7 +59,7 @@ namespace Guardtime.KSI.Hashing
         /// <summary>
         /// Updates the digest using the specified array of bytes, starting at the specified offset.
         /// </summary>
-        /// <param name="data">the array of bytes.</param>
+        /// <param name="data">the list of bytes.</param>
         /// <param name="offset">the offset to start from in the array of bytes.</param>
         /// <param name="length">the number of bytes to use, starting at the offset.</param>
         /// <returns>the same DataHasher object for chaining calls</returns>
@@ -81,7 +81,7 @@ namespace Guardtime.KSI.Hashing
         /// <summary>
         /// Adds data to the digest using the specified array of bytes, starting at an offset of 0.
         /// </summary>
-        /// <param name="data">array of bytes</param>
+        /// <param name="data">list of bytes</param>
         /// <returns>the same DataHasher object for chaining calls</returns>
         public DataHasher AddData(byte[] data) {
             if (data == null)
