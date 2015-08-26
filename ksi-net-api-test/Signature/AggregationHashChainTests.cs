@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Exceptions;
+using System;
 
 namespace Guardtime.KSI.Signature
 {
@@ -203,7 +204,6 @@ namespace Guardtime.KSI.Signature
             using (var reader = new TlvReader(stream))
             {
                 AggregationHashChain aggregationHashChain = new AggregationHashChain(reader.ReadTag());
-                aggregationHashChain.IsValidStructure();
 
                 return aggregationHashChain;
             }

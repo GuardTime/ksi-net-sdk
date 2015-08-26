@@ -58,7 +58,6 @@ namespace Guardtime.KSI.Signature
             using (var reader = new TlvReader(stream))
             {
                 CalendarAuthenticationRecord calendarAuthenticationRecord = new CalendarAuthenticationRecord(reader.ReadTag());
-                calendarAuthenticationRecord.IsValidStructure();
 
                 return calendarAuthenticationRecord;
             }

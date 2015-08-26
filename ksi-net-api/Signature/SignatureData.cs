@@ -7,7 +7,7 @@ namespace Guardtime.KSI.Signature
     /// <summary>
     /// Signature data TLV element
     /// </summary>
-    public class SignatureData : CompositeTag
+    public sealed class SignatureData : CompositeTag
     {
         // TODO: Better name
         /// <summary>
@@ -30,6 +30,16 @@ namespace Guardtime.KSI.Signature
         /// <param name="tag">TLV element</param>
         public SignatureData(TlvTag tag) : base(tag)
         {
+            if (Type != TagType)
+            {
+                throw new InvalidTlvStructureException("Invalid signature data type: " + Type);
+            }
+
+            int signatureTypeCount = 0;
+            int signatureValueCount = 0;
+            int certificateIdCount = 0;
+            int certificateRepositoryUriCount = 0;
+
             for (int i = 0; i < Count; i++)
             {
                 switch (this[i].Type)
@@ -37,72 +47,46 @@ namespace Guardtime.KSI.Signature
                     case SignatureTypeTagType:
                         _signatureType = new StringTag(this[i]);
                         this[i] = _signatureType;
+                        signatureTypeCount++;
                         break;
                     case SignatureValueTagType:
                         _signatureValue = new RawTag(this[i]);
                         this[i] = _signatureValue;
+                        signatureValueCount++;
                         break;
                     case CertificateIdTagType:
                         _certificateId = new RawTag(this[i]);
                         this[i] = _certificateId;
+                        certificateIdCount++;
                         break;
                     case CertificateRepositoryUriTagType:
                         _certificateRepositoryUri = new StringTag(this[i]);
                         this[i] = _certificateRepositoryUri;
-                        break;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Check TLV structure.
-        /// </summary>
-        protected override void CheckStructure()
-        {
-            if (Type != TagType)
-            {
-                throw new InvalidTlvStructureException("Invalid signature data type: " + Type);
-            }
-
-            uint[] tags = new uint[4];
-
-            for (int i = 0; i < Count; i++)
-            {
-                switch (this[i].Type)
-                {
-                    case SignatureTypeTagType:
-                        tags[0]++;
-                        break;
-                    case SignatureValueTagType:
-                        tags[1]++;
-                        break;
-                    case CertificateIdTagType:
-                        tags[2]++;
-                        break;
-                    case CertificateRepositoryUriTagType:
-                        tags[3]++;
+                        certificateRepositoryUriCount++;
                         break;
                     default:
-                        throw new InvalidTlvStructureException("Invalid tag", this[i]);
+                        VerifyCriticalTag(this[i]);
+                        break;
                 }
             }
 
-            if (tags[0] != 1)
+
+            if (signatureTypeCount != 1)
             {
                 throw new InvalidTlvStructureException("Only one signature type must exist in signature data");
             }
 
-            if (tags[1] != 1)
+            if (signatureValueCount != 1)
             {
                 throw new InvalidTlvStructureException("Only one signature value must exist in signature data");
             }
 
-            if (tags[2] != 1)
+            if (certificateIdCount != 1)
             {
                 throw new InvalidTlvStructureException("Only one certificate id must exist in signature data");
             }
 
-            if (tags[3] > 1)
+            if (certificateRepositoryUriCount > 1)
             {
                 throw new InvalidTlvStructureException("Only one certificate repository uri is allowed in signature data");
             }

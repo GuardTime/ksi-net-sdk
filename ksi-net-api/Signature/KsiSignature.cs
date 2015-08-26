@@ -8,18 +8,9 @@ using Guardtime.KSI.Hashing;
 
 namespace Guardtime.KSI.Signature
 {
-    public class KsiSignature
+    public sealed class KsiSignature
     {
         private readonly KsiSignatureDo _ksiSignatureDo;
-
-        /// <summary>
-        /// Get KSI signature aggregation time
-        /// </summary>
-        public ulong AggregationTime {
-            get { return _ksiSignatureDo.AggregationTime; }
-        }
-
-        
 
         /// <summary>
         /// Is signature in RFC 3161 format
@@ -67,7 +58,6 @@ namespace Guardtime.KSI.Signature
 
             // TODO: Make signature data object to interface
             _ksiSignatureDo = new KsiSignatureDo(signatureTags);
-            _ksiSignatureDo.IsValidStructure();
         }
 
         // TODO: Should be public?
@@ -77,8 +67,6 @@ namespace Guardtime.KSI.Signature
             {
                 throw new ArgumentNullException("ksiSignatureDo");
             }
-            // TODO: Should check structure?
-            ksiSignatureDo.IsValidStructure();
             _ksiSignatureDo = ksiSignatureDo;
         }
 
@@ -124,9 +112,7 @@ namespace Guardtime.KSI.Signature
 
             using (TlvReader reader = new TlvReader(stream))
             {
-                KsiSignatureDo ksiSignatureDo = new KsiSignatureDo(reader.ReadTag());
-                ksiSignatureDo.IsValidStructure();
-                return new KsiSignature(ksiSignatureDo);
+                return new KsiSignature(new KsiSignatureDo(reader.ReadTag()));
             }
         }
 

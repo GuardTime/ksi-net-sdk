@@ -76,7 +76,6 @@ namespace Guardtime.KSI.Signature
             using (var reader = new TlvReader(stream))
             {
                 AggregationAuthenticationRecord aggregationAuthenticationRecord = new AggregationAuthenticationRecord(reader.ReadTag());
-                aggregationAuthenticationRecord.IsValidStructure();
 
                 return aggregationAuthenticationRecord;
             }

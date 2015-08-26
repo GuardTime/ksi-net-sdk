@@ -83,7 +83,6 @@ namespace Guardtime.KSI.Signature
             using (var reader = new TlvReader(stream))
             {
                 SignatureData signatureData = new SignatureData(reader.ReadTag());
-                signatureData.IsValidStructure();
 
                 return signatureData;
             }

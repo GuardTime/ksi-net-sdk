@@ -136,7 +136,6 @@ namespace Guardtime.KSI.Signature
             using (var reader = new TlvReader(stream))
             {
                 Rfc3161Record rfc3161Record = new Rfc3161Record(reader.ReadTag());
-                rfc3161Record.IsValidStructure();
 
                 return rfc3161Record;
             }

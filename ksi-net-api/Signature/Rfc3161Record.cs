@@ -9,7 +9,7 @@ namespace Guardtime.KSI.Signature
     /// <summary>
     /// RFC3161 record TLV element
     /// </summary>
-    public class Rfc3161Record : CompositeTag
+    public sealed class Rfc3161Record : CompositeTag
     {
         // TODO: Better name
         /// <summary>
@@ -55,6 +55,20 @@ namespace Guardtime.KSI.Signature
         /// <param name="tag">TLV element</param>
         public Rfc3161Record(TlvTag tag) : base(tag)
         {
+            if (Type != TagType)
+            {
+                throw new InvalidTlvStructureException("Invalid RFC 3161 record type: " + Type);
+            }
+
+            int aggregationTimeCount = 0;
+            int inputHashCount = 0;
+            int tstInfoPrefixCount = 0;
+            int tstInfoSuffixCount = 0;
+            int tstInfoAlgorithmCount = 0;
+            int signedAttributesPrefixCount = 0;
+            int signedAttributesSuffixCount = 0;
+            int signedAttributesAlgorithmCount = 0;
+
             for (int i = 0; i < Count; i++)
             {
                 switch (this[i].Type)
@@ -62,6 +76,7 @@ namespace Guardtime.KSI.Signature
                     case AggregationTimeTagType:
                         _aggregationTime = new IntegerTag(this[i]);
                         this[i] = _aggregationTime;
+                        aggregationTimeCount++;
                         break;
                     case ChainIndexTagType:
                         IntegerTag chainTag = new IntegerTag(this[i]);
@@ -71,32 +86,87 @@ namespace Guardtime.KSI.Signature
                     case InputHashTagType:
                         _inputHash = new ImprintTag(this[i]);
                         this[i] = _inputHash;
+                        inputHashCount++;
                         break;
                     case TstInfoPrefixTagType:
                         _tstInfoPrefix = new RawTag(this[i]);
                         this[i] = _tstInfoPrefix;
+                        tstInfoPrefixCount++;
                         break;
                     case TstInfoSuffixTagType:
                         _tstInfoSuffix = new RawTag(this[i]);
                         this[i] = _tstInfoSuffix;
+                        tstInfoSuffixCount++;
                         break;
                     case TstInfoAlgorithmTagType:
                         _tstInfoAlgorithm = new IntegerTag(this[i]);
                         this[i] = _tstInfoAlgorithm;
+                        tstInfoAlgorithmCount++;
                         break;
                     case SignedAttributesPrefixTagType:
                         _signedAttributesPrefix = new RawTag(this[i]);
                         this[i] = _signedAttributesPrefix;
+                        signedAttributesPrefixCount++;
                         break;
                     case SignedAttributesSuffixTagType:
                         _signedAttributesSuffix = new RawTag(this[i]);
                         this[i] = _signedAttributesSuffix;
+                        signedAttributesSuffixCount++;
                         break;
                     case SignedAttributesAlgorithmTagType:
                         _signedAttributesAlgorithm = new IntegerTag(this[i]);
                         this[i] = _signedAttributesAlgorithm;
+                        signedAttributesAlgorithmCount++;
+                        break;
+                    default:
+                        VerifyCriticalTag(this[i]);
                         break;
                 }
+            }
+
+            if (aggregationTimeCount != 1)
+            {
+                throw new InvalidTlvStructureException("Only one aggregation time must exist in RFC 3161 record");
+            }
+
+            if (_chainIndex.Count == 0)
+            {
+                throw new InvalidTlvStructureException("Chain indexes must exist in RFC 3161 record");
+            }
+
+            if (inputHashCount != 1)
+            {
+                throw new InvalidTlvStructureException("Only one input hash must exist in RFC 3161 record");
+            }
+
+            if (tstInfoPrefixCount != 1)
+            {
+                throw new InvalidTlvStructureException("Only one tstInfo prefix must exist in RFC 3161 record");
+            }
+
+            if (tstInfoSuffixCount != 1)
+            {
+                throw new InvalidTlvStructureException("Only one tstInfo suffix must exist in RFC 3161 record");
+            }
+
+            if (tstInfoAlgorithmCount != 1)
+            {
+                throw new InvalidTlvStructureException("Only one tstInfo algorithm must exist in RFC 3161 record");
+            }
+
+            if (signedAttributesPrefixCount != 1)
+            {
+                throw new InvalidTlvStructureException("Only one signed attributes prefix must exist in RFC 3161 record");
+            }
+
+            if (signedAttributesSuffixCount != 1)
+            {
+                throw new InvalidTlvStructureException("Only one signed attributes suffix must exist in RFC 3161 record");
+            }
+
+            if (signedAttributesAlgorithmCount != 1)
+            {
+                throw new InvalidTlvStructureException("Only one signed attributes algorithm must exist in RFC 3161 record");
             }
         }
 
@@ -127,100 +197,6 @@ namespace Guardtime.KSI.Signature
             hasher.AddData(_signedAttributesSuffix.Value);
 
             return hasher.GetHash();
-        }
-
-        /// <summary>
-        /// Check TLV structure.
-        /// </summary>
-        protected override void CheckStructure()
-        {
-            if (Type != TagType)
-            {
-                throw new InvalidTlvStructureException("Invalid RFC 3161 record type: " + Type);
-            }
-
-            uint[] tags = new uint[9];
-
-            for (int i = 0; i < Count; i++)
-            {
-                switch (this[i].Type)
-                {
-                    case AggregationTimeTagType:
-                        tags[0]++;
-                        break;
-                    case ChainIndexTagType:
-                        tags[1]++;
-                        break;
-                    case InputHashTagType:
-                        tags[2]++;
-                        break;
-                    case TstInfoPrefixTagType:
-                        tags[3]++;
-                        break;
-                    case TstInfoSuffixTagType:
-                        tags[4]++;
-                        break;
-                    case TstInfoAlgorithmTagType:
-                        tags[5]++;
-                        break;
-                    case SignedAttributesPrefixTagType:
-                        tags[6]++;
-                        break;
-                    case SignedAttributesSuffixTagType:
-                        tags[7]++;
-                        break;
-                    case SignedAttributesAlgorithmTagType:
-                        tags[8]++;
-                        break;
-                    default:
-                        throw new InvalidTlvStructureException("Invalid tag", this[i]);
-                }
-            }
-
-            if (tags[0] != 1)
-            {
-                throw new InvalidTlvStructureException("Only one aggregation time must exist in RFC 3161 record");
-            }
-
-            if (tags[1] == 0)
-            {
-                throw new InvalidTlvStructureException("Chain indexes must exist in RFC 3161 record");
-            }
-
-            if (tags[2] != 1)
-            {
-                throw new InvalidTlvStructureException("Only one input hash must exist in RFC 3161 record");
-            }
-
-            if (tags[3] != 1)
-            {
-                throw new InvalidTlvStructureException("Only one tstInfo prefix must exist in RFC 3161 record");
-            }
-
-            if (tags[4] != 1)
-            {
-                throw new InvalidTlvStructureException("Only one tstInfo suffix must exist in RFC 3161 record");
-            }
-
-            if (tags[5] != 1)
-            {
-                throw new InvalidTlvStructureException("Only one tstInfo algorithm must exist in RFC 3161 record");
-            }
-
-            if (tags[6] != 1)
-            {
-                throw new InvalidTlvStructureException("Only one signed attributes prefix must exist in RFC 3161 record");
-            }
-
-            if (tags[7] != 1)
-            {
-                throw new InvalidTlvStructureException("Only one signed attributes suffix must exist in RFC 3161 record");
-            }
-
-            if (tags[8] != 1)
-            {
-                throw new InvalidTlvStructureException("Only one signed attributes algorithm must exist in RFC 3161 record");
-            }
         }
     }
 }

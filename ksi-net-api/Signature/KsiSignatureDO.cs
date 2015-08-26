@@ -12,7 +12,7 @@ namespace Guardtime.KSI.Signature
     /// <summary>
     /// KSI Signature TLV element
     /// </summary>
-    public class KsiSignatureDo : CompositeTag
+    public sealed class KsiSignatureDo : CompositeTag
     {
         // TODO: Better name
         /// <summary>
@@ -26,17 +26,6 @@ namespace Guardtime.KSI.Signature
         private readonly AggregationAuthenticationRecord _aggregationAuthenticationRecord;
         private readonly CalendarAuthenticationRecord _calendarAuthenticationRecord;
         private readonly Rfc3161Record _rfc3161Record;
-
-        /// <summary>
-        /// Get aggregation time
-        /// </summary>
-        public ulong AggregationTime
-        {
-            get
-            {
-                return _calendarChain.AggregationTime;
-            }
-        }
 
         /// <summary>
         /// Get RFC 3161 record
@@ -76,7 +65,7 @@ namespace Guardtime.KSI.Signature
         /// Create new KSI signature TLV element from TLV element
         /// </summary>
         /// <param name="tagList">TLV tag list</param>
-        public KsiSignatureDo(List<TlvTag> tagList) : this(new KsiSignatureDo(0x800, false, false, tagList))
+        public KsiSignatureDo(List<TlvTag> tagList) : this(new KsiSignatureDo(TagType, false, false, tagList))
         {
         }
 
@@ -98,6 +87,17 @@ namespace Guardtime.KSI.Signature
         /// <param name="tag">TLV element</param>
         public KsiSignatureDo(TlvTag tag) : base(tag)
         {
+            if (Type != TagType)
+            {
+                throw new InvalidTlvStructureException("Invalid signature type: " + Type);
+            }
+
+            int calendarChainCount = 0;
+            int publicationRecordCount = 0;
+            int aggregationAuthenticationRecordCount = 0;
+            int calendarAuthenticationRecordCount = 0;
+            int rfc3161RecordCount = 0;
+
             for (int i = 0; i < Count; i++)
             {
                 switch (this[i].Type)
@@ -110,25 +110,65 @@ namespace Guardtime.KSI.Signature
                     case CalendarHashChain.TagType:
                         _calendarChain = new CalendarHashChain(this[i]);
                         this[i] = _calendarChain;
+                        calendarChainCount++;
                         break;
                     case PublicationRecord.TagTypeSignature:
                         _publicationRecord = new PublicationRecord(this[i]);
                         this[i] = _publicationRecord;
+                        publicationRecordCount++;
                         break;
                     case AggregationAuthenticationRecord.TagType:
                         _aggregationAuthenticationRecord = new AggregationAuthenticationRecord(this[i]);
                         this[i] = _aggregationAuthenticationRecord;
+                        aggregationAuthenticationRecordCount++;
                         break;
                     case CalendarAuthenticationRecord.TagType:
                         _calendarAuthenticationRecord = new CalendarAuthenticationRecord(this[i]);
                         this[i] = _calendarAuthenticationRecord;
+                        calendarAuthenticationRecordCount++;
                         break;
                     case Rfc3161Record.TagType:
                         _rfc3161Record = new Rfc3161Record(this[i]);
                         this[i] = _rfc3161Record;
+                        rfc3161RecordCount++;
+                        break;
+                    default:
+                        VerifyCriticalTag(this[i]);
                         break;
                 }
             }
+
+            if (_aggregationHashChainCollection.Count == 0)
+            {
+                throw new InvalidTlvStructureException("Aggregation hash chains must exist in signature data object");
+            }
+
+            if (calendarChainCount > 1)
+            {
+                throw new InvalidTlvStructureException("Only one calendar hash chain is allowed in signature data object");
+            }
+
+            if (calendarChainCount == 0 && (publicationRecordCount != 0 || calendarAuthenticationRecordCount != 0))
+            {
+                throw new InvalidTlvStructureException("No publication record or calendar authentication record is allowed in signature data object if there is no calendar hash chain");
+            }
+
+            if ((publicationRecordCount == 1 && calendarAuthenticationRecordCount == 1) || publicationRecordCount > 1 || calendarAuthenticationRecordCount > 1)
+            {
+                throw new InvalidTlvStructureException("Only one from publication record or calendar authentication record is allowed in signature data object");
+            }
+
+            if (aggregationAuthenticationRecordCount > 1)
+            {
+                throw new InvalidTlvStructureException("Only one aggregation authentication record is allowed in signature data object");
+            }
+
+            if (rfc3161RecordCount > 1)
+            {
+                throw new InvalidTlvStructureException("Only one RFC 3161 record is allowed in signature data object");
+            }
+
+            // TODO: Aggregation authentication record
 
             _aggregationHashChainCollection.Sort(new AggregationHashChain.ChainIndexOrdering());
         }
@@ -151,74 +191,6 @@ namespace Guardtime.KSI.Signature
             }
 
             return lastResult.Hash;
-        }
-
-        /// <summary>
-        /// Check TLV structure.
-        /// </summary>
-        protected override void CheckStructure()
-        {
-            if (Type != TagType)
-            {
-                throw new InvalidTlvStructureException("Invalid signature type: " + Type);
-            }
-
-            uint[] tags = new uint[6];
-
-            for (int i = 0; i < Count; i++)
-            {
-                switch (this[i].Type)
-                {
-                    case AggregationHashChain.TagType:
-                        tags[0]++;
-                        break;
-                    case CalendarHashChain.TagType:
-                        tags[1]++;
-                        break;
-                    case PublicationRecord.TagTypeSignature:
-                        tags[2]++;
-                        break;
-                    case AggregationAuthenticationRecord.TagType:
-                        tags[3]++;
-                        break;
-                    case CalendarAuthenticationRecord.TagType:
-                        tags[4]++;
-                        break;
-                    case Rfc3161Record.TagType:
-                        tags[5]++;
-                        break;
-                    default:
-                        throw new InvalidTlvStructureException("Invalid tag", this[i]);
-                }
-            }
-
-            if (tags[0] == 0)
-            {
-                throw new InvalidTlvStructureException("Aggregation hash chains must exist in signature data object");
-            }
-
-            if (tags[1] > 1)
-            {
-                throw new InvalidTlvStructureException("Only one calendar hash chain is allowed in signature data object");
-            }
-
-            if (tags[1] == 0 && (tags[2] != 0 || tags[4] != 0))
-            {
-                throw new InvalidTlvStructureException("No publication record or calendar authentication record is allowed in signature data object if there is no calendar hash chain");
-            }
-
-            if ((tags[2] != 0 || tags[4] != 0) && (tags[2] != 1 || tags[4] != 0) && (tags[2] != 0 || tags[4] != 1))
-            {
-                throw new InvalidTlvStructureException("Only one from publication record or calendar authentication record is allowed in signature data object");
-            }
-
-
-            if (tags[5] > 1)
-            {
-                throw new InvalidTlvStructureException("Only one RFC 3161 record is allowed in signature data object");
-            }
-
-            // TODO: Aggregation hash chain if defined
         }
     }
 }

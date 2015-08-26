@@ -77,7 +77,6 @@ namespace Guardtime.KSI.Signature
             using (var reader = new TlvReader(stream))
             {
                 CalendarHashChain calendarHashChain = new CalendarHashChain(reader.ReadTag());
-                calendarHashChain.IsValidStructure();
 
                 return calendarHashChain;
             }

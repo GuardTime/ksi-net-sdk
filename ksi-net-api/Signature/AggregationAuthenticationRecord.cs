@@ -7,7 +7,7 @@ namespace Guardtime.KSI.Signature
     /// <summary>
     /// Aggregation authentication record TLV element
     /// </summary>
-    public class AggregationAuthenticationRecord : CompositeTag
+    public sealed class AggregationAuthenticationRecord : CompositeTag
     {
         // TODO: Better name
         /// <summary>
@@ -29,6 +29,15 @@ namespace Guardtime.KSI.Signature
         /// <param name="tag">TLV element</param>
         public AggregationAuthenticationRecord(TlvTag tag) : base(tag)
         {
+            if (Type != TagType)
+            {
+                throw new InvalidTlvStructureException("Invalid aggregation authentication record type: " + Type);
+            }
+
+            int aggregationTimeCount = 0;
+            int inputHashCount = 0;
+            int signatureDataCount = 0;
+
             for (int i = 0; i < Count; i++)
             {
                 switch (this[i].Type)
@@ -36,6 +45,7 @@ namespace Guardtime.KSI.Signature
                     case AggregationTimeTagType:
                         _aggregationTime = new IntegerTag(this[i]);
                         this[i] = _aggregationTime;
+                        aggregationTimeCount++;
                         break;
                     case ChainIndexTagType:
                         IntegerTag chainIndexTag = new IntegerTag(this[i]);
@@ -45,67 +55,40 @@ namespace Guardtime.KSI.Signature
                     case InputHashTagType:
                         _inputHash = new ImprintTag(this[i]);
                         this[i] = _inputHash;
+                        inputHashCount++;
                         break;
                     case SignatureData.TagType:
                         _signatureData = new SignatureData(this[i]);
                         this[i] = _signatureData;
-                        break;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Check TLV structure.
-        /// </summary>
-        protected override void CheckStructure()
-        {
-            if (Type != TagType)
-            {
-                throw new InvalidTlvStructureException("Invalid aggregation authentication record type: " + Type);
-            }
-
-            uint[] tags = new uint[4];
-
-            for (int i = 0; i < Count; i++)
-            {
-                switch (this[i].Type)
-                {
-                    case AggregationTimeTagType:
-                        tags[0]++;
-                        break;
-                    case ChainIndexTagType:
-                        tags[1]++;
-                        break;
-                    case InputHashTagType:
-                        tags[2]++;
-                        break;
-                    case SignatureData.TagType:
-                        tags[3]++;
+                        signatureDataCount++;
                         break;
                     default:
-                        throw new InvalidTlvStructureException("Invalid tag", this[i]);
+                        VerifyCriticalTag(this[i]);
+                        break;
+
                 }
             }
 
-            if (tags[0] != 1)
+            if (aggregationTimeCount != 1)
             {
                 throw new InvalidTlvStructureException("Only one aggregation time must exist in aggregation authentication record");
             }
 
-            if (tags[1] == 0)
+            if (_chainIndex.Count == 0)
             {
                 throw new InvalidTlvStructureException("Chain indexes must exist in aggregation authentication record");
             }
 
-            if (tags[2] != 1)
+            if (inputHashCount != 1)
             {
                 throw new InvalidTlvStructureException("Only one input hash must exist in aggregation authentication record");
             }
 
-            if (tags[3] != 1)
+            if (signatureDataCount != 1)
             {
                 throw new InvalidTlvStructureException("Only one signature data must exist in aggregation authentication record");
             }
         }
+
     }
 }

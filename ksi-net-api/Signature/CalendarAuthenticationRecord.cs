@@ -7,7 +7,7 @@ namespace Guardtime.KSI.Signature
     /// <summary>
     /// Calendar authentication record TLV element
     /// </summary>
-    public class CalendarAuthenticationRecord : CompositeTag
+    public sealed class CalendarAuthenticationRecord : CompositeTag
     {
         // TODO: Better name
         /// <summary>
@@ -24,6 +24,14 @@ namespace Guardtime.KSI.Signature
         /// <param name="tag">TLV element</param>
         public CalendarAuthenticationRecord(TlvTag tag) : base(tag)
         {
+            if (Type != TagType)
+            {
+                throw new InvalidTlvStructureException("Invalid calendar authentication record type: " + Type);
+            }
+
+            int publicationDataCount = 0;
+            int signatureDataCount = 0;
+
             for (int i = 0; i < Count; i++)
             {
                 switch (this[i].Type)
@@ -31,48 +39,25 @@ namespace Guardtime.KSI.Signature
                     case PublicationData.TagType:
                         _publicationData = new PublicationData(this[i]);
                         this[i] = _publicationData;
+                        publicationDataCount++;
                         break;
                     case SignatureData.TagType:
                         _signatureData = new SignatureData(this[i]);
                         this[i] = _signatureData;
-                        break;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Check TLV structure.
-        /// </summary>
-        protected override void CheckStructure()
-        {
-            if (Type != TagType)
-            {
-                throw new InvalidTlvStructureException("Invalid calendar authentication record type: " + Type);
-            }
-
-            uint[] tags = new uint[2];
-
-            for (int i = 0; i < Count; i++)
-            {
-                switch (this[i].Type)
-                {
-                    case PublicationData.TagType:
-                        tags[0]++;
-                        break;
-                    case SignatureData.TagType:
-                        tags[1]++;
+                        signatureDataCount++;
                         break;
                     default:
-                        throw new InvalidTlvStructureException("Invalid tag", this[i]);
+                        VerifyCriticalTag(this[i]);
+                        break;
                 }
             }
 
-            if (tags[0] != 1)
+            if (publicationDataCount != 1)
             {
                 throw new InvalidTlvStructureException("Only one publication data must exist in calendar authentication record");
             }
 
-            if (tags[1] != 1)
+            if (signatureDataCount != 1)
             {
                 throw new InvalidTlvStructureException("Only one signature data must exist in calendar authentication record");
             }

@@ -17,6 +17,20 @@ namespace Guardtime.KSI.Signature
         }
 
         [Test]
+        public void TestKsiSignatureDoOkMissingCalendarHashChain()
+        {
+            KsiSignatureDo signature = GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Ok_Missing_Calendar_Hash_Chain);
+            Assert.AreEqual(3, signature.Count, "Invalid amount of child TLV objects");
+        }
+
+        [Test]
+        public void TestKsiSignatureDoOkMissingPublicationRecord()
+        {
+            KsiSignatureDo signature = GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record);
+            Assert.AreEqual(4, signature.Count, "Invalid amount of child TLV objects");
+        }
+
+        [Test]
         public void TestLegacyKsiSignatureDoOk()
         {
             KsiSignatureDo signature = GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Legacy_Ok);
@@ -29,7 +43,7 @@ namespace Guardtime.KSI.Signature
             GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Type);
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one from publication record or calendar authentication record must exist in signature data object")]
+        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one from publication record or calendar authentication record is allowed in signature data object")]
         public void TestKsiSignatureDoInvalidContainsPublicationRecordAndCalendarAuthenticationRecord()
         {
             GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Contain_Publication_Record_And_Calendar_Authentication_Record);
@@ -47,31 +61,27 @@ namespace Guardtime.KSI.Signature
             GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Missing_Aggregation_Hash_Chain);
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one calendar hash chain must exist in signature data object")]
+        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "No publication record or calendar authentication record is allowed in signature data object if there is no calendar hash chain")]
         public void TestKsiSignatureDoInvalidMissingCalendarHashChain()
         {
             GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Missing_Calendar_Hash_Chain);
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one from publication record or calendar authentication record must exist in signature data object")]
-        public void TestKsiSignatureDoInvalidMissingPublicationRecord()
-        {
-            GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Missing_Publication_Record);
-        }
+        
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one from publication record or calendar authentication record must exist in signature data object")]
+        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one from publication record or calendar authentication record is allowed in signature data object")]
         public void TestKsiSignatureDoInvalidMultipleCalendarAuthenticationRecords()
         {
             GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Multiple_Calendar_Authentication_Records);
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one calendar hash chain must exist in signature data object")]
+        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one calendar hash chain is allowed in signature data object")]
         public void TestKsiSignatureDoInvalidMultipleCalendarHashChain()
         {
             GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Multiple_Calendar_Hash_Chains);
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one from publication record or calendar authentication record must exist in signature data object")]
+        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one from publication record or calendar authentication record is allowed in signature data object")]
         public void TestKsiSignatureDoInvalidMultiplePublicationRecords()
         {
             GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Multiple_Publication_Records);
@@ -90,10 +100,7 @@ namespace Guardtime.KSI.Signature
             using (var stream = new FileStream(file, FileMode.Open))
             using (var reader = new TlvReader(stream))
             {
-                KsiSignatureDo signature = new KsiSignatureDo(reader.ReadTag());
-                signature.IsValidStructure();
-
-                return signature;
+                return new KsiSignatureDo(reader.ReadTag());
             }
         }
     }
