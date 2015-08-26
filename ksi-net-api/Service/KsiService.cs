@@ -6,9 +6,11 @@ using System.Threading;
 using System.IO;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Exceptions;
+using System.Collections.ObjectModel;
 
 namespace Guardtime.KSI.Service
 {
+    // TODO: Implement timeout
     public class KsiService : IKsiService
     {
         private readonly IKsiServiceProtocol _serviceProtocol;
@@ -83,7 +85,9 @@ namespace Guardtime.KSI.Service
             {
                 throw new ArgumentNullException("signature");
             }
-            ExtendPdu pdu = new ExtendPdu(new KsiPduHeader(_serviceSettings.LoginId), new ExtendRequestPayload(signature.AggregationTime));
+
+            ReadOnlyCollection<AggregationHashChain> aggregationHashChain = signature.GetAggregationHashChains();
+            ExtendPdu pdu = new ExtendPdu(new KsiPduHeader(_serviceSettings.LoginId), new ExtendRequestPayload(aggregationHashChain[aggregationHashChain.Count - 1].AggregationTime));
             pdu.CalculateMac(_serviceSettings.LoginKey);
             IAsyncResult serviceProtocolAsyncResult = _serviceProtocol.BeginExtendSignature(pdu.Encode(), callback, asyncState);
             return new ExtendSignatureKsiServiceAsyncResult(serviceProtocolAsyncResult, signature, asyncState);
@@ -95,8 +99,9 @@ namespace Guardtime.KSI.Service
             {
                 throw new ArgumentNullException("signature");
             }
+            ReadOnlyCollection<AggregationHashChain> aggregationHashChain = signature.GetAggregationHashChains();
             // TODO: Set publication to payload
-            ExtendPdu pdu = new ExtendPdu(new KsiPduHeader(_serviceSettings.LoginId), new ExtendRequestPayload(signature.AggregationTime));
+            ExtendPdu pdu = new ExtendPdu(new KsiPduHeader(_serviceSettings.LoginId), new ExtendRequestPayload(aggregationHashChain[aggregationHashChain.Count - 1].AggregationTime));
             pdu.CalculateMac(_serviceSettings.LoginKey);
             IAsyncResult serviceProtocolAsyncResult = _serviceProtocol.BeginExtendSignature(pdu.Encode(), callback, asyncState);
             return new ExtendSignatureKsiServiceAsyncResult(serviceProtocolAsyncResult, signature, asyncState);
@@ -122,7 +127,7 @@ namespace Guardtime.KSI.Service
             using (TlvReader reader = new TlvReader(memoryStream))
             {
                 ExtendPdu tag = new ExtendPdu(reader.ReadTag());
-                tag.IsValidStructure();
+
                 // TODO: Set types to constants
                 if (tag.Payload.Type == 0x302)
                 {

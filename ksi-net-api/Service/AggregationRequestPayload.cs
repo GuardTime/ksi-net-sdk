@@ -6,7 +6,7 @@ using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Service
 {
-    public class AggregationRequestPayload : AggregationPduPayload
+    public sealed class AggregationRequestPayload : AggregationPduPayload
     {
         // TODO: Better name
         public const uint TagType = 0x201;
@@ -18,23 +18,19 @@ namespace Guardtime.KSI.Service
         private readonly IntegerTag _requestLevel;
         private readonly RawTag _config;
 
-        public AggregationRequestPayload(TlvTag tag) : base(tag)
-        {
-        }
-
         // Create correct constructor
         public AggregationRequestPayload(DataHash hash) : base(TagType, false, false, new List<TlvTag>())
         {
+            if (hash == null)
+            {
+                throw new ArgumentNullException("hash");
+            }
+
             _requestId = new IntegerTag(RequestIdTagType, false, false, Util.GetRandomUnsignedLong());
             AddTag(_requestId);
 
             _requestHash = new ImprintTag(RequestHashTagType, false, false, hash);
             AddTag(_requestHash);
-        }
-
-        protected override void CheckStructure()
-        {
-            throw new NotImplementedException();
         }
 
     }

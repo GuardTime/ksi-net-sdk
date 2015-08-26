@@ -1,4 +1,5 @@
-﻿using Guardtime.KSI.Hashing;
+﻿using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace Guardtime.KSI.Service
     public abstract class KsiPdu : CompositeTag
     {
         // TODO: Better name
-        private const uint MacTagType = 0x1f;
+        protected const uint MacTagType = 0x1f;
 
         private readonly KsiPduHeader _header;
         private ImprintTag _mac;
@@ -24,6 +25,9 @@ namespace Guardtime.KSI.Service
 
         protected KsiPdu(TlvTag tag) : base(tag)
         {
+            int headerCount = 0;
+            int macCount = 0;
+
             for (int i = 0; i < Count; i++)
             {
                 switch (this[i].Type)
@@ -31,12 +35,19 @@ namespace Guardtime.KSI.Service
                     case KsiPduHeader.TagType:
                         _header = new KsiPduHeader(this[i]);
                         this[i] = _header;
+                        headerCount++;
                         break;
                     case MacTagType:
                         _mac = new ImprintTag(this[i]);
                         this[i] = _mac;
+                        macCount++;
                         break;
                 }
+            }
+
+            if (headerCount != 1)
+            {
+                throw new InvalidTlvStructureException("Only one header must exist in ksi pdu");
             }
         }
 

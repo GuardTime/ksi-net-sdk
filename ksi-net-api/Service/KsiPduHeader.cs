@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using Guardtime.KSI.Parser;
+using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Service
 {
-    public class KsiPduHeader : CompositeTag
+    public sealed class KsiPduHeader : CompositeTag
     {
         // TODO: Better name
         public const uint TagType = 0x1;
@@ -17,6 +18,15 @@ namespace Guardtime.KSI.Service
 
         public KsiPduHeader(TlvTag tag) : base(tag)
         {
+            if (Type != TagType)
+            {
+                throw new InvalidTlvStructureException("Invalid ksi pdu header type: " + Type);
+            }
+
+            int loginIdCount = 0;
+            int instanceIdCount = 0;
+            int messageIdCount = 0;
+
             for (int i = 0; i < Count; i++)
             {
                 switch (this[i].Type)
@@ -24,16 +34,37 @@ namespace Guardtime.KSI.Service
                     case LoginIdTagType:
                         _loginId = new StringTag(this[i]);
                         this[i] = _loginId;
+                        loginIdCount++;
                         break;
                     case InstanceIdTagType:
                         _instanceId = new IntegerTag(this[i]);
                         this[i] = _instanceId;
+                        instanceIdCount++;
                         break;
                     case MessageIdTagType:
                         _messageId = new IntegerTag(this[i]);
                         this[i] = _messageId;
+                        messageIdCount++;
+                        break;
+                    default:
+                        VerifyCriticalTag(this[i]);
                         break;
                 }
+            }
+
+            if (loginIdCount != 1)
+            {
+                throw new InvalidTlvStructureException("Only one login id must exist in ksi pdu header");
+            }
+
+            if (instanceIdCount > 1)
+            {
+                throw new InvalidTlvStructureException("Only one instance id is allowed in ksi pdu header");
+            }
+
+            if (messageIdCount > 1)
+            {
+                throw new InvalidTlvStructureException("Only one message id is allowed in ksi pdu header");
             }
         }
         
@@ -51,11 +82,6 @@ namespace Guardtime.KSI.Service
 
             _messageId = new IntegerTag(MessageIdTagType, false, false, messageId);
             AddTag(_messageId);
-        }
-
-        protected override void CheckStructure()
-        {
-            // TODO: Check structure
         }
     }
 }

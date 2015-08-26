@@ -5,7 +5,7 @@ using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Service
 {
-    public class ExtendRequestPayload : ExtendPduPayload
+    public sealed class ExtendRequestPayload : ExtendPduPayload
     {
         // TODO: Better name
         public const uint TagType = 0x301;
@@ -18,10 +18,6 @@ namespace Guardtime.KSI.Service
         private readonly IntegerTag _aggregationTime;
         private readonly IntegerTag _publicationTime;
 
-        public ExtendRequestPayload(TlvTag tag) : base(tag)
-        {
-        }
-
         // Create correct constructor
         public ExtendRequestPayload(ulong aggregationTime) : base(TagType, false, false, new List<TlvTag>())
         {
@@ -30,11 +26,6 @@ namespace Guardtime.KSI.Service
 
             _aggregationTime = new IntegerTag(AggregationTimeTagType, false, false, aggregationTime);
             AddTag(_aggregationTime);
-        }
-
-        protected override void CheckStructure()
-        {
-            throw new NotImplementedException();
         }
 
     }
