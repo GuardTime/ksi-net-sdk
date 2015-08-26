@@ -10,8 +10,10 @@ namespace Guardtime.KSI.Publication
     /// <summary>
     /// Publication record TLV element
     /// </summary>
-    public class PublicationRecord : CompositeTag
+    public sealed class PublicationRecord : CompositeTag
     {
+        public const uint TagTypeSignature = 0x803;
+        public const uint TagTypePublication = 0x703;
         private const uint PublicationReferencesTagType = 0x9;
         private const uint PublicationRepositoryUriTagType = 0xa;
 
@@ -60,6 +62,13 @@ namespace Guardtime.KSI.Publication
         /// <param name="tagList">TLV tag list</param>
         public PublicationRecord(TlvTag tag) : base(tag)
         {
+            if (Type != TagTypeSignature && Type != TagTypePublication)
+            {
+                throw new InvalidTlvStructureException("Invalid publication record type: " + Type);
+            }
+
+            int publicationDataCount = 0;
+
             for (int i = 0; i < Count; i++)
             {
                 StringTag listTag;
@@ -69,6 +78,7 @@ namespace Guardtime.KSI.Publication
                     case PublicationData.TagType:
                         _publicationData = new PublicationData(this[i]);
                         this[i] = _publicationData;
+                        publicationDataCount++;
                         break;
                     case PublicationReferencesTagType:
                         listTag = new StringTag(this[i]);
@@ -80,45 +90,17 @@ namespace Guardtime.KSI.Publication
                         _publicationRepositoryUri.Add(listTag);
                         this[i] = listTag;
                         break;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Check TLV structure.
-        /// </summary>
-        protected override void CheckStructure()
-        {
-            if (Type != KsiSignatureDo.PublicationRecordTagType && Type != PublicationsFileDo.PublicationRecordTagType)
-            {
-                throw new InvalidTlvStructureException("Invalid publication record type: " + Type);
-            }
-
-            uint[] tags = new uint[3];
-
-            for (int i = 0; i < Count; i++)
-            {
-                switch (this[i].Type)
-                {
-                    case PublicationData.TagType:
-                        tags[0]++;
-                        break;
-                    case PublicationReferencesTagType:
-                        tags[1]++;
-                        break;
-                    case PublicationRepositoryUriTagType:
-                        tags[2]++;
-                        break;
                     default:
-                        throw new InvalidTlvStructureException("Invalid tag", this[i]);
+                        VerifyCriticalTag(this[i]);
+                        break;
                 }
             }
 
-            if (tags[0] != 1)
+            if (publicationDataCount != 1)
             {
                 throw new InvalidTlvStructureException("Only one publication data is allowed in publication record");
             }
-
         }
+
     }
 }

@@ -8,9 +8,8 @@ namespace Guardtime.KSI.Publication
     /// <summary>
     /// Publications file TLV element
     /// </summary>
-    internal class PublicationsFileDo : CompositeTag
+    public sealed class PublicationsFileDo : CompositeTag
     {
-        public const uint PublicationRecordTagType = 0x703;
         private const uint CmsSignatureTagType = 0x704;
 
         private readonly PublicationsFileHeader _publicationsHeader;
@@ -72,6 +71,9 @@ namespace Guardtime.KSI.Publication
         /// <param name="tagList">TLV tag list</param>
         public PublicationsFileDo(TlvTag tag) : base(tag)
         {
+            int publicationsHeaderCount = 0;
+            int cmsSignatureCount = 0;
+
             for (int i = 0; i < Count; i++)
             {
                 switch (this[i].Type)
@@ -79,61 +81,38 @@ namespace Guardtime.KSI.Publication
                     case PublicationsFileHeader.TagType:
                         _publicationsHeader = new PublicationsFileHeader(this[i]);
                         this[i] = _publicationsHeader;
+                        publicationsHeaderCount++;
                         break;
                     case CertificateRecord.TagType:
                         CertificateRecord certificateRecordTag = new CertificateRecord(this[i]);
                         CertificateRecords.Add(certificateRecordTag);
                         this[i] = certificateRecordTag;
                         break;
-                    case PublicationRecordTagType:
+                    case PublicationRecord.TagTypePublication:
                         PublicationRecord publicationRecordTag = new PublicationRecord(this[i]);
                         PublicationRecords.Add(publicationRecordTag);
                         this[i] = publicationRecordTag;
                         break;
                     case CmsSignatureTagType:
                         _cmsSignature = this[i];
-                        break;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Check TLV structure.
-        /// </summary>
-        protected override void CheckStructure()
-        {
-            uint[] tags = new uint[4];
-
-            for (int i = 0; i < Count; i++)
-            {
-                switch (this[i].Type)
-                {
-                    case PublicationsFileHeader.TagType:
-                        tags[0]++;
-                        break;
-                    case CertificateRecord.TagType:
-                        tags[1]++;
-                        break;
-                    case PublicationRecordTagType:
-                        tags[2]++;
-                        break;
-                    case CmsSignatureTagType:
-                        tags[3]++;
+                        cmsSignatureCount++;
                         break;
                     default:
-                        throw new InvalidTlvStructureException("Invalid tag", this[i]);
+                        VerifyCriticalTag(this[i]);
+                        break;
                 }
             }
 
-            if (tags[0] != 1)
+            if (publicationsHeaderCount != 1)
             {
                 throw new InvalidTlvStructureException("Only one publications file header must exist in publications file");
             }
 
-            if (tags[3] != 1)
+            if (cmsSignatureCount != 1)
             {
                 throw new InvalidTlvStructureException("Only one signature must exist in publications file");
             }
         }
+
     }
 }

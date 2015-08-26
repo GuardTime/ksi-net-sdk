@@ -3,9 +3,15 @@ using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Publication
 {
-    public class PublicationData : CompositeTag
+    /// <summary>
+    /// Publication data TLV element
+    /// </summary>
+    public sealed class PublicationData : CompositeTag
     {
         // TODO: Better name
+        /// <summary>
+        /// Publication data tag type
+        /// </summary>
         public const uint TagType = 0x10;
         private const uint PublicationTimeTagType = 0x2;
         private const uint PublicationHashTagType = 0x4;
@@ -13,18 +19,36 @@ namespace Guardtime.KSI.Publication
         private readonly IntegerTag _publicationTime;
         private readonly ImprintTag _publicationHash;
 
+        /// <summary>
+        /// Get publication time
+        /// </summary>
         public IntegerTag PublicationTime
         {
             get { return _publicationTime; }
         }
 
+        /// <summary>
+        /// Get publication hash 
+        /// </summary>
         public ImprintTag PublicationHash
         {
             get { return _publicationHash; }
         }
 
+        /// <summary>
+        /// Create new publication data TLV element from TLV element
+        /// </summary>
+        /// <param name="tag">TLV element</param>
         public PublicationData(TlvTag tag) : base(tag)
         {
+            if (Type != TagType)
+            {
+                throw new InvalidTlvStructureException("Invalid publication record type: " + Type);
+            }
+
+            int publicationTimeCount = 0;
+            int publicationHashCount = 0;
+
             for (int i = 0; i < Count; i++)
             {
                 switch (this[i].Type)
@@ -32,50 +56,29 @@ namespace Guardtime.KSI.Publication
                     case PublicationTimeTagType:
                         _publicationTime = new IntegerTag(this[i]);
                         this[i] = _publicationTime;
+                        publicationTimeCount++;
                         break;
                     case PublicationHashTagType:
                         _publicationHash = new ImprintTag(this[i]);
                         this[i] = _publicationHash;
-                        break;
-                }
-            }
-        }
-
-
-        protected override void CheckStructure()
-        {
-            if (Type != TagType)
-            {
-                throw new InvalidTlvStructureException("Invalid publication record type: " + Type);
-            }
-
-            uint[] tags = new uint[2];
-
-            for (int i = 0; i < Count; i++)
-            {
-                switch (this[i].Type)
-                {
-                    case PublicationTimeTagType:
-                        tags[0]++;
-                        break;
-                    case PublicationHashTagType:
-                        tags[1]++;
+                        publicationHashCount++;
                         break;
                     default:
-                        throw new InvalidTlvStructureException("Invalid tag", this[i]);
+                        VerifyCriticalTag(this[i]);
+                        break;
                 }
             }
 
-            if (tags[0] != 1)
+            if (publicationTimeCount != 1)
             {
                 throw new InvalidTlvStructureException("Only one publication time must exist in publication data");
             }
 
-            if (tags[1] != 1)
+            if (publicationHashCount != 1)
             {
                 throw new InvalidTlvStructureException("Only one publication hash must exist in publication data");
             }
-
         }
+
     }
 }

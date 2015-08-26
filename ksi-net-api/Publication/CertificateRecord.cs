@@ -3,7 +3,7 @@ using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Publication
 {
-    public class CertificateRecord : CompositeTag
+    public sealed class CertificateRecord : CompositeTag
     {
         // TODO: Better name
         public const uint TagType = 0x702;
@@ -31,6 +31,14 @@ namespace Guardtime.KSI.Publication
 
         public CertificateRecord(TlvTag tag) : base(tag)
         {
+            if (Type != TagType)
+            {
+                throw new InvalidTlvStructureException("Invalid certificate record type: " + Type);
+            }
+
+            int certificateIdCount = 0;
+            int x509CertificateCount = 0;
+
             for (int i = 0; i < Count; i++)
             {
                 switch (this[i].Type)
@@ -38,45 +46,25 @@ namespace Guardtime.KSI.Publication
                     case CertificateIdTagType:
                         _certificateId = new RawTag(this[i]);
                         this[i] = _certificateId;
+                        certificateIdCount++;
                         break;
                     case X509CertificateTagType:
                         _x509Certificate = new RawTag(this[i]);
                         this[i] = _x509Certificate;
-                        break;
-                }
-            }
-        }
-
-        protected override void CheckStructure()
-        {
-            if (Type != TagType)
-            {
-                throw new InvalidTlvStructureException("Invalid certificate record type: " + Type);
-            }
-
-            uint[] tags = new uint[2];
-
-            for (int i = 0; i < Count; i++)
-            {
-                switch (this[i].Type)
-                {
-                    case CertificateIdTagType:
-                        tags[0]++;
-                        break;
-                    case X509CertificateTagType:
-                        tags[1]++;
+                        x509CertificateCount++;
                         break;
                     default:
-                        throw new InvalidTlvStructureException("Invalid tag", this[i]);
+                        VerifyCriticalTag(this[i]);
+                        break;
                 }
             }
 
-            if (tags[0] != 1)
+            if (certificateIdCount != 1)
             {
                 throw new InvalidTlvStructureException("Only one certificate id must exist in certificate record");
             }
 
-            if (tags[1] != 1)
+            if (x509CertificateCount != 1)
             {
                 throw new InvalidTlvStructureException("Only one certificate must exist in certificate record");
             }
