@@ -133,11 +133,13 @@
     <Compile Include="Signature\Verification\KsiTrustProvider.cs" />
     <Compile Include="Signature\Verification\Policy\IPolicy.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainTimeConsistencyRule.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarHashChainRegistrationTimeRule.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarHashChainAggregationTimeRule.cs" />
     <Compile Include="Signature\Verification\Rule\CalendarHashChainInputHashVerificationRule.cs" />
     <Compile Include="Signature\Verification\Rule\IRule.cs" />
     <Compile Include="Signature\Verification\Policy\Policy.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainConsistencyRule.cs" />
-    <Compile Include="Signature\Verification\Rule\AggregationHashChainInputHashVerificationRule.cs" />
+    <Compile Include="Signature\Verification\Rule\AggregationChainInputHashVerificationRule.cs" />
     <Compile Include="Signature\Verification\IVerificationContext.cs" />
     <Compile Include="Signature\Verification\VerificationContext.cs" />
     <Compile Include="Signature\Verification\VerificationError.cs" />

@@ -85,8 +85,7 @@ namespace Guardtime.KSI.Signature
             List<TlvTag> signatureTags = new List<TlvTag>();
             for (int i = 0; i < _ksiSignatureDo.Count; i++)
             {
-                // TODO: Change type to constant
-                if (_ksiSignatureDo[i].Type == CalendarAuthenticationRecord.TagType)
+                if (_ksiSignatureDo[i].Type == CalendarHashChain.TagType)
                 {
                     signatureTags.Add(calendarHashChain);
                     continue;
