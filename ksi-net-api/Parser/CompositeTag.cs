@@ -118,36 +118,6 @@ namespace Guardtime.KSI.Parser
             }
         }
 
-        /// <summary>
-        /// Check TLV structure.
-        /// </summary>
-        protected abstract void CheckStructure();
-
-        /// <summary>
-        /// Is TLV element structure valid.
-        /// </summary>
-        public void IsValidStructure()
-        {
-            try
-            {
-                CheckStructure();
-                for (int i = 0; i < Count; i++)
-                {
-                    CompositeTag tag = this[i] as CompositeTag;
-                    if (tag == null) continue;
-
-
-                    tag.IsValidStructure();
-                }
-
-            }
-            catch (InvalidTlvStructureException e)
-            {
-                e.TlvList.Add(this);
-                throw;
-            }
-        }
-
         // TODO: Use better name or replace this functionality
         /// <summary>
         /// Put TLV element to child list, if null, remove it from list.
@@ -216,6 +186,22 @@ namespace Guardtime.KSI.Parser
                 _value[i] = tag;
                 return tag;
             }
+        }
+
+        // TODO: make better
+        protected void VerifyCriticalTag(TlvTag tag)
+        {
+            if (tag == null)
+            {
+                throw new ArgumentNullException("tag");
+            }
+
+            if (!tag.NonCritical)
+            {
+                throw new InvalidTlvStructureException("Invalid tag", tag);
+            }
+
+            
         }
 
         /// <summary>
