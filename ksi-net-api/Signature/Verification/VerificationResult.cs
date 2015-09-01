@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Guardtime.KSI.Signature.Verification
+﻿namespace Guardtime.KSI.Signature.Verification
 {
     public enum VerificationResult
     {

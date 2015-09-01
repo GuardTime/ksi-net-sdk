@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using Guardtime.KSI.Hashing;
+using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Signature.Verification
 {
@@ -35,6 +36,22 @@ namespace Guardtime.KSI.Signature.Verification
             }
         }
 
+        public CalendarAuthenticationRecord CalendarAuthenticationRecord
+        {
+            get
+            {
+                return _signature == null ? null : _signature.CalendarAuthenticationRecord;
+            }
+        }
+
+        public PublicationRecord PublicationRecord
+        {
+            get
+            {
+                return _signature == null ? null : _signature.PublicationRecord;
+            }
+        }
+
         public KsiSignature Signature
         {
             get
@@ -52,6 +69,8 @@ namespace Guardtime.KSI.Signature.Verification
                 _signature = value;
             }
         }
+
+        
 
         public ReadOnlyCollection<AggregationHashChain> GetAggregationHashChains()
         {

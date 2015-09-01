@@ -31,7 +31,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 if (aggregationHashChainCollection[i].AggregationTime != time)
                 {
                     // TODO: Correct logging
-                    Console.WriteLine("Previous aggregation hash chain aggregation time %s does not match current aggregation time %s", time, aggregationHashChainCollection[i].AggregationTime);
+                    Console.WriteLine("Previous aggregation hash chain aggregation time {0} does not match current aggregation time {1}", time, aggregationHashChainCollection[i].AggregationTime);
                     return VerificationResult.FAIL;
                 }
 

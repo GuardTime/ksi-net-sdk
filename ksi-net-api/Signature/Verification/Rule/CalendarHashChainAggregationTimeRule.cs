@@ -1,5 +1,4 @@
-﻿using Guardtime.KSI.Hashing;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 
 namespace Guardtime.KSI.Signature.Verification.Rule

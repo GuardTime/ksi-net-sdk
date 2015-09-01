@@ -1,5 +1,4 @@
 ﻿
-using System.Collections.Generic;
 
 namespace Guardtime.KSI.Signature.Verification.Policy
 {
