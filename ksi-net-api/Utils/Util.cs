@@ -3,10 +3,20 @@ using System.Text;
 
 namespace Guardtime.KSI.Utils
 {
+    /// <summary>
+    /// Utilities object.
+    /// </summary>
     public static class Util
     {
         private static readonly Random Random = new Random();
 
+        /// <summary>
+        /// Are given arrays equal with same data ordering.
+        /// </summary>
+        /// <typeparam name="T">any type</typeparam>
+        /// <param name="arr1">first array</param>
+        /// <param name="arr2">second array</param>
+        /// <returns>true if arrays are equal</returns>
         public static bool IsArrayEqual<T>(T[] arr1, T[] arr2) 
         {
             if (arr1 == null || arr2 == null)
@@ -30,11 +40,23 @@ namespace Guardtime.KSI.Utils
             return true;
         }
 
-        public static string ConvertByteArrayToString(byte[] valueBytes)
+        /// <summary>
+        /// Convert byte array to hex string.
+        /// </summary>
+        /// <param name="valueBytes">data bytes</param>
+        /// <returns>hex string</returns>
+        public static string ConvertByteArrayToHexString(byte[] valueBytes)
         {
             return valueBytes == null ? "" : BitConverter.ToString(valueBytes).Replace("-", string.Empty);
         }
 
+        /// <summary>
+        /// Decode byte array to unsigned long.
+        /// </summary>
+        /// <param name="buf">byte array</param>
+        /// <param name="ofs">data offset</param>
+        /// <param name="len">data length</param>
+        /// <returns>unsigned long</returns>
         public static ulong DecodeUnsignedLong(byte[] buf, int ofs, int len) {
             if (buf == null)
             {
@@ -57,7 +79,11 @@ namespace Guardtime.KSI.Utils
             return t;
         }
 
-
+        /// <summary>
+        /// Encode unsigned long to byte array.
+        /// </summary>
+        /// <param name="value">unsigned long</param>
+        /// <returns>byte array</returns>
         public static byte[] EncodeUnsignedLong(ulong value) {
             int n = 0;
 
@@ -74,17 +100,32 @@ namespace Guardtime.KSI.Utils
             return res;
         }
 
+        /// <summary>
+        /// Convert DateTime to unix time.
+        /// </summary>
+        /// <param name="time">time in DateTime format</param>
+        /// <returns>unix time</returns>
         public static ulong ConvertDateTimeToUnixTime(DateTime time)
         {
             TimeSpan timeSpan = (time - new DateTime(1970, 1, 1, 0, 0, 0));
             return (ulong) timeSpan.TotalSeconds;
         }
 
+        /// <summary>
+        /// Convert unix time to DateTime.
+        /// </summary>
+        /// <param name="time">unix time</param>
+        /// <returns>time as DateTime</returns>
         public static DateTime ConvertUnixTimeToDateTime(ulong time)
         {
             return new DateTime(1970, 1, 1, 0, 0, 0) + TimeSpan.FromSeconds(time);
         }
 
+        /// <summary>
+        /// Decode null terminated UTF-8 string from bytes.
+        /// </summary>
+        /// <param name="bytes">string bytes</param>
+        /// <returns>utf-8 string</returns>
         public static string DecodeNullTerminatedUtf8String(byte[] bytes)
         {
             if (bytes == null)
@@ -101,6 +142,11 @@ namespace Guardtime.KSI.Utils
             return Encoding.UTF8.GetString(bytes, 0, bytes.Length - 1);
         }
 
+        /// <summary>
+        /// Encode null terminated byte array to UTF-8 string.
+        /// </summary>
+        /// <param name="value">utf-8 string</param>
+        /// <returns>byte array</returns>
         public static byte[] EncodeNullTerminatedUtf8String(string value)
         {
             if (value == null)
@@ -114,9 +160,13 @@ namespace Guardtime.KSI.Utils
             return bytes;
         }
 
+        /// <summary>
+        /// Get random unsigned long.
+        /// </summary>
+        /// <returns>random unsigned long</returns>
         public static ulong GetRandomUnsignedLong()
         {
-            byte[] bytes = new byte[32];
+            byte[] bytes = new byte[8];
             Random.NextBytes(bytes);
             return BitConverter.ToUInt32(bytes, 0);
         }

@@ -1,6 +1,5 @@
 ﻿using Guardtime.KSI.Utils;
 using System;
-using System.Collections.ObjectModel;
 
 namespace Guardtime.KSI.Hashing
 {
@@ -112,12 +111,17 @@ namespace Guardtime.KSI.Hashing
         /// Compare TLV element to object.
         /// </summary>
         /// <param name="obj">Comparable object.</param>
-        /// <returns>Is given object equal</returns>
+        /// <returns>true if objects are equal</returns>
         public override bool Equals(object obj)
         {
             return Equals(obj as DataHash);
         }
 
+        /// <summary>
+        /// Compare current hash against another hash.
+        /// </summary>
+        /// <param name="hash">data hash</param>
+        /// <returns>true if objects are equal</returns>
         public bool Equals(DataHash hash)
         {
             // If parameter is null, return false. 
@@ -164,25 +168,26 @@ namespace Guardtime.KSI.Hashing
         /// <returns>String representing algorithm name and value</returns>
         public override string ToString()
         {
-            return Algorithm.Name + ":[" + Util.ConvertByteArrayToString(_value) + "]";
+            return Algorithm.Name + ":[" + Util.ConvertByteArrayToHexString(_value) + "]";
         }
 
+        /// <summary>
+        /// Compares two hash objects.
+        /// </summary>
+        /// <param name="a">hash</param>
+        /// <param name="b">hash</param>
+        /// <returns>true if hashes are equal</returns>
         public static bool operator ==(DataHash a, DataHash b)
         {
-            if (ReferenceEquals(a, null))
-            {
-                if (ReferenceEquals(b, null))
-                {
-                    return true;
-                }
-
-                return false;
-            }
-
-            // Equals handles case of null on right side. 
-            return a.Equals(b);
+            return ReferenceEquals(a, null) ? ReferenceEquals(b, null) : a.Equals(b);
         }
 
+        /// <summary>
+        /// Compares two hash objects for non equality.
+        /// </summary>
+        /// <param name="a">hash</param>
+        /// <param name="b">hash</param>
+        /// <returns>true if hashes are not equal</returns>
         public static bool operator !=(DataHash a, DataHash b)
         {
             return !(a == b);

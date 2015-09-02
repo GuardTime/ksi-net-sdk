@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using Microsoft.Win32.SafeHandles;
-using System.Collections.Generic;
 
 namespace Guardtime.KSI.Hashing
 {
