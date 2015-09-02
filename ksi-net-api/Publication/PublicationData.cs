@@ -1,16 +1,18 @@
 ﻿using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
+using System.Collections.Generic;
 
 namespace Guardtime.KSI.Publication
 {
     /// <summary>
-    /// Publication data TLV element
+    /// Publication data TLV element.
     /// </summary>
     public sealed class PublicationData : CompositeTag
     {
         // TODO: Better name
         /// <summary>
-        /// Publication data tag type
+        /// Publication data tag type.
         /// </summary>
         public const uint TagType = 0x10;
         private const uint PublicationTimeTagType = 0x2;
@@ -20,7 +22,7 @@ namespace Guardtime.KSI.Publication
         private readonly ImprintTag _publicationHash;
 
         /// <summary>
-        /// Get publication time
+        /// Get publication time.
         /// </summary>
         public IntegerTag PublicationTime
         {
@@ -28,7 +30,7 @@ namespace Guardtime.KSI.Publication
         }
 
         /// <summary>
-        /// Get publication hash 
+        /// Get publication hash .
         /// </summary>
         public ImprintTag PublicationHash
         {
@@ -36,7 +38,7 @@ namespace Guardtime.KSI.Publication
         }
 
         /// <summary>
-        /// Create new publication data TLV element from TLV element
+        /// Create new publication data TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         public PublicationData(TlvTag tag) : base(tag)
@@ -64,7 +66,7 @@ namespace Guardtime.KSI.Publication
                         publicationHashCount++;
                         break;
                     default:
-                        VerifyCriticalTag(this[i]);
+                        VerifyCriticalFlag(this[i]);
                         break;
                 }
             }
@@ -80,5 +82,17 @@ namespace Guardtime.KSI.Publication
             }
         }
 
+        /// <summary>
+        /// Create new publication data TLV element from publication time and publication hash.
+        /// </summary>
+        /// <param name="publicationTime">publication time</param>
+        /// <param name="publicationHash">publication hash</param>
+        public PublicationData(ulong publicationTime, DataHash publicationHash) : base(TagType, false, true, new List<TlvTag>())
+        {
+            _publicationTime = new IntegerTag(PublicationTimeTagType, false, false, publicationTime);
+            AddTag(_publicationTime);
+            _publicationHash = new ImprintTag(PublicationHashTagType, false, false, publicationHash);
+            AddTag(_publicationHash);
+        }
     }
 }

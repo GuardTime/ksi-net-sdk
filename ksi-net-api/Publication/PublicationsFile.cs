@@ -9,22 +9,38 @@ using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Publication
 {
+    /// <summary>
+    /// Publication file.
+    /// </summary>
     public sealed class PublicationsFile : IKsiTrustProvider
     {
+        /// <summary>
+        /// Publications file beginning bytes "KSIPUBLF". 
+        /// </summary>
         public static readonly byte[] FileBeginningMagicBytes = { 0x4b, 0x53, 0x49, 0x50, 0x55, 0x42, 0x4c, 0x46 };
         private readonly PublicationsFileDo _publicationsFileDo;
 
+        /// <summary>
+        /// Get publications file creation time.
+        /// </summary>
         // TODO: Problem with too big value
         public DateTime? CreationTime
         {
             get { return _publicationsFileDo.CreationTime; }
         }
 
+        /// <summary>
+        /// Get publications file repository uri.
+        /// </summary>
         public string RepUri
         {
             get { return _publicationsFileDo.RepUri; }
         }
 
+        /// <summary>
+        /// Create publications file instance from publications file data object.
+        /// </summary>
+        /// <param name="publicationFileDo">Publications file data object</param>
         private PublicationsFile(PublicationsFileDo publicationFileDo)
         {
             if (publicationFileDo == null)
@@ -35,6 +51,11 @@ namespace Guardtime.KSI.Publication
             _publicationsFileDo = publicationFileDo;
         }
 
+        /// <summary>
+        /// Create publications file instance from data bytes.
+        /// </summary>
+        /// <param name="bytes">data bytes</param>
+        /// <returns>publications file</returns>
         public static PublicationsFile GetInstance(byte[] bytes)
         {
             if (bytes == null)
@@ -45,9 +66,13 @@ namespace Guardtime.KSI.Publication
             return GetInstance(new MemoryStream(bytes));
         }
 
+        /// <summary>
+        /// Create publications file instance from data stream.
+        /// </summary>
+        /// <param name="stream">data stream</param>
+        /// <returns>publications file</returns>
         public static PublicationsFile GetInstance(Stream stream)
         {
-            // TODO: Java api check if stream is null
             if (stream == null)
             {
                 throw new ArgumentNullException("stream");
@@ -76,6 +101,10 @@ namespace Guardtime.KSI.Publication
             }
         }
 
+        /// <summary>
+        /// Get latest publication record.
+        /// </summary>
+        /// <returns>publication record</returns>
         public PublicationRecord GetLatestPublication()
         {
             int publicationRecordCount = _publicationsFileDo.PublicationRecords.Count;
@@ -93,7 +122,7 @@ namespace Guardtime.KSI.Publication
                     continue;
                 }
 
-                if (_publicationsFileDo.PublicationRecords[i].PublicationTime.CompareTo(latest.PublicationTime) > 0)
+                if (_publicationsFileDo.PublicationRecords[i].PublicationData.PublicationTime.Value.CompareTo(latest.PublicationData.PublicationTime.Value) > 0)
                 {
                     latest = _publicationsFileDo.PublicationRecords[i];
                 }
@@ -102,6 +131,11 @@ namespace Guardtime.KSI.Publication
             return latest;
         }
 
+        /// <summary>
+        /// Is publication record in publications file.
+        /// </summary>
+        /// <param name="publicationRecord">lookup publication record</param>
+        /// <returns>true if publication record is in publications file</returns>
         public bool Contains(PublicationRecord publicationRecord)
         {
             if (publicationRecord == null) return false;
@@ -122,6 +156,11 @@ namespace Guardtime.KSI.Publication
             return false;
         }
 
+        /// <summary>
+        /// Get certificate by certificate ID.
+        /// </summary>
+        /// <param name="certificateId">certificate id</param>
+        /// <returns>X509 certificate</returns>
         public X509Certificate FindCertificateById(byte[] certificateId)
         {
             for (int i = 0; i < _publicationsFileDo.CertificateRecords.Count; i++)
@@ -135,6 +174,10 @@ namespace Guardtime.KSI.Publication
             return null;
         }
 
+        /// <summary>
+        /// Convert publications file to string.
+        /// </summary>
+        /// <returns>publications file as string</returns>
         public override string ToString()
         {
             StringBuilder builder = new StringBuilder();
@@ -142,7 +185,7 @@ namespace Guardtime.KSI.Publication
 
             builder.Append(", created: ").Append(CreationTime);
             // TODO: Check if publication always exists
-            builder.Append(", last publication: ").Append(GetLatestPublication().PublicationTime);
+            builder.Append(", last publication: ").Append(GetLatestPublication().PublicationData.PublicationTime.Value);
             if (RepUri != null)
             {
                 builder.Append(", published at: ").Append(RepUri);

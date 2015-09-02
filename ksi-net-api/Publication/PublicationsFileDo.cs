@@ -6,7 +6,7 @@ using Guardtime.KSI.Parser;
 namespace Guardtime.KSI.Publication
 {
     /// <summary>
-    /// Publications file TLV element
+    /// Publications file TLV element.
     /// </summary>
     public sealed class PublicationsFileDo : CompositeTag
     {
@@ -18,7 +18,7 @@ namespace Guardtime.KSI.Publication
         private readonly TlvTag _cmsSignature;
 
         /// <summary>
-        /// Get publications file header
+        /// Get publications file header.
         /// </summary>
         public PublicationsFileHeader PublicationsHeader
         {
@@ -26,7 +26,7 @@ namespace Guardtime.KSI.Publication
         }
 
         /// <summary>
-        /// Get certificate records
+        /// Get certificate records.
         /// </summary>
         public List<CertificateRecord> CertificateRecords
         {
@@ -34,7 +34,7 @@ namespace Guardtime.KSI.Publication
         }
 
         /// <summary>
-        /// Get publication records
+        /// Get publication records.
         /// </summary>
         public List<PublicationRecord> PublicationRecords
         {
@@ -42,7 +42,7 @@ namespace Guardtime.KSI.Publication
         }
 
         /// <summary>
-        /// Get cms signature
+        /// Get cms signature.
         /// </summary>
         public TlvTag CmsSignature
         {
@@ -50,7 +50,7 @@ namespace Guardtime.KSI.Publication
         }
 
         /// <summary>
-        /// Get creation time
+        /// Get creation time.
         /// </summary>
         public DateTime? CreationTime
         {
@@ -58,7 +58,7 @@ namespace Guardtime.KSI.Publication
         }
 
         /// <summary>
-        /// Get repository uri
+        /// Get repository uri.
         /// </summary>
         public string RepUri
         {
@@ -66,9 +66,9 @@ namespace Guardtime.KSI.Publication
         }
 
         /// <summary>
-        /// Create new publications file TLV element from TLV element
+        /// Create new publications file TLV element from TLV element.
         /// </summary>
-        /// <param name="tagList">TLV tag list</param>
+        /// <param name="tag">TLV element</param>
         public PublicationsFileDo(TlvTag tag) : base(tag)
         {
             int publicationsHeaderCount = 0;
@@ -98,7 +98,7 @@ namespace Guardtime.KSI.Publication
                         cmsSignatureCount++;
                         break;
                     default:
-                        VerifyCriticalTag(this[i]);
+                        VerifyCriticalFlag(this[i]);
                         break;
                 }
             }

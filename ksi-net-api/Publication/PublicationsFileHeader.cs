@@ -5,9 +5,14 @@ using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Publication
 {
+    /// <summary>
+    /// Publications file header TLV element.
+    /// </summary>
     public sealed class PublicationsFileHeader : CompositeTag
     {
-        // TODO: Better name
+        /// <summary>
+        /// Publications file header TLV type.
+        /// </summary>
         public const uint TagType = 0x701;
         private const uint VersionTagType = 0x1;
         private const uint CreationTimeTagType = 0x2;
@@ -17,18 +22,27 @@ namespace Guardtime.KSI.Publication
         private readonly IntegerTag _creationTime;
         private readonly StringTag _repUri;
 
-        // TODO: Should structure be checked right away?
+        /// <summary>
+        /// Get publications file creation time.
+        /// </summary>
         public DateTime? CreationTime
         {
             
             get { return _creationTime == null ? (DateTime?)null : Util.ConvertUnixTimeToDateTime(_creationTime.Value); }
         }
 
+        /// <summary>
+        /// Get publications file repository uri.
+        /// </summary>
         public string RepUri
         {
             get { return _repUri != null ? _repUri.Value : null; }
         }
 
+        /// <summary>
+        /// Create publications file header TLV element from TLV element.
+        /// </summary>
+        /// <param name="tag">TLV element</param>
         public PublicationsFileHeader(TlvTag tag) : base(tag)
         {
             if (Type != TagType)
@@ -61,7 +75,7 @@ namespace Guardtime.KSI.Publication
                         repUriCount++;
                         break;
                     default:
-                        VerifyCriticalTag(this[i]);
+                        VerifyCriticalFlag(this[i]);
                         break;
                 }
             }

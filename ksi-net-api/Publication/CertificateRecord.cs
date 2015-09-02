@@ -3,9 +3,14 @@ using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Publication
 {
+    /// <summary>
+    /// Certificate record TLV element.
+    /// </summary>
     public sealed class CertificateRecord : CompositeTag
     {
-        // TODO: Better name
+        /// <summary>
+        /// Certificate record TLV type.
+        /// </summary>
         public const uint TagType = 0x702;
         private const uint CertificateIdTagType = 0x1;
         private const uint X509CertificateTagType = 0x2;
@@ -13,6 +18,9 @@ namespace Guardtime.KSI.Publication
         private readonly RawTag _certificateId;
         private readonly RawTag _x509Certificate;
 
+        /// <summary>
+        /// Get certificate ID.
+        /// </summary>
         public RawTag CertificateId
         {
             get
@@ -21,6 +29,9 @@ namespace Guardtime.KSI.Publication
             }
         }
 
+        /// <summary>
+        /// Get X509 certificate.
+        /// </summary>
         public RawTag X509Certificate
         {
             get
@@ -29,6 +40,10 @@ namespace Guardtime.KSI.Publication
             }
         }
 
+        /// <summary>
+        /// Create new certificate record TLV element from TLV element.
+        /// </summary>
+        /// <param name="tag">TLV element</param>
         public CertificateRecord(TlvTag tag) : base(tag)
         {
             if (Type != TagType)
@@ -54,7 +69,7 @@ namespace Guardtime.KSI.Publication
                         x509CertificateCount++;
                         break;
                     default:
-                        VerifyCriticalTag(this[i]);
+                        VerifyCriticalFlag(this[i]);
                         break;
                 }
             }

@@ -60,7 +60,7 @@ namespace Guardtime.KSI.Publication
                 var publicationsFile = PublicationsFile.GetInstance(stream);
                 var publicationRecord = publicationsFile.GetLatestPublication();
 
-                Assert.AreEqual(new DateTime(2015, 4, 15), publicationRecord.PublicationTime, "Should be correct publication time for latest publication");
+                Assert.AreEqual(1429056000, publicationRecord.PublicationData.PublicationTime.Value, "Should be correct publication time for latest publication");
                 // TODO: Test more from latest publication
             }
         }

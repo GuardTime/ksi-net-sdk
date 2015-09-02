@@ -1,18 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Guardtime.KSI.Parser;
-using Guardtime.KSI.Utils;
 using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Signature;
 
 namespace Guardtime.KSI.Publication
 {
     /// <summary>
-    /// Publication record TLV element
+    /// Publication record TLV element.
     /// </summary>
     public sealed class PublicationRecord : CompositeTag
     {
+        /// <summary>
+        /// Signature publication record TLV type.
+        /// </summary>
         public const uint TagTypeSignature = 0x803;
+        /// <summary>
+        /// Publication publication record TLV type.
+        /// </summary>
         public const uint TagTypePublication = 0x703;
         private const uint PublicationReferencesTagType = 0x9;
         private const uint PublicationRepositoryUriTagType = 0xa;
@@ -22,7 +25,7 @@ namespace Guardtime.KSI.Publication
         private readonly List<StringTag> _publicationRepositoryUri = new List<StringTag>();
 
         /// <summary>
-        /// Get publication data
+        /// Get publication data.
         /// </summary>
         public PublicationData PublicationData
         {
@@ -30,7 +33,7 @@ namespace Guardtime.KSI.Publication
         }
 
         /// <summary>
-        /// Get publication references
+        /// Get publication references.
         /// </summary>
         public List<StringTag> PublicationReferences
         {
@@ -38,7 +41,7 @@ namespace Guardtime.KSI.Publication
         }
 
         /// <summary>
-        /// Get publication repository uri
+        /// Get publication repository uri.
         /// </summary>
         public List<StringTag> PubRepUri
         {
@@ -46,20 +49,9 @@ namespace Guardtime.KSI.Publication
         }
 
         /// <summary>
-        /// Get publication time
+        /// Create new publication record TLV element from TLV element.
         /// </summary>
-        public DateTime PublicationTime
-        {
-            get
-            {
-                return Util.ConvertUnixTimeToDateTime(PublicationData.PublicationTime.Value);
-            } 
-        }
-
-        /// <summary>
-        /// Create new publication record TLV element from TLV element
-        /// </summary>
-        /// <param name="tagList">TLV tag list</param>
+        /// <param name="tag">TLV element</param>
         public PublicationRecord(TlvTag tag) : base(tag)
         {
             if (Type != TagTypeSignature && Type != TagTypePublication)
@@ -91,7 +83,7 @@ namespace Guardtime.KSI.Publication
                         this[i] = listTag;
                         break;
                     default:
-                        VerifyCriticalTag(this[i]);
+                        VerifyCriticalFlag(this[i]);
                         break;
                 }
             }
