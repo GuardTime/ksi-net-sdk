@@ -75,7 +75,7 @@ namespace Guardtime.KSI.Exceptions
                 builder.Append("]:");
             }
 
-            builder.Append("0x").Append(Util.ConvertByteArrayToString(TlvList[0].EncodeValue()));
+            builder.Append("0x").Append(Util.ConvertByteArrayToHexString(TlvList[0].EncodeValue()));
 
             return builder.ToString();
         }
