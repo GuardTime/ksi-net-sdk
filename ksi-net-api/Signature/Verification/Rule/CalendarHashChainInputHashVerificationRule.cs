@@ -2,13 +2,16 @@
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
+    /// <summary>
+    /// Calendar hash chain input hash verification rule.
+    /// </summary>
     public class CalendarHashChainInputHashVerificationRule : IRule
     {
         /// <summary>
-        /// 
+        /// Verify given context with rule.
         /// </summary>
-        /// <param name="context"></param>
-        /// <returns></returns>
+        /// <param name="context">verification context</param>
+        /// <returns>verification result</returns>
         public VerificationResult Verify(VerificationContext context)
         {
 
@@ -16,21 +19,16 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             CalendarHashChain calendarHashChain = context.CalendarHashChain;
             if (calendarHashChain == null)
             {
-                return VerificationResult.OK;
+                return VerificationResult.Ok;
             }
 
             DataHash aggregationHashChainRootHash = context.GetAggregationHashChainRootHash();
             if (aggregationHashChainRootHash == null)
             {
-                return VerificationResult.FAIL;
+                return VerificationResult.Fail;
             }
 
-            if (aggregationHashChainRootHash != calendarHashChain.InputHash)
-            {
-                return VerificationResult.FAIL;
-            }
-          
-            return VerificationResult.OK;
+            return aggregationHashChainRootHash != calendarHashChain.InputHash ? VerificationResult.Fail : VerificationResult.Ok;
         }
     }
 }

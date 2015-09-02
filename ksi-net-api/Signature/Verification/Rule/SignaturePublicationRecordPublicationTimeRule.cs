@@ -8,7 +8,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         {
             if (context.PublicationRecord == null)
             {
-                return VerificationResult.OK;
+                return VerificationResult.Ok;
             }
 
             // TODO: Check!
@@ -17,9 +17,9 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (publicationRecord.PublicationData.PublicationHash.Value != calendarHashChain.PublicationData.PublicationHash.Value)
             {
-                return VerificationResult.FAIL;
+                return VerificationResult.Fail;
             }
-            return VerificationResult.OK;
+            return VerificationResult.Ok;
         }
     }
 }

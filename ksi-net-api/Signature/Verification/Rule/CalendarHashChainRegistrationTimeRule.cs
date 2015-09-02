@@ -1,12 +1,15 @@
 ﻿namespace Guardtime.KSI.Signature.Verification.Rule
 {
+    /// <summary>
+    /// Calendar hash chain registration time verification rule.
+    /// </summary>
     public class CalendarHashChainRegistrationTimeRule : IRule
     {
         /// <summary>
-        /// 
+        /// Verify given context with rule.
         /// </summary>
-        /// <param name="context"></param>
-        /// <returns></returns>
+        /// <param name="context">verification context</param>
+        /// <returns>verification result</returns>
         public VerificationResult Verify(VerificationContext context)
         {
 
@@ -14,15 +17,10 @@
             CalendarHashChain calendarHashChain = context.CalendarHashChain;
             if (calendarHashChain == null)
             {
-                return VerificationResult.OK;
+                return VerificationResult.Ok;
             }
 
-            if (calendarHashChain.AggregationTime != calendarHashChain.RegistrationTime)
-            {
-                return VerificationResult.FAIL;
-            }
-
-            return VerificationResult.OK;
+            return calendarHashChain.AggregationTime != calendarHashChain.RegistrationTime ? VerificationResult.Fail : VerificationResult.Ok;
         }
     }
 }

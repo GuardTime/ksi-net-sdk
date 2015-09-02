@@ -3,13 +3,16 @@ using System.Collections.ObjectModel;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
+    /// <summary>
+    /// Calendar hash chain aggregation time verification rule.
+    /// </summary>
     public class CalendarHashChainAggregationTimeRule : IRule
     {
         /// <summary>
-        /// 
+        /// Verify given context with rule.
         /// </summary>
-        /// <param name="context"></param>
-        /// <returns></returns>
+        /// <param name="context">verification context</param>
+        /// <returns>verification result</returns>
         public VerificationResult Verify(VerificationContext context)
         {
 
@@ -17,7 +20,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             CalendarHashChain calendarHashChain = context.CalendarHashChain;
             if (calendarHashChain == null)
             {
-                return VerificationResult.OK;
+                return VerificationResult.Ok;
             }
 
             ReadOnlyCollection<AggregationHashChain> aggregationHashChainCollection = context.GetAggregationHashChains();
@@ -32,7 +35,6 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 aggregationTime = aggregationHashChainCollection[aggregationHashChainCollection.Count - 1].AggregationTime;
             }
 
-            // TODO: Check if data exists in object before calling verify
             if (aggregationTime == null)
             {
                 throw new ArgumentException("Invalid aggregation time: null", "context");
@@ -40,10 +42,10 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (aggregationTime != calendarHashChain.AggregationTime)
             {
-                return VerificationResult.FAIL;
+                return VerificationResult.Fail;
             }
 
-            return VerificationResult.OK;
+            return VerificationResult.Ok;
         }
     }
 }

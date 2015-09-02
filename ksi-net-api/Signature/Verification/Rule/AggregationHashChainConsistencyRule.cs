@@ -3,9 +3,16 @@ using System.Collections.ObjectModel;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
+    /// <summary>
+    /// Aggregation hash chain consistency verification rule.
+    /// </summary>
     public class AggregationHashChainConsistencyRule : IRule
     {
-        
+        /// <summary>
+        /// Verify given context with rule.
+        /// </summary>
+        /// <param name="context">verification context</param>
+        /// <returns>verification result</returns>
         public VerificationResult Verify(VerificationContext context)
         {
             if (context == null)
@@ -32,15 +39,13 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 {
                     // TODO: Correct logging
                     Console.WriteLine("Previous aggregation hash chain output hash {0} does not match current input hash {1}", chainResult.Hash, aggregationHashChainCollection[i].InputHash);
-                    return VerificationResult.FAIL;
+                    return VerificationResult.Fail;
                 }
 
                 chainResult = aggregationHashChainCollection[i].GetOutputHash(chainResult.Level);
             }
 
-
-
-            return VerificationResult.OK;
+            return VerificationResult.Ok;
         }
     }
 }

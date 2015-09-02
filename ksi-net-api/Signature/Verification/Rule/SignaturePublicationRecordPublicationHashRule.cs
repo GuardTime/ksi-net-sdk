@@ -2,13 +2,21 @@
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
+    /// <summary>
+    /// Signature publication record publication hash verification rule.
+    /// </summary>
     public class SignaturePublicationRecordPublicationHashRule : IRule
     {
+        /// <summary>
+        /// Verify given context with rule.
+        /// </summary>
+        /// <param name="context">verification context</param>
+        /// <returns>verification result</returns>
         public VerificationResult Verify(VerificationContext context)
         {
             if (context.PublicationRecord == null)
             {
-                return VerificationResult.OK;
+                return VerificationResult.Ok;
             }
 
             // TODO: Check!
@@ -17,9 +25,9 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (publicationRecordPublicationData.PublicationTime.Value != calendarHashChainPublicationData.PublicationTime.Value)
             {
-                return VerificationResult.FAIL;
+                return VerificationResult.Fail;
             }
-            return VerificationResult.OK;
+            return VerificationResult.Ok;
         }
     }
 }

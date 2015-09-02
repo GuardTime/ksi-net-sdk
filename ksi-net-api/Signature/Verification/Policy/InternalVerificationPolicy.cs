@@ -5,13 +5,18 @@ using System.Collections.Generic;
 
 namespace Guardtime.KSI.Signature.Verification.Policy
 {
+    /// <summary>
+    /// Internal verification polcy.
+    /// </summary>
     public class InternalVerificationPolicy : IPolicy
     {
         private readonly List<IRule> _rules = new List<IRule>();
 
+        /// <summary>
+        /// Create internal verification policy and add rules to it.
+        /// </summary>
         public InternalVerificationPolicy()
         {
-            // TODO: Check signature in constructor or above that
             // Verify aggregation hash chain
             _rules.Add(new AggregationChainInputHashVerificationRule());
             _rules.Add(new AggregationHashChainConsistencyRule());
@@ -34,6 +39,11 @@ namespace Guardtime.KSI.Signature.Verification.Policy
             //rules.add(new DocumentHashVerificationRule());
         }
 
+        /// <summary>
+        /// Verify context with set up rules.
+        /// </summary>
+        /// <param name="context">verification context</param>
+        /// <returns>true if verification is successful</returns>
         public bool Verify(VerificationContext context)
         {
             if (context == null)

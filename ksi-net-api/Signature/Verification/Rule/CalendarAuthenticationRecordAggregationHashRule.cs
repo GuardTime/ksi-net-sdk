@@ -2,13 +2,21 @@
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
+    /// <summary>
+    /// Calendar authentication record aggregation hash verification rule.
+    /// </summary>
     public class CalendarAuthenticationRecordAggregationHashRule : IRule
     {
+        /// <summary>
+        /// Verify given context with rule.
+        /// </summary>
+        /// <param name="context">verification context</param>
+        /// <returns>verification result</returns>
         public VerificationResult Verify(VerificationContext context)
         {
             if (context.CalendarAuthenticationRecord == null)
             {
-                return VerificationResult.OK;
+                return VerificationResult.Ok;
             }
 
             // TODO: Make context check for null?
@@ -16,10 +24,10 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             PublicationData calendarHashChainPublicationData = context.CalendarHashChain.PublicationData;
             if (calendarAuthRecordPublicationData.PublicationHash.Value != calendarHashChainPublicationData.PublicationHash.Value)
             {
-                return VerificationResult.FAIL;
+                return VerificationResult.Fail;
             }
 
-            return VerificationResult.OK;
+            return VerificationResult.Ok;
         }
     }
 }

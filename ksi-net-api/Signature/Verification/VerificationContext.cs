@@ -5,11 +5,17 @@ using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Signature.Verification
 {
+    /// <summary>
+    /// Verification context.
+    /// </summary>
     public class VerificationContext : IVerificationContext
     {
         private KsiSignature _signature;
         private DataHash _documentHash;
 
+        /// <summary>
+        /// Get or set document hash.
+        /// </summary>
         public DataHash DocumentHash
         {
             get
@@ -28,6 +34,9 @@ namespace Guardtime.KSI.Signature.Verification
             }
         }
 
+        /// <summary>
+        /// Get calendar hash chain.
+        /// </summary>
         public CalendarHashChain CalendarHashChain
         {
             get
@@ -36,6 +45,9 @@ namespace Guardtime.KSI.Signature.Verification
             }
         }
 
+        /// <summary>
+        /// Get calendar authentication record.
+        /// </summary>
         public CalendarAuthenticationRecord CalendarAuthenticationRecord
         {
             get
@@ -44,6 +56,9 @@ namespace Guardtime.KSI.Signature.Verification
             }
         }
 
+        /// <summary>
+        /// Get publication record.
+        /// </summary>
         public PublicationRecord PublicationRecord
         {
             get
@@ -52,6 +67,9 @@ namespace Guardtime.KSI.Signature.Verification
             }
         }
 
+        /// <summary>
+        /// Get or set KSI signature.
+        /// </summary>
         public KsiSignature Signature
         {
             get
@@ -70,13 +88,19 @@ namespace Guardtime.KSI.Signature.Verification
             }
         }
 
-        
-
+        /// <summary>
+        /// Get aggregation hash chains collection.
+        /// </summary>
+        /// <returns>aggregation hash chains collection</returns>
         public ReadOnlyCollection<AggregationHashChain> GetAggregationHashChains()
         {
             return _signature == null ? null : _signature.GetAggregationHashChains();
         }
 
+        /// <summary>
+        /// Get aggregation hash chains root hash
+        /// </summary>
+        /// <returns>output hash</returns>
         public DataHash GetAggregationHashChainRootHash()
         {
             return _signature == null ? null : _signature.GetAggregationHashChainRootHash();
