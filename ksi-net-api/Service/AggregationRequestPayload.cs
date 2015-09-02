@@ -6,9 +6,14 @@ using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Service
 {
+    /// <summary>
+    /// Aggregation request payload.
+    /// </summary>
     public sealed class AggregationRequestPayload : AggregationPduPayload
     {
-        // TODO: Better name
+        /// <summary>
+        /// Aggregation request TLV type.
+        /// </summary>
         public const uint TagType = 0x201;
         private const uint RequestIdTagType = 0x1;
         private const uint RequestHashTagType = 0x2;
@@ -18,7 +23,11 @@ namespace Guardtime.KSI.Service
         private readonly IntegerTag _requestLevel;
         private readonly RawTag _config;
 
-        // Create correct constructor
+        // TODO: Create better constructor
+        /// <summary>
+        /// Create aggregation request payload from data hash.
+        /// </summary>
+        /// <param name="hash">data hash</param>
         public AggregationRequestPayload(DataHash hash) : base(TagType, false, false, new List<TlvTag>())
         {
             if (hash == null)

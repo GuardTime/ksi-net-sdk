@@ -1,17 +1,25 @@
-﻿using System;
-using Guardtime.KSI.Parser;
+﻿using Guardtime.KSI.Parser;
 using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Service
 {
+    /// <summary>
+    /// Extension error payload.
+    /// </summary>
     public sealed class ExtendError : ExtendPduPayload
     {
-        // TODO: Better name
+        /// <summary>
+        /// Extension error payload TLV type.
+        /// </summary>
         public const uint TagType = 0x303;
 
         private readonly IntegerTag _status;
         private readonly StringTag _errorMessage;
 
+        /// <summary>
+        /// Create extend error payload from TLV element. 
+        /// </summary>
+        /// <param name="tag">TLV element</param>
         public ExtendError(TlvTag tag) : base(tag)
         {
             if (Type != TagType)
@@ -37,7 +45,7 @@ namespace Guardtime.KSI.Service
                         errorMessageCount++;
                         break;
                     default:
-                        VerifyCriticalTag(this[i]);
+                        VerifyCriticalFlag(this[i]);
                         break;
                 }
             }

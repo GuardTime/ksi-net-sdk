@@ -1,14 +1,18 @@
-﻿using System;
-using Guardtime.KSI.Parser;
+﻿using Guardtime.KSI.Parser;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Service
 {
+    /// <summary>
+    /// Aggregation response payload.
+    /// </summary>
     public sealed class AggregationResponsePayload : AggregationPduPayload
     {
-        // Better name
+        /// <summary>
+        /// Aggregation response payload TLV type.
+        /// </summary>
         public const uint TagType = 0x202;
         private const uint RequestIdTagType = 0x1;
         private const uint ConfigTagType = 0x10;
@@ -23,6 +27,10 @@ namespace Guardtime.KSI.Service
         // TODO: Create request acknowledgement 
         private readonly RawTag _requestAcknowledgment;
 
+        /// <summary>
+        /// Create aggregation response payload from TLV element.
+        /// </summary>
+        /// <param name="tag">TLV element</param>
         public AggregationResponsePayload(TlvTag tag) : base(tag)
         {
             if (Type != TagType)
@@ -66,7 +74,6 @@ namespace Guardtime.KSI.Service
                         this[i] = _requestAcknowledgment;
                         requestAcknowledgmentCount++;
                         break;
-                    //TODO: ??
                     case AggregationHashChain.TagType:
                     case CalendarHashChain.TagType:
                     case PublicationRecord.TagTypeSignature:
@@ -74,7 +81,7 @@ namespace Guardtime.KSI.Service
                     case CalendarAuthenticationRecord.TagType:
                         break;
                     default:
-                        VerifyCriticalTag(this[i]);
+                        VerifyCriticalFlag(this[i]);
                         break;
                 }
             }

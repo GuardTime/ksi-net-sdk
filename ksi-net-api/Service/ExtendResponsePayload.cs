@@ -1,14 +1,19 @@
-﻿using System;
-using Guardtime.KSI.Parser;
+﻿using Guardtime.KSI.Parser;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Service
 {
+    /// <summary>
+    /// Extension response payload.
+    /// </summary>
     public sealed class ExtendResponsePayload : ExtendPduPayload
     {
-        // TODO: Better name
+        /// <summary>
+        /// Extension response payload TLV type.
+        /// </summary>
         public const uint TagType = 0x302;
+
         private const uint RequestIdTagType = 0x1;
         private const uint LastTimeTagType = 0x10;
 
@@ -20,6 +25,9 @@ namespace Guardtime.KSI.Service
 
         private readonly CalendarHashChain _calendarHashChain;
 
+        /// <summary>
+        /// Get calendar hash chain.
+        /// </summary>
         public CalendarHashChain CalendarHashChain
         {
             get
@@ -28,6 +36,10 @@ namespace Guardtime.KSI.Service
             }
         }
 
+        /// <summary>
+        /// Create extend response payload from TLV element.
+        /// </summary>
+        /// <param name="tag">TLV element</param>
         public ExtendResponsePayload(TlvTag tag) : base(tag)
         {
             if (Type != TagType)
@@ -71,7 +83,7 @@ namespace Guardtime.KSI.Service
                         calendarHashChainCount++;
                         break;
                     default:
-                        VerifyCriticalTag(this[i]);
+                        VerifyCriticalFlag(this[i]);
                         break;
                 }
             }

@@ -11,11 +11,19 @@ using System.Collections.ObjectModel;
 namespace Guardtime.KSI.Service
 {
     // TODO: Implement timeout
+    /// <summary>
+    /// KSI service.
+    /// </summary>
     public class KsiService : IKsiService
     {
         private readonly IKsiServiceProtocol _serviceProtocol;
         private readonly IKsiServiceSettings _serviceSettings;
 
+        /// <summary>
+        /// Create KSI service with service protocol and service settings.
+        /// </summary>
+        /// <param name="serviceProtocol">service protocol</param>
+        /// <param name="serviceSettings">service settings</param>
         public KsiService(IKsiServiceProtocol serviceProtocol, IKsiServiceSettings serviceSettings)
         {
             if (serviceProtocol == null)
@@ -32,19 +40,37 @@ namespace Guardtime.KSI.Service
             _serviceSettings = serviceSettings;
         }
 
+
+        /// <summary>
+        /// Sync create signature with given data hash.
+        /// </summary>
+        /// <param name="hash">data hash</param>
+        /// <returns>KSI signature</returns>
         public KsiSignature CreateSignature(DataHash hash)
         {
             return EndCreateSignature(BeginCreateSignature(hash, null, null));
         }
 
+        /// <summary>
+        /// Async begin create signature with given data hash.
+        /// </summary>
+        /// <param name="hash">data hash</param>
+        /// <param name="callback">callback when creating signature is finished</param>
+        /// <param name="asyncState">async state object</param>
+        /// <returns>async result</returns>
         public IAsyncResult BeginCreateSignature(DataHash hash, AsyncCallback callback, object asyncState)
         {
             AggregationPdu pdu = new AggregationPdu(new KsiPduHeader(_serviceSettings.LoginId), new AggregationRequestPayload(hash));
-            pdu.CalculateMac(_serviceSettings.LoginKey);
+            pdu.SetMac(_serviceSettings.LoginKey);
             IAsyncResult serviceProtocolAsyncResult = _serviceProtocol.BeginCreateSignature(pdu.Encode(), callback, asyncState);
             return new CreateSignatureKsiServiceAsyncResult(serviceProtocolAsyncResult, asyncState);
         }
 
+        /// <summary>
+        /// Async end create signature.
+        /// </summary>
+        /// <param name="asyncResult">async result status</param>
+        /// <returns>KSI signature</returns>
         public KsiSignature EndCreateSignature(IAsyncResult asyncResult)
         {
             KsiServiceAsyncResult serviceAsyncResult = asyncResult as CreateSignatureKsiServiceAsyncResult;
@@ -69,16 +95,34 @@ namespace Guardtime.KSI.Service
             }
         }
 
+        /// <summary>
+        /// Sync extend signature to latest publication.
+        /// </summary>
+        /// <param name="signature">KSI signature</param>
+        /// <returns>extended KSI signature</returns>
         public KsiSignature ExtendSignature(KsiSignature signature)
         {
             return EndExtendSignature(BeginExtendSignature(signature, null, null));
         }
 
+        /// <summary>
+        /// Sync extend signature to given publication.
+        /// </summary>
+        /// <param name="signature">KSI signature</param>
+        /// <param name="publicationRecord">publication record</param>
+        /// <returns>extended KSI signature</returns>
         public KsiSignature ExtendSignature(KsiSignature signature, PublicationRecord publicationRecord)
         {
             return EndExtendSignature(BeginExtendSignature(signature, publicationRecord, null, null));
         }
 
+        /// <summary>
+        /// Async begin extend signature to latest publication.
+        /// </summary>
+        /// <param name="signature">KSI signature</param>
+        /// <param name="callback">callback when extending signature is finished</param>
+        /// <param name="asyncState">async state object</param>
+        /// <returns>async result</returns>
         public IAsyncResult BeginExtendSignature(KsiSignature signature, AsyncCallback callback, object asyncState)
         {
             if (signature == null)
@@ -88,11 +132,19 @@ namespace Guardtime.KSI.Service
 
             ReadOnlyCollection<AggregationHashChain> aggregationHashChain = signature.GetAggregationHashChains();
             ExtendPdu pdu = new ExtendPdu(new KsiPduHeader(_serviceSettings.LoginId), new ExtendRequestPayload(aggregationHashChain[aggregationHashChain.Count - 1].AggregationTime));
-            pdu.CalculateMac(_serviceSettings.LoginKey);
+            pdu.SetMac(_serviceSettings.LoginKey);
             IAsyncResult serviceProtocolAsyncResult = _serviceProtocol.BeginExtendSignature(pdu.Encode(), callback, asyncState);
             return new ExtendSignatureKsiServiceAsyncResult(serviceProtocolAsyncResult, signature, asyncState);
         }
 
+        /// <summary>
+        /// Async begin extend signature to given publication.
+        /// </summary>
+        /// <param name="signature">KSI signature</param>
+        /// <param name="publicationRecord">publication record</param>
+        /// <param name="callback">callback when extending signature is finished</param>
+        /// <param name="asyncState">async state object</param>
+        /// <returns>async result</returns>
         public IAsyncResult BeginExtendSignature(KsiSignature signature, PublicationRecord publicationRecord, AsyncCallback callback, object asyncState)
         {
             if (signature == null)
@@ -102,11 +154,16 @@ namespace Guardtime.KSI.Service
             ReadOnlyCollection<AggregationHashChain> aggregationHashChain = signature.GetAggregationHashChains();
             // TODO: Set publication to payload
             ExtendPdu pdu = new ExtendPdu(new KsiPduHeader(_serviceSettings.LoginId), new ExtendRequestPayload(aggregationHashChain[aggregationHashChain.Count - 1].AggregationTime));
-            pdu.CalculateMac(_serviceSettings.LoginKey);
+            pdu.SetMac(_serviceSettings.LoginKey);
             IAsyncResult serviceProtocolAsyncResult = _serviceProtocol.BeginExtendSignature(pdu.Encode(), callback, asyncState);
             return new ExtendSignatureKsiServiceAsyncResult(serviceProtocolAsyncResult, signature, asyncState);
         }
 
+        /// <summary>
+        /// Async end extend signature.
+        /// </summary>
+        /// <param name="asyncResult">async result</param>
+        /// <returns>extended KSI signature</returns>
         public KsiSignature EndExtendSignature(IAsyncResult asyncResult)
         {
             ExtendSignatureKsiServiceAsyncResult serviceAsyncResult = asyncResult as ExtendSignatureKsiServiceAsyncResult;
@@ -128,34 +185,45 @@ namespace Guardtime.KSI.Service
             {
                 ExtendPdu tag = new ExtendPdu(reader.ReadTag());
 
-                // TODO: Set types to constants
-                if (tag.Payload.Type == 0x302)
-                {
-                    ExtendResponsePayload payload = tag.Payload as ExtendResponsePayload;
-                    if (payload == null)
-                    {
-                        // TODO: Throw correct exception
-                        throw new KsiException("Invalid response payload");
-                    }
+                if (tag.Payload.Type != ExtendResponsePayload.TagType) return null;
 
-                    return serviceAsyncResult.Signature.Extend(payload.CalendarHashChain);
+                ExtendResponsePayload payload = tag.Payload as ExtendResponsePayload;
+                if (payload == null)
+                {
+                    // TODO: Throw correct exception
+                    throw new KsiException("Invalid response payload");
                 }
-                
-                return null;
+
+                return serviceAsyncResult.Signature.Extend(payload.CalendarHashChain);
             }
         }
 
+        /// <summary>
+        /// Sync get publications file.
+        /// </summary>
+        /// <returns>Publications file</returns>
         public PublicationsFile GetPublicationsFile()
         {
             return EndGetPublicationsFile(BeginGetPublicationsFile(null, null));
         }
 
+        /// <summary>
+        /// Async begin get publications file.
+        /// </summary>
+        /// <param name="callback">callback when publications file is downloaded</param>
+        /// <param name="asyncState">async state object</param>
+        /// <returns>async result</returns>
         public IAsyncResult BeginGetPublicationsFile(AsyncCallback callback, object asyncState)
         {
             IAsyncResult serviceProtocolAsyncResult = _serviceProtocol.BeginGetPublicationsFile(callback, asyncState);
             return new PublicationKsiServiceAsyncResult(serviceProtocolAsyncResult, asyncState);
         }
 
+        /// <summary>
+        /// Async end get publications file.
+        /// </summary>
+        /// <param name="asyncResult">async result</param>
+        /// <returns>publications file</returns>
         public PublicationsFile EndGetPublicationsFile(IAsyncResult asyncResult)
         {
             KsiServiceAsyncResult serviceAsyncResult = asyncResult as PublicationKsiServiceAsyncResult;
@@ -175,6 +243,9 @@ namespace Guardtime.KSI.Service
             return PublicationsFile.GetInstance(data);
         }
 
+        /// <summary>
+        /// Create signature KSI service async result.
+        /// </summary>
         private class CreateSignatureKsiServiceAsyncResult : KsiServiceAsyncResult
         {
             public CreateSignatureKsiServiceAsyncResult(IAsyncResult serviceProtocolAsyncResult, object asyncState) : base(serviceProtocolAsyncResult, asyncState)
@@ -183,6 +254,9 @@ namespace Guardtime.KSI.Service
             }
         }
 
+        /// <summary>
+        /// Extend signature KSI service async result.
+        /// </summary>
         private class ExtendSignatureKsiServiceAsyncResult : KsiServiceAsyncResult
         {
             private readonly KsiSignature _signature;
@@ -206,6 +280,9 @@ namespace Guardtime.KSI.Service
             }
         }
 
+        /// <summary>
+        /// Publications file KSI service async result.
+        /// </summary>
         private class PublicationKsiServiceAsyncResult : KsiServiceAsyncResult
         {
             public PublicationKsiServiceAsyncResult(IAsyncResult serviceProtocolAsyncResult, object asyncState) : base(serviceProtocolAsyncResult, asyncState)
@@ -214,6 +291,9 @@ namespace Guardtime.KSI.Service
             }
         }
 
+        /// <summary>
+        /// KSI service async result.
+        /// </summary>
         private abstract class KsiServiceAsyncResult : IAsyncResult
         {
             private readonly object _asyncState;

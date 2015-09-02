@@ -5,13 +5,21 @@ using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Service
 {
+    /// <summary>
+    /// Aggregation message PDU.
+    /// </summary>
     public sealed class AggregationPdu : KsiPdu
     {
-        // TODO: Better name
+        /// <summary>
+        /// Aggregation PDU TLV type.
+        /// </summary>
         public const uint TagType = 0x200;
 
         private readonly AggregationPduPayload _payload;
 
+        /// <summary>
+        /// Get aggregation message payload.
+        /// </summary>
         public override KsiPduPayload Payload
         {
             get
@@ -20,6 +28,10 @@ namespace Guardtime.KSI.Service
             }
         }
 
+        /// <summary>
+        /// Create aggregation pdu TLV element from TLV element.
+        /// </summary>
+        /// <param name="tag">TLV element</param>
         public AggregationPdu(TlvTag tag) : base(tag)
         {
             if (Type != TagType)
@@ -49,7 +61,7 @@ namespace Guardtime.KSI.Service
                     case MacTagType:
                         break;
                     default:
-                        VerifyCriticalTag(this[i]);
+                        VerifyCriticalFlag(this[i]);
                         break;
                 }
             }
@@ -60,6 +72,11 @@ namespace Guardtime.KSI.Service
             }
         }
 
+        /// <summary>
+        /// Create aggregation pdu TLV element from KSI header and payload.
+        /// </summary>
+        /// <param name="header">KSI PDU header</param>
+        /// <param name="payload">aggregation payload</param>
         public AggregationPdu(KsiPduHeader header, AggregationPduPayload payload) : base(header, TagType, false, false, new List<TlvTag>())
         {
             if (payload == null)

@@ -5,13 +5,21 @@ using System.Collections.Generic;
 
 namespace Guardtime.KSI.Service
 {
+    /// <summary>
+    /// Extension PDU.
+    /// </summary>
     public sealed class ExtendPdu : KsiPdu
     {
-        // TODO: Better name
+        /// <summary>
+        /// Extension PDU TLV type.
+        /// </summary>
         public const uint TagType = 0x300;
 
         private readonly ExtendPduPayload _payload;
 
+        /// <summary>
+        /// Get extension PDU payload.
+        /// </summary>
         public override KsiPduPayload Payload
         {
             get
@@ -20,6 +28,10 @@ namespace Guardtime.KSI.Service
             }
         }
 
+        /// <summary>
+        /// Create extend PDU from TLV element.
+        /// </summary>
+        /// <param name="tag">TLV element</param>
         public ExtendPdu(TlvTag tag) : base(tag)
         {
             if (Type != TagType)
@@ -48,7 +60,7 @@ namespace Guardtime.KSI.Service
                     case MacTagType:
                         break;
                     default:
-                        VerifyCriticalTag(this[i]);
+                        VerifyCriticalFlag(this[i]);
                         break;
                 }
             }
@@ -59,7 +71,11 @@ namespace Guardtime.KSI.Service
             }
         }
 
-        // TODO: Create correct constructor
+        /// <summary>
+        /// Create extend pdu from KSI header and extend pdu payload.
+        /// </summary>
+        /// <param name="header">KSI header</param>
+        /// <param name="payload">Extend pdu payload</param>
         public ExtendPdu(KsiPduHeader header, ExtendPduPayload payload) : base(header, TagType, false, false, new List<TlvTag>())
         {
             if (payload == null)

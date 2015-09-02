@@ -4,10 +4,16 @@ using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Service
 {
+    /// <summary>
+    /// KSI PDU header.
+    /// </summary>
     public sealed class KsiPduHeader : CompositeTag
     {
-        // TODO: Better name
+        /// <summary>
+        /// KSI PDU header TLV type.
+        /// </summary>
         public const uint TagType = 0x1;
+
         private const uint LoginIdTagType = 0x1;
         private const uint InstanceIdTagType = 0x2;
         private const uint MessageIdTagType = 0x3;
@@ -16,6 +22,10 @@ namespace Guardtime.KSI.Service
         private readonly IntegerTag _instanceId;
         private readonly IntegerTag _messageId;
 
+        /// <summary>
+        /// Create KSI PDU header from TLV element.
+        /// </summary>
+        /// <param name="tag">TLV element</param>
         public KsiPduHeader(TlvTag tag) : base(tag)
         {
             if (Type != TagType)
@@ -47,7 +57,7 @@ namespace Guardtime.KSI.Service
                         messageIdCount++;
                         break;
                     default:
-                        VerifyCriticalTag(this[i]);
+                        VerifyCriticalFlag(this[i]);
                         break;
                 }
             }
@@ -68,10 +78,20 @@ namespace Guardtime.KSI.Service
             }
         }
         
+        /// <summary>
+        /// Create KSI PDU header from login ID.
+        /// </summary>
+        /// <param name="loginId">login ID</param>
         public KsiPduHeader(string loginId) : this(loginId, 0, 0)
         {
         }
 
+        /// <summary>
+        /// Create KSI PDU header from login ID, instance ID, message ID.
+        /// </summary>
+        /// <param name="loginId">login ID</param>
+        /// <param name="instanceId">instance ID</param>
+        /// <param name="messageId">message ID</param>
         public KsiPduHeader(string loginId, ulong instanceId, ulong messageId) : base(TagType, false, false, new List<TlvTag>())
         {
             _loginId = new StringTag(LoginIdTagType, false, false, loginId);
