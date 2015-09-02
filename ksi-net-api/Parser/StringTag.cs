@@ -87,6 +87,11 @@ namespace Guardtime.KSI.Parser
             return Equals(obj as StringTag);
         }
 
+        /// <summary>
+        /// Compare TLV element against string TLV element.
+        /// </summary>
+        /// <param name="tag">String TLV element</param>
+        /// <returns>true if elements are equal</returns>
         public bool Equals(StringTag tag)
         {
             // If parameter is null, return false. 
@@ -136,22 +141,23 @@ namespace Guardtime.KSI.Parser
             return builder.ToString();
         }
 
+        /// <summary>
+        /// Compare string TLV elements against each other.
+        /// </summary>
+        /// <param name="a">String TLV element</param>
+        /// <param name="b">String TLV element</param>
+        /// <returns>true if elements are equal</returns>
         public static bool operator ==(StringTag a, StringTag b)
         {
-            if (ReferenceEquals(a, null))
-            {
-                if (ReferenceEquals(b, null))
-                {
-                    return true;
-                }
-
-                return false;
-            }
-
-            // Equals handles case of null on right side. 
-            return a.Equals(b);
+            return ReferenceEquals(a, null) ? ReferenceEquals(b, null) : a.Equals(b);
         }
 
+        /// <summary>
+        /// Compare string TLV elements non equity.
+        /// </summary>
+        /// <param name="a">String TLV element</param>
+        /// <param name="b">String TLV element</param>
+        /// <returns>true if elements are not equal</returns>
         public static bool operator !=(StringTag a, StringTag b)
         {
             return !(a == b);

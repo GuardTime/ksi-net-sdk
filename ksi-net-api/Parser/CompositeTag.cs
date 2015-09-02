@@ -45,7 +45,6 @@ namespace Guardtime.KSI.Parser
             }
         }
 
-        // TODO: can be null?
         /// <summary>
         /// Get TLV element list size
         /// </summary>
@@ -59,10 +58,8 @@ namespace Guardtime.KSI.Parser
             }
         }
 
-
-        // TODO: Create possibility to check composite tag validity and check for null tags in child objects
         /// <summary>
-        /// Create new composite TLV element from TLV element
+        /// Create new composite TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         protected CompositeTag(TlvTag tag) : base(tag)
@@ -71,12 +68,12 @@ namespace Guardtime.KSI.Parser
         }
 
         /// <summary>
-        /// Create new composite TLV element from data
+        /// Create new composite TLV element from data.
         /// </summary>
         /// <param name="type">TLV type</param>
         /// <param name="nonCritical">Is TLV element non critical</param>
         /// <param name="forward">Is TLV element forwarded</param>
-        /// <param name="value">TLV value</param>
+        /// <param name="value">TLV element list</param>
         protected CompositeTag(uint type, bool nonCritical, bool forward, List<TlvTag> value)
             : base(type, nonCritical, forward)
         {
@@ -87,6 +84,10 @@ namespace Guardtime.KSI.Parser
             _value = value;
         }
 
+        /// <summary>
+        /// Decode bytes to TLV list.
+        /// </summary>
+        /// <param name="bytes">TLV bytes</param>
         private void DecodeValue(byte[] bytes)
         {
             
@@ -101,7 +102,7 @@ namespace Guardtime.KSI.Parser
         }
 
         /// <summary>
-        /// Encode child TLV list to byte array
+        /// Encode child TLV list to byte array.
         /// </summary>
         /// <returns>TLV list elements as byte array</returns>
         public override byte[] EncodeValue()
@@ -188,8 +189,11 @@ namespace Guardtime.KSI.Parser
             }
         }
 
-        // TODO: make better
-        protected void VerifyCriticalTag(TlvTag tag)
+        /// <summary>
+        /// Verify unknown tag for critical flag and throw exception.
+        /// </summary>
+        /// <param name="tag">TLV element</param>
+        protected void VerifyCriticalFlag(TlvTag tag)
         {
             if (tag == null)
             {
@@ -250,6 +254,11 @@ namespace Guardtime.KSI.Parser
             return Equals(obj as CompositeTag);
         }
 
+        /// <summary>
+        /// Compare Composite element to composite element
+        /// </summary>
+        /// <param name="tag">composite element</param>
+        /// <returns>true if objects are equal</returns>
         public bool Equals(CompositeTag tag)
         {
             // If parameter is null, return false. 
@@ -317,7 +326,12 @@ namespace Guardtime.KSI.Parser
             return builder.ToString();
         }
 
-        private string TabPrefix(string s)
+        /// <summary>
+        /// Put tab prefix instead of new rows.
+        /// </summary>
+        /// <param name="s">string</param>
+        /// <returns>tab prefixed string</returns>
+        private static string TabPrefix(string s)
         {
             StringBuilder builder = new StringBuilder();
 
@@ -335,29 +349,32 @@ namespace Guardtime.KSI.Parser
             return builder.ToString();
         }
 
+        /// <summary>
+        /// Compare two composite element objects.
+        /// </summary>
+        /// <param name="a">composite element</param>
+        /// <param name="b">composite element</param>
+        /// <returns>true if objects are equal</returns>
         public static bool operator ==(CompositeTag a, CompositeTag b)
         {
-            if (ReferenceEquals(a, null))
-            {
-                if (ReferenceEquals(b, null))
-                {
-                    return true;
-                }
-
-                return false;
-            }
-
-            // Equals handles case of null on right side. 
-            return a.Equals(b);
+            return ReferenceEquals(a, null) ? ReferenceEquals(b, null) : a.Equals(b);
         }
 
+        /// <summary>
+        /// Compare two composite elements non equality.
+        /// </summary>
+        /// <param name="a">composite element</param>
+        /// <param name="b">composite element</param>
+        /// <returns>true if objects are not equal</returns>
         public static bool operator !=(CompositeTag a, CompositeTag b)
         {
             return !(a == b);
         }
 
-
-
+        /// <summary>
+        /// Thread safe enumerator for composite tag element
+        /// </summary>
+        /// <typeparam name="T">composite element</typeparam>
         private class ThreadSafeIEnumerator<T> : IEnumerator<T>
         {
             private readonly object _lock;

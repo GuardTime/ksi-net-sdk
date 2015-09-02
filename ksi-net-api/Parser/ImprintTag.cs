@@ -82,6 +82,11 @@ namespace Guardtime.KSI.Parser
             return Equals(obj as ImprintTag);
         }
 
+        /// <summary>
+        /// Compare TLV element against imprint TLV element.
+        /// </summary>
+        /// <param name="tag">Imprint TLV element</param>
+        /// <returns>true if elements are equal</returns>
         public bool Equals(ImprintTag tag)
         {
             // If parameter is null, return false. 
@@ -107,22 +112,23 @@ namespace Guardtime.KSI.Parser
                     Value == tag.Value;
         }
 
+        /// <summary>
+        /// Compare imprint TLV elements against each other.
+        /// </summary>
+        /// <param name="a">Imprint TLV element</param>
+        /// <param name="b">Imprint TLV element</param>
+        /// <returns>true if elements are equal</returns>
         public static bool operator ==(ImprintTag a, ImprintTag b)
         {
-            if (ReferenceEquals(a, null))
-            {
-                if (ReferenceEquals(b, null))
-                {
-                    return true;
-                }
-
-                return false;
-            }
-
-            // Equals handles case of null on right side. 
-            return a.Equals(b);
+            return ReferenceEquals(a, null) ? ReferenceEquals(b, null) : a.Equals(b);
         }
 
+        /// <summary>
+        /// Compare imprint TLV element non equity to another imprint TLV element.
+        /// </summary>
+        /// <param name="a">Imprint TLV element</param>
+        /// <param name="b">Imprint TLV element</param>
+        /// <returns>true if elements are not equal</returns>
         public static bool operator !=(ImprintTag a, ImprintTag b)
         {
             return !(a == b);

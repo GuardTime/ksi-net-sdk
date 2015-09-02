@@ -77,7 +77,6 @@ namespace Guardtime.KSI.Parser
                 return new RawTag(type, nonCritical, forward, data);
             } catch (EndOfStreamException e) {
                 // TODO: Throw better exception
-
                 throw new FormatException("Premature end of data", e);
             }
         }

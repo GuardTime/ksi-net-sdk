@@ -1,7 +1,6 @@
 ﻿
 using Guardtime.KSI.Utils;
 using System;
-using System.Collections.Generic;
 
 namespace Guardtime.KSI.Parser
 {
@@ -90,6 +89,11 @@ namespace Guardtime.KSI.Parser
             return Equals(obj as RawTag);
         }
 
+        /// <summary>
+        /// Compare TLV element against raw TLV element.
+        /// </summary>
+        /// <param name="tag">Raw TLV element</param>
+        /// <returns>true if elements are equal</returns>
         public bool Equals(RawTag tag)
         {
             // If parameter is null, return false. 
@@ -115,22 +119,23 @@ namespace Guardtime.KSI.Parser
                     Util.IsArrayEqual(EncodeValue(), tag.EncodeValue());
         }
 
+        /// <summary>
+        /// Compare raw TLV elements against each other.
+        /// </summary>
+        /// <param name="a">Raw TLV element</param>
+        /// <param name="b">Raw TLV element</param>
+        /// <returns>true if elements are equal</returns>
         public static bool operator ==(RawTag a, RawTag b)
         {
-            if (ReferenceEquals(a, null))
-            {
-                if (ReferenceEquals(b, null))
-                {
-                    return true;
-                }
-
-                return false;
-            }
-
-            // Equals handles case of null on right side. 
-            return a.Equals(b);
+            return ReferenceEquals(a, null) ? ReferenceEquals(b, null) : a.Equals(b);
         }
 
+        /// <summary>
+        /// Compare raw TLV elements non equity.
+        /// </summary>
+        /// <param name="a">Raw TLV element</param>
+        /// <param name="b">Raw TLV element</param>
+        /// <returns>true if elements are not equal</returns>
         public static bool operator !=(RawTag a, RawTag b)
         {
             return !(a == b);

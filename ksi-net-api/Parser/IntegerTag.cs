@@ -69,7 +69,7 @@ namespace Guardtime.KSI.Parser
         }
 
         /// <summary>
-        /// Compare TLV element to object.
+        /// Compare against object.
         /// </summary>
         /// <param name="obj">Comparable object.</param>
         /// <returns>Is given object equal</returns>
@@ -78,6 +78,11 @@ namespace Guardtime.KSI.Parser
             return Equals(obj as IntegerTag);
         }
 
+        /// <summary>
+        /// Compare against Integer TLV element
+        /// </summary>
+        /// <param name="tag">Comparable integer TLV element</param>
+        /// <returns>true if integer TLV element is equal</returns>
         public bool Equals(IntegerTag tag)
         {
             // If parameter is null, return false. 
@@ -127,22 +132,23 @@ namespace Guardtime.KSI.Parser
             return builder.ToString();
         }
 
+        /// <summary>
+        /// Compare integer TLV elements against each other.
+        /// </summary>
+        /// <param name="a">Integer TLV element</param>
+        /// <param name="b">Integer TLV element</param>
+        /// <returns>true if elements are equal</returns>
         public static bool operator ==(IntegerTag a, IntegerTag b)
         {
-            if (ReferenceEquals(a, null))
-            {
-                if (ReferenceEquals(b, null))
-                {
-                    return true;
-                }
-
-                return false;
-            }
-
-            // Equals handles case of null on right side. 
-            return a.Equals(b);
+            return ReferenceEquals(a, null) ? ReferenceEquals(b, null) : a.Equals(b);
         }
 
+        /// <summary>
+        /// Compare integer TLV element non equity to another integer TLV element.
+        /// </summary>
+        /// <param name="a">Integer TLV element</param>
+        /// <param name="b">Integer TLV element</param>
+        /// <returns>true if elements are not equal</returns>
         public static bool operator !=(IntegerTag a, IntegerTag b)
         {
             return !(a == b);
