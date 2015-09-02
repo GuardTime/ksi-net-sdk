@@ -5,9 +5,13 @@ using System.IO;
 using System;
 using System.Collections.ObjectModel;
 using Guardtime.KSI.Hashing;
+using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Signature
 {
+    /// <summary>
+    /// KSI signature.
+    /// </summary>
     public sealed class KsiSignature
     {
         private readonly KsiSignatureDo _ksiSignatureDo;
@@ -34,6 +38,9 @@ namespace Guardtime.KSI.Signature
             }
         }
 
+        /// <summary>
+        /// Get calendar hash chain.
+        /// </summary>
         public CalendarHashChain CalendarHashChain {
             get
             {
@@ -42,7 +49,29 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
-        /// Create KSI signature instance
+        /// Get calendar authentication record.
+        /// </summary>
+        public CalendarAuthenticationRecord CalendarAuthenticationRecord
+        {
+            get
+            {
+                return _ksiSignatureDo.CalendarAuthenticationRecord;
+            }
+        }
+
+        /// <summary>
+        /// Get publication record.
+        /// </summary>
+        public PublicationRecord PublicationRecord
+        {
+            get
+            {
+                return _ksiSignatureDo.PublicationRecord;
+            }
+        }
+
+        /// <summary>
+        /// Create KSI signature instance from KSI PDU payload.
         /// </summary>
         /// <param name="response">KSI PDU payload</param>
         public KsiSignature(KsiPduPayload response)
@@ -60,7 +89,10 @@ namespace Guardtime.KSI.Signature
             _ksiSignatureDo = new KsiSignatureDo(signatureTags);
         }
 
-        // TODO: Should be public?
+        /// <summary>
+        /// Create signature from signature data object.
+        /// </summary>
+        /// <param name="ksiSignatureDo">KSI signature data object</param>
         private KsiSignature(KsiSignatureDo ksiSignatureDo)
         {
             if (ksiSignatureDo == null)
@@ -71,10 +103,10 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
-        /// Extend KSI signature
+        /// Extend KSI signature with given calendar hash chain.
         /// </summary>
-        /// <param name="calendarHashChain">Calendar hash chain</param>
-        /// <returns>Extended KSI signature</returns>
+        /// <param name="calendarHashChain">calendar hash chain</param>
+        /// <returns>extended KSI signature</returns>
         public KsiSignature Extend(CalendarHashChain calendarHashChain)
         {
             if (calendarHashChain == null)
@@ -98,9 +130,9 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
-        /// Get KSI signature instance
+        /// Get KSI signature instance from stream.
         /// </summary>
-        /// <param name="stream">Signature data stream</param>
+        /// <param name="stream">signature data stream</param>
         /// <returns>KSI signature</returns>
         public static KsiSignature GetInstance(Stream stream)
         {
@@ -115,24 +147,28 @@ namespace Guardtime.KSI.Signature
             }
         }
 
+        /// <summary>
+        /// Get aggregation hash chains.
+        /// </summary>
+        /// <returns>aggregation hash chains list</returns>
         public ReadOnlyCollection<AggregationHashChain> GetAggregationHashChains()
         {
             return _ksiSignatureDo.GetAggregationHashChains();
         }
 
         /// <summary>
-        /// Get aggregation hash chain output hash
+        /// Get aggregation hash chain output hash.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>aggregation hash chain root hash</returns>
         public DataHash GetAggregationHashChainRootHash()
         {
             return _ksiSignatureDo.GetAggregationHashChainRootHash();
         }
 
         /// <summary>
-        /// Convert signature to string format
+        /// Convert signature to string format.
         /// </summary>
-        /// <returns>Signature string representation</returns>
+        /// <returns>signature string representation</returns>
         public override string ToString()
         {
             return _ksiSignatureDo.ToString();

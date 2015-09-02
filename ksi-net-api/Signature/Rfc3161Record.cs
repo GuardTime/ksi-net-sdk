@@ -119,7 +119,7 @@ namespace Guardtime.KSI.Signature
                         signedAttributesAlgorithmCount++;
                         break;
                     default:
-                        VerifyCriticalTag(this[i]);
+                        VerifyCriticalFlag(this[i]);
                         break;
                 }
             }

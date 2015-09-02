@@ -65,7 +65,7 @@ namespace Guardtime.KSI.Signature
                         certificateRepositoryUriCount++;
                         break;
                     default:
-                        VerifyCriticalTag(this[i]);
+                        VerifyCriticalFlag(this[i]);
                         break;
                 }
             }

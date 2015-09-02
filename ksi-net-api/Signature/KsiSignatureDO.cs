@@ -4,7 +4,6 @@ using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Hashing;
 using System.Collections.ObjectModel;
-using System;
 
 namespace Guardtime.KSI.Signature
 {
@@ -50,7 +49,7 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
-        /// Get Calendar Hash Chain
+        /// Get calendar hash chain.
         /// </summary>
         public CalendarHashChain CalendarHashChain {
             get
@@ -59,19 +58,40 @@ namespace Guardtime.KSI.Signature
             }
         }
 
+        /// <summary>
+        /// Get calendar authentication record.
+        /// </summary>
+        public CalendarAuthenticationRecord CalendarAuthenticationRecord
+        {
+            get
+            {
+                return _calendarAuthenticationRecord;
+            }
+        }
+
+        /// <summary>
+        /// Get publication record.
+        /// </summary>
+        public PublicationRecord PublicationRecord
+        {
+            get
+            {
+                return _publicationRecord;
+            }
+        }
+
         // Order aggregation chain list to correct order
         // TODO: Create interface for tags list
         /// <summary>
-        /// Create new KSI signature TLV element from TLV element
+        /// Create new KSI signature TLV element from TLV element list.
         /// </summary>
         /// <param name="tagList">TLV tag list</param>
         public KsiSignatureDo(List<TlvTag> tagList) : this(new KsiSignatureDo(TagType, false, false, tagList))
         {
         }
 
-        // TODO: Better solution
         /// <summary>
-        /// Constructor for creating current object for decoding
+        /// Constructor for creating current object for decoding.
         /// </summary>
         /// <param name="type">TLV type</param>
         /// <param name="nonCritical">Is TLV element non critical</param>
@@ -82,7 +102,7 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
-        /// Create new KSI signature TLV element from TLV element
+        /// Create new KSI signature TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         public KsiSignatureDo(TlvTag tag) : base(tag)
@@ -133,7 +153,7 @@ namespace Guardtime.KSI.Signature
                         rfc3161RecordCount++;
                         break;
                     default:
-                        VerifyCriticalTag(this[i]);
+                        VerifyCriticalFlag(this[i]);
                         break;
                 }
             }
@@ -173,13 +193,17 @@ namespace Guardtime.KSI.Signature
             _aggregationHashChainCollection.Sort(new AggregationHashChain.ChainIndexOrdering());
         }
 
+        /// <summary>
+        /// Get aggregation hash chains list.
+        /// </summary>
+        /// <returns>aggregations hash chains list</returns>
         public ReadOnlyCollection<AggregationHashChain> GetAggregationHashChains()
         {
             return _aggregationHashChainCollection.AsReadOnly();
         }
 
         /// <summary>
-        /// Get aggregation hash chain output hash
+        /// Get aggregation hash chain output hash.
         /// </summary>
         /// <returns>output hash</returns>
         public DataHash GetAggregationHashChainRootHash()

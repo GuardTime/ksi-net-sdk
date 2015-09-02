@@ -9,14 +9,24 @@ namespace Guardtime.KSI.Signature
     /// </summary>
     public sealed class CalendarAuthenticationRecord : CompositeTag
     {
-        // TODO: Better name
         /// <summary>
-        /// Calendar authentication record tag type
+        /// Calendar authentication record TLV type
         /// </summary>
         public const uint TagType = 0x805;
 
         private readonly PublicationData _publicationData;
         private readonly SignatureData _signatureData;
+
+        /// <summary>
+        /// Get publication data.
+        /// </summary>
+        public PublicationData PublicationData
+        {
+            get
+            {
+                return _publicationData;
+            }
+        }
 
         /// <summary>
         /// Create new calendar authentication record TLV element from TLV element
@@ -47,7 +57,7 @@ namespace Guardtime.KSI.Signature
                         signatureDataCount++;
                         break;
                     default:
-                        VerifyCriticalTag(this[i]);
+                        VerifyCriticalFlag(this[i]);
                         break;
                 }
             }

@@ -2,21 +2,20 @@
 using Guardtime.KSI.Parser;
 using System.Collections.Generic;
 using Guardtime.KSI.Exceptions;
-using System;
 using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Signature
 {
     /// <summary>
-    /// Aggregation hash chain TLV element
+    /// Aggregation hash chain TLV element.
     /// </summary>
     public sealed class AggregationHashChain : CompositeTag
     {
-        // TODO: Better name
         /// <summary>
-        /// Aggregation hash chain tag type
+        /// Aggregation hash chain TLV type.
         /// </summary>
         public const uint TagType = 0x801;
+
         private const uint AggregationTimeTagType = 0x2;
         private const uint ChainIndexTagType = 0x3;
         private const uint InputDataTagType = 0x4;
@@ -31,7 +30,7 @@ namespace Guardtime.KSI.Signature
         private readonly List<Link> _chain = new List<Link>();
 
         /// <summary>
-        /// Get hash chain input hash
+        /// Get hash chain input hash.
         /// </summary>
         public DataHash InputHash
         {
@@ -41,6 +40,9 @@ namespace Guardtime.KSI.Signature
             }
         }
 
+        /// <summary>
+        /// Get aggregation time.
+        /// </summary>
         public ulong AggregationTime
         {
             get
@@ -50,7 +52,7 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
-        /// Create new aggregation hash chain TLV element from TLV element
+        /// Create new aggregation hash chain TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         public AggregationHashChain(TlvTag tag) : base(tag)
@@ -101,7 +103,7 @@ namespace Guardtime.KSI.Signature
                         this[i] = linkTag;
                         break;
                     default:
-                        VerifyCriticalTag(this[i]);
+                        VerifyCriticalFlag(this[i]);
                         break;
                 }
             }
@@ -140,7 +142,7 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
-        /// Get output hash
+        /// Get output hash.
         /// </summary>
         /// <param name="level">hash chain input level</param>
         /// <returns>output hash chain result</returns>
@@ -168,7 +170,7 @@ namespace Guardtime.KSI.Signature
 
          // TODO: Better name
         /// <summary>
-        /// Hash two hashes together
+        /// Hash two hashes together.
         /// </summary>
         /// <param name="hashA">first hash</param>
         /// <param name="hashB">second hash</param>
@@ -183,9 +185,11 @@ namespace Guardtime.KSI.Signature
             return hasher.GetHash();
         }
 
+        /// <summary>
+        /// Aggregation hash chain link.
+        /// </summary>
         private class Link : CompositeTag
         {
-            // TODO: Better name
             private const uint LevelCorrectionTagType = 0x1;
             private const uint SiblingHashTagType = 0x2;
             private const uint MetaHashTagType = 0x3;
@@ -195,7 +199,7 @@ namespace Guardtime.KSI.Signature
             private readonly ImprintTag _metaHash;
             private readonly MetaData _metaData;
 
-            private LinkDirection _direction;
+            private readonly LinkDirection _direction;
 
             // the client ID extracted from metaHash
             private string _metaHashId;
@@ -283,7 +287,7 @@ namespace Guardtime.KSI.Signature
                             metaDataCount++;
                             break;
                         default:
-                            VerifyCriticalTag(this[i]);
+                            VerifyCriticalFlag(this[i]);
                             break;
                     }
                 }
@@ -305,8 +309,12 @@ namespace Guardtime.KSI.Signature
 
         private class MetaData : CompositeTag
         {
-            // TODO: Better name
+            /// <summary>
+            /// Metadata TLV type.
+            /// </summary>
+            // ReSharper disable once MemberHidesStaticFromOuterClass
             public const uint TagType = 0x4;
+
             private const uint ClientIdTagType = 0x1;
             private const uint MachineIdTagType = 0x2;
             private const uint SequenceNumberTagType = 0x3;
@@ -319,6 +327,10 @@ namespace Guardtime.KSI.Signature
             // Please do keep in mind that request time is in milliseconds!
             private readonly IntegerTag _requestTime;
 
+            /// <summary>
+            /// Create Metadata from TLV element.
+            /// </summary>
+            /// <param name="tag">TLV element</param>
             public MetaData(TlvTag tag) : base(tag)
             {
                 if (Type != TagType)
@@ -356,7 +368,7 @@ namespace Guardtime.KSI.Signature
                             requestTimeCount++;
                             break;
                         default:
-                            VerifyCriticalTag(this[i]);
+                            VerifyCriticalFlag(this[i]);
                             break;
                     }
                 }
@@ -383,12 +395,20 @@ namespace Guardtime.KSI.Signature
             }
         }
 
+        /// <summary>
+        /// Aggregation hash chain chain index ordering.
+        /// </summary>
         public class ChainIndexOrdering : IComparer<AggregationHashChain>
         {
+            /// <summary>
+            /// Compare aggregation hash chains to eachother.
+            /// </summary>
+            /// <param name="x">aggregation hash chain</param>
+            /// <param name="y">aggregation hash chain</param>
+            /// <returns>0 if equal, 1 if bigger, -1 if smaller</returns>
             public int Compare(AggregationHashChain x, AggregationHashChain y)
             {
-                int i = 0;
-                for (i = 0; i < x._chainIndex.Count; i++)
+                for (int i = 0; i < x._chainIndex.Count; i++)
                 {
                     if (i >= y._chainIndex.Count)
                     {
@@ -402,12 +422,7 @@ namespace Guardtime.KSI.Signature
                     }
                 }
 
-                if (x._chainIndex.Count == y._chainIndex.Count)
-                {
-                    return 0;
-                }
-
-                return 1;
+                return x._chainIndex.Count == y._chainIndex.Count ? 0 : 1;
             }
         }
 
@@ -441,15 +456,15 @@ namespace Guardtime.KSI.Signature
                 }
             }
 
+            /// <summary>
+            /// Create chain result from level and data hash.
+            /// </summary>
+            /// <param name="level">hash chain level</param>
+            /// <param name="hash">output hash</param>
             public ChainResult(ulong level, DataHash hash)
             {
                 _level = level;
                 _hash = hash;
-            }
-
-            public override string ToString()
-            {
-                return _hash + " " + _level;
             }
         }
 

@@ -2,7 +2,7 @@
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
-using System;
+using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Signature
 {
@@ -26,6 +26,8 @@ namespace Guardtime.KSI.Signature
         private readonly List<Link> _chain = new List<Link>();
 
         private readonly ulong _registrationTime;
+        private readonly DataHash _outputHash;
+        private readonly PublicationData _publicationData;
 
         // TODO: Check if null
         /// <summary>
@@ -40,6 +42,9 @@ namespace Guardtime.KSI.Signature
             }
         }
 
+        /// <summary>
+        /// Get registration time.
+        /// </summary>
         public ulong RegistrationTime
         {
             get
@@ -48,11 +53,36 @@ namespace Guardtime.KSI.Signature
             }
         }
 
+        /// <summary>
+        /// Get input hash.
+        /// </summary>
         public DataHash InputHash
         {
             get
             {
                 return _inputHash.Value;
+            }
+        }
+
+        /// <summary>
+        /// Get output hash.
+        /// </summary>
+        public DataHash OutputHash
+        {
+            get
+            {
+                return _outputHash;
+            }
+        }
+
+        /// <summary>
+        /// Get publication data.
+        /// </summary>
+        public PublicationData PublicationData
+        {
+            get
+            {
+                return _publicationData;
             }
         }
 
@@ -97,7 +127,7 @@ namespace Guardtime.KSI.Signature
                         this[i] = chainTag;
                         break;
                     default:
-                        VerifyCriticalTag(this[i]);
+                        VerifyCriticalFlag(this[i]);
                         break;
                 }
             }
@@ -123,6 +153,38 @@ namespace Guardtime.KSI.Signature
             }
 
             _registrationTime = CalculateRegistrationTime();
+            _outputHash = CalculateOutputHash();
+            _publicationData = new PublicationData(_publicationTime.Value, _outputHash);
+        }
+
+        private DataHash CalculateOutputHash()
+        {
+            DataHash inputHash = InputHash;
+            for (int i = 0; i < _chain.Count; i++)
+            {
+                DataHash siblingHash = _chain[i].Value;
+                if (_chain[i].Direction == LinkDirection.Left)
+                {
+                    inputHash = HashTogether(siblingHash.Algorithm, inputHash.Imprint, siblingHash.Imprint);
+                }
+
+                if (_chain[i].Direction == LinkDirection.Right)
+                {
+                    inputHash = HashTogether(inputHash.Algorithm, siblingHash.Imprint, inputHash.Imprint);
+                }
+                
+            }
+
+            return inputHash;
+        }
+
+        private DataHash HashTogether(HashAlgorithm algorithm, byte[] hashA, byte[] hashB)
+        {
+            DataHasher hasher = new DataHasher(algorithm);
+            hasher.AddData(hashA);
+            hasher.AddData(hashB);
+            hasher.AddData(new byte[] { 0xFF });
+            return hasher.GetHash();
         }
 
         private ulong CalculateRegistrationTime()
