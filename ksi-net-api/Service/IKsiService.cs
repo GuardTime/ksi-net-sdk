@@ -16,7 +16,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="hash">data hash</param>
         /// <returns>KSI signature</returns>
-        KsiSignature CreateSignature(DataHash hash);
+        KsiSignature Sign(DataHash hash);
 
         /// <summary>
         /// Async begin create signature with given data hash.
@@ -25,26 +25,26 @@ namespace Guardtime.KSI.Service
         /// <param name="callback">callback when creating signature is finished</param>
         /// <param name="asyncState">async state object</param>
         /// <returns>async result</returns>
-        IAsyncResult BeginCreateSignature(DataHash hash, AsyncCallback callback, object asyncState);
+        IAsyncResult BeginSign(DataHash hash, AsyncCallback callback, object asyncState);
         /// <summary>
         /// Async end create signature.
         /// </summary>
         /// <param name="asyncResult">async result status</param>
         /// <returns>KSI signature</returns>
-        KsiSignature EndCreateSignature(IAsyncResult asyncResult);
+        KsiSignature EndSign(IAsyncResult asyncResult);
         /// <summary>
         /// Sync extend signature to latest publication.
         /// </summary>
         /// <param name="signature">KSI signature</param>
         /// <returns>extended KSI signature</returns>
-        KsiSignature ExtendSignature(KsiSignature signature);
+        KsiSignature Extend(KsiSignature signature);
         /// <summary>
         /// Sync extend signature to given publication.
         /// </summary>
         /// <param name="signature">KSI signature</param>
         /// <param name="publicationRecord">publication record</param>
         /// <returns>extended KSI signature</returns>
-        KsiSignature ExtendSignature(KsiSignature signature, PublicationRecord publicationRecord);
+        KsiSignature Extend(KsiSignature signature, PublicationRecord publicationRecord);
         /// <summary>
         /// Async begin extend signature to latest publication.
         /// </summary>
@@ -52,7 +52,7 @@ namespace Guardtime.KSI.Service
         /// <param name="callback">callback when extending signature is finished</param>
         /// <param name="asyncState">async state object</param>
         /// <returns>async result</returns>
-        IAsyncResult BeginExtendSignature(KsiSignature signature, AsyncCallback callback, object asyncState);
+        IAsyncResult BeginExtend(KsiSignature signature, AsyncCallback callback, object asyncState);
         /// <summary>
         /// Async begin extend signature to given publication.
         /// </summary>
@@ -61,13 +61,13 @@ namespace Guardtime.KSI.Service
         /// <param name="callback">callback when extending signature is finished</param>
         /// <param name="asyncState">async state object</param>
         /// <returns>async result</returns>
-        IAsyncResult BeginExtendSignature(KsiSignature signature, PublicationRecord publicationRecord, AsyncCallback callback, object asyncState);
+        IAsyncResult BeginExtend(KsiSignature signature, PublicationRecord publicationRecord, AsyncCallback callback, object asyncState);
         /// <summary>
         /// Async end extend signature.
         /// </summary>
         /// <param name="asyncResult">async result</param>
         /// <returns>extended KSI signature</returns>
-        KsiSignature EndExtendSignature(IAsyncResult asyncResult);
+        KsiSignature EndExtend(IAsyncResult asyncResult);
         /// <summary>
         /// Sync get publications file.
         /// </summary>
