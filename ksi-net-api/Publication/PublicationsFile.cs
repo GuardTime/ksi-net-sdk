@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -23,8 +24,7 @@ namespace Guardtime.KSI.Publication
         /// <summary>
         /// Get publications file creation time.
         /// </summary>
-        // TODO: Problem with too big value
-        public DateTime? CreationTime
+        public ulong CreationTime
         {
             get { return _publicationsFileDo.CreationTime; }
         }
@@ -67,11 +67,22 @@ namespace Guardtime.KSI.Publication
         }
 
         /// <summary>
-        /// Create publications file instance from data stream.
+        /// Create publications file instance from data stream and default buffer size.
         /// </summary>
         /// <param name="stream">data stream</param>
         /// <returns>publications file</returns>
         public static PublicationsFile GetInstance(Stream stream)
+        {
+            return GetInstance(stream, 8092);
+        }
+
+        /// <summary>
+        /// Create publications file instance from data stream and set buffer size.
+        /// </summary>
+        /// <param name="stream">data stream</param>
+        /// <param name="bufferSize">buffer size</param>
+        /// <returns>publications file</returns>
+        public static PublicationsFile GetInstance(Stream stream, int bufferSize)
         {
             if (stream == null)
             {
@@ -87,11 +98,9 @@ namespace Guardtime.KSI.Publication
                 throw new KsiException("Invalid publications file: incorrect file header");
             }
 
-            // TODO: Check for too long file
             using (MemoryStream memoryStream = new MemoryStream())
             {
-                // TODO: Make buffer configurable
-                byte[] buffer = new byte[8092];
+                byte[] buffer = new byte[bufferSize];
                 while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
                 {
                     memoryStream.Write(buffer, 0, bytesRead);
@@ -107,7 +116,9 @@ namespace Guardtime.KSI.Publication
         /// <returns>publication record</returns>
         public PublicationRecord GetLatestPublication()
         {
-            int publicationRecordCount = _publicationsFileDo.PublicationRecords.Count;
+            ReadOnlyCollection<PublicationRecord> publicationRecordCollection = _publicationsFileDo.GetPublicationRecords();
+
+            int publicationRecordCount = publicationRecordCollection.Count;
             if (publicationRecordCount == 0)
             {
                 return null;
@@ -118,13 +129,13 @@ namespace Guardtime.KSI.Publication
             {
                 if (latest == null)
                 {
-                    latest = _publicationsFileDo.PublicationRecords[i];
+                    latest = publicationRecordCollection[i];
                     continue;
                 }
 
-                if (_publicationsFileDo.PublicationRecords[i].PublicationData.PublicationTime.Value.CompareTo(latest.PublicationData.PublicationTime.Value) > 0)
+                if (publicationRecordCollection[i].PublicationData.PublicationTime.Value.CompareTo(latest.PublicationData.PublicationTime.Value) > 0)
                 {
-                    latest = _publicationsFileDo.PublicationRecords[i];
+                    latest = publicationRecordCollection[i];
                 }
             }
 
@@ -138,20 +149,22 @@ namespace Guardtime.KSI.Publication
         /// <returns>true if publication record is in publications file</returns>
         public bool Contains(PublicationRecord publicationRecord)
         {
-            if (publicationRecord == null) return false;
-
-            for (int i = 0; i < _publicationsFileDo.PublicationRecords.Count; i++)
+            if (publicationRecord == null)
             {
-                if (_publicationsFileDo.PublicationRecords[i].PublicationData == null) continue;
+                return false;
+            }
 
-                if (
-                    _publicationsFileDo.PublicationRecords[i].PublicationData.Equals(
-                        publicationRecord.PublicationData))
+            ReadOnlyCollection<PublicationRecord> publicationRecordCollection = _publicationsFileDo.GetPublicationRecords();
+
+            for (int i = 0; i < publicationRecordCollection.Count; i++)
+            {
+                if (publicationRecordCollection[i].PublicationData == null) continue;
+
+                if (publicationRecordCollection[i].PublicationData.Equals(publicationRecord.PublicationData))
                 {
                     return true;
                 }
             }
-
 
             return false;
         }
@@ -163,12 +176,14 @@ namespace Guardtime.KSI.Publication
         /// <returns>X509 certificate</returns>
         public X509Certificate FindCertificateById(byte[] certificateId)
         {
-            for (int i = 0; i < _publicationsFileDo.CertificateRecords.Count; i++)
+            ReadOnlyCollection<CertificateRecord> certificateRecordCollection = _publicationsFileDo.GetCertificateRecords();
+
+            for (int i = 0; i < certificateRecordCollection.Count; i++)
             {
-                if (Util.IsArrayEqual(_publicationsFileDo.CertificateRecords[i].CertificateId.EncodeValue(),
+                if (Util.IsArrayEqual(certificateRecordCollection[i].CertificateId.EncodeValue(),
                     certificateId))
                 {
-                    return new X509Certificate(_publicationsFileDo.CertificateRecords[i].X509Certificate.EncodeValue());
+                    return new X509Certificate(certificateRecordCollection[i].X509Certificate.EncodeValue());
                 }
             }
             return null;
@@ -184,8 +199,13 @@ namespace Guardtime.KSI.Publication
             builder.Append("Publications file");
 
             builder.Append(", created: ").Append(CreationTime);
-            // TODO: Check if publication always exists
-            builder.Append(", last publication: ").Append(GetLatestPublication().PublicationData.PublicationTime.Value);
+
+            PublicationRecord latestPublication = GetLatestPublication();
+            if (latestPublication != null)
+            {
+                builder.Append(", last publication: ").Append(latestPublication.PublicationData.PublicationTime.Value);
+            }
+            
             if (RepUri != null)
             {
                 builder.Append(", published at: ").Append(RepUri);

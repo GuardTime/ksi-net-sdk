@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 
@@ -13,8 +13,8 @@ namespace Guardtime.KSI.Publication
         private const uint CmsSignatureTagType = 0x704;
 
         private readonly PublicationsFileHeader _publicationsHeader;
-        private readonly List<CertificateRecord> _certificateRecords = new List<CertificateRecord>();
-        private readonly List<PublicationRecord> _publicationRecords = new List<PublicationRecord>();
+        private readonly List<CertificateRecord> _certificateRecordList = new List<CertificateRecord>();
+        private readonly List<PublicationRecord> _publicationRecordList = new List<PublicationRecord>();
         private readonly TlvTag _cmsSignature;
 
         /// <summary>
@@ -23,22 +23,6 @@ namespace Guardtime.KSI.Publication
         public PublicationsFileHeader PublicationsHeader
         {
             get { return _publicationsHeader; }
-        }
-
-        /// <summary>
-        /// Get certificate records.
-        /// </summary>
-        public List<CertificateRecord> CertificateRecords
-        {
-            get { return _certificateRecords; }
-        }
-
-        /// <summary>
-        /// Get publication records.
-        /// </summary>
-        public List<PublicationRecord> PublicationRecords
-        {
-            get { return _publicationRecords; }
         }
 
         /// <summary>
@@ -52,7 +36,7 @@ namespace Guardtime.KSI.Publication
         /// <summary>
         /// Get creation time.
         /// </summary>
-        public DateTime? CreationTime
+        public ulong CreationTime
         {
             get { return _publicationsHeader.CreationTime; }
         }
@@ -82,20 +66,32 @@ namespace Guardtime.KSI.Publication
                         _publicationsHeader = new PublicationsFileHeader(this[i]);
                         this[i] = _publicationsHeader;
                         publicationsHeaderCount++;
+                        if (i != 0)
+                        {
+                            throw new InvalidTlvStructureException("Publications file header should be the first element in publications file");
+                        }
                         break;
                     case CertificateRecord.TagType:
                         CertificateRecord certificateRecordTag = new CertificateRecord(this[i]);
-                        CertificateRecords.Add(certificateRecordTag);
+                        _certificateRecordList.Add(certificateRecordTag);
                         this[i] = certificateRecordTag;
+                        if (_publicationRecordList.Count != 0)
+                        {
+                            throw new InvalidTlvStructureException("Certificate records should be before publication records");
+                        }
                         break;
                     case PublicationRecord.TagTypePublication:
                         PublicationRecord publicationRecordTag = new PublicationRecord(this[i]);
-                        PublicationRecords.Add(publicationRecordTag);
+                        _publicationRecordList.Add(publicationRecordTag);
                         this[i] = publicationRecordTag;
                         break;
                     case CmsSignatureTagType:
                         _cmsSignature = this[i];
                         cmsSignatureCount++;
+                        if (i != Count - 1)
+                        {
+                            throw new InvalidTlvStructureException("Cms signature should be last element in publications file");
+                        }
                         break;
                     default:
                         VerifyCriticalFlag(this[i]);
@@ -112,6 +108,22 @@ namespace Guardtime.KSI.Publication
             {
                 throw new InvalidTlvStructureException("Only one signature must exist in publications file");
             }
+        }
+
+        /// <summary>
+        /// Get certificate records.
+        /// </summary>
+        public ReadOnlyCollection<CertificateRecord> GetCertificateRecords()
+        {
+            return _certificateRecordList.AsReadOnly();
+        }
+
+        /// <summary>
+        /// Get publication records.
+        /// </summary>
+        public ReadOnlyCollection<PublicationRecord> GetPublicationRecords()
+        {
+            return _publicationRecordList.AsReadOnly();
         }
 
     }

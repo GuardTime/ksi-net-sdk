@@ -25,10 +25,10 @@ namespace Guardtime.KSI.Publication
         /// <summary>
         /// Get publications file creation time.
         /// </summary>
-        public DateTime? CreationTime
+        public ulong CreationTime
         {
             
-            get { return _creationTime == null ? (DateTime?)null : Util.ConvertUnixTimeToDateTime(_creationTime.Value); }
+            get { return _creationTime.Value; }
         }
 
         /// <summary>
