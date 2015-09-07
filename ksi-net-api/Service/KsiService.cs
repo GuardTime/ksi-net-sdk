@@ -20,6 +20,7 @@ namespace Guardtime.KSI.Service
         private readonly IKsiExtendingServiceProtocol _extendingServiceProtocol;
         private readonly IKsiPublicationsFileServiceProtocol _publicationsFileServiceProtocol;
         private readonly IKsiServiceSettings _serviceSettings;
+        private readonly PublicationsFileFactory _publicationsFileFactory;
 
         /// <summary>
         /// Create KSI service with service protocol and service settings.
@@ -28,20 +29,28 @@ namespace Guardtime.KSI.Service
         /// <param name="extendingServiceProtocol">extending service protocol</param>
         /// <param name="publicationsFileServiceProtocol">publications file protocol</param>
         /// <param name="serviceSettings">service settings</param>
+        /// <param name="publicationsFileFactory">publications file factory</param>
         public KsiService(  IKsiSigningServiceProtocol signingServiceProtocol, 
                             IKsiExtendingServiceProtocol extendingServiceProtocol,
                             IKsiPublicationsFileServiceProtocol publicationsFileServiceProtocol,                
-                            IKsiServiceSettings serviceSettings)
+                            IKsiServiceSettings serviceSettings,
+                            PublicationsFileFactory publicationsFileFactory)
         {
             if (serviceSettings == null)
             {
                 throw new ArgumentNullException("serviceSettings");
             }
 
+            if (publicationsFileFactory == null)
+            {
+                throw new ArgumentNullException("publicationsFileFactory");
+            }
+
             _sigingServiceProtocol = signingServiceProtocol;
             _extendingServiceProtocol = extendingServiceProtocol;
             _publicationsFileServiceProtocol = publicationsFileServiceProtocol;
             _serviceSettings = serviceSettings;
+            _publicationsFileFactory = publicationsFileFactory;
         }
 
 
@@ -293,8 +302,7 @@ namespace Guardtime.KSI.Service
             }
 
             byte[] data = _publicationsFileServiceProtocol.EndGetPublicationsFile(serviceAsyncResult.ServiceProtocolAsyncResult);
-
-            return PublicationsFile.GetInstance(data);
+            return _publicationsFileFactory.Create(data);
         }
 
         /// <summary>
