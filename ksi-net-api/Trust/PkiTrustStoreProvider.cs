@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography.Pkcs;
 using System.Security.Cryptography.X509Certificates;
+using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Trust
 {
@@ -9,15 +10,6 @@ namespace Guardtime.KSI.Trust
     /// </summary>
     public class PkiTrustStoreProvider : IPkiTrustProvider
     {
-        /// <summary>
-        /// Return PKI trust store provider name.
-        /// </summary>
-        public string Name
-        {
-            // TODO: Correct return
-            get { return ""; } 
-        }
-
         /// <summary>
         /// Verify bytes with x509 signature.
         /// </summary>
@@ -29,7 +21,7 @@ namespace Guardtime.KSI.Trust
             {
                 throw new ArgumentNullException("x509SignatureBytes");
             }
-            
+
             SignedCms signedCms = new SignedCms(new ContentInfo(signedBytes), true);
             signedCms.Decode(x509SignatureBytes);
             signedCms.CheckSignature(false);

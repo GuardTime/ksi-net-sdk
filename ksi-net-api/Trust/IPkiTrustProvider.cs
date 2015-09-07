@@ -6,11 +6,6 @@
     public interface IPkiTrustProvider
     {
         /// <summary>
-        /// Get trust provider name.
-        /// </summary>
-        string Name { get; }
-
-        /// <summary>
         /// Verify bytes with x509 signature.
         /// </summary>
         /// <param name="signedBytes"></param>

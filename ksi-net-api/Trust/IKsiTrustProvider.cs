@@ -8,12 +8,19 @@ namespace Guardtime.KSI.Trust
     /// </summary>
     public interface IKsiTrustProvider
     {
+
+        /// <summary>
+        /// Get KSI trust provider name.
+        /// </summary>
+        string Name { get; }
+
         /// <summary>
         /// KSI trust provider contains given publication record.
         /// </summary>
         /// <param name="publicationRecord">publication record</param>
         /// <returns>true if publication record exists in ksi trust provider</returns>
         bool Contains(PublicationRecord publicationRecord);
+
         /// <summary>
         /// Find X509 certificate in KSI trust provider.
         /// </summary>
