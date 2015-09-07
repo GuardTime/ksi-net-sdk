@@ -2,12 +2,10 @@
 using System.IO;
 using System.Net;
 using System.Threading;
+using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Service
 {
-
-    // TODO: Make thread safe
-    // TODO: Should be possible to set timeout
 
     // TODO: Better names
     /// <summary>
@@ -15,6 +13,7 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public class HttpKsiServiceProtocol : IKsiSigningServiceProtocol, IKsiExtendingServiceProtocol, IKsiPublicationsFileServiceProtocol
     {
+        private readonly int _requestTimeOut = 100000;
         private readonly int _bufferSize = 8092;
 
         private readonly string _signingUrl;
@@ -36,18 +35,38 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        /// Create http KSI service protocol with given url-s and buffer size
+        /// Create http KSI service protocol with given url-s and request timeout
         /// </summary>
         /// <param name="signingUrl">signing url</param>
         /// <param name="extendingUrl">extending url</param>
         /// <param name="publicationsFileUrl">publications file url</param>
-        /// <param name="bufferSize">buffer size</param>
-        public HttpKsiServiceProtocol(string signingUrl, string extendingUrl, string publicationsFileUrl, int bufferSize) : this(signingUrl, extendingUrl, publicationsFileUrl)
+        /// <param name="requestTimeout">request timeout</param>
+        public HttpKsiServiceProtocol(string signingUrl, string extendingUrl, string publicationsFileUrl,
+            int requestTimeout) : this(signingUrl, extendingUrl, publicationsFileUrl)
         {
-            _bufferSize = bufferSize;
+            if (requestTimeout < 0)
+            {
+                throw new ArgumentOutOfRangeException("requestTimeout", requestTimeout, "Request timeout should be in milliseconds");
+            }
+            _requestTimeOut = requestTimeout;
         }
 
-
+        /// <summary>
+        /// Create http KSI service protocol with given url-s, request timeout and buffer size
+        /// </summary>
+        /// <param name="signingUrl">signing url</param>
+        /// <param name="extendingUrl">extending url</param>
+        /// <param name="publicationsFileUrl">publications file url</param>
+        /// <param name="requestTimeout">request timeout</param>
+        /// <param name="bufferSize">buffer size</param>
+        public HttpKsiServiceProtocol(string signingUrl, string extendingUrl, string publicationsFileUrl, int requestTimeout, int bufferSize) : this(signingUrl, extendingUrl, publicationsFileUrl, requestTimeout)
+        {
+            if (bufferSize < 0)
+            {
+                throw new ArgumentOutOfRangeException("bufferSize", bufferSize, "Buffer size should be positive integer");
+            }
+            _bufferSize = bufferSize;
+        }
 
         /// <summary>
         /// Begin create signature.
@@ -62,17 +81,20 @@ namespace Guardtime.KSI.Service
             {
                 throw new ArgumentNullException("data");
             }
-            // TODO: URLs from conf
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(_signingUrl);
 
-            // TODO: Seems to work with expect100
-            //request.ServicePoint.Expect100Continue = false;
+            HttpWebRequest request = WebRequest.Create(_signingUrl) as HttpWebRequest;
+            if (request == null)
+            {
+                throw new ServiceProtocolException("Invalid signing HTTP URL: " + _signingUrl);
+            }
+
             request.Method = WebRequestMethods.Http.Post;
             request.ContentType = "application/ksi-request";
             request.ContentLength = data.Length;
 
             HttpKsiServiceProtocolAsyncResult httpAsyncResult = new HttpKsiServiceProtocolAsyncResult(request, data, callback, asyncState);
-            request.BeginGetRequestStream(EndAsyncGetRequestStreamCallback, httpAsyncResult);
+            httpAsyncResult.StreamAsyncResult = request.BeginGetRequestStream(null, httpAsyncResult);
+            ThreadPool.RegisterWaitForSingleObject(httpAsyncResult.StreamAsyncResult.AsyncWaitHandle, EndAsyncGetRequestStreamCallback, httpAsyncResult, _requestTimeOut, true);
             return httpAsyncResult;
         }
 
@@ -100,13 +122,19 @@ namespace Guardtime.KSI.Service
                 throw new ArgumentNullException("data");
             }
 
-            WebRequest request = WebRequest.Create(_extendingUrl);
+            HttpWebRequest request = WebRequest.Create(_extendingUrl) as HttpWebRequest;
+            if (request == null)
+            {
+                throw new ServiceProtocolException("Invalid extending HTTP URL: " + _extendingUrl);
+            }
+
             request.Method = WebRequestMethods.Http.Post;
             request.ContentType = "application/ksi-request";
             request.ContentLength = data.Length;
 
             HttpKsiServiceProtocolAsyncResult httpAsyncResult = new HttpKsiServiceProtocolAsyncResult(request, data, callback, asyncState);
-            request.BeginGetRequestStream(EndAsyncGetRequestStreamCallback, httpAsyncResult);
+            httpAsyncResult.StreamAsyncResult = request.BeginGetRequestStream(null, httpAsyncResult);
+            ThreadPool.RegisterWaitForSingleObject(httpAsyncResult.StreamAsyncResult.AsyncWaitHandle, EndAsyncGetRequestStreamCallback, httpAsyncResult, _requestTimeOut, true);
             return httpAsyncResult;
         }
 
@@ -128,11 +156,18 @@ namespace Guardtime.KSI.Service
         /// <returns>HTTP KSI service protocol async result</returns>
         public IAsyncResult BeginGetPublicationsFile(AsyncCallback callback, object asyncState)
         {
-            WebRequest request = WebRequest.Create(_publicationsFileUrl);
+            HttpWebRequest request = WebRequest.Create(_publicationsFileUrl) as HttpWebRequest;
+            if (request == null)
+            {
+                throw new ServiceProtocolException("Invalid publications file HTTP URL: " + _publicationsFileUrl);
+            }
+
             request.Method = WebRequestMethods.Http.Get;
 
             HttpKsiServiceProtocolAsyncResult httpAsyncResult = new HttpKsiServiceProtocolAsyncResult(request, null, callback, asyncState);
-            httpAsyncResult.ResponseAsyncResult = request.BeginGetResponse(EndAsyncGetResponseCallback, httpAsyncResult);
+            httpAsyncResult.ResponseAsyncResult = request.BeginGetResponse(null, httpAsyncResult);
+            ThreadPool.RegisterWaitForSingleObject(httpAsyncResult.ResponseAsyncResult.AsyncWaitHandle, EndAsyncGetResponseCallback, httpAsyncResult, _requestTimeOut, true);
+
             return httpAsyncResult;
         }
 
@@ -146,30 +181,59 @@ namespace Guardtime.KSI.Service
             return EndGetResult(asyncResult);
         }
 
-        /// <summary>
-        /// End async get request stream callback.
-        /// </summary>
-        /// <param name="asyncResult">HTTP KSI service protocol async result</param>
-        private void EndAsyncGetRequestStreamCallback(IAsyncResult asyncResult)
+
+
+        private void EndAsyncGetRequestStreamCallback(object state, bool timedOut)
         {
-            HttpKsiServiceProtocolAsyncResult httpAsyncResult = (HttpKsiServiceProtocolAsyncResult)asyncResult.AsyncState;
+            HttpKsiServiceProtocolAsyncResult httpAsyncResult = (HttpKsiServiceProtocolAsyncResult)state;
 
+
+
+            if (timedOut)
+            {
+                httpAsyncResult.Error = new ServiceProtocolException("Request stream timed out");
+                httpAsyncResult.SetComplete(true);
+                return;
+            }
+
+
+            int timeRemaining = _requestTimeOut - httpAsyncResult.TimeElapsed;
+            if (timeRemaining < 0)
+            {
+                httpAsyncResult.Error = new ServiceProtocolException("Request timed out");
+                httpAsyncResult.SetComplete(true);
+                return;
+            }
+
+            httpAsyncResult.Request.Timeout = _requestTimeOut;
             byte[] data = httpAsyncResult.PostData;
-            Stream stream = httpAsyncResult.Request.EndGetRequestStream(asyncResult);
-            stream.Write(data, 0, data.Length);
-            stream.Close();
+            try
+            {
+                 Stream stream = httpAsyncResult.Request.EndGetRequestStream(httpAsyncResult.StreamAsyncResult);
+                stream.Write(data, 0, data.Length);
+                stream.Close();
 
-            httpAsyncResult.ResponseAsyncResult = httpAsyncResult.Request.BeginGetResponse(EndAsyncGetResponseCallback, httpAsyncResult);
+                httpAsyncResult.ResponseAsyncResult = httpAsyncResult.Request.BeginGetResponse(null, httpAsyncResult);
+                ThreadPool.RegisterWaitForSingleObject(httpAsyncResult.ResponseAsyncResult.AsyncWaitHandle, EndAsyncGetResponseCallback, httpAsyncResult, timeRemaining, true);
+            }
+            catch (Exception e)
+            {
+                httpAsyncResult.Error = new ServiceProtocolException("Request failed: " + e, e);
+                httpAsyncResult.SetComplete(true);
+            }
         }
 
-        /// <summary>
-        /// End async get response callback.
-        /// </summary>
-        /// <param name="asyncResult">HTTP KSI service protocol async result</param>
-        private void EndAsyncGetResponseCallback(IAsyncResult asyncResult)
+        private void EndAsyncGetResponseCallback(object state, bool timedOut)
         {
-            HttpKsiServiceProtocolAsyncResult httpAsyncResult = (HttpKsiServiceProtocolAsyncResult)asyncResult.AsyncState;
-            httpAsyncResult.SetComplete();
+            HttpKsiServiceProtocolAsyncResult httpAsyncResult =
+                (HttpKsiServiceProtocolAsyncResult) state;
+
+            if (timedOut)
+            {
+                httpAsyncResult.Error = new ServiceProtocolException("Request timed out");
+            }
+
+            httpAsyncResult.SetComplete(timedOut);
         }
 
         /// <summary>
@@ -191,17 +255,16 @@ namespace Guardtime.KSI.Service
                 httpAsyncResult.AsyncWaitHandle.WaitOne();
             }
 
-            // TODO: Make buffer configurable
+            if (httpAsyncResult.IsErroneous)
+            {
+                throw httpAsyncResult.Error;
+            }
+
             byte[] buffer = new byte[_bufferSize];
             try
             {
-                WebResponse response = httpAsyncResult.Request.EndGetResponse(httpAsyncResult.ResponseAsyncResult);
-                if (response == null)
-                {
-                    // TODO: When response is empty
-                    throw new Exception("Problem");
-                }
-
+                using (
+                    WebResponse response = httpAsyncResult.Request.EndGetResponse(httpAsyncResult.ResponseAsyncResult))
                 using (Stream s = response.GetResponseStream())
                 using (MemoryStream memoryStream = new MemoryStream())
                 {
@@ -241,21 +304,24 @@ namespace Guardtime.KSI.Service
         /// </summary>
         private class HttpKsiServiceProtocolAsyncResult : IAsyncResult
         {
-            private bool _isCompleted;
-            private bool _isCompletedSynchronously;
+
+            private readonly DateTime _startTime = DateTime.Now;
             private readonly ManualResetEvent _waitHandle;
             private readonly object _asyncState;
+            private bool _isCompleted;
+            private bool _isCompletedSynchronously;
 
             private readonly AsyncCallback _callback;
-
             private readonly object _lock;
-
+            
+            private IAsyncResult _streamAsyncResult;
             private IAsyncResult _responseAsyncResult;
+            private Exception _error;
 
-            private readonly WebRequest _request;
+            private readonly HttpWebRequest _request;
             private readonly byte[] _postData;
 
-            public HttpKsiServiceProtocolAsyncResult(WebRequest request, byte[] postData, AsyncCallback callback, object asyncState)
+            public HttpKsiServiceProtocolAsyncResult(HttpWebRequest request, byte[] postData, AsyncCallback callback, object asyncState)
             {
                 if (request == null)
                 {
@@ -312,6 +378,23 @@ namespace Guardtime.KSI.Service
                 }
             }
 
+            public IAsyncResult StreamAsyncResult
+            {
+                get
+                {
+                    return _streamAsyncResult;
+                }
+
+                set
+                {
+                    if (value == null)
+                    {
+                        throw new ArgumentNullException("value");
+                    }
+                    _streamAsyncResult = value;
+                }
+            }
+
             public IAsyncResult ResponseAsyncResult
             {
                 get
@@ -321,11 +404,15 @@ namespace Guardtime.KSI.Service
 
                 set
                 {
+                    if (value == null)
+                    {
+                        throw new ArgumentNullException("value");
+                    }
                     _responseAsyncResult = value;
                 }
             }
 
-            public WebRequest Request
+            public HttpWebRequest Request
             {
                 get
                 {
@@ -341,7 +428,23 @@ namespace Guardtime.KSI.Service
                 }
             }
 
-            public void SetComplete()
+            public int TimeElapsed
+            {
+                get { return (int) (DateTime.Now - _startTime).TotalMilliseconds; }
+            }
+
+            public bool IsErroneous
+            {
+                get { return _error != null; }
+            }
+
+            public Exception Error
+            {
+                get { return _error; }
+                set { _error = value; }
+            }
+
+            public void SetComplete(bool errorOccured)
             {
 
                 lock (_lock)
@@ -350,7 +453,7 @@ namespace Guardtime.KSI.Service
                     {
                         _isCompleted = true;
                         _isCompletedSynchronously = true;
-                        if (_callback != null)
+                        if (errorOccured == false && _callback != null)
                         {
                             _callback.Invoke(this);
                         }
