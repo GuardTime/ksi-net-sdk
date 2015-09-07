@@ -4,6 +4,7 @@ using Guardtime.KSI.Signature;
 using NUnit.Framework;
 using System;
 using System.IO;
+using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Service
 {
@@ -18,7 +19,7 @@ namespace Guardtime.KSI.Service
                 "http://ksigw.test.guardtime.com:8010/gt-extendingservice",
                 "http://verify.guardtime.com/ksi-publications.bin");
 
-            var ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"));
+            var ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"), new PublicationsFileFactory());
             var createSignatureAsyncResult = ksiService.BeginSign(new DataHash(HashAlgorithm.Sha2256, new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 }), null, null);
             ksiService.EndSign(createSignatureAsyncResult);
 
@@ -31,7 +32,7 @@ namespace Guardtime.KSI.Service
             }
             var pubFileAsyncResult = ksiService.BeginGetPublicationsFile(null, null);
             var extendSignatureAsyncresult = ksiService.BeginExtend(signature, null, null);
-            Console.WriteLine(ksiService.EndExtend(extendSignatureAsyncresult));
+            ksiService.EndExtend(extendSignatureAsyncresult);
             Console.WriteLine(ksiService.EndGetPublicationsFile(pubFileAsyncResult));
         }
     }
