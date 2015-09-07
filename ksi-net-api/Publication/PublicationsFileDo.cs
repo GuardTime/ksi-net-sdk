@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 
@@ -15,7 +16,7 @@ namespace Guardtime.KSI.Publication
         private readonly PublicationsFileHeader _publicationsHeader;
         private readonly List<CertificateRecord> _certificateRecordList = new List<CertificateRecord>();
         private readonly List<PublicationRecord> _publicationRecordList = new List<PublicationRecord>();
-        private readonly TlvTag _cmsSignature;
+        private readonly RawTag _cmsSignature;
 
         /// <summary>
         /// Get publications file header.
@@ -28,7 +29,7 @@ namespace Guardtime.KSI.Publication
         /// <summary>
         /// Get cms signature.
         /// </summary>
-        public TlvTag CmsSignature
+        public RawTag CmsSignature
         {
             get { return _cmsSignature; }
         }
@@ -86,7 +87,7 @@ namespace Guardtime.KSI.Publication
                         this[i] = publicationRecordTag;
                         break;
                     case CmsSignatureTagType:
-                        _cmsSignature = this[i];
+                        _cmsSignature = new RawTag(this[i]);
                         cmsSignatureCount++;
                         if (i != Count - 1)
                         {
@@ -125,6 +126,5 @@ namespace Guardtime.KSI.Publication
         {
             return _publicationRecordList.AsReadOnly();
         }
-
     }
 }

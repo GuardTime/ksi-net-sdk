@@ -64,8 +64,7 @@ namespace Guardtime.KSI.Publication
                         versionCount++;
                         break;
                     case CreationTimeTagType:
-                        // TODO: temporary solution to publication file creationtime since it is too large (max value can be 10000 years in c#)
-                        _creationTime = new IntegerTag(this[i].Type, this[i].NonCritical, this[i].Forward, Util.DecodeUnsignedLong(this[i].EncodeValue(), 0, this[i].EncodeValue().Length) / 1000);
+                        _creationTime = new IntegerTag(this[i].Type, this[i].NonCritical, this[i].Forward, Util.DecodeUnsignedLong(this[i].EncodeValue(), 0, this[i].EncodeValue().Length));
                         this[i] = _creationTime;
                         creationTimeCount++;
                         break;

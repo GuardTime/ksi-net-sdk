@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -20,6 +21,14 @@ namespace Guardtime.KSI.Publication
         /// </summary>
         public static readonly byte[] FileBeginningMagicBytes = { 0x4b, 0x53, 0x49, 0x50, 0x55, 0x42, 0x4c, 0x46 };
         private readonly PublicationsFileDo _publicationsFileDo;
+
+        /// <summary>
+        /// Get KSI trust provider name.
+        /// </summary>
+        public string Name
+        {
+            get { return "publications file"; }
+        }
 
         /// <summary>
         /// Get publications file creation time.
@@ -142,6 +151,8 @@ namespace Guardtime.KSI.Publication
             return latest;
         }
 
+        
+
         /// <summary>
         /// Is publication record in publications file.
         /// </summary>
@@ -187,6 +198,42 @@ namespace Guardtime.KSI.Publication
                 }
             }
             return null;
+        }
+
+        /// <summary>
+        /// Get signed bytes.
+        /// </summary>
+        /// <returns>signed bytes</returns>
+        public byte[] GetSignatureBytes()
+        {
+            return _publicationsFileDo.CmsSignature.EncodeValue();
+        }
+
+        /// <summary>
+        /// Get signature bytes.
+        /// </summary>
+        /// <returns>signature bytes</returns>
+        public byte[] GetSignedBytes()
+        {
+            using (MemoryStream stream = new MemoryStream())
+            using (TlvWriter writer = new TlvWriter(stream))
+            {
+                writer.Write(FileBeginningMagicBytes);
+                for (int i = 0; i < _publicationsFileDo.Count - 1; i++)
+                {
+                    writer.WriteTag(_publicationsFileDo[i]);
+                }
+                return stream.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Get publications data object as string.
+        /// </summary>
+        /// <returns>publications file data object string</returns>
+        public string GetDataObjectAsString()
+        {
+            return _publicationsFileDo.ToString();
         }
 
         /// <summary>
