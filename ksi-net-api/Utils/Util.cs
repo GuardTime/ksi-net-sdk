@@ -41,16 +41,6 @@ namespace Guardtime.KSI.Utils
         }
 
         /// <summary>
-        /// Convert byte array to hex string.
-        /// </summary>
-        /// <param name="valueBytes">data bytes</param>
-        /// <returns>hex string</returns>
-        public static string ConvertByteArrayToHexString(byte[] valueBytes)
-        {
-            return valueBytes == null ? "" : BitConverter.ToString(valueBytes).Replace("-", string.Empty);
-        }
-
-        /// <summary>
         /// Decode byte array to unsigned long.
         /// </summary>
         /// <param name="buf">byte array</param>
@@ -73,7 +63,7 @@ namespace Guardtime.KSI.Utils
             
             ulong t = 0;
             for (int i = 0; i < len; ++i) {
-                t = (t << 8) | ((ulong) buf[ofs + i] & 0xff);
+                t = (t << 8) | buf[ofs + i];
             }
 
             return t;
@@ -171,5 +161,53 @@ namespace Guardtime.KSI.Utils
             return BitConverter.ToUInt32(bytes, 0);
         }
 
+        /// <summary>
+        /// Fill array with specific value
+        /// </summary>
+        /// <param name="arr">array of values</param>
+        /// <param name="value">value to write to array</param>
+        /// <typeparam name="T">array type</typeparam>
+        /// <exception cref="ArgumentNullException">thrown if array is null</exception>
+        public static void ArrayFill<T>(T[] arr, T value)
+        {
+            if (arr == null)
+            {
+                throw new ArgumentNullException("values");
+            }
+
+            for (int i = 0; i < arr.Length; i++)
+            {
+                arr[i] = value;
+            }
+        }
+
+        /// <summary>
+        /// Find the Greatest Common Divisor
+        /// </summary>
+        /// <param name="a">Number a</param>
+        /// <param name="b">Number b</param>
+        /// <returns>The greatest common Divisor</returns>
+        public static int GCD(int a, int b)
+        {
+            while (b != 0)
+            {
+                int tmp = b;
+                b = a % b;
+                a = tmp;
+            }
+
+            return a;
+        }
+
+        /// <summary>
+        /// Find the Least Common Multiple
+        /// </summary>
+        /// <param name="a">Number a</param>
+        /// <param name="b">Number b</param>
+        /// <returns>The least common multiple</returns>
+        public static int LCM(int a, int b)
+        {
+            return (a * b) / GCD(a, b);
+        }
     }
 }
