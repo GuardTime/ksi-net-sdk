@@ -35,39 +35,39 @@ namespace Guardtime.KSI.Service
         /// <summary>
         /// Sync extend signature to latest publication.
         /// </summary>
-        /// <param name="signature">KSI signature</param>
-        /// <returns>extended KSI signature</returns>
-        KsiSignature Extend(KsiSignature signature);
+        /// <param name="aggregationTime">aggregation time</param>
+        /// <returns>extended calendar hash chain</returns>
+        CalendarHashChain Extend(ulong aggregationTime);
         /// <summary>
         /// Sync extend signature to given publication.
         /// </summary>
-        /// <param name="signature">KSI signature</param>
-        /// <param name="publicationRecord">publication record</param>
-        /// <returns>extended KSI signature</returns>
-        KsiSignature Extend(KsiSignature signature, PublicationRecord publicationRecord);
+        /// <param name="aggregationTime">aggregation time</param>
+        /// <param name="publicationTime">publication time</param>
+        /// <returns>extended calendar hash chain</returns>
+        CalendarHashChain Extend(ulong aggregationTime, ulong publicationTime);
         /// <summary>
         /// Async begin extend signature to latest publication.
         /// </summary>
-        /// <param name="signature">KSI signature</param>
+        /// <param name="aggregationTime">aggregation time</param>
         /// <param name="callback">callback when extending signature is finished</param>
         /// <param name="asyncState">async state object</param>
         /// <returns>async result</returns>
-        IAsyncResult BeginExtend(KsiSignature signature, AsyncCallback callback, object asyncState);
+        IAsyncResult BeginExtend(ulong aggregationTime, AsyncCallback callback, object asyncState);
         /// <summary>
         /// Async begin extend signature to given publication.
         /// </summary>
-        /// <param name="signature">KSI signature</param>
-        /// <param name="publicationRecord">publication record</param>
+        /// <param name="aggregationTime">aggregation time</param>
+        /// <param name="publicationTime">publication time</param>
         /// <param name="callback">callback when extending signature is finished</param>
         /// <param name="asyncState">async state object</param>
         /// <returns>async result</returns>
-        IAsyncResult BeginExtend(KsiSignature signature, PublicationRecord publicationRecord, AsyncCallback callback, object asyncState);
+        IAsyncResult BeginExtend(ulong aggregationTime, ulong publicationTime, AsyncCallback callback, object asyncState);
         /// <summary>
         /// Async end extend signature.
         /// </summary>
         /// <param name="asyncResult">async result</param>
-        /// <returns>extended KSI signature</returns>
-        KsiSignature EndExtend(IAsyncResult asyncResult);
+        /// <returns>extended calendar hash chain</returns>
+        CalendarHashChain EndExtend(IAsyncResult asyncResult);
         /// <summary>
         /// Sync get publications file.
         /// </summary>

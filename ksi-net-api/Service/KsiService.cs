@@ -125,84 +125,72 @@ namespace Guardtime.KSI.Service
         /// <summary>
         /// Sync extend signature to latest publication.
         /// </summary>
-        /// <param name="signature">KSI signature</param>
-        /// <returns>extended KSI signature</returns>
-        public KsiSignature Extend(KsiSignature signature)
+        /// <param name="aggregationTime">aggregation time</param>
+        /// <returns>extended calendar hash chain</returns>
+        public CalendarHashChain Extend(ulong aggregationTime)
         {
-            return EndExtend(BeginExtend(signature, null, null));
+            return EndExtend(BeginExtend(aggregationTime, null, null));
         }
 
         /// <summary>
         /// Sync extend signature to given publication.
         /// </summary>
-        /// <param name="signature">KSI signature</param>
-        /// <param name="publicationRecord">publication record</param>
-        /// <returns>extended KSI signature</returns>
-        public KsiSignature Extend(KsiSignature signature, PublicationRecord publicationRecord)
+        /// <param name="aggregationTime">aggregation time</param>
+        /// <param name="publicationTime">publication time</param>
+        /// <returns>extended calendar hash chain</returns>
+        public CalendarHashChain Extend(ulong aggregationTime, ulong publicationTime)
         {
-            return EndExtend(BeginExtend(signature, publicationRecord, null, null));
+            return EndExtend(BeginExtend(aggregationTime, publicationTime, null, null));
         }
 
         /// <summary>
         /// Async begin extend signature to latest publication.
         /// </summary>
-        /// <param name="signature">KSI signature</param>
+        /// <param name="aggregationTime">aggregation time</param>
         /// <param name="callback">callback when extending signature is finished</param>
         /// <param name="asyncState">async state object</param>
         /// <returns>async result</returns>
-        public IAsyncResult BeginExtend(KsiSignature signature, AsyncCallback callback, object asyncState)
+        public IAsyncResult BeginExtend(ulong aggregationTime, AsyncCallback callback, object asyncState)
         {
             if (_extendingServiceProtocol == null)
             {
                 throw new InvalidOperationException("Extending service protocol is missing from service");
             }
 
-            if (signature == null)
-            {
-                throw new ArgumentNullException("signature");
-            }
-
-            ReadOnlyCollection<AggregationHashChain> aggregationHashChain = signature.GetAggregationHashChains();
-            ExtendPdu pdu = new ExtendPdu(new KsiPduHeader(_serviceSettings.LoginId), new ExtendRequestPayload(aggregationHashChain[aggregationHashChain.Count - 1].AggregationTime));
+            ExtendPdu pdu = new ExtendPdu(new KsiPduHeader(_serviceSettings.LoginId), new ExtendRequestPayload(aggregationTime));
             pdu.SetMac(_serviceSettings.LoginKey);
             IAsyncResult serviceProtocolAsyncResult = _extendingServiceProtocol.BeginExtend(pdu.Encode(), callback, asyncState);
-            return new ExtendSignatureKsiServiceAsyncResult(serviceProtocolAsyncResult, signature, asyncState);
+            return new ExtendSignatureKsiServiceAsyncResult(serviceProtocolAsyncResult, asyncState);
         }
+
 
         /// <summary>
         /// Async begin extend signature to given publication.
         /// </summary>
-        /// <param name="signature">KSI signature</param>
-        /// <param name="publicationRecord">publication record</param>
+        /// <param name="aggregationTime">aggregation time</param>
+        /// <param name="publicationTime">publication time</param>
         /// <param name="callback">callback when extending signature is finished</param>
         /// <param name="asyncState">async state object</param>
         /// <returns>async result</returns>
-        public IAsyncResult BeginExtend(KsiSignature signature, PublicationRecord publicationRecord, AsyncCallback callback, object asyncState)
+        public IAsyncResult BeginExtend(ulong aggregationTime, ulong publicationTime, AsyncCallback callback, object asyncState)
         {
             if (_extendingServiceProtocol == null)
             {
                 throw new InvalidOperationException("Extending service protocol is missing from service");
             }
 
-            if (signature == null)
-            {
-                throw new ArgumentNullException("signature");
-            }
-
-            ReadOnlyCollection<AggregationHashChain> aggregationHashChain = signature.GetAggregationHashChains();
-            // TODO: Set publication to payload
-            ExtendPdu pdu = new ExtendPdu(new KsiPduHeader(_serviceSettings.LoginId), new ExtendRequestPayload(aggregationHashChain[aggregationHashChain.Count - 1].AggregationTime));
+            ExtendPdu pdu = new ExtendPdu(new KsiPduHeader(_serviceSettings.LoginId), new ExtendRequestPayload(aggregationTime, publicationTime));
             pdu.SetMac(_serviceSettings.LoginKey);
             IAsyncResult serviceProtocolAsyncResult = _extendingServiceProtocol.BeginExtend(pdu.Encode(), callback, asyncState);
-            return new ExtendSignatureKsiServiceAsyncResult(serviceProtocolAsyncResult, signature, asyncState);
+            return new ExtendSignatureKsiServiceAsyncResult(serviceProtocolAsyncResult, asyncState);
         }
 
         /// <summary>
         /// Async end extend signature.
         /// </summary>
         /// <param name="asyncResult">async result</param>
-        /// <returns>extended KSI signature</returns>
-        public KsiSignature EndExtend(IAsyncResult asyncResult)
+        /// <returns>extended calendar hash chain</returns>
+        public CalendarHashChain EndExtend(IAsyncResult asyncResult)
         {
             if (_extendingServiceProtocol == null)
             {
@@ -242,7 +230,13 @@ namespace Guardtime.KSI.Service
                     throw new KsiException("Invalid response payload");
                 }
 
-                return serviceAsyncResult.Signature.Extend(payload.CalendarHashChain);
+                if (payload.CalendarHashChain == null)
+                {
+                    // TODO: better exception
+                    throw new KsiException("No calendar hash chain in payload, error");
+                }
+
+                return payload.CalendarHashChain;
             }
         }
 
@@ -321,24 +315,9 @@ namespace Guardtime.KSI.Service
         /// </summary>
         private class ExtendSignatureKsiServiceAsyncResult : KsiServiceAsyncResult
         {
-            private readonly KsiSignature _signature;
 
-            public KsiSignature Signature
+            public ExtendSignatureKsiServiceAsyncResult(IAsyncResult serviceProtocolAsyncResult, object asyncState) : base(serviceProtocolAsyncResult, asyncState)
             {
-                get
-                {
-                    return _signature;
-                }
-            }
-
-            public ExtendSignatureKsiServiceAsyncResult(IAsyncResult serviceProtocolAsyncResult, KsiSignature signature, object asyncState) : base(serviceProtocolAsyncResult, asyncState)
-            {
-                if (signature == null)
-                {
-                    throw new ArgumentNullException("signature");
-                }
-
-                _signature = signature;
             }
         }
 

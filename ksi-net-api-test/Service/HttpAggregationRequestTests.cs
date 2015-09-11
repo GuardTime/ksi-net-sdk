@@ -19,20 +19,26 @@ namespace Guardtime.KSI.Service
                 "http://ksigw.test.guardtime.com:8010/gt-extendingservice",
                 "http://verify.guardtime.com/ksi-publications.bin");
 
+
+            Console.WriteLine(@"// Creating service");
             var ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"), new PublicationsFileFactory());
+            Console.WriteLine(@"// Signing hash");
             var createSignatureAsyncResult = ksiService.BeginSign(new DataHash(HashAlgorithm.Sha2256, new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 }), null, null);
             ksiService.EndSign(createSignatureAsyncResult);
 
+            // TODO: Improve extending
+            Console.WriteLine(@"// Extending signature");
             KsiSignature signature;
             using (var stream = new FileStream("resources/signature/signature-ok.tlv", FileMode.Open))
             {
                 signature = KsiSignature.GetInstance(stream);
-                var extendSignatureAsyncResult = ksiService.BeginExtend(signature, null, null);
-                signature = ksiService.EndExtend(extendSignatureAsyncResult);
+                var extendSignatureAsyncResult = ksiService.BeginExtend(signature.AggregationTime, null, null);
+                signature = signature.Extend(ksiService.EndExtend(extendSignatureAsyncResult));
             }
             var pubFileAsyncResult = ksiService.BeginGetPublicationsFile(null, null);
-            var extendSignatureAsyncresult = ksiService.BeginExtend(signature, null, null);
+            var extendSignatureAsyncresult = ksiService.BeginExtend(signature.AggregationTime, null, null);
             ksiService.EndExtend(extendSignatureAsyncresult);
+            Console.WriteLine(@"// Publications File");
             Console.WriteLine(ksiService.EndGetPublicationsFile(pubFileAsyncResult));
         }
     }
