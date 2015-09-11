@@ -107,7 +107,7 @@ namespace Guardtime.KSI.Parser
             }
 
             builder.Append("]:");
-            builder.Append("0x").Append(Util.ConvertByteArrayToHexString(EncodeValue()));
+            builder.Append("0x").Append(Base16.Encode(EncodeValue()));
 
             return builder.ToString();
         }
