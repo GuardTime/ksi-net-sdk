@@ -71,6 +71,14 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
+        /// Get aggregation time.
+        /// </summary>
+        public ulong AggregationTime
+        {
+            get { return _ksiSignatureDo.GetAggregationHashChains()[0].AggregationTime; }
+        }
+
+        /// <summary>
         /// Create KSI signature instance from KSI PDU payload.
         /// </summary>
         /// <param name="response">KSI PDU payload</param>
