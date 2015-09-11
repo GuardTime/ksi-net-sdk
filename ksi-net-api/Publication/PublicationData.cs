@@ -1,7 +1,9 @@
-﻿using Guardtime.KSI.Exceptions;
+﻿using System;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using System.Collections.Generic;
+using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Publication
 {
@@ -92,6 +94,54 @@ namespace Guardtime.KSI.Publication
             _publicationTime = new IntegerTag(PublicationTimeTagType, false, false, publicationTime);
             AddTag(_publicationTime);
             _publicationHash = new ImprintTag(PublicationHashTagType, false, false, publicationHash);
+            AddTag(_publicationHash);
+        }
+
+        /// <summary>
+        /// Create new publication data TLV element from publication string.
+        /// </summary>
+        /// <param name="publicationString">publication string</param>
+        public PublicationData(string publicationString) : base(TagType, false, true, new List<TlvTag>())
+        {
+            if (publicationString == null)
+            {
+                // TODO: Better exception
+                throw new ArgumentNullException("publicationString");
+            }
+
+            byte[] dataBytesWithCrc32 = Base32.Decode(publicationString);
+
+            // Length needs to be at least 13 bytes (8 bytes for time plus non-empty hash imprint plus 4 bytes for crc32)
+            if (dataBytesWithCrc32 == null || dataBytesWithCrc32.Length < 13)
+            {
+                // TODO: correct exception
+                throw new InvalidOperationException("Invalid publication string: Base32 decode failed");
+            }
+
+
+            byte[] dataBytes = new byte[dataBytesWithCrc32.Length - 4];
+            Array.Copy(dataBytesWithCrc32, 0, dataBytes, 0, dataBytesWithCrc32.Length - 4);
+
+            byte[] computedCrc32 = Util.EncodeUnsignedLong(Crc32.Calculate(dataBytes, 0));
+            byte[] messageCrc32 = new byte[4];
+            Array.Copy(dataBytesWithCrc32, dataBytesWithCrc32.Length - 4, messageCrc32, 0, 4);
+            if (!Util.IsArrayEqual(computedCrc32, messageCrc32))
+            {
+                // TODO: Better exception
+                throw new Exception("Invalid publication string: CRC32 Check failed");
+            }
+
+
+            byte[] hashImprint = new byte[dataBytesWithCrc32.Length - 12];
+            Array.Copy(dataBytesWithCrc32, 8, hashImprint, 0, dataBytesWithCrc32.Length - 12);
+
+            byte[] publicationTimeBytes = new byte[8];
+            Array.Copy(dataBytesWithCrc32, 0, publicationTimeBytes, 0, 8);
+
+            _publicationTime = new IntegerTag(PublicationTimeTagType, false, false, Util.DecodeUnsignedLong(publicationTimeBytes, 0, publicationTimeBytes.Length));
+            AddTag(_publicationTime);
+
+            _publicationHash = new ImprintTag(PublicationHashTagType, false, false, new DataHash(hashImprint));
             AddTag(_publicationHash);
         }
     }
