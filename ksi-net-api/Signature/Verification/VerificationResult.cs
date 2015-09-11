@@ -12,6 +12,10 @@
         /// <summary>
         /// Verification result failed.
         /// </summary>
-        Fail = 1
+        Fail = 1,
+        /// <summary>
+        /// Verification result undefined
+        /// </summary>
+        Na = 2
     }
 }

@@ -5,14 +5,14 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// <summary>
     /// Calendar authentication record aggregation time verification rule.
     /// </summary>
-    public class CalendarAuthenticationRecordAggregationTimeRule : IRule
+    public sealed class CalendarAuthenticationRecordAggregationTimeRule : IRule
     {
         /// <summary>
         /// Verify given context with rule.
         /// </summary>
         /// <param name="context">verification context</param>
         /// <returns>verification result</returns>
-        public VerificationResult Verify(VerificationContext context)
+        public override VerificationResult Verify(VerificationContext context)
         {
             if (context.CalendarAuthenticationRecord == null)
             {

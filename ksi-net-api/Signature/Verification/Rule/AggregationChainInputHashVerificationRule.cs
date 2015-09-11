@@ -6,14 +6,15 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// <summary>
     /// Aggregation hash chain input hash verification rule.
     /// </summary>
-    public class AggregationChainInputHashVerificationRule : IRule
+    public sealed class AggregationChainInputHashVerificationRule : IRule
     {
+
         /// <summary>
         /// Verify given context with rule.
         /// </summary>
         /// <param name="context">verification context</param>
         /// <returns>verification result</returns>
-        public VerificationResult Verify(VerificationContext context)
+        public override VerificationResult Verify(VerificationContext context)
         {
             if (context == null)
             {
@@ -21,7 +22,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             }
 
             KsiSignature signature = context.Signature;
-            DataHash inputHash = context.DocumentHash, documentHash = context.DocumentHash;
+            DataHash inputHash = context.DocumentHash;
             if (signature == null)
             {
                 throw new ArgumentException("Invalid signature in context: null", "context");
@@ -29,15 +30,10 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (signature.IsRfc3161Signature)
             {
-                inputHash = signature.Rfc3161Record.GetOutputHash(documentHash);
+                inputHash = signature.Rfc3161Record.GetOutputHash(inputHash);
             }
 
-            if (inputHash != signature.GetAggregationHashChains()[0].InputHash)
-            {
-                return VerificationResult.Fail;
-            }
-
-            return VerificationResult.Ok;
+            return inputHash != signature.GetAggregationHashChains()[0].InputHash ? VerificationResult.Fail : VerificationResult.Ok;
         }
     }
 }

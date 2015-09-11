@@ -136,6 +136,14 @@
     <Compile Include="Signature\Rfc3161Record.cs" />
     <Compile Include="Signature\SignatureData.cs" />
     <Compile Include="Signature\Verification\KsiTrustProvider.cs" />
+    <Compile Include="Signature\Verification\Policy\PublicationVerificationPolicy.cs" />
+    <Compile Include="Signature\Verification\Rule\IRule.cs" />
+    <Compile Include="Signature\Verification\Rule\Publication\PublicationsEqualsRule.cs" />
+    <Compile Include="Signature\Verification\Rule\Publication\SignatureExtendingPermissionRule.cs" />
+    <Compile Include="Signature\Verification\Rule\Publication\PublicationsFileHasExtendablePublicationRule.cs" />
+    <Compile Include="Signature\Verification\Rule\Publication\SignaturePublicationExistanceRule.cs" />
+    <Compile Include="Signature\Verification\Rule\Publication\UserPublicationExistanceRule - Copy.cs" />
+    <Compile Include="Signature\Verification\Rule\Publication\SignatureCreatedBeforeUserPublicationRule.cs" />
     <Compile Include="Signature\Verification\Rule\SignaturePublicationRecordPublicationTimeRule.cs" />
     <Compile Include="Signature\Verification\Rule\SignaturePublicationRecordPublicationHashRule.cs" />
     <Compile Include="Signature\Verification\Rule\CalendarAuthenticationRecordAggregationTimeRule.cs" />
@@ -145,7 +153,6 @@
     <Compile Include="Signature\Verification\Rule\CalendarHashChainRegistrationTimeRule.cs" />
     <Compile Include="Signature\Verification\Rule\CalendarHashChainAggregationTimeRule.cs" />
     <Compile Include="Signature\Verification\Rule\CalendarHashChainInputHashVerificationRule.cs" />
-    <Compile Include="Signature\Verification\Rule\IRule.cs" />
     <Compile Include="Signature\Verification\Policy\InternalVerificationPolicy.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainConsistencyRule.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationChainInputHashVerificationRule.cs" />
@@ -157,6 +164,10 @@
     <Compile Include="Trust\IKsiTrustProvider.cs" />
     <Compile Include="Trust\IPkiTrustProvider.cs" />
     <Compile Include="Trust\PkiTrustStoreProvider.cs" />
+    <Compile Include="Utils\Base16.cs" />
+    <Compile Include="Utils\Base32.cs" />
+    <Compile Include="Utils\BaseX.cs" />
+    <Compile Include="Utils\Crc32.cs" />
     <Compile Include="Utils\Util.cs" />
   </ItemGroup>
   <ItemGroup>

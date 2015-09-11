@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Publication;
+using Guardtime.KSI.Service;
 
 namespace Guardtime.KSI.Signature.Verification
 {
@@ -12,6 +14,12 @@ namespace Guardtime.KSI.Signature.Verification
     {
         private KsiSignature _signature;
         private DataHash _documentHash;
+        private PublicationData _userPublication;
+
+        private Dictionary<int, CalendarHashChain> _extendedCalendars;
+        private CalendarHashChain _calendarExtendedToHead;
+        private IKsiService _ksiService;
+        private bool _extendingAllowed;
 
         /// <summary>
         /// Get or set document hash.
@@ -25,11 +33,6 @@ namespace Guardtime.KSI.Signature.Verification
 
             set
             {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
-
                 _documentHash = value;
             }
         }
@@ -79,12 +82,15 @@ namespace Guardtime.KSI.Signature.Verification
 
             set
             {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
-
                 _signature = value;
+            }
+        }
+
+        public PublicationData UserPublication
+        {
+            get { return _userPublication; }
+            set {
+                _userPublication = value;
             }
         }
 
@@ -104,6 +110,39 @@ namespace Guardtime.KSI.Signature.Verification
         public DataHash GetAggregationHashChainRootHash()
         {
             return _signature == null ? null : _signature.GetAggregationHashChainRootHash();
+        }
+
+        public IKsiService KsiService
+        {
+            get { return _ksiService; }
+            set { _ksiService = value; }
+        }
+
+        public bool ExtendingAllowed
+        {
+            get { return _extendingAllowed; }
+            set { _extendingAllowed = value; }
+        }
+
+        // TODO: Better solution?
+        public CalendarHashChain GetExtendedLatestCalendarHashChain()
+        {
+            return GetExtendedTimeCalendarHashChain(null);
+        }
+
+        public CalendarHashChain GetExtendedTimeCalendarHashChain(ulong? publicationTime)
+        {
+            if (_ksiService == null)
+            {
+                throw new InvalidOperationException("Cannot extend when KSI service is missing");
+            }
+
+            if (_signature == null)
+            {
+                throw new InvalidOperationException("No signature to extend");
+            }
+
+            return publicationTime == null ? _ksiService.Extend(_signature.AggregationTime) : _ksiService.Extend(_signature.AggregationTime, publicationTime.Value);
         }
 
     }

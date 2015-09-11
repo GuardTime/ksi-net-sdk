@@ -2,9 +2,9 @@
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
-    internal class SignaturePublicationRecordPublicationTimeRule : IRule
+    public sealed class SignaturePublicationRecordPublicationTimeRule : IRule
     {
-        public VerificationResult Verify(VerificationContext context)
+        public override VerificationResult Verify(VerificationContext context)
         {
             if (context.PublicationRecord == null)
             {
@@ -15,11 +15,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             PublicationRecord publicationRecord = context.PublicationRecord;
             CalendarHashChain calendarHashChain = context.CalendarHashChain;
 
-            if (publicationRecord.PublicationData.PublicationHash.Value != calendarHashChain.PublicationData.PublicationHash.Value)
-            {
-                return VerificationResult.Fail;
-            }
-            return VerificationResult.Ok;
+            return publicationRecord.PublicationData.PublicationHash.Value != calendarHashChain.PublicationData.PublicationHash.Value ? VerificationResult.Fail : VerificationResult.Ok;
         }
     }
 }

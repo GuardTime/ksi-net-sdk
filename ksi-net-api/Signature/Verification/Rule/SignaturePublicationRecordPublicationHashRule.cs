@@ -5,14 +5,15 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// <summary>
     /// Signature publication record publication hash verification rule.
     /// </summary>
-    public class SignaturePublicationRecordPublicationHashRule : IRule
+    public sealed class SignaturePublicationRecordPublicationHashRule : IRule
     {
+
         /// <summary>
         /// Verify given context with rule.
         /// </summary>
         /// <param name="context">verification context</param>
         /// <returns>verification result</returns>
-        public VerificationResult Verify(VerificationContext context)
+        public override VerificationResult Verify(VerificationContext context)
         {
             if (context.PublicationRecord == null)
             {

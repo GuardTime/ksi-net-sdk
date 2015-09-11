@@ -11,31 +11,29 @@ namespace Guardtime.KSI.Signature.Verification.Policy
     public class InternalVerificationPolicy : IPolicy
     {
         private readonly List<IRule> _rules = new List<IRule>();
+        private readonly IRule _startRule;
 
         /// <summary>
         /// Create internal verification policy and add rules to it.
         /// </summary>
         public InternalVerificationPolicy()
         {
-            // Verify aggregation hash chain
-            _rules.Add(new AggregationChainInputHashVerificationRule());
-            _rules.Add(new AggregationHashChainConsistencyRule());
-            _rules.Add(new AggregationHashChainTimeConsistencyRule());
+            // Verify aggregation chain
+            _startRule = new AggregationChainInputHashVerificationRule()
+                .OnSuccess(new AggregationHashChainConsistencyRule()
+                    .OnSuccess(new AggregationHashChainTimeConsistencyRule()
+                        .OnSuccess(
+                            // If present verify calendar hash chain
+                            new CalendarHashChainInputHashVerificationRule()
+                            .OnSuccess(new CalendarHashChainAggregationTimeRule()
+                                .OnSuccess(new CalendarHashChainRegistrationTimeRule()
+                                    .OnSuccess(
+                                        // If present verify publication record
+                                        new SignaturePublicationRecordPublicationTimeRule()
+                                        .OnSuccess(new SignaturePublicationRecordPublicationHashRule())))))));
 
-            // If present verify calendar hash chain
-            _rules.Add(new CalendarHashChainInputHashVerificationRule());
-            _rules.Add(new CalendarHashChainAggregationTimeRule());
-            _rules.Add(new CalendarHashChainRegistrationTimeRule());
-
-            // If present verify calendar authentication record
-            _rules.Add(new CalendarAuthenticationRecordAggregationHashRule());
-            _rules.Add(new CalendarAuthenticationRecordAggregationTimeRule());
-
-            // If present verify publication record
-            _rules.Add(new SignaturePublicationRecordPublicationHashRule());
-            _rules.Add(new SignaturePublicationRecordPublicationTimeRule());
-
-            //
+            
+            // TODO: Add input hash verification
             //rules.add(new DocumentHashVerificationRule());
         }
 
@@ -51,11 +49,14 @@ namespace Guardtime.KSI.Signature.Verification.Policy
                 throw new ArgumentNullException("context");
             }
 
-            for (int i = 0; i < _rules.Count; i++)
+            IRule rule = _startRule ?? IRule.Empty;
+            while (rule != null)
             {
-                Console.WriteLine("Rule {0}: {1}", _rules[i].GetType().Name, _rules[i].Verify(context));
+                VerificationResult result = rule.Verify(context);
+                Console.WriteLine("Rule {0}: {1}", rule.GetType().Name, result);
+                rule = rule.NextRule(result);
             }
-
+ 
             return true;
         }
 

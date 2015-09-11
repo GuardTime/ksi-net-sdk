@@ -6,14 +6,15 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// <summary>
     /// Aggregation hash chain consistency verification rule.
     /// </summary>
-    public class AggregationHashChainConsistencyRule : IRule
+    public sealed class AggregationHashChainConsistencyRule : IRule
     {
+
         /// <summary>
         /// Verify given context with rule.
         /// </summary>
         /// <param name="context">verification context</param>
         /// <returns>verification result</returns>
-        public VerificationResult Verify(VerificationContext context)
+        public override VerificationResult Verify(VerificationContext context)
         {
             if (context == null)
             {
