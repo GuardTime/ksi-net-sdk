@@ -26,7 +26,7 @@ namespace Guardtime.KSI.Trust
         /// </summary>
         /// <param name="certificateId">certificate ID</param>
         /// <returns>x509 certificate contained in trust provider</returns>
-        X509Certificate FindCertificateById(byte[] certificateId);
+        X509Certificate2 FindCertificateById(byte[] certificateId);
 
 
     }
