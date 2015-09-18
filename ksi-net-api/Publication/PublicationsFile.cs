@@ -142,13 +142,40 @@ namespace Guardtime.KSI.Publication
                     continue;
                 }
 
-                if (publicationRecordCollection[i].PublicationData.PublicationTime.Value.CompareTo(latest.PublicationData.PublicationTime.Value) > 0)
+                if (publicationRecordCollection[i].PublicationData.PublicationTime.CompareTo(latest.PublicationData.PublicationTime) > 0)
                 {
                     latest = publicationRecordCollection[i];
                 }
             }
 
             return latest;
+        }
+
+        /// <summary>
+        /// Get neared publication record to time.
+        /// </summary>
+        /// <param name="time">publication time</param>
+        /// <returns>publication record closest to time</returns>
+        public PublicationRecord GetNearestPublicationRecord(ulong time)
+        {
+            PublicationRecord nearestPublicationRecord = null;
+            ReadOnlyCollection<PublicationRecord> publicationRecords = _publicationsFileDo.GetPublicationRecords();
+            for (int i = 0; i < publicationRecords.Count; i++)
+            {
+                ulong publicationTime = publicationRecords[i].PublicationData.PublicationTime;
+                if (publicationTime != time && publicationTime <= time) continue;
+
+                if (nearestPublicationRecord == null)
+                {
+                    nearestPublicationRecord = publicationRecords[i];
+                }
+                else if (publicationTime < nearestPublicationRecord.PublicationData.PublicationTime)
+                {
+                    nearestPublicationRecord = publicationRecords[i];
+                }
+            }
+
+            return nearestPublicationRecord;
         }
 
         
@@ -185,7 +212,7 @@ namespace Guardtime.KSI.Publication
         /// </summary>
         /// <param name="certificateId">certificate id</param>
         /// <returns>X509 certificate</returns>
-        public X509Certificate FindCertificateById(byte[] certificateId)
+        public X509Certificate2 FindCertificateById(byte[] certificateId)
         {
             ReadOnlyCollection<CertificateRecord> certificateRecordCollection = _publicationsFileDo.GetCertificateRecords();
 
@@ -194,7 +221,7 @@ namespace Guardtime.KSI.Publication
                 if (Util.IsArrayEqual(certificateRecordCollection[i].CertificateId.EncodeValue(),
                     certificateId))
                 {
-                    return new X509Certificate(certificateRecordCollection[i].X509Certificate.EncodeValue());
+                    return new X509Certificate2(certificateRecordCollection[i].X509Certificate.EncodeValue());
                 }
             }
             return null;
@@ -250,7 +277,7 @@ namespace Guardtime.KSI.Publication
             PublicationRecord latestPublication = GetLatestPublication();
             if (latestPublication != null)
             {
-                builder.Append(", last publication: ").Append(latestPublication.PublicationData.PublicationTime.Value);
+                builder.Append(", last publication: ").Append(latestPublication.PublicationData.PublicationTime);
             }
             
             if (RepUri != null)

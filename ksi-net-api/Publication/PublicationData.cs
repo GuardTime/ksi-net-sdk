@@ -26,17 +26,17 @@ namespace Guardtime.KSI.Publication
         /// <summary>
         /// Get publication time.
         /// </summary>
-        public IntegerTag PublicationTime
+        public ulong PublicationTime
         {
-            get { return _publicationTime; }
+            get { return _publicationTime.Value; }
         }
 
         /// <summary>
-        /// Get publication hash .
+        /// Get publication hash.
         /// </summary>
-        public ImprintTag PublicationHash
+        public DataHash PublicationHash
         {
-            get { return _publicationHash; }
+            get { return _publicationHash.Value; }
         }
 
         /// <summary>
