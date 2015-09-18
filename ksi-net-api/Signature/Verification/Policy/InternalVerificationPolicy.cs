@@ -25,12 +25,12 @@ namespace Guardtime.KSI.Signature.Verification.Policy
                         .OnSuccess(
                             // If present verify calendar hash chain
                             new CalendarHashChainInputHashVerificationRule()
-                            .OnSuccess(new CalendarHashChainAggregationTimeRule()
-                                .OnSuccess(new CalendarHashChainRegistrationTimeRule()
-                                    .OnSuccess(
-                                        // If present verify publication record
-                                        new SignaturePublicationRecordPublicationTimeRule()
-                                        .OnSuccess(new SignaturePublicationRecordPublicationHashRule())))))));
+                                .OnSuccess(new CalendarHashChainAggregationTimeRule()
+                                    .OnSuccess(new CalendarHashChainRegistrationTimeRule()
+                                        .OnSuccess(
+                                            // If present verify publication record
+                                            new SignaturePublicationRecordPublicationTimeRule()
+                                                .OnSuccess(new SignaturePublicationRecordPublicationHashRule())))))));
 
             
             // TODO: Add input hash verification

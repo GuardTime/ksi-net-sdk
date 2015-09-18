@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
@@ -15,6 +16,7 @@ namespace Guardtime.KSI.Signature.Verification
         private KsiSignature _signature;
         private DataHash _documentHash;
         private PublicationData _userPublication;
+        private PublicationsFile _publicationsFile;
 
         private Dictionary<int, CalendarHashChain> _extendedCalendars;
         private CalendarHashChain _calendarExtendedToHead;
@@ -124,12 +126,18 @@ namespace Guardtime.KSI.Signature.Verification
             set { _extendingAllowed = value; }
         }
 
-        // TODO: Better solution?
+        public PublicationsFile PublicationsFile
+        {
+            get { return _publicationsFile; }
+            set { _publicationsFile = value; }
+        }
+
         public CalendarHashChain GetExtendedLatestCalendarHashChain()
         {
             return GetExtendedTimeCalendarHashChain(null);
         }
 
+        // TODO: Cache result and make signature mandatory and unchangeable
         public CalendarHashChain GetExtendedTimeCalendarHashChain(ulong? publicationTime)
         {
             if (_ksiService == null)
@@ -143,6 +151,16 @@ namespace Guardtime.KSI.Signature.Verification
             }
 
             return publicationTime == null ? _ksiService.Extend(_signature.AggregationTime) : _ksiService.Extend(_signature.AggregationTime, publicationTime.Value);
+        }
+
+        public X509Certificate2 GetCertificate(byte[] certificateId)
+        {
+            if (_publicationsFile == null)
+            {
+                throw new InvalidOperationException("Invalid publications file: null");
+            }
+
+            return _publicationsFile.FindCertificateById(certificateId);
         }
 
     }

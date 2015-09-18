@@ -4,24 +4,22 @@ using Guardtime.KSI.Signature.Verification.Rule.Publication;
 
 namespace Guardtime.KSI.Signature.Verification.Policy
 {
-    public class PublicationVerificationPolicy : IPolicy
+    public class PublicationsFileVerificationPolicy : IPolicy
     {
         private readonly IRule _startRule ;
 
-        public PublicationVerificationPolicy()
+        public PublicationsFileVerificationPolicy()
         {
             IRule rule = new SignatureExtendingPermissionRule()
-                .OnSuccess(new UserProvidedPublicationHashMatchesExtendedResponseRule()
-                    .OnSuccess(new UserProvidedPublicationTimeMatchesExtendedResponseRule()
-                        .OnSuccess(new UserProvidedPublicationExtendedSignatureInputHashRule())));
+                .OnSuccess(new PublicationsFilePublicationHashMatchesExtenderResponseRule()
+                    .OnSuccess(new PublicationsFilePublicationTimeMatchesExtendedResponseRule()
+                        .OnSuccess(new PublicationsFileExtendedSignatureInputHashRule())));
 
-            _startRule = new UserPublicationExistanceRule()
-                .OnSuccess(new SignaturePublicationExistanceRule()
-                    .OnSuccess(new PublicationsEqualsRule())
-                    .OnNa(new SignatureCreatedBeforeUserPublicationRule()
-                        .OnSuccess(rule)))
-                .OnNa(new PublicationsFileHasExtendablePublicationRule()
-                    .OnSuccess(rule));
+            _startRule = new SignaturePublicationExistanceRule()
+                .OnSuccess(new PublicationExistsInPublicationsFileRule())
+                // TODO: Fix onSuccess, it should fail when publication record exists
+                .OnNa(new SignaturePublicationExistanceRule()
+                    .OnNa(rule));
         }
 
         public bool Verify(VerificationContext context)

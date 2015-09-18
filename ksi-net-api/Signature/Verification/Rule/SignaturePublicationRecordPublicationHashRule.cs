@@ -24,7 +24,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             PublicationData publicationRecordPublicationData = context.PublicationRecord.PublicationData;
             PublicationData calendarHashChainPublicationData = context.CalendarHashChain.PublicationData;
 
-            if (publicationRecordPublicationData.PublicationTime.Value != calendarHashChainPublicationData.PublicationTime.Value)
+            if (publicationRecordPublicationData.PublicationTime != calendarHashChainPublicationData.PublicationTime)
             {
                 return VerificationResult.Fail;
             }

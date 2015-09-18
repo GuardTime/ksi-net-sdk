@@ -1,4 +1,5 @@
-﻿using Guardtime.KSI.Publication;
+﻿using System;
+using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
@@ -19,10 +20,19 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 return VerificationResult.Ok;
             }
 
-            // TODO: Make context check for null?
-            PublicationData calendarHashChainPublicationData = context.CalendarHashChain.PublicationData;
-            PublicationData calendarAuthRecordPublicationData = context.CalendarAuthenticationRecord.PublicationData;
-            if (calendarAuthRecordPublicationData.PublicationTime.Value != calendarHashChainPublicationData.PublicationTime.Value)
+            CalendarAuthenticationRecord calendarAuthenticationRecord = context.CalendarAuthenticationRecord;
+            if (calendarAuthenticationRecord == null)
+            {
+                throw new InvalidOperationException("Invalid calendar authentication record: null");
+            }
+
+            CalendarHashChain calendarHashChain = context.CalendarHashChain;
+            if (calendarHashChain == null)
+            {
+                throw new InvalidOperationException("Invalid calendar hash chain: null");
+            }
+
+            if (calendarAuthenticationRecord.PublicationData.PublicationTime != calendarHashChain.PublicationData.PublicationTime)
             {
                 return VerificationResult.Fail;
             }

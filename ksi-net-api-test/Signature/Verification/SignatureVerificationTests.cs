@@ -1,10 +1,12 @@
-﻿using System.IO;
-using NUnit.Framework;
-using Guardtime.KSI.Signature.Verification.Policy;
-using Guardtime.KSI.Signature.Verification;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
 using Guardtime.KSI.Publication;
+using Guardtime.KSI.Service;
+using Guardtime.KSI.Signature.Verification.Policy;
+using NUnit.Framework;
 
-namespace Guardtime.KSI.Signature
+namespace Guardtime.KSI.Signature.Verification
 {
     [TestFixture]
     public class SignatureVerificationTests
@@ -15,6 +17,12 @@ namespace Guardtime.KSI.Signature
         {
             using (var stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
             {
+                var serviceProtocol = new HttpKsiServiceProtocol(
+                    "http://ksigw.test.guardtime.com:3333/gt-signingservice",
+                    "http://ksigw.test.guardtime.com:8010/gt-extendingservice",
+                    "http://verify.guardtime.com/ksi-publications.bin");
+
+                var ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"), new PublicationsFileFactory());
                 var context = new VerificationContext
                 {
                     Signature = KsiSignature.GetInstance(stream),
@@ -27,13 +35,33 @@ namespace Guardtime.KSI.Signature
                             0x77, 0x2D
                         }),
                     UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K"),
-                    ExtendingAllowed = true
+                    ExtendingAllowed = true,
+                    KsiService = ksiService,
+                    // TODO: use resource for publications file
+                    PublicationsFile = PublicationsFile.GetInstance(new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
                 };
+
+                Console.WriteLine(@"// Internal verification policy");
                 IPolicy policy = new InternalVerificationPolicy();
                 policy.Verify(context);
 
+                Console.WriteLine(@"// Publication");
                 policy = new PublicationVerificationPolicy();
                 policy.Verify(context);
+
+                Console.WriteLine(@"// Publications file");
+                policy = new PublicationsFileVerificationPolicy();
+                policy.Verify(context);
+
+                Console.WriteLine(@"// PKI");
+                policy = new KeyBasedVerificationPolicy();
+                policy.Verify(context);
+
+                Console.WriteLine(@"// Calendar based verification");
+                policy = new CalendarBasedVerificationPolicy();
+                policy.Verify(context);
+                
+
             }
         }
 
