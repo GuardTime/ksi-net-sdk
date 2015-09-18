@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
@@ -155,6 +156,31 @@ namespace Guardtime.KSI.Signature
             _registrationTime = CalculateRegistrationTime();
             _outputHash = CalculateOutputHash();
             _publicationData = new PublicationData(_publicationTime.Value, _outputHash);
+        }
+
+        public bool AreRightLinksEqual(CalendarHashChain calendarHashChain)
+        {
+            if (calendarHashChain == null)
+            {
+                return false;
+            }
+
+            if (_chain.Count != calendarHashChain._chain.Count)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < _chain.Count; i++)
+            {
+                if (calendarHashChain._chain[i].Direction != LinkDirection.Right) continue;
+
+                if (_chain[i] != calendarHashChain._chain[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private DataHash CalculateOutputHash()

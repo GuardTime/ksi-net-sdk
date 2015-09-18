@@ -25,6 +25,30 @@ namespace Guardtime.KSI.Signature
         private readonly StringTag _certificateRepositoryUri;
 
         /// <summary>
+        /// Get certificate ID.
+        /// </summary>
+        public byte[] CertificateId
+        {
+            get { return _certificateId.Value; }
+        }
+
+        /// <summary>
+        /// Get signature value.
+        /// </summary>
+        public byte[] SignatureValue
+        {
+            get { return _signatureValue.Value; }
+        }
+
+        /// <summary>
+        /// Get signature type.
+        /// </summary>
+        public string SignatureType
+        {
+            get { return _signatureType.Value; }
+        }
+
+        /// <summary>
         /// Create new signature data TLV element from TLV element
         /// </summary>
         /// <param name="tag">TLV element</param>
@@ -91,5 +115,7 @@ namespace Guardtime.KSI.Signature
                 throw new InvalidTlvStructureException("Only one certificate repository uri is allowed in signature data");
             }
         }
+
+        
     }
 }

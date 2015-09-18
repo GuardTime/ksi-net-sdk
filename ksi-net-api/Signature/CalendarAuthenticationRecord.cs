@@ -29,6 +29,17 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
+        /// Get signature data.
+        /// </summary>
+        public SignatureData SignatureData
+        {
+            get
+            {
+                return _signatureData;
+            }
+        }
+
+        /// <summary>
         /// Create new calendar authentication record TLV element from TLV element
         /// </summary>
         /// <param name="tag">TLV element</param>

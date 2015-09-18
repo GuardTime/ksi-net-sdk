@@ -179,6 +179,7 @@ namespace Guardtime.KSI.Signature
         /// <returns>signature string representation</returns>
         public override string ToString()
         {
+            // TODO: What it should output
             return _ksiSignatureDo.ToString();
         }
     }
