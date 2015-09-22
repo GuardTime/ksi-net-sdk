@@ -182,8 +182,6 @@ namespace Guardtime.KSI.Signature
                 throw new ArgumentNullException("inputHash");
             }
 
-            // TODO: Check data before using them
-
             DataHasher hasher = new DataHasher(HashAlgorithm.GetById((byte)_tstInfoAlgorithm.Value));
             hasher.AddData(_tstInfoPrefix.Value);
             hasher.AddData(inputHash.Imprint);

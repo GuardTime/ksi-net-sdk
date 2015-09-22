@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
@@ -30,7 +29,6 @@ namespace Guardtime.KSI.Signature
         private readonly DataHash _outputHash;
         private readonly PublicationData _publicationData;
 
-        // TODO: Check if null
         /// <summary>
         /// Get aggregation time
         /// </summary>
@@ -41,6 +39,14 @@ namespace Guardtime.KSI.Signature
                 // TODO: null or 0
                 return _aggregationTime == null ? _publicationTime.Value : _aggregationTime.Value;
             }
+        }
+
+        /// <summary>
+        /// Get publication time.
+        /// </summary>
+        public ulong PublicationTime
+        {
+            get { return _publicationTime.Value; }
         }
 
         /// <summary>
@@ -158,6 +164,11 @@ namespace Guardtime.KSI.Signature
             _publicationData = new PublicationData(_publicationTime.Value, _outputHash);
         }
 
+        /// <summary>
+        /// Compare right links if they are equal.
+        /// </summary>
+        /// <param name="calendarHashChain">calendar hash chain to compare to</param>
+        /// <returns>true if right links are equal and on same position</returns>
         public bool AreRightLinksEqual(CalendarHashChain calendarHashChain)
         {
             if (calendarHashChain == null)
@@ -183,6 +194,10 @@ namespace Guardtime.KSI.Signature
             return true;
         }
 
+        /// <summary>
+        /// Calculate output hash.
+        /// </summary>
+        /// <returns>output hash</returns>
         private DataHash CalculateOutputHash()
         {
             DataHash inputHash = InputHash;
@@ -204,6 +219,13 @@ namespace Guardtime.KSI.Signature
             return inputHash;
         }
 
+        /// <summary>
+        /// Hash two hashes together with algorithm.
+        /// </summary>
+        /// <param name="algorithm">hash algorithm</param>
+        /// <param name="hashA">hash a</param>
+        /// <param name="hashB">hash b</param>
+        /// <returns>result hash</returns>
         private DataHash HashTogether(HashAlgorithm algorithm, byte[] hashA, byte[] hashB)
         {
             DataHasher hasher = new DataHasher(algorithm);
@@ -213,6 +235,10 @@ namespace Guardtime.KSI.Signature
             return hasher.GetHash();
         }
 
+        /// <summary>
+        /// Calculate registration time.
+        /// </summary>
+        /// <returns>registration time</returns>
         private ulong CalculateRegistrationTime()
         {
             ulong r = _publicationTime.Value;
@@ -245,7 +271,12 @@ namespace Guardtime.KSI.Signature
             return t;
         }
 
-        static ulong HighBit(ulong n)
+        /// <summary>
+        /// Calculate highest bit.
+        /// </summary>
+        /// <param name="n">number to get highest bit from.</param>
+        /// <returns>highest bit</returns>
+        private static ulong HighBit(ulong n)
         {
             n |= (n >> 1);
             n |= (n >> 2);
