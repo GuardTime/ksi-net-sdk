@@ -23,52 +23,84 @@ namespace Guardtime.KSI.Signature
             Assert.AreEqual(25, calendarHashChain.Count, "Invalid amount of child TLV objects");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Invalid calendar hash chain type: 2051")]
+        [Test]
         public void TestCalendarHashChainInvalidType()
         {
-            GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Type);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Type);
+            }, "Invalid calendar hash chain type: 2051");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Invalid tag")]
+        [Test]
         public void TestCalendarHashChainInvalidExtraTag()
         {
-            GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Extra_Tag);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Extra_Tag);
+            }, "Invalid tag");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one input hash must exist in calendar hash chain")]
+        [Test]
         public void TestCalendarHashChainInvalidMissingInputHash()
         {
-            GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Missing_Input_Hash);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Missing_Input_Hash);
+            }, "Only one input hash must exist in calendar hash chain");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Links are missing in calendar hash chain")]
+        [Test]
         public void TestCalendarHashChainInvalidMissingLinks()
         {
-            GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Missing_Links);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Missing_Links);
+            }, "Links are missing in calendar hash chain");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one publication time must exist in calendar hash chain")]
+        [Test]
         public void TestCalendarHashChainInvalidMissingPublicationTime()
         {
-            GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Missing_Publication_Time);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Missing_Publication_Time);
+            }, "Only one publication time must exist in calendar hash chain");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one aggregation time is allowed in calendar hash chain")]
+        [Test]
         public void TestCalendarHashChainInvalidMultipleAggregationTime()
         {
-            GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Multiple_Aggregation_Time);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Multiple_Aggregation_Time);
+            }, "Only one aggregation time is allowed in calendar hash chain");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one input hash must exist in calendar hash chain")]
+        [Test]
         public void TestCalendarHashChainInvalidMultipleInputHash()
         {
-            GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Multiple_Input_Hash);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Multiple_Input_Hash);
+            }, "Only one input hash must exist in calendar hash chain");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one publication time must exist in calendar hash chain")]
+        [Test]
         public void TestCalendarHashChainInvalidMultiplePublicationTime()
         {
-            GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Multiple_Publication_Time);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Multiple_Publication_Time);
+            }, "Only one publication time must exist in calendar hash chain");
+            
         }
 
         private CalendarHashChain GetCalendarHashChainFromFile(string file)

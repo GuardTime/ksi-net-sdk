@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Trust
@@ -23,7 +24,19 @@ namespace Guardtime.KSI.Trust
                 stream.Read(sigBytes, 0, (int)stream.Length);
             }
 
-            new PkiTrustStoreProvider().Verify(data, sigBytes);
+            var trustStoreProvider = new PkiTrustStoreProvider();
+
+            trustStoreProvider.Verify(data, sigBytes);
+
+            Assert.Throws<ArgumentNullException>(delegate
+            {
+                trustStoreProvider.Verify(null, sigBytes);
+            });
+
+            Assert.Throws<ArgumentNullException>(delegate
+            {
+                trustStoreProvider.Verify(data, null);
+            });
         }
     }
 }

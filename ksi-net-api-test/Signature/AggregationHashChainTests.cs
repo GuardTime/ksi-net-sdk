@@ -24,70 +24,114 @@ namespace Guardtime.KSI.Signature
             Assert.AreEqual(8, aggregationHashChain.Count, "Invalid amount of child TLV objects");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Invalid tag")]
+        [Test]
         public void TestAggregationHashChainInvalidExtraTag()
         {
-            GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Extra_Tag);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Extra_Tag);
+            }, "Invalid tag");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one algorithm must exist in aggregation hash chain")]
+        [Test]
         public void TestAggregationHashChainInvalidMissingAggregationAlgorithm()
         {
-            GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Missing_Aggregation_Algorithm);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Missing_Aggregation_Algorithm);
+            }, "Only one algorithm must exist in aggregation hash chain");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one aggregation time must exist in aggregation hash chain")]
+        [Test]
         public void TestAggregationHashChainInvalidMissingAggregationTime()
         {
-            GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Missing_Aggregation_Time);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Missing_Aggregation_Time);
+            }, "Only one aggregation time must exist in aggregation hash chain");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Chain index is missing in aggregation hash chain")]
+        [Test]
         public void TestAggregationHashChainInvalidMissingChainIndex()
         {
-            GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Missing_Chain_Index);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Missing_Chain_Index);
+            }, "Chain index is missing in aggregation hash chain");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one input hash must exist in aggregation hash chain")]
+        [Test]
         public void TestAggregationHashChainInvalidMissingInputHash()
         {
-            GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Missing_Input_Hash);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Missing_Input_Hash);
+            }, "Only one input hash must exist in aggregation hash chain");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Links are missing in aggregation hash chain")]
+        [Test]
         public void TestAggregationHashChainInvalidMissingLinks()
         {
-            GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Missing_Links);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Missing_Links);
+            }, "Links are missing in aggregation hash chain");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one algorithm must exist in aggregation hash chain")]
+        [Test]
         public void TestAggregationHashChainInvalidMultipleAggregationAlgorithm()
         {
-            GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Multiple_Aggregation_Algorithm);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Multiple_Aggregation_Algorithm);
+            }, "Only one algorithm must exist in aggregation hash chain");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one aggregation time must exist in aggregation hash chain")]
+        [Test]
         public void TestAggregationHashChainInvalidMultipleAggregationTime()
         {
-            GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Multiple_Aggregation_Time);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Multiple_Aggregation_Time);
+            }, "Only one aggregation time must exist in aggregation hash chain");
+
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one input data value is allowed in aggregation hash chain")]
+        [Test]
         public void TestAggregationHashChainInvalidMultipleInputData()
         {
-            GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Multiple_Input_Data);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Multiple_Input_Data);
+            }, "Only one input data value is allowed in aggregation hash chain");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one input hash must exist in aggregation hash chain")]
+        [Test]
         public void TestAggregationHashChainInvalidMultipleInputHash()
         {
-            GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Multiple_Input_Hash);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Multiple_Input_Hash);
+            }, "Only one input hash must exist in aggregation hash chain");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Invalid aggregation hash chain type: 2050")]
+        [Test]
         public void TestAggregationHashChainInvalidType()
         {
-            GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Type);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Type);
+            }, "Invalid aggregation hash chain type: 2050");
+            
         }
 
         [Test]
@@ -96,64 +140,105 @@ namespace Guardtime.KSI.Signature
             GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Ok_Missing_Optionals);
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one of three from siblinghash, metahash or metadata must exist in aggregation hash chain link")]
+        [Test]
         public void TestAggregationHashChainLinkInvalidAllTagsDefined()
         {
-            GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_All_Tags_Defined);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_All_Tags_Defined);
+            }, "Only one of three from siblinghash, metahash or metadata must exist in aggregation hash chain link");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one of three from siblinghash, metahash or metadata must exist in aggregation hash chain link")]
+        [Test]
         public void TestAggregationHashChainLinkInvalidEmpty()
         {
-            GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_Empty);
+
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_Empty);
+            }, "Only one of three from siblinghash, metahash or metadata must exist in aggregation hash chain link");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Invalid tag")]
+        [Test]
         public void TestAggregationHashChainLinkInvalidExtraTag()
         {
-            GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_Extra_Tag);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_Extra_Tag);
+            }, "Invalid tag");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one of three from siblinghash, metahash or metadata must exist in aggregation hash chain link")]
+        [Test]
         public void TestAggregationHashChainLinkInvalidMetadataMetahashNoSiblingHash()
         {
-            GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_Metadata_Metahash_No_SiblingHash);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_Metadata_Metahash_No_SiblingHash);
+            }, "Only one of three from siblinghash, metahash or metadata must exist in aggregation hash chain link");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one levelcorrection value is allowed in aggregation hash chain link")]
+        [Test]
         public void TestAggregationHashChainLinkInvalidMultipleLevelCorrection()
         {
-            GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_Multiple_LevelCorrection);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_Multiple_LevelCorrection);
+            }, "Only one levelcorrection value is allowed in aggregation hash chain link");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one of three from siblinghash, metahash or metadata must exist in aggregation hash chain link")]
+        [Test]
         public void TestAggregationHashChainLinkInvalidMultipleMetadata()
         {
-            GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_Multiple_Metadata);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_Multiple_Metadata);
+            }, "Only one of three from siblinghash, metahash or metadata must exist in aggregation hash chain link");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one of three from siblinghash, metahash or metadata must exist in aggregation hash chain link")]
+        [Test]
         public void TestAggregationHashChainLinkInvalidMultipleMetahash()
         {
-            GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_Multiple_Metahash);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_Multiple_Metahash);
+            }, "Only one of three from siblinghash, metahash or metadata must exist in aggregation hash chain link");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one of three from siblinghash, metahash or metadata must exist in aggregation hash chain link")]
+        [Test]
         public void TestAggregationHashChainLinkInvalidMultipleSiblinghash()
         {
-            GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_Multiple_Siblinghash);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_Multiple_Siblinghash);
+            }, "Only one of three from siblinghash, metahash or metadata must exist in aggregation hash chain link");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one of three from siblinghash, metahash or metadata must exist in aggregation hash chain link")]
+        [Test]
         public void TestAggregationHashChainLinkInvalidSiblinghashMetadataNoMetahash()
         {
-            GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_SiblingHash_Metadata_No_MetaHash);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_SiblingHash_Metadata_No_MetaHash);
+            }, "Only one of three from siblinghash, metahash or metadata must exist in aggregation hash chain link");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one of three from siblinghash, metahash or metadata must exist in aggregation hash chain link")]
+        [Test]
         public void TestAggregationHashChainLinkInvalidSiblinghashMetahashNoMetadata()
         {
-            GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_SiblingHash_MetaHash_No_Metadata);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_SiblingHash_MetaHash_No_Metadata);
+            }, "Only one of three from siblinghash, metahash or metadata must exist in aggregation hash chain link");
+            
         }
 
         [Test]
@@ -162,40 +247,59 @@ namespace Guardtime.KSI.Signature
             GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Metadata_Ok_Missing_Optionals);
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Invalid tag")]
+        [Test]
         public void TestAggregationHashChainMetadataInvalidExtraTag()
         {
-            GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Metadata_Invalid_Extra_Tag);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Metadata_Invalid_Extra_Tag);
+            }, "Invalid tag");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one client id must exist in aggregation hash chain link metadata")]
+        [Test]
         public void TestAggregationHashChainMetadataInvalidMissingClientId()
         {
-            GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Metadata_Invalid_Missing_Client_id);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Metadata_Invalid_Missing_Client_id);
+            }, "Only one client id must exist in aggregation hash chain link metadata");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one client id must exist in aggregation hash chain link metadata")]
+        [Test]
         public void TestAggregationHashChainMetadataInvalidMultipleClientId()
         {
-            GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Metadata_Invalid_Multiple_Client_Id);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Metadata_Invalid_Multiple_Client_Id);
+            }, "Only one client id must exist in aggregation hash chain link metadata");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one machine id is allowed in aggregation hash chain link metadata")]
+        [Test]
         public void TestAggregationHashChainMetadataInvalidMultipleMachineId()
         {
-            GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Metadata_Invalid_Multiple_Machine_Id);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Metadata_Invalid_Multiple_Machine_Id);
+            }, "Only one machine id is allowed in aggregation hash chain link metadata");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one request time is allowed in aggregation hash chain link metadata")]
+        [Test]
         public void TestAggregationHashChainMetadataInvalidMultipleRequestTime()
         {
-            GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Metadata_Invalid_Multiple_Request_Time);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Metadata_Invalid_Multiple_Request_Time);
+            }, "Only one request time is allowed in aggregation hash chain link metadata");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one sequence number is allowed in aggregation hash chain link metadata")]
+        [Test]
         public void TestAggregationHashChainMetadataInvalidMultipleSequenceNumber()
         {
-            GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Metadata_Invalid_Multiple_Sequence_Number);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Metadata_Invalid_Multiple_Sequence_Number);
+            }, "Only one sequence number is allowed in aggregation hash chain link metadata");
         }
 
         private AggregationHashChain GetAggregationHashChainFromFile(string file)
