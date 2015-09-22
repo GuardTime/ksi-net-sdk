@@ -17,6 +17,12 @@ namespace Guardtime.KSI.Trust
         /// <param name="signatureBytes"></param>
         public void Verify(byte[] signedBytes, byte[] signatureBytes)
         {
+            // TODO: Check for better exception
+            if (signedBytes == null)
+            {
+                throw new ArgumentNullException("signedBytes");
+            }
+
             if (signatureBytes == null)
             {
                 throw new ArgumentNullException("signatureBytes");

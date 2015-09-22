@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Crypto
 {
+    /// <summary>
+    /// RSA signature verifier.
+    /// </summary>
     public class RsaCryptoSignatureVerifier : ICryptoSignatureVerifier
     {
-
+        /// <see cref="ICryptoSignatureVerifier"/>
         public void Verify(byte[] signedBytes, byte[] signatureBytes, Dictionary<string, object> data)
         {
             X509Certificate2 certificate = null;

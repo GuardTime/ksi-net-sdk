@@ -5,8 +5,12 @@ using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Crypto
 {
+    /// <summary>
+    /// PKCS#7 signature verifier.
+    /// </summary>
     public class Pkcs7CryptoSignatureVerifier : ICryptoSignatureVerifier
     {
+        /// <see cref="ICryptoSignatureVerifier"/>
         public void Verify(byte[] signedBytes, byte[] signatureBytes, Dictionary<string, object> data)
         {
             try
