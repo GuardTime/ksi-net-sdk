@@ -1,5 +1,4 @@
-﻿using System;
-using Guardtime.KSI.Parser;
+﻿using Guardtime.KSI.Parser;
 using Guardtime.KSI.Utils;
 using Guardtime.KSI.Exceptions;
 

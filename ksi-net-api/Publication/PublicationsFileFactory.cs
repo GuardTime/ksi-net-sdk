@@ -1,7 +1,5 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Guardtime.KSI.Trust;
-using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Publication
 {

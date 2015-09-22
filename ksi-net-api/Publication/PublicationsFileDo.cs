@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 
