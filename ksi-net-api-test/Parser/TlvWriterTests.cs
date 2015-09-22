@@ -83,21 +83,27 @@ namespace Guardtime.KSI.Parser
             }
         }
 
-        [Test(), ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test()]
         public void TestWriteTagWithTooLongType()
         {
             using (var writer = new TlvWriter(new MemoryStream()))
             {
-                writer.WriteTag(new RawTag(0x2000, true, true, new byte[256]));
+                Assert.Throws<ArgumentOutOfRangeException>(delegate
+                {
+                    writer.WriteTag(new RawTag(0x2000, true, true, new byte[256]));
+                });
             }
         }
 
-        [Test(), ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test()]
         public void TestWriteTagWithTooLongData()
         {
             using (var writer = new TlvWriter(new MemoryStream()))
             {
-                writer.WriteTag(new RawTag(0x1, true, true, new byte[ushort.MaxValue + 1]));
+                Assert.Throws<ArgumentOutOfRangeException>(delegate
+                {
+                    writer.WriteTag(new RawTag(0x1, true, true, new byte[ushort.MaxValue + 1]));
+                });
             }
         }
 

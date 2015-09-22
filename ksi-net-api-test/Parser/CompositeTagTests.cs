@@ -65,6 +65,9 @@ namespace Guardtime.KSI.Parser
         {
             var tag = new CompositeTestTag(0x1, false, false, new List<TlvTag>() { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }) });
             Assert.AreEqual(new CompositeTestTag(0x1, false, false, new List<TlvTag>() { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }) }), tag, "Tags should be equal");
+            Assert.IsTrue(tag == new CompositeTestTag(0x1, false, false, new List<TlvTag>() { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }) }), "Tags should be equal");
+            Assert.IsTrue(tag != new ChildCompositeTestTag(0x1, false, false, new List<TlvTag>() { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }) }), "Tags should be equal");
+            Assert.IsFalse(new CompositeTestTag(0x2, false, false, new List<TlvTag>() { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }) }) == tag, "Tags should not be equal");
             Assert.IsFalse(tag.Equals(new RawTag(0x1, false, false, new byte[] { })), "Tags should not be equal");
         }
 
@@ -81,18 +84,18 @@ namespace Guardtime.KSI.Parser
             var tag = new CompositeTestTag(0x1, false, false, new List<TlvTag>() { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }), new CompositeTestTag(0x5, false, false, new List<TlvTag>() { new RawTag(0x1, false, false, new byte[] { }) }) });
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void TestPutNullTagToCompositeTagList()
         {
             var tag = new CompositeTestTag(0x1, false, false, new List<TlvTag>() { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }) });
-            tag.SetCompositeTestTagValue(null);
+            Assert.Throws<ArgumentNullException>(delegate { tag.SetCompositeTestTagValue(null);  });
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void TestCompositeTagAddNullValueToSpecificPosition()
         {
             var tag = new CompositeTestTag(0x1, false, false, new List<TlvTag>() { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }) });
-            tag.SetTagToFirstPosition(null);
+            Assert.Throws<ArgumentNullException>(delegate { tag.SetTagToFirstPosition(null); });
         }
 
         [Test]
@@ -102,23 +105,45 @@ namespace Guardtime.KSI.Parser
             Assert.IsNull(tag.ReplaceTagImpl(tag, new RawTag(0x5, false, false, new byte[] { })));
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void TestAddNullTagToCompositeTagList()
         {
             var tag = new CompositeTestTag(0x1, false, false, new List<TlvTag>() { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }) });
-            tag.AddTagImpl(null);
+            Assert.Throws<ArgumentNullException>(delegate { tag.AddTagImpl(null); });
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void TestCompositeTagCreateFromDataNullValue()
         {
-            var tag = new CompositeTestTag(0x1, false, false, null);
+            Assert.Throws<ArgumentNullException>(delegate
+            {
+                new CompositeTestTag(0x1, false, false, null);
+            });
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException))]
+        [Test]
         public void TestIsInvalidStructure()
         {
-            var tag = new CompositeTestTag(0x1, false, false, new List<TlvTag>() { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x3, false, false, new byte[] { 0x3, 0x4 }) });
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                new CompositeTestTag(0x1, false, false,
+                    new List<TlvTag>()
+                    {
+                        new RawTag(0x1, false, false, new byte[] {0x1, 0x2}),
+                        new RawTag(0x3, false, false, new byte[] {0x3, 0x4})
+                    });
+            }, "Invalid tag");
+        }
+
+        [Test]
+        public void TestVerifyCriticalFlag()
+        {
+            var tag = new CompositeTestTag(0x1, false, false, new List<TlvTag>() { new RawTag(0x25, true, false, new byte[] { 0x1, 0x2 }), new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }), new CompositeTestTag(0x5, false, false, new List<TlvTag>() { new RawTag(0x1, false, false, new byte[] { }) }) });
+            Assert.Throws<ArgumentNullException>(delegate
+            {
+                tag.VerifyCriticalFlagWithoutTag();
+            });
+            
         }
 
         private class CompositeTestTag : CompositeTag
@@ -150,7 +175,8 @@ namespace Guardtime.KSI.Parser
                         case 0x1:
                             break;
                         default:
-                            throw new InvalidTlvStructureException("Invalid tag", this[i]);
+                            VerifyCriticalFlag(this[i]);
+                            break;
                     }
                 }
             }
@@ -174,6 +200,22 @@ namespace Guardtime.KSI.Parser
             public void SetTagToFirstPosition(TlvTag tag)
             {
                 this[0] = tag;
+            }
+
+            public void VerifyCriticalFlagWithoutTag()
+            {
+                VerifyCriticalFlag(null);
+            }
+        }
+
+        private class ChildCompositeTestTag : CompositeTestTag
+        {
+            public ChildCompositeTestTag(TlvTag tag) : base(tag)
+            {
+            }
+
+            public ChildCompositeTestTag(uint type, bool nonCritical, bool forward, List<TlvTag> value) : base(type, nonCritical, forward, value)
+            {
             }
         }
     }

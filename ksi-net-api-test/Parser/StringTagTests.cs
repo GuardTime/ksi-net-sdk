@@ -26,6 +26,9 @@ namespace Guardtime.KSI.Parser
             var tag = new StringTag(new RawTag(0x1, false, false,
                 new byte[] { 0x74, 0x65, 0x73, 0x74, 0x20, 0x6D, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x0 }));
             Assert.AreEqual(new StringTag(tag), tag, "Tags should be equal");
+            Assert.IsTrue(tag.Equals(tag), "Tags should be equal");
+            Assert.IsTrue(tag == new StringTag(new RawTag(0x1, false, false, new byte[] { 0x74, 0x65, 0x73, 0x74, 0x20, 0x6D, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x0 })), "Tag should compare correctly with other objects");
+            Assert.IsTrue(tag != new ChildStringTag(new RawTag(0x1, false, false, new byte[] { 0x74, 0x65, 0x73, 0x74, 0x20, 0x6D, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x0 })), "Tag should compare correctly with other objects");
             Assert.IsFalse(tag.Equals(new RawTag(0x1, false, false, new byte[] { 0x74, 0x65, 0x73, 0x74, 0x20, 0x6D, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x0 })), "Tags should not be equal");
         }
 
@@ -57,30 +60,54 @@ namespace Guardtime.KSI.Parser
             Assert.AreEqual("test message", tag.Value, "Tag should cast correctly to string");
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void TestTlvTagCreateFromInvalidEncodeTlvTag()
         {
-            var tag = new StringTag(new InvalidEncodeTlvTag(0x0, false, false));
+            Assert.Throws<ArgumentException>(delegate
+            {
+                new StringTag(new InvalidEncodeTlvTag(0x0, false, false));
+            });
         }
 
-        [Test, ExpectedException(typeof(FormatException))]
+        [Test]
         public void TestStringTagDecodeNotEndingWithNullByte()
         {
             var rawTag = new RawTag(0x1, true, true,
                 new byte[] { 0x74, 0x65, 0x73, 0x74, 0x20, 0x6D, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65 });
-            var tag = new StringTag(rawTag);
+
+            Assert.Throws<FormatException>(delegate
+            {
+                new StringTag(rawTag);
+            }, "String must be null terminated");
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void TestStringTagCreateFromNullTag()
         {
-            var tag = new StringTag((TlvTag)null);
+            Assert.Throws<ArgumentNullException>(delegate
+            {
+                new StringTag(null);
+            });
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void TestStringTagCreateWithNullValue()
         {
-            var tag = new StringTag(0x1, true, true, null);
+            Assert.Throws<ArgumentNullException>(delegate
+            {
+                new StringTag(0x1, true, true, null);
+            });
+        }
+
+        private class ChildStringTag : StringTag
+        {
+            public ChildStringTag(TlvTag tag) : base(tag)
+            {
+            }
+
+            public ChildStringTag(uint type, bool nonCritical, bool forward, string value) : base(type, nonCritical, forward, value)
+            {
+            }
         }
     }
 }

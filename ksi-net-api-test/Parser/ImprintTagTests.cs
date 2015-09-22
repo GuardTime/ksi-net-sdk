@@ -34,6 +34,9 @@ namespace Guardtime.KSI.Parser
         {
             var tag = new ImprintTag(0x1, false, false, new DataHash(HashAlgorithm.Sha2256, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x30, 0x31, 0x32 }));
             Assert.AreEqual(new ImprintTag(0x1, false, false, new DataHash(HashAlgorithm.Sha2256, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x30, 0x31, 0x32 })), tag, "Tag Equals function should compare correctly");
+            Assert.IsTrue(tag.Equals(tag), "Tags should be equal");
+            Assert.IsTrue(tag == new ImprintTag(0x1, false, false, new DataHash(HashAlgorithm.Sha2256, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x30, 0x31, 0x32 })), "Tag should compare correctly with other objects");
+            Assert.IsTrue(tag != new ChildImprintTag(0x1, false, false, new DataHash(HashAlgorithm.Sha2256, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x30, 0x31, 0x32 })), "Tag should compare correctly with other objects");
             Assert.IsFalse(tag.Equals(new StringTag(0x1, false, false, "test")), "Tag Equals function should compare correctly with other objects");
             Assert.IsFalse(tag.Equals(new object()), "Tag Equals function should compare correctly with other objects");
         }
@@ -62,23 +65,42 @@ namespace Guardtime.KSI.Parser
             Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x30, 0x31, 0x32 }), tag.Value, "Tag should cast correctly to DataHash");
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void TestTlvTagCreateFromInvalidEncodeTlvTag()
         {
-            var tag = new ImprintTag(new InvalidEncodeTlvTag(0x0, false, false));
+            Assert.Throws<ArgumentException>(delegate
+            {
+                new ImprintTag(new InvalidEncodeTlvTag(0x0, false, false));
+            });
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void TestImprintTagCreateFromNullTag()
         {
-            var tag = new ImprintTag((TlvTag)null);
+            Assert.Throws<ArgumentNullException>(delegate
+            {
+                new ImprintTag((TlvTag)null);
+            });
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void TestImprintTagCreateWithNullValue()
         {
-            var tag = new ImprintTag(0x1, true, true, null);
+            Assert.Throws<ArgumentNullException>(delegate
+            {
+                new ImprintTag(0x1, true, true, null);
+            });
         }
 
+        private class ChildImprintTag : ImprintTag
+        {
+            public ChildImprintTag(TlvTag tag) : base(tag)
+            {
+            }
+
+            public ChildImprintTag(uint type, bool nonCritical, bool forward, DataHash value) : base(type, nonCritical, forward, value)
+            {
+            }
+        }
     }
 }
