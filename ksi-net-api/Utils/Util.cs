@@ -172,7 +172,7 @@ namespace Guardtime.KSI.Utils
         {
             if (arr == null)
             {
-                throw new ArgumentNullException("values");
+                throw new ArgumentNullException("arr");
             }
 
             for (int i = 0; i < arr.Length; i++)

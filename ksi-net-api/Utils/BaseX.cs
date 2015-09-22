@@ -199,7 +199,10 @@ namespace Guardtime.KSI.Utils
             outLen = (outLen + _block - 1)/_block*_block;
             if (freq > 0)
             {
-                outLen += (outLen - 1)/freq * sep.Length;
+                if (sep != null)
+                {
+                    outLen += (outLen - 1)/freq * sep.Length;
+                }
             }
 
             StringBuilder builder = new StringBuilder(outLen);

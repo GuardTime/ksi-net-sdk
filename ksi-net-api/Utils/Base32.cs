@@ -6,7 +6,7 @@
     public static class Base32
     {
 
-        private static BaseX Inst = new BaseX("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567", false, '=');
+        private static readonly BaseX Inst = new BaseX("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567", false, '=');
 
         /// <summary>
         /// Encode data bytes to base32 string.
