@@ -1,9 +1,8 @@
 ﻿using System;
-using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
-    public sealed class SignaturePublicationRecordPublicationHashRule : VerificationRule
+    public sealed class UserProvidedPublicationVerificationRule : VerificationRule
     {
         /// <see cref="VerificationRule.Verify"/>
         public override VerificationResult Verify(IVerificationContext context)
@@ -19,15 +18,17 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 throw new InvalidOperationException("Signature cannot be null");
             }
 
-            PublicationRecord publicationRecord = context.Signature.PublicationRecord;
-            if (publicationRecord == null)
+            if (context.UserPublication == null)
             {
-                return VerificationResult.Ok;
+                throw new InvalidOperationException("Invalid user publication: null");
             }
 
-            CalendarHashChain calendarHashChain = context.Signature.CalendarHashChain;
+            if (context.Signature.PublicationRecord == null)
+            {
+                throw new InvalidOperationException("Invalid signature publication record: null");
+            }
 
-            return publicationRecord.PublicationData.PublicationHash.Value != calendarHashChain.PublicationData.PublicationHash.Value ? VerificationResult.Fail : VerificationResult.Ok;
+            return context.UserPublication == context.Signature.PublicationRecord.PublicationData ? VerificationResult.Ok : VerificationResult.Na;
         }
     }
 }

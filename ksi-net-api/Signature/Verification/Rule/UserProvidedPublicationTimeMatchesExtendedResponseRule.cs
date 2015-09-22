@@ -1,12 +1,18 @@
 ﻿using System;
 using Guardtime.KSI.Publication;
 
-namespace Guardtime.KSI.Signature.Verification.Rule.Publication
+namespace Guardtime.KSI.Signature.Verification.Rule
 {
-    public sealed class UserProvidedPublicationTimeMatchesExtendedResponseRule : IRule
+    public sealed class UserProvidedPublicationTimeMatchesExtendedResponseRule : VerificationRule
     {
-        public override VerificationResult Verify(VerificationContext context)
+        /// <see cref="VerificationRule.Verify"/>
+        public override VerificationResult Verify(IVerificationContext context)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
             PublicationData userPublication = context.UserPublication;
             if (userPublication == null)
             {
@@ -14,7 +20,6 @@ namespace Guardtime.KSI.Signature.Verification.Rule.Publication
                 throw new InvalidOperationException("Invalid publication provided by user: null");
             }
 
-            // s
             KsiSignature signature = context.Signature;
             if (signature == null)
             {
@@ -23,11 +28,16 @@ namespace Guardtime.KSI.Signature.Verification.Rule.Publication
 
             CalendarHashChain extendedTimeCalendarHashChain = context.GetExtendedTimeCalendarHashChain(userPublication.PublicationTime);
 
+            if (extendedTimeCalendarHashChain == null)
+            {
+                throw new InvalidOperationException("Invalid extended calendar hash chain: null");
+            }
+
             if (userPublication.PublicationTime != extendedTimeCalendarHashChain.PublicationData.PublicationTime)
             {
                 return VerificationResult.Fail;
             }
-            // calculate round time and check that it matches with aggregation hash chain aggregation time
+
             if (signature.AggregationTime != extendedTimeCalendarHashChain.RegistrationTime)
             {
                 return VerificationResult.Fail;

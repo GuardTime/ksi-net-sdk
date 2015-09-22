@@ -1,21 +1,41 @@
-﻿using Guardtime.KSI.Publication;
+﻿using System;
+using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
-    public sealed class SignaturePublicationRecordPublicationTimeRule : IRule
+    /// <summary>
+    /// Signature publication record publication hash verification VerificationRule.
+    /// </summary>
+    public sealed class SignaturePublicationRecordPublicationTimeRule : VerificationRule
     {
-        public override VerificationResult Verify(VerificationContext context)
+        /// <see cref="VerificationRule.Verify"/>
+        public override VerificationResult Verify(IVerificationContext context)
         {
-            if (context.PublicationRecord == null)
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            if (context.Signature == null)
+            {
+                // TODO: Better exception
+                throw new InvalidOperationException("Signature cannot be null");
+            }
+
+            if (context.Signature.PublicationRecord == null)
             {
                 return VerificationResult.Ok;
             }
 
-            // TODO: Check!
-            PublicationRecord publicationRecord = context.PublicationRecord;
-            CalendarHashChain calendarHashChain = context.CalendarHashChain;
+            PublicationData publicationRecordPublicationData = context.Signature.PublicationRecord.PublicationData;
+            PublicationData calendarHashChainPublicationData = context.Signature.CalendarHashChain.PublicationData;
 
-            return publicationRecord.PublicationData.PublicationHash.Value != calendarHashChain.PublicationData.PublicationHash.Value ? VerificationResult.Fail : VerificationResult.Ok;
+            if (publicationRecordPublicationData.PublicationTime != calendarHashChainPublicationData.PublicationTime)
+            {
+                return VerificationResult.Fail;
+            }
+
+            return VerificationResult.Ok;
         }
     }
 }

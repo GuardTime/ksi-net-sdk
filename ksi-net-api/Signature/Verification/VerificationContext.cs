@@ -13,7 +13,7 @@ namespace Guardtime.KSI.Signature.Verification
     /// </summary>
     public class VerificationContext : IVerificationContext
     {
-        private KsiSignature _signature;
+        private readonly KsiSignature _signature;
         private DataHash _documentHash;
         private PublicationData _userPublication;
         private PublicationsFile _publicationsFile;
@@ -40,40 +40,7 @@ namespace Guardtime.KSI.Signature.Verification
         }
 
         /// <summary>
-        /// Get calendar hash chain.
-        /// </summary>
-        public CalendarHashChain CalendarHashChain
-        {
-            get
-            {
-                return _signature == null ? null : _signature.CalendarHashChain;
-            }
-        }
-
-        /// <summary>
-        /// Get calendar authentication record.
-        /// </summary>
-        public CalendarAuthenticationRecord CalendarAuthenticationRecord
-        {
-            get
-            {
-                return _signature == null ? null : _signature.CalendarAuthenticationRecord;
-            }
-        }
-
-        /// <summary>
-        /// Get publication record.
-        /// </summary>
-        public PublicationRecord PublicationRecord
-        {
-            get
-            {
-                return _signature == null ? null : _signature.PublicationRecord;
-            }
-        }
-
-        /// <summary>
-        /// Get or set KSI signature.
+        /// Get KSI signature.
         /// </summary>
         public KsiSignature Signature
         {
@@ -81,38 +48,16 @@ namespace Guardtime.KSI.Signature.Verification
             {
                 return _signature;
             }
-
-            set
-            {
-                _signature = value;
-            }
         }
 
         public PublicationData UserPublication
         {
             get { return _userPublication; }
-            set {
+            set
+            {
                 _userPublication = value;
             }
-        }
-
-        /// <summary>
-        /// Get aggregation hash chains collection.
-        /// </summary>
-        /// <returns>aggregation hash chains collection</returns>
-        public ReadOnlyCollection<AggregationHashChain> GetAggregationHashChains()
-        {
-            return _signature == null ? null : _signature.GetAggregationHashChains();
-        }
-
-        /// <summary>
-        /// Get aggregation hash chains root hash
-        /// </summary>
-        /// <returns>output hash</returns>
-        public DataHash GetAggregationHashChainRootHash()
-        {
-            return _signature == null ? null : _signature.GetAggregationHashChainRootHash();
-        }
+        }        
 
         public IKsiService KsiService
         {
@@ -120,7 +65,7 @@ namespace Guardtime.KSI.Signature.Verification
             set { _ksiService = value; }
         }
 
-        public bool ExtendingAllowed
+        public bool IsExtendingAllowed
         {
             get { return _extendingAllowed; }
             set { _extendingAllowed = value; }
@@ -130,6 +75,16 @@ namespace Guardtime.KSI.Signature.Verification
         {
             get { return _publicationsFile; }
             set { _publicationsFile = value; }
+        }
+
+        public VerificationContext(KsiSignature signature)
+        {
+            if (signature == null)
+            {
+                throw new ArgumentNullException("signature");
+            }
+
+            _signature = signature;
         }
 
         public CalendarHashChain GetExtendedLatestCalendarHashChain()
@@ -145,22 +100,7 @@ namespace Guardtime.KSI.Signature.Verification
                 throw new InvalidOperationException("Cannot extend when KSI service is missing");
             }
 
-            if (_signature == null)
-            {
-                throw new InvalidOperationException("No signature to extend");
-            }
-
             return publicationTime == null ? _ksiService.Extend(_signature.AggregationTime) : _ksiService.Extend(_signature.AggregationTime, publicationTime.Value);
-        }
-
-        public X509Certificate2 GetCertificate(byte[] certificateId)
-        {
-            if (_publicationsFile == null)
-            {
-                throw new InvalidOperationException("Invalid publications file: null");
-            }
-
-            return _publicationsFile.FindCertificateById(certificateId);
         }
 
     }

@@ -2,10 +2,7 @@
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
-    /// <summary>
-    /// Calendar hash chain registration time verification VerificationRule.
-    /// </summary>
-    public sealed class CalendarHashChainRegistrationTimeRule : VerificationRule
+    public sealed class ExtendedSignatureCalendarChainRootHashRule : VerificationRule
     {
         /// <see cref="VerificationRule.Verify"/>
         public override VerificationResult Verify(IVerificationContext context)
@@ -21,14 +18,19 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 throw new InvalidOperationException("Signature cannot be null");
             }
 
-            // If calendar hash chain is missing, verification successful
             CalendarHashChain calendarHashChain = context.Signature.CalendarHashChain;
             if (calendarHashChain == null)
             {
-                return VerificationResult.Ok;
+                throw new InvalidOperationException("Invalid calendar hash chain: null");
             }
 
-            return calendarHashChain.AggregationTime != calendarHashChain.RegistrationTime ? VerificationResult.Fail : VerificationResult.Ok;
+            CalendarHashChain extendedSignatureCalendarHashChain = context.GetExtendedTimeCalendarHashChain(calendarHashChain.PublicationData.PublicationTime);
+            if (extendedSignatureCalendarHashChain == null)
+            {
+                throw new InvalidOperationException("Invalid extended calendar hash chain: null");
+            }
+
+            return calendarHashChain.OutputHash != extendedSignatureCalendarHashChain.OutputHash ? VerificationResult.Fail : VerificationResult.Ok;
         }
     }
 }

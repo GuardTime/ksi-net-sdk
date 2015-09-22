@@ -3,10 +3,7 @@ using System.Collections.ObjectModel;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
-    /// <summary>
-    /// Calendar hash chain aggregation time verification VerificationRule.
-    /// </summary>
-    public sealed class CalendarHashChainAggregationTimeRule : VerificationRule
+    public sealed class ExtendedSignatureCalendarChainAggregationTimeRule : VerificationRule
     {
         /// <see cref="VerificationRule.Verify"/>
         public override VerificationResult Verify(IVerificationContext context)
@@ -22,17 +19,26 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 throw new InvalidOperationException("Signature cannot be null");
             }
 
-            // If calendar hash chain is missing, verification successful
             CalendarHashChain calendarHashChain = context.Signature.CalendarHashChain;
             if (calendarHashChain == null)
             {
-                return VerificationResult.Ok;
+                // TODO: Better exception
+                throw new InvalidOperationException("Invalid calendar hash chain: null");
+            }
+
+            CalendarHashChain extendedCalendarHashChain = calendarHashChain.PublicationData == null ? 
+                context.GetExtendedLatestCalendarHashChain() : 
+                context.GetExtendedTimeCalendarHashChain(calendarHashChain.PublicationData.PublicationTime);
+
+            if (extendedCalendarHashChain == null)
+            {
+                throw new InvalidOperationException("Invalid extended calendar hash chain: null");
             }
 
             ReadOnlyCollection<AggregationHashChain> aggregationHashChainCollection = context.Signature.GetAggregationHashChains();
             if (aggregationHashChainCollection == null)
             {
-                throw new ArgumentException("Invalid aggregation hash chains in context signature: null", "context");
+                throw new InvalidOperationException("Invalid aggregation hash chains in context signature: null");
             }
 
             ulong? aggregationTime = null;
@@ -43,10 +49,10 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (aggregationTime == null)
             {
-                throw new ArgumentException("Invalid aggregation time: null", "context");
+                throw new InvalidOperationException("Invalid aggregation time: null");
             }
 
-            if (aggregationTime != calendarHashChain.AggregationTime)
+            if (aggregationTime != extendedCalendarHashChain.AggregationTime)
             {
                 return VerificationResult.Fail;
             }

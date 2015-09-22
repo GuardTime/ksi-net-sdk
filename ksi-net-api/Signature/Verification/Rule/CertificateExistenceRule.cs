@@ -1,9 +1,8 @@
 ﻿using System;
-using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
-    public sealed class CalendarAuthenticationRecordAggregationTimeRule : VerificationRule
+    public sealed class CertificateExistenceRule : VerificationRule
     {
         /// <see cref="VerificationRule.Verify"/>
         public override VerificationResult Verify(IVerificationContext context)
@@ -13,21 +12,26 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 throw new ArgumentNullException("context");
             }
 
-            KsiSignature signature = context.Signature;
-            if (signature == null)
+            if (context.Signature == null)
             {
                 // TODO: Better exception
                 throw new InvalidOperationException("Signature cannot be null");
             }
 
-            CalendarAuthenticationRecord calendarAuthenticationRecord = signature.CalendarAuthenticationRecord;
+            CalendarAuthenticationRecord calendarAuthenticationRecord = context.Signature.CalendarAuthenticationRecord;
             if (calendarAuthenticationRecord == null)
             {
-                return VerificationResult.Ok;
+                throw new InvalidOperationException("Invalid calendar authentication record: null");
             }
 
-            CalendarHashChain calendarHashChain = signature.CalendarHashChain;
-            if (calendarHashChain.PublicationTime != calendarAuthenticationRecord.PublicationData.PublicationTime)
+            SignatureData signatureData = calendarAuthenticationRecord.SignatureData;
+            
+            if (context.PublicationsFile == null)
+            {
+                throw new InvalidOperationException("Invalid publications file: null");
+            }
+
+            if (context.PublicationsFile.FindCertificateById(signatureData.CertificateId) == null)
             {
                 return VerificationResult.Fail;
             }

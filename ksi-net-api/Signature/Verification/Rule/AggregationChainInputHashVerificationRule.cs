@@ -4,17 +4,13 @@ using System;
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
     /// <summary>
-    /// Aggregation hash chain input hash verification rule.
+    /// Aggregation hash chain input hash verification VerificationRule.
     /// </summary>
-    public sealed class AggregationChainInputHashVerificationRule : IRule
+    public sealed class AggregationChainInputHashVerificationRule : VerificationRule
     {
 
-        /// <summary>
-        /// Verify given context with rule.
-        /// </summary>
-        /// <param name="context">verification context</param>
-        /// <returns>verification result</returns>
-        public override VerificationResult Verify(VerificationContext context)
+        /// <see cref="VerificationRule.Verify"/>
+        public override VerificationResult Verify(IVerificationContext context)
         {
             if (context == null)
             {

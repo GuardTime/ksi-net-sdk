@@ -3,7 +3,7 @@ using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
-    public sealed class CalendarAuthenticationRecordAggregationTimeRule : VerificationRule
+    public sealed class PublicationsFileContainsSignaturePublicationRule : VerificationRule
     {
         /// <see cref="VerificationRule.Verify"/>
         public override VerificationResult Verify(IVerificationContext context)
@@ -13,21 +13,19 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 throw new ArgumentNullException("context");
             }
 
-            KsiSignature signature = context.Signature;
-            if (signature == null)
+            if (context.Signature == null)
             {
                 // TODO: Better exception
                 throw new InvalidOperationException("Signature cannot be null");
             }
 
-            CalendarAuthenticationRecord calendarAuthenticationRecord = signature.CalendarAuthenticationRecord;
-            if (calendarAuthenticationRecord == null)
+            PublicationsFile publicationsFile = context.PublicationsFile;
+            if (publicationsFile == null)
             {
-                return VerificationResult.Ok;
+                throw new InvalidOperationException("Invalid publications file: null");
             }
 
-            CalendarHashChain calendarHashChain = signature.CalendarHashChain;
-            if (calendarHashChain.PublicationTime != calendarAuthenticationRecord.PublicationData.PublicationTime)
+            if (!publicationsFile.Contains(context.Signature.PublicationRecord))
             {
                 return VerificationResult.Fail;
             }

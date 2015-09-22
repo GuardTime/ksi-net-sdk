@@ -3,36 +3,31 @@ using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
-    /// <summary>
-    /// Calendar authentication record aggregation hash verification rule.
-    /// </summary>
-    public sealed class CalendarAuthenticationRecordAggregationHashRule : IRule
+    public sealed class CalendarAuthenticationRecordAggregationHashRule : VerificationRule
     {
-        /// <summary>
-        /// Verify given context with rule.
-        /// </summary>
-        /// <param name="context">verification context</param>
-        /// <returns>verification result</returns>
-        public override VerificationResult Verify(VerificationContext context)
+        /// <see cref="VerificationRule.Verify"/>
+        public override VerificationResult Verify(IVerificationContext context)
         {
-            if (context.CalendarAuthenticationRecord == null)
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            KsiSignature signature = context.Signature;
+            if (signature == null)
+            {
+                // TODO: Better exception
+                throw new InvalidOperationException("Signature cannot be null");
+            }
+
+            CalendarAuthenticationRecord calendarAuthenticationRecord = signature.CalendarAuthenticationRecord;
+            if (calendarAuthenticationRecord == null)
             {
                 return VerificationResult.Ok;
             }
 
-            CalendarAuthenticationRecord calendarAuthenticationRecord = context.CalendarAuthenticationRecord;
-            if (calendarAuthenticationRecord == null)
-            {
-                throw new InvalidOperationException("Invalid calendar authentication record: null");
-            }
-
-            CalendarHashChain calendarHashChain = context.CalendarHashChain;
-            if (calendarHashChain == null)
-            {
-                throw new InvalidOperationException("Invalid calendar hash chain: null");
-            }
-
-            if (calendarAuthenticationRecord.PublicationData.PublicationHash.Value != calendarHashChain.PublicationData.PublicationHash.Value)
+            CalendarHashChain calendarHashChain = signature.CalendarHashChain;
+            if (calendarHashChain.OutputHash != calendarAuthenticationRecord.PublicationData.PublicationHash)
             {
                 return VerificationResult.Fail;
             }

@@ -4,24 +4,26 @@ using System.Collections.ObjectModel;
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
     /// <summary>
-    /// Aggregation hash chain consistency verification rule.
+    /// Aggregation hash chain consistency verification VerificationRule.
     /// </summary>
-    public sealed class AggregationHashChainConsistencyRule : IRule
+    public sealed class AggregationHashChainConsistencyRule : VerificationRule
     {
 
-        /// <summary>
-        /// Verify given context with rule.
-        /// </summary>
-        /// <param name="context">verification context</param>
-        /// <returns>verification result</returns>
-        public override VerificationResult Verify(VerificationContext context)
+        /// <see cref="VerificationRule.Verify"/>
+        public override VerificationResult Verify(IVerificationContext context)
         {
             if (context == null)
             {
                 throw new ArgumentNullException("context");
             }
 
-            ReadOnlyCollection<AggregationHashChain> aggregationHashChainCollection = context.GetAggregationHashChains();
+            if (context.Signature == null)
+            {
+                // TODO: Better exception
+                throw new InvalidOperationException("Signature cannot be null");
+            }
+
+            ReadOnlyCollection<AggregationHashChain> aggregationHashChainCollection = context.Signature.GetAggregationHashChains();
             if (aggregationHashChainCollection == null)
             {
                 throw new ArgumentException("Invalid aggregation hash chains in context signature: null", "context");

@@ -1,12 +1,18 @@
 ﻿using System;
 using Guardtime.KSI.Publication;
 
-namespace Guardtime.KSI.Signature.Verification.Rule.Publication
+namespace Guardtime.KSI.Signature.Verification.Rule
 {
-    public sealed class PublicationsFileExtendedSignatureInputHashRule : IRule
+    public sealed class UserProvidedPublicationHashMatchesExtendedResponseRule : VerificationRule
     {
-        public override VerificationResult Verify(VerificationContext context)
+        /// <see cref="VerificationRule.Verify"/>
+        public override VerificationResult Verify(IVerificationContext context)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
             PublicationData userPublication = context.UserPublication;
             if (userPublication == null)
             {
@@ -16,7 +22,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule.Publication
 
             CalendarHashChain extendedTimeCalendarHashChain = context.GetExtendedTimeCalendarHashChain(userPublication.PublicationTime);
 
-            if (extendedTimeCalendarHashChain.InputHash != context.GetAggregationHashChainRootHash())
+            if (extendedTimeCalendarHashChain.PublicationData.PublicationHash != userPublication.PublicationHash)
             {
                 return VerificationResult.Fail;
             }
