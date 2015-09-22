@@ -141,36 +141,37 @@
     <Compile Include="Signature\SignatureData.cs" />
     <Compile Include="Signature\Verification\KsiTrustProvider.cs" />
     <Compile Include="Signature\Verification\Policy\CalendarBasedVerificationPolicy.cs" />
+    <Compile Include="Signature\Verification\Policy\PublicationBasedVerificationPolicy.cs" />
     <Compile Include="Signature\Verification\Policy\KeyBasedVerificationPolicy.cs" />
     <Compile Include="Signature\Verification\Policy\PublicationsFileVerificationPolicy.cs" />
-    <Compile Include="Signature\Verification\Policy\PublicationVerificationPolicy.cs" />
-    <Compile Include="Signature\Verification\Rule\Calendar\ExtendedSignatureAggregationChainRightLinksMatchesRule.cs" />
-    <Compile Include="Signature\Verification\Rule\Calendar\ExtendedSignatureCalendarChainAggregationTimeRule.cs" />
-    <Compile Include="Signature\Verification\Rule\Calendar\ExtendedSignatureCalendarChainRootHashRule.cs" />
-    <Compile Include="Signature\Verification\Rule\Calendar\SignaturePublicationRecordExistenceRule.cs" />
-    <Compile Include="Signature\Verification\Rule\Calendar\ExtendedSignatureCalendarChainInputHashRule.cs" />
-    <Compile Include="Signature\Verification\Rule\IRule.cs" />
-    <Compile Include="Signature\Verification\Rule\Pki\CalendarAuthenticationRecordExistenceRule.cs" />
-    <Compile Include="Signature\Verification\Rule\Pki\CalendarAuthenticationRecordSignatureVerificationRule.cs" />
-    <Compile Include="Signature\Verification\Rule\Pki\CertificateExistenceRule.cs" />
-    <Compile Include="Signature\Verification\Rule\Pki\CalendarHashChainExistenceRule.cs" />
-    <Compile Include="Signature\Verification\Rule\Publication\PublicationsEqualsRule.cs" />
-    <Compile Include="Signature\Verification\Rule\Publication\SignatureExtendingPermissionRule.cs" />
-    <Compile Include="Signature\Verification\Rule\Publication\PublicationsFileHasExtendablePublicationRule.cs" />
-    <Compile Include="Signature\Verification\Rule\Publication\PublicationExistsInPublicationsFileRule.cs" />
-    <Compile Include="Signature\Verification\Rule\Publication\PublicationsFileExtendedSignatureInputHashRule.cs" />
-    <Compile Include="Signature\Verification\Rule\Publication\PublicationsFilePublicationHashMatchesExtenderResponseRule.cs" />
-    <Compile Include="Signature\Verification\Rule\Publication\UserProvidedPublicationHashMatchesExtendedResponseRule.cs" />
-    <Compile Include="Signature\Verification\Rule\Publication\UserProvidedPublicationExtendedSignatureInputHashRule.cs" />
-    <Compile Include="Signature\Verification\Rule\Publication\PublicationsFilePublicationTimeMatchesExtendedResponseRule.cs" />
-    <Compile Include="Signature\Verification\Rule\Publication\UserPublicationExistanceRule.cs" />
-    <Compile Include="Signature\Verification\Rule\Publication\SignaturePublicationExistanceRule.cs" />
-    <Compile Include="Signature\Verification\Rule\Publication\UserProvidedPublicationTimeMatchesExtendedResponseRule.cs" />
-    <Compile Include="Signature\Verification\Rule\Publication\SignatureCreatedBeforeUserPublicationRule.cs" />
-    <Compile Include="Signature\Verification\Rule\SignaturePublicationRecordPublicationTimeRule.cs" />
-    <Compile Include="Signature\Verification\Rule\SignaturePublicationRecordPublicationHashRule.cs" />
+    <Compile Include="Signature\Verification\Policy\UserProvidedPublicationBasedVerificationPolicy.cs" />
+    <Compile Include="Signature\Verification\Policy\VerificationPolicy.cs" />
     <Compile Include="Signature\Verification\Rule\CalendarAuthenticationRecordAggregationTimeRule.cs" />
+    <Compile Include="Signature\Verification\Rule\ExtendedSignatureAggregationChainRightLinksMatchesRule.cs" />
+    <Compile Include="Signature\Verification\Rule\ExtendedSignatureCalendarChainAggregationTimeRule.cs" />
+    <Compile Include="Signature\Verification\Rule\ExtendedSignatureCalendarChainRootHashRule.cs" />
+    <Compile Include="Signature\Verification\Rule\ExtendedSignatureCalendarChainInputHashRule.cs" />
     <Compile Include="Signature\Verification\Rule\CalendarAuthenticationRecordAggregationHashRule.cs" />
+    <Compile Include="Signature\Verification\Rule\SignaturePublicationRecordExistenceRule.cs" />
+    <Compile Include="Signature\Verification\Rule\VerificationRule.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarAuthenticationRecordExistenceRule.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarAuthenticationRecordSignatureVerificationRule.cs" />
+    <Compile Include="Signature\Verification\Rule\CertificateExistenceRule.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarHashChainExistenceRule.cs" />
+    <Compile Include="Signature\Verification\Rule\UserProvidedPublicationVerificationRule.cs" />
+    <Compile Include="Signature\Verification\Rule\ExtendingPermittedVerificationRule.cs" />
+    <Compile Include="Signature\Verification\Rule\PublicationsFileHasExtendablePublicationRule.cs" />
+    <Compile Include="Signature\Verification\Rule\PublicationsFileContainsSignaturePublicationRule.cs" />
+    <Compile Include="Signature\Verification\Rule\PublicationsFileExtendedSignatureInputHashRule.cs" />
+    <Compile Include="Signature\Verification\Rule\PublicationsFilePublicationHashMatchesExtenderResponseRule.cs" />
+    <Compile Include="Signature\Verification\Rule\UserProvidedPublicationHashMatchesExtendedResponseRule.cs" />
+    <Compile Include="Signature\Verification\Rule\UserProvidedPublicationExtendedSignatureInputHashRule.cs" />
+    <Compile Include="Signature\Verification\Rule\PublicationsFilePublicationTimeMatchesExtenderResponseRule.cs" />
+    <Compile Include="Signature\Verification\Rule\UserProvidedPublicationExistenceRule.cs" />
+    <Compile Include="Signature\Verification\Rule\UserProvidedPublicationTimeMatchesExtendedResponseRule.cs" />
+    <Compile Include="Signature\Verification\Rule\UserProvidedPublicationCreationTimeVerificationRule.cs" />
+    <Compile Include="Signature\Verification\Rule\SignaturePublicationRecordPublicationHashRule.cs" />
+    <Compile Include="Signature\Verification\Rule\SignaturePublicationRecordPublicationTimeRule.cs" />
     <Compile Include="Signature\Verification\Policy\IPolicy.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainTimeConsistencyRule.cs" />
     <Compile Include="Signature\Verification\Rule\CalendarHashChainRegistrationTimeRule.cs" />
@@ -200,6 +201,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
