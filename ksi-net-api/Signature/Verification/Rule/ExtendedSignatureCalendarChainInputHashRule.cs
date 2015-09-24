@@ -1,10 +1,13 @@
 ﻿using System;
+using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
     public sealed class ExtendedSignatureCalendarChainInputHashRule : VerificationRule
     {
         /// <see cref="VerificationRule.Verify"/>
+        /// <exception cref="ArgumentNullException">thrown if context is missing</exception>
+        /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
             if (context == null)
@@ -14,24 +17,15 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (context.Signature == null)
             {
-                // TODO: Better exception
-                throw new InvalidOperationException("Signature cannot be null");
+                throw new KsiVerificationException("Invalid KSI signature in context: null");
             }
 
             CalendarHashChain calendarHashChain = context.Signature.CalendarHashChain;
-            if (calendarHashChain == null)
-            {
-                // TODO: Better exception
-                throw new InvalidOperationException("Invalid calendar hash chain: null");
-            }
-
-            CalendarHashChain extendedCalendarHashChain = calendarHashChain.PublicationData == null ? 
-                context.GetExtendedLatestCalendarHashChain() : 
-                context.GetExtendedTimeCalendarHashChain(calendarHashChain.PublicationData.PublicationTime);
+            CalendarHashChain extendedCalendarHashChain = calendarHashChain == null ? context.GetExtendedLatestCalendarHashChain() : context.GetExtendedTimeCalendarHashChain(calendarHashChain.PublicationTime);
 
             if (extendedCalendarHashChain == null)
             {
-                throw new InvalidOperationException("Invalid extended calendar hash chain: null");
+                throw new KsiVerificationException("Invalid extended calendar hash chain from context extension function: null");
             }
 
             if (context.Signature.GetAggregationHashChainRootHash() != extendedCalendarHashChain.InputHash)

@@ -1,4 +1,5 @@
 ﻿using System;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
@@ -6,6 +7,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public sealed class PublicationsFileContainsSignaturePublicationRule : VerificationRule
     {
         /// <see cref="VerificationRule.Verify"/>
+        /// <exception cref="ArgumentNullException">thrown if context is missing</exception>
+        /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
             if (context == null)
@@ -15,14 +18,18 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (context.Signature == null)
             {
-                // TODO: Better exception
-                throw new InvalidOperationException("Signature cannot be null");
+                throw new KsiVerificationException("Invalid KSI signature in context: null");
             }
 
             PublicationsFile publicationsFile = context.PublicationsFile;
             if (publicationsFile == null)
             {
-                throw new InvalidOperationException("Invalid publications file: null");
+                throw new KsiVerificationException("Invalid publications file in context: null");
+            }
+
+            if (context.Signature.PublicationRecord == null)
+            {
+                throw new KsiVerificationException("Invalid publications record in signature: null");
             }
 
             if (!publicationsFile.Contains(context.Signature.PublicationRecord))

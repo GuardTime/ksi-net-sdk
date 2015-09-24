@@ -1,4 +1,5 @@
 ﻿using System;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
@@ -6,6 +7,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public sealed class UserProvidedPublicationTimeMatchesExtendedResponseRule : VerificationRule
     {
         /// <see cref="VerificationRule.Verify"/>
+        /// <exception cref="ArgumentNullException">thrown if context is missing</exception>
+        /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
             if (context == null)
@@ -16,21 +19,20 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             PublicationData userPublication = context.UserPublication;
             if (userPublication == null)
             {
-                // TODO: better exception
-                throw new InvalidOperationException("Invalid publication provided by user: null");
+                throw new KsiVerificationException("Invalid user publication in context: null");
             }
 
             KsiSignature signature = context.Signature;
             if (signature == null)
             {
-                throw new InvalidOperationException("Invalid signature provided by user: null");
+                throw new KsiVerificationException("Invalid KSI signature in context: null");
             }
 
             CalendarHashChain extendedTimeCalendarHashChain = context.GetExtendedTimeCalendarHashChain(userPublication.PublicationTime);
 
             if (extendedTimeCalendarHashChain == null)
             {
-                throw new InvalidOperationException("Invalid extended calendar hash chain: null");
+                throw new KsiVerificationException("Invalid extended calendar hash chain from context extension function: null");
             }
 
             if (userPublication.PublicationTime != extendedTimeCalendarHashChain.PublicationData.PublicationTime)

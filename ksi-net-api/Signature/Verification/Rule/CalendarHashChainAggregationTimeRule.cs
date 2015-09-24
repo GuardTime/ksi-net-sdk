@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
+
     /// <summary>
-    /// Calendar hash chain aggregation time verification VerificationRule.
+    /// Rule verifies calendar hash chain aggregation time equality to last aggregation hash chain aggregation time. Without calendar authentication record <see cref="VerificationResult.Ok"/> is returned.
     /// </summary>
     public sealed class CalendarHashChainAggregationTimeRule : VerificationRule
     {
         /// <see cref="VerificationRule.Verify"/>
+        /// <exception cref="ArgumentNullException">thrown if context is missing</exception>
+        /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception
         public override VerificationResult Verify(IVerificationContext context)
         {
             if (context == null)
@@ -18,8 +22,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (context.Signature == null)
             {
-                // TODO: Better exception
-                throw new InvalidOperationException("Signature cannot be null");
+                throw new KsiVerificationException("Signature cannot be null");
             }
 
             // If calendar hash chain is missing, verification successful
@@ -30,21 +33,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             }
 
             ReadOnlyCollection<AggregationHashChain> aggregationHashChainCollection = context.Signature.GetAggregationHashChains();
-            if (aggregationHashChainCollection == null)
-            {
-                throw new ArgumentException("Invalid aggregation hash chains in context signature: null", "context");
-            }
-
-            ulong? aggregationTime = null;
-            if (aggregationHashChainCollection.Count > 0)
-            {
-                aggregationTime = aggregationHashChainCollection[aggregationHashChainCollection.Count - 1].AggregationTime;
-            }
-
-            if (aggregationTime == null)
-            {
-                throw new ArgumentException("Invalid aggregation time: null", "context");
-            }
+            ulong aggregationTime = aggregationHashChainCollection[aggregationHashChainCollection.Count - 1].AggregationTime;
 
             if (aggregationTime != calendarHashChain.AggregationTime)
             {

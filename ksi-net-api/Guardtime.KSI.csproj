@@ -83,6 +83,7 @@
     <Compile Include="Exceptions\InvalidTlvStructureException.cs" />
     <Compile Include="Exceptions\ServiceProtocolException.cs" />
     <Compile Include="Exceptions\KsiException.cs" />
+    <Compile Include="Exceptions\VerificationException.cs" />
     <Compile Include="Hashing\DataHash.cs" />
     <Compile Include="Hashing\DataHasher.cs" />
     <Compile Include="Hashing\HashAlgorithm.cs" />
@@ -160,7 +161,6 @@
     <Compile Include="Signature\Verification\Rule\CalendarHashChainExistenceRule.cs" />
     <Compile Include="Signature\Verification\Rule\UserProvidedPublicationVerificationRule.cs" />
     <Compile Include="Signature\Verification\Rule\ExtendingPermittedVerificationRule.cs" />
-    <Compile Include="Signature\Verification\Rule\PublicationsFileHasExtendablePublicationRule.cs" />
     <Compile Include="Signature\Verification\Rule\PublicationsFileContainsSignaturePublicationRule.cs" />
     <Compile Include="Signature\Verification\Rule\PublicationsFileExtendedSignatureInputHashRule.cs" />
     <Compile Include="Signature\Verification\Rule\PublicationsFilePublicationHashMatchesExtenderResponseRule.cs" />

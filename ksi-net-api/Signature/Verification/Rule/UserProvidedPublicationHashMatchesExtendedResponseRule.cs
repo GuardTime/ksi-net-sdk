@@ -1,4 +1,5 @@
 ﻿using System;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
@@ -6,6 +7,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public sealed class UserProvidedPublicationHashMatchesExtendedResponseRule : VerificationRule
     {
         /// <see cref="VerificationRule.Verify"/>
+        /// <exception cref="ArgumentNullException">thrown if context is missing</exception>
+        /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
             if (context == null)
@@ -16,13 +19,16 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             PublicationData userPublication = context.UserPublication;
             if (userPublication == null)
             {
-                // TODO: better exception
-                throw new InvalidOperationException("Invalid publication provided by user: null");
+                throw new KsiVerificationException("Invalid user publication in context: null");
             }
 
-            CalendarHashChain extendedTimeCalendarHashChain = context.GetExtendedTimeCalendarHashChain(userPublication.PublicationTime);
+            CalendarHashChain extendedCalendarHashChain = context.GetExtendedTimeCalendarHashChain(userPublication.PublicationTime);
+            if (extendedCalendarHashChain == null)
+            {
+                throw new KsiVerificationException("Invalid extended calendar hash chain from context extension function: null");
+            }
 
-            if (extendedTimeCalendarHashChain.PublicationData.PublicationHash != userPublication.PublicationHash)
+            if (extendedCalendarHashChain.PublicationData.PublicationHash != userPublication.PublicationHash)
             {
                 return VerificationResult.Fail;
             }

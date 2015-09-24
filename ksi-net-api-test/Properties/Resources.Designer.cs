@@ -601,6 +601,87 @@ namespace Guardtime.KSI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-aggregation-chain-aggregation-time-mismatch.tlv.
+        /// </summary>
+        internal static string KsiSignatureDo_Invalid_Aggregation_Chain_Aggregation_Time_Mismatch {
+            get {
+                return ResourceManager.GetString("KsiSignatureDo_Invalid_Aggregation_Chain_Aggregation_Time_Mismatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-aggregation-chain-input-hash.tlv.
+        /// </summary>
+        internal static string KsiSignatureDo_Invalid_Aggregation_Chain_Input_Hash {
+            get {
+                return ResourceManager.GetString("KsiSignatureDo_Invalid_Aggregation_Chain_Input_Hash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-aggregation-time-with-publication-record.tlv.
+        /// </summary>
+        internal static string KsiSignatureDo_Invalid_Aggregation_Time_With_Publication_Record {
+            get {
+                return ResourceManager.GetString("KsiSignatureDo_Invalid_Aggregation_Time_With_Publication_Record", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-calendar-authentication-record-invalid-certificate-id.tlv.
+        /// </summary>
+        internal static string KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Certificate_Id {
+            get {
+                return ResourceManager.GetString("KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Certificate_Id", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-calendar-authentication-record-invalid-publication-hash.tlv.
+        /// </summary>
+        internal static string KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Publication_Hash {
+            get {
+                return ResourceManager.GetString("KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Publication_Hash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-calendar-authentication-record-invalid-publication-time.tlv.
+        /// </summary>
+        internal static string KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Publication_Time {
+            get {
+                return ResourceManager.GetString("KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Publication_Time", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-calendar-authentication-record-invalid-signature.tlv.
+        /// </summary>
+        internal static string KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Signature {
+            get {
+                return ResourceManager.GetString("KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Signature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-calendar-hash-chain-input-hash.tlv.
+        /// </summary>
+        internal static string KsiSignatureDo_Invalid_Calendar_Chain_Input_Hash {
+            get {
+                return ResourceManager.GetString("KsiSignatureDo_Invalid_Calendar_Chain_Input_Hash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-calendar-hash-chain-publication-time.tlv.
+        /// </summary>
+        internal static string KsiSignatureDo_Invalid_Calendar_Chain_Publication_Time {
+            get {
+                return ResourceManager.GetString("KsiSignatureDo_Invalid_Calendar_Chain_Publication_Time", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-contain-both-publication-record-and-calendar-authentication-record.tlv.
         /// </summary>
         internal static string KsiSignatureDo_Invalid_Contain_Publication_Record_And_Calendar_Authentication_Record {
@@ -683,11 +764,38 @@ namespace Guardtime.KSI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-aggregation-root-hash.tlv.
+        /// </summary>
+        internal static string KsiSignatureDo_Invalid_With_Invalid_Aggregation_Root_Hash {
+            get {
+                return ResourceManager.GetString("KsiSignatureDo_Invalid_With_Invalid_Aggregation_Root_Hash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-with-invalid-publication-record.tlv.
+        /// </summary>
+        internal static string KsiSignatureDo_Invalid_With_Invalid_Publication_Record {
+            get {
+                return ResourceManager.GetString("KsiSignatureDo_Invalid_With_Invalid_Publication_Record", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/ksi-signature-do/legacy-ksi-signature-ok.tlv.
         /// </summary>
         internal static string KsiSignatureDo_Legacy_Ok {
             get {
                 return ResourceManager.GetString("KsiSignatureDo_Legacy_Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/legacy-ksi-signature-ok-with-publication-record.tlv.
+        /// </summary>
+        internal static string KsiSignatureDo_Legacy_Ok_With_Publication_Record {
+            get {
+                return ResourceManager.GetString("KsiSignatureDo_Legacy_Ok_With_Publication_Record", resourceCulture);
             }
         }
         
@@ -715,6 +823,24 @@ namespace Guardtime.KSI.Properties {
         internal static string KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record {
             get {
                 return ResourceManager.GetString("KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-ok-new.tlv.
+        /// </summary>
+        internal static string KsiSignatureDo_Ok_New {
+            get {
+                return ResourceManager.GetString("KsiSignatureDo_Ok_New", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-ok-with-publication-record.tlv.
+        /// </summary>
+        internal static string KsiSignatureDo_Ok_With_Publication_Record {
+            get {
+                return ResourceManager.GetString("KsiSignatureDo_Ok_With_Publication_Record", resourceCulture);
             }
         }
         

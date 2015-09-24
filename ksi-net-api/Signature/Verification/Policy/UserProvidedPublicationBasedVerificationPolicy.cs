@@ -16,10 +16,7 @@ namespace Guardtime.KSI.Signature.Verification.Policy
                 .OnSuccess(new SignaturePublicationRecordExistenceRule()
                     .OnSuccess(new UserProvidedPublicationVerificationRule())
                     .OnNa(new UserProvidedPublicationCreationTimeVerificationRule()
-                        .OnSuccess(_verificationRule)))
-                        // TODO: fix
-                .OnNa(new PublicationsFileHasExtendablePublicationRule()
-                    .OnSuccess(_verificationRule));
+                        .OnSuccess(_verificationRule)));
         }
     }
 }

@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
     /// <summary>
-    /// Aggregation hash chain time consistency verification VerificationRule.
+    ///     Aggregation hash chain time consistency verification VerificationRule.
     /// </summary>
     public sealed class AggregationHashChainTimeConsistencyRule : VerificationRule
     {
         private VerificationRule _verificationRule;
 
-        /// <see cref="VerificationRule.Verify"/>
+        /// <see cref="VerificationRule.Verify" />
+        /// <exception cref="ArgumentNullException">thrown if context is missing</exception>
+        /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
             if (context == null)
@@ -20,15 +23,11 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (context.Signature == null)
             {
-                // TODO: Better exception
-                throw new InvalidOperationException("Signature cannot be null");
+                throw new KsiVerificationException("Invalid KSI signature: null");
             }
 
-            ReadOnlyCollection<AggregationHashChain> aggregationHashChainCollection = context.Signature.GetAggregationHashChains();
-            if (aggregationHashChainCollection == null)
-            {
-                throw new ArgumentException("Invalid aggregation hash chains in context signature: null", "context");
-            }
+            ReadOnlyCollection<AggregationHashChain> aggregationHashChainCollection =
+                context.Signature.GetAggregationHashChains();
 
             ulong? time = null;
             for (int i = 0; i < aggregationHashChainCollection.Count; i++)
@@ -42,10 +41,11 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 if (aggregationHashChainCollection[i].AggregationTime != time)
                 {
                     // TODO: Correct logging
-                    Console.WriteLine("Previous aggregation hash chain aggregation time {0} does not match current aggregation time {1}", time, aggregationHashChainCollection[i].AggregationTime);
+                    Console.WriteLine(
+                        "Previous aggregation hash chain aggregation time {0} does not match current aggregation time {1}",
+                        time, aggregationHashChainCollection[i].AggregationTime);
                     return VerificationResult.Fail;
                 }
-
             }
 
             return VerificationResult.Ok;

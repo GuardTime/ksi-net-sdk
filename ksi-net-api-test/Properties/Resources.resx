@@ -300,8 +300,17 @@
   <data name="KsiSignatureDo_Ok" xml:space="preserve">
     <value>resources/signature/ksi-signature-do/ksi-signature-ok.tlv</value>
   </data>
+  <data name="KsiSignatureDo_Ok_New" xml:space="preserve">
+    <value>resources/signature/ksi-signature-do/ksi-signature-ok-new.tlv</value>
+  </data>
+  <data name="KsiSignatureDo_Ok_With_Publication_Record" xml:space="preserve">
+    <value>resources/signature/ksi-signature-do/ksi-signature-ok-with-publication-record.tlv</value>
+  </data>
   <data name="KsiSignatureDo_Legacy_Ok" xml:space="preserve">
     <value>resources/signature/ksi-signature-do/legacy-ksi-signature-ok.tlv</value>
+  </data>
+  <data name="KsiSignatureDo_Legacy_Ok_With_Publication_Record" xml:space="preserve">
+    <value>resources/signature/ksi-signature-do/legacy-ksi-signature-ok-with-publication-record.tlv</value>
   </data>
   <data name="KsiSignatureDo_Ok_Missing_Calendar_Hash_Chain" xml:space="preserve">
     <value>resources/signature/ksi-signature-do/ksi-signature-ok-missing-calendar-hash-chain.tlv</value>
@@ -335,6 +344,36 @@
   </data>
   <data name="KsiSignatureDo_Invalid_Multiple_Rfc_3161_Records" xml:space="preserve">
     <value>resources/signature/ksi-signature-do/ksi-signature-invalid-multiple-rfc3161-records.tlv</value>
+  </data>
+  <data name="KsiSignatureDo_Invalid_Aggregation_Chain_Input_Hash" xml:space="preserve">
+    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-aggregation-chain-input-hash.tlv</value>
+  </data>
+  <data name="KsiSignatureDo_Invalid_Aggregation_Chain_Aggregation_Time_Mismatch" xml:space="preserve">
+    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-aggregation-chain-aggregation-time-mismatch.tlv</value>
+  </data>
+  <data name="KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Publication_Hash" xml:space="preserve">
+    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-calendar-authentication-record-invalid-publication-hash.tlv</value>
+  </data>
+  <data name="KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Publication_Time" xml:space="preserve">
+    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-calendar-authentication-record-invalid-publication-time.tlv</value>
+  </data>
+  <data name="KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Certificate_Id" xml:space="preserve">
+    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-calendar-authentication-record-invalid-certificate-id.tlv</value>
+  </data>
+  <data name="KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Signature" xml:space="preserve">
+    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-calendar-authentication-record-invalid-signature.tlv</value>
+  </data>
+  <data name="KsiSignatureDo_Invalid_Calendar_Chain_Input_Hash" xml:space="preserve">
+    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-calendar-hash-chain-input-hash.tlv</value>
+  </data>
+  <data name="KsiSignatureDo_Invalid_Calendar_Chain_Publication_Time" xml:space="preserve">
+    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-calendar-hash-chain-publication-time.tlv</value>
+  </data>
+  <data name="KsiSignatureDo_Invalid_With_Invalid_Publication_Record" xml:space="preserve">
+    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-with-invalid-publication-record.tlv</value>
+  </data>
+  <data name="KsiSignatureDo_Invalid_With_Invalid_Aggregation_Root_Hash" xml:space="preserve">
+    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-aggregation-root-hash.tlv</value>
   </data>
   <data name="Rfc3161Record_Ok" xml:space="preserve">
     <value>resources/signature/rfc3161-record/rfc3161-record-ok.tlv</value>
@@ -428,5 +467,8 @@
   </data>
   <data name="SignatureData_Ok_No_Uri" xml:space="preserve">
     <value>resources/signature/signaturedata/signature-data-ok-no-uri.tlv</value>
+  </data>
+  <data name="KsiSignatureDo_Invalid_Aggregation_Time_With_Publication_Record" xml:space="preserve">
+    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-aggregation-time-with-publication-record.tlv</value>
   </data>
 </root>

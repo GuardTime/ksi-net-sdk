@@ -1,15 +1,16 @@
 ﻿using System;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
-    /// <summary>
-    /// Calendar hash chain input hash verification VerificationRule.
-    /// </summary>
+
     public sealed class CalendarHashChainInputHashVerificationRule : VerificationRule
     {
 
         /// <see cref="VerificationRule.Verify"/>
+        /// <exception cref="ArgumentNullException">thrown if context is missing</exception>
+        /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
             if (context == null)
@@ -19,8 +20,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (context.Signature == null)
             {
-                // TODO: Better exception
-                throw new InvalidOperationException("Signature cannot be null");
+                throw new KsiVerificationException("Invalid KSI signature: null");
             }
 
             // If calendar hash chain is missing, verification successful
@@ -30,13 +30,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 return VerificationResult.Ok;
             }
 
-            DataHash aggregationHashChainRootHash = context.Signature.GetAggregationHashChainRootHash();
-            if (aggregationHashChainRootHash == null)
-            {
-                return VerificationResult.Fail;
-            }
-
-            return aggregationHashChainRootHash != calendarHashChain.InputHash ? VerificationResult.Fail : VerificationResult.Ok;
+            return context.Signature.GetAggregationHashChainRootHash() != calendarHashChain.InputHash ? VerificationResult.Fail : VerificationResult.Ok;
         }
     }
 }

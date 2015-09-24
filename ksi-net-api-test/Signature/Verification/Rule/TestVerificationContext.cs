@@ -27,7 +27,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         {
             if (KsiService == null)
             {
-                throw new InvalidOperationException("Cannot extend when KSI service is missing");
+                throw new InvalidOperationException("Invalid KSI service: null");
             }
 
             return publicationTime == null ? KsiService.Extend(Signature.AggregationTime) : KsiService.Extend(Signature.AggregationTime, publicationTime.Value);

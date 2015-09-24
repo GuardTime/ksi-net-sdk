@@ -1,4 +1,5 @@
 ﻿using System;
+using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
@@ -7,6 +8,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     {
 
         /// <see cref="VerificationRule.Verify"/>
+        /// <exception cref="ArgumentNullException">thrown if context is missing</exception>
+        /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
             if (context == null)
@@ -16,8 +19,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (context.Signature == null)
             {
-                // TODO: Better exception
-                throw new InvalidOperationException("Signature cannot be null");
+                throw new KsiVerificationException("Invalid KSI signature: null");
             }
 
             return context.Signature.CalendarAuthenticationRecord != null ? VerificationResult.Ok : VerificationResult.Na;

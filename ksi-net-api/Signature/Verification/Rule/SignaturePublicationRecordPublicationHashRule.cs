@@ -1,4 +1,5 @@
 ﻿using System;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
@@ -6,6 +7,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public sealed class SignaturePublicationRecordPublicationHashRule : VerificationRule
     {
         /// <see cref="VerificationRule.Verify"/>
+        /// <exception cref="ArgumentNullException">thrown if context is missing</exception>
+        /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
             if (context == null)
@@ -15,8 +18,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (context.Signature == null)
             {
-                // TODO: Better exception
-                throw new InvalidOperationException("Signature cannot be null");
+                throw new KsiVerificationException("Invalid KSI signature in context: null");
             }
 
             PublicationRecord publicationRecord = context.Signature.PublicationRecord;
@@ -27,7 +29,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             CalendarHashChain calendarHashChain = context.Signature.CalendarHashChain;
 
-            return publicationRecord.PublicationData.PublicationHash.Value != calendarHashChain.PublicationData.PublicationHash.Value ? VerificationResult.Fail : VerificationResult.Ok;
+            return publicationRecord.PublicationData.PublicationHash != calendarHashChain.PublicationData.PublicationHash ? VerificationResult.Fail : VerificationResult.Ok;
         }
     }
 }
