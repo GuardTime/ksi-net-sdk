@@ -39,12 +39,19 @@ namespace Guardtime.KSI.Service
                 throw new InvalidTlvStructureException("Invalid aggregation pdu type: " + Type);
             }
 
+            int headerCount = 0;
             int payloadCount = 0;
+            int macCount = 0;
 
             for (int i = 0; i < Count; i++)
             {
                 switch (this[i].Type)
                 {
+                    case AggregationRequestPayload.TagType:
+                        _payload = new AggregationRequestPayload(this[i]);
+                        this[i] = _payload;
+                        payloadCount++;
+                        break;
                     case AggregationResponsePayload.TagType:
                         _payload = new AggregationResponsePayload(this[i]);
                         this[i] = _payload;
@@ -58,7 +65,10 @@ namespace Guardtime.KSI.Service
 
                     // TODO: How to handle parent class types
                     case KsiPduHeader.TagType:
+                        headerCount++;
+                        break;
                     case MacTagType:
+                        macCount++;
                         break;
                     default:
                         VerifyCriticalFlag(this[i]);
@@ -69,6 +79,16 @@ namespace Guardtime.KSI.Service
             if (payloadCount != 1)
             {
                 throw new InvalidTlvStructureException("Only one payload must exist in ksi pdu");
+            }
+
+            if (_payload.Type != AggregationError.TagType && headerCount != 1)
+            {
+                throw new InvalidTlvStructureException("Only one header must exist in ksi pdu");
+            }
+
+            if (_payload.Type != AggregationError.TagType && macCount != 1)
+            {
+                throw new InvalidTlvStructureException("Only one mac must exist in ksi pdu");
             }
         }
 

@@ -202,10 +202,8 @@ namespace Guardtime.KSI.Parser
 
             if (!tag.NonCritical)
             {
-                throw new InvalidTlvStructureException("Invalid tag", tag);
+                throw new InvalidTlvStructureException("Invalid tag: " + tag.Type, tag);
             }
-
-            
         }
 
         /// <summary>
@@ -277,7 +275,7 @@ namespace Guardtime.KSI.Parser
             {
                 return false;
             }
-
+            
             if (Count != tag.Count || Type != tag.Type || Forward != tag.Forward || NonCritical != tag.NonCritical)
             {
                 return false;

@@ -39,12 +39,19 @@ namespace Guardtime.KSI.Service
                 throw new InvalidTlvStructureException("Invalid extend pdu type: " + Type);
             }
 
+            int headerCount = 0;
             int payloadCount = 0;
+            int macCount = 0;
 
             for (int i = 0; i < Count; i++)
             {
                 switch (this[i].Type)
                 {
+                    case ExtendRequestPayload.TagType:
+                        _payload = new ExtendRequestPayload(this[i]);
+                        this[i] = _payload;
+                        payloadCount++;
+                        break;
                     case ExtendResponsePayload.TagType:
                         _payload = new ExtendResponsePayload(this[i]);
                         this[i] = _payload;
@@ -55,9 +62,11 @@ namespace Guardtime.KSI.Service
                         this[i] = _payload;
                         payloadCount++;
                         break;
-                    // TODO: Better solution for parent tags
                     case KsiPduHeader.TagType:
+                        headerCount++;
+                        break;
                     case MacTagType:
+                        macCount++;
                         break;
                     default:
                         VerifyCriticalFlag(this[i]);
@@ -68,6 +77,16 @@ namespace Guardtime.KSI.Service
             if (payloadCount != 1)
             {
                 throw new InvalidTlvStructureException("Only one payload must exist in ksi pdu");
+            }
+
+            if (_payload.Type != ExtendError.TagType && headerCount != 1)
+            {
+                throw new InvalidTlvStructureException("Only one header must exist in ksi pdu");
+            }
+
+            if (_payload.Type != ExtendError.TagType && macCount != 1)
+            {
+                throw new InvalidTlvStructureException("Only one mac must exist in ksi pdu");
             }
         }
 

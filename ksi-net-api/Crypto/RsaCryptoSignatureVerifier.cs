@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Crypto
 {
@@ -43,10 +45,13 @@ namespace Guardtime.KSI.Crypto
                 throw new KsiException("No public key in certificate");
             }
 
-            // TODO: Throw ksi exception
+            // TODO: Better exception
             using (RSACryptoServiceProvider serviceProvider = (RSACryptoServiceProvider)certificate.PublicKey.Key)
             {
-                serviceProvider.VerifyData(signedBytes, data["digestAlgorithm"], signatureBytes);
+                if (!serviceProvider.VerifyData(signedBytes, data["digestAlgorithm"], signatureBytes))
+                {
+                    throw new Exception("Verification failure");
+                }
             }
         }
     }

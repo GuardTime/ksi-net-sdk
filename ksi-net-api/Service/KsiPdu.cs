@@ -36,35 +36,19 @@ namespace Guardtime.KSI.Service
         /// <param name="tag">TLV element</param>
         protected KsiPdu(TlvTag tag) : base(tag)
         {
-            int headerCount = 0;
-            int macCount = 0;
-
             for (int i = 0; i < Count; i++)
             {
-                // ReSharper disable once SwitchStatementMissingSomeCases
                 switch (this[i].Type)
                 {
                     case KsiPduHeader.TagType:
                         _header = new KsiPduHeader(this[i]);
                         this[i] = _header;
-                        headerCount++;
                         break;
                     case MacTagType:
                         _mac = new ImprintTag(this[i]);
                         this[i] = _mac;
-                        macCount++;
                         break;
                 }
-            }
-
-            if (headerCount != 1)
-            {
-                throw new InvalidTlvStructureException("Only one header must exist in ksi pdu");
-            }
-
-            if (macCount != 1)
-            {
-                throw new InvalidTlvStructureException("Only one mac must exist in ksi pdu");
             }
         }
 

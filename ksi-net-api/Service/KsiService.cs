@@ -114,6 +114,11 @@ namespace Guardtime.KSI.Service
             }
 
             byte[] data = _sigingServiceProtocol.EndSign(serviceAsyncResult.ServiceProtocolAsyncResult);
+            if (data == null)
+            {
+                throw new KsiException("Invalid sign response payload: null");
+            }
+
             using (MemoryStream memoryStream = new MemoryStream(data))
             using (TlvReader reader = new TlvReader(memoryStream))
             {
@@ -152,17 +157,8 @@ namespace Guardtime.KSI.Service
         /// <returns>async result</returns>
         public IAsyncResult BeginExtend(ulong aggregationTime, AsyncCallback callback, object asyncState)
         {
-            if (_extendingServiceProtocol == null)
-            {
-                throw new InvalidOperationException("Extending service protocol is missing from service");
-            }
-
-            ExtendPdu pdu = new ExtendPdu(new KsiPduHeader(_serviceSettings.LoginId), new ExtendRequestPayload(aggregationTime));
-            pdu.SetMac(_serviceSettings.LoginKey);
-            IAsyncResult serviceProtocolAsyncResult = _extendingServiceProtocol.BeginExtend(pdu.Encode(), callback, asyncState);
-            return new ExtendSignatureKsiServiceAsyncResult(serviceProtocolAsyncResult, asyncState);
+            return BeginExtend(new ExtendRequestPayload(aggregationTime), callback, asyncState);
         }
-
 
         /// <summary>
         /// Async begin extend signature to given publication.
@@ -174,12 +170,24 @@ namespace Guardtime.KSI.Service
         /// <returns>async result</returns>
         public IAsyncResult BeginExtend(ulong aggregationTime, ulong publicationTime, AsyncCallback callback, object asyncState)
         {
+            return BeginExtend(new ExtendRequestPayload(aggregationTime, publicationTime), callback, asyncState);
+        }
+
+        /// <summary>
+        /// Begin extend with payload.
+        /// </summary>
+        /// <param name="payload">extend request payload</param>
+        /// <param name="callback">callback when extending signature is finished</param>
+        /// <param name="asyncState">async state object</param>
+        /// <returns></returns>
+        private IAsyncResult BeginExtend(ExtendPduPayload payload, AsyncCallback callback, object asyncState)
+        {
             if (_extendingServiceProtocol == null)
             {
                 throw new InvalidOperationException("Extending service protocol is missing from service");
             }
 
-            ExtendPdu pdu = new ExtendPdu(new KsiPduHeader(_serviceSettings.LoginId), new ExtendRequestPayload(aggregationTime, publicationTime));
+            ExtendPdu pdu = new ExtendPdu(new KsiPduHeader(_serviceSettings.LoginId), payload);
             pdu.SetMac(_serviceSettings.LoginKey);
             IAsyncResult serviceProtocolAsyncResult = _extendingServiceProtocol.BeginExtend(pdu.Encode(), callback, asyncState);
             return new ExtendSignatureKsiServiceAsyncResult(serviceProtocolAsyncResult, asyncState);
@@ -215,19 +223,21 @@ namespace Guardtime.KSI.Service
             }
 
             byte[] data = _extendingServiceProtocol.EndExtend(serviceAsyncResult.ServiceProtocolAsyncResult);
+            if (data == null)
+            {
+                throw new KsiException("Invalid extend response payload: null");
+            }
 
             using (MemoryStream memoryStream = new MemoryStream(data))
             using (TlvReader reader = new TlvReader(memoryStream))
             {
                 ExtendPdu tag = new ExtendPdu(reader.ReadTag());
-
-                if (tag.Payload.Type != ExtendResponsePayload.TagType) return null;
-
                 ExtendResponsePayload payload = tag.Payload as ExtendResponsePayload;
+                //Console.WriteLine(tag);
                 if (payload == null)
                 {
                     // TODO: Throw correct exception
-                    throw new KsiException("Invalid response payload");
+                    throw new KsiException("Invalid extend response payload");
                 }
 
                 if (payload.CalendarHashChain == null)

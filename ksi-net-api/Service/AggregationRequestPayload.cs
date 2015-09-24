@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Utils;
@@ -17,11 +18,88 @@ namespace Guardtime.KSI.Service
         public const uint TagType = 0x201;
         private const uint RequestIdTagType = 0x1;
         private const uint RequestHashTagType = 0x2;
+        private const uint RequestLevelTagType = 0x3;
+        private const uint ConfigTagType = 0x10;
 
         private readonly IntegerTag _requestId;
         private readonly ImprintTag _requestHash;
         private readonly IntegerTag _requestLevel;
         private readonly RawTag _config;
+
+        /// <summary>
+        /// Get request hash.
+        /// </summary>
+        public DataHash RequestHash
+        {
+            get { return _requestHash.Value; }
+        }
+
+        /// <summary>
+        /// Create extend request payload from TLV element.
+        /// </summary>
+        /// <param name="tag">TLV element</param>
+        public AggregationRequestPayload(TlvTag tag) : base(tag)
+        {
+            if (Type != TagType)
+            {
+                throw new InvalidTlvStructureException("Invalid extend pdu type: " + Type);
+            }
+
+            int requestIdCount = 0;
+            int requestHashCount = 0;
+            int requestLevelCount = 0;
+            int contigCount = 0;
+
+            for (int i = 0; i < Count; i++)
+            {
+                switch (this[i].Type)
+                {
+                    case RequestIdTagType:
+                        _requestId = new IntegerTag(this[i]);
+                        this[i] = _requestId;
+                        requestIdCount++;
+                        break;
+                    case RequestHashTagType:
+                        _requestHash = new ImprintTag(this[i]);
+                        this[i] = _requestHash;
+                        requestHashCount++;
+                        break;
+                    case RequestLevelTagType:
+                        _requestLevel = new IntegerTag(this[i]);
+                        this[i] = _requestLevel;
+                        requestLevelCount++;
+                        break;
+                    case ConfigTagType:
+                        _config = new RawTag(this[i]);
+                        this[i] = _config;
+                        contigCount++;
+                        break;
+                    default:
+                        VerifyCriticalFlag(this[i]);
+                        break;
+                }
+            }
+
+            if (requestIdCount != 1)
+            {
+                throw new InvalidTlvStructureException("Only one request id must exist in aggregation request payload");
+            }
+
+            if (requestHashCount != 1)
+            {
+                throw new InvalidTlvStructureException("Only one request hash must exist in aggregation request payload");
+            }
+
+            if (requestLevelCount > 1)
+            {
+                throw new InvalidTlvStructureException("Only one request level is allowed in aggregation request payload");
+            }
+
+            if (contigCount > 1)
+            {
+                throw new InvalidTlvStructureException("Only one config tag is allowed in aggregation request payload");
+            }
+        }
 
         // TODO: Create better constructor
         /// <summary>
