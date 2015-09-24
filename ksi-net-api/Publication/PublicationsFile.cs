@@ -195,9 +195,8 @@ namespace Guardtime.KSI.Publication
 
             for (int i = 0; i < publicationRecordCollection.Count; i++)
             {
-                if (publicationRecordCollection[i].PublicationData == null) continue;
-
-                if (publicationRecordCollection[i].PublicationData.Equals(publicationRecord.PublicationData))
+                if (publicationRecordCollection[i].PublicationData.PublicationTime == publicationRecord.PublicationData.PublicationTime &&
+                    publicationRecordCollection[i].PublicationData.PublicationHash == publicationRecord.PublicationData.PublicationHash)
                 {
                     return true;
                 }
