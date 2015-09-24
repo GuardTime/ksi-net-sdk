@@ -36,7 +36,6 @@ namespace Guardtime.KSI.Signature
         {
             get
             {
-                // TODO: null or 0
                 return _aggregationTime == null ? _publicationTime.Value : _aggregationTime.Value;
             }
         }

@@ -184,14 +184,14 @@ namespace Guardtime.KSI.Signature
 
             DataHasher hasher = new DataHasher(HashAlgorithm.GetById((byte)_tstInfoAlgorithm.Value));
             hasher.AddData(_tstInfoPrefix.Value);
-            hasher.AddData(inputHash.Imprint);
+            hasher.AddData(inputHash.Value);
             hasher.AddData(_tstInfoSuffix.Value);
 
             inputHash = hasher.GetHash();
 
             hasher = new DataHasher(HashAlgorithm.GetById((byte)_signedAttributesAlgorithm.Value));
             hasher.AddData(_signedAttributesPrefix.Value);
-            hasher.AddData(inputHash.Imprint);
+            hasher.AddData(inputHash.Value);
             hasher.AddData(_signedAttributesSuffix.Value);
 
             return hasher.GetHash();

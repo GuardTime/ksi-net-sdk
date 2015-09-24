@@ -144,12 +144,13 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         /// Get output hash.
         /// </summary>
-        /// <param name="level">hash chain input level</param>
+        /// <param name="result">last hashing result</param>
         /// <returns>output hash chain result</returns>
-        public ChainResult GetOutputHash(ulong level)
+        public ChainResult GetOutputHash(ChainResult result)
         {
             // TODO: Check if not null
-            DataHash lastHash = _inputHash.Value;
+            DataHash lastHash = result.Hash;
+            ulong level = result.Level;
             for (int i = 0; i < _chain.Count; i++)
             {
                 Link link = _chain[i];

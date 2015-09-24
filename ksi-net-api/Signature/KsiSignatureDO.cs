@@ -1,4 +1,5 @@
-﻿using Guardtime.KSI.Publication;
+﻿using System;
+using Guardtime.KSI.Publication;
 using System.Collections.Generic;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
@@ -208,10 +209,11 @@ namespace Guardtime.KSI.Signature
         /// <returns>output hash</returns>
         public DataHash GetAggregationHashChainRootHash()
         {
-            AggregationHashChain.ChainResult lastResult = new AggregationHashChain.ChainResult(0, null);
+            // Store result
+            AggregationHashChain.ChainResult lastResult = new AggregationHashChain.ChainResult(0, _aggregationHashChainCollection[0].InputHash);
             for (int i = 0; i < _aggregationHashChainCollection.Count; i++)
             {
-                lastResult = _aggregationHashChainCollection[i].GetOutputHash(lastResult.Level);
+                lastResult = _aggregationHashChainCollection[i].GetOutputHash(lastResult);
             }
 
             return lastResult.Hash;
