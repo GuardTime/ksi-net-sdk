@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
+using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Signature
 {
@@ -22,7 +23,7 @@ namespace Guardtime.KSI.Signature
                 rfc3161Record.GetOutputHash(null);
             }, "Output hash calculation should throw exception when inputhash is null");
 
-            Assert.AreEqual(rfc3161Record.GetOutputHash(rfc3161Record.InputHash), new DataHash(HashAlgorithm.Sha2256, new byte[] { 0x6D, 0x2B, 0x05, 0x79, 0xBA, 0x94, 0x7A, 0x38, 0x7F, 0x4F, 0xD7, 0x61, 0x9E, 0x6B, 0xDB, 0x04, 0xD3, 0x7C, 0x5A, 0x80, 0x63, 0x12, 0xA0, 0x93, 0x73, 0x31, 0xA9, 0x11, 0x5D, 0xD1, 0x9E, 0x3A }), "Output hash should be correctly calculated");
+            Assert.AreEqual(rfc3161Record.GetOutputHash(rfc3161Record.InputHash), new DataHash(HashAlgorithm.Sha2256, Base16.Decode("C96682043DB0474031CEF1AE12941523E59BDC64E62CDAAE817CE46370918648")), "Output hash should be correctly calculated");
         }
 
         [Test]
