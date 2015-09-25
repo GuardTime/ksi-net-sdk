@@ -1,46 +1,31 @@
 ﻿using System;
+using System.Collections.Generic;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
-using System.Collections.Generic;
 using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Publication
 {
     /// <summary>
-    /// Publication data TLV element.
+    ///     Publication data TLV element.
     /// </summary>
     public sealed class PublicationData : CompositeTag
     {
         // TODO: Better name
         /// <summary>
-        /// Publication data tag type.
+        ///     Publication data tag type.
         /// </summary>
         public const uint TagType = 0x10;
+
         private const uint PublicationTimeTagType = 0x2;
         private const uint PublicationHashTagType = 0x4;
-
-        private readonly IntegerTag _publicationTime;
         private readonly ImprintTag _publicationHash;
 
-        /// <summary>
-        /// Get publication time.
-        /// </summary>
-        public ulong PublicationTime
-        {
-            get { return _publicationTime.Value; }
-        }
+        private readonly IntegerTag _publicationTime;
 
         /// <summary>
-        /// Get publication hash.
-        /// </summary>
-        public DataHash PublicationHash
-        {
-            get { return _publicationHash.Value; }
-        }
-
-        /// <summary>
-        /// Create new publication data TLV element from TLV element.
+        ///     Create new publication data TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         public PublicationData(TlvTag tag) : base(tag)
@@ -85,11 +70,12 @@ namespace Guardtime.KSI.Publication
         }
 
         /// <summary>
-        /// Create new publication data TLV element from publication time and publication hash.
+        ///     Create new publication data TLV element from publication time and publication hash.
         /// </summary>
         /// <param name="publicationTime">publication time</param>
         /// <param name="publicationHash">publication hash</param>
-        public PublicationData(ulong publicationTime, DataHash publicationHash) : base(TagType, false, true, new List<TlvTag>())
+        public PublicationData(ulong publicationTime, DataHash publicationHash)
+            : base(TagType, false, true, new List<TlvTag>())
         {
             _publicationTime = new IntegerTag(PublicationTimeTagType, false, false, publicationTime);
             AddTag(_publicationTime);
@@ -98,7 +84,7 @@ namespace Guardtime.KSI.Publication
         }
 
         /// <summary>
-        /// Create new publication data TLV element from publication string.
+        ///     Create new publication data TLV element from publication string.
         /// </summary>
         /// <param name="publicationString">publication string</param>
         public PublicationData(string publicationString) : base(TagType, false, true, new List<TlvTag>())
@@ -114,10 +100,8 @@ namespace Guardtime.KSI.Publication
             // Length needs to be at least 13 bytes (8 bytes for time plus non-empty hash imprint plus 4 bytes for crc32)
             if (dataBytesWithCrc32 == null || dataBytesWithCrc32.Length < 13)
             {
-                // TODO: correct exception
-                throw new InvalidOperationException("Invalid publication string: Base32 decode failed");
+                throw new KsiException("Invalid publication string: Base32 decode failed");
             }
-
 
             byte[] dataBytes = new byte[dataBytesWithCrc32.Length - 4];
             Array.Copy(dataBytesWithCrc32, 0, dataBytes, 0, dataBytesWithCrc32.Length - 4);
@@ -127,10 +111,8 @@ namespace Guardtime.KSI.Publication
             Array.Copy(dataBytesWithCrc32, dataBytesWithCrc32.Length - 4, messageCrc32, 0, 4);
             if (!Util.IsArrayEqual(computedCrc32, messageCrc32))
             {
-                // TODO: Better exception
-                throw new Exception("Invalid publication string: CRC32 Check failed");
+                throw new KsiException("Invalid publication string: CRC32 Check failed");
             }
-
 
             byte[] hashImprint = new byte[dataBytesWithCrc32.Length - 12];
             Array.Copy(dataBytesWithCrc32, 8, hashImprint, 0, dataBytesWithCrc32.Length - 12);
@@ -138,11 +120,28 @@ namespace Guardtime.KSI.Publication
             byte[] publicationTimeBytes = new byte[8];
             Array.Copy(dataBytesWithCrc32, 0, publicationTimeBytes, 0, 8);
 
-            _publicationTime = new IntegerTag(PublicationTimeTagType, false, false, Util.DecodeUnsignedLong(publicationTimeBytes, 0, publicationTimeBytes.Length));
+            _publicationTime = new IntegerTag(PublicationTimeTagType, false, false,
+                Util.DecodeUnsignedLong(publicationTimeBytes, 0, publicationTimeBytes.Length));
             AddTag(_publicationTime);
 
             _publicationHash = new ImprintTag(PublicationHashTagType, false, false, new DataHash(hashImprint));
             AddTag(_publicationHash);
+        }
+
+        /// <summary>
+        ///     Get publication time.
+        /// </summary>
+        public ulong PublicationTime
+        {
+            get { return _publicationTime.Value; }
+        }
+
+        /// <summary>
+        ///     Get publication hash.
+        /// </summary>
+        public DataHash PublicationHash
+        {
+            get { return _publicationHash.Value; }
         }
     }
 }

@@ -6,12 +6,12 @@ using Guardtime.KSI.Utils;
 namespace Guardtime.KSI.Service
 {
     /// <summary>
-    /// Extend request payload.
+    ///     Extend request payload.
     /// </summary>
     public sealed class ExtendRequestPayload : ExtendPduPayload
     {
         /// <summary>
-        /// Extend request payload TLV type.
+        ///     Extend request payload TLV type.
         /// </summary>
         public const uint TagType = 0x301;
 
@@ -19,29 +19,13 @@ namespace Guardtime.KSI.Service
         private const uint AggregationTimeTagType = 0x2;
         // TODO: Check if correct
         private const uint PublicationTimeTagType = 0x3;
-
-        private readonly IntegerTag _requestId;
         private readonly IntegerTag _aggregationTime;
         private readonly IntegerTag _publicationTime;
 
-        /// <summary>
-        /// Get aggregation time.
-        /// </summary>
-        public ulong AggregationTime
-        {
-            get { return _aggregationTime.Value; }
-        }
+        private readonly IntegerTag _requestId;
 
         /// <summary>
-        /// Get publication time if exists otherwise null.
-        /// </summary>
-        public ulong? PublicationTime
-        {
-            get { return _publicationTime == null ? (ulong?) null : _publicationTime.Value; }
-        }
-
-        /// <summary>
-        /// Create extend request payload from TLV element.
+        ///     Create extend request payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         public ExtendRequestPayload(TlvTag tag) : base(tag)
@@ -97,7 +81,7 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        /// Create extend request payload from aggregation time and publication time.
+        ///     Create extend request payload from aggregation time and publication time.
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
         /// <param name="publicationTime">publication time</param>
@@ -108,7 +92,7 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        /// Create extend request payload from aggregation time.
+        ///     Create extend request payload from aggregation time.
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
         public ExtendRequestPayload(ulong aggregationTime) : base(TagType, false, false, new List<TlvTag>())
@@ -120,5 +104,20 @@ namespace Guardtime.KSI.Service
             AddTag(_aggregationTime);
         }
 
+        /// <summary>
+        ///     Get aggregation time.
+        /// </summary>
+        public ulong AggregationTime
+        {
+            get { return _aggregationTime.Value; }
+        }
+
+        /// <summary>
+        ///     Get publication time if exists otherwise null.
+        /// </summary>
+        public ulong? PublicationTime
+        {
+            get { return _publicationTime == null ? (ulong?) null : _publicationTime.Value; }
+        }
     }
 }

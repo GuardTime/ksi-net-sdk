@@ -6,7 +6,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 {
     public sealed class UserProvidedPublicationExtendedSignatureInputHashRule : VerificationRule
     {
-        /// <see cref="VerificationRule.Verify"/>
+        /// <see cref="VerificationRule.Verify" />
         /// <exception cref="ArgumentNullException">thrown if context is missing</exception>
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
@@ -27,10 +27,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 throw new KsiVerificationException("Invalid user publication in context: null");
             }
 
-            CalendarHashChain extendedTimeCalendarHashChain = context.GetExtendedTimeCalendarHashChain(userPublication.PublicationTime);
+            CalendarHashChain extendedTimeCalendarHashChain =
+                context.GetExtendedTimeCalendarHashChain(userPublication.PublicationTime);
             if (extendedTimeCalendarHashChain == null)
             {
-                throw new KsiVerificationException("Invalid extended calendar hash chain from context extension function: null");
+                throw new KsiVerificationException(
+                    "Invalid extended calendar hash chain from context extension function: null");
             }
 
             if (extendedTimeCalendarHashChain.InputHash != context.Signature.GetAggregationHashChainRootHash())

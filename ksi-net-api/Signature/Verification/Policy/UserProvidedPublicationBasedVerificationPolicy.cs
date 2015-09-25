@@ -1,5 +1,4 @@
-﻿using System;
-using Guardtime.KSI.Signature.Verification.Rule;
+﻿using Guardtime.KSI.Signature.Verification.Rule;
 
 namespace Guardtime.KSI.Signature.Verification.Policy
 {

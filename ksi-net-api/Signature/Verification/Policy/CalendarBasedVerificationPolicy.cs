@@ -1,21 +1,21 @@
-﻿
-using Guardtime.KSI.Signature.Verification.Rule;
-using System;
+﻿using Guardtime.KSI.Signature.Verification.Rule;
 
 namespace Guardtime.KSI.Signature.Verification.Policy
 {
     /// <summary>
-    /// Internal verification polcy.
+    ///     Internal verification polcy.
     /// </summary>
     public class CalendarBasedVerificationPolicy : VerificationPolicy
     {
         /// <summary>
-        /// Create internal verification policy and add rules to it.
+        ///     Create internal verification policy and add rules to it.
         /// </summary>
         public CalendarBasedVerificationPolicy()
         {
-            ExtendedSignatureCalendarChainInputHashRule extendedSignatureCalendarChainInputHashRule = new ExtendedSignatureCalendarChainInputHashRule();
-            ExtendedSignatureCalendarChainAggregationTimeRule extendedSignatureCalendarChainAggregationTimeRule = new ExtendedSignatureCalendarChainAggregationTimeRule();
+            ExtendedSignatureCalendarChainInputHashRule extendedSignatureCalendarChainInputHashRule =
+                new ExtendedSignatureCalendarChainInputHashRule();
+            ExtendedSignatureCalendarChainAggregationTimeRule extendedSignatureCalendarChainAggregationTimeRule =
+                new ExtendedSignatureCalendarChainAggregationTimeRule();
 
             // Check for internal verification
             _firstRule = new CalendarHashChainExistenceRule()
@@ -35,6 +35,5 @@ namespace Guardtime.KSI.Signature.Verification.Policy
                     extendedSignatureCalendarChainInputHashRule
                         .OnSuccess(extendedSignatureCalendarChainAggregationTimeRule));
         }
-
     }
 }

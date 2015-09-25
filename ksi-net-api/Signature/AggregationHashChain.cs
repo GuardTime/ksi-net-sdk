@@ -1,18 +1,18 @@
-﻿using Guardtime.KSI.Hashing;
-using Guardtime.KSI.Parser;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Hashing;
+using Guardtime.KSI.Parser;
 using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Signature
 {
     /// <summary>
-    /// Aggregation hash chain TLV element.
+    ///     Aggregation hash chain TLV element.
     /// </summary>
     public sealed class AggregationHashChain : CompositeTag
     {
         /// <summary>
-        /// Aggregation hash chain TLV type.
+        ///     Aggregation hash chain TLV type.
         /// </summary>
         public const uint TagType = 0x801;
 
@@ -21,38 +21,16 @@ namespace Guardtime.KSI.Signature
         private const uint InputDataTagType = 0x4;
         private const uint InputHashTagType = 0x5;
         private const uint AggregationAlgorithmIdTagType = 0x6;
-        
+        private readonly IntegerTag _aggrAlgorithmId;
+
         private readonly IntegerTag _aggregationTime;
+        private readonly List<Link> _chain = new List<Link>();
         private readonly List<IntegerTag> _chainIndex = new List<IntegerTag>();
         private readonly RawTag _inputData;
         private readonly ImprintTag _inputHash;
-        private readonly IntegerTag _aggrAlgorithmId;
-        private readonly List<Link> _chain = new List<Link>();
 
         /// <summary>
-        /// Get hash chain input hash.
-        /// </summary>
-        public DataHash InputHash
-        {
-            get
-            {
-                return _inputHash.Value;
-            }
-        }
-
-        /// <summary>
-        /// Get aggregation time.
-        /// </summary>
-        public ulong AggregationTime
-        {
-            get
-            {
-                return _aggregationTime.Value;
-            }
-        }
-
-        /// <summary>
-        /// Create new aggregation hash chain TLV element from TLV element.
+        ///     Create new aggregation hash chain TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         public AggregationHashChain(TlvTag tag) : base(tag)
@@ -96,9 +74,9 @@ namespace Guardtime.KSI.Signature
                         this[i] = _aggrAlgorithmId;
                         aggrAlgorithmIdCount++;
                         break;
-                    case (uint)LinkDirection.Left:
-                    case (uint)LinkDirection.Right:
-                        Link linkTag = new Link(this[i], (LinkDirection)this[i].Type);
+                    case (uint) LinkDirection.Left:
+                    case (uint) LinkDirection.Right:
+                        Link linkTag = new Link(this[i], (LinkDirection) this[i].Type);
                         _chain.Add(linkTag);
                         this[i] = linkTag;
                         break;
@@ -137,12 +115,26 @@ namespace Guardtime.KSI.Signature
             {
                 throw new InvalidTlvStructureException("Links are missing in aggregation hash chain");
             }
-
-
         }
 
         /// <summary>
-        /// Get output hash.
+        ///     Get hash chain input hash.
+        /// </summary>
+        public DataHash InputHash
+        {
+            get { return _inputHash.Value; }
+        }
+
+        /// <summary>
+        ///     Get aggregation time.
+        /// </summary>
+        public ulong AggregationTime
+        {
+            get { return _aggregationTime.Value; }
+        }
+
+        /// <summary>
+        ///     Get output hash.
         /// </summary>
         /// <param name="result">last hashing result</param>
         /// <returns>output hash chain result</returns>
@@ -169,9 +161,9 @@ namespace Guardtime.KSI.Signature
             return new ChainResult(level, lastHash);
         }
 
-         // TODO: Better name
+        // TODO: Better name
         /// <summary>
-        /// Hash two hashes together.
+        ///     Hash two hashes together.
         /// </summary>
         /// <param name="hashA">first hash</param>
         /// <param name="hashB">second hash</param>
@@ -179,7 +171,7 @@ namespace Guardtime.KSI.Signature
         /// <returns>resulting hash</returns>
         private DataHash HashTogether(byte[] hashA, byte[] hashB, ulong level)
         {
-            DataHasher hasher = new DataHasher(HashAlgorithm.GetById((byte)_aggrAlgorithmId.Value));
+            DataHasher hasher = new DataHasher(HashAlgorithm.GetById((byte) _aggrAlgorithmId.Value));
             hasher.AddData(hashA);
             hasher.AddData(hashB);
             hasher.AddData(Util.EncodeUnsignedLong(level));
@@ -187,7 +179,7 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
-        /// Aggregation hash chain link.
+        ///     Aggregation hash chain link.
         /// </summary>
         private class Link : CompositeTag
         {
@@ -195,65 +187,15 @@ namespace Guardtime.KSI.Signature
             private const uint SiblingHashTagType = 0x2;
             private const uint MetaHashTagType = 0x3;
 
-            private readonly IntegerTag _levelCorrection;
-            private readonly ImprintTag _siblingHash;
-            private readonly ImprintTag _metaHash;
-            private readonly MetaData _metaData;
-
             private readonly LinkDirection _direction;
+
+            private readonly IntegerTag _levelCorrection;
+            private readonly MetaData _metaData;
+            private readonly ImprintTag _metaHash;
+            private readonly ImprintTag _siblingHash;
 
             // the client ID extracted from metaHash
             private string _metaHashId;
-
-            /// <summary>
-            /// Get level correction
-            /// </summary>
-            public ulong LevelCorrection
-            {
-                get
-                {
-                    return _levelCorrection == null ? 0UL : _levelCorrection.Value;
-                }
-            }
-
-            // TODO: Better name
-            /// <summary>
-            /// Get data byte array
-            /// </summary>
-            public byte[] SiblingData
-            {
-                get
-                {
-                    if (_siblingHash != null)
-                    {
-                        return _siblingHash.EncodeValue();
-                    }
-
-                    if (_metaHash != null)
-                    {
-                        return _metaHash.EncodeValue();
-                    }
-
-                    if (_metaData != null)
-                    {
-                        return _metaData.EncodeValue();
-                    }
-
-                    // TODO: Throw exception?
-                    return null;
-                }
-            }
-
-            /// <summary>
-            ///  Get direction
-            /// </summary>
-            public LinkDirection Direction
-            {
-                get
-                {
-                    return _direction;
-                }
-            }
 
 
             public Link(TlvTag tag, LinkDirection direction) : base(tag)
@@ -295,23 +237,70 @@ namespace Guardtime.KSI.Signature
 
                 if (levelCorrectionCount > 1)
                 {
-                    throw new InvalidTlvStructureException("Only one levelcorrection value is allowed in aggregation hash chain link");
+                    throw new InvalidTlvStructureException(
+                        "Only one levelcorrection value is allowed in aggregation hash chain link");
                 }
 
-                if ((siblingHashCount > 1 || metaHashCount > 1 || metaDataCount > 1) || !(siblingHashCount == 1 ^ metaHashCount == 1 ^ metaDataCount == 1) || (siblingHashCount == 1 && metaHashCount == 1 && metaDataCount == 1))
+                if ((siblingHashCount > 1 || metaHashCount > 1 || metaDataCount > 1) ||
+                    !(siblingHashCount == 1 ^ metaHashCount == 1 ^ metaDataCount == 1) ||
+                    (siblingHashCount == 1 && metaHashCount == 1 && metaDataCount == 1))
                 {
-                    throw new InvalidTlvStructureException("Only one of three from siblinghash, metahash or metadata must exist in aggregation hash chain link");
+                    throw new InvalidTlvStructureException(
+                        "Only one of three from siblinghash, metahash or metadata must exist in aggregation hash chain link");
                 }
 
                 _direction = direction;
             }
 
+            /// <summary>
+            ///     Get level correction
+            /// </summary>
+            public ulong LevelCorrection
+            {
+                get { return _levelCorrection == null ? 0UL : _levelCorrection.Value; }
+            }
+
+            // TODO: Better name
+            /// <summary>
+            ///     Get data byte array
+            /// </summary>
+            public byte[] SiblingData
+            {
+                get
+                {
+                    if (_siblingHash != null)
+                    {
+                        return _siblingHash.EncodeValue();
+                    }
+
+                    if (_metaHash != null)
+                    {
+                        return _metaHash.EncodeValue();
+                    }
+
+                    if (_metaData != null)
+                    {
+                        return _metaData.EncodeValue();
+                    }
+
+                    // TODO: Throw exception?
+                    return null;
+                }
+            }
+
+            /// <summary>
+            ///     Get direction
+            /// </summary>
+            public LinkDirection Direction
+            {
+                get { return _direction; }
+            }
         }
 
         private class MetaData : CompositeTag
         {
             /// <summary>
-            /// Metadata TLV type.
+            ///     Metadata TLV type.
             /// </summary>
             // ReSharper disable once MemberHidesStaticFromOuterClass
             public const uint TagType = 0x4;
@@ -323,13 +312,13 @@ namespace Guardtime.KSI.Signature
 
             private readonly StringTag _clientId;
             private readonly StringTag _machineId;
-            private readonly IntegerTag _sequenceNr;
 
             // Please do keep in mind that request time is in milliseconds!
             private readonly IntegerTag _requestTime;
+            private readonly IntegerTag _sequenceNr;
 
             /// <summary>
-            /// Create Metadata from TLV element.
+            ///     Create Metadata from TLV element.
             /// </summary>
             /// <param name="tag">TLV element</param>
             public MetaData(TlvTag tag) : base(tag)
@@ -376,33 +365,37 @@ namespace Guardtime.KSI.Signature
 
                 if (clientIdCount != 1)
                 {
-                    throw new InvalidTlvStructureException("Only one client id must exist in aggregation hash chain link metadata");
+                    throw new InvalidTlvStructureException(
+                        "Only one client id must exist in aggregation hash chain link metadata");
                 }
 
                 if (machineIdCount > 1)
                 {
-                    throw new InvalidTlvStructureException("Only one machine id is allowed in aggregation hash chain link metadata");
+                    throw new InvalidTlvStructureException(
+                        "Only one machine id is allowed in aggregation hash chain link metadata");
                 }
 
                 if (sequenceNrCount > 1)
                 {
-                    throw new InvalidTlvStructureException("Only one sequence number is allowed in aggregation hash chain link metadata");
+                    throw new InvalidTlvStructureException(
+                        "Only one sequence number is allowed in aggregation hash chain link metadata");
                 }
 
                 if (requestTimeCount > 1)
                 {
-                    throw new InvalidTlvStructureException("Only one request time is allowed in aggregation hash chain link metadata");
+                    throw new InvalidTlvStructureException(
+                        "Only one request time is allowed in aggregation hash chain link metadata");
                 }
             }
         }
 
         /// <summary>
-        /// Aggregation hash chain chain index ordering.
+        ///     Aggregation hash chain chain index ordering.
         /// </summary>
         public class ChainIndexOrdering : IComparer<AggregationHashChain>
         {
             /// <summary>
-            /// Compare aggregation hash chains to eachother.
+            ///     Compare aggregation hash chains to eachother.
             /// </summary>
             /// <param name="x">aggregation hash chain</param>
             /// <param name="y">aggregation hash chain</param>
@@ -428,7 +421,7 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
-        /// Aggregation chain output result
+        ///     Aggregation chain output result
         /// </summary>
         public class ChainResult
         {
@@ -436,29 +429,7 @@ namespace Guardtime.KSI.Signature
             private readonly ulong _level;
 
             /// <summary>
-            /// Get aggregation chain output hash
-            /// </summary>
-            public DataHash Hash
-            {
-                get
-                {
-                    return _hash;
-                }
-            }
-
-            /// <summary>
-            /// Get aggregation chain output hash level
-            /// </summary>
-            public ulong Level
-            {
-                get
-                {
-                    return _level;
-                }
-            }
-
-            /// <summary>
-            /// Create chain result from level and data hash.
+            ///     Create chain result from level and data hash.
             /// </summary>
             /// <param name="level">hash chain level</param>
             /// <param name="hash">output hash</param>
@@ -467,7 +438,22 @@ namespace Guardtime.KSI.Signature
                 _level = level;
                 _hash = hash;
             }
-        }
 
+            /// <summary>
+            ///     Get aggregation chain output hash
+            /// </summary>
+            public DataHash Hash
+            {
+                get { return _hash; }
+            }
+
+            /// <summary>
+            ///     Get aggregation chain output hash level
+            /// </summary>
+            public ulong Level
+            {
+                get { return _level; }
+            }
+        }
     }
 }

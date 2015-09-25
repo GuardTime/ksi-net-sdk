@@ -1,22 +1,24 @@
 ﻿using System.Collections.Generic;
-using Guardtime.KSI.Parser;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Publication
 {
     /// <summary>
-    /// Publication record TLV element.
+    ///     Publication record TLV element.
     /// </summary>
     public sealed class PublicationRecord : CompositeTag
     {
         /// <summary>
-        /// Signature publication record TLV type.
+        ///     Signature publication record TLV type.
         /// </summary>
         public const uint TagTypeSignature = 0x803;
+
         /// <summary>
-        /// Publication publication record TLV type.
+        ///     Publication publication record TLV type.
         /// </summary>
         public const uint TagTypePublication = 0x703;
+
         private const uint PublicationReferencesTagType = 0x9;
         private const uint PublicationRepositoryUriTagType = 0xa;
 
@@ -25,31 +27,7 @@ namespace Guardtime.KSI.Publication
         private readonly List<StringTag> _publicationRepositoryUri = new List<StringTag>();
 
         /// <summary>
-        /// Get publication data.
-        /// </summary>
-        public PublicationData PublicationData
-        {
-            get { return _publicationData; }
-        }
-
-        /// <summary>
-        /// Get publication references.
-        /// </summary>
-        public List<StringTag> PublicationReferences
-        {
-            get { return _publicationReferences; }
-        }
-
-        /// <summary>
-        /// Get publication repository uri.
-        /// </summary>
-        public List<StringTag> PubRepUri
-        {
-            get { return _publicationRepositoryUri; }
-        }
-
-        /// <summary>
-        /// Create new publication record TLV element from TLV element.
+        ///     Create new publication record TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         public PublicationRecord(TlvTag tag) : base(tag)
@@ -94,5 +72,28 @@ namespace Guardtime.KSI.Publication
             }
         }
 
+        /// <summary>
+        ///     Get publication data.
+        /// </summary>
+        public PublicationData PublicationData
+        {
+            get { return _publicationData; }
+        }
+
+        /// <summary>
+        ///     Get publication references.
+        /// </summary>
+        public List<StringTag> PublicationReferences
+        {
+            get { return _publicationReferences; }
+        }
+
+        /// <summary>
+        ///     Get publication repository uri.
+        /// </summary>
+        public List<StringTag> PubRepUri
+        {
+            get { return _publicationRepositoryUri; }
+        }
     }
 }

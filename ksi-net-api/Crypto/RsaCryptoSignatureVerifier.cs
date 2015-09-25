@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Crypto
 {
     /// <summary>
-    /// RSA signature verifier.
+    ///     RSA signature verifier.
     /// </summary>
     public class RsaCryptoSignatureVerifier : ICryptoSignatureVerifier
     {
-        /// <see cref="ICryptoSignatureVerifier"/>
+        /// <see cref="ICryptoSignatureVerifier" />
+        /// <exception cref="CryptoVerificationException">thrown when verification process cannot complete</exception>
         public void Verify(byte[] signedBytes, byte[] signatureBytes, Dictionary<string, object> data)
         {
             X509Certificate2 certificate = null;
@@ -32,25 +31,24 @@ namespace Guardtime.KSI.Crypto
 
             if (certificate == null)
             {
-                throw new KsiException("Invalid certificate: null");
+                throw new CryptoVerificationException("Invalid certificate in data: null");
             }
 
             if (digestAlgorithm == null)
             {
-                throw new KsiException("Invalid digest algorithm: null");
+                throw new CryptoVerificationException("Invalid digest algorithm in data: null");
             }
 
             if (certificate.PublicKey == null)
             {
-                throw new KsiException("No public key in certificate");
+                throw new CryptoVerificationException("No public key in certificate");
             }
 
-            // TODO: Better exception
-            using (RSACryptoServiceProvider serviceProvider = (RSACryptoServiceProvider)certificate.PublicKey.Key)
+            using (RSACryptoServiceProvider serviceProvider = (RSACryptoServiceProvider) certificate.PublicKey.Key)
             {
                 if (!serviceProvider.VerifyData(signedBytes, data["digestAlgorithm"], signatureBytes))
                 {
-                    throw new Exception("Verification failure");
+                    throw new CryptoVerificationException("Failed to verify RSA signature");
                 }
             }
         }

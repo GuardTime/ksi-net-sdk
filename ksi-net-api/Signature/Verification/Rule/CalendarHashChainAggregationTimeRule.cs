@@ -4,15 +4,15 @@ using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
-
     /// <summary>
-    /// Rule verifies calendar hash chain aggregation time equality to last aggregation hash chain aggregation time. Without calendar authentication record <see cref="VerificationResult.Ok"/> is returned.
+    ///     Rule verifies calendar hash chain aggregation time equality to last aggregation hash chain aggregation time.
+    ///     Without calendar authentication record <see cref="VerificationResult.Ok" /> is returned.
     /// </summary>
     public sealed class CalendarHashChainAggregationTimeRule : VerificationRule
     {
-        /// <see cref="VerificationRule.Verify"/>
+        /// <see cref="VerificationRule.Verify" />
         /// <exception cref="ArgumentNullException">thrown if context is missing</exception>
-        /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception
+        /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
             if (context == null)
@@ -32,8 +32,15 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 return VerificationResult.Ok;
             }
 
-            ReadOnlyCollection<AggregationHashChain> aggregationHashChainCollection = context.Signature.GetAggregationHashChains();
-            ulong aggregationTime = aggregationHashChainCollection[aggregationHashChainCollection.Count - 1].AggregationTime;
+            ReadOnlyCollection<AggregationHashChain> aggregationHashChainCollection =
+                context.Signature.GetAggregationHashChains();
+            if (aggregationHashChainCollection == null || aggregationHashChainCollection.Count == 0)
+            {
+                throw new KsiVerificationException("Aggregation hash chains missing in KSI signature");
+            }
+
+            ulong aggregationTime =
+                aggregationHashChainCollection[aggregationHashChainCollection.Count - 1].AggregationTime;
 
             if (aggregationTime != calendarHashChain.AggregationTime)
             {

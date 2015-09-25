@@ -35,14 +35,14 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             });
 
             var serviceProtocol = new TestKsiServiceProtocol();
-            var ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"), new PublicationsFileFactory());
+            var ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"), new PublicationsFileFactory(), new KsiSignatureFactory());
 
             // Check signature without calendar chain
             using (var stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_Missing_Calendar_Hash_Chain, FileMode.Open))
             {
                 var context = new TestVerificationContext()
                 {
-                    Signature = KsiSignature.GetInstance(stream),
+                    Signature = new KsiSignatureFactory().Create(stream),
                     KsiService = ksiService
                 };
 
@@ -54,7 +54,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 var context = new TestVerificationContextFaultyFunctions()
                 {
-                    Signature = KsiSignature.GetInstance(stream),
+                    Signature = new KsiSignatureFactory().Create(stream),
                     KsiService = ksiService
                 };
 
@@ -69,7 +69,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 var context = new TestVerificationContext()
                 {
-                    Signature = KsiSignature.GetInstance(stream),
+                    Signature = new KsiSignatureFactory().Create(stream),
                     KsiService = ksiService
                 };
 
@@ -81,7 +81,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 var context = new TestVerificationContext()
                 {
-                    Signature = KsiSignature.GetInstance(stream),
+                    Signature = new KsiSignatureFactory().Create(stream),
                     KsiService = ksiService
                 };
 
@@ -93,7 +93,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 var context = new TestVerificationContext()
                 {
-                    Signature = KsiSignature.GetInstance(stream),
+                    Signature = new KsiSignatureFactory().Create(stream),
                     KsiService = ksiService
                 };
 

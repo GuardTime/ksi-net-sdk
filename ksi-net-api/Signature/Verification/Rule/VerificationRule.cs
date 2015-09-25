@@ -1,21 +1,22 @@
 ﻿namespace Guardtime.KSI.Signature.Verification.Rule
 {
     /// <summary>
-    /// Verification rule.
+    ///     Verification rule.
     /// </summary>
     public abstract class VerificationRule
     {
         /// <summary>
-        /// Return empty verification rule.
+        ///     Return empty verification rule.
         /// </summary>
         public static readonly VerificationRule Empty = new EmptyVerificationVerificationRule();
 
-        private VerificationRule _onSuccess;
         private VerificationRule _onFailure;
         private VerificationRule _onNa;
 
+        private VerificationRule _onSuccess;
+
         /// <summary>
-        /// Get next rule based on verification result.
+        ///     Get next rule based on verification result.
         /// </summary>
         /// <param name="result">verification result</param>
         /// <returns>next verification rule</returns>
@@ -35,7 +36,7 @@
         }
 
         /// <summary>
-        /// Set next verification rule on success.
+        ///     Set next verification rule on success.
         /// </summary>
         /// <param name="onSuccess">next verification rule on success</param>
         /// <returns>current verification rule</returns>
@@ -46,7 +47,7 @@
         }
 
         /// <summary>
-        /// Set next verification rule on na status.
+        ///     Set next verification rule on na status.
         /// </summary>
         /// <param name="onNa">next verification rule on na status</param>
         /// <returns>current verification rule</returns>
@@ -57,7 +58,7 @@
         }
 
         /// <summary>
-        /// Set next verification rule on failure.
+        ///     Set next verification rule on failure.
         /// </summary>
         /// <param name="onFailure">next verification rule on failure</param>
         /// <returns>current verification rule</returns>
@@ -68,7 +69,7 @@
         }
 
         /// <summary>
-        /// Verify given context with verification rule.
+        ///     Verify given context with verification rule.
         /// </summary>
         /// <param name="context">verification context</param>
         /// <returns>verification result</returns>
@@ -80,8 +81,6 @@
             {
                 return VerificationResult.Ok;
             }
-
-            
         }
     }
 }

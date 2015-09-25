@@ -1,11 +1,11 @@
-﻿using Guardtime.KSI.Utils;
-using System;
+﻿using System;
+using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Hashing
 {
     /// <summary>
-    /// Representation of hash values as hash computation results.
-    /// Includes name of the algorithm used and computed hash value.
+    ///     Representation of hash values as hash computation results.
+    ///     Includes name of the algorithm used and computed hash value.
     /// </summary>
     public class DataHash : IEquatable<DataHash>
     {
@@ -14,33 +14,7 @@ namespace Guardtime.KSI.Hashing
         private readonly byte[] _value;
 
         /// <summary>
-        /// Get the HashAlgorithm used to compute this DataHash.
-        /// </summary>
-        public HashAlgorithm Algorithm
-        {
-            get { return _algorithm; }
-        }
-
-        /// <summary>
-        /// Get data imprint.
-        /// Imprint is created by concatenating hash algorithm id with hash value.
-        /// </summary>
-        public byte[] Imprint
-        {
-            // TODO: Fix the clone with immutable array
-            get { return (byte[])_imprint.Clone(); }
-        }
-
-        /// <summary>
-        /// Get the computed hash value for DataHash.
-        /// </summary>
-        public byte[] Value {
-            // TODO: Fix the clone with immutable array
-            get { return (byte[])_value.Clone(); }
-        }
-
-        /// <summary>
-        /// Constructor which initializes the DataHash with algorithm and value.
+        ///     Constructor which initializes the DataHash with algorithm and value.
         /// </summary>
         /// <param name="algorithm">HashAlgorithm used to compute this hash.</param>
         /// <param name="valueBytes">hash value computed for the input data.</param>
@@ -60,7 +34,7 @@ namespace Guardtime.KSI.Hashing
             {
                 // TODO: Better exception here
                 throw new FormatException("Hash size(" + valueBytes.Length + ") does not match "
-                            + algorithm.Name + " size(" + algorithm.Length + ")");
+                                          + algorithm.Name + " size(" + algorithm.Length + ")");
             }
 
             _algorithm = algorithm;
@@ -72,7 +46,7 @@ namespace Guardtime.KSI.Hashing
         }
 
         /// <summary>
-        /// Constructor which initializes the DataHash with imprint.
+        ///     Constructor which initializes the DataHash with imprint.
         /// </summary>
         /// <param name="imprintBytes">Hash imprint</param>
         public DataHash(byte[] imprintBytes)
@@ -99,7 +73,7 @@ namespace Guardtime.KSI.Hashing
             {
                 // TODO: Better exception
                 throw new FormatException("Hash size(" + (imprintBytes.Length - 1) + ") does not match "
-                           + _algorithm.Name + " size(" + _algorithm.Length + ")");
+                                          + _algorithm.Name + " size(" + _algorithm.Length + ")");
             }
 
             _value = new byte[_algorithm.Length];
@@ -108,17 +82,34 @@ namespace Guardtime.KSI.Hashing
         }
 
         /// <summary>
-        /// Compare TLV element to object.
+        ///     Get the HashAlgorithm used to compute this DataHash.
         /// </summary>
-        /// <param name="obj">Comparable object.</param>
-        /// <returns>true if objects are equal</returns>
-        public override bool Equals(object obj)
+        public HashAlgorithm Algorithm
         {
-            return Equals(obj as DataHash);
+            get { return _algorithm; }
         }
 
         /// <summary>
-        /// Compare current hash against another hash.
+        ///     Get data imprint.
+        ///     Imprint is created by concatenating hash algorithm id with hash value.
+        /// </summary>
+        public byte[] Imprint
+        {
+            // TODO: Fix the clone with immutable array
+            get { return (byte[]) _imprint.Clone(); }
+        }
+
+        /// <summary>
+        ///     Get the computed hash value for DataHash.
+        /// </summary>
+        public byte[] Value
+        {
+            // TODO: Fix the clone with immutable array
+            get { return (byte[]) _value.Clone(); }
+        }
+
+        /// <summary>
+        ///     Compare current hash against another hash.
         /// </summary>
         /// <param name="hash">data hash</param>
         /// <returns>true if objects are equal</returns>
@@ -145,7 +136,17 @@ namespace Guardtime.KSI.Hashing
         }
 
         /// <summary>
-        /// Get hash code of current object.
+        ///     Compare TLV element to object.
+        /// </summary>
+        /// <param name="obj">Comparable object.</param>
+        /// <returns>true if objects are equal</returns>
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as DataHash);
+        }
+
+        /// <summary>
+        ///     Get hash code of current object.
         /// </summary>
         /// <returns>hash code of current object</returns>
         public override int GetHashCode()
@@ -155,7 +156,7 @@ namespace Guardtime.KSI.Hashing
                 int res = 1;
                 for (int i = 0; i < _imprint.Length; i++)
                 {
-                    res = 31 * res + _imprint[i];
+                    res = 31*res + _imprint[i];
                 }
 
                 return res;
@@ -163,7 +164,7 @@ namespace Guardtime.KSI.Hashing
         }
 
         /// <summary>
-        /// Get DataHash as a string including the algorithm name and computed hash value.
+        ///     Get DataHash as a string including the algorithm name and computed hash value.
         /// </summary>
         /// <returns>String representing algorithm name and value</returns>
         public override string ToString()
@@ -172,7 +173,7 @@ namespace Guardtime.KSI.Hashing
         }
 
         /// <summary>
-        /// Compares two hash objects.
+        ///     Compares two hash objects.
         /// </summary>
         /// <param name="a">hash</param>
         /// <param name="b">hash</param>
@@ -183,7 +184,7 @@ namespace Guardtime.KSI.Hashing
         }
 
         /// <summary>
-        /// Compares two hash objects for non equality.
+        ///     Compares two hash objects for non equality.
         /// </summary>
         /// <param name="a">hash</param>
         /// <param name="b">hash</param>

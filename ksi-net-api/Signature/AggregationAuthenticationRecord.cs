@@ -1,19 +1,20 @@
 ﻿using System.Collections.Generic;
-using Guardtime.KSI.Parser;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Signature
 {
     /// <summary>
-    /// Aggregation authentication record TLV element
+    ///     Aggregation authentication record TLV element
     /// </summary>
     public sealed class AggregationAuthenticationRecord : CompositeTag
     {
         // TODO: Better name
         /// <summary>
-        /// Aggregation authentication record tag type
+        ///     Aggregation authentication record tag type
         /// </summary>
         public const uint TagType = 0x804;
+
         private const uint AggregationTimeTagType = 0x2;
         private const uint ChainIndexTagType = 0x3;
         private const uint InputHashTagType = 0x5;
@@ -24,7 +25,7 @@ namespace Guardtime.KSI.Signature
         private readonly SignatureData _signatureData;
 
         /// <summary>
-        /// Create new aggregation authentication record TLV element from TLV element
+        ///     Create new aggregation authentication record TLV element from TLV element
         /// </summary>
         /// <param name="tag">TLV element</param>
         public AggregationAuthenticationRecord(TlvTag tag) : base(tag)
@@ -65,13 +66,13 @@ namespace Guardtime.KSI.Signature
                     default:
                         VerifyCriticalFlag(this[i]);
                         break;
-
                 }
             }
 
             if (aggregationTimeCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one aggregation time must exist in aggregation authentication record");
+                throw new InvalidTlvStructureException(
+                    "Only one aggregation time must exist in aggregation authentication record");
             }
 
             if (_chainIndex.Count == 0)
@@ -81,14 +82,15 @@ namespace Guardtime.KSI.Signature
 
             if (inputHashCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one input hash must exist in aggregation authentication record");
+                throw new InvalidTlvStructureException(
+                    "Only one input hash must exist in aggregation authentication record");
             }
 
             if (signatureDataCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one signature data must exist in aggregation authentication record");
+                throw new InvalidTlvStructureException(
+                    "Only one signature data must exist in aggregation authentication record");
             }
         }
-
     }
 }

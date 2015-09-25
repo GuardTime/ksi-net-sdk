@@ -5,7 +5,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 {
     public sealed class UserProvidedPublicationVerificationRule : VerificationRule
     {
-        /// <see cref="VerificationRule.Verify"/>
+        /// <see cref="VerificationRule.Verify" />
         /// <exception cref="ArgumentNullException">thrown if context is missing</exception>
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
@@ -30,7 +30,9 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 throw new KsiVerificationException("Invalid publication record in signature: null");
             }
 
-            return context.UserPublication == context.Signature.PublicationRecord.PublicationData ? VerificationResult.Ok : VerificationResult.Na;
+            return context.UserPublication == context.Signature.PublicationRecord.PublicationData
+                ? VerificationResult.Ok
+                : VerificationResult.Na;
         }
     }
 }

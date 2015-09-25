@@ -3,53 +3,29 @@ using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Signature
 {
-
     /// <summary>
-    /// Signature data TLV element
+    ///     Signature data TLV element
     /// </summary>
     public sealed class SignatureData : CompositeTag
     {
         // TODO: Better name
         /// <summary>
-        /// Signature data tag type
+        ///     Signature data tag type
         /// </summary>
         public const uint TagType = 0xb;
+
         private const uint SignatureTypeTagType = 0x1;
         private const uint SignatureValueTagType = 0x2;
         private const uint CertificateIdTagType = 0x3;
         private const uint CertificateRepositoryUriTagType = 0x4;
-
-        private readonly StringTag _signatureType;
-        private readonly RawTag _signatureValue;
         private readonly RawTag _certificateId;
         private readonly StringTag _certificateRepositoryUri;
 
-        /// <summary>
-        /// Get certificate ID.
-        /// </summary>
-        public byte[] CertificateId
-        {
-            get { return _certificateId.Value; }
-        }
+        private readonly StringTag _signatureType;
+        private readonly RawTag _signatureValue;
 
         /// <summary>
-        /// Get signature value.
-        /// </summary>
-        public byte[] SignatureValue
-        {
-            get { return _signatureValue.Value; }
-        }
-
-        /// <summary>
-        /// Get signature type.
-        /// </summary>
-        public string SignatureType
-        {
-            get { return _signatureType.Value; }
-        }
-
-        /// <summary>
-        /// Create new signature data TLV element from TLV element
+        ///     Create new signature data TLV element from TLV element
         /// </summary>
         /// <param name="tag">TLV element</param>
         public SignatureData(TlvTag tag) : base(tag)
@@ -112,10 +88,33 @@ namespace Guardtime.KSI.Signature
 
             if (certificateRepositoryUriCount > 1)
             {
-                throw new InvalidTlvStructureException("Only one certificate repository uri is allowed in signature data");
+                throw new InvalidTlvStructureException(
+                    "Only one certificate repository uri is allowed in signature data");
             }
         }
 
-        
+        /// <summary>
+        ///     Get certificate ID.
+        /// </summary>
+        public byte[] CertificateId
+        {
+            get { return _certificateId.Value; }
+        }
+
+        /// <summary>
+        ///     Get signature value.
+        /// </summary>
+        public byte[] SignatureValue
+        {
+            get { return _signatureValue.Value; }
+        }
+
+        /// <summary>
+        ///     Get signature type.
+        /// </summary>
+        public string SignatureType
+        {
+            get { return _signatureType.Value; }
+        }
     }
 }

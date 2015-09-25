@@ -21,17 +21,17 @@ namespace Guardtime.KSI.Service
 
 
             Console.WriteLine(@"// Creating service");
-            var ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"), new PublicationsFileFactory());
+            var ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"), new PublicationsFileFactory(), new KsiSignatureFactory());
             Console.WriteLine(@"// Signing hash");
             var createSignatureAsyncResult = ksiService.BeginSign(new DataHash(HashAlgorithm.Sha2256, new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 }), null, null);
             ksiService.EndSign(createSignatureAsyncResult);
 
             // TODO: Improve extending
             Console.WriteLine(@"// Extending signature");
-            KsiSignature signature;
+            IKsiSignature signature;
             using (var stream = new FileStream("resources/signature/signature-ok.tlv", FileMode.Open))
             {
-                signature = KsiSignature.GetInstance(stream);
+                signature = new KsiSignatureFactory().Create(stream);
                 var extendSignatureAsyncResult = ksiService.BeginExtend(signature.AggregationTime, null, null);
                 signature = signature.Extend(ksiService.EndExtend(extendSignatureAsyncResult));
             }

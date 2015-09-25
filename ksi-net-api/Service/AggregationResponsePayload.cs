@@ -1,34 +1,35 @@
-﻿using Guardtime.KSI.Parser;
-using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Signature;
+﻿using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
+using Guardtime.KSI.Signature;
 
 namespace Guardtime.KSI.Service
 {
     /// <summary>
-    /// Aggregation response payload.
+    ///     Aggregation response payload.
     /// </summary>
     public sealed class AggregationResponsePayload : AggregationPduPayload
     {
         /// <summary>
-        /// Aggregation response payload TLV type.
+        ///     Aggregation response payload TLV type.
         /// </summary>
         public const uint TagType = 0x202;
+
         private const uint RequestIdTagType = 0x1;
         private const uint ConfigTagType = 0x10;
         private const uint RequestAcknowledgmentTagType = 0x11;
 
-        private readonly IntegerTag _requestId;
-        private readonly IntegerTag _status;
-        private readonly StringTag _errorMessage;
-
         // TODO: Create config
         private readonly RawTag _config;
+        private readonly StringTag _errorMessage;
         // TODO: Create request acknowledgement 
         private readonly RawTag _requestAcknowledgment;
 
+        private readonly IntegerTag _requestId;
+        private readonly IntegerTag _status;
+
         /// <summary>
-        /// Create aggregation response payload from TLV element.
+        ///     Create aggregation response payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         public AggregationResponsePayload(TlvTag tag) : base(tag)
@@ -43,7 +44,7 @@ namespace Guardtime.KSI.Service
             int errorMessageCount = 0;
             int configCount = 0;
             int requestAcknowledgmentCount = 0;
-            
+
             for (int i = 0; i < Count; i++)
             {
                 switch (this[i].Type)
@@ -98,7 +99,8 @@ namespace Guardtime.KSI.Service
 
             if (errorMessageCount > 1)
             {
-                throw new InvalidTlvStructureException("Only one error message is allowed in aggregation response payload");
+                throw new InvalidTlvStructureException(
+                    "Only one error message is allowed in aggregation response payload");
             }
 
             if (configCount > 1)
@@ -108,9 +110,9 @@ namespace Guardtime.KSI.Service
 
             if (requestAcknowledgmentCount > 1)
             {
-                throw new InvalidTlvStructureException("Only one request acknowledgment is allowed in aggregation response payload");
+                throw new InvalidTlvStructureException(
+                    "Only one request acknowledgment is allowed in aggregation response payload");
             }
         }
-
     }
 }

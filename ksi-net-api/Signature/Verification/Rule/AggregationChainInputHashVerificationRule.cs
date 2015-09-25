@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 
@@ -20,18 +21,28 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 throw new ArgumentNullException("context");
             }
 
-            KsiSignature signature = context.Signature;
+            IKsiSignature signature = context.Signature;
             DataHash inputHash = context.DocumentHash;
             if (signature == null)
             {
                 throw new KsiVerificationException("Invalid KSI signature: null");
             }
 
-            DataHash aggregationHashChainInputHash = signature.GetAggregationHashChains()[0].InputHash;
+            ReadOnlyCollection<AggregationHashChain> aggregationHashChains = signature.GetAggregationHashChains();
+            if (aggregationHashChains == null || aggregationHashChains.Count == 0)
+            {
+                throw new KsiVerificationException("Aggregation hash chains missing in KSI signature");
+            }
 
+            DataHash aggregationHashChainInputHash = aggregationHashChains[0].InputHash;
             if (signature.IsRfc3161Signature)
             {
                 DataHasher hasher = new DataHasher(aggregationHashChainInputHash.Algorithm);
+                if (signature.Rfc3161Record == null)
+                {
+                    throw new KsiVerificationException("No RFC 3161 record in KSI signature");
+                }
+
                 hasher.AddData(signature.Rfc3161Record.GetOutputHash(inputHash).Imprint);
                 inputHash = hasher.GetHash();
             }

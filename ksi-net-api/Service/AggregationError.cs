@@ -1,23 +1,24 @@
-﻿using Guardtime.KSI.Parser;
-using Guardtime.KSI.Exceptions;
+﻿using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Service
 {
     /// <summary>
-    /// Aggregation Error payload TLV element.
+    ///     Aggregation Error payload TLV element.
     /// </summary>
     public sealed class AggregationError : AggregationPduPayload
     {
         /// <summary>
-        /// Aggregation error payload TLV type.
+        ///     Aggregation error payload TLV type.
         /// </summary>
         public const uint TagType = 0x203;
 
-        private readonly IntegerTag _status;
         private readonly StringTag _errorMessage;
 
+        private readonly IntegerTag _status;
+
         /// <summary>
-        /// Create aggregation error payload TLV element from TLV element.
+        ///     Create aggregation error payload TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         public AggregationError(TlvTag tag) : base(tag)
@@ -60,6 +61,5 @@ namespace Guardtime.KSI.Service
                 throw new InvalidTlvStructureException("Only one error message is allowed in aggregation error");
             }
         }
-
     }
 }

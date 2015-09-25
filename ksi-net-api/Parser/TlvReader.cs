@@ -4,39 +4,42 @@ using System.IO;
 namespace Guardtime.KSI.Parser
 {
     /// <summary>
-    /// Specialized reader for decoding TLV data.
+    ///     Specialized reader for decoding TLV data.
     /// </summary>
     public class TlvReader : BinaryReader
     {
         /// <summary>
-        /// TLV element 16 bit flag
+        ///     TLV element 16 bit flag
         /// </summary>
         public const byte Tlv16Flag = 0x80;
+
         /// <summary>
-        /// TLV element non critical flag
+        ///     TLV element non critical flag
         /// </summary>
         public const byte NonCriticalFlag = 0x40;
+
         /// <summary>
-        /// TLV element forward flag
+        ///     TLV element forward flag
         /// </summary>
         public const byte ForwardFlag = 0x20;
 
         /// <summary>
-        /// TLV element type mask.
+        ///     TLV element type mask.
         /// </summary>
         public const byte TypeMask = 0x1f;
+
         /// <summary>
-        /// TLV element max type.
+        ///     TLV element max type.
         /// </summary>
         public const ushort MaxType = 0x1fff;
 
         /// <summary>
-        /// Bits in byte
+        ///     Bits in byte
         /// </summary>
         public const byte ByteBits = 8;
 
         /// <summary>
-        /// Reads from given input stream for TLV data.
+        ///     Reads from given input stream for TLV data.
         /// </summary>
         /// <param name="input">input stream to read data from</param>
         public TlvReader(Stream input) : base(input)
@@ -44,11 +47,13 @@ namespace Guardtime.KSI.Parser
         }
 
         /// <summary>
-        /// Reads a complete TLV item from the wrapped stream.
+        ///     Reads a complete TLV item from the wrapped stream.
         /// </summary>
         /// <returns>raw tlv tag</returns>
-        public TlvTag ReadTag() {
-            try {
+        public TlvTag ReadTag()
+        {
+            try
+            {
                 byte firstByte = ReadByte();
 
                 bool tlv16 = (firstByte & Tlv16Flag) != 0;
@@ -57,12 +62,15 @@ namespace Guardtime.KSI.Parser
 
                 uint type = (uint) (firstByte & TypeMask);
                 ushort length;
-                
-                if (tlv16) {
+
+                if (tlv16)
+                {
                     byte typeLsb = ReadByte();
                     type = (type << ByteBits) | typeLsb;
-                    length = (ushort)((ReadByte() << ByteBits) | ReadByte());
-                } else {
+                    length = (ushort) ((ReadByte() << ByteBits) | ReadByte());
+                }
+                else
+                {
                     length = ReadByte();
                 }
 
@@ -71,11 +79,14 @@ namespace Guardtime.KSI.Parser
 
                 if (bytesRead != length)
                 {
-                    throw new EndOfStreamException("Could not read TLV data with expected length of " + length + ", instead could only read " + bytesRead);
+                    throw new EndOfStreamException("Could not read TLV data with expected length of " + length +
+                                                   ", instead could only read " + bytesRead);
                 }
 
                 return new RawTag(type, nonCritical, forward, data);
-            } catch (EndOfStreamException e) {
+            }
+            catch (EndOfStreamException e)
+            {
                 // TODO: Throw better exception
                 throw new FormatException("Premature end of data", e);
             }

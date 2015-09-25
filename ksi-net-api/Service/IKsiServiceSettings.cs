@@ -1,24 +1,27 @@
 ﻿namespace Guardtime.KSI.Service
 {
     /// <summary>
-    /// KSI service settings interface.
+    ///     KSI service settings interface.
     /// </summary>
     public interface IKsiServiceSettings
     {
         /// <summary>
-        /// Login ID.
+        ///     Login ID.
         /// </summary>
         string LoginId { get; }
+
         /// <summary>
-        /// Login key.
+        ///     Login key.
         /// </summary>
         byte[] LoginKey { get; }
+
         /// <summary>
-        /// Instance ID.
+        ///     Instance ID.
         /// </summary>
         ulong InstanceId { get; }
+
         /// <summary>
-        /// Message ID.
+        ///     Message ID.
         /// </summary>
         ulong MessageId { get; }
     }

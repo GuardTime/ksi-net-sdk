@@ -14,7 +14,7 @@ namespace Guardtime.KSI.Signature.Verification.Policy
                 throw new ArgumentNullException("context");
             }
 
-            VerificationRule verificationRule = _firstRule ?? VerificationRule.Empty;
+            VerificationRule verificationRule = _firstRule ?? Empty;
             while (verificationRule != null)
             {
                 VerificationResult result = verificationRule.Verify(context);

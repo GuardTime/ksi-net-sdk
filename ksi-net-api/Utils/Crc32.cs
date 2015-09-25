@@ -4,11 +4,12 @@ using System.Collections.Generic;
 namespace Guardtime.KSI.Utils
 {
     /// <summary>
-    /// CRC 32 calculation class.
+    ///     CRC 32 calculation class.
     /// </summary>
     public static class Crc32
     {
-        private static readonly uint[] Crc32Table = new uint[] {
+        private static readonly uint[] Crc32Table =
+        {
             0x00000000, 0x77073096, 0xee0e612c, 0x990951ba,
             0x076dc419, 0x706af48f, 0xe963a535, 0x9e6495a3,
             0x0edb8832, 0x79dcb8a4, 0xe0d5e91e, 0x97d2d988,
@@ -76,7 +77,7 @@ namespace Guardtime.KSI.Utils
         };
 
         /// <summary>
-        /// Calculate crc32 from data bytes.
+        ///     Calculate crc32 from data bytes.
         /// </summary>
         /// <param name="data">data bytes</param>
         /// <param name="ival">start value</param>
@@ -94,8 +95,8 @@ namespace Guardtime.KSI.Utils
             {
                 retval = Crc32Table[(retval ^ data[i]) & 0xff] ^ (retval >> 8);
             }
-	        
-	        return retval ^ 0xffffffff;
+
+            return retval ^ 0xffffffff;
         }
     }
 }

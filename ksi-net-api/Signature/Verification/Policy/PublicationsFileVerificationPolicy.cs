@@ -1,15 +1,14 @@
-﻿using System;
-using Guardtime.KSI.Signature.Verification.Rule;
+﻿using Guardtime.KSI.Signature.Verification.Rule;
 
 namespace Guardtime.KSI.Signature.Verification.Policy
 {
     /// <summary>
-    /// Publications file verification policy.
+    ///     Publications file verification policy.
     /// </summary>
     public class PublicationsFileVerificationPolicy : VerificationPolicy
     {
         /// <summary>
-        /// Create publications file verification policy instance.
+        ///     Create publications file verification policy instance.
         /// </summary>
         public PublicationsFileVerificationPolicy()
         {

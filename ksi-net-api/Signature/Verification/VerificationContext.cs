@@ -1,63 +1,60 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
+using Guardtime.KSI.Trust;
 
 namespace Guardtime.KSI.Signature.Verification
 {
     /// <summary>
-    /// Verification context.
+    ///     Verification context.
     /// </summary>
     public class VerificationContext : IVerificationContext
     {
-        private readonly KsiSignature _signature;
+        private readonly IKsiSignature _signature;
+        private CalendarHashChain _calendarExtendedToHead;
         private DataHash _documentHash;
-        private PublicationData _userPublication;
-        private PublicationsFile _publicationsFile;
 
         private Dictionary<int, CalendarHashChain> _extendedCalendars;
-        private CalendarHashChain _calendarExtendedToHead;
-        private IKsiService _ksiService;
         private bool _extendingAllowed;
+        private IKsiService _ksiService;
+        private IPublicationsFile _publicationsFile;
+        private PublicationData _userPublication;
 
-        /// <summary>
-        /// Get or set document hash.
-        /// </summary>
-        public DataHash DocumentHash
+        public VerificationContext(IKsiSignature signature)
         {
-            get
+            if (signature == null)
             {
-                return _documentHash;
+                throw new ArgumentNullException("signature");
             }
 
-            set
-            {
-                _documentHash = value;
-            }
+            _signature = signature;
         }
 
         /// <summary>
-        /// Get KSI signature.
+        ///     Get or set document hash.
         /// </summary>
-        public KsiSignature Signature
+        public DataHash DocumentHash
         {
-            get
-            {
-                return _signature;
-            }
+            get { return _documentHash; }
+
+            set { _documentHash = value; }
+        }
+
+        /// <summary>
+        ///     Get KSI signature.
+        /// </summary>
+        public IKsiSignature Signature
+        {
+            get { return _signature; }
         }
 
         public PublicationData UserPublication
         {
             get { return _userPublication; }
-            set
-            {
-                _userPublication = value;
-            }
-        }        
+            set { _userPublication = value; }
+        }
 
         public IKsiService KsiService
         {
@@ -71,20 +68,10 @@ namespace Guardtime.KSI.Signature.Verification
             set { _extendingAllowed = value; }
         }
 
-        public PublicationsFile PublicationsFile
+        public IPublicationsFile PublicationsFile
         {
             get { return _publicationsFile; }
             set { _publicationsFile = value; }
-        }
-
-        public VerificationContext(KsiSignature signature)
-        {
-            if (signature == null)
-            {
-                throw new ArgumentNullException("signature");
-            }
-
-            _signature = signature;
         }
 
         public CalendarHashChain GetExtendedLatestCalendarHashChain()
@@ -100,8 +87,9 @@ namespace Guardtime.KSI.Signature.Verification
                 throw new InvalidOperationException("Invalid KSI service: null");
             }
 
-            return publicationTime == null ? _ksiService.Extend(_signature.AggregationTime) : _ksiService.Extend(_signature.AggregationTime, publicationTime.Value);
+            return publicationTime == null
+                ? _ksiService.Extend(_signature.AggregationTime)
+                : _ksiService.Extend(_signature.AggregationTime, publicationTime.Value);
         }
-
     }
 }

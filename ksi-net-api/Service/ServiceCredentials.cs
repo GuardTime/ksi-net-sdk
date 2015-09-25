@@ -3,7 +3,7 @@
 namespace Guardtime.KSI.Service
 {
     /// <summary>
-    /// Service credentials.
+    ///     Service credentials.
     /// </summary>
     public class ServiceCredentials : IKsiServiceSettings
     {
@@ -11,51 +11,7 @@ namespace Guardtime.KSI.Service
         private readonly byte[] _loginKey;
 
         /// <summary>
-        /// Get login ID.
-        /// </summary>
-        public string LoginId
-        {
-            get
-            {
-                return _loginId;
-            }
-        }
-
-        /// <summary>
-        /// Get login key.
-        /// </summary>
-        public byte[] LoginKey
-        {
-            get
-            {
-                return _loginKey;
-            }
-        }
-
-        /// <summary>
-        /// Get instance ID.
-        /// </summary>
-        public ulong InstanceId
-        {
-            get
-            {
-                return 0;
-            }
-        }
-
-        /// <summary>
-        /// Get message ID.
-        /// </summary>
-        public ulong MessageId
-        {
-            get
-            {
-                return 0;
-            }
-        }
-
-        /// <summary>
-        /// Create service credentials object from login ID and login key as bytes.
+        ///     Create service credentials object from login ID and login key as bytes.
         /// </summary>
         /// <param name="loginId">login ID</param>
         /// <param name="loginKey">login key</param>
@@ -66,7 +22,7 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        /// Create servoce credentials object from login ID and login key as string.
+        ///     Create servoce credentials object from login ID and login key as string.
         /// </summary>
         /// <param name="loginId">login ID</param>
         /// <param name="loginKey">login key</param>
@@ -74,6 +30,38 @@ namespace Guardtime.KSI.Service
         {
             _loginId = loginId;
             _loginKey = Util.EncodeNullTerminatedUtf8String(loginKey);
+        }
+
+        /// <summary>
+        ///     Get login ID.
+        /// </summary>
+        public string LoginId
+        {
+            get { return _loginId; }
+        }
+
+        /// <summary>
+        ///     Get login key.
+        /// </summary>
+        public byte[] LoginKey
+        {
+            get { return _loginKey; }
+        }
+
+        /// <summary>
+        ///     Get instance ID.
+        /// </summary>
+        public ulong InstanceId
+        {
+            get { return 0; }
+        }
+
+        /// <summary>
+        ///     Get message ID.
+        /// </summary>
+        public ulong MessageId
+        {
+            get { return 0; }
         }
     }
 }

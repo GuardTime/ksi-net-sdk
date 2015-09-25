@@ -1,15 +1,14 @@
 ﻿namespace Guardtime.KSI.Utils
 {
     /// <summary>
-    /// Base32 converter.
+    ///     Base32 converter.
     /// </summary>
     public static class Base32
     {
-
         private static readonly BaseX Inst = new BaseX("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567", false, '=');
 
         /// <summary>
-        /// Encode data bytes to base32 string.
+        ///     Encode data bytes to base32 string.
         /// </summary>
         /// <param name="bytes">data bytes</param>
         /// <returns>base32 string</returns>
@@ -19,7 +18,7 @@
         }
 
         /// <summary>
-        /// Encode data bytes with given offset and length to base32 string.
+        ///     Encode data bytes with given offset and length to base32 string.
         /// </summary>
         /// <param name="bytes">data bytes</param>
         /// <param name="off">data offset</param>
@@ -31,7 +30,7 @@
         }
 
         /// <summary>
-        /// Decode base32 string to byte array.
+        ///     Decode base32 string to byte array.
         /// </summary>
         /// <param name="s">base32 string</param>
         /// <returns>base32 bytes</returns>

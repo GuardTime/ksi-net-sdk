@@ -12,29 +12,31 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestKsiSignatureDoOk()
         {
-            KsiSignatureDo signature = GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Ok);
-            Assert.AreEqual(5, signature.Count, "Invalid amount of child TLV objects");
+            var signature = GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Ok);
+            Assert.NotNull(signature.CalendarHashChain, "Calendar hash chain cannot be null");
         }
 
         [Test]
         public void TestKsiSignatureDoOkMissingCalendarHashChain()
         {
-            KsiSignatureDo signature = GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Ok_Missing_Calendar_Hash_Chain);
-            Assert.AreEqual(3, signature.Count, "Invalid amount of child TLV objects");
+            var signature = GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Ok_Missing_Calendar_Hash_Chain);
+            Assert.Null(signature.CalendarHashChain, "Calendar hash chain must be null");
+
         }
 
         [Test]
         public void TestKsiSignatureDoOkMissingPublicationRecord()
         {
-            KsiSignatureDo signature = GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record);
-            Assert.AreEqual(4, signature.Count, "Invalid amount of child TLV objects");
+            var signature = GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record);
+            Assert.Null(signature.PublicationRecord, "Publication record must be null");
+            Assert.Null(signature.CalendarAuthenticationRecord, "Calendar authentication record must be null");
         }
 
         [Test]
         public void TestLegacyKsiSignatureDoOk()
         {
-            KsiSignatureDo signature = GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Legacy_Ok);
-            Assert.AreEqual(4, signature.Count, "Invalid amount of child TLV objects");
+            var signature = GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Legacy_Ok);
+            Assert.IsTrue(signature.IsRfc3161Signature, "RFC3161 tag must exist");
         }
 
         [Test]
@@ -131,12 +133,11 @@ namespace Guardtime.KSI.Signature
 
         // TODO: Multiple aggregation authentication record test is missing
 
-        private KsiSignatureDo GetKsiSignatureDoFromFile(string file)
+        private IKsiSignature GetKsiSignatureDoFromFile(string file)
         {
             using (var stream = new FileStream(file, FileMode.Open))
-            using (var reader = new TlvReader(stream))
             {
-                return new KsiSignatureDo(reader.ReadTag());
+                return new KsiSignatureFactory().Create(stream);
             }
         }
     }

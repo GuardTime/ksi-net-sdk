@@ -1,10 +1,9 @@
 ﻿namespace Guardtime.KSI.Signature.Verification
 {
-    class Verifier
+    internal class Verifier
     {
         public void Verify()
         {
-            
         }
     }
 }

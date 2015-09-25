@@ -1,11 +1,10 @@
 ﻿using System;
-using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
     public sealed class ExtendingPermittedVerificationRule : VerificationRule
     {
-        /// <see cref="VerificationRule.Verify"/>
+        /// <see cref="VerificationRule.Verify" />
         /// <exception cref="ArgumentNullException">thrown if context is missing</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {

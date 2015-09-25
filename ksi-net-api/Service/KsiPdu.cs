@@ -1,21 +1,20 @@
-﻿using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Hashing;
-using Guardtime.KSI.Parser;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
+using Guardtime.KSI.Hashing;
+using Guardtime.KSI.Parser;
 using HashAlgorithm = Guardtime.KSI.Hashing.HashAlgorithm;
 
 namespace Guardtime.KSI.Service
 {
     /// <summary>
-    /// KSI PDU.
+    ///     KSI PDU.
     /// </summary>
     public abstract class KsiPdu : CompositeTag
     {
         /// <summary>
-        /// Mac TLV type.
+        ///     Mac TLV type.
         /// </summary>
         protected const uint MacTagType = 0x1f;
 
@@ -23,15 +22,7 @@ namespace Guardtime.KSI.Service
         private ImprintTag _mac;
 
         /// <summary>
-        /// Get KSI PDU payload.
-        /// </summary>
-        public abstract KsiPduPayload Payload
-        {
-            get;
-        }
-
-        /// <summary>
-        /// Create KSI PDU from TLV element.
+        ///     Create KSI PDU from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         protected KsiPdu(TlvTag tag) : base(tag)
@@ -53,14 +44,15 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        /// Create KSI PDU from PDU header and data.
+        ///     Create KSI PDU from PDU header and data.
         /// </summary>
         /// <param name="header">KSI PDU header</param>
         /// <param name="type">TLV type</param>
         /// <param name="nonCritical">Is TLV element non critical</param>
         /// <param name="forward">Is TLV element forwarded</param>
         /// <param name="value">TLV element list</param>
-        protected KsiPdu(KsiPduHeader header, uint type, bool nonCritical, bool forward, List<TlvTag> value) : base(type, nonCritical, forward, value)
+        protected KsiPdu(KsiPduHeader header, uint type, bool nonCritical, bool forward, List<TlvTag> value)
+            : base(type, nonCritical, forward, value)
         {
             if (header == null)
             {
@@ -72,7 +64,12 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        /// Calculate MAC and attach it to PDU.
+        ///     Get KSI PDU payload.
+        /// </summary>
+        public abstract KsiPduPayload Payload { get; }
+
+        /// <summary>
+        ///     Calculate MAC and attach it to PDU.
         /// </summary>
         /// <param name="key">hmac key</param>
         public void SetMac(byte[] key)
@@ -89,7 +86,7 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        /// Calculate HMAC for data with given key.
+        ///     Calculate HMAC for data with given key.
         /// </summary>
         /// <param name="key">hmac key</param>
         /// <param name="data">hmac calculation data</param>
@@ -101,7 +98,7 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        /// Validate mac attached to KSI PDU.
+        ///     Validate mac attached to KSI PDU.
         /// </summary>
         /// <param name="key">message key</param>
         /// <returns>true if MAC is valid</returns>
@@ -122,6 +119,5 @@ namespace Guardtime.KSI.Service
                 return hash.Equals(_mac.Value);
             }
         }
-
     }
 }

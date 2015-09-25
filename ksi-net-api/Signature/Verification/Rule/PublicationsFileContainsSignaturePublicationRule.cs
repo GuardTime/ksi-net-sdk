@@ -1,12 +1,13 @@
 ﻿using System;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
+using Guardtime.KSI.Trust;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
     public sealed class PublicationsFileContainsSignaturePublicationRule : VerificationRule
     {
-        /// <see cref="VerificationRule.Verify"/>
+        /// <see cref="VerificationRule.Verify" />
         /// <exception cref="ArgumentNullException">thrown if context is missing</exception>
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
@@ -21,7 +22,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 throw new KsiVerificationException("Invalid KSI signature in context: null");
             }
 
-            PublicationsFile publicationsFile = context.PublicationsFile;
+            IKsiTrustProvider publicationsFile = context.PublicationsFile;
             if (publicationsFile == null)
             {
                 throw new KsiVerificationException("Invalid publications file in context: null");

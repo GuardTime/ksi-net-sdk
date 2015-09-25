@@ -39,7 +39,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 var context = new TestVerificationContext()
                 {
-                    Signature = KsiSignature.GetInstance(stream)
+                    Signature = new KsiSignatureFactory().Create(stream)
                 };
 
                 Assert.Throws<KsiVerificationException>(delegate
@@ -50,14 +50,14 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
 
             var serviceProtocol = new TestKsiServiceProtocol();
-            var ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"), new PublicationsFileFactory());
+            var ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"), new PublicationsFileFactory(), new KsiSignatureFactory());
 
             // Check invalid extended calendar chain from context extension function
             using (var stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
             {
                 var context = new TestVerificationContextFaultyFunctions()
                 {
-                    Signature = KsiSignature.GetInstance(stream),
+                    Signature = new KsiSignatureFactory().Create(stream),
                     KsiService = ksiService
                 };
 
@@ -73,7 +73,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 var context = new TestVerificationContext()
                 {
-                    Signature = KsiSignature.GetInstance(stream),
+                    Signature = new KsiSignatureFactory().Create(stream),
                     KsiService = ksiService,
                     UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K")
                 };
@@ -86,7 +86,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 var context = new TestVerificationContext()
                 {
-                    Signature = KsiSignature.GetInstance(stream),
+                    Signature = new KsiSignatureFactory().Create(stream),
                     KsiService = ksiService,
                     UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K")
                 };
@@ -99,7 +99,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 var context = new TestVerificationContext()
                 {
-                    Signature = KsiSignature.GetInstance(stream),
+                    Signature = new KsiSignatureFactory().Create(stream),
                     KsiService = ksiService,
                     UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K")
                 };

@@ -3,12 +3,12 @@
 namespace Guardtime.KSI.Exceptions
 {
     /// <summary>
-    /// KSI signature verification exception.
+    ///     KSI signature verification exception.
     /// </summary>
     public class KsiVerificationException : KsiException
     {
         /// <summary>
-        /// Create new KSI verification exception with message.
+        ///     Create new KSI verification exception with message.
         /// </summary>
         /// <param name="message">exception message</param>
         public KsiVerificationException(string message) : base(message)
@@ -16,7 +16,7 @@ namespace Guardtime.KSI.Exceptions
         }
 
         /// <summary>
-        /// Create new KSI verification exception  with message and inner exception.
+        ///     Create new KSI verification exception  with message and inner exception.
         /// </summary>
         /// <param name="message">exception message</param>
         /// <param name="innerException">inner exception</param>

@@ -1,4 +1,3 @@
 ﻿namespace Guardtime.KSI.Service
 {
-
 }

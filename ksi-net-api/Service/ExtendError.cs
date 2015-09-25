@@ -1,23 +1,24 @@
-﻿using Guardtime.KSI.Parser;
-using Guardtime.KSI.Exceptions;
+﻿using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Service
 {
     /// <summary>
-    /// Extension error payload.
+    ///     Extension error payload.
     /// </summary>
     public sealed class ExtendError : ExtendPduPayload
     {
         /// <summary>
-        /// Extension error payload TLV type.
+        ///     Extension error payload TLV type.
         /// </summary>
         public const uint TagType = 0x303;
 
-        private readonly IntegerTag _status;
         private readonly StringTag _errorMessage;
 
+        private readonly IntegerTag _status;
+
         /// <summary>
-        /// Create extend error payload from TLV element. 
+        ///     Create extend error payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         public ExtendError(TlvTag tag) : base(tag)
@@ -60,6 +61,5 @@ namespace Guardtime.KSI.Service
                 throw new InvalidTlvStructureException("Only one error message is allowed in extend error");
             }
         }
-
     }
 }

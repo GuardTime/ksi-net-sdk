@@ -30,7 +30,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 var context = new TestVerificationContext
                 {
-                    Signature = KsiSignature.GetInstance(stream)
+                    Signature = new KsiSignatureFactory().Create(stream)
                 };
 
                 Assert.AreEqual(VerificationResult.Ok, rule.Verify(context));
@@ -41,7 +41,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 var context = new TestVerificationContext
                 {
-                    Signature = KsiSignature.GetInstance(stream)
+                    Signature = new KsiSignatureFactory().Create(stream)
                 };
 
                 Assert.AreEqual(VerificationResult.Ok, rule.Verify(context));
@@ -52,7 +52,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 var context = new TestVerificationContext
                 {
-                    Signature = KsiSignature.GetInstance(stream)
+                    Signature = new KsiSignatureFactory().Create(stream)
                 };
 
                 Assert.AreEqual(VerificationResult.Na, rule.Verify(context));

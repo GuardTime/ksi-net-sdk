@@ -1,15 +1,14 @@
 ﻿namespace Guardtime.KSI.Utils
 {
     /// <summary>
-    /// Base16 (Hex) converter.
+    ///     Base16 (Hex) converter.
     /// </summary>
     public static class Base16
     {
-     
         private static readonly BaseX Inst = new BaseX("0123456789ABCDEF", false, ' ');
 
         /// <summary>
-        /// Encode data bytes to hex string.
+        ///     Encode data bytes to hex string.
         /// </summary>
         /// <param name="bytes">data bytes</param>
         /// <returns>hex string</returns>
@@ -19,7 +18,7 @@
         }
 
         /// <summary>
-        /// Encode data bytes with given offset and length to hex string.
+        ///     Encode data bytes with given offset and length to hex string.
         /// </summary>
         /// <param name="bytes">data bytes</param>
         /// <param name="off">data offset</param>
@@ -31,7 +30,7 @@
         }
 
         /// <summary>
-        /// Decode hex string to byte array.
+        ///     Decode hex string to byte array.
         /// </summary>
         /// <param name="s">hex string</param>
         /// <returns>hex bytes</returns>

@@ -39,7 +39,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 var context = new TestVerificationContext()
                 {
-                    Signature = KsiSignature.GetInstance(stream)
+                    Signature = new KsiSignatureFactory().Create(stream)
                 };
 
                 Assert.Throws<KsiVerificationException>(delegate
@@ -53,7 +53,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 var context = new TestVerificationContextFaultyFunctions()
                 {
-                    Signature = KsiSignature.GetInstance(stream)
+                    Signature = new KsiSignatureFactory().Create(stream)
                 };
 
                 Assert.Throws<KsiVerificationException>(delegate
@@ -67,7 +67,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 var context = new TestVerificationContext()
                 {
-                    Signature = KsiSignature.GetInstance(stream),
+                    Signature = new KsiSignatureFactory().Create(stream),
                     UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K")
                 };
 
@@ -79,7 +79,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 var context = new TestVerificationContext()
                 {
-                    Signature = KsiSignature.GetInstance(stream),
+                    Signature = new KsiSignatureFactory().Create(stream),
                     UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K")
                 };
 
@@ -91,7 +91,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 var context = new TestVerificationContext()
                 {
-                    Signature = KsiSignature.GetInstance(stream),
+                    Signature = new KsiSignatureFactory().Create(stream),
                     UserPublication = new PublicationData("AAAAAA-CVUWRI-AANGVK-SV7GJL-36LN65-AVJYZR-6XRZSL-HIMRH3-6GU7WR-YNRY7C-X2XEC3-YOVLRM")
                 };
 

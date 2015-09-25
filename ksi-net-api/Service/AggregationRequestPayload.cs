@@ -8,34 +8,27 @@ using Guardtime.KSI.Utils;
 namespace Guardtime.KSI.Service
 {
     /// <summary>
-    /// Aggregation request payload.
+    ///     Aggregation request payload.
     /// </summary>
     public sealed class AggregationRequestPayload : AggregationPduPayload
     {
         /// <summary>
-        /// Aggregation request TLV type.
+        ///     Aggregation request TLV type.
         /// </summary>
         public const uint TagType = 0x201;
+
         private const uint RequestIdTagType = 0x1;
         private const uint RequestHashTagType = 0x2;
         private const uint RequestLevelTagType = 0x3;
         private const uint ConfigTagType = 0x10;
+        private readonly RawTag _config;
+        private readonly ImprintTag _requestHash;
 
         private readonly IntegerTag _requestId;
-        private readonly ImprintTag _requestHash;
         private readonly IntegerTag _requestLevel;
-        private readonly RawTag _config;
 
         /// <summary>
-        /// Get request hash.
-        /// </summary>
-        public DataHash RequestHash
-        {
-            get { return _requestHash.Value; }
-        }
-
-        /// <summary>
-        /// Create extend request payload from TLV element.
+        ///     Create extend request payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         public AggregationRequestPayload(TlvTag tag) : base(tag)
@@ -92,7 +85,8 @@ namespace Guardtime.KSI.Service
 
             if (requestLevelCount > 1)
             {
-                throw new InvalidTlvStructureException("Only one request level is allowed in aggregation request payload");
+                throw new InvalidTlvStructureException(
+                    "Only one request level is allowed in aggregation request payload");
             }
 
             if (contigCount > 1)
@@ -103,7 +97,7 @@ namespace Guardtime.KSI.Service
 
         // TODO: Create better constructor
         /// <summary>
-        /// Create aggregation request payload from data hash.
+        ///     Create aggregation request payload from data hash.
         /// </summary>
         /// <param name="hash">data hash</param>
         public AggregationRequestPayload(DataHash hash) : base(TagType, false, false, new List<TlvTag>())
@@ -120,5 +114,12 @@ namespace Guardtime.KSI.Service
             AddTag(_requestHash);
         }
 
+        /// <summary>
+        ///     Get request hash.
+        /// </summary>
+        public DataHash RequestHash
+        {
+            get { return _requestHash.Value; }
+        }
     }
 }

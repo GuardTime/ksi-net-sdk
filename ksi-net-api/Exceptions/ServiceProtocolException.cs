@@ -3,12 +3,12 @@
 namespace Guardtime.KSI.Exceptions
 {
     /// <summary>
-    /// KSI API base exception
+    ///     KSI API base exception
     /// </summary>
     public class ServiceProtocolException : KsiException
     {
         /// <summary>
-        /// Create new KSI exception
+        ///     Create new KSI exception
         /// </summary>
         /// <param name="message">Exception message</param>
         public ServiceProtocolException(string message) : base(message)
@@ -16,7 +16,7 @@ namespace Guardtime.KSI.Exceptions
         }
 
         /// <summary>
-        /// Create new KSI exception
+        ///     Create new KSI exception
         /// </summary>
         /// <param name="message">Exception message</param>
         /// <param name="innerException">Inner exception</param>

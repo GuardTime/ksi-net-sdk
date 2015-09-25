@@ -1,16 +1,17 @@
 ﻿namespace Guardtime.KSI.Signature
 {
     /// <summary>
-    /// Link direction TLV types.
+    ///     Link direction TLV types.
     /// </summary>
     public enum LinkDirection
     {
         /// <summary>
-        /// Link left TLV type.
+        ///     Link left TLV type.
         /// </summary>
         Left = 0x7,
+
         /// <summary>
-        /// Link right TLV type.
+        ///     Link right TLV type.
         /// </summary>
         Right = 0x8
     }

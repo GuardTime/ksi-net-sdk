@@ -22,8 +22,8 @@ namespace Guardtime.KSI.Signature.Verification
                     "http://ksigw.test.guardtime.com:8010/gt-extendingservice",
                     "http://verify.guardtime.com/ksi-publications.bin");
 
-                var ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"), new PublicationsFileFactory());
-                var context = new VerificationContext(KsiSignature.GetInstance(stream))
+                var ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"), new PublicationsFileFactory(), new KsiSignatureFactory());
+                var context = new VerificationContext(new KsiSignatureFactory().Create(stream))
                 {
                     DocumentHash =
                         new Hashing.DataHash(new byte[]
@@ -36,8 +36,7 @@ namespace Guardtime.KSI.Signature.Verification
                     //UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K"),
                     IsExtendingAllowed = true,
                     KsiService = ksiService,
-                    // TODO: use resource for publications file
-                    PublicationsFile = PublicationsFile.GetInstance(new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+                    PublicationsFile = new PublicationsFileFactory().Create(new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
                 };
 
                 Console.WriteLine(@"// Internal verification policy");

@@ -28,6 +28,10 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             ReadOnlyCollection<AggregationHashChain> aggregationHashChainCollection =
                 context.Signature.GetAggregationHashChains();
+            if (aggregationHashChainCollection == null)
+            {
+                throw new KsiVerificationException("Aggregation hash chains missing in KSI signature");
+            }
 
             ulong? time = null;
             for (int i = 0; i < aggregationHashChainCollection.Count; i++)

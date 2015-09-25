@@ -4,14 +4,15 @@ using Guardtime.KSI.Parser;
 namespace Guardtime.KSI.Publication
 {
     /// <summary>
-    /// Certificate record TLV element.
+    ///     Certificate record TLV element.
     /// </summary>
     public sealed class CertificateRecord : CompositeTag
     {
         /// <summary>
-        /// Certificate record TLV type.
+        ///     Certificate record TLV type.
         /// </summary>
         public const uint TagType = 0x702;
+
         private const uint CertificateIdTagType = 0x1;
         private const uint X509CertificateTagType = 0x2;
 
@@ -19,29 +20,7 @@ namespace Guardtime.KSI.Publication
         private readonly RawTag _x509Certificate;
 
         /// <summary>
-        /// Get certificate ID.
-        /// </summary>
-        public RawTag CertificateId
-        {
-            get
-            {
-                return _certificateId;
-            }
-        }
-
-        /// <summary>
-        /// Get X509 certificate.
-        /// </summary>
-        public RawTag X509Certificate
-        {
-            get
-            {
-                return _x509Certificate;
-            }
-        }
-
-        /// <summary>
-        /// Create new certificate record TLV element from TLV element.
+        ///     Create new certificate record TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         public CertificateRecord(TlvTag tag) : base(tag)
@@ -83,6 +62,22 @@ namespace Guardtime.KSI.Publication
             {
                 throw new InvalidTlvStructureException("Only one certificate must exist in certificate record");
             }
+        }
+
+        /// <summary>
+        ///     Get certificate ID.
+        /// </summary>
+        public RawTag CertificateId
+        {
+            get { return _certificateId; }
+        }
+
+        /// <summary>
+        ///     Get X509 certificate.
+        /// </summary>
+        public RawTag X509Certificate
+        {
+            get { return _x509Certificate; }
         }
     }
 }

@@ -3,21 +3,22 @@
 namespace Guardtime.KSI.Crypto
 {
     /// <summary>
-    /// Crypto signature verifier factory.
+    ///     Crypto signature verifier factory.
     /// </summary>
     public static class CryptoSignatureVerifierFactory
     {
         /// <summary>
-        /// RSA signature verifier.
+        ///     RSA signature verifier.
         /// </summary>
         public static readonly RsaCryptoSignatureVerifier RsaSignatureVerifier = new RsaCryptoSignatureVerifier();
+
         /// <summary>
-        /// PKCS#7 signature verifier.
+        ///     PKCS#7 signature verifier.
         /// </summary>
         public static readonly Pkcs7CryptoSignatureVerifier Pkcs7SignatureVerifier = new Pkcs7CryptoSignatureVerifier();
 
         /// <summary>
-        /// Get crypto signature verifier by oid.
+        ///     Get crypto signature verifier by oid.
         /// </summary>
         /// <param name="oid">signature oid</param>
         /// <param name="digestAlgorithm">algorithm used for given signature</param>

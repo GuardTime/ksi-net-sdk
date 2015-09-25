@@ -1,35 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using Guardtime.KSI.Parser;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Service
 {
     /// <summary>
-    /// Aggregation message PDU.
+    ///     Aggregation message PDU.
     /// </summary>
     public sealed class AggregationPdu : KsiPdu
     {
         /// <summary>
-        /// Aggregation PDU TLV type.
+        ///     Aggregation PDU TLV type.
         /// </summary>
         public const uint TagType = 0x200;
 
         private readonly AggregationPduPayload _payload;
 
         /// <summary>
-        /// Get aggregation message payload.
-        /// </summary>
-        public override KsiPduPayload Payload
-        {
-            get
-            {
-                return _payload;
-            }
-        }
-
-        /// <summary>
-        /// Create aggregation pdu TLV element from TLV element.
+        ///     Create aggregation pdu TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         public AggregationPdu(TlvTag tag) : base(tag)
@@ -62,8 +51,6 @@ namespace Guardtime.KSI.Service
                         this[i] = _payload;
                         payloadCount++;
                         break;
-
-                    // TODO: How to handle parent class types
                     case KsiPduHeader.TagType:
                         headerCount++;
                         break;
@@ -93,11 +80,12 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        /// Create aggregation pdu TLV element from KSI header and payload.
+        ///     Create aggregation pdu TLV element from KSI header and payload.
         /// </summary>
         /// <param name="header">KSI PDU header</param>
         /// <param name="payload">aggregation payload</param>
-        public AggregationPdu(KsiPduHeader header, AggregationPduPayload payload) : base(header, TagType, false, false, new List<TlvTag>())
+        public AggregationPdu(KsiPduHeader header, AggregationPduPayload payload)
+            : base(header, TagType, false, false, new List<TlvTag>())
         {
             if (payload == null)
             {
@@ -105,6 +93,14 @@ namespace Guardtime.KSI.Service
             }
 
             _payload = AddTag(payload);
+        }
+
+        /// <summary>
+        ///     Get aggregation message payload.
+        /// </summary>
+        public override KsiPduPayload Payload
+        {
+            get { return _payload; }
         }
     }
 }

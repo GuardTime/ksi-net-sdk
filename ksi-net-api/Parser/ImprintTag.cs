@@ -4,22 +4,14 @@ using Guardtime.KSI.Hashing;
 namespace Guardtime.KSI.Parser
 {
     /// <summary>
-    /// Imprint TLV element
+    ///     Imprint TLV element
     /// </summary>
     public class ImprintTag : TlvTag, IEquatable<ImprintTag>
     {
         private readonly DataHash _value;
 
         /// <summary>
-        /// Get TLV element data hash
-        /// </summary>
-        public DataHash Value
-        {
-            get { return _value; }
-        }
-
-        /// <summary>
-        /// Create new imprint TLV element from TLV element.
+        ///     Create new imprint TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         public ImprintTag(TlvTag tag) : base(tag)
@@ -35,7 +27,7 @@ namespace Guardtime.KSI.Parser
 
         // TODO: Check null on imprint
         /// <summary>
-        /// Create new imprint TLV element from data.
+        ///     Create new imprint TLV element from data.
         /// </summary>
         /// <param name="type">TLV element type</param>
         /// <param name="nonCritical">Is TLV element non critical</param>
@@ -52,38 +44,15 @@ namespace Guardtime.KSI.Parser
         }
 
         /// <summary>
-        /// Encode data hash to byte array.
+        ///     Get TLV element data hash
         /// </summary>
-        /// <returns>Data hash as byte array</returns>
-        public override byte[] EncodeValue()
+        public DataHash Value
         {
-            return _value.Imprint;
+            get { return _value; }
         }
 
         /// <summary>
-        /// Get TLV element hash code.
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                return Value.GetHashCode() + Type.GetHashCode() + Forward.GetHashCode() + NonCritical.GetHashCode();
-            }
-        }
-
-        /// <summary>
-        /// Compare TLV element to object.
-        /// </summary>
-        /// <param name="obj">Comparable object.</param>
-        /// <returns>Is given object equal</returns>
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as ImprintTag);
-        }
-
-        /// <summary>
-        /// Compare TLV element against imprint TLV element.
+        ///     Compare TLV element against imprint TLV element.
         /// </summary>
         /// <param name="tag">Imprint TLV element</param>
         /// <returns>true if elements are equal</returns>
@@ -107,13 +76,44 @@ namespace Guardtime.KSI.Parser
             }
 
             return Type == tag.Type &&
-                    Forward == tag.Forward &&
-                    NonCritical == tag.NonCritical &&
-                    Value == tag.Value;
+                   Forward == tag.Forward &&
+                   NonCritical == tag.NonCritical &&
+                   Value == tag.Value;
         }
 
         /// <summary>
-        /// Compare imprint TLV elements against each other.
+        ///     Encode data hash to byte array.
+        /// </summary>
+        /// <returns>Data hash as byte array</returns>
+        public override byte[] EncodeValue()
+        {
+            return _value.Imprint;
+        }
+
+        /// <summary>
+        ///     Get TLV element hash code.
+        /// </summary>
+        /// <returns>Hash code</returns>
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return Value.GetHashCode() + Type.GetHashCode() + Forward.GetHashCode() + NonCritical.GetHashCode();
+            }
+        }
+
+        /// <summary>
+        ///     Compare TLV element to object.
+        /// </summary>
+        /// <param name="obj">Comparable object.</param>
+        /// <returns>Is given object equal</returns>
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as ImprintTag);
+        }
+
+        /// <summary>
+        ///     Compare imprint TLV elements against each other.
         /// </summary>
         /// <param name="a">Imprint TLV element</param>
         /// <param name="b">Imprint TLV element</param>
@@ -124,7 +124,7 @@ namespace Guardtime.KSI.Parser
         }
 
         /// <summary>
-        /// Compare imprint TLV element non equity to another imprint TLV element.
+        ///     Compare imprint TLV element non equity to another imprint TLV element.
         /// </summary>
         /// <param name="a">Imprint TLV element</param>
         /// <param name="b">Imprint TLV element</param>
@@ -133,7 +133,5 @@ namespace Guardtime.KSI.Parser
         {
             return !(a == b);
         }
-
     }
-
 }

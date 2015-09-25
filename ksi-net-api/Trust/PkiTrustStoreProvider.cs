@@ -6,12 +6,12 @@ using Guardtime.KSI.Crypto;
 namespace Guardtime.KSI.Trust
 {
     /// <summary>
-    /// PKI trust store provider.
+    ///     PKI trust store provider.
     /// </summary>
     public class PkiTrustStoreProvider : IPkiTrustProvider
     {
         /// <summary>
-        /// Verify bytes with x509 signature.
+        ///     Verify bytes with x509 signature.
         /// </summary>
         /// <param name="signedBytes"></param>
         /// <param name="signatureBytes"></param>

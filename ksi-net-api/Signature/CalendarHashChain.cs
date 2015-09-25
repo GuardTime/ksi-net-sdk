@@ -1,99 +1,37 @@
 ﻿using System.Collections.Generic;
-using Guardtime.KSI.Parser;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
+using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Signature
 {
     /// <summary>
-    /// Calendar hash chain TLV element
+    ///     Calendar hash chain TLV element
     /// </summary>
     public sealed class CalendarHashChain : CompositeTag
     {
         // TODO: Better name
         /// <summary>
-        /// Calendar hash chain tag type
+        ///     Calendar hash chain tag type
         /// </summary>
         public const uint TagType = 0x802;
+
         private const uint PublicationTimeTagType = 0x1;
         private const uint AggregationTimeTagType = 0x2;
         private const uint InputHashTagType = 0x5;
-
-        private readonly IntegerTag _publicationTime;
         private readonly IntegerTag _aggregationTime;
-        private readonly ImprintTag _inputHash;
         private readonly List<Link> _chain = new List<Link>();
-
-        private readonly ulong _registrationTime;
+        private readonly ImprintTag _inputHash;
         private readonly DataHash _outputHash;
         private readonly PublicationData _publicationData;
 
-        /// <summary>
-        /// Get aggregation time
-        /// </summary>
-        public ulong AggregationTime
-        {
-            get
-            {
-                return _aggregationTime == null ? _publicationTime.Value : _aggregationTime.Value;
-            }
-        }
+        private readonly IntegerTag _publicationTime;
+
+        private readonly ulong _registrationTime;
 
         /// <summary>
-        /// Get publication time.
-        /// </summary>
-        public ulong PublicationTime
-        {
-            get { return _publicationTime.Value; }
-        }
-
-        /// <summary>
-        /// Get registration time.
-        /// </summary>
-        public ulong RegistrationTime
-        {
-            get
-            {
-                return _registrationTime;
-            }
-        }
-
-        /// <summary>
-        /// Get input hash.
-        /// </summary>
-        public DataHash InputHash
-        {
-            get
-            {
-                return _inputHash.Value;
-            }
-        }
-
-        /// <summary>
-        /// Get output hash.
-        /// </summary>
-        public DataHash OutputHash
-        {
-            get
-            {
-                return _outputHash;
-            }
-        }
-
-        /// <summary>
-        /// Get publication data.
-        /// </summary>
-        public PublicationData PublicationData
-        {
-            get
-            {
-                return _publicationData;
-            }
-        }
-
-        /// <summary>
-        /// Create new calendar hash chain TLV element from TLV element
+        ///     Create new calendar hash chain TLV element from TLV element
         /// </summary>
         /// <param name="tag">TLV element</param>
         public CalendarHashChain(TlvTag tag) : base(tag)
@@ -126,8 +64,8 @@ namespace Guardtime.KSI.Signature
                         this[i] = _inputHash;
                         inputHashCount++;
                         break;
-                    case (uint)LinkDirection.Left:
-                    case (uint)LinkDirection.Right:
+                    case (uint) LinkDirection.Left:
+                    case (uint) LinkDirection.Right:
                         Link chainTag = new Link(this[i]);
                         _chain.Add(chainTag);
                         this[i] = chainTag;
@@ -164,7 +102,55 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
-        /// Compare right links if they are equal.
+        ///     Get aggregation time
+        /// </summary>
+        public ulong AggregationTime
+        {
+            get { return _aggregationTime == null ? _publicationTime.Value : _aggregationTime.Value; }
+        }
+
+        /// <summary>
+        ///     Get publication time.
+        /// </summary>
+        public ulong PublicationTime
+        {
+            get { return _publicationTime.Value; }
+        }
+
+        /// <summary>
+        ///     Get registration time.
+        /// </summary>
+        public ulong RegistrationTime
+        {
+            get { return _registrationTime; }
+        }
+
+        /// <summary>
+        ///     Get input hash.
+        /// </summary>
+        public DataHash InputHash
+        {
+            get { return _inputHash.Value; }
+        }
+
+        /// <summary>
+        ///     Get output hash.
+        /// </summary>
+        public DataHash OutputHash
+        {
+            get { return _outputHash; }
+        }
+
+        /// <summary>
+        ///     Get publication data.
+        /// </summary>
+        public PublicationData PublicationData
+        {
+            get { return _publicationData; }
+        }
+
+        /// <summary>
+        ///     Compare right links if they are equal.
         /// </summary>
         /// <param name="calendarHashChain">calendar hash chain to compare to</param>
         /// <returns>true if right links are equal and on same position</returns>
@@ -194,7 +180,7 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
-        /// Calculate output hash.
+        ///     Calculate output hash.
         /// </summary>
         /// <returns>output hash</returns>
         private DataHash CalculateOutputHash()
@@ -212,14 +198,13 @@ namespace Guardtime.KSI.Signature
                 {
                     inputHash = HashTogether(inputHash.Algorithm, siblingHash.Imprint, inputHash.Imprint);
                 }
-                
             }
 
             return inputHash;
         }
 
         /// <summary>
-        /// Hash two hashes together with algorithm.
+        ///     Hash two hashes together with algorithm.
         /// </summary>
         /// <param name="algorithm">hash algorithm</param>
         /// <param name="hashA">hash a</param>
@@ -230,12 +215,12 @@ namespace Guardtime.KSI.Signature
             DataHasher hasher = new DataHasher(algorithm);
             hasher.AddData(hashA);
             hasher.AddData(hashB);
-            hasher.AddData(new byte[] { 0xFF });
+            hasher.AddData(new byte[] {0xFF});
             return hasher.GetHash();
         }
 
         /// <summary>
-        /// Calculate registration time.
+        ///     Calculate registration time.
         /// </summary>
         /// <returns>registration time</returns>
         private ulong CalculateRegistrationTime()
@@ -243,7 +228,7 @@ namespace Guardtime.KSI.Signature
             ulong r = _publicationTime.Value;
             ulong t = 0;
             // iterate over the chain in reverse
-            
+
             for (int i = _chain.Count - 1; i >= 0; i--)
             {
                 if (r <= 0)
@@ -255,7 +240,8 @@ namespace Guardtime.KSI.Signature
                 if (_chain[i].Direction == LinkDirection.Left)
                 {
                     r = HighBit(r) - 1;
-                } else
+                }
+                else
                 {
                     t = t + HighBit(r);
                     r = r - HighBit(r);
@@ -271,7 +257,7 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
-        /// Calculate highest bit.
+        ///     Calculate highest bit.
         /// </summary>
         /// <param name="n">number to get highest bit from.</param>
         /// <returns>highest bit</returns>
@@ -287,19 +273,11 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
-        /// Calendar hash chain link object which is imprint containing link direction
+        ///     Calendar hash chain link object which is imprint containing link direction
         /// </summary>
         private class Link : ImprintTag
         {
             private readonly LinkDirection _direction;
-
-            public LinkDirection Direction
-            {
-                get
-                {
-                    return _direction;
-                }
-            }
 
             public Link(TlvTag tag) : base(tag)
             {
@@ -317,12 +295,12 @@ namespace Guardtime.KSI.Signature
                 {
                     throw new InvalidTlvStructureException("Invalid calendar hash chain link type: " + Type);
                 }
-                
             }
-            
+
+            public LinkDirection Direction
+            {
+                get { return _direction; }
+            }
         }
-
-
-        
     }
 }

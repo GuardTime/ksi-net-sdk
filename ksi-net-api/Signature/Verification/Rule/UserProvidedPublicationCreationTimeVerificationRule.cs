@@ -5,7 +5,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 {
     public sealed class UserProvidedPublicationCreationTimeVerificationRule : VerificationRule
     {
-        /// <see cref="VerificationRule.Verify"/>
+        /// <see cref="VerificationRule.Verify" />
         /// <exception cref="ArgumentNullException">thrown if context is missing</exception>
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)

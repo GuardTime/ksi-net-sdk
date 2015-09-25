@@ -81,13 +81,15 @@
     <Compile Include="Crypto\Pkcs7CryptoSignatureVerifier.cs" />
     <Compile Include="Crypto\RsaCryptoSignatureVerifier.cs" />
     <Compile Include="Exceptions\InvalidTlvStructureException.cs" />
+    <Compile Include="Exceptions\PublicationsFileStructureException.cs" />
     <Compile Include="Exceptions\ServiceProtocolException.cs" />
     <Compile Include="Exceptions\KsiException.cs" />
-    <Compile Include="Exceptions\VerificationException.cs" />
+    <Compile Include="Exceptions\CryptoVerificationException.cs" />
+    <Compile Include="Exceptions\KsiVerificationException.cs" />
     <Compile Include="Hashing\DataHash.cs" />
     <Compile Include="Hashing\DataHasher.cs" />
     <Compile Include="Hashing\HashAlgorithm.cs" />
-    <Compile Include="Hashing\HashingException.cs" />
+    <Compile Include="Exceptions\HashingException.cs" />
     <Compile Include="Parser\ImprintTag.cs" />
     <Compile Include="Parser\IntegerTag.cs" />
     <Compile Include="Parser\RawTag.cs" />
@@ -103,10 +105,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Publication\CertificateRecord.cs" />
+    <Compile Include="Publication\IPublicationsFile.cs" />
     <Compile Include="Publication\PublicationsFileFactory.cs" />
     <Compile Include="Publication\PublicationsFileHeader.cs" />
     <Compile Include="Publication\PublicationsFile.cs" />
-    <Compile Include="Publication\PublicationsFileDo.cs" />
     <Compile Include="Publication\PublicationData.cs" />
     <Compile Include="Service\ExtendRequestPayload.cs" />
     <Compile Include="Service\ExtendError.cs" />
@@ -134,8 +136,9 @@
     <Compile Include="Signature\AggregationHashChain.cs" />
     <Compile Include="Signature\CalendarAuthenticationRecord.cs" />
     <Compile Include="Signature\CalendarHashChain.cs" />
+    <Compile Include="Signature\IKsiSignature.cs" />
     <Compile Include="Signature\KsiSignature.cs" />
-    <Compile Include="Signature\KsiSignatureDo.cs" />
+    <Compile Include="Signature\KsiSignatureFactory.cs" />
     <Compile Include="Signature\LinkDirection.cs" />
     <Compile Include="Publication\PublicationRecord.cs" />
     <Compile Include="Signature\Rfc3161Record.cs" />

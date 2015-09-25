@@ -6,7 +6,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 {
     public sealed class SignaturePublicationRecordPublicationHashRule : VerificationRule
     {
-        /// <see cref="VerificationRule.Verify"/>
+        /// <see cref="VerificationRule.Verify" />
         /// <exception cref="ArgumentNullException">thrown if context is missing</exception>
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
@@ -28,8 +28,15 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             }
 
             CalendarHashChain calendarHashChain = context.Signature.CalendarHashChain;
+            if (calendarHashChain == null)
+            {
+                throw new KsiVerificationException("Calendar hash chain missing in KSI signature");
+            }
 
-            return publicationRecord.PublicationData.PublicationHash != calendarHashChain.PublicationData.PublicationHash ? VerificationResult.Fail : VerificationResult.Ok;
+            return publicationRecord.PublicationData.PublicationHash !=
+                   calendarHashChain.PublicationData.PublicationHash
+                ? VerificationResult.Fail
+                : VerificationResult.Ok;
         }
     }
 }

@@ -6,11 +6,12 @@ using Guardtime.KSI.Exceptions;
 namespace Guardtime.KSI.Crypto
 {
     /// <summary>
-    /// PKCS#7 signature verifier.
+    ///     PKCS#7 signature verifier.
     /// </summary>
     public class Pkcs7CryptoSignatureVerifier : ICryptoSignatureVerifier
     {
-        /// <see cref="ICryptoSignatureVerifier"/>
+        /// <see cref="ICryptoSignatureVerifier.Verify" />
+        /// <exception cref="CryptoVerificationException">thrown when signature verification throws any exception</exception>
         public void Verify(byte[] signedBytes, byte[] signatureBytes, Dictionary<string, object> data)
         {
             try
@@ -21,8 +22,7 @@ namespace Guardtime.KSI.Crypto
             }
             catch (Exception e)
             {
-                // TODO: Better exception
-                throw new KsiException("Verification failed", e);
+                throw new CryptoVerificationException("Failed to verify PKCS#7 signature", e);
             }
         }
     }

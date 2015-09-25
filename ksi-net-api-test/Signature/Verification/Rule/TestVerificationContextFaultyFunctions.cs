@@ -12,11 +12,11 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         }
 
         public DataHash DocumentHash { get; set; }
-        public KsiSignature Signature { get; set; }
+        public IKsiSignature Signature { get; set; }
         public PublicationData UserPublication { get; set; }
         public IKsiService KsiService { get; set; }
         public bool IsExtendingAllowed { get; set; }
-        public PublicationsFile PublicationsFile { get; set; }
+        public IPublicationsFile PublicationsFile { get; set; }
         public CalendarHashChain GetExtendedLatestCalendarHashChain()
         {
             return GetExtendedTimeCalendarHashChain(null);

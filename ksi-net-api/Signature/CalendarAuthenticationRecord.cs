@@ -5,12 +5,12 @@ using Guardtime.KSI.Publication;
 namespace Guardtime.KSI.Signature
 {
     /// <summary>
-    /// Calendar authentication record TLV element
+    ///     Calendar authentication record TLV element
     /// </summary>
     public sealed class CalendarAuthenticationRecord : CompositeTag
     {
         /// <summary>
-        /// Calendar authentication record TLV type
+        ///     Calendar authentication record TLV type
         /// </summary>
         public const uint TagType = 0x805;
 
@@ -18,29 +18,7 @@ namespace Guardtime.KSI.Signature
         private readonly SignatureData _signatureData;
 
         /// <summary>
-        /// Get publication data.
-        /// </summary>
-        public PublicationData PublicationData
-        {
-            get
-            {
-                return _publicationData;
-            }
-        }
-
-        /// <summary>
-        /// Get signature data.
-        /// </summary>
-        public SignatureData SignatureData
-        {
-            get
-            {
-                return _signatureData;
-            }
-        }
-
-        /// <summary>
-        /// Create new calendar authentication record TLV element from TLV element
+        ///     Create new calendar authentication record TLV element from TLV element
         /// </summary>
         /// <param name="tag">TLV element</param>
         public CalendarAuthenticationRecord(TlvTag tag) : base(tag)
@@ -75,13 +53,31 @@ namespace Guardtime.KSI.Signature
 
             if (publicationDataCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one publication data must exist in calendar authentication record");
+                throw new InvalidTlvStructureException(
+                    "Only one publication data must exist in calendar authentication record");
             }
 
             if (signatureDataCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one signature data must exist in calendar authentication record");
+                throw new InvalidTlvStructureException(
+                    "Only one signature data must exist in calendar authentication record");
             }
+        }
+
+        /// <summary>
+        ///     Get publication data.
+        /// </summary>
+        public PublicationData PublicationData
+        {
+            get { return _publicationData; }
+        }
+
+        /// <summary>
+        ///     Get signature data.
+        /// </summary>
+        public SignatureData SignatureData
+        {
+            get { return _signatureData; }
         }
     }
 }

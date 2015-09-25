@@ -39,7 +39,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 var context = new TestVerificationContext()
                 {
-                    Signature = KsiSignature.GetInstance(stream)
+                    Signature = new KsiSignatureFactory().Create(stream)
                 };
 
                 Assert.Throws<KsiVerificationException>(delegate
@@ -48,10 +48,10 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 });
             }
 
-            PublicationsFile publicationsFile;
+            IPublicationsFile publicationsFile;
             using (var stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
             {
-                publicationsFile = PublicationsFile.GetInstance(stream);
+                publicationsFile = new PublicationsFileFactory().Create(stream);
             }
 
             // Check invalid publications recordin signature: null
@@ -59,7 +59,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 var context = new TestVerificationContextFaultyFunctions()
                 {
-                    Signature = KsiSignature.GetInstance(stream),
+                    Signature = new KsiSignatureFactory().Create(stream),
                     PublicationsFile = publicationsFile
                 };
 
@@ -70,14 +70,14 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             }
 
             var serviceProtocol = new TestKsiServiceProtocol();
-            var ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"), new PublicationsFileFactory());
+            var ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"), new PublicationsFileFactory(), new KsiSignatureFactory());
 
             // Check invalid extended calendar chain from context function: null
             using (var stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
             {
                 var context = new TestVerificationContextFaultyFunctions()
                 {
-                    Signature = KsiSignature.GetInstance(stream),
+                    Signature = new KsiSignatureFactory().Create(stream),
                     PublicationsFile = publicationsFile,
                     KsiService = ksiService
                 };
@@ -93,7 +93,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 var context = new TestVerificationContext()
                 {
-                    Signature = KsiSignature.GetInstance(stream),
+                    Signature = new KsiSignatureFactory().Create(stream),
                     PublicationsFile = publicationsFile,
                     KsiService = ksiService
                 };
@@ -109,7 +109,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 var context = new TestVerificationContext()
                 {
-                    Signature = KsiSignature.GetInstance(stream),
+                    Signature = new KsiSignatureFactory().Create(stream),
                     PublicationsFile = publicationsFile,
                     KsiService = ksiService
                 };
@@ -122,7 +122,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 var context = new TestVerificationContext()
                 {
-                    Signature = KsiSignature.GetInstance(stream),
+                    Signature = new KsiSignatureFactory().Create(stream),
                     PublicationsFile = publicationsFile,
                     KsiService = ksiService
                 };
@@ -135,7 +135,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 var context = new TestVerificationContext()
                 {
-                    Signature = KsiSignature.GetInstance(stream),
+                    Signature = new KsiSignatureFactory().Create(stream),
                     PublicationsFile = publicationsFile,
                     KsiService = ksiService
                 };

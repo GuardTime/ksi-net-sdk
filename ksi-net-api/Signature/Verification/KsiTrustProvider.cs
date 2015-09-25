@@ -1,17 +1,15 @@
-﻿
-namespace Guardtime.KSI.Signature.Verification
+﻿namespace Guardtime.KSI.Signature.Verification
 {
     /// <summary>
-    /// KSI trust provider.
+    ///     KSI trust provider.
     /// </summary>
     public class KsiTrustProvider
     {
         /// <summary>
-        /// Verfy signature.
+        ///     Verfy signature.
         /// </summary>
         public void VerifySignature()
         {
-            
         }
     }
 }

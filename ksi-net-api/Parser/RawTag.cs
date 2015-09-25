@@ -1,27 +1,18 @@
-﻿
+﻿using System;
 using Guardtime.KSI.Utils;
-using System;
 
 namespace Guardtime.KSI.Parser
 {
     /// <summary>
-    /// Octet String TLV element.
+    ///     Octet String TLV element.
     /// </summary>
     public class RawTag : TlvTag, IEquatable<RawTag>
     {
         private readonly byte[] _value;
 
-        /// <summary>
-        /// Get TLV element byte array value.
-        /// </summary>
-        public byte[] Value
-        {
-            get { return _value; }
-        }
-
         // TODO: Test with encode returning null
         /// <summary>
-        /// Create new octet string TLV element from TLV element.
+        ///     Create new octet string TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         public RawTag(TlvTag tag) : base(tag)
@@ -36,7 +27,7 @@ namespace Guardtime.KSI.Parser
         }
 
         /// <summary>
-        /// Create new octet string TLV element from data
+        ///     Create new octet string TLV element from data
         /// </summary>
         /// <param name="type">TLV element type</param>
         /// <param name="nonCritical">Is TLV element non critical</param>
@@ -53,44 +44,15 @@ namespace Guardtime.KSI.Parser
         }
 
         /// <summary>
-        /// Return TLV element byte array value.
+        ///     Get TLV element byte array value.
         /// </summary>
-        /// <returns>TLV element value</returns>
-        public override byte[] EncodeValue()
+        public byte[] Value
         {
-            return _value;
+            get { return _value; }
         }
 
         /// <summary>
-        /// Get TLV element hash code.
-        /// </summary>
-        /// <returns>Hash code</returns>
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int res = 1;
-                for (int i = 0; i < _value.Length; i++)
-                {
-                    res = 31 * res + _value[i];
-                }
-
-                return res + Type.GetHashCode() + Forward.GetHashCode() + NonCritical.GetHashCode();
-            }
-        }
-
-        /// <summary>
-        /// Compare TLV element to object.
-        /// </summary>
-        /// <param name="obj">Comparable object.</param>
-        /// <returns>Is given object equal</returns>
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as RawTag);
-        }
-
-        /// <summary>
-        /// Compare TLV element against raw TLV element.
+        ///     Compare TLV element against raw TLV element.
         /// </summary>
         /// <param name="tag">Raw TLV element</param>
         /// <returns>true if elements are equal</returns>
@@ -114,13 +76,50 @@ namespace Guardtime.KSI.Parser
             }
 
             return Type == tag.Type &&
-                    Forward == tag.Forward &&
-                    NonCritical == tag.NonCritical &&
-                    Util.IsArrayEqual(EncodeValue(), tag.EncodeValue());
+                   Forward == tag.Forward &&
+                   NonCritical == tag.NonCritical &&
+                   Util.IsArrayEqual(EncodeValue(), tag.EncodeValue());
         }
 
         /// <summary>
-        /// Compare raw TLV elements against each other.
+        ///     Return TLV element byte array value.
+        /// </summary>
+        /// <returns>TLV element value</returns>
+        public override byte[] EncodeValue()
+        {
+            return _value;
+        }
+
+        /// <summary>
+        ///     Get TLV element hash code.
+        /// </summary>
+        /// <returns>Hash code</returns>
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int res = 1;
+                for (int i = 0; i < _value.Length; i++)
+                {
+                    res = 31*res + _value[i];
+                }
+
+                return res + Type.GetHashCode() + Forward.GetHashCode() + NonCritical.GetHashCode();
+            }
+        }
+
+        /// <summary>
+        ///     Compare TLV element to object.
+        /// </summary>
+        /// <param name="obj">Comparable object.</param>
+        /// <returns>Is given object equal</returns>
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as RawTag);
+        }
+
+        /// <summary>
+        ///     Compare raw TLV elements against each other.
         /// </summary>
         /// <param name="a">Raw TLV element</param>
         /// <param name="b">Raw TLV element</param>
@@ -131,7 +130,7 @@ namespace Guardtime.KSI.Parser
         }
 
         /// <summary>
-        /// Compare raw TLV elements non equity.
+        ///     Compare raw TLV elements non equity.
         /// </summary>
         /// <param name="a">Raw TLV element</param>
         /// <param name="b">Raw TLV element</param>
@@ -140,7 +139,5 @@ namespace Guardtime.KSI.Parser
         {
             return !(a == b);
         }
-
     }
-
 }

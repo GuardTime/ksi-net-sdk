@@ -178,6 +178,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="resources\service\" />
     <Folder Include="resources\signature\ksi-signature\" />
   </ItemGroup>
   <ItemGroup>

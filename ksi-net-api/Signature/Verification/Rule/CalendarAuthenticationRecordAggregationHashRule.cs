@@ -3,9 +3,9 @@ using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
-
     /// <summary>
-    /// Rule verifies that calendar authentication record publication hash equals to calendar hash chain publication hash. Without calendar authentication record <see cref="VerificationResult.Ok"/> is returned.
+    ///     Rule verifies that calendar authentication record publication hash equals to calendar hash chain publication hash.
+    ///     Without calendar authentication record <see cref="VerificationResult.Ok" /> is returned.
     /// </summary>
     public sealed class CalendarAuthenticationRecordAggregationHashRule : VerificationRule
     {
@@ -19,7 +19,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 throw new ArgumentNullException("context");
             }
 
-            KsiSignature signature = context.Signature;
+            IKsiSignature signature = context.Signature;
             if (signature == null)
             {
                 throw new KsiVerificationException("Invalid KSI signature: null");
@@ -32,6 +32,11 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             }
 
             CalendarHashChain calendarHashChain = signature.CalendarHashChain;
+            if (calendarHashChain == null)
+            {
+                throw new KsiVerificationException("Calendar hash chain missing from KSI signature");
+            }
+
             if (calendarHashChain.OutputHash != calendarAuthenticationRecord.PublicationData.PublicationHash)
             {
                 return VerificationResult.Fail;

@@ -1,21 +1,22 @@
-﻿using System.Collections.Generic;
-using Guardtime.KSI.Parser;
+﻿using System;
+using System.Collections.Generic;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
-using System;
+using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Signature
 {
     /// <summary>
-    /// RFC3161 record TLV element
+    ///     RFC3161 record TLV element
     /// </summary>
     public sealed class Rfc3161Record : CompositeTag
     {
         // TODO: Better name
         /// <summary>
-        /// RFC3161 record tag type
+        ///     RFC3161 record tag type
         /// </summary>
         public const uint TagType = 0x806;
+
         private const uint AggregationTimeTagType = 0x2;
         private const uint ChainIndexTagType = 0x3;
         private const uint InputHashTagType = 0x5;
@@ -29,28 +30,17 @@ namespace Guardtime.KSI.Signature
         private readonly IntegerTag _aggregationTime;
         private readonly List<IntegerTag> _chainIndex = new List<IntegerTag>();
         private readonly ImprintTag _inputHash;
-
-        private readonly RawTag _tstInfoPrefix;
-        private readonly RawTag _tstInfoSuffix;
-        private readonly IntegerTag _tstInfoAlgorithm;
+        private readonly IntegerTag _signedAttributesAlgorithm;
 
         private readonly RawTag _signedAttributesPrefix;
         private readonly RawTag _signedAttributesSuffix;
-        private readonly IntegerTag _signedAttributesAlgorithm;
+        private readonly IntegerTag _tstInfoAlgorithm;
+
+        private readonly RawTag _tstInfoPrefix;
+        private readonly RawTag _tstInfoSuffix;
 
         /// <summary>
-        /// Get RFC3161 input hash
-        /// </summary>
-        public DataHash InputHash
-        {
-            get
-            {
-                return _inputHash.Value;
-            }
-        }
-
-        /// <summary>
-        /// Create new RFC3161 record TLV element from TLV element
+        ///     Create new RFC3161 record TLV element from TLV element
         /// </summary>
         /// <param name="tag">TLV element</param>
         public Rfc3161Record(TlvTag tag) : base(tag)
@@ -166,12 +156,21 @@ namespace Guardtime.KSI.Signature
 
             if (signedAttributesAlgorithmCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one signed attributes algorithm must exist in RFC 3161 record");
+                throw new InvalidTlvStructureException(
+                    "Only one signed attributes algorithm must exist in RFC 3161 record");
             }
         }
 
         /// <summary>
-        /// Get output hash for RFC 3161 from document hash
+        ///     Get RFC3161 input hash
+        /// </summary>
+        public DataHash InputHash
+        {
+            get { return _inputHash.Value; }
+        }
+
+        /// <summary>
+        ///     Get output hash for RFC 3161 from document hash
         /// </summary>
         /// <param name="inputHash">document hash</param>
         /// <returns>aggregation input hash</returns>
@@ -182,14 +181,14 @@ namespace Guardtime.KSI.Signature
                 throw new ArgumentNullException("inputHash");
             }
 
-            DataHasher hasher = new DataHasher(HashAlgorithm.GetById((byte)_tstInfoAlgorithm.Value));
+            DataHasher hasher = new DataHasher(HashAlgorithm.GetById((byte) _tstInfoAlgorithm.Value));
             hasher.AddData(_tstInfoPrefix.Value);
             hasher.AddData(inputHash.Value);
             hasher.AddData(_tstInfoSuffix.Value);
 
             inputHash = hasher.GetHash();
 
-            hasher = new DataHasher(HashAlgorithm.GetById((byte)_signedAttributesAlgorithm.Value));
+            hasher = new DataHasher(HashAlgorithm.GetById((byte) _signedAttributesAlgorithm.Value));
             hasher.AddData(_signedAttributesPrefix.Value);
             hasher.AddData(inputHash.Value);
             hasher.AddData(_signedAttributesSuffix.Value);

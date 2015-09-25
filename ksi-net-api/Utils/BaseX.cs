@@ -1,56 +1,54 @@
-
 using System;
 using System.Text;
 
 namespace Guardtime.KSI.Utils
 {
-
     /// <summary>
-    /// A generic implementation base for the <a target="_blank" href="http://www.ietf.org/rfc/rfc4648.txt">RFC 4648</a> base-X encoders/decoders.
+    ///     A generic implementation base for the <a target="_blank" href="http://www.ietf.org/rfc/rfc4648.txt">RFC 4648</a>
+    ///     base-X encoders/decoders.
     /// </summary>
     public class BaseX
     {
+        /// <summary>
+        ///     The number of data bits encoded per character.
+        /// </summary>
+        private readonly int _bits;
 
         /// <summary>
-        /// A lookup table from values to characters.
+        ///     The number of characters in a full block in the encoded form.
+        /// </summary>
+        private readonly int _block;
+
+        /// <summary>
+        ///     A lookup table from values to characters.
         /// </summary>
         private readonly char[] _chars;
 
         /// <summary>
-        /// A lookup table from character code points to values. A value of -1 in the
-        /// table indicates the corresponding character is not used in the encoded
-        /// form. The indices {@code 0..values.length-1} correspond to code points
-        /// {@code min..max}.
-        /// </summary>
-        private readonly int[] _values;
-
-        /// <summary>
-        /// The lowest code point used in the encoded form.
-        /// </summary>
-        private int _min;
-
-        /// <summary>
-        /// The highest code point used in the encoded form.
-        /// </summary>
-        private int _max;
-
-		/// <summary>
-        /// The number of data bits encoded per character.
-        /// </summary>
-        private readonly int _bits;
-
-		/// <summary>
-        /// The number of characters in a full block in the encoded form.
-        /// </summary>
-        private readonly int _block;
-
-		/// <summary>
-        /// The character used for padding the last block when encoding.
+        ///     The character used for padding the last block when encoding.
         /// </summary>
         private readonly char _pad;
 
         /// <summary>
-        /// Create base converting instance.
+        ///     A lookup table from character code points to values. A value of -1 in the
+        ///     table indicates the corresponding character is not used in the encoded
+        ///     form. The indices {@code 0..values.length-1} correspond to code points
+        ///     {@code min..max}.
+        /// </summary>
+        private readonly int[] _values;
+
+        /// <summary>
+        ///     The highest code point used in the encoded form.
+        /// </summary>
+        private int _max;
+
+        /// <summary>
+        ///     The lowest code point used in the encoded form.
+        /// </summary>
+        private int _min;
+
+        /// <summary>
+        ///     Create base converting instance.
         /// </summary>
         /// <param name="alphabet">base alphabet</param>
         /// <param name="caseSensitive">is base conversion case sensitive</param>
@@ -58,7 +56,6 @@ namespace Guardtime.KSI.Utils
         /// <exception cref="ArgumentException">thrown when alphabet or padding does not match</exception>
         public BaseX(string alphabet, bool caseSensitive, char padding)
         {
-
             // the bit and byte counts
             _bits = 1;
             while ((1 << _bits) < alphabet.Length)
@@ -70,7 +67,7 @@ namespace Guardtime.KSI.Utils
                 throw new ArgumentException("The size of the encoding alphabet is not a power of 2", "alphabet");
             }
 
-            _block = 8 / Util.GCD(8, _bits);
+            _block = 8/Util.GCD(8, _bits);
 
             // the encoding lookup table
             _chars = alphabet.ToCharArray();
@@ -144,7 +141,7 @@ namespace Guardtime.KSI.Utils
         }
 
         /// <summary>
-        /// Encode bytes in given base.
+        ///     Encode bytes in given base.
         /// </summary>
         /// <param name="bytes">data bytes</param>
         /// <param name="sep">separator</param>
@@ -156,7 +153,7 @@ namespace Guardtime.KSI.Utils
         }
 
         /// <summary>
-        /// Encode bytes in given base.
+        ///     Encode bytes in given base.
         /// </summary>
         /// <param name="bytes">data bytes</param>
         /// <param name="off">offset</param>
@@ -166,7 +163,6 @@ namespace Guardtime.KSI.Utils
         /// <returns>bytes string representation in given base</returns>
         public string Encode(byte[] bytes, int off, int len, string sep, int freq)
         {
-
             // sanitize the parameters
             if (bytes == null)
             {
@@ -182,7 +178,7 @@ namespace Guardtime.KSI.Utils
             {
                 freq = 0;
             }
-            else 
+            else
             {
                 for (int i = 0; i < sep.Length; i++)
                 {
@@ -195,13 +191,13 @@ namespace Guardtime.KSI.Utils
             }
 
             // create the output buffer
-            int outLen = (8 * len + _bits - 1) / _bits;
+            int outLen = (8*len + _bits - 1)/_bits;
             outLen = (outLen + _block - 1)/_block*_block;
             if (freq > 0)
             {
                 if (sep != null)
                 {
-                    outLen += (outLen - 1)/freq * sep.Length;
+                    outLen += (outLen - 1)/freq*sep.Length;
                 }
             }
 
@@ -222,9 +218,10 @@ namespace Guardtime.KSI.Utils
                 // fetch the next byte(s), padding with zero bits as needed
                 while (bufBits < _bits)
                 {
-                    int next = (inCount < len ? bytes[off + inCount] :
-                    0)
-                    ;
+                    int next = (inCount < len
+                        ? bytes[off + inCount]
+                        : 0)
+                        ;
                     inCount++;
                     buf = (buf << 8) | (next & 0xff); // we want unsigned bytes
                     bufBits += 8;
@@ -251,13 +248,12 @@ namespace Guardtime.KSI.Utils
         }
 
         /// <summary>
-        /// Decode string base representation.
+        ///     Decode string base representation.
         /// </summary>
         /// <param name="s">base string</param>
         /// <returns>base decoded byte array</returns>
         public byte[] Decode(string s)
         {
-
             // sanitize the parameters
             if (s == null)
             {
@@ -265,7 +261,7 @@ namespace Guardtime.KSI.Utils
             }
 
             // create the result buffer
-            byte[] outputBytes = new byte[s.Length * _bits / 8];
+            byte[] outputBytes = new byte[s.Length*_bits/8];
 
             // decode
             int outCount = 0; // number of output bytes produced
@@ -301,10 +297,9 @@ namespace Guardtime.KSI.Utils
 
             byte[] tmp = outputBytes;
             outputBytes = new byte[outCount];
-            Array.Copy(tmp, 0, outputBytes , 0, outCount);
+            Array.Copy(tmp, 0, outputBytes, 0, outCount);
 
             return outputBytes;
         }
-
     }
 }

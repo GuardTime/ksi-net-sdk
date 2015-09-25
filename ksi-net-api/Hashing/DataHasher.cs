@@ -5,7 +5,7 @@ using Microsoft.Win32.SafeHandles;
 namespace Guardtime.KSI.Hashing
 {
     /// <summary>
-    /// This class provides functionality for hashing data.
+    ///     This class provides functionality for hashing data.
     /// </summary>
     public class DataHasher
     {
@@ -16,7 +16,7 @@ namespace Guardtime.KSI.Hashing
         private DataHash _outputHash;
 
         /// <summary>
-        /// Create new Datahasher with given algorithm
+        ///     Create new Datahasher with given algorithm
         /// </summary>
         /// <param name="algorithm">Hash algorithm</param>
         public DataHasher(HashAlgorithm algorithm)
@@ -44,26 +44,25 @@ namespace Guardtime.KSI.Hashing
             }
 
             _messageHasher.Initialize();
-            
         }
 
         /// <summary>
-        /// Create new data hasher for the default algorithm.
+        ///     Create new data hasher for the default algorithm.
         /// </summary>
-        public DataHasher() : this(HashAlgorithm.GetByName("DEFAULT")) 
+        public DataHasher() : this(HashAlgorithm.GetByName("DEFAULT"))
         {
-
         }
 
         /// <summary>
-        /// Updates the digest using the specified array of bytes, starting at the specified offset.
+        ///     Updates the digest using the specified array of bytes, starting at the specified offset.
         /// </summary>
         /// <param name="data">the list of bytes.</param>
         /// <param name="offset">the offset to start from in the array of bytes.</param>
         /// <param name="length">the number of bytes to use, starting at the offset.</param>
         /// <returns>the same DataHasher object for chaining calls</returns>
-        public DataHasher AddData(byte[] data, int offset, int length) {
-            if (_outputHash != null) 
+        public DataHasher AddData(byte[] data, int offset, int length)
+        {
+            if (_outputHash != null)
             {
                 throw new InvalidOperationException("Output hash has already been calculated");
             }
@@ -78,55 +77,59 @@ namespace Guardtime.KSI.Hashing
         }
 
         /// <summary>
-        /// Adds data to the digest using the specified array of bytes, starting at an offset of 0.
+        ///     Adds data to the digest using the specified array of bytes, starting at an offset of 0.
         /// </summary>
         /// <param name="data">list of bytes</param>
         /// <returns>the same DataHasher object for chaining calls</returns>
-        public DataHasher AddData(byte[] data) {
+        public DataHasher AddData(byte[] data)
+        {
             if (data == null)
             {
                 throw new ArgumentNullException("data");
             }
-            
+
             return AddData(data, 0, data.Length);
         }
 
         /// <summary>
-        /// Adds data to the digest using the specified input stream of bytes, starting at an offset of 0.
+        ///     Adds data to the digest using the specified input stream of bytes, starting at an offset of 0.
         /// </summary>
         /// <param name="inStream">input stream of bytes.</param>
         /// <returns>the same DataHasher object for chaining calls</returns>
-        public DataHasher AddData(Stream inStream) {
+        public DataHasher AddData(Stream inStream)
+        {
             return AddData(inStream, DefaultStreamBufferSize);
         }
 
         /// <summary>
-        /// Adds data to the digest using the specified file, starting at the offset 0.
+        ///     Adds data to the digest using the specified file, starting at the offset 0.
         /// </summary>
         /// <param name="fileHandle">input file handle.</param>
         /// <returns>the same DataHasher object for chaining calls</returns>
-        public DataHasher AddData(SafeFileHandle fileHandle) {
+        public DataHasher AddData(SafeFileHandle fileHandle)
+        {
             return AddData(fileHandle, DefaultStreamBufferSize);
         }
 
         /// <summary>
-        /// Adds data to the digest using the specified input stream of bytes, starting at an offset of 0.
+        ///     Adds data to the digest using the specified input stream of bytes, starting at an offset of 0.
         /// </summary>
         /// <param name="inStream">input stream of bytes.</param>
         /// <param name="bufferSize">maximum allowed buffer size for reading data</param>
         /// <returns>the same DataHasher object for chaining calls</returns>
-        public DataHasher AddData(Stream inStream, int bufferSize) {
+        public DataHasher AddData(Stream inStream, int bufferSize)
+        {
             if (inStream == null)
             {
                 throw new ArgumentNullException("inStream");
             }
 
             byte[] buffer = new byte[bufferSize];
-            while (true) 
+            while (true)
             {
                 int bytesRead = inStream.Read(buffer, 0, bufferSize);
 
-                if (bytesRead == 0) 
+                if (bytesRead == 0)
                 {
                     return this;
                 }
@@ -136,7 +139,7 @@ namespace Guardtime.KSI.Hashing
         }
 
         /// <summary>
-        /// Adds data to the digest using the specified file, starting at the offset 0.
+        ///     Adds data to the digest using the specified file, starting at the offset 0.
         /// </summary>
         /// <param name="fileHandle">input file handle.</param>
         /// <param name="bufferSize">size of buffer for reading data</param>
@@ -155,13 +158,14 @@ namespace Guardtime.KSI.Hashing
         }
 
         /// <summary>
-        /// Get the final hash value for the digest.
-        /// This will not reset hash calculation.
+        ///     Get the final hash value for the digest.
+        ///     This will not reset hash calculation.
         /// </summary>
         /// <returns>hashValue with computed hash value.</returns>
-        public DataHash GetHash() {
+        public DataHash GetHash()
+        {
             if (_outputHash != null) return _outputHash;
-            _messageHasher.TransformFinalBlock(new byte[] { }, 0, 0);
+            _messageHasher.TransformFinalBlock(new byte[] {}, 0, 0);
             byte[] hash = _messageHasher.Hash;
             _outputHash = new DataHash(_algorithm, hash);
 
@@ -169,10 +173,11 @@ namespace Guardtime.KSI.Hashing
         }
 
         /// <summary>
-        /// Resets hash calculation.
+        ///     Resets hash calculation.
         /// </summary>
         /// <returns>the same DataHasher object for chaining calls</returns>
-        public DataHasher Reset() {
+        public DataHasher Reset()
+        {
             _outputHash = null;
             _messageHasher.Clear();
             _messageHasher = System.Security.Cryptography.HashAlgorithm.Create(_algorithm.Name);

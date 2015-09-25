@@ -3,10 +3,9 @@ using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
-
     public sealed class CalendarHashChainRegistrationTimeRule : VerificationRule
     {
-        /// <see cref="VerificationRule.Verify"/>
+        /// <see cref="VerificationRule.Verify" />
         /// <exception cref="ArgumentNullException">thrown if context is missing</exception>
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
@@ -28,7 +27,9 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 return VerificationResult.Ok;
             }
 
-            return calendarHashChain.AggregationTime != calendarHashChain.RegistrationTime ? VerificationResult.Fail : VerificationResult.Ok;
+            return calendarHashChain.AggregationTime != calendarHashChain.RegistrationTime
+                ? VerificationResult.Fail
+                : VerificationResult.Ok;
         }
     }
 }
