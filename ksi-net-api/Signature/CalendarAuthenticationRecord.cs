@@ -5,13 +5,12 @@ using Guardtime.KSI.Publication;
 namespace Guardtime.KSI.Signature
 {
     /// <summary>
-    /// Calendar authentication record TLV element
+    ///     Calendar authentication record TLV element
     /// </summary>
-    public class CalendarAuthenticationRecord : CompositeTag
+    public sealed class CalendarAuthenticationRecord : CompositeTag
     {
-        // TODO: Better name
         /// <summary>
-        /// Calendar authentication record tag type
+        ///     Calendar authentication record TLV type
         /// </summary>
         public const uint TagType = 0x805;
 
@@ -19,11 +18,19 @@ namespace Guardtime.KSI.Signature
         private readonly SignatureData _signatureData;
 
         /// <summary>
-        /// Create new calendar authentication record TLV element from TLV element
+        ///     Create new calendar authentication record TLV element from TLV element
         /// </summary>
         /// <param name="tag">TLV element</param>
         public CalendarAuthenticationRecord(TlvTag tag) : base(tag)
         {
+            if (Type != TagType)
+            {
+                throw new InvalidTlvStructureException("Invalid calendar authentication record type: " + Type);
+            }
+
+            int publicationDataCount = 0;
+            int signatureDataCount = 0;
+
             for (int i = 0; i < Count; i++)
             {
                 switch (this[i].Type)
@@ -31,51 +38,46 @@ namespace Guardtime.KSI.Signature
                     case PublicationData.TagType:
                         _publicationData = new PublicationData(this[i]);
                         this[i] = _publicationData;
+                        publicationDataCount++;
                         break;
                     case SignatureData.TagType:
                         _signatureData = new SignatureData(this[i]);
                         this[i] = _signatureData;
+                        signatureDataCount++;
+                        break;
+                    default:
+                        VerifyCriticalFlag(this[i]);
                         break;
                 }
+            }
+
+            if (publicationDataCount != 1)
+            {
+                throw new InvalidTlvStructureException(
+                    "Only one publication data must exist in calendar authentication record");
+            }
+
+            if (signatureDataCount != 1)
+            {
+                throw new InvalidTlvStructureException(
+                    "Only one signature data must exist in calendar authentication record");
             }
         }
 
         /// <summary>
-        /// Check TLV structure.
+        ///     Get publication data.
         /// </summary>
-        protected override void CheckStructure()
+        public PublicationData PublicationData
         {
-            if (Type != TagType)
-            {
-                throw new InvalidTlvStructureException("Invalid calendar authentication record type: " + Type);
-            }
+            get { return _publicationData; }
+        }
 
-            uint[] tags = new uint[2];
-
-            for (int i = 0; i < Count; i++)
-            {
-                switch (this[i].Type)
-                {
-                    case PublicationData.TagType:
-                        tags[0]++;
-                        break;
-                    case SignatureData.TagType:
-                        tags[1]++;
-                        break;
-                    default:
-                        throw new InvalidTlvStructureException("Invalid tag", this[i]);
-                }
-            }
-
-            if (tags[0] != 1)
-            {
-                throw new InvalidTlvStructureException("Only one publication data must exist in calendar authentication record");
-            }
-
-            if (tags[1] != 1)
-            {
-                throw new InvalidTlvStructureException("Only one signature data must exist in calendar authentication record");
-            }
+        /// <summary>
+        ///     Get signature data.
+        /// </summary>
+        public SignatureData SignatureData
+        {
+            get { return _signatureData; }
         }
     }
 }

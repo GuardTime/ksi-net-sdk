@@ -1,17 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using Guardtime.KSI.Parser;
-using Guardtime.KSI.Utils;
+﻿using System.Collections.Generic;
 using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Signature;
+using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Publication
 {
     /// <summary>
-    /// Publication record TLV element
+    ///     Publication record TLV element.
     /// </summary>
-    public class PublicationRecord : CompositeTag
+    public sealed class PublicationRecord : CompositeTag
     {
+        /// <summary>
+        ///     Signature publication record TLV type.
+        /// </summary>
+        public const uint TagTypeSignature = 0x803;
+
+        /// <summary>
+        ///     Publication publication record TLV type.
+        /// </summary>
+        public const uint TagTypePublication = 0x703;
+
         private const uint PublicationReferencesTagType = 0x9;
         private const uint PublicationRepositoryUriTagType = 0xa;
 
@@ -20,46 +27,18 @@ namespace Guardtime.KSI.Publication
         private readonly List<StringTag> _publicationRepositoryUri = new List<StringTag>();
 
         /// <summary>
-        /// Get publication data
+        ///     Create new publication record TLV element from TLV element.
         /// </summary>
-        public PublicationData PublicationData
-        {
-            get { return _publicationData; }
-        }
-
-        /// <summary>
-        /// Get publication references
-        /// </summary>
-        public List<StringTag> PublicationReferences
-        {
-            get { return _publicationReferences; }
-        }
-
-        /// <summary>
-        /// Get publication repository uri
-        /// </summary>
-        public List<StringTag> PubRepUri
-        {
-            get { return _publicationRepositoryUri; }
-        }
-
-        /// <summary>
-        /// Get publication time
-        /// </summary>
-        public DateTime PublicationTime
-        {
-            get
-            {
-                return Util.ConvertUnixTimeToDateTime(PublicationData.PublicationTime.Value);
-            } 
-        }
-
-        /// <summary>
-        /// Create new publication record TLV element from TLV element
-        /// </summary>
-        /// <param name="tagList">TLV tag list</param>
+        /// <param name="tag">TLV element</param>
         public PublicationRecord(TlvTag tag) : base(tag)
         {
+            if (Type != TagTypeSignature && Type != TagTypePublication)
+            {
+                throw new InvalidTlvStructureException("Invalid publication record type: " + Type);
+            }
+
+            int publicationDataCount = 0;
+
             for (int i = 0; i < Count; i++)
             {
                 StringTag listTag;
@@ -69,6 +48,7 @@ namespace Guardtime.KSI.Publication
                     case PublicationData.TagType:
                         _publicationData = new PublicationData(this[i]);
                         this[i] = _publicationData;
+                        publicationDataCount++;
                         break;
                     case PublicationReferencesTagType:
                         listTag = new StringTag(this[i]);
@@ -80,45 +60,40 @@ namespace Guardtime.KSI.Publication
                         _publicationRepositoryUri.Add(listTag);
                         this[i] = listTag;
                         break;
+                    default:
+                        VerifyCriticalFlag(this[i]);
+                        break;
                 }
+            }
+
+            if (publicationDataCount != 1)
+            {
+                throw new InvalidTlvStructureException("Only one publication data is allowed in publication record");
             }
         }
 
         /// <summary>
-        /// Check TLV structure.
+        ///     Get publication data.
         /// </summary>
-        protected override void CheckStructure()
+        public PublicationData PublicationData
         {
-            if (Type != KsiSignatureDo.PublicationRecordTagType && Type != PublicationsFileDo.PublicationRecordTagType)
-            {
-                throw new InvalidTlvStructureException("Invalid publication record type: " + Type);
-            }
+            get { return _publicationData; }
+        }
 
-            uint[] tags = new uint[3];
+        /// <summary>
+        ///     Get publication references.
+        /// </summary>
+        public List<StringTag> PublicationReferences
+        {
+            get { return _publicationReferences; }
+        }
 
-            for (int i = 0; i < Count; i++)
-            {
-                switch (this[i].Type)
-                {
-                    case PublicationData.TagType:
-                        tags[0]++;
-                        break;
-                    case PublicationReferencesTagType:
-                        tags[1]++;
-                        break;
-                    case PublicationRepositoryUriTagType:
-                        tags[2]++;
-                        break;
-                    default:
-                        throw new InvalidTlvStructureException("Invalid tag", this[i]);
-                }
-            }
-
-            if (tags[0] != 1)
-            {
-                throw new InvalidTlvStructureException("Only one publication data is allowed in publication record");
-            }
-
+        /// <summary>
+        ///     Get publication repository uri.
+        /// </summary>
+        public List<StringTag> PubRepUri
+        {
+            get { return _publicationRepositoryUri; }
         }
     }
 }

@@ -4,6 +4,7 @@ using Guardtime.KSI.Signature;
 using NUnit.Framework;
 using System;
 using System.IO;
+using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Service
 {
@@ -13,23 +14,32 @@ namespace Guardtime.KSI.Service
         [Test]
         public void TestHttpAggregationRequest()
         {
-            KsiService ksiService = new KsiService(new HttpKsiServiceProtocol(), new ServiceCredentials("anon", "anon"));
-            IAsyncResult createSignatureAsyncResult = ksiService.BeginCreateSignature(new DataHash(HashAlgorithm.Sha2256, new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 }), null, null);
-            KsiSignature signature = ksiService.EndCreateSignature(createSignatureAsyncResult);
-            Console.WriteLine(signature);
+            var serviceProtocol = new HttpKsiServiceProtocol(
+                "http://ksigw.test.guardtime.com:3333/gt-signingservice",
+                "http://ksigw.test.guardtime.com:8010/gt-extendingservice",
+                "http://verify.guardtime.com/ksi-publications.bin");
 
+
+            Console.WriteLine(@"// Creating service");
+            var ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"), new PublicationsFileFactory(), new KsiSignatureFactory());
+            Console.WriteLine(@"// Signing hash");
+            var createSignatureAsyncResult = ksiService.BeginSign(new DataHash(HashAlgorithm.Sha2256, new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 }), null, null);
+            ksiService.EndSign(createSignatureAsyncResult);
+
+            // TODO: Improve extending
+            Console.WriteLine(@"// Extending signature");
+            IKsiSignature signature;
             using (var stream = new FileStream("resources/signature/signature-ok.tlv", FileMode.Open))
             {
-                signature = KsiSignature.GetInstance(stream);
-                Console.WriteLine(signature);
-                IAsyncResult extendSignatureAsyncResult = ksiService.BeginExtendSignature(signature, null, null);
-                signature = ksiService.EndExtendSignature(extendSignatureAsyncResult);
-                Console.WriteLine(signature);
+                signature = new KsiSignatureFactory().Create(stream);
+                var extendSignatureAsyncResult = ksiService.BeginExtend(signature.AggregationTime, null, null);
+                signature = signature.Extend(ksiService.EndExtend(extendSignatureAsyncResult));
             }
-            //IAsyncResult pubFileAsyncResult = ksiService.BeginGetPublicationsFile(null, null);
-            //IAsyncResult extendSignatureAsyncresult = ksiService.BeginExtendSignature(signature, null, null);
-            //Console.WriteLine(ksiService.EndExtendSignature(extendSignatureAsyncresult));
-            //Console.WriteLine(ksiService.EndGetPublicationsFile(pubFileAsyncResult));
+            var pubFileAsyncResult = ksiService.BeginGetPublicationsFile(null, null);
+            var extendSignatureAsyncresult = ksiService.BeginExtend(signature.AggregationTime, null, null);
+            ksiService.EndExtend(extendSignatureAsyncresult);
+            Console.WriteLine(@"// Publications File");
+            Console.WriteLine(ksiService.EndGetPublicationsFile(pubFileAsyncResult));
         }
     }
 }

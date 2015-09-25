@@ -1,12 +1,10 @@
 ﻿using System;
-using Guardtime.KSI.Exceptions;
 
-namespace Guardtime.KSI.Hashing
+namespace Guardtime.KSI.Exceptions
 {
     [Serializable]
-    class HashingException : KsiException
+    internal class HashingException : KsiException
     {
-
         public HashingException(string message) : base(message)
         {
         }

@@ -1,7 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using NUnit.Framework;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Signature
 {
@@ -14,6 +16,10 @@ namespace Guardtime.KSI.Signature
         {
             SignatureData signatureData = GetSignatureDataFromFile(Properties.Resources.SignatureData_Ok);
             Assert.AreEqual(4, signatureData.Count, "Invalid amount of child TLV objects");
+
+            CollectionAssert.AreEqual(signatureData.CertificateId, new byte[] { 0xc2, 0x46, 0xb1, 0x39 }, "Certificate Id should be equal");
+            CollectionAssert.AreEqual(signatureData.SignatureValue, Base16.Decode("98D9A4D14722BB2C22425AC9112FBF6A2491B7051AD0CBFD8153E669BFCC6CDF20EEC80F7FCC7236985A4F83871DD6E245470BCA323A3902035B78764DDC4C6EB42416A3A7D7E5CEF6ED6AE8FADA668413758CF7DE1E9565EDF646170286D0F43CA30491DD3407B53DEEDDCBD2620057AB6580E3D3E938AE44EABAF3282357EEBB7B2325616755A1F20B3A78DE2F636DE10F7CCD75B6C5BB80EFEBA216F9BF1A302DCB93B9D3E3E9754620E6D8EC8672C5329CBBB00A9A4617242950D68B8A55CBA77E69DECDD49DD96F69FAA6BFBB0EF48A913F5F26AFA01FB08192D62123FC644BA2978CAF147229BD5702663494983A40ED77AA5016EAABC1FE8456DC17D4"), "Signature value should be correct");
+            Assert.AreEqual(signatureData.SignatureType, "1.2.840.113549.1.1.11", "Signature type should be correct");
         }
 
         [Test]
@@ -23,58 +29,86 @@ namespace Guardtime.KSI.Signature
             Assert.AreEqual(3, signatureData.Count, "Invalid amount of child TLV objects");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Invalid signature data type: 10")]
+        [Test]
         public void TestSignatureDataInvalidWithWrongType()
         {
-            GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Wrong_Type);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Wrong_Type);
+            }, "Invalid signature data type: 10");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Invalid tag")]
+        [Test]
         public void TestSignatureDataInvalidWithExtraTag()
         {
-            GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Extra_Tag);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Extra_Tag);
+            }, "Invalid tag");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one signature type must exist in signature data")]
+        [Test]
         public void TestSignatureDataInvalidWithoutSignatureTypeTag()
         {
-            GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Signature_Type_Missing);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Signature_Type_Missing);
+            }, "Only one signature type must exist in signature data");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one signature type must exist in signature data")]
+        [Test]
         public void TestSignatureDataInvalidWithMultipleSignatureTypes()
         {
-            GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Multiple_Signature_Type);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Multiple_Signature_Type);
+            }, "Only one signature type must exist in signature data");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one signature value must exist in signature data")]
+        [Test]
         public void TestSignatureDataInvalidWithoutSignatureValueTag()
         {
-            GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Signature_Value_Missing);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Signature_Value_Missing);
+            }, "Only one signature value must exist in signature data");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one signature value must exist in signature data")]
+        [Test]
         public void TestSignatureDataInvalidWithMultipleSignatureValues()
         {
-            GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Multiple_Signature_Value);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Multiple_Signature_Value);
+            }, "Only one signature value must exist in signature data");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one certificate id must exist in signature data")]
+        [Test]
         public void TestSignatureDataInvalidWithoutCertificateIdTag()
         {
-            GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Certificate_Id_Missing);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Certificate_Id_Missing);
+            }, "Only one certificate id must exist in signature data");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one certificate id must exist in signature data")]
+        [Test]
         public void TestSignatureDataInvalidWithMultipleCertificateIds()
         {
-            GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Multiple_Certificate_Id);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Multiple_Certificate_Id);
+            }, "Only one certificate id must exist in signature data");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one certificate repository uri is allowed in signature data")]
+        [Test]
         public void TestSignatureDataInvalidWithMultipleCertificateRepUris()
         {
-            GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Multiple_Certificate_Rep_Uri);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Multiple_Certificate_Rep_Uri);
+            }, "Only one certificate repository uri is allowed in signature data");
+            
         }
 
         private SignatureData GetSignatureDataFromFile(string file)
@@ -83,7 +117,6 @@ namespace Guardtime.KSI.Signature
             using (var reader = new TlvReader(stream))
             {
                 SignatureData signatureData = new SignatureData(reader.ReadTag());
-                signatureData.IsValidStructure();
 
                 return signatureData;
             }

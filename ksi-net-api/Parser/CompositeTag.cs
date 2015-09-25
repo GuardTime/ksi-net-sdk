@@ -1,23 +1,49 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Guardtime.KSI.Exceptions;
-using System.Collections.Generic;
-using System.Collections;
 using System.Threading;
+using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Parser
 {
     /// <summary>
-    /// TLV element containing other TLV elements
+    ///     TLV element containing other TLV elements
     /// </summary>
-    public abstract class CompositeTag : TlvTag, IEnumerable<TlvTag>
+    public abstract class CompositeTag : TlvTag, IEnumerable<TlvTag>, IEquatable<CompositeTag>
     {
         private readonly object _lock = new object();
         private readonly List<TlvTag> _value = new List<TlvTag>();
 
         /// <summary>
-        /// Get or set TLV child object
+        ///     Create new composite TLV element from TLV element.
+        /// </summary>
+        /// <param name="tag">TLV element</param>
+        protected CompositeTag(TlvTag tag) : base(tag)
+        {
+            DecodeValue(tag.EncodeValue());
+        }
+
+        /// <summary>
+        ///     Create new composite TLV element from data.
+        /// </summary>
+        /// <param name="type">TLV type</param>
+        /// <param name="nonCritical">Is TLV element non critical</param>
+        /// <param name="forward">Is TLV element forwarded</param>
+        /// <param name="value">TLV element list</param>
+        protected CompositeTag(uint type, bool nonCritical, bool forward, List<TlvTag> value)
+            : base(type, nonCritical, forward)
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
+            _value = value;
+        }
+
+        /// <summary>
+        ///     Get or set TLV child object
         /// </summary>
         /// <param name="i">tlv element position</param>
         /// <returns>TLV element at given position</returns>
@@ -31,6 +57,7 @@ namespace Guardtime.KSI.Parser
                 }
             }
 
+            // TODO: Thread safe
             protected set
             {
                 lock (_lock)
@@ -45,13 +72,13 @@ namespace Guardtime.KSI.Parser
             }
         }
 
-        // TODO: can be null?
         /// <summary>
-        /// Get TLV element list size
+        ///     Get TLV element list size
         /// </summary>
         public int Count
         {
-            get {
+            get
+            {
                 lock (_lock)
                 {
                     return _value.Count;
@@ -59,37 +86,70 @@ namespace Guardtime.KSI.Parser
             }
         }
 
-
-        // TODO: Create possibility to check composite tag validity and check for null tags in child objects
         /// <summary>
-        /// Create new composite TLV element from TLV element
+        ///     Get Enumerator for TLV composite element.
         /// </summary>
-        /// <param name="tag">TLV element</param>
-        protected CompositeTag(TlvTag tag) : base(tag)
+        /// <returns>TLV composite elemnet enumerator.</returns>
+        public IEnumerator<TlvTag> GetEnumerator()
         {
-            DecodeValue(tag.EncodeValue());
+            return new ThreadSafeIEnumerator<TlvTag>(_value.GetEnumerator(), _lock);
         }
 
         /// <summary>
-        /// Create new composite TLV element from data
+        ///     Get Enumerator for TLV composite element.
         /// </summary>
-        /// <param name="type">TLV type</param>
-        /// <param name="nonCritical">Is TLV element non critical</param>
-        /// <param name="forward">Is TLV element forwarded</param>
-        /// <param name="value">TLV value</param>
-        protected CompositeTag(uint type, bool nonCritical, bool forward, List<TlvTag> value)
-            : base(type, nonCritical, forward)
+        /// <returns>TLV composite elemnet enumerator.</returns>
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            if (value == null)
+            return GetEnumerator();
+        }
+
+        /// <summary>
+        ///     Compare Composite element to composite element
+        /// </summary>
+        /// <param name="tag">composite element</param>
+        /// <returns>true if objects are equal</returns>
+        public bool Equals(CompositeTag tag)
+        {
+            // If parameter is null, return false. 
+            if (ReferenceEquals(tag, null))
             {
-                throw new ArgumentNullException("value");
+                return false;
             }
-            _value = value;
+
+            if (ReferenceEquals(this, tag))
+            {
+                return true;
+            }
+
+            // If run-time types are not exactly the same, return false. 
+            if (GetType() != tag.GetType())
+            {
+                return false;
+            }
+
+            if (Count != tag.Count || Type != tag.Type || Forward != tag.Forward || NonCritical != tag.NonCritical)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < Count; i++)
+            {
+                if (!this[i].Equals(tag[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
+        /// <summary>
+        ///     Decode bytes to TLV list.
+        /// </summary>
+        /// <param name="bytes">TLV bytes</param>
         private void DecodeValue(byte[] bytes)
         {
-            
             using (MemoryStream stream = new MemoryStream(bytes))
             using (TlvReader tlvReader = new TlvReader(stream))
             {
@@ -101,7 +161,7 @@ namespace Guardtime.KSI.Parser
         }
 
         /// <summary>
-        /// Encode child TLV list to byte array
+        ///     Encode child TLV list to byte array.
         /// </summary>
         /// <returns>TLV list elements as byte array</returns>
         public override byte[] EncodeValue()
@@ -118,39 +178,9 @@ namespace Guardtime.KSI.Parser
             }
         }
 
-        /// <summary>
-        /// Check TLV structure.
-        /// </summary>
-        protected abstract void CheckStructure();
-
-        /// <summary>
-        /// Is TLV element structure valid.
-        /// </summary>
-        public void IsValidStructure()
-        {
-            try
-            {
-                CheckStructure();
-                for (int i = 0; i < Count; i++)
-                {
-                    CompositeTag tag = this[i] as CompositeTag;
-                    if (tag == null) continue;
-
-
-                    tag.IsValidStructure();
-                }
-
-            }
-            catch (InvalidTlvStructureException e)
-            {
-                e.TlvList.Add(this);
-                throw;
-            }
-        }
-
         // TODO: Use better name or replace this functionality
         /// <summary>
-        /// Put TLV element to child list, if null, remove it from list.
+        ///     Put TLV element to child list, if null, remove it from list.
         /// </summary>
         /// <typeparam name="T">TLV element type</typeparam>
         /// <param name="tag">New TLV element to put in list</param>
@@ -167,7 +197,7 @@ namespace Guardtime.KSI.Parser
         }
 
         /// <summary>
-        /// Add TLV element to list.
+        ///     Add TLV element to list.
         /// </summary>
         /// <typeparam name="T">Tlv element type</typeparam>
         /// <param name="tag">New TLV element</param>
@@ -187,7 +217,7 @@ namespace Guardtime.KSI.Parser
         }
 
         /// <summary>
-        /// Replace TLV element in list.
+        ///     Replace TLV element in list.
         /// </summary>
         /// <typeparam name="T">TLV element type</typeparam>
         /// <param name="tag">New TLV element</param>
@@ -219,25 +249,24 @@ namespace Guardtime.KSI.Parser
         }
 
         /// <summary>
-        /// Get Enumerator for TLV composite element.
+        ///     Verify unknown tag for critical flag and throw exception.
         /// </summary>
-        /// <returns>TLV composite elemnet enumerator.</returns>
-        public IEnumerator<TlvTag> GetEnumerator()
+        /// <param name="tag">TLV element</param>
+        protected void VerifyCriticalFlag(TlvTag tag)
         {
-            return new ThreadSafeIEnumerator<TlvTag>(_value.GetEnumerator(), _lock);
+            if (tag == null)
+            {
+                throw new ArgumentNullException("tag");
+            }
+
+            if (!tag.NonCritical)
+            {
+                throw new InvalidTlvStructureException("Invalid tag: " + tag.Type, tag);
+            }
         }
 
         /// <summary>
-        /// Get Enumerator for TLV composite element.
-        /// </summary>
-        /// <returns>TLV composite elemnet enumerator.</returns>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        /// <summary>
-        /// Get TLV element hash code.
+        ///     Get TLV element hash code.
         /// </summary>
         /// <returns>Hash code</returns>
         public override int GetHashCode()
@@ -247,7 +276,7 @@ namespace Guardtime.KSI.Parser
                 int res = 1;
                 for (int i = 0; i < _value.Count; i++)
                 {
-                    res = 31 * res + (_value[i] == null ? 0 : _value[i].GetHashCode());
+                    res = 31*res + (_value[i] == null ? 0 : _value[i].GetHashCode());
                 }
 
                 return res + Type.GetHashCode() + Forward.GetHashCode() + NonCritical.GetHashCode();
@@ -255,29 +284,17 @@ namespace Guardtime.KSI.Parser
         }
 
         /// <summary>
-        /// Compare TLV element to object.
+        ///     Compare TLV element to object.
         /// </summary>
         /// <param name="obj">Comparable object.</param>
         /// <returns>Is given object equal</returns>
         public override bool Equals(object obj)
         {
-            CompositeTag tag = obj as CompositeTag;
-            if (tag == null || (tag.Count != Count) || (tag.Type != Type && tag.Forward != Forward && tag.NonCritical != NonCritical))
-            {
-                return false;
-            }
-            
-            bool match = true;
-            for (int i = 0; i < Count && match; i++)
-            {
-                match = tag[i].Equals(this[i]);
-            }
-
-            return match;
+            return Equals(obj as CompositeTag);
         }
 
         /// <summary>
-        /// Convert TLV element to string.
+        ///     Convert TLV element to string.
         /// </summary>
         /// <returns>TLV element as string</returns>
         public override string ToString()
@@ -308,7 +325,12 @@ namespace Guardtime.KSI.Parser
             return builder.ToString();
         }
 
-        private string TabPrefix(string s)
+        /// <summary>
+        ///     Put tab prefix instead of new rows.
+        /// </summary>
+        /// <param name="s">string</param>
+        /// <returns>tab prefixed string</returns>
+        private static string TabPrefix(string s)
         {
             StringBuilder builder = new StringBuilder();
 
@@ -326,28 +348,36 @@ namespace Guardtime.KSI.Parser
             return builder.ToString();
         }
 
-        
+        /// <summary>
+        ///     Compare two composite element objects.
+        /// </summary>
+        /// <param name="a">composite element</param>
+        /// <param name="b">composite element</param>
+        /// <returns>true if objects are equal</returns>
+        public static bool operator ==(CompositeTag a, CompositeTag b)
+        {
+            return ReferenceEquals(a, null) ? ReferenceEquals(b, null) : a.Equals(b);
+        }
 
+        /// <summary>
+        ///     Compare two composite elements non equality.
+        /// </summary>
+        /// <param name="a">composite element</param>
+        /// <param name="b">composite element</param>
+        /// <returns>true if objects are not equal</returns>
+        public static bool operator !=(CompositeTag a, CompositeTag b)
+        {
+            return !(a == b);
+        }
+
+        /// <summary>
+        ///     Thread safe enumerator for composite tag element
+        /// </summary>
+        /// <typeparam name="T">composite element</typeparam>
         private class ThreadSafeIEnumerator<T> : IEnumerator<T>
         {
-            private readonly object _lock;
             private readonly IEnumerator<T> _childEnumerator;
-
-            public T Current
-            {
-                get
-                {
-                    return _childEnumerator.Current;
-                }
-            }
-
-            object IEnumerator.Current
-            {
-                get
-                {
-                    return _childEnumerator.Current;
-                }
-            }
+            private readonly object _lock;
 
             public ThreadSafeIEnumerator(IEnumerator<T> childEnumerator, object lockObject)
             {
@@ -355,6 +385,16 @@ namespace Guardtime.KSI.Parser
                 _lock = lockObject;
 
                 Monitor.Enter(_lock);
+            }
+
+            public T Current
+            {
+                get { return _childEnumerator.Current; }
+            }
+
+            object IEnumerator.Current
+            {
+                get { return _childEnumerator.Current; }
             }
 
             public void Dispose()
@@ -373,5 +413,4 @@ namespace Guardtime.KSI.Parser
             }
         }
     }
-
 }

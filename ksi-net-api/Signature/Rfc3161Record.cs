@@ -1,21 +1,22 @@
-﻿using System.Collections.Generic;
-using Guardtime.KSI.Parser;
+﻿using System;
+using System.Collections.Generic;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
-using System;
+using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Signature
 {
     /// <summary>
-    /// RFC3161 record TLV element
+    ///     RFC3161 record TLV element
     /// </summary>
-    public class Rfc3161Record : CompositeTag
+    public sealed class Rfc3161Record : CompositeTag
     {
         // TODO: Better name
         /// <summary>
-        /// RFC3161 record tag type
+        ///     RFC3161 record tag type
         /// </summary>
         public const uint TagType = 0x806;
+
         private const uint AggregationTimeTagType = 0x2;
         private const uint ChainIndexTagType = 0x3;
         private const uint InputHashTagType = 0x5;
@@ -29,32 +30,35 @@ namespace Guardtime.KSI.Signature
         private readonly IntegerTag _aggregationTime;
         private readonly List<IntegerTag> _chainIndex = new List<IntegerTag>();
         private readonly ImprintTag _inputHash;
-
-        private readonly RawTag _tstInfoPrefix;
-        private readonly RawTag _tstInfoSuffix;
-        private readonly IntegerTag _tstInfoAlgorithm;
+        private readonly IntegerTag _signedAttributesAlgorithm;
 
         private readonly RawTag _signedAttributesPrefix;
         private readonly RawTag _signedAttributesSuffix;
-        private readonly IntegerTag _signedAttributesAlgorithm;
+        private readonly IntegerTag _tstInfoAlgorithm;
+
+        private readonly RawTag _tstInfoPrefix;
+        private readonly RawTag _tstInfoSuffix;
 
         /// <summary>
-        /// Get RFC3161 input hash
-        /// </summary>
-        public DataHash InputHash
-        {
-            get
-            {
-                return _inputHash.Value;
-            }
-        }
-
-        /// <summary>
-        /// Create new RFC3161 record TLV element from TLV element
+        ///     Create new RFC3161 record TLV element from TLV element
         /// </summary>
         /// <param name="tag">TLV element</param>
         public Rfc3161Record(TlvTag tag) : base(tag)
         {
+            if (Type != TagType)
+            {
+                throw new InvalidTlvStructureException("Invalid RFC 3161 record type: " + Type);
+            }
+
+            int aggregationTimeCount = 0;
+            int inputHashCount = 0;
+            int tstInfoPrefixCount = 0;
+            int tstInfoSuffixCount = 0;
+            int tstInfoAlgorithmCount = 0;
+            int signedAttributesPrefixCount = 0;
+            int signedAttributesSuffixCount = 0;
+            int signedAttributesAlgorithmCount = 0;
+
             for (int i = 0; i < Count; i++)
             {
                 switch (this[i].Type)
@@ -62,6 +66,7 @@ namespace Guardtime.KSI.Signature
                     case AggregationTimeTagType:
                         _aggregationTime = new IntegerTag(this[i]);
                         this[i] = _aggregationTime;
+                        aggregationTimeCount++;
                         break;
                     case ChainIndexTagType:
                         IntegerTag chainTag = new IntegerTag(this[i]);
@@ -71,37 +76,101 @@ namespace Guardtime.KSI.Signature
                     case InputHashTagType:
                         _inputHash = new ImprintTag(this[i]);
                         this[i] = _inputHash;
+                        inputHashCount++;
                         break;
                     case TstInfoPrefixTagType:
                         _tstInfoPrefix = new RawTag(this[i]);
                         this[i] = _tstInfoPrefix;
+                        tstInfoPrefixCount++;
                         break;
                     case TstInfoSuffixTagType:
                         _tstInfoSuffix = new RawTag(this[i]);
                         this[i] = _tstInfoSuffix;
+                        tstInfoSuffixCount++;
                         break;
                     case TstInfoAlgorithmTagType:
                         _tstInfoAlgorithm = new IntegerTag(this[i]);
                         this[i] = _tstInfoAlgorithm;
+                        tstInfoAlgorithmCount++;
                         break;
                     case SignedAttributesPrefixTagType:
                         _signedAttributesPrefix = new RawTag(this[i]);
                         this[i] = _signedAttributesPrefix;
+                        signedAttributesPrefixCount++;
                         break;
                     case SignedAttributesSuffixTagType:
                         _signedAttributesSuffix = new RawTag(this[i]);
                         this[i] = _signedAttributesSuffix;
+                        signedAttributesSuffixCount++;
                         break;
                     case SignedAttributesAlgorithmTagType:
                         _signedAttributesAlgorithm = new IntegerTag(this[i]);
                         this[i] = _signedAttributesAlgorithm;
+                        signedAttributesAlgorithmCount++;
+                        break;
+                    default:
+                        VerifyCriticalFlag(this[i]);
                         break;
                 }
+            }
+
+            if (aggregationTimeCount != 1)
+            {
+                throw new InvalidTlvStructureException("Only one aggregation time must exist in RFC 3161 record");
+            }
+
+            if (_chainIndex.Count == 0)
+            {
+                throw new InvalidTlvStructureException("Chain indexes must exist in RFC 3161 record");
+            }
+
+            if (inputHashCount != 1)
+            {
+                throw new InvalidTlvStructureException("Only one input hash must exist in RFC 3161 record");
+            }
+
+            if (tstInfoPrefixCount != 1)
+            {
+                throw new InvalidTlvStructureException("Only one tstInfo prefix must exist in RFC 3161 record");
+            }
+
+            if (tstInfoSuffixCount != 1)
+            {
+                throw new InvalidTlvStructureException("Only one tstInfo suffix must exist in RFC 3161 record");
+            }
+
+            if (tstInfoAlgorithmCount != 1)
+            {
+                throw new InvalidTlvStructureException("Only one tstInfo algorithm must exist in RFC 3161 record");
+            }
+
+            if (signedAttributesPrefixCount != 1)
+            {
+                throw new InvalidTlvStructureException("Only one signed attributes prefix must exist in RFC 3161 record");
+            }
+
+            if (signedAttributesSuffixCount != 1)
+            {
+                throw new InvalidTlvStructureException("Only one signed attributes suffix must exist in RFC 3161 record");
+            }
+
+            if (signedAttributesAlgorithmCount != 1)
+            {
+                throw new InvalidTlvStructureException(
+                    "Only one signed attributes algorithm must exist in RFC 3161 record");
             }
         }
 
         /// <summary>
-        /// Get output hash for RFC 3161 from document hash
+        ///     Get RFC3161 input hash
+        /// </summary>
+        public DataHash InputHash
+        {
+            get { return _inputHash.Value; }
+        }
+
+        /// <summary>
+        ///     Get output hash for RFC 3161 from document hash
         /// </summary>
         /// <param name="inputHash">document hash</param>
         /// <returns>aggregation input hash</returns>
@@ -112,115 +181,19 @@ namespace Guardtime.KSI.Signature
                 throw new ArgumentNullException("inputHash");
             }
 
-            // TODO: Check data before using them
-
-            DataHasher hasher = new DataHasher(HashAlgorithm.GetById((byte)_tstInfoAlgorithm.Value));
+            DataHasher hasher = new DataHasher(HashAlgorithm.GetById((byte) _tstInfoAlgorithm.Value));
             hasher.AddData(_tstInfoPrefix.Value);
-            hasher.AddData(inputHash.Imprint);
+            hasher.AddData(inputHash.Value);
             hasher.AddData(_tstInfoSuffix.Value);
 
             inputHash = hasher.GetHash();
 
-            hasher = new DataHasher(HashAlgorithm.GetById((byte)_signedAttributesAlgorithm.Value));
+            hasher = new DataHasher(HashAlgorithm.GetById((byte) _signedAttributesAlgorithm.Value));
             hasher.AddData(_signedAttributesPrefix.Value);
-            hasher.AddData(inputHash.Imprint);
+            hasher.AddData(inputHash.Value);
             hasher.AddData(_signedAttributesSuffix.Value);
 
             return hasher.GetHash();
-        }
-
-        /// <summary>
-        /// Check TLV structure.
-        /// </summary>
-        protected override void CheckStructure()
-        {
-            if (Type != TagType)
-            {
-                throw new InvalidTlvStructureException("Invalid RFC 3161 record type: " + Type);
-            }
-
-            uint[] tags = new uint[9];
-
-            for (int i = 0; i < Count; i++)
-            {
-                switch (this[i].Type)
-                {
-                    case AggregationTimeTagType:
-                        tags[0]++;
-                        break;
-                    case ChainIndexTagType:
-                        tags[1]++;
-                        break;
-                    case InputHashTagType:
-                        tags[2]++;
-                        break;
-                    case TstInfoPrefixTagType:
-                        tags[3]++;
-                        break;
-                    case TstInfoSuffixTagType:
-                        tags[4]++;
-                        break;
-                    case TstInfoAlgorithmTagType:
-                        tags[5]++;
-                        break;
-                    case SignedAttributesPrefixTagType:
-                        tags[6]++;
-                        break;
-                    case SignedAttributesSuffixTagType:
-                        tags[7]++;
-                        break;
-                    case SignedAttributesAlgorithmTagType:
-                        tags[8]++;
-                        break;
-                    default:
-                        throw new InvalidTlvStructureException("Invalid tag", this[i]);
-                }
-            }
-
-            if (tags[0] != 1)
-            {
-                throw new InvalidTlvStructureException("Only one aggregation time must exist in RFC 3161 record");
-            }
-
-            if (tags[1] == 0)
-            {
-                throw new InvalidTlvStructureException("Chain indexes must exist in RFC 3161 record");
-            }
-
-            if (tags[2] != 1)
-            {
-                throw new InvalidTlvStructureException("Only one input hash must exist in RFC 3161 record");
-            }
-
-            if (tags[3] != 1)
-            {
-                throw new InvalidTlvStructureException("Only one tstInfo prefix must exist in RFC 3161 record");
-            }
-
-            if (tags[4] != 1)
-            {
-                throw new InvalidTlvStructureException("Only one tstInfo suffix must exist in RFC 3161 record");
-            }
-
-            if (tags[5] != 1)
-            {
-                throw new InvalidTlvStructureException("Only one tstInfo algorithm must exist in RFC 3161 record");
-            }
-
-            if (tags[6] != 1)
-            {
-                throw new InvalidTlvStructureException("Only one signed attributes prefix must exist in RFC 3161 record");
-            }
-
-            if (tags[7] != 1)
-            {
-                throw new InvalidTlvStructureException("Only one signed attributes suffix must exist in RFC 3161 record");
-            }
-
-            if (tags[8] != 1)
-            {
-                throw new InvalidTlvStructureException("Only one signed attributes algorithm must exist in RFC 3161 record");
-            }
         }
     }
 }

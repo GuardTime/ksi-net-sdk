@@ -76,12 +76,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Crypto\CryptoSignatureVerifierFactory.cs" />
+    <Compile Include="Crypto\ICryptoSignatureVerifier.cs" />
+    <Compile Include="Crypto\Pkcs7CryptoSignatureVerifier.cs" />
+    <Compile Include="Crypto\RsaCryptoSignatureVerifier.cs" />
     <Compile Include="Exceptions\InvalidTlvStructureException.cs" />
+    <Compile Include="Exceptions\PublicationsFileStructureException.cs" />
+    <Compile Include="Exceptions\ServiceProtocolException.cs" />
     <Compile Include="Exceptions\KsiException.cs" />
+    <Compile Include="Exceptions\CryptoVerificationException.cs" />
+    <Compile Include="Exceptions\KsiVerificationException.cs" />
     <Compile Include="Hashing\DataHash.cs" />
     <Compile Include="Hashing\DataHasher.cs" />
     <Compile Include="Hashing\HashAlgorithm.cs" />
-    <Compile Include="Hashing\HashingException.cs" />
+    <Compile Include="Exceptions\HashingException.cs" />
     <Compile Include="Parser\ImprintTag.cs" />
     <Compile Include="Parser\IntegerTag.cs" />
     <Compile Include="Parser\RawTag.cs" />
@@ -97,9 +105,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Publication\CertificateRecord.cs" />
+    <Compile Include="Publication\IPublicationsFile.cs" />
+    <Compile Include="Publication\PublicationsFileFactory.cs" />
     <Compile Include="Publication\PublicationsFileHeader.cs" />
     <Compile Include="Publication\PublicationsFile.cs" />
-    <Compile Include="Publication\PublicationsFileDo.cs" />
     <Compile Include="Publication\PublicationData.cs" />
     <Compile Include="Service\ExtendRequestPayload.cs" />
     <Compile Include="Service\ExtendError.cs" />
@@ -111,9 +120,12 @@
     <Compile Include="Service\ExtendPdu.cs" />
     <Compile Include="Service\ExtendPduPayload.cs" />
     <Compile Include="Service\ExtendResponsePayload.cs" />
+    <Compile Include="Service\HttpKsiServiceSettings.cs" />
     <Compile Include="Service\HttpServiceProtocol.cs" />
     <Compile Include="Service\IKsiService.cs" />
-    <Compile Include="Service\IKsiServiceProtocol.cs" />
+    <Compile Include="Service\IKsiPublicationsFileServiceProtocol.cs" />
+    <Compile Include="Service\IKsiSigningServiceProtocol.cs" />
+    <Compile Include="Service\IKsiExtendingServiceProtocol.cs" />
     <Compile Include="Service\IKsiServiceSettings.cs" />
     <Compile Include="Service\KsiPduPayload.cs" />
     <Compile Include="Service\KsiPdu.cs" />
@@ -124,20 +136,53 @@
     <Compile Include="Signature\AggregationHashChain.cs" />
     <Compile Include="Signature\CalendarAuthenticationRecord.cs" />
     <Compile Include="Signature\CalendarHashChain.cs" />
+    <Compile Include="Signature\IKsiSignature.cs" />
     <Compile Include="Signature\KsiSignature.cs" />
-    <Compile Include="Signature\KsiSignatureDo.cs" />
+    <Compile Include="Signature\KsiSignatureFactory.cs" />
     <Compile Include="Signature\LinkDirection.cs" />
     <Compile Include="Publication\PublicationRecord.cs" />
     <Compile Include="Signature\Rfc3161Record.cs" />
     <Compile Include="Signature\SignatureData.cs" />
     <Compile Include="Signature\Verification\KsiTrustProvider.cs" />
+    <Compile Include="Signature\Verification\Policy\CalendarBasedVerificationPolicy.cs" />
+    <Compile Include="Signature\Verification\Policy\PublicationBasedVerificationPolicy.cs" />
+    <Compile Include="Signature\Verification\Policy\KeyBasedVerificationPolicy.cs" />
+    <Compile Include="Signature\Verification\Policy\PublicationsFileVerificationPolicy.cs" />
+    <Compile Include="Signature\Verification\Policy\UserProvidedPublicationBasedVerificationPolicy.cs" />
+    <Compile Include="Signature\Verification\Policy\VerificationPolicy.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarAuthenticationRecordAggregationTimeRule.cs" />
+    <Compile Include="Signature\Verification\Rule\ExtendedSignatureAggregationChainRightLinksMatchesRule.cs" />
+    <Compile Include="Signature\Verification\Rule\ExtendedSignatureCalendarChainAggregationTimeRule.cs" />
+    <Compile Include="Signature\Verification\Rule\ExtendedSignatureCalendarChainRootHashRule.cs" />
+    <Compile Include="Signature\Verification\Rule\ExtendedSignatureCalendarChainInputHashRule.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarAuthenticationRecordAggregationHashRule.cs" />
+    <Compile Include="Signature\Verification\Rule\SignaturePublicationRecordExistenceRule.cs" />
+    <Compile Include="Signature\Verification\Rule\VerificationRule.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarAuthenticationRecordExistenceRule.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarAuthenticationRecordSignatureVerificationRule.cs" />
+    <Compile Include="Signature\Verification\Rule\CertificateExistenceRule.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarHashChainExistenceRule.cs" />
+    <Compile Include="Signature\Verification\Rule\UserProvidedPublicationVerificationRule.cs" />
+    <Compile Include="Signature\Verification\Rule\ExtendingPermittedVerificationRule.cs" />
+    <Compile Include="Signature\Verification\Rule\PublicationsFileContainsSignaturePublicationRule.cs" />
+    <Compile Include="Signature\Verification\Rule\PublicationsFileExtendedSignatureInputHashRule.cs" />
+    <Compile Include="Signature\Verification\Rule\PublicationsFilePublicationHashMatchesExtenderResponseRule.cs" />
+    <Compile Include="Signature\Verification\Rule\UserProvidedPublicationHashMatchesExtendedResponseRule.cs" />
+    <Compile Include="Signature\Verification\Rule\UserProvidedPublicationExtendedSignatureInputHashRule.cs" />
+    <Compile Include="Signature\Verification\Rule\PublicationsFilePublicationTimeMatchesExtenderResponseRule.cs" />
+    <Compile Include="Signature\Verification\Rule\UserProvidedPublicationExistenceRule.cs" />
+    <Compile Include="Signature\Verification\Rule\UserProvidedPublicationTimeMatchesExtendedResponseRule.cs" />
+    <Compile Include="Signature\Verification\Rule\UserProvidedPublicationCreationTimeVerificationRule.cs" />
+    <Compile Include="Signature\Verification\Rule\SignaturePublicationRecordPublicationHashRule.cs" />
+    <Compile Include="Signature\Verification\Rule\SignaturePublicationRecordPublicationTimeRule.cs" />
     <Compile Include="Signature\Verification\Policy\IPolicy.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainTimeConsistencyRule.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarHashChainRegistrationTimeRule.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarHashChainAggregationTimeRule.cs" />
     <Compile Include="Signature\Verification\Rule\CalendarHashChainInputHashVerificationRule.cs" />
-    <Compile Include="Signature\Verification\Rule\IRule.cs" />
-    <Compile Include="Signature\Verification\Policy\Policy.cs" />
+    <Compile Include="Signature\Verification\Policy\InternalVerificationPolicy.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainConsistencyRule.cs" />
-    <Compile Include="Signature\Verification\Rule\AggregationHashChainInputHashVerificationRule.cs" />
+    <Compile Include="Signature\Verification\Rule\AggregationChainInputHashVerificationRule.cs" />
     <Compile Include="Signature\Verification\IVerificationContext.cs" />
     <Compile Include="Signature\Verification\VerificationContext.cs" />
     <Compile Include="Signature\Verification\VerificationError.cs" />
@@ -146,6 +191,10 @@
     <Compile Include="Trust\IKsiTrustProvider.cs" />
     <Compile Include="Trust\IPkiTrustProvider.cs" />
     <Compile Include="Trust\PkiTrustStoreProvider.cs" />
+    <Compile Include="Utils\Base16.cs" />
+    <Compile Include="Utils\Base32.cs" />
+    <Compile Include="Utils\BaseX.cs" />
+    <Compile Include="Utils\Crc32.cs" />
     <Compile Include="Utils\Util.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -155,6 +204,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

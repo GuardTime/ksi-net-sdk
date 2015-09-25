@@ -102,54 +102,76 @@ namespace Guardtime.KSI.Hashing
             stream.Close();
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void TestDataHasherWithAlgorithmNull()
         {
-            var hasher = new DataHasher(null);
+            Assert.Throws<ArgumentNullException>(delegate
+            {
+                new DataHasher(null);
+            });
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void TestDataHasherWithAlgorithmNotImplemented()
         {
-            var hasher = new DataHasher(HashAlgorithm.Sha3256);
+            Assert.Throws<ArgumentException>(delegate
+            {
+                new DataHasher(HashAlgorithm.Sha3256);
+            }, "Hash algorithm is not implemented");
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void TestDataHasherWithNullBytes()
         {
             var hasher = new DataHasher();
-            hasher.AddData((byte[]) null);
+            Assert.Throws<ArgumentNullException>(delegate
+            {
+                hasher.AddData((byte[])null);
+            });
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void TestDataHasherWithNullBytesAndNoLength()
         {
             var hasher = new DataHasher();
-            hasher.AddData(null, 0, 0);
+            Assert.Throws<ArgumentNullException>(delegate
+            {
+                hasher.AddData(null, 0, 0);
+            });
+
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void TestDataHasherWithNullSafeFileHandle()
         {
             var hasher = new DataHasher();
-            hasher.AddData((SafeFileHandle)null);
+            Assert.Throws<ArgumentNullException>(delegate
+            {
+                hasher.AddData((SafeFileHandle)null);
+            });
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void TestDataHasherWithNullStream()
         {
             var hasher = new DataHasher();
-            hasher.AddData((Stream)null);
+            Assert.Throws<ArgumentNullException>(delegate
+            {
+                hasher.AddData((Stream)null);
+            });
         }
 
-        [Test, ExpectedException(typeof(InvalidOperationException))]
+        [Test]
         public void TestDataHasherWithAddingDataAfterHashHasBeenCalculated()
         {
             var hasher = new DataHasher();
             var data = System.Text.Encoding.UTF8.GetBytes(Resources.DataHasher_TestString);
             hasher.AddData(data);
             hasher.GetHash();
-            hasher.AddData(data);
+            Assert.Throws<InvalidOperationException>(delegate
+            {
+                hasher.AddData(data);
+            }, "Output hash has already been calculated");
         }
 
 

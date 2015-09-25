@@ -1,7 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using NUnit.Framework;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Hashing;
+using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Signature
 {
@@ -14,120 +17,185 @@ namespace Guardtime.KSI.Signature
         {
             Rfc3161Record rfc3161Record = GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Ok);
             Assert.AreEqual(10, rfc3161Record.Count, "Invalid amount of child TLV objects");
+
+            Assert.Throws<ArgumentNullException>(delegate
+            {
+                rfc3161Record.GetOutputHash(null);
+            }, "Output hash calculation should throw exception when inputhash is null");
+
+            Assert.AreEqual(rfc3161Record.GetOutputHash(rfc3161Record.InputHash), new DataHash(HashAlgorithm.Sha2256, Base16.Decode("C96682043DB0474031CEF1AE12941523E59BDC64E62CDAAE817CE46370918648")), "Output hash should be correctly calculated");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Invalid RFC 3161 record type: 2055")]
+        [Test]
         public void TestRfc3161RecordInvalidType()
         {
-            GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Type);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Type);
+            }, "Invalid RFC 3161 record type: 2055");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Invalid tag")]
+        [Test]
         public void TestRfc3161RecordInvalidExtraTag()
         {
-            GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Extra_Tag);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Extra_Tag);
+            }, "Invalid tag");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one aggregation time must exist in RFC 3161 record")]
+        [Test]
         public void TestRfc3161RecordInvalidMissingAggregationTime()
         {
-            GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Missing_Aggregation_Time);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Missing_Aggregation_Time);
+            }, "Only one aggregation time must exist in RFC 3161 record");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Chain indexes must exist in RFC 3161 record")]
+        [Test]
         public void TestRfc3161RecordInvalidMissingChainIndex()
         {
-            GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Missing_Chain_Index);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Missing_Chain_Index);
+            }, "Chain indexes must exist in RFC 3161 record");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one input hash must exist in RFC 3161 record")]
+        [Test]
         public void TestRfc3161RecordInvalidMissingInputHash()
         {
-            GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Missing_Input_Hash);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Missing_Input_Hash);
+            }, "Only one input hash must exist in RFC 3161 record");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one signed attributes algorithm must exist in RFC 3161 record")]
+        [Test]
         public void TestRfc3161RecordInvalidMissingSignedAttributesAlgorithm()
         {
-            GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Missing_Signed_Attributes_Algorithm);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Missing_Signed_Attributes_Algorithm);
+            }, "Only one signed attributes algorithm must exist in RFC 3161 record");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one signed attributes prefix must exist in RFC 3161 record")]
+        [Test]
         public void TestRfc3161RecordInvalidMissingSignedAttributesPrefix()
         {
-            GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Missing_Signed_Attributes_Prefix);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Missing_Signed_Attributes_Prefix);
+            }, "Only one signed attributes prefix must exist in RFC 3161 record");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one signed attributes suffix must exist in RFC 3161 record")]
+        [Test]
         public void TestRfc3161RecordInvalidMissingSignedAttributesSuffix()
         {
-            GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Missing_Signed_Attributes_Suffix);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Missing_Signed_Attributes_Suffix);
+            }, "Only one signed attributes suffix must exist in RFC 3161 record");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one tstInfo algorithm must exist in RFC 3161 record")]
+        [Test]
         public void TestRfc3161RecordInvalidMissingTstInfoAlgorithm()
         {
-            GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Missing_TstInfo_Algorithm);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Missing_TstInfo_Algorithm);
+            }, "Only one tstInfo algorithm must exist in RFC 3161 record");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one tstInfo prefix must exist in RFC 3161 record")]
+        [Test]
         public void TestRfc3161RecordInvalidMissingTstInfoPrefix()
         {
-            GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Missing_TstInfo_Prefix);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Missing_TstInfo_Prefix);
+            }, "Only one tstInfo prefix must exist in RFC 3161 record");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one tstInfo suffix must exist in RFC 3161 record")]
+        [Test]
         public void TestRfc3161RecordInvalidMissingTstInfoSuffix()
         {
-            GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Missing_TstInfo_Suffix);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Missing_TstInfo_Suffix);
+            }, "Only one tstInfo suffix must exist in RFC 3161 record");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one aggregation time must exist in RFC 3161 record")]
+        [Test]
         public void TestRfc3161RecordInvalidMultipleAggregationTime()
         {
-            GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Multiple_Aggregation_Time);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Multiple_Aggregation_Time);
+            }, "Only one aggregation time must exist in RFC 3161 record");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one input hash must exist in RFC 3161 record")]
+        [Test]
         public void TestRfc3161RecordInvalidMultipleInputHash()
         {
-            GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Multiple_Input_Hash);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Multiple_Input_Hash);
+            }, "Only one input hash must exist in RFC 3161 record");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one signed attributes algorithm must exist in RFC 3161 record")]
+        [Test]
         public void TestRfc3161RecordInvalidMultipleSignedAttributesAlgorithm()
         {
-            GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Multiple_Signed_Attributes_Algorithm);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Multiple_Signed_Attributes_Algorithm);
+            }, "Only one signed attributes algorithm must exist in RFC 3161 record");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one signed attributes prefix must exist in RFC 3161 record")]
+        [Test]
         public void TestRfc3161RecordInvalidMultipleSignedAttributesPrefix()
         {
-            GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Multiple_Signed_Attributes_Prefix);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Multiple_Signed_Attributes_Prefix);
+            }, "Only one signed attributes prefix must exist in RFC 3161 record");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one signed attributes suffix must exist in RFC 3161 record")]
+        [Test]
         public void TestRfc3161RecordInvalidMultipleSignedAttributesSuffix()
         {
-            GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Multiple_Signed_Attributes_Suffix);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Multiple_Signed_Attributes_Suffix);
+            }, "Only one signed attributes suffix must exist in RFC 3161 record");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one tstInfo algorithm must exist in RFC 3161 record")]
+        [Test]
         public void TestRfc3161RecordInvalidMultipleTstInfoAlgorithm()
         {
-            GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Multiple_TstInfo_Algorithm);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Multiple_TstInfo_Algorithm);
+            }, "Only one tstInfo algorithm must exist in RFC 3161 record");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one tstInfo prefix must exist in RFC 3161 record")]
+        [Test]
         public void TestRfc3161RecordInvalidMultipleTstInfoPrefix()
         {
-            GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Multiple_TstInfo_Prefix);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Multiple_TstInfo_Prefix);
+            }, "Only one tstInfo prefix must exist in RFC 3161 record");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one tstInfo suffix must exist in RFC 3161 record")]
+        [Test]
         public void TestRfc3161RecordInvalidMultipleTstInfoSuffix()
         {
-            GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Multiple_TstInfo_Suffix);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Multiple_TstInfo_Suffix);
+            }, "Only one tstInfo suffix must exist in RFC 3161 record");
         }
 
         private Rfc3161Record GetRfc3161RecordFromFile(string file)
@@ -136,7 +204,6 @@ namespace Guardtime.KSI.Signature
             using (var reader = new TlvReader(stream))
             {
                 Rfc3161Record rfc3161Record = new Rfc3161Record(reader.ReadTag());
-                rfc3161Record.IsValidStructure();
 
                 return rfc3161Record;
             }

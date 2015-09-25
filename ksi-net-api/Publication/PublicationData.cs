@@ -1,30 +1,43 @@
-﻿using Guardtime.KSI.Exceptions;
+﻿using System;
+using System.Collections.Generic;
+using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
+using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Publication
 {
-    public class PublicationData : CompositeTag
+    /// <summary>
+    ///     Publication data TLV element.
+    /// </summary>
+    public sealed class PublicationData : CompositeTag
     {
         // TODO: Better name
+        /// <summary>
+        ///     Publication data tag type.
+        /// </summary>
         public const uint TagType = 0x10;
+
         private const uint PublicationTimeTagType = 0x2;
         private const uint PublicationHashTagType = 0x4;
-
-        private readonly IntegerTag _publicationTime;
         private readonly ImprintTag _publicationHash;
 
-        public IntegerTag PublicationTime
-        {
-            get { return _publicationTime; }
-        }
+        private readonly IntegerTag _publicationTime;
 
-        public ImprintTag PublicationHash
-        {
-            get { return _publicationHash; }
-        }
-
+        /// <summary>
+        ///     Create new publication data TLV element from TLV element.
+        /// </summary>
+        /// <param name="tag">TLV element</param>
         public PublicationData(TlvTag tag) : base(tag)
         {
+            if (Type != TagType)
+            {
+                throw new InvalidTlvStructureException("Invalid publication record type: " + Type);
+            }
+
+            int publicationTimeCount = 0;
+            int publicationHashCount = 0;
+
             for (int i = 0; i < Count; i++)
             {
                 switch (this[i].Type)
@@ -32,50 +45,103 @@ namespace Guardtime.KSI.Publication
                     case PublicationTimeTagType:
                         _publicationTime = new IntegerTag(this[i]);
                         this[i] = _publicationTime;
+                        publicationTimeCount++;
                         break;
                     case PublicationHashTagType:
                         _publicationHash = new ImprintTag(this[i]);
                         this[i] = _publicationHash;
-                        break;
-                }
-            }
-        }
-
-
-        protected override void CheckStructure()
-        {
-            if (Type != TagType)
-            {
-                throw new InvalidTlvStructureException("Invalid publication record type: " + Type);
-            }
-
-            uint[] tags = new uint[2];
-
-            for (int i = 0; i < Count; i++)
-            {
-                switch (this[i].Type)
-                {
-                    case PublicationTimeTagType:
-                        tags[0]++;
-                        break;
-                    case PublicationHashTagType:
-                        tags[1]++;
+                        publicationHashCount++;
                         break;
                     default:
-                        throw new InvalidTlvStructureException("Invalid tag", this[i]);
+                        VerifyCriticalFlag(this[i]);
+                        break;
                 }
             }
 
-            if (tags[0] != 1)
+            if (publicationTimeCount != 1)
             {
                 throw new InvalidTlvStructureException("Only one publication time must exist in publication data");
             }
 
-            if (tags[1] != 1)
+            if (publicationHashCount != 1)
             {
                 throw new InvalidTlvStructureException("Only one publication hash must exist in publication data");
             }
+        }
 
+        /// <summary>
+        ///     Create new publication data TLV element from publication time and publication hash.
+        /// </summary>
+        /// <param name="publicationTime">publication time</param>
+        /// <param name="publicationHash">publication hash</param>
+        public PublicationData(ulong publicationTime, DataHash publicationHash)
+            : base(TagType, false, true, new List<TlvTag>())
+        {
+            _publicationTime = new IntegerTag(PublicationTimeTagType, false, false, publicationTime);
+            AddTag(_publicationTime);
+            _publicationHash = new ImprintTag(PublicationHashTagType, false, false, publicationHash);
+            AddTag(_publicationHash);
+        }
+
+        /// <summary>
+        ///     Create new publication data TLV element from publication string.
+        /// </summary>
+        /// <param name="publicationString">publication string</param>
+        public PublicationData(string publicationString) : base(TagType, false, true, new List<TlvTag>())
+        {
+            if (publicationString == null)
+            {
+                // TODO: Better exception
+                throw new ArgumentNullException("publicationString");
+            }
+
+            byte[] dataBytesWithCrc32 = Base32.Decode(publicationString);
+
+            // Length needs to be at least 13 bytes (8 bytes for time plus non-empty hash imprint plus 4 bytes for crc32)
+            if (dataBytesWithCrc32 == null || dataBytesWithCrc32.Length < 13)
+            {
+                throw new KsiException("Invalid publication string: Base32 decode failed");
+            }
+
+            byte[] dataBytes = new byte[dataBytesWithCrc32.Length - 4];
+            Array.Copy(dataBytesWithCrc32, 0, dataBytes, 0, dataBytesWithCrc32.Length - 4);
+
+            byte[] computedCrc32 = Util.EncodeUnsignedLong(Crc32.Calculate(dataBytes, 0));
+            byte[] messageCrc32 = new byte[4];
+            Array.Copy(dataBytesWithCrc32, dataBytesWithCrc32.Length - 4, messageCrc32, 0, 4);
+            if (!Util.IsArrayEqual(computedCrc32, messageCrc32))
+            {
+                throw new KsiException("Invalid publication string: CRC32 Check failed");
+            }
+
+            byte[] hashImprint = new byte[dataBytesWithCrc32.Length - 12];
+            Array.Copy(dataBytesWithCrc32, 8, hashImprint, 0, dataBytesWithCrc32.Length - 12);
+
+            byte[] publicationTimeBytes = new byte[8];
+            Array.Copy(dataBytesWithCrc32, 0, publicationTimeBytes, 0, 8);
+
+            _publicationTime = new IntegerTag(PublicationTimeTagType, false, false,
+                Util.DecodeUnsignedLong(publicationTimeBytes, 0, publicationTimeBytes.Length));
+            AddTag(_publicationTime);
+
+            _publicationHash = new ImprintTag(PublicationHashTagType, false, false, new DataHash(hashImprint));
+            AddTag(_publicationHash);
+        }
+
+        /// <summary>
+        ///     Get publication time.
+        /// </summary>
+        public ulong PublicationTime
+        {
+            get { return _publicationTime.Value; }
+        }
+
+        /// <summary>
+        ///     Get publication hash.
+        /// </summary>
+        public DataHash PublicationHash
+        {
+            get { return _publicationHash.Value; }
         }
     }
 }

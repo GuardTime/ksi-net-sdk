@@ -3,33 +3,43 @@ using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Signature
 {
-
     /// <summary>
-    /// Signature data TLV element
+    ///     Signature data TLV element
     /// </summary>
-    public class SignatureData : CompositeTag
+    public sealed class SignatureData : CompositeTag
     {
         // TODO: Better name
         /// <summary>
-        /// Signature data tag type
+        ///     Signature data tag type
         /// </summary>
         public const uint TagType = 0xb;
+
         private const uint SignatureTypeTagType = 0x1;
         private const uint SignatureValueTagType = 0x2;
         private const uint CertificateIdTagType = 0x3;
         private const uint CertificateRepositoryUriTagType = 0x4;
-
-        private readonly StringTag _signatureType;
-        private readonly RawTag _signatureValue;
         private readonly RawTag _certificateId;
         private readonly StringTag _certificateRepositoryUri;
 
+        private readonly StringTag _signatureType;
+        private readonly RawTag _signatureValue;
+
         /// <summary>
-        /// Create new signature data TLV element from TLV element
+        ///     Create new signature data TLV element from TLV element
         /// </summary>
         /// <param name="tag">TLV element</param>
         public SignatureData(TlvTag tag) : base(tag)
         {
+            if (Type != TagType)
+            {
+                throw new InvalidTlvStructureException("Invalid signature data type: " + Type);
+            }
+
+            int signatureTypeCount = 0;
+            int signatureValueCount = 0;
+            int certificateIdCount = 0;
+            int certificateRepositoryUriCount = 0;
+
             for (int i = 0; i < Count; i++)
             {
                 switch (this[i].Type)
@@ -37,75 +47,74 @@ namespace Guardtime.KSI.Signature
                     case SignatureTypeTagType:
                         _signatureType = new StringTag(this[i]);
                         this[i] = _signatureType;
+                        signatureTypeCount++;
                         break;
                     case SignatureValueTagType:
                         _signatureValue = new RawTag(this[i]);
                         this[i] = _signatureValue;
+                        signatureValueCount++;
                         break;
                     case CertificateIdTagType:
                         _certificateId = new RawTag(this[i]);
                         this[i] = _certificateId;
+                        certificateIdCount++;
                         break;
                     case CertificateRepositoryUriTagType:
                         _certificateRepositoryUri = new StringTag(this[i]);
                         this[i] = _certificateRepositoryUri;
-                        break;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Check TLV structure.
-        /// </summary>
-        protected override void CheckStructure()
-        {
-            if (Type != TagType)
-            {
-                throw new InvalidTlvStructureException("Invalid signature data type: " + Type);
-            }
-
-            uint[] tags = new uint[4];
-
-            for (int i = 0; i < Count; i++)
-            {
-                switch (this[i].Type)
-                {
-                    case SignatureTypeTagType:
-                        tags[0]++;
-                        break;
-                    case SignatureValueTagType:
-                        tags[1]++;
-                        break;
-                    case CertificateIdTagType:
-                        tags[2]++;
-                        break;
-                    case CertificateRepositoryUriTagType:
-                        tags[3]++;
+                        certificateRepositoryUriCount++;
                         break;
                     default:
-                        throw new InvalidTlvStructureException("Invalid tag", this[i]);
+                        VerifyCriticalFlag(this[i]);
+                        break;
                 }
             }
 
-            if (tags[0] != 1)
+
+            if (signatureTypeCount != 1)
             {
                 throw new InvalidTlvStructureException("Only one signature type must exist in signature data");
             }
 
-            if (tags[1] != 1)
+            if (signatureValueCount != 1)
             {
                 throw new InvalidTlvStructureException("Only one signature value must exist in signature data");
             }
 
-            if (tags[2] != 1)
+            if (certificateIdCount != 1)
             {
                 throw new InvalidTlvStructureException("Only one certificate id must exist in signature data");
             }
 
-            if (tags[3] > 1)
+            if (certificateRepositoryUriCount > 1)
             {
-                throw new InvalidTlvStructureException("Only one certificate repository uri is allowed in signature data");
+                throw new InvalidTlvStructureException(
+                    "Only one certificate repository uri is allowed in signature data");
             }
+        }
+
+        /// <summary>
+        ///     Get certificate ID.
+        /// </summary>
+        public byte[] CertificateId
+        {
+            get { return _certificateId.Value; }
+        }
+
+        /// <summary>
+        ///     Get signature value.
+        /// </summary>
+        public byte[] SignatureValue
+        {
+            get { return _signatureValue.Value; }
+        }
+
+        /// <summary>
+        ///     Get signature type.
+        /// </summary>
+        public string SignatureType
+        {
+            get { return _signatureType.Value; }
         }
     }
 }

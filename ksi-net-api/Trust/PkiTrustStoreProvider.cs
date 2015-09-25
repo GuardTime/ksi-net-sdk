@@ -1,31 +1,40 @@
 ﻿using System;
 using System.Security.Cryptography.Pkcs;
 using System.Security.Cryptography.X509Certificates;
+using Guardtime.KSI.Crypto;
 
 namespace Guardtime.KSI.Trust
 {
+    /// <summary>
+    ///     PKI trust store provider.
+    /// </summary>
     public class PkiTrustStoreProvider : IPkiTrustProvider
     {
-
-        public string Name
+        /// <summary>
+        ///     Verify bytes with x509 signature.
+        /// </summary>
+        /// <param name="signedBytes"></param>
+        /// <param name="signatureBytes"></param>
+        public void Verify(byte[] signedBytes, byte[] signatureBytes)
         {
-            // TODO: Correct return
-            get { return ""; } 
-        }
-
-        public void Verify(byte[] signedBytes, byte[] x509SignatureBytes)
-        {
-            if (x509SignatureBytes == null)
+            // TODO: Check for better exception
+            if (signedBytes == null)
             {
-                throw new ArgumentNullException("x509SignatureBytes");
+                throw new ArgumentNullException("signedBytes");
             }
-            
 
-            // TODO: Java API email verification does not check email correctly, if its missing then it skips it
+            if (signatureBytes == null)
+            {
+                throw new ArgumentNullException("signatureBytes");
+            }
+
+            ICryptoSignatureVerifier verifier = CryptoSignatureVerifierFactory.Pkcs7SignatureVerifier;
+            verifier.Verify(signedBytes, signatureBytes, null);
+
             SignedCms signedCms = new SignedCms(new ContentInfo(signedBytes), true);
-            signedCms.Decode(x509SignatureBytes);
-            signedCms.CheckSignature(false);
+            signedCms.Decode(signatureBytes);
 
+            // TODO: Verify email also
             Console.WriteLine(signedCms.SignerInfos[0].Certificate.GetNameInfo(X509NameType.EmailName, false));
         }
     }

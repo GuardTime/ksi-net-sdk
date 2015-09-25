@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -9,146 +10,245 @@ using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Publication
 {
-    public sealed class PublicationsFile : IKsiTrustProvider
+
+    public partial class PublicationsFileFactory
     {
-        public static readonly byte[] FileBeginningMagicBytes = { 0x4b, 0x53, 0x49, 0x50, 0x55, 0x42, 0x4c, 0x46 };
-        private readonly PublicationsFileDo _publicationsFileDo;
-
-        // TODO: Problem with too big value
-        public DateTime? CreationTime
+        /// <summary>
+        ///     Publications file implementation.
+        /// </summary>
+        private sealed class PublicationsFile : CompositeTag, IPublicationsFile
         {
-            get { return _publicationsFileDo.CreationTime; }
-        }
+            /// <summary>
+            /// Publications file beginning bytes "KSIPUBLF". 
+            /// </summary>
+            public static readonly byte[] FileBeginningMagicBytes = {0x4b, 0x53, 0x49, 0x50, 0x55, 0x42, 0x4c, 0x46};
 
-        public string RepUri
-        {
-            get { return _publicationsFileDo.RepUri; }
-        }
+            private const uint CmsSignatureTagType = 0x704;
+            private readonly List<CertificateRecord> _certificateRecordList = new List<CertificateRecord>();
+            private readonly RawTag _cmsSignature;
+            private readonly List<PublicationRecord> _publicationRecordList = new List<PublicationRecord>();
+            private readonly PublicationsFileHeader _publicationsHeader;
 
-        private PublicationsFile(PublicationsFileDo publicationFileDo)
-        {
-            if (publicationFileDo == null)
+            /// <summary>
+            ///     Create new publications file TLV element from TLV element.
+            /// </summary>
+            /// <param name="tag">TLV element</param>
+            public PublicationsFile(TlvTag tag) : base(tag)
             {
-                throw new ArgumentNullException("publicationFileDo");
-            }
+                int publicationsHeaderCount = 0;
+                int cmsSignatureCount = 0;
 
-            _publicationsFileDo = publicationFileDo;
-        }
-
-        public static PublicationsFile GetInstance(byte[] bytes)
-        {
-            if (bytes == null)
-            {
-                throw new ArgumentNullException("bytes");
-            }
-
-            return GetInstance(new MemoryStream(bytes));
-        }
-
-        public static PublicationsFile GetInstance(Stream stream)
-        {
-            // TODO: Java api check if stream is null
-            if (stream == null)
-            {
-                throw new ArgumentNullException("stream");
-            }
-
-            byte[] data = new byte[FileBeginningMagicBytes.Length];
-            int bytesRead = stream.Read(data, 0, data.Length);
-
-            if (bytesRead != FileBeginningMagicBytes.Length || !Util.IsArrayEqual(data, FileBeginningMagicBytes))
-            {
-                // TODO: Correct exception
-                throw new KsiException("Invalid publications file: incorrect file header");
-            }
-
-            // TODO: Check for too long file
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                // TODO: Make buffer configurable
-                byte[] buffer = new byte[8092];
-                while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
+                for (int i = 0; i < Count; i++)
                 {
-                    memoryStream.Write(buffer, 0, bytesRead);
+                    switch (this[i].Type)
+                    {
+                        case PublicationsFileHeader.TagType:
+                            _publicationsHeader = new PublicationsFileHeader(this[i]);
+                            this[i] = _publicationsHeader;
+                            publicationsHeaderCount++;
+                            if (i != 0)
+                            {
+                                throw new InvalidTlvStructureException(
+                                    "Publications file header should be the first element in publications file");
+                            }
+                            break;
+                        case CertificateRecord.TagType:
+                            CertificateRecord certificateRecordTag = new CertificateRecord(this[i]);
+                            _certificateRecordList.Add(certificateRecordTag);
+                            this[i] = certificateRecordTag;
+                            if (_publicationRecordList.Count != 0)
+                            {
+                                throw new InvalidTlvStructureException(
+                                    "Certificate records should be before publication records");
+                            }
+                            break;
+                        case PublicationRecord.TagTypePublication:
+                            PublicationRecord publicationRecordTag = new PublicationRecord(this[i]);
+                            _publicationRecordList.Add(publicationRecordTag);
+                            this[i] = publicationRecordTag;
+                            break;
+                        case CmsSignatureTagType:
+                            _cmsSignature = new RawTag(this[i]);
+                            cmsSignatureCount++;
+                            if (i != Count - 1)
+                            {
+                                throw new InvalidTlvStructureException(
+                                    "Cms signature should be last element in publications file");
+                            }
+                            break;
+                        default:
+                            VerifyCriticalFlag(this[i]);
+                            break;
+                    }
                 }
 
-                return new PublicationsFile(new PublicationsFileDo(new RawTag(0x0, false, false, memoryStream.ToArray())));
-            }
-        }
+                if (publicationsHeaderCount != 1)
+                {
+                    throw new InvalidTlvStructureException(
+                        "Only one publications file header must exist in publications file");
+                }
 
-        public PublicationRecord GetLatestPublication()
-        {
-            int publicationRecordCount = _publicationsFileDo.PublicationRecords.Count;
-            if (publicationRecordCount == 0)
+                if (cmsSignatureCount != 1)
+                {
+                    throw new InvalidTlvStructureException("Only one signature must exist in publications file");
+                }
+            }
+
+            /// <summary>
+            ///     Get KSI trust provider name.
+            /// </summary>
+            public string Name
             {
+                get { return "publications file"; }
+            }
+
+            /// <summary>
+            /// Get latest publication record.
+            /// </summary>
+            /// <returns>publication record</returns>
+            public PublicationRecord GetLatestPublication()
+            {
+                PublicationRecord latest = null;
+                for (int i = 0; i < _publicationRecordList.Count; i++)
+                {
+                    if (latest == null)
+                    {
+                        latest = _publicationRecordList[i];
+                        continue;
+                    }
+
+                    if (
+                        _publicationRecordList[i].PublicationData.PublicationTime.CompareTo(
+                            latest.PublicationData.PublicationTime) > 0)
+                    {
+                        latest = _publicationRecordList[i];
+                    }
+                }
+
+                return latest;
+            }
+
+            /// <summary>
+            /// Get neared publication record to time.
+            /// </summary>
+            /// <param name="time">publication time</param>
+            /// <returns>publication record closest to time</returns>
+            public PublicationRecord GetNearestPublicationRecord(ulong time)
+            {
+                PublicationRecord nearestPublicationRecord = null;
+                for (int i = 0; i < _publicationRecordList.Count; i++)
+                {
+                    ulong publicationTime = _publicationRecordList[i].PublicationData.PublicationTime;
+                    if (publicationTime != time && publicationTime <= time) continue;
+
+                    if (nearestPublicationRecord == null)
+                    {
+                        nearestPublicationRecord = _publicationRecordList[i];
+                    }
+                    else if (publicationTime < nearestPublicationRecord.PublicationData.PublicationTime)
+                    {
+                        nearestPublicationRecord = _publicationRecordList[i];
+                    }
+                }
+
+                return nearestPublicationRecord;
+            }
+
+            /// <summary>
+            ///     Is publication record in publications file.
+            /// </summary>
+            /// <param name="publicationRecord">lookup publication record</param>
+            /// <returns>true if publication record is in publications file</returns>
+            public bool Contains(PublicationRecord publicationRecord)
+            {
+                if (publicationRecord == null)
+                {
+                    return false;
+                }
+
+                for (int i = 0; i < _publicationRecordList.Count; i++)
+                {
+                    if (_publicationRecordList[i].PublicationData.PublicationTime ==
+                        publicationRecord.PublicationData.PublicationTime &&
+                        _publicationRecordList[i].PublicationData.PublicationHash ==
+                        publicationRecord.PublicationData.PublicationHash)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            /// <summary>
+            ///     Get certificate by certificate ID.
+            /// </summary>
+            /// <param name="certificateId">certificate id</param>
+            /// <returns>X509 certificate</returns>
+            public X509Certificate2 FindCertificateById(byte[] certificateId)
+            {
+                for (int i = 0; i < _certificateRecordList.Count; i++)
+                {
+                    if (Util.IsArrayEqual(_certificateRecordList[i].CertificateId.EncodeValue(),
+                        certificateId))
+                    {
+                        return new X509Certificate2(_certificateRecordList[i].X509Certificate.EncodeValue());
+                    }
+                }
                 return null;
             }
 
-            PublicationRecord latest = null;
-            for (int i = 0; i < publicationRecordCount; i++)
+            /// <summary>
+            ///     Get signed bytes.
+            /// </summary>
+            /// <returns>signed bytes</returns>
+            public byte[] GetSignatureBytes()
             {
-                if (latest == null)
-                {
-                    latest = _publicationsFileDo.PublicationRecords[i];
-                    continue;
-                }
-
-                if (_publicationsFileDo.PublicationRecords[i].PublicationTime.CompareTo(latest.PublicationTime) > 0)
-                {
-                    latest = _publicationsFileDo.PublicationRecords[i];
-                }
+                return _cmsSignature.EncodeValue();
             }
 
-            return latest;
-        }
-
-        public bool Contains(PublicationRecord publicationRecord)
-        {
-            if (publicationRecord == null) return false;
-
-            for (int i = 0; i < _publicationsFileDo.PublicationRecords.Count; i++)
+            /// <summary>
+            ///     Get signature bytes.
+            /// </summary>
+            /// <returns>signature bytes</returns>
+            public byte[] GetSignedBytes()
             {
-                if (_publicationsFileDo.PublicationRecords[i].PublicationData == null) continue;
-
-                if (
-                    _publicationsFileDo.PublicationRecords[i].PublicationData.Equals(
-                        publicationRecord.PublicationData))
+                using (MemoryStream stream = new MemoryStream())
+                using (TlvWriter writer = new TlvWriter(stream))
                 {
-                    return true;
+                    writer.Write(FileBeginningMagicBytes);
+                    for (int i = 0; i < Count - 1; i++)
+                    {
+                        writer.WriteTag(this[i]);
+                    }
+                    return stream.ToArray();
                 }
             }
 
-
-            return false;
-        }
-
-        public X509Certificate FindCertificateById(byte[] certificateId)
-        {
-            for (int i = 0; i < _publicationsFileDo.CertificateRecords.Count; i++)
+            /// <summary>
+            ///     Convert publications file to string.
+            /// </summary>
+            /// <returns>publications file as string</returns>
+            public override string ToString()
             {
-                if (Util.IsArrayEqual(_publicationsFileDo.CertificateRecords[i].CertificateId.EncodeValue(),
-                    certificateId))
+                StringBuilder builder = new StringBuilder();
+                builder.Append("Publications file");
+
+                builder.Append(", created: ").Append(_publicationsHeader.CreationTime);
+
+                PublicationRecord latestPublication = GetLatestPublication();
+                if (latestPublication != null)
                 {
-                    return new X509Certificate(_publicationsFileDo.CertificateRecords[i].X509Certificate.EncodeValue());
+                    builder.Append(", last publication: ").Append(latestPublication.PublicationData.PublicationTime);
                 }
+
+                if (_publicationsHeader.RepUri != null)
+                {
+                    builder.Append(", published at: ").Append(_publicationsHeader.RepUri);
+                }
+
+                return builder.ToString();
             }
-            return null;
-        }
-
-        public override string ToString()
-        {
-            StringBuilder builder = new StringBuilder();
-            builder.Append("Publications file");
-
-            builder.Append(", created: ").Append(CreationTime);
-            // TODO: Check if publication always exists
-            builder.Append(", last publication: ").Append(GetLatestPublication().PublicationTime);
-            if (RepUri != null)
-            {
-                builder.Append(", published at: ").Append(RepUri);
-            }
-
-            return builder.ToString();
         }
     }
 }

@@ -4,12 +4,12 @@ using System.IO;
 namespace Guardtime.KSI.Parser
 {
     /// <summary>
-    /// TLV object writer for stream.
+    ///     TLV object writer for stream.
     /// </summary>
     public class TlvWriter : BinaryWriter
     {
         /// <summary>
-        /// Create TLV object writer instance.
+        ///     Create TLV object writer instance.
         /// </summary>
         /// <param name="input">Output stream</param>
         public TlvWriter(Stream input) : base(input)
@@ -17,10 +17,11 @@ namespace Guardtime.KSI.Parser
         }
 
         /// <summary>
-        /// Write TLV object to given stream.
+        ///     Write TLV object to given stream.
         /// </summary>
         /// <param name="tag">TLV object</param>
-        public void WriteTag(TlvTag tag) {
+        public void WriteTag(TlvTag tag)
+        {
             // TODO: What to do on null tag, exception or skip?
             if (tag == null)
             {
@@ -34,20 +35,20 @@ namespace Guardtime.KSI.Parser
 
             byte[] data = tag.EncodeValue();
             bool tlv16 = tag.Type > TlvReader.TypeMask
-                    || (data != null && data.Length > byte.MaxValue);
-            byte firstByte = (byte)((tlv16 ? TlvReader.Tlv16Flag : 0)
+                         || (data != null && data.Length > byte.MaxValue);
+            byte firstByte = (byte) ((tlv16 ? TlvReader.Tlv16Flag : 0)
                                      + (tag.NonCritical ? TlvReader.NonCriticalFlag : 0)
                                      + (tag.Forward ? TlvReader.ForwardFlag : 0));
 
             if (tlv16)
             {
-                firstByte = (byte)(firstByte
+                firstByte = (byte) (firstByte
                                     | (tag.Type >> TlvReader.ByteBits) & TlvReader.TypeMask);
                 Write(firstByte);
-                Write((byte)tag.Type);
+                Write((byte) tag.Type);
                 if (data == null)
                 {
-                    Write((byte)0);
+                    Write((byte) 0);
                 }
                 else
                 {
@@ -55,22 +56,22 @@ namespace Guardtime.KSI.Parser
                     {
                         throw new ArgumentOutOfRangeException("tag");
                     }
-                    Write((byte)(data.Length >> TlvReader.ByteBits));
-                    Write((byte)data.Length);
+                    Write((byte) (data.Length >> TlvReader.ByteBits));
+                    Write((byte) data.Length);
                     Write(data);
                 }
             }
             else
             {
-                firstByte = (byte)(firstByte | tag.Type & TlvReader.TypeMask);
+                firstByte = (byte) (firstByte | tag.Type & TlvReader.TypeMask);
                 Write(firstByte);
                 if (data == null)
                 {
-                    Write((byte)0);
+                    Write((byte) 0);
                 }
                 else
                 {
-                    Write((byte)data.Length);
+                    Write((byte) data.Length);
                     Write(data);
                 }
             }

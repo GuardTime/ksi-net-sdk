@@ -12,88 +12,132 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestKsiSignatureDoOk()
         {
-            KsiSignatureDo signature = GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Ok);
-            Assert.AreEqual(5, signature.Count, "Invalid amount of child TLV objects");
+            var signature = GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Ok);
+            Assert.NotNull(signature.CalendarHashChain, "Calendar hash chain cannot be null");
+        }
+
+        [Test]
+        public void TestKsiSignatureDoOkMissingCalendarHashChain()
+        {
+            var signature = GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Ok_Missing_Calendar_Hash_Chain);
+            Assert.Null(signature.CalendarHashChain, "Calendar hash chain must be null");
+
+        }
+
+        [Test]
+        public void TestKsiSignatureDoOkMissingPublicationRecord()
+        {
+            var signature = GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record);
+            Assert.Null(signature.PublicationRecord, "Publication record must be null");
+            Assert.Null(signature.CalendarAuthenticationRecord, "Calendar authentication record must be null");
         }
 
         [Test]
         public void TestLegacyKsiSignatureDoOk()
         {
-            KsiSignatureDo signature = GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Legacy_Ok);
-            Assert.AreEqual(4, signature.Count, "Invalid amount of child TLV objects");
+            var signature = GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Legacy_Ok);
+            Assert.IsTrue(signature.IsRfc3161Signature, "RFC3161 tag must exist");
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Invalid signature type: 2201")]
+        [Test]
         public void TestKsiSignatureDoInvalidType()
         {
-            GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Type);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Type);
+            }, "Invalid signature type: 2201");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one from publication record or calendar authentication record must exist in signature data object")]
+        [Test]
         public void TestKsiSignatureDoInvalidContainsPublicationRecordAndCalendarAuthenticationRecord()
         {
-            GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Contain_Publication_Record_And_Calendar_Authentication_Record);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Contain_Publication_Record_And_Calendar_Authentication_Record);
+            }, "Only one from publication record or calendar authentication record is allowed in signature data object");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Invalid tag")]
+        [Test]
         public void TestKsiSignatureDoInvalidExtraTag()
         {
-            GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Extra_Tag);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Extra_Tag);
+            }, "Invalid tag");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Aggregation hash chains must exist in signature data object")]
+        [Test]
         public void TestKsiSignatureDoInvalidMissingAggregationHashChain()
         {
-            GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Missing_Aggregation_Hash_Chain);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Missing_Aggregation_Hash_Chain);
+            }, "Aggregation hash chains must exist in signature data object");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one calendar hash chain must exist in signature data object")]
+        [Test]
         public void TestKsiSignatureDoInvalidMissingCalendarHashChain()
         {
-            GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Missing_Calendar_Hash_Chain);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Missing_Calendar_Hash_Chain);
+            }, "No publication record or calendar authentication record is allowed in signature data object if there is no calendar hash chain");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one from publication record or calendar authentication record must exist in signature data object")]
-        public void TestKsiSignatureDoInvalidMissingPublicationRecord()
-        {
-            GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Missing_Publication_Record);
-        }
+        
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one from publication record or calendar authentication record must exist in signature data object")]
+        [Test]
         public void TestKsiSignatureDoInvalidMultipleCalendarAuthenticationRecords()
         {
-            GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Multiple_Calendar_Authentication_Records);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Multiple_Calendar_Authentication_Records);
+            }, "Only one from publication record or calendar authentication record is allowed in signature data object");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one calendar hash chain must exist in signature data object")]
+        [Test]
         public void TestKsiSignatureDoInvalidMultipleCalendarHashChain()
         {
-            GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Multiple_Calendar_Hash_Chains);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Multiple_Calendar_Hash_Chains);
+            }, "Only one calendar hash chain is allowed in signature data object");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one from publication record or calendar authentication record must exist in signature data object")]
+        [Test]
         public void TestKsiSignatureDoInvalidMultiplePublicationRecords()
         {
-            GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Multiple_Publication_Records);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Multiple_Publication_Records);
+            }, "Only one from publication record or calendar authentication record is allowed in signature data object");
+            
         }
 
-        [Test, ExpectedException(typeof(InvalidTlvStructureException), ExpectedMessage = "Only one RFC 3161 record is allowed in signature data object")]
+        [Test]
         public void TestKsiSignatureDoInvalidMultipleRfc3161Records()
         {
-            GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Multiple_Rfc_3161_Records);
+            Assert.Throws<InvalidTlvStructureException>(delegate
+            {
+                GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Multiple_Rfc_3161_Records);
+            }, "Only one RFC 3161 record is allowed in signature data object");
+            
         }
 
         // TODO: Multiple aggregation authentication record test is missing
 
-        private KsiSignatureDo GetKsiSignatureDoFromFile(string file)
+        private IKsiSignature GetKsiSignatureDoFromFile(string file)
         {
             using (var stream = new FileStream(file, FileMode.Open))
-            using (var reader = new TlvReader(stream))
             {
-                KsiSignatureDo signature = new KsiSignatureDo(reader.ReadTag());
-                signature.IsValidStructure();
-
-                return signature;
+                return new KsiSignatureFactory().Create(stream);
             }
         }
     }

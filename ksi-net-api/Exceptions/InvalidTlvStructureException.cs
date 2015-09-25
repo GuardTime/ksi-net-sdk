@@ -7,26 +7,25 @@ using Guardtime.KSI.Utils;
 namespace Guardtime.KSI.Exceptions
 {
     /// <summary>
-    /// Invalid TLV Structure exception
+    ///     Invalid TLV Structure exception
     /// </summary>
     public class InvalidTlvStructureException : KsiException
     {
         /// <summary>
-        /// TLV element list
+        ///     TLV element list
         /// </summary>
         public List<TlvTag> TlvList = new List<TlvTag>();
 
         /// <summary>
-        /// Create new InvalidTlvStructure exception.
+        ///     Create new InvalidTlvStructure exception.
         /// </summary>
         /// <param name="message">exception message</param>
         public InvalidTlvStructureException(string message) : base(message)
         {
-
         }
 
         /// <summary>
-        /// Create new InvalidTlvStructure exception.
+        ///     Create new InvalidTlvStructure exception.
         /// </summary>
         /// <param name="message">exception message</param>
         /// <param name="innerException">inner exception</param>
@@ -35,7 +34,7 @@ namespace Guardtime.KSI.Exceptions
         }
 
         /// <summary>
-        /// Create new InvalidTlvStructure exception.
+        ///     Create new InvalidTlvStructure exception.
         /// </summary>
         /// <param name="message">exception message</param>
         /// <param name="tag">invalid tlv tag</param>
@@ -50,7 +49,7 @@ namespace Guardtime.KSI.Exceptions
         }
 
         /// <summary>
-        /// Get TLV tag trace as string
+        ///     Get TLV tag trace as string
         /// </summary>
         /// <returns>tlv trace as string</returns>
         public string GetTlvTagTrace()
@@ -59,7 +58,7 @@ namespace Guardtime.KSI.Exceptions
             StringBuilder builder = new StringBuilder();
             for (int i = TlvList.Count - 1; i >= 0; i--)
             {
-                builder.Append("\n").Append(' ', (TlvList.Count - i - 1) * 2);
+                builder.Append("\n").Append(' ', (TlvList.Count - i - 1)*2);
                 builder.Append("TLV[0x").Append(TlvList[i].Type.ToString("X"));
 
                 if (TlvList[i].NonCritical)
@@ -75,7 +74,7 @@ namespace Guardtime.KSI.Exceptions
                 builder.Append("]:");
             }
 
-            builder.Append("0x").Append(Util.ConvertByteArrayToString(TlvList[0].EncodeValue()));
+            builder.Append("0x").Append(Base16.Encode(TlvList[0].EncodeValue()));
 
             return builder.ToString();
         }

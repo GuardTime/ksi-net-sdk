@@ -8,7 +8,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Guardtime.KSI</RootNamespace>
     <AssemblyName>Guardtime.KSITest</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -30,6 +30,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -39,6 +40,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -48,6 +50,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -57,6 +60,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -66,6 +70,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <OutputPath>bin\Release\</OutputPath>
@@ -75,6 +80,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
@@ -114,6 +120,7 @@
     <Compile Include="Publication\PublicationDataTests.cs" />
     <Compile Include="Publication\PublicationsFileTests.cs" />
     <Compile Include="Service\HttpAggregationRequestTests.cs" />
+    <Compile Include="Service\TestKsiServiceProtocol.cs" />
     <Compile Include="Signature\CalendarAuthenticationRecordTests.cs" />
     <Compile Include="Signature\AggregationAuthenticationRecordTests.cs" />
     <Compile Include="Signature\KsiSignatureDoTests.cs" />
@@ -121,6 +128,38 @@
     <Compile Include="Signature\CalendarHashChainTests.cs" />
     <Compile Include="Signature\Rfc3161RecordTests.cs" />
     <Compile Include="Signature\SignatureDataTests.cs" />
+    <Compile Include="Signature\Verification\Rule\AggregationChainInputHashVerificationRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\AggregationHashChainConsistencyRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\AggregationHashChainTimeConsistencyRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarAuthenticationRecordAggregationHashRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarAuthenticationRecordAggregationTimeRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarAuthenticationRecordExistenceRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarAuthenticationRecordSignatureVerificationRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarHashChainAggregationTimeRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarHashChainExistenceRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarHashChainInputHashVerificationRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarHashChainRegistrationTimeRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\CertificateExistenceRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\ExtendedSignatureAggregationChainRightLinksMatchesRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\ExtendedSignatureCalendarChainAggregationTimeRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\ExtendedSignatureCalendarChainInputHashRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\ExtendedSignatureCalendarChainRootHashRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\ExtendingPermittedVerificationRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\PublicationsFileContainsSignaturePublicationRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\PublicationsFileExtendedSignatureInputHashRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\PublicationsFilePublicationHashMatchesExtenderResponseRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\PublicationsFilePublicationTimeMatchesExtenderResponseRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\SignaturePublicationRecordExistenceRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\SignaturePublicationRecordPublicationHashRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\SignaturePublicationRecordPublicationTimeRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\TestVerificationContextFaultyFunctions.cs" />
+    <Compile Include="Signature\Verification\Rule\TestVerificationContext.cs" />
+    <Compile Include="Signature\Verification\Rule\UserProvidedPublicationCreationTimeVerificationRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\UserProvidedPublicationExistenceRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\UserProvidedPublicationExtendedSignatureInputHashRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\UserProvidedPublicationHashMatchesExtendedResponseRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\UserProvidedPublicationTimeMatchesExtendedResponseRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\UserProvidedPublicationVerificationRuleTests.cs" />
     <Compile Include="Signature\Verification\SignatureVerificationTests.cs" />
     <Compile Include="Trust\PkiTrustStoreProviderTests.cs" />
     <Compile Include="Utils\InvalidEncodeTlvTag.cs" />
@@ -139,10 +178,44 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="resources\service\" />
     <Folder Include="resources\signature\ksi-signature\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="resources\extender-response\response-invalid-anon-1404215325-1404259200.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\extender-response\response-invalid-anon-1404215325-1408060800.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\extender-response\response-invalid-anon-1404215325-1439596800.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\extender-response\response-ok-anon-1401915603-1401926400.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\extender-response\response-ok-anon-1401915603-1408060800.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\extender-response\response-ok-anon-1401915603-1439596800.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\extender-response\response-ok-anon-1401915603.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\extender-response\response-ok-anon-1404215325-1404259200.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\extender-response\response-ok-anon-1404215325-1408060800.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\extender-response\response-ok-anon-1404215325-1439596800.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\extender-response\response-ok-anon-1404215325.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="resources\publication\publicationdata\missingtag.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -338,6 +411,33 @@
     <None Include="resources\signature\calendar-hash-chain\calendar-hash-chain-ok.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-aggregation-chain-aggregation-time-mismatch.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-aggregation-chain-input-hash.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-aggregation-root-hash.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-aggregation-time-with-publication-record.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-calendar-authentication-record-invalid-certificate-id.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-calendar-authentication-record-invalid-publication-hash.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-calendar-authentication-record-invalid-publication-time.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-calendar-authentication-record-invalid-signature.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-calendar-hash-chain-publication-time.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-contain-both-publication-record-and-calendar-authentication-record.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -348,6 +448,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-missing-calendar-hash-chain.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-with-invalid-publication-record.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\ksi-signature-do\ksi-signature-ok-invalid-calendar-chain-invalid-aggregation-time.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\ksi-signature-do\ksi-signature-ok-missing-calendar-hash-chain.tlv">
@@ -371,7 +477,16 @@
     <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-type.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="resources\signature\ksi-signature-do\ksi-signature-ok-new.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\ksi-signature-do\ksi-signature-ok-with-publication-record.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="resources\signature\ksi-signature-do\ksi-signature-ok.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\ksi-signature-do\legacy-ksi-signature-ok-with-publication-record.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\ksi-signature-do\legacy-ksi-signature-ok.tlv">
@@ -480,6 +595,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\trust\pkitrustprovider\sigbytes.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-calendar-hash-chain-input-hash.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

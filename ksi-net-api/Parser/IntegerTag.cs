@@ -1,26 +1,18 @@
-﻿using Guardtime.KSI.Utils;
-using System;
+﻿using System;
 using System.Text;
+using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Parser
 {
     /// <summary>
-    /// Integer TLV element.
+    ///     Integer TLV element.
     /// </summary>
-    public class IntegerTag : TlvTag
+    public class IntegerTag : TlvTag, IEquatable<IntegerTag>
     {
         private readonly ulong _value;
 
         /// <summary>
-        /// Get TLV element unsigned long value.
-        /// </summary>
-        public ulong Value
-        {
-            get { return _value; }
-        }
-
-        /// <summary>
-        /// Create new Integer TLV element from TLV element.
+        ///     Create new Integer TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         public IntegerTag(TlvTag tag) : base(tag)
@@ -35,7 +27,7 @@ namespace Guardtime.KSI.Parser
         }
 
         /// <summary>
-        /// Create new Integer TLV element from data.
+        ///     Create new Integer TLV element from data.
         /// </summary>
         /// <param name="type">TLV element type</param>
         /// <param name="nonCritical">Is TLV element non critical</param>
@@ -48,7 +40,45 @@ namespace Guardtime.KSI.Parser
         }
 
         /// <summary>
-        /// Encode element value ulong to byte array.
+        ///     Get TLV element unsigned long value.
+        /// </summary>
+        public ulong Value
+        {
+            get { return _value; }
+        }
+
+        /// <summary>
+        ///     Compare against Integer TLV element
+        /// </summary>
+        /// <param name="tag">Comparable integer TLV element</param>
+        /// <returns>true if integer TLV element is equal</returns>
+        public bool Equals(IntegerTag tag)
+        {
+            // If parameter is null, return false. 
+            if (ReferenceEquals(tag, null))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, tag))
+            {
+                return true;
+            }
+
+            // If run-time types are not exactly the same, return false. 
+            if (GetType() != tag.GetType())
+            {
+                return false;
+            }
+
+            return Type == tag.Type &&
+                   Forward == tag.Forward &&
+                   NonCritical == tag.NonCritical &&
+                   Value == tag.Value;
+        }
+
+        /// <summary>
+        ///     Encode element value ulong to byte array.
         /// </summary>
         /// <returns>ulong as byte array</returns>
         public override byte[] EncodeValue()
@@ -57,7 +87,7 @@ namespace Guardtime.KSI.Parser
         }
 
         /// <summary>
-        /// Get TLV element hash code.
+        ///     Get TLV element hash code.
         /// </summary>
         /// <returns>Hash code</returns>
         public override int GetHashCode()
@@ -69,17 +99,17 @@ namespace Guardtime.KSI.Parser
         }
 
         /// <summary>
-        /// Compare TLV element to object.
+        ///     Compare against object.
         /// </summary>
-        /// <param name="obj">Comparable object</param>
-        /// <returns>Is TLV element equal to object</returns>
+        /// <param name="obj">Comparable object.</param>
+        /// <returns>Is given object equal</returns>
         public override bool Equals(object obj)
         {
-            return this == obj as IntegerTag;
+            return Equals(obj as IntegerTag);
         }
 
         /// <summary>
-        /// Convert TLV element to string.
+        ///     Convert TLV element to string.
         /// </summary>
         /// <returns>TLV element as string</returns>
         public override string ToString()
@@ -102,32 +132,26 @@ namespace Guardtime.KSI.Parser
             return builder.ToString();
         }
 
+        /// <summary>
+        ///     Compare integer TLV elements against each other.
+        /// </summary>
+        /// <param name="a">Integer TLV element</param>
+        /// <param name="b">Integer TLV element</param>
+        /// <returns>true if elements are equal</returns>
         public static bool operator ==(IntegerTag a, IntegerTag b)
         {
-            // If both are null, or both are same instance, return true.
-            if (ReferenceEquals(a, b))
-            {
-                return true;
-            }
-
-            // If one is null, but not both, return false.
-            if (((object)a == null) || ((object)b == null))
-            {
-                return false;
-            }
-
-            return a.Type == b.Type &&
-                    a.Forward == b.Forward &&
-                    a.NonCritical == b.NonCritical &&
-                    a.Value == b.Value;
+            return ReferenceEquals(a, null) ? ReferenceEquals(b, null) : a.Equals(b);
         }
 
+        /// <summary>
+        ///     Compare integer TLV element non equity to another integer TLV element.
+        /// </summary>
+        /// <param name="a">Integer TLV element</param>
+        /// <param name="b">Integer TLV element</param>
+        /// <returns>true if elements are not equal</returns>
         public static bool operator !=(IntegerTag a, IntegerTag b)
         {
             return !(a == b);
         }
-
-
     }
-
 }

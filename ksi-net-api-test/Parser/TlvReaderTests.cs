@@ -69,21 +69,27 @@ namespace Guardtime.KSI.Parser
             }
         }
 
-        [Test(), ExpectedException(typeof(FormatException))]
+        [Test()]
         public void TestReadTooShortTag()
         {
             using (var reader = new TlvReader(new MemoryStream(new byte[] { 0x21 })))
             {
-                var tag = reader.ReadTag();
+                Assert.Throws<FormatException>(delegate
+                {
+                    reader.ReadTag();
+                }, "Premature end of data");
             }
         }
 
-        [Test(), ExpectedException(typeof(FormatException))]
+        [Test()]
         public void TestReadDataWithInvalidLength()
         {
             using (var reader = new TlvReader(new MemoryStream(new byte[] { 0x21, 0x2 })))
             {
-                var tag = reader.ReadTag();
+                Assert.Throws<FormatException>(delegate
+                {
+                    reader.ReadTag();
+                }, "Premature end of data");
             }
         }
     }

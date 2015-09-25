@@ -1,45 +1,21 @@
-﻿using Guardtime.KSI.Utils;
-using System;
+﻿using System;
 using System.IO;
 using System.Text;
+using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Parser
 {
     /// <summary>
-    /// TLV objects base class.
+    ///     TLV objects base class.
     /// </summary>
     public abstract class TlvTag
     {
-        private readonly uint _type;
-        private readonly bool _nonCritical;
         private readonly bool _forward;
+        private readonly bool _nonCritical;
+        private readonly uint _type;
 
         /// <summary>
-        /// Tlv tag type.
-        /// </summary>
-        public uint Type
-        {
-            get { return _type; }
-        }
-
-        /// <summary>
-        /// Is tlv tag non critical.
-        /// </summary>
-        public bool NonCritical
-        {
-            get { return _nonCritical; }
-        }
-
-        /// <summary>
-        /// Is tlv forwarded.
-        /// </summary>
-        public bool Forward
-        {
-            get { return _forward; }
-        }
-
-        /// <summary>
-        /// Create new TLV element from data.
+        ///     Create new TLV element from data.
         /// </summary>
         /// <param name="type">TLV element type</param>
         /// <param name="nonCritical">Is TLV element non critical</param>
@@ -52,7 +28,7 @@ namespace Guardtime.KSI.Parser
         }
 
         /// <summary>
-        /// Create new TLV element from TLV element.
+        ///     Create new TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         protected TlvTag(TlvTag tag)
@@ -68,13 +44,37 @@ namespace Guardtime.KSI.Parser
         }
 
         /// <summary>
-        /// Encode TLV object value.
+        ///     Tlv tag type.
+        /// </summary>
+        public uint Type
+        {
+            get { return _type; }
+        }
+
+        /// <summary>
+        ///     Is tlv tag non critical.
+        /// </summary>
+        public bool NonCritical
+        {
+            get { return _nonCritical; }
+        }
+
+        /// <summary>
+        ///     Is tlv forwarded.
+        /// </summary>
+        public bool Forward
+        {
+            get { return _forward; }
+        }
+
+        /// <summary>
+        ///     Encode TLV object value.
         /// </summary>
         /// <returns>TLV object value as bytes</returns>
         public abstract byte[] EncodeValue();
 
         /// <summary>
-        /// Encode TLV object.
+        ///     Encode TLV object.
         /// </summary>
         /// <returns>TLV object as bytes</returns>
         public byte[] Encode()
@@ -88,7 +88,7 @@ namespace Guardtime.KSI.Parser
         }
 
         /// <summary>
-        /// Convert TLV object to string.
+        ///     Convert TLV object to string.
         /// </summary>
         /// <returns>TLV object as string</returns>
         public override string ToString()
@@ -107,10 +107,9 @@ namespace Guardtime.KSI.Parser
             }
 
             builder.Append("]:");
-            builder.Append("0x").Append(Util.ConvertByteArrayToString(EncodeValue()));
+            builder.Append("0x").Append(Base16.Encode(EncodeValue()));
 
             return builder.ToString();
         }
     }
-
 }

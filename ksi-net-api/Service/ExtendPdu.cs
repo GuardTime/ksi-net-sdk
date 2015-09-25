@@ -1,57 +1,106 @@
-﻿using Guardtime.KSI.Parser;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Service
 {
-    internal class ExtendPdu : KsiPdu
+    /// <summary>
+    ///     Extension PDU.
+    /// </summary>
+    public sealed class ExtendPdu : KsiPdu
     {
-        // TODO: Better name
+        /// <summary>
+        ///     Extension PDU TLV type.
+        /// </summary>
         public const uint TagType = 0x300;
 
         private readonly ExtendPduPayload _payload;
 
-        public override KsiPduPayload Payload
-        {
-            get
-            {
-                return _payload;
-            }
-        }
-
+        /// <summary>
+        ///     Create extend PDU from TLV element.
+        /// </summary>
+        /// <param name="tag">TLV element</param>
         public ExtendPdu(TlvTag tag) : base(tag)
         {
+            if (Type != TagType)
+            {
+                throw new InvalidTlvStructureException("Invalid extend pdu type: " + Type);
+            }
+
+            int headerCount = 0;
+            int payloadCount = 0;
+            int macCount = 0;
+
             for (int i = 0; i < Count; i++)
             {
                 switch (this[i].Type)
                 {
+                    case ExtendRequestPayload.TagType:
+                        _payload = new ExtendRequestPayload(this[i]);
+                        this[i] = _payload;
+                        payloadCount++;
+                        break;
                     case ExtendResponsePayload.TagType:
                         _payload = new ExtendResponsePayload(this[i]);
                         this[i] = _payload;
+                        payloadCount++;
                         break;
                     case ExtendError.TagType:
                         _payload = new ExtendError(this[i]);
                         this[i] = _payload;
+                        payloadCount++;
+                        break;
+                    case KsiPduHeader.TagType:
+                        headerCount++;
+                        break;
+                    case MacTagType:
+                        macCount++;
+                        break;
+                    default:
+                        VerifyCriticalFlag(this[i]);
                         break;
                 }
             }
-        }
 
-        // TODO: Create correct constructor
-        public ExtendPdu(KsiPduHeader header, ExtendPduPayload payload) : base(header, TagType, false, false, new List<TlvTag>())
-        {
-            _payload = payload;
-            if (payload != null)
+            if (payloadCount != 1)
             {
-                AddTag(_payload);
+                throw new InvalidTlvStructureException("Only one payload must exist in ksi pdu");
+            }
+
+            if (_payload.Type != ExtendError.TagType && headerCount != 1)
+            {
+                throw new InvalidTlvStructureException("Only one header must exist in ksi pdu");
+            }
+
+            if (_payload.Type != ExtendError.TagType && macCount != 1)
+            {
+                throw new InvalidTlvStructureException("Only one mac must exist in ksi pdu");
             }
         }
 
-        
-
-        protected override void CheckStructure()
+        /// <summary>
+        ///     Create extend pdu from KSI header and extend pdu payload.
+        /// </summary>
+        /// <param name="header">KSI header</param>
+        /// <param name="payload">Extend pdu payload</param>
+        public ExtendPdu(KsiPduHeader header, ExtendPduPayload payload)
+            : base(header, TagType, false, false, new List<TlvTag>())
         {
-            // TODO: Check if payload exists
+            if (payload == null)
+            {
+                throw new ArgumentNullException("payload");
+            }
+
+            _payload = AddTag(payload);
+        }
+
+        /// <summary>
+        ///     Get extension PDU payload.
+        /// </summary>
+        public override KsiPduPayload Payload
+        {
+            get { return _payload; }
         }
     }
 }

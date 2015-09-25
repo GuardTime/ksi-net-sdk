@@ -36,6 +36,9 @@ namespace Guardtime.KSI.Parser
         {
             var tag = new RawTag(0x1, false, false, new byte[] { 0x1, 0x2, 0x3 });
             Assert.AreEqual(new RawTag(0x1, false, false, new byte[] { 0x1, 0x2, 0x3 }), tag, "Tag Equals function should compare correctly");
+            Assert.IsTrue(tag.Equals(tag), "Tags should be equal");
+            Assert.IsTrue(tag == new RawTag(0x1, false, false, new byte[] { 0x1, 0x2, 0x3 }), "Tag should compare correctly with other objects");
+            Assert.IsTrue(tag != new ChildRawTag(0x1, false, false, new byte[] { 0x1, 0x2, 0x3 }), "Tag should compare correctly with other objects");
             Assert.IsFalse(tag.Equals(new StringTag(0x1, false, false, "test")), "Tag Equals function should compare correctly with other objects");
             Assert.IsFalse(tag.Equals(new object()), "Tag Equals function should compare correctly with other objects");
         }
@@ -60,23 +63,42 @@ namespace Guardtime.KSI.Parser
             Assert.AreEqual("TLV[0x1,N,F]:0x74657374206D65737361676500", tag.ToString(), "Tag byte hex representation should be correct");
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void TestTlvTagCreateFromNullData()
         {
-            var tag = new RawTag(0x1, false, false, null);
+            Assert.Throws<ArgumentNullException>(delegate
+            {
+                new RawTag(0x1, false, false, null);
+            });
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void TestTlvTagCreateFromNullTag()
         {
-            var tag = new RawTag((TlvTag)null);
+            Assert.Throws<ArgumentNullException>(delegate
+            {
+                new RawTag((TlvTag)null);
+            });
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void TestTlvTagCreateFromInvalidEncodeTlvTag()
         {
-            var tag = new RawTag(new InvalidEncodeTlvTag(0x0, false, false));
+            Assert.Throws<ArgumentException>(delegate
+            {
+                new RawTag(new InvalidEncodeTlvTag(0x0, false, false));
+            });
         }
 
+        private class ChildRawTag : RawTag
+        {
+            public ChildRawTag(TlvTag tag) : base(tag)
+            {
+            }
+
+            public ChildRawTag(uint type, bool nonCritical, bool forward, byte[] value) : base(type, nonCritical, forward, value)
+            {
+            }
+        }
     }
 }
