@@ -5,6 +5,7 @@ using NUnit.Framework;
 using System;
 using System.IO;
 using Guardtime.KSI.Publication;
+using Guardtime.KSI.Trust;
 
 namespace Guardtime.KSI.Service
 {
@@ -21,7 +22,7 @@ namespace Guardtime.KSI.Service
 
 
             Console.WriteLine(@"// Creating service");
-            var ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"), new PublicationsFileFactory(), new KsiSignatureFactory());
+            var ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"), new PublicationsFileFactory(new PkiTrustStoreProvider()), new KsiSignatureFactory());
             Console.WriteLine(@"// Signing hash");
             var createSignatureAsyncResult = ksiService.BeginSign(new DataHash(HashAlgorithm.Sha2256, new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 }), null, null);
             ksiService.EndSign(createSignatureAsyncResult);

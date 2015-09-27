@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using Guardtime.KSI.Exceptions;
@@ -17,8 +16,8 @@ namespace Guardtime.KSI.Service
     public class KsiService : IKsiService
     {
         private readonly IKsiExtendingServiceProtocol _extendingServiceProtocol;
-        private readonly PublicationsFileFactory _publicationsFileFactory;
         private readonly KsiSignatureFactory _ksiSignatureFactory;
+        private readonly PublicationsFileFactory _publicationsFileFactory;
         private readonly IKsiPublicationsFileServiceProtocol _publicationsFileServiceProtocol;
         private readonly IKsiServiceSettings _serviceSettings;
         private readonly IKsiSigningServiceProtocol _sigingServiceProtocol;

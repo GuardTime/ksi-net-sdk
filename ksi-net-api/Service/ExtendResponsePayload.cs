@@ -19,9 +19,7 @@ namespace Guardtime.KSI.Service
 
         private readonly CalendarHashChain _calendarHashChain;
         private readonly StringTag _errorMessage;
-
         private readonly IntegerTag _lastTime;
-
         private readonly IntegerTag _requestId;
         private readonly IntegerTag _status;
 
@@ -29,11 +27,12 @@ namespace Guardtime.KSI.Service
         ///     Create extend response payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
+        /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
         public ExtendResponsePayload(TlvTag tag) : base(tag)
         {
             if (Type != TagType)
             {
-                throw new InvalidTlvStructureException("Invalid extend response payload type: " + Type);
+                throw new TlvException("Invalid extend response payload type(" + Type + ").");
             }
 
             int requestIdCount = 0;
@@ -79,34 +78,34 @@ namespace Guardtime.KSI.Service
 
             if (requestIdCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one request id must exist in extend response payload");
+                throw new TlvException("Only one request id must exist in extend response payload.");
             }
 
             if (statusCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one status code must exist in extend response payload");
+                throw new TlvException("Only one status code must exist in extend response payload.");
             }
 
             if (errorMessageCount > 1)
             {
-                throw new InvalidTlvStructureException("Only one error message is allowed in extend response payload");
+                throw new TlvException("Only one error message is allowed in extend response payload.");
             }
 
             if (lastTimeCount > 1)
             {
-                throw new InvalidTlvStructureException("Only one last time is allowed in extend response payload");
+                throw new TlvException("Only one last time is allowed in extend response payload.");
             }
 
             if (_status.Value == 0 && calendarHashChainCount != 1)
             {
-                throw new InvalidTlvStructureException(
-                    "Only one calendar hash chain must exist in extend response payload");
+                throw new TlvException(
+                    "Only one calendar hash chain must exist in extend response payload.");
             }
 
             if (_status.Value != 0 && calendarHashChainCount != 0)
             {
-                throw new InvalidTlvStructureException(
-                    "Calendar hash chain should be missing when error occurs in extend response payload");
+                throw new TlvException(
+                    "Calendar hash chain should be missing when error occurs in extend response payload.");
             }
         }
 
@@ -116,6 +115,38 @@ namespace Guardtime.KSI.Service
         public CalendarHashChain CalendarHashChain
         {
             get { return _calendarHashChain; }
+        }
+
+        /// <summary>
+        ///     Get error message if it exists.
+        /// </summary>
+        public string ErrorMessage
+        {
+            get { return _errorMessage == null ? null : _errorMessage.Value; }
+        }
+
+        /// <summary>
+        ///     Get last time if it exists.
+        /// </summary>
+        public ulong? LastTime
+        {
+            get { return _lastTime == null ? (ulong?) null : _lastTime.Value; }
+        }
+
+        /// <summary>
+        ///     Get request ID.
+        /// </summary>
+        public ulong RequestId
+        {
+            get { return _requestId.Value; }
+        }
+
+        /// <summary>
+        ///     Get status code.
+        /// </summary>
+        public ulong Status
+        {
+            get { return _status.Value; }
         }
     }
 }

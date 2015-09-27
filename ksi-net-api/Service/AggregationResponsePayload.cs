@@ -24,7 +24,6 @@ namespace Guardtime.KSI.Service
         private readonly StringTag _errorMessage;
         // TODO: Create request acknowledgement 
         private readonly RawTag _requestAcknowledgment;
-
         private readonly IntegerTag _requestId;
         private readonly IntegerTag _status;
 
@@ -32,11 +31,12 @@ namespace Guardtime.KSI.Service
         ///     Create aggregation response payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
+        /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
         public AggregationResponsePayload(TlvTag tag) : base(tag)
         {
             if (Type != TagType)
             {
-                throw new InvalidTlvStructureException("Invalid aggregation response payload type: " + Type);
+                throw new TlvException("Invalid aggregation response payload type(" + Type + ").");
             }
 
             int requestIdCount = 0;
@@ -89,30 +89,54 @@ namespace Guardtime.KSI.Service
 
             if (requestIdCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one request id must exist in aggregation response payload");
+                throw new TlvException("Only one request id must exist in aggregation response payload.");
             }
 
             if (statusCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one status code must exist in aggregation response payload");
+                throw new TlvException("Only one status code must exist in aggregation response payload.");
             }
 
             if (errorMessageCount > 1)
             {
-                throw new InvalidTlvStructureException(
-                    "Only one error message is allowed in aggregation response payload");
+                throw new TlvException(
+                    "Only one error message is allowed in aggregation response payload.");
             }
 
             if (configCount > 1)
             {
-                throw new InvalidTlvStructureException("Only one config is allowed in aggregation response payload");
+                throw new TlvException("Only one config is allowed in aggregation response payload.");
             }
 
             if (requestAcknowledgmentCount > 1)
             {
-                throw new InvalidTlvStructureException(
-                    "Only one request acknowledgment is allowed in aggregation response payload");
+                throw new TlvException(
+                    "Only one request acknowledgment is allowed in aggregation response payload.");
             }
+        }
+
+        /// <summary>
+        ///     Get error message if it exists.
+        /// </summary>
+        public string ErrorMessage
+        {
+            get { return _errorMessage == null ? null : _errorMessage.Value; }
+        }
+
+        /// <summary>
+        ///     Get request ID.
+        /// </summary>
+        public ulong RequestId
+        {
+            get { return _requestId.Value; }
+        }
+
+        /// <summary>
+        ///     Get status code.
+        /// </summary>
+        public ulong Status
+        {
+            get { return _status.Value; }
         }
     }
 }

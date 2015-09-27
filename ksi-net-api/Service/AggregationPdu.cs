@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 
@@ -21,11 +20,12 @@ namespace Guardtime.KSI.Service
         ///     Create aggregation pdu TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
+        /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
         public AggregationPdu(TlvTag tag) : base(tag)
         {
             if (Type != TagType)
             {
-                throw new InvalidTlvStructureException("Invalid aggregation pdu type: " + Type);
+                throw new TlvException("Invalid aggregation PDU type(" + Type + ").");
             }
 
             int headerCount = 0;
@@ -65,17 +65,17 @@ namespace Guardtime.KSI.Service
 
             if (payloadCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one payload must exist in ksi pdu");
+                throw new TlvException("Only one payload must exist in KSI PDU.");
             }
 
             if (_payload.Type != AggregationError.TagType && headerCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one header must exist in ksi pdu");
+                throw new TlvException("Only one header must exist in KSI PDU.");
             }
 
             if (_payload.Type != AggregationError.TagType && macCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one mac must exist in ksi pdu");
+                throw new TlvException("Only one mac must exist in KSI PDU");
             }
         }
 
@@ -84,12 +84,13 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="header">KSI PDU header</param>
         /// <param name="payload">aggregation payload</param>
+        /// <exception cref="TlvException">thrown when payload is null</exception>
         public AggregationPdu(KsiPduHeader header, AggregationPduPayload payload)
             : base(header, TagType, false, false, new List<TlvTag>())
         {
             if (payload == null)
             {
-                throw new ArgumentNullException("payload");
+                throw new TlvException("Payload cannot be null.");
             }
 
             _payload = AddTag(payload);

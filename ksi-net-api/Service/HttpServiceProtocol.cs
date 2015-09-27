@@ -45,8 +45,8 @@ namespace Guardtime.KSI.Service
         {
             if (requestTimeout < 0)
             {
-                throw new ArgumentOutOfRangeException("requestTimeout", requestTimeout,
-                    "Request timeout should be in milliseconds");
+                throw new KsiServiceProtocolException("Request timeout should be in milliseconds, but was (" +
+                                                      requestTimeout + ").");
             }
             _requestTimeOut = requestTimeout;
         }
@@ -64,7 +64,8 @@ namespace Guardtime.KSI.Service
         {
             if (bufferSize < 0)
             {
-                throw new ArgumentOutOfRangeException("bufferSize", bufferSize, "Buffer size should be positive integer");
+                throw new KsiServiceProtocolException("Buffer size should be in positive integer, but was (" +
+                                                      bufferSize + ").");
             }
             _bufferSize = bufferSize;
         }
@@ -86,7 +87,7 @@ namespace Guardtime.KSI.Service
             HttpWebRequest request = WebRequest.Create(_extendingUrl) as HttpWebRequest;
             if (request == null)
             {
-                throw new ServiceProtocolException("Invalid extending HTTP URL: " + _extendingUrl);
+                throw new KsiServiceProtocolException("Invalid extending HTTP URL(\"" + _extendingUrl + "\").");
             }
 
             request.Method = WebRequestMethods.Http.Post;
@@ -122,7 +123,8 @@ namespace Guardtime.KSI.Service
             HttpWebRequest request = WebRequest.Create(_publicationsFileUrl) as HttpWebRequest;
             if (request == null)
             {
-                throw new ServiceProtocolException("Invalid publications file HTTP URL: " + _publicationsFileUrl);
+                throw new KsiServiceProtocolException("Invalid publications file HTTP URL(\"" + _publicationsFileUrl +
+                                                      "\").");
             }
 
             request.Method = WebRequestMethods.Http.Get;
@@ -163,7 +165,7 @@ namespace Guardtime.KSI.Service
             HttpWebRequest request = WebRequest.Create(_signingUrl) as HttpWebRequest;
             if (request == null)
             {
-                throw new ServiceProtocolException("Invalid signing HTTP URL: " + _signingUrl);
+                throw new KsiServiceProtocolException("Invalid signing HTTP URL(\"" + _signingUrl + "\").");
             }
 
             request.Method = WebRequestMethods.Http.Post;
@@ -196,7 +198,7 @@ namespace Guardtime.KSI.Service
 
             if (timedOut)
             {
-                httpAsyncResult.Error = new ServiceProtocolException("Request stream timed out");
+                httpAsyncResult.Error = new KsiServiceProtocolException("Request stream timed out.");
                 httpAsyncResult.SetComplete(true);
                 return;
             }
@@ -205,7 +207,7 @@ namespace Guardtime.KSI.Service
             int timeRemaining = _requestTimeOut - httpAsyncResult.TimeElapsed;
             if (timeRemaining < 0)
             {
-                httpAsyncResult.Error = new ServiceProtocolException("Request timed out");
+                httpAsyncResult.Error = new KsiServiceProtocolException("Request timed out.");
                 httpAsyncResult.SetComplete(true);
                 return;
             }
@@ -224,7 +226,8 @@ namespace Guardtime.KSI.Service
             }
             catch (Exception e)
             {
-                httpAsyncResult.Error = new ServiceProtocolException("Request failed: " + e, e);
+                httpAsyncResult.Error =
+                    new KsiServiceProtocolException("Request failed with following error \"" + e + "\".", e);
                 httpAsyncResult.SetComplete(true);
             }
         }
@@ -236,7 +239,7 @@ namespace Guardtime.KSI.Service
 
             if (timedOut)
             {
-                httpAsyncResult.Error = new ServiceProtocolException("Request timed out");
+                httpAsyncResult.Error = new KsiServiceProtocolException("Request timed out.");
             }
 
             httpAsyncResult.SetComplete(timedOut);
@@ -252,7 +255,7 @@ namespace Guardtime.KSI.Service
             HttpKsiServiceProtocolAsyncResult httpAsyncResult = asyncResult as HttpKsiServiceProtocolAsyncResult;
             if (httpAsyncResult == null)
             {
-                throw new ServiceProtocolException("Invalid IAsyncResult");
+                throw new KsiServiceProtocolException("Invalid IAsyncResult.");
             }
 
             if (!httpAsyncResult.IsCompleted)
@@ -286,7 +289,7 @@ namespace Guardtime.KSI.Service
             {
                 if (e.Response == null)
                 {
-                    throw new ServiceProtocolException("Error occured while trying to get response", e);
+                    throw new KsiServiceProtocolException("Error occured while trying to get response.", e);
                 }
 
                 using (Stream s = e.Response.GetResponseStream())

@@ -17,22 +17,22 @@ namespace Guardtime.KSI.Service
 
         private const uint RequestIdTagType = 0x1;
         private const uint AggregationTimeTagType = 0x2;
-        // TODO: Check if correct
         private const uint PublicationTimeTagType = 0x3;
+
         private readonly IntegerTag _aggregationTime;
         private readonly IntegerTag _publicationTime;
-
         private readonly IntegerTag _requestId;
 
         /// <summary>
         ///     Create extend request payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
+        /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
         public ExtendRequestPayload(TlvTag tag) : base(tag)
         {
             if (Type != TagType)
             {
-                throw new InvalidTlvStructureException("Invalid extend pdu type: " + Type);
+                throw new TlvException("Invalid extend request payload type(" + Type + ").");
             }
 
             int requestIdCount = 0;
@@ -66,17 +66,17 @@ namespace Guardtime.KSI.Service
 
             if (requestIdCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one request id must exist in extend request payload");
+                throw new TlvException("Only one request id must exist in extend request payload.");
             }
 
             if (aggregationTimeCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one aggregation time must exist in extend request payload");
+                throw new TlvException("Only one aggregation time must exist in extend request payload.");
             }
 
             if (publicationTimeCount > 1)
             {
-                throw new InvalidTlvStructureException("Only one publication time is allowed in extend request payload");
+                throw new TlvException("Only one publication time is allowed in extend request payload.");
             }
         }
 
@@ -102,6 +102,14 @@ namespace Guardtime.KSI.Service
 
             _aggregationTime = new IntegerTag(AggregationTimeTagType, false, false, aggregationTime);
             AddTag(_aggregationTime);
+        }
+
+        /// <summary>
+        ///     Get request ID.
+        /// </summary>
+        public ulong RequestId
+        {
+            get { return _requestId.Value; }
         }
 
         /// <summary>
