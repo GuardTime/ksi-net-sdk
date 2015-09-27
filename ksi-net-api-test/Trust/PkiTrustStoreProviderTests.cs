@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Guardtime.KSI.Exceptions;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Trust
@@ -28,12 +29,12 @@ namespace Guardtime.KSI.Trust
 
             trustStoreProvider.Verify(data, sigBytes);
 
-            Assert.Throws<ArgumentNullException>(delegate
+            Assert.Throws<PkiVerificationException>(delegate
             {
                 trustStoreProvider.Verify(null, sigBytes);
             });
 
-            Assert.Throws<ArgumentNullException>(delegate
+            Assert.Throws<PkiVerificationException>(delegate
             {
                 trustStoreProvider.Verify(data, null);
             });
