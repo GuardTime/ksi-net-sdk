@@ -30,11 +30,12 @@ namespace Guardtime.KSI.Publication
         ///     Create new publication record TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
+        /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
         public PublicationRecord(TlvTag tag) : base(tag)
         {
             if (Type != TagTypeSignature && Type != TagTypePublication)
             {
-                throw new InvalidTlvStructureException("Invalid publication record type: " + Type);
+                throw new TlvException("Invalid publication record type(" + Type + ").");
             }
 
             int publicationDataCount = 0;
@@ -68,7 +69,7 @@ namespace Guardtime.KSI.Publication
 
             if (publicationDataCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one publication data is allowed in publication record");
+                throw new TlvException("Only one publication data is allowed in publication record.");
             }
         }
 

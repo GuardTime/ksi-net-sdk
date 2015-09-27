@@ -12,7 +12,6 @@ namespace Guardtime.KSI.Publication
     /// </summary>
     public sealed class PublicationData : CompositeTag
     {
-        // TODO: Better name
         /// <summary>
         ///     Publication data tag type.
         /// </summary>
@@ -28,11 +27,12 @@ namespace Guardtime.KSI.Publication
         ///     Create new publication data TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
+        /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
         public PublicationData(TlvTag tag) : base(tag)
         {
             if (Type != TagType)
             {
-                throw new InvalidTlvStructureException("Invalid publication record type: " + Type);
+                throw new TlvException("Invalid publication data type(" + Type + ").");
             }
 
             int publicationTimeCount = 0;
@@ -60,12 +60,12 @@ namespace Guardtime.KSI.Publication
 
             if (publicationTimeCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one publication time must exist in publication data");
+                throw new TlvException("Only one publication time must exist in publication data.");
             }
 
             if (publicationHashCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one publication hash must exist in publication data");
+                throw new TlvException("Only one publication hash must exist in publication data.");
             }
         }
 
@@ -87,12 +87,12 @@ namespace Guardtime.KSI.Publication
         ///     Create new publication data TLV element from publication string.
         /// </summary>
         /// <param name="publicationString">publication string</param>
+        /// <exception cref="TlvException">thrown when TLV parsing fails from publication string</exception>
         public PublicationData(string publicationString) : base(TagType, false, true, new List<TlvTag>())
         {
             if (publicationString == null)
             {
-                // TODO: Better exception
-                throw new ArgumentNullException("publicationString");
+                throw new TlvException("Publication string cannot be null.");
             }
 
             byte[] dataBytesWithCrc32 = Base32.Decode(publicationString);
@@ -100,7 +100,7 @@ namespace Guardtime.KSI.Publication
             // Length needs to be at least 13 bytes (8 bytes for time plus non-empty hash imprint plus 4 bytes for crc32)
             if (dataBytesWithCrc32 == null || dataBytesWithCrc32.Length < 13)
             {
-                throw new KsiException("Invalid publication string: Base32 decode failed");
+                throw new TlvException("Publication string base 32 decode failed.");
             }
 
             byte[] dataBytes = new byte[dataBytesWithCrc32.Length - 4];
@@ -111,7 +111,7 @@ namespace Guardtime.KSI.Publication
             Array.Copy(dataBytesWithCrc32, dataBytesWithCrc32.Length - 4, messageCrc32, 0, 4);
             if (!Util.IsArrayEqual(computedCrc32, messageCrc32))
             {
-                throw new KsiException("Invalid publication string: CRC32 Check failed");
+                throw new TlvException("Publication string CRC 32 check failed.");
             }
 
             byte[] hashImprint = new byte[dataBytesWithCrc32.Length - 12];

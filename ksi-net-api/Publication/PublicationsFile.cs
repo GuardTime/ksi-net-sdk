@@ -1,16 +1,13 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
-using Guardtime.KSI.Trust;
 using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Publication
 {
-
     public partial class PublicationsFileFactory
     {
         /// <summary>
@@ -18,12 +15,13 @@ namespace Guardtime.KSI.Publication
         /// </summary>
         private sealed class PublicationsFile : CompositeTag, IPublicationsFile
         {
+            private const uint CmsSignatureTagType = 0x704;
+
             /// <summary>
-            /// Publications file beginning bytes "KSIPUBLF". 
+            ///     Publications file beginning bytes "KSIPUBLF".
             /// </summary>
             public static readonly byte[] FileBeginningMagicBytes = {0x4b, 0x53, 0x49, 0x50, 0x55, 0x42, 0x4c, 0x46};
 
-            private const uint CmsSignatureTagType = 0x704;
             private readonly List<CertificateRecord> _certificateRecordList = new List<CertificateRecord>();
             private readonly RawTag _cmsSignature;
             private readonly List<PublicationRecord> _publicationRecordList = new List<PublicationRecord>();
@@ -33,6 +31,7 @@ namespace Guardtime.KSI.Publication
             ///     Create new publications file TLV element from TLV element.
             /// </summary>
             /// <param name="tag">TLV element</param>
+            /// <exception cref="PublicationsFileException">thrown when TLV parsing fails</exception>
             public PublicationsFile(TlvTag tag) : base(tag)
             {
                 int publicationsHeaderCount = 0;
@@ -48,8 +47,8 @@ namespace Guardtime.KSI.Publication
                             publicationsHeaderCount++;
                             if (i != 0)
                             {
-                                throw new InvalidTlvStructureException(
-                                    "Publications file header should be the first element in publications file");
+                                throw new PublicationsFileException(
+                                    "Publications file header should be the first element in publications file.");
                             }
                             break;
                         case CertificateRecord.TagType:
@@ -58,8 +57,8 @@ namespace Guardtime.KSI.Publication
                             this[i] = certificateRecordTag;
                             if (_publicationRecordList.Count != 0)
                             {
-                                throw new InvalidTlvStructureException(
-                                    "Certificate records should be before publication records");
+                                throw new PublicationsFileException(
+                                    "Certificate records should be before publication records.");
                             }
                             break;
                         case PublicationRecord.TagTypePublication:
@@ -72,8 +71,8 @@ namespace Guardtime.KSI.Publication
                             cmsSignatureCount++;
                             if (i != Count - 1)
                             {
-                                throw new InvalidTlvStructureException(
-                                    "Cms signature should be last element in publications file");
+                                throw new PublicationsFileException(
+                                    "Cms signature should be last element in publications file.");
                             }
                             break;
                         default:
@@ -84,13 +83,13 @@ namespace Guardtime.KSI.Publication
 
                 if (publicationsHeaderCount != 1)
                 {
-                    throw new InvalidTlvStructureException(
-                        "Only one publications file header must exist in publications file");
+                    throw new PublicationsFileException(
+                        "Only one publications file header must exist in publications file.");
                 }
 
                 if (cmsSignatureCount != 1)
                 {
-                    throw new InvalidTlvStructureException("Only one signature must exist in publications file");
+                    throw new PublicationsFileException("Only one signature must exist in publications file.");
                 }
             }
 
@@ -103,7 +102,7 @@ namespace Guardtime.KSI.Publication
             }
 
             /// <summary>
-            /// Get latest publication record.
+            ///     Get latest publication record.
             /// </summary>
             /// <returns>publication record</returns>
             public PublicationRecord GetLatestPublication()
@@ -129,7 +128,7 @@ namespace Guardtime.KSI.Publication
             }
 
             /// <summary>
-            /// Get neared publication record to time.
+            ///     Get neared publication record to time.
             /// </summary>
             /// <param name="time">publication time</param>
             /// <returns>publication record closest to time</returns>

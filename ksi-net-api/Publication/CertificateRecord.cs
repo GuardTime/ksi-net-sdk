@@ -23,11 +23,12 @@ namespace Guardtime.KSI.Publication
         ///     Create new certificate record TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
+        /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
         public CertificateRecord(TlvTag tag) : base(tag)
         {
             if (Type != TagType)
             {
-                throw new InvalidTlvStructureException("Invalid certificate record type: " + Type);
+                throw new TlvException("Invalid certificate record type(" + Type + ").");
             }
 
             int certificateIdCount = 0;
@@ -55,12 +56,12 @@ namespace Guardtime.KSI.Publication
 
             if (certificateIdCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one certificate id must exist in certificate record");
+                throw new TlvException("Only one certificate id must exist in certificate record.");
             }
 
             if (x509CertificateCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one certificate must exist in certificate record");
+                throw new TlvException("Only one certificate must exist in certificate record.");
             }
         }
 
