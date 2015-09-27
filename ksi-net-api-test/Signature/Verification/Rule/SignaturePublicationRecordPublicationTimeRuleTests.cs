@@ -19,7 +19,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             var rule = new SignaturePublicationRecordPublicationTimeRule();
 
             // Argument null exception when no context
-            Assert.Throws<ArgumentNullException>(delegate
+            Assert.Throws<KsiException>(delegate
             {
                 rule.Verify(null);
             });

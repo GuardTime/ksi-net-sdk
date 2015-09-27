@@ -3,17 +3,17 @@
 namespace Guardtime.KSI.Signature.Verification.Policy
 {
     /// <summary>
-    ///     Internal verification polcy.
+    ///     Policy for verifying KSI signature with PKI.
     /// </summary>
     public class KeyBasedVerificationPolicy : VerificationPolicy
     {
         /// <summary>
-        ///     Create internal verification policy and add rules to it.
+        ///     Create key based verification policy and add rules to it.
         /// </summary>
         public KeyBasedVerificationPolicy()
         {
             // Check for internal verification
-            _firstRule = new CalendarHashChainExistenceRule()
+            FirstRule = new CalendarHashChainExistenceRule()
                 .OnSuccess(new CalendarAuthenticationRecordExistenceRule()
                     .OnSuccess(new CertificateExistenceRule()
                         .OnSuccess(new CalendarAuthenticationRecordSignatureVerificationRule())));

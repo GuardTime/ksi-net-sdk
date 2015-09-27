@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
+using Guardtime.KSI.Trust;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
@@ -20,7 +21,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             var rule = new CertificateExistenceRule();
 
             // Argument null exception when no context
-            Assert.Throws<ArgumentNullException>(delegate
+            Assert.Throws<KsiException>(delegate
             {
                 rule.Verify(null);
             });
@@ -36,7 +37,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             IPublicationsFile publicationsFile;
             using (var stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
             {
-                publicationsFile = new PublicationsFileFactory().Create(stream);
+                publicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider()).Create(stream);
             }
 
             // Check signature with no calendar authentication record

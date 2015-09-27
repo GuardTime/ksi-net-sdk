@@ -5,13 +5,13 @@ namespace Guardtime.KSI.Exceptions
     /// <summary>
     ///     Publications file exception.
     /// </summary>
-    public class PublicationsFileStructureException : KsiException
+    public class PublicationsFileException : KsiException
     {
         /// <summary>
         ///     Create new publications file structure exception with message
         /// </summary>
         /// <param name="message">Exception message</param>
-        public PublicationsFileStructureException(string message) : base(message)
+        public PublicationsFileException(string message) : base(message)
         {
         }
 
@@ -20,7 +20,8 @@ namespace Guardtime.KSI.Exceptions
         /// </summary>
         /// <param name="message">Exception message</param>
         /// <param name="innerException">Inner exception</param>
-        public PublicationsFileStructureException(string message, Exception innerException) : base(message, innerException)
+        public PublicationsFileException(string message, Exception innerException)
+            : base(message, innerException)
         {
         }
     }

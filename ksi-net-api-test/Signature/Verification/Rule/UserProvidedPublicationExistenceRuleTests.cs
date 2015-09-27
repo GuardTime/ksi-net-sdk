@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
@@ -19,7 +20,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             var rule = new UserProvidedPublicationExistenceRule();
 
             // Argument null exception when no context
-            Assert.Throws<ArgumentNullException>(delegate
+            Assert.Throws<KsiException>(delegate
             {
                 rule.Verify(null);
             });

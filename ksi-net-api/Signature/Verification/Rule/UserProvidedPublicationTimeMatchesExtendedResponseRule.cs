@@ -1,19 +1,21 @@
-﻿using System;
-using Guardtime.KSI.Exceptions;
+﻿using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
+    /// <summary>
+    ///     Rule checks that user provided publication time matches extender response calendar hash chain registration time.
+    /// </summary>
     public sealed class UserProvidedPublicationTimeMatchesExtendedResponseRule : VerificationRule
     {
         /// <see cref="VerificationRule.Verify" />
-        /// <exception cref="ArgumentNullException">thrown if context is missing</exception>
+        /// <exception cref="KsiException">thrown if verification context is missing</exception>
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new KsiException("Invalid verification context: null.");
             }
 
             PublicationData userPublication = context.UserPublication;

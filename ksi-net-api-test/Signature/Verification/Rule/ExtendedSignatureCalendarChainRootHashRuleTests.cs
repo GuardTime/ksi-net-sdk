@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
+using Guardtime.KSI.Trust;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
@@ -21,7 +22,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             var rule = new ExtendedSignatureCalendarChainRootHashRule();
 
             // Argument null exception when no context
-            Assert.Throws<ArgumentNullException>(delegate
+            Assert.Throws<KsiException>(delegate
             {
                 rule.Verify(null);
             });
@@ -49,7 +50,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             }
 
             var serviceProtocol = new TestKsiServiceProtocol();
-            var ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"), new PublicationsFileFactory(), new KsiSignatureFactory());
+            var ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"), new PublicationsFileFactory(new PkiTrustStoreProvider()), new KsiSignatureFactory());
 
             // Check invalid extended calendar chain which comes from invalid verification context functions
             using (var stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))

@@ -3,24 +3,24 @@
 namespace Guardtime.KSI.Exceptions
 {
     /// <summary>
-    ///     Hashing functionality exception.
+    ///     Invalid TLV exception.
     /// </summary>
-    public class HashingException : KsiException
+    public class TlvException : KsiException
     {
         /// <summary>
-        ///     Create new hashing exception with message.
+        ///     Create new InvalidTlvStructure exception.
         /// </summary>
         /// <param name="message">exception message</param>
-        public HashingException(string message) : base(message)
+        public TlvException(string message) : base(message)
         {
         }
 
         /// <summary>
-        ///     Create new hashing exception  with message and inner exception.
+        ///     Create new InvalidTlvStructure exception.
         /// </summary>
         /// <param name="message">exception message</param>
         /// <param name="innerException">inner exception</param>
-        public HashingException(string message, Exception innerException) : base(message, innerException)
+        public TlvException(string message, Exception innerException) : base(message, innerException)
         {
         }
     }

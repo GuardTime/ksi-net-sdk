@@ -7,16 +7,21 @@ using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
+    /// <summary>
+    ///     Rule validates calendar authentication record signature. Signature is made from calendar authentication record
+    ///     publication data. X.509 certificate is searched from publications file and when found, it is used to validate PKI
+    ///     signature in calendar authentication record.
+    /// </summary>
     public sealed class CalendarAuthenticationRecordSignatureVerificationRule : VerificationRule
     {
         /// <see cref="VerificationRule.Verify" />
-        /// <exception cref="ArgumentNullException">thrown if context is missing</exception>
+        /// <exception cref="KsiException">thrown if verification context is missing</exception>
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new KsiException("Invalid verification context: null.");
             }
 
             if (context.Signature == null)
@@ -59,7 +64,6 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             }
             catch (Exception e)
             {
-                // TODO: Catch only crypto exception
                 // TODO: Log exception
                 return VerificationResult.Fail;
             }

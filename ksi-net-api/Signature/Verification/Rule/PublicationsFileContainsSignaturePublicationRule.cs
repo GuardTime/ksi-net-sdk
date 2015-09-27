@@ -1,20 +1,21 @@
-﻿using System;
-using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Publication;
+﻿using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Trust;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
+    /// <summary>
+    ///     Rule checks if publications file contains signature publication.
+    /// </summary>
     public sealed class PublicationsFileContainsSignaturePublicationRule : VerificationRule
     {
         /// <see cref="VerificationRule.Verify" />
-        /// <exception cref="ArgumentNullException">thrown if context is missing</exception>
+        /// <exception cref="KsiException">thrown if verification context is missing</exception>
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new KsiException("Invalid verification context: null.");
             }
 
             if (context.Signature == null)

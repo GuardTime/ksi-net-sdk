@@ -5,20 +5,21 @@ using Guardtime.KSI.Exceptions;
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
     /// <summary>
-    ///     Aggregation hash chain time consistency verification VerificationRule.
+    ///     Rule checks that aggregation hash chain times are consistent. It means that previous aggregation hash chain
+    ///     aggregation time equals to current one.
     /// </summary>
     public sealed class AggregationHashChainTimeConsistencyRule : VerificationRule
     {
         private VerificationRule _verificationRule;
 
         /// <see cref="VerificationRule.Verify" />
-        /// <exception cref="ArgumentNullException">thrown if context is missing</exception>
+        /// <exception cref="KsiException">thrown if verification context is missing</exception>
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new KsiException("Invalid verification context: null.");
             }
 
             if (context.Signature == null)

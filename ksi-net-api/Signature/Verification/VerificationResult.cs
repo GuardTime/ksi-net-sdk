@@ -1,5 +1,6 @@
 ﻿namespace Guardtime.KSI.Signature.Verification
 {
+    // TODO: Use class to store also reason.
     /// <summary>
     ///     Verification results.
     /// </summary>

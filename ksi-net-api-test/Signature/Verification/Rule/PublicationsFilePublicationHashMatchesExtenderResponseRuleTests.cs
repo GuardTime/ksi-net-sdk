@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
+using Guardtime.KSI.Trust;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
@@ -21,7 +22,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             var rule = new PublicationsFilePublicationHashMatchesExtenderResponseRule();
 
             // Argument null exception when no context
-            Assert.Throws<ArgumentNullException>(delegate
+            Assert.Throws<KsiException>(delegate
             {
                 rule.Verify(null);
             });
@@ -51,7 +52,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             IPublicationsFile publicationsFile;
             using (var stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
             {
-                publicationsFile = new PublicationsFileFactory().Create(stream);
+                publicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider()).Create(stream);
             }
 
             // Check invalid publications recordin signature: null
@@ -70,7 +71,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             }
 
             var serviceProtocol = new TestKsiServiceProtocol();
-            var ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"), new PublicationsFileFactory(), new KsiSignatureFactory());
+            var ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"), new PublicationsFileFactory(new PkiTrustStoreProvider()), new KsiSignatureFactory());
 
             // Check invalid extended calendar chain from context function: null
             using (var stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))

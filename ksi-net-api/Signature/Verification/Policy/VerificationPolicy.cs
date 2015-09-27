@@ -3,10 +3,21 @@ using Guardtime.KSI.Signature.Verification.Rule;
 
 namespace Guardtime.KSI.Signature.Verification.Policy
 {
+    /// <summary>
+    ///     Verification policy to verify set of verification rules.
+    /// </summary>
     public abstract class VerificationPolicy : VerificationRule
     {
-        protected VerificationRule _firstRule;
+        /// <summary>
+        ///     First rule to verify.
+        /// </summary>
+        protected VerificationRule FirstRule;
 
+        /// <summary>
+        ///     Verify given context with verification policy.
+        /// </summary>
+        /// <param name="context">verification context</param>
+        /// <returns>verification result</returns>
         public override VerificationResult Verify(IVerificationContext context)
         {
             if (context == null)
@@ -14,7 +25,7 @@ namespace Guardtime.KSI.Signature.Verification.Policy
                 throw new ArgumentNullException("context");
             }
 
-            VerificationRule verificationRule = _firstRule ?? Empty;
+            VerificationRule verificationRule = FirstRule ?? Empty;
             while (verificationRule != null)
             {
                 VerificationResult result = verificationRule.Verify(context);

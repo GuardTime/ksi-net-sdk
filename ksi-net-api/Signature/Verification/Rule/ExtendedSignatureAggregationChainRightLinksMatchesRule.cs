@@ -1,18 +1,21 @@
-﻿using System;
-using Guardtime.KSI.Exceptions;
+﻿using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
+    /// <summary>
+    ///     Rule checks if extended signature aggregation hash chain links are with same structure and right links are equal to
+    ///     not extended signature right links.
+    /// </summary>
     public sealed class ExtendedSignatureAggregationChainRightLinksMatchesRule : VerificationRule
     {
         /// <see cref="VerificationRule.Verify" />
-        /// <exception cref="ArgumentNullException">thrown if context is missing</exception>
+        /// <exception cref="KsiException">thrown if verification context is missing</exception>
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new KsiException("Invalid verification context: null.");
             }
 
             if (context.Signature == null)

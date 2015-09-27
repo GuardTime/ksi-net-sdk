@@ -3,17 +3,17 @@
 namespace Guardtime.KSI.Signature.Verification.Policy
 {
     /// <summary>
-    ///     Internal verification polcy.
+    ///     Policy for verifying KSI signature with publication.
     /// </summary>
     public class PublicationBasedVerificationPolicy : VerificationPolicy
     {
         /// <summary>
-        ///     Create internal verification policy and add rules to it.
+        ///     Create publication based verification policy and add rules to it.
         /// </summary>
         public PublicationBasedVerificationPolicy()
         {
             // Check for internal verification
-            _firstRule = new UserProvidedPublicationExistenceRule()
+            FirstRule = new UserProvidedPublicationExistenceRule()
                 .OnSuccess(new UserProvidedPublicationBasedVerificationPolicy())
                 .OnNa(new PublicationsFileVerificationPolicy());
         }
