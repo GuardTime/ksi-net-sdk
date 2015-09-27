@@ -1,6 +1,6 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Text;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Parser
@@ -31,11 +31,12 @@ namespace Guardtime.KSI.Parser
         ///     Create new TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
+        /// <exception cref="TlvException">thrown when input TLV tag is invalid.</exception>
         protected TlvTag(TlvTag tag)
         {
             if (tag == null)
             {
-                throw new ArgumentNullException("tag");
+                throw new TlvException("TLV tag cannot be null.");
             }
 
             _type = tag.Type;

@@ -22,7 +22,6 @@ namespace Guardtime.KSI.Parser
         /// <param name="tag">TLV object</param>
         public void WriteTag(TlvTag tag)
         {
-            // TODO: What to do on null tag, exception or skip?
             if (tag == null)
             {
                 return;

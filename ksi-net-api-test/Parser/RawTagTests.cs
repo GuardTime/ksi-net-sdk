@@ -1,4 +1,5 @@
 ﻿using System;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
@@ -66,7 +67,7 @@ namespace Guardtime.KSI.Parser
         [Test]
         public void TestTlvTagCreateFromNullData()
         {
-            Assert.Throws<ArgumentNullException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 new RawTag(0x1, false, false, null);
             });
@@ -75,7 +76,7 @@ namespace Guardtime.KSI.Parser
         [Test]
         public void TestTlvTagCreateFromNullTag()
         {
-            Assert.Throws<ArgumentNullException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 new RawTag((TlvTag)null);
             });
@@ -84,7 +85,7 @@ namespace Guardtime.KSI.Parser
         [Test]
         public void TestTlvTagCreateFromInvalidEncodeTlvTag()
         {
-            Assert.Throws<ArgumentException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 new RawTag(new InvalidEncodeTlvTag(0x0, false, false));
             });

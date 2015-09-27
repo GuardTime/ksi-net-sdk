@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Utils
 {
@@ -47,21 +48,21 @@ namespace Guardtime.KSI.Utils
         /// <param name="ofs">data offset</param>
         /// <param name="len">data length</param>
         /// <returns>unsigned long</returns>
+        /// <exception cref="KsiException">thrown if input data is invalid</exception>
         public static ulong DecodeUnsignedLong(byte[] buf, int ofs, int len)
         {
             if (buf == null)
             {
-                throw new ArgumentNullException("buf");
+                throw new KsiException("Input byte array cannot be null.");
             }
 
             if (ofs < 0 || len < 0 || ofs + len < 0 || ofs + len > buf.Length)
             {
-                throw new IndexOutOfRangeException();
+                throw new KsiException("Index out of bounds.");
             }
             if (len > 8)
             {
-                // TODO: better exception and handling
-                throw new FormatException("Integers of at most 63 unsigned bits supported by this implementation");
+                throw new KsiException("Integers of at most 63 unsigned bits supported by this implementation.");
             }
 
             ulong t = 0;
@@ -123,17 +124,17 @@ namespace Guardtime.KSI.Utils
         /// </summary>
         /// <param name="bytes">string bytes</param>
         /// <returns>utf-8 string</returns>
+        /// <exception cref="KsiException">thrown if input bytes are null or string is not null terminated</exception>
         public static string DecodeNullTerminatedUtf8String(byte[] bytes)
         {
             if (bytes == null)
             {
-                throw new ArgumentNullException("bytes");
+                throw new KsiException("Input bytes cannot be null.");
             }
 
             if (bytes.Length == 0 || bytes[bytes.Length - 1] != 0)
             {
-                // TODO: Use correct exception
-                throw new FormatException("String must be null terminated");
+                throw new KsiException("String must be null terminated.");
             }
 
             return Encoding.UTF8.GetString(bytes, 0, bytes.Length - 1);
@@ -144,11 +145,12 @@ namespace Guardtime.KSI.Utils
         /// </summary>
         /// <param name="value">utf-8 string</param>
         /// <returns>byte array</returns>
+        /// <exception cref="KsiException">thrown if string is null</exception>
         public static byte[] EncodeNullTerminatedUtf8String(string value)
         {
             if (value == null)
             {
-                throw new ArgumentNullException("value");
+                throw new KsiException("Input string cannot be null.");
             }
 
             byte[] stringBytes = Encoding.UTF8.GetBytes(value);
@@ -174,12 +176,12 @@ namespace Guardtime.KSI.Utils
         /// <param name="arr">array of values</param>
         /// <param name="value">value to write to array</param>
         /// <typeparam name="T">array type</typeparam>
-        /// <exception cref="ArgumentNullException">thrown if array is null</exception>
+        /// <exception cref="KsiException">thrown if array is null</exception>
         public static void ArrayFill<T>(T[] arr, T value)
         {
             if (arr == null)
             {
-                throw new ArgumentNullException("arr");
+                throw new KsiException("Input array cannot be null.");
             }
 
             for (int i = 0; i < arr.Length; i++)

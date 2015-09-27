@@ -9,7 +9,7 @@ using Guardtime.KSI.Exceptions;
 namespace Guardtime.KSI.Parser
 {
     /// <summary>
-    ///     TLV element containing other TLV elements
+    ///     TLV element containing other TLV elements.
     /// </summary>
     public abstract class CompositeTag : TlvTag, IEnumerable<TlvTag>, IEquatable<CompositeTag>
     {
@@ -20,6 +20,7 @@ namespace Guardtime.KSI.Parser
         ///     Create new composite TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
+        /// <exception cref="TlvException">thrown when TLV tag is null</exception>
         protected CompositeTag(TlvTag tag) : base(tag)
         {
             DecodeValue(tag.EncodeValue());
@@ -32,12 +33,13 @@ namespace Guardtime.KSI.Parser
         /// <param name="nonCritical">Is TLV element non critical</param>
         /// <param name="forward">Is TLV element forwarded</param>
         /// <param name="value">TLV element list</param>
+        /// <exception cref="TlvException">thrown when input value is null</exception>
         protected CompositeTag(uint type, bool nonCritical, bool forward, List<TlvTag> value)
             : base(type, nonCritical, forward)
         {
             if (value == null)
             {
-                throw new ArgumentNullException("value");
+                throw new TlvException("TLV element list cannot be null.");
             }
             _value = value;
         }
@@ -47,6 +49,7 @@ namespace Guardtime.KSI.Parser
         /// </summary>
         /// <param name="i">tlv element position</param>
         /// <returns>TLV element at given position</returns>
+        /// <exception cref="TlvException">thrown when trying to set null as value in array</exception>
         public TlvTag this[int i]
         {
             get
@@ -64,7 +67,7 @@ namespace Guardtime.KSI.Parser
                 {
                     if (value == null)
                     {
-                        throw new ArgumentNullException("value");
+                        throw new TlvException("Value cannot be null.");
                     }
 
                     _value[i] = value;
@@ -202,13 +205,14 @@ namespace Guardtime.KSI.Parser
         /// <typeparam name="T">Tlv element type</typeparam>
         /// <param name="tag">New TLV element</param>
         /// <returns>Added TLV element</returns>
+        /// <exception cref="TlvException">thrown when TLV tag is null</exception>
         protected T AddTag<T>(T tag) where T : TlvTag
         {
             lock (_lock)
             {
                 if (tag == null)
                 {
-                    throw new ArgumentNullException("tag");
+                    throw new TlvException("TLV tag cannot be null.");
                 }
 
                 _value.Add(tag);
@@ -256,12 +260,12 @@ namespace Guardtime.KSI.Parser
         {
             if (tag == null)
             {
-                throw new ArgumentNullException("tag");
+                throw new TlvException("TlvTag cannot be null.");
             }
 
             if (!tag.NonCritical)
             {
-                throw new InvalidTlvStructureException("Invalid tag: " + tag.Type, tag);
+                throw new TlvException("Unknown tag type(" + tag.Type + ").");
             }
         }
 

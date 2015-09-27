@@ -1,4 +1,5 @@
 ﻿using System;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 
 namespace Guardtime.KSI.Parser
@@ -14,18 +15,17 @@ namespace Guardtime.KSI.Parser
         ///     Create new imprint TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
+        /// <exception cref="TlvException">thrown when TLV tag is null or encodeValue returns null</exception>
         public ImprintTag(TlvTag tag) : base(tag)
         {
             byte[] data = tag.EncodeValue();
             if (data == null)
             {
-                // TODO: Check exception message
-                throw new ArgumentException("Invalid TLV element encoded value: null", "tag");
+                throw new TlvException("TLV element encoded value cannot be null.");
             }
             _value = new DataHash(data);
         }
 
-        // TODO: Check null on imprint
         /// <summary>
         ///     Create new imprint TLV element from data.
         /// </summary>
@@ -33,13 +33,15 @@ namespace Guardtime.KSI.Parser
         /// <param name="nonCritical">Is TLV element non critical</param>
         /// <param name="forward">Is TLV element forwarded</param>
         /// <param name="value">data hash</param>
+        /// <exception cref="TlvException">thrown when value is null</exception>
         public ImprintTag(uint type, bool nonCritical, bool forward, DataHash value)
             : base(type, nonCritical, forward)
         {
             if (value == null)
             {
-                throw new ArgumentNullException("value");
+                throw new TlvException("Input value cannot be null.");
             }
+
             _value = value;
         }
 
@@ -87,7 +89,9 @@ namespace Guardtime.KSI.Parser
         /// <returns>Data hash as byte array</returns>
         public override byte[] EncodeValue()
         {
-            return _value.Imprint;
+            byte[] value = new byte[_value.Imprint.Count];
+            _value.Imprint.CopyTo(value, 0);
+            return value;
         }
 
         /// <summary>

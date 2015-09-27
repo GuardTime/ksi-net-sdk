@@ -1,4 +1,5 @@
 ﻿using System;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Parser
@@ -15,13 +16,13 @@ namespace Guardtime.KSI.Parser
         ///     Create new octet string TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
+        /// <exception cref="TlvException">thrown when TLV tag is null or encodeValue returns null</exception>
         public RawTag(TlvTag tag) : base(tag)
         {
             byte[] data = tag.EncodeValue();
             if (data == null)
             {
-                // TODO: Check exception message
-                throw new ArgumentException("Invalid TLV element encoded value: null", "tag");
+                throw new TlvException("TLV element encoded value cannot be null.");
             }
             _value = data;
         }
@@ -33,12 +34,13 @@ namespace Guardtime.KSI.Parser
         /// <param name="nonCritical">Is TLV element non critical</param>
         /// <param name="forward">Is TLV element forwarded</param>
         /// <param name="value">TLV element byte array value</param>
+        /// <exception cref="TlvException">thrown when value is null</exception>
         public RawTag(uint type, bool nonCritical, bool forward, byte[] value)
             : base(type, nonCritical, forward)
         {
             if (value == null)
             {
-                throw new ArgumentNullException("value");
+                throw new TlvException("Input value cannot be null.");
             }
             _value = value;
         }

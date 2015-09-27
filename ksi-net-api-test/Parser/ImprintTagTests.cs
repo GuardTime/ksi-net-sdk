@@ -1,4 +1,5 @@
 ﻿using System;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
@@ -68,7 +69,7 @@ namespace Guardtime.KSI.Parser
         [Test]
         public void TestTlvTagCreateFromInvalidEncodeTlvTag()
         {
-            Assert.Throws<ArgumentException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 new ImprintTag(new InvalidEncodeTlvTag(0x0, false, false));
             });
@@ -77,7 +78,7 @@ namespace Guardtime.KSI.Parser
         [Test]
         public void TestImprintTagCreateFromNullTag()
         {
-            Assert.Throws<ArgumentNullException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 new ImprintTag((TlvTag)null);
             });
@@ -86,7 +87,7 @@ namespace Guardtime.KSI.Parser
         [Test]
         public void TestImprintTagCreateWithNullValue()
         {
-            Assert.Throws<ArgumentNullException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 new ImprintTag(0x1, true, true, null);
             });
