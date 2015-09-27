@@ -7,14 +7,14 @@ using Guardtime.KSI.Signature;
 namespace Guardtime.KSI
 {
     /// <summary>
-    /// Simple implementation of KSI services.
+    ///     Simple implementation of KSI services.
     /// </summary>
     public class Ksi
     {
         private readonly IKsiService _ksiService;
 
         /// <summary>
-        /// Create new KSI instance.
+        ///     Create new KSI instance.
         /// </summary>
         /// <param name="ksiService">KSI service</param>
         /// <exception cref="KsiException">thrown when KSI service is null</exception>
@@ -28,16 +28,16 @@ namespace Guardtime.KSI
         }
 
         /// <summary>
-        /// Sign document hash.
-        /// <example>
-        /// Equals to following code
-        /// <code>
+        ///     Sign document hash.
+        ///     <example>
+        ///         Equals to following code
+        ///         <code>
         /// DataHash hash;
         /// KsiService ksiService;
         /// 
         /// IKsiSignature signature = ksiService.Sign(hash);
         /// </code>
-        /// </example>
+        ///     </example>
         /// </summary>
         /// <param name="hash">document hash</param>
         /// <returns>KSI signature</returns>
@@ -52,10 +52,10 @@ namespace Guardtime.KSI
         }
 
         /// <summary>
-        /// Extend signature to calendar head.
-        /// <example>
-        /// Equals to following code
-        /// <code>
+        ///     Extend signature to calendar head.
+        ///     <example>
+        ///         Equals to following code
+        ///         <code>
         /// KsiService ksiService;
         /// IKsiSignature signature;
         /// IPublicationsFile publicationsFile.
@@ -63,7 +63,7 @@ namespace Guardtime.KSI
         /// CalendarHashChain calendarHashChain = ksiService.Extend(signature.AggregationTime, publicationsFile.GetLatestPublication().PublicationData.PublicationTime);
         /// IKsiSignature extendedSignature = signature.Extend(calendarHashChain, publicationRecord);
         /// </code>
-        /// </example>
+        ///     </example>
         /// </summary>
         /// <param name="signature">KSI signature</param>
         /// <returns>extended KSI signature</returns>
@@ -74,10 +74,10 @@ namespace Guardtime.KSI
         }
 
         /// <summary>
-        /// Extend signature to publication.
-        /// <example>
-        /// Equals to following code
-        /// <code>
+        ///     Extend signature to publication.
+        ///     <example>
+        ///         Equals to following code
+        ///         <code>
         /// KsiService ksiService;
         /// IKsiSignature signature;
         /// PublicationRecord publicationRecord;
@@ -85,7 +85,7 @@ namespace Guardtime.KSI
         /// CalendarHashChain calendarHashChain = ksiService.Extend(signature.AggregationTime, publicationRecord.PublicationData.PublicationTime);
         /// IKsiSignature extendedSignature = signature.Extend(calendarHashChain, publicationRecord);
         /// </code>
-        /// </example>
+        ///     </example>
         /// </summary>
         /// <param name="signature">KSI signature</param>
         /// <param name="publicationRecord">publication</param>
@@ -103,21 +103,21 @@ namespace Guardtime.KSI
                 throw new KsiException("Publication record cannot be null.");
             }
 
-            CalendarHashChain calendarHashChain = _ksiService.Extend(signature.AggregationTime, publicationRecord.PublicationData.PublicationTime);
+            CalendarHashChain calendarHashChain = _ksiService.Extend(signature.AggregationTime,
+                publicationRecord.PublicationData.PublicationTime);
             return signature.Extend(calendarHashChain, publicationRecord);
         }
 
         /// <summary>
-        /// Get publications file.
-        /// 
-        /// <example>
-        /// Equals to following code
-        /// <code>
+        ///     Get publications file.
+        ///     <example>
+        ///         Equals to following code
+        ///         <code>
         /// KsiService ksiService;
         /// 
         /// IPublicationsFile publicationsFile = ksiService.GetPublicationsFile();
         /// </code>
-        /// </example>
+        ///     </example>
         /// </summary>
         /// <returns>publications file</returns>
         /// <exception cref="KsiException">thrown when null is returned from ksi service</exception>
