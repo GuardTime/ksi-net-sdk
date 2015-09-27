@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Hashing
@@ -16,25 +19,25 @@ namespace Guardtime.KSI.Hashing
         /// <summary>
         ///     Constructor which initializes the DataHash with algorithm and value.
         /// </summary>
-        /// <param name="algorithm">HashAlgorithm used to compute this hash.</param>
-        /// <param name="valueBytes">hash value computed for the input data.</param>
+        /// <param name="algorithm">[NotNull] HashAlgorithm used to compute this hash.</param>
+        /// <param name="valueBytes">[NotNull] hash value computed for the input data.</param>
+        /// <exception cref="HashingException">thrown when invalid data is supplied</exception>
         public DataHash(HashAlgorithm algorithm, byte[] valueBytes)
         {
             if (algorithm == null)
             {
-                throw new ArgumentNullException("algorithm");
+                throw new HashingException("Algorithm cannot be null.");
             }
 
             if (valueBytes == null)
             {
-                throw new ArgumentNullException("valueBytes");
+                throw new HashingException("Value bytes cannot be null.");
             }
 
             if (valueBytes.Length != algorithm.Length)
             {
-                // TODO: Better exception here
-                throw new FormatException("Hash size(" + valueBytes.Length + ") does not match "
-                                          + algorithm.Name + " size(" + algorithm.Length + ")");
+                throw new HashingException("Hash size(" + valueBytes.Length + ") does not match "
+                                           + algorithm.Name + " size(" + algorithm.Length + ").");
             }
 
             _algorithm = algorithm;
@@ -48,32 +51,31 @@ namespace Guardtime.KSI.Hashing
         /// <summary>
         ///     Constructor which initializes the DataHash with imprint.
         /// </summary>
-        /// <param name="imprintBytes">Hash imprint</param>
+        /// <param name="imprintBytes">[NotNull] Hash imprint</param>
+        /// <exception cref="HashingException">thrown when invalid data is supplied</exception>
         public DataHash(byte[] imprintBytes)
         {
             if (imprintBytes == null)
             {
-                throw new ArgumentNullException("imprintBytes");
+                throw new HashingException("Hash imprint cannot be null.");
             }
 
             if (imprintBytes.Length == 0)
             {
-                throw new ArgumentException("Hash imprint too short", "imprintBytes");
+                throw new HashingException("Hash imprint too short.");
             }
 
             _algorithm = HashAlgorithm.GetById(imprintBytes[0]);
 
             if (_algorithm == null)
             {
-                // TODO: Better exception
-                throw new FormatException("Hash algorithm ID unknown: " + imprintBytes[0]);
+                throw new HashingException("Hash algorithm id(" + imprintBytes[0] + ") is unknown.");
             }
 
             if (_algorithm.Length + 1 != imprintBytes.Length)
             {
-                // TODO: Better exception
-                throw new FormatException("Hash size(" + (imprintBytes.Length - 1) + ") does not match "
-                                          + _algorithm.Name + " size(" + _algorithm.Length + ")");
+                throw new HashingException("Hash size(" + (imprintBytes.Length - 1) + ") does not match "
+                                           + _algorithm.Name + " size(" + _algorithm.Length + ").");
             }
 
             _value = new byte[_algorithm.Length];
@@ -93,19 +95,17 @@ namespace Guardtime.KSI.Hashing
         ///     Get data imprint.
         ///     Imprint is created by concatenating hash algorithm id with hash value.
         /// </summary>
-        public byte[] Imprint
+        public ICollection<byte> Imprint
         {
-            // TODO: Fix the clone with immutable array
-            get { return (byte[]) _imprint.Clone(); }
+            get { return new ReadOnlyCollection<byte>(_imprint); }
         }
 
         /// <summary>
         ///     Get the computed hash value for DataHash.
         /// </summary>
-        public byte[] Value
+        public ICollection<byte> Value
         {
-            // TODO: Fix the clone with immutable array
-            get { return (byte[]) _value.Clone(); }
+            get { return new ReadOnlyCollection<byte>(_value); }
         }
 
         /// <summary>

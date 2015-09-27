@@ -1,5 +1,6 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.IO;
+using Guardtime.KSI.Exceptions;
 using Microsoft.Win32.SafeHandles;
 
 namespace Guardtime.KSI.Hashing
@@ -19,11 +20,12 @@ namespace Guardtime.KSI.Hashing
         ///     Create new Datahasher with given algorithm
         /// </summary>
         /// <param name="algorithm">Hash algorithm</param>
+        /// <exception cref="HashingException">thrown when hasher input data is invalid or hasher could not be created</exception>
         public DataHasher(HashAlgorithm algorithm)
         {
             if (algorithm == null)
             {
-                throw new ArgumentNullException("algorithm");
+                throw new HashingException("Hash algorithm cannot be null.");
             }
 
             /*
@@ -32,7 +34,7 @@ namespace Guardtime.KSI.Hashing
              */
             if (algorithm.Status == HashAlgorithm.AlgorithmStatus.NotImplemented)
             {
-                throw new ArgumentException("Hash algorithm is not implemented", "algorithm");
+                throw new HashingException("Hash algorithm is not implemented.");
             }
 
             _algorithm = algorithm;
@@ -40,7 +42,7 @@ namespace Guardtime.KSI.Hashing
             _messageHasher = System.Security.Cryptography.HashAlgorithm.Create(algorithm.Name);
             if (_messageHasher == null)
             {
-                throw new ArgumentException("Hash algorithm not supported: " + algorithm.Name, "algorithm");
+                throw new HashingException("Hash algorithm(" + algorithm.Name + ") is not supported.");
             }
 
             _messageHasher.Initialize();
@@ -60,16 +62,17 @@ namespace Guardtime.KSI.Hashing
         /// <param name="offset">the offset to start from in the array of bytes.</param>
         /// <param name="length">the number of bytes to use, starting at the offset.</param>
         /// <returns>the same DataHasher object for chaining calls</returns>
+        /// <exception cref="HashingException">thrown when hash is already calculated or data is invalid</exception>
         public DataHasher AddData(byte[] data, int offset, int length)
         {
             if (_outputHash != null)
             {
-                throw new InvalidOperationException("Output hash has already been calculated");
+                throw new HashingException("Output hash has already been calculated.");
             }
 
             if (data == null)
             {
-                throw new ArgumentNullException("data");
+                throw new HashingException("Input data cannot be null.");
             }
 
             _messageHasher.TransformBlock(data, offset, length, null, 0);
@@ -81,14 +84,33 @@ namespace Guardtime.KSI.Hashing
         /// </summary>
         /// <param name="data">list of bytes</param>
         /// <returns>the same DataHasher object for chaining calls</returns>
+        /// <exception cref="HashingException">thrown when data is invalid</exception>
         public DataHasher AddData(byte[] data)
         {
             if (data == null)
             {
-                throw new ArgumentNullException("data");
+                throw new HashingException("Input data cannot be null.");
             }
 
             return AddData(data, 0, data.Length);
+        }
+
+        /// <summary>
+        ///     Adds data to the digest using the specified collection of bytes, starting at an offset of 0.
+        /// </summary>
+        /// <param name="data">collection of bytes</param>
+        /// <returns>the same DataHasher object for chaining calls</returns>
+        /// <exception cref="HashingException">thrown when input data is invalid</exception>
+        public DataHasher AddData(ICollection<byte> data)
+        {
+            if (data == null)
+            {
+                throw new HashingException("Input data cannot be null.");
+            }
+
+            byte[] bytes = new byte[data.Count];
+            data.CopyTo(bytes, 0);
+            return AddData(bytes, 0, bytes.Length);
         }
 
         /// <summary>
@@ -96,6 +118,7 @@ namespace Guardtime.KSI.Hashing
         /// </summary>
         /// <param name="inStream">input stream of bytes.</param>
         /// <returns>the same DataHasher object for chaining calls</returns>
+        /// <exception cref="HashingException">thrown when invalid stream is supplied</exception>
         public DataHasher AddData(Stream inStream)
         {
             return AddData(inStream, DefaultStreamBufferSize);
@@ -106,6 +129,7 @@ namespace Guardtime.KSI.Hashing
         /// </summary>
         /// <param name="fileHandle">input file handle.</param>
         /// <returns>the same DataHasher object for chaining calls</returns>
+        /// <exception cref="HashingException">thrown when invalid file handle is supplied</exception>
         public DataHasher AddData(SafeFileHandle fileHandle)
         {
             return AddData(fileHandle, DefaultStreamBufferSize);
@@ -117,11 +141,12 @@ namespace Guardtime.KSI.Hashing
         /// <param name="inStream">input stream of bytes.</param>
         /// <param name="bufferSize">maximum allowed buffer size for reading data</param>
         /// <returns>the same DataHasher object for chaining calls</returns>
+        /// <exception cref="HashingException">thrown when invalid stream is supplied</exception>
         public DataHasher AddData(Stream inStream, int bufferSize)
         {
             if (inStream == null)
             {
-                throw new ArgumentNullException("inStream");
+                throw new HashingException("Input stream cannot be null.");
             }
 
             byte[] buffer = new byte[bufferSize];
@@ -144,11 +169,12 @@ namespace Guardtime.KSI.Hashing
         /// <param name="fileHandle">input file handle.</param>
         /// <param name="bufferSize">size of buffer for reading data</param>
         /// <returns>the same DataHasher object for chaining calls</returns>
+        /// <exception cref="HashingException">thrown when invalid file handle is supplied</exception>
         public DataHasher AddData(SafeFileHandle fileHandle, int bufferSize)
         {
             if (fileHandle == null)
             {
-                throw new ArgumentNullException("fileHandle");
+                throw new HashingException("File handle cannot be null.");
             }
 
             using (FileStream inStream = new FileStream(fileHandle, FileAccess.Read))
@@ -161,7 +187,7 @@ namespace Guardtime.KSI.Hashing
         ///     Get the final hash value for the digest.
         ///     This will not reset hash calculation.
         /// </summary>
-        /// <returns>hashValue with computed hash value.</returns>
+        /// <returns>calculated hash</returns>
         public DataHash GetHash()
         {
             if (_outputHash != null) return _outputHash;
