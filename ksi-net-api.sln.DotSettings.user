@@ -1,7 +1,7 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:Boolean x:Key="/Default/CoverageSessionsPersistenceManagerSettings/SessionPersistentData/=6B4C400FC6144F068256FFB162F5E632/@KeyIndexDefined">True</s:Boolean>
 	<s:String x:Key="/Default/CoverageSessionsPersistenceManagerSettings/SessionPersistentData/=6B4C400FC6144F068256FFB162F5E632/ProductVersion/@EntryValue">3.2</s:String>
-	<s:String x:Key="/Default/CoverageSessionsPersistenceManagerSettings/SessionPersistentData/=6B4C400FC6144F068256FFB162F5E632/SnapshotLocation/@EntryValue">C:\Users\martt\AppData\Local\Temp\ssm.Dejixeb.tmp</s:String>
+	<s:String x:Key="/Default/CoverageSessionsPersistenceManagerSettings/SessionPersistentData/=6B4C400FC6144F068256FFB162F5E632/SnapshotLocation/@EntryValue">C:\Users\martt\AppData\Local\Temp\ssm.Kytonig.tmp</s:String>
 	
 	
 	

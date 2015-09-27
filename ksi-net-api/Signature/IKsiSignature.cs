@@ -4,6 +4,9 @@ using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Signature
 {
+    /// <summary>
+    ///     KSI signature interface.
+    /// </summary>
     public interface IKsiSignature
     {
         /// <summary>
@@ -32,6 +35,11 @@ namespace Guardtime.KSI.Signature
         PublicationRecord PublicationRecord { get; }
 
         /// <summary>
+        ///     Get aggregation time.
+        /// </summary>
+        ulong AggregationTime { get; }
+
+        /// <summary>
         ///     Get aggregation hash chains list.
         /// </summary>
         /// <returns>aggregations hash chains list</returns>
@@ -44,16 +52,18 @@ namespace Guardtime.KSI.Signature
         DataHash GetAggregationHashChainRootHash();
 
         /// <summary>
-        /// Get aggregation time.
+        ///     Extend KSI signature with given calendar hash chain.
         /// </summary>
-        ulong AggregationTime { get; }
-
-        /// <summary>
-        /// Extend KSI signature with given calendar hash chain.
-        /// </summary>
-        /// <param name="calendarHashChain">calendar hash chain</param>
+        /// <param name="calendarHashChain">extended calendar hash chain</param>
         /// <returns>extended KSI signature</returns>
         IKsiSignature Extend(CalendarHashChain calendarHashChain);
-        
+
+        /// <summary>
+        ///     Extend signature to publication.
+        /// </summary>
+        /// <param name="calendarHashChain">extended calendar hash chain</param>
+        /// <param name="publicationRecord">extended publication record</param>
+        /// <returns>extended KSI signature</returns>
+        IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecord publicationRecord);
     }
 }

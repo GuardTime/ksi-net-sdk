@@ -43,11 +43,12 @@ namespace Guardtime.KSI.Signature
         ///     Create new RFC3161 record TLV element from TLV element
         /// </summary>
         /// <param name="tag">TLV element</param>
+        /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
         public Rfc3161Record(TlvTag tag) : base(tag)
         {
             if (Type != TagType)
             {
-                throw new InvalidTlvStructureException("Invalid RFC 3161 record type: " + Type);
+                throw new TlvException("Invalid RFC#3161 record type(" + Type + ").");
             }
 
             int aggregationTimeCount = 0;
@@ -116,49 +117,57 @@ namespace Guardtime.KSI.Signature
 
             if (aggregationTimeCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one aggregation time must exist in RFC 3161 record");
+                throw new TlvException("Only one aggregation time must exist in RFC#3161 record.");
             }
 
             if (_chainIndex.Count == 0)
             {
-                throw new InvalidTlvStructureException("Chain indexes must exist in RFC 3161 record");
+                throw new TlvException("Chain indexes must exist in RFC#3161 record.");
             }
 
             if (inputHashCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one input hash must exist in RFC 3161 record");
+                throw new TlvException("Only one input hash must exist in RFC#3161 record.");
             }
 
             if (tstInfoPrefixCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one tstInfo prefix must exist in RFC 3161 record");
+                throw new TlvException("Only one tstInfo prefix must exist in RFC#3161 record.");
             }
 
             if (tstInfoSuffixCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one tstInfo suffix must exist in RFC 3161 record");
+                throw new TlvException("Only one tstInfo suffix must exist in RFC#3161 record.");
             }
 
             if (tstInfoAlgorithmCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one tstInfo algorithm must exist in RFC 3161 record");
+                throw new TlvException("Only one tstInfo algorithm must exist in RFC#3161 record.");
             }
 
             if (signedAttributesPrefixCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one signed attributes prefix must exist in RFC 3161 record");
+                throw new TlvException("Only one signed attributes prefix must exist in RFC#3161 record.");
             }
 
             if (signedAttributesSuffixCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one signed attributes suffix must exist in RFC 3161 record");
+                throw new TlvException("Only one signed attributes suffix must exist in RFC#3161 record.");
             }
 
             if (signedAttributesAlgorithmCount != 1)
             {
-                throw new InvalidTlvStructureException(
-                    "Only one signed attributes algorithm must exist in RFC 3161 record");
+                throw new TlvException(
+                    "Only one signed attributes algorithm must exist in RFC#3161 record.");
             }
+        }
+
+        /// <summary>
+        ///     Get aggregation time.
+        /// </summary>
+        public ulong AggregationTime
+        {
+            get { return _aggregationTime.Value; }
         }
 
         /// <summary>

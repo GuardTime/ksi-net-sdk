@@ -21,11 +21,12 @@ namespace Guardtime.KSI.Signature
         ///     Create new calendar authentication record TLV element from TLV element
         /// </summary>
         /// <param name="tag">TLV element</param>
+        /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
         public CalendarAuthenticationRecord(TlvTag tag) : base(tag)
         {
             if (Type != TagType)
             {
-                throw new InvalidTlvStructureException("Invalid calendar authentication record type: " + Type);
+                throw new TlvException("Invalid calendar authentication record type(" + Type + ").");
             }
 
             int publicationDataCount = 0;
@@ -53,14 +54,14 @@ namespace Guardtime.KSI.Signature
 
             if (publicationDataCount != 1)
             {
-                throw new InvalidTlvStructureException(
-                    "Only one publication data must exist in calendar authentication record");
+                throw new TlvException(
+                    "Only one publication data must exist in calendar authentication record.");
             }
 
             if (signatureDataCount != 1)
             {
-                throw new InvalidTlvStructureException(
-                    "Only one signature data must exist in calendar authentication record");
+                throw new TlvException(
+                    "Only one signature data must exist in calendar authentication record.");
             }
         }
 

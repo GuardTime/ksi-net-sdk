@@ -19,7 +19,7 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestAggregationAuthenticationRecordInvalidExtraTag()
         {
-            Assert.Throws<InvalidTlvStructureException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Extra_Tag);
             }, "Invalid tag");
@@ -28,7 +28,7 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestAggregationAuthenticationRecordInvalidMissingAggregationTime()
         {
-            Assert.Throws<InvalidTlvStructureException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Missing_Aggregation_Time);
             }, "Only one aggregation time must exist in aggregation authentication record");
@@ -37,7 +37,7 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestAggregationAuthenticationRecordInvalidMissingChainIndex()
         {
-            Assert.Throws<InvalidTlvStructureException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Missing_Chain_Index);
             }, "Chain indexes must exist in aggregation authentication record");
@@ -46,7 +46,7 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestAggregationAuthenticationRecordInvalidMissingInputHash()
         {
-            Assert.Throws<InvalidTlvStructureException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Missing_Input_Hash);
             }, "Only one input hash must exist in aggregation authentication record");
@@ -56,7 +56,7 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestAggregationAuthenticationRecordInvalidMissingSignatureData()
         {
-            Assert.Throws<InvalidTlvStructureException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Missing_Signature_Data);
             }, "Only one signature data must exist in aggregation authentication record");
@@ -66,7 +66,7 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestAggregationAuthenticationRecordInvalidMultipleAggregationTime()
         {
-            Assert.Throws<InvalidTlvStructureException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Multiple_Aggregation_Time);
             }, "Only one aggregation time must exist in aggregation authentication record");
@@ -76,7 +76,7 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestAggregationAuthenticationRecordInvalidMultipleInputHash()
         {
-            Assert.Throws<InvalidTlvStructureException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Multiple_Input_Hash);
             }, "Only one input hash must exist in aggregation authentication record");
@@ -86,7 +86,7 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestAggregationAuthenticationRecordInvalidMultipleSignatureData()
         {
-            Assert.Throws<InvalidTlvStructureException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Multiple_Signature_Data);
             }, "Only one signature data must exist in aggregation authentication record");
@@ -96,7 +96,7 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestAggregationAuthenticationRecordInvalidType()
         {
-            Assert.Throws<InvalidTlvStructureException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Type);
             }, "Invalid aggregation authentication record type: 2053");

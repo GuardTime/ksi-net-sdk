@@ -32,7 +32,7 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestSignatureDataInvalidWithWrongType()
         {
-            Assert.Throws<InvalidTlvStructureException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Wrong_Type);
             }, "Invalid signature data type: 10");
@@ -41,7 +41,7 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestSignatureDataInvalidWithExtraTag()
         {
-            Assert.Throws<InvalidTlvStructureException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Extra_Tag);
             }, "Invalid tag");
@@ -50,7 +50,7 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestSignatureDataInvalidWithoutSignatureTypeTag()
         {
-            Assert.Throws<InvalidTlvStructureException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Signature_Type_Missing);
             }, "Only one signature type must exist in signature data");
@@ -59,7 +59,7 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestSignatureDataInvalidWithMultipleSignatureTypes()
         {
-            Assert.Throws<InvalidTlvStructureException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Multiple_Signature_Type);
             }, "Only one signature type must exist in signature data");
@@ -68,7 +68,7 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestSignatureDataInvalidWithoutSignatureValueTag()
         {
-            Assert.Throws<InvalidTlvStructureException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Signature_Value_Missing);
             }, "Only one signature value must exist in signature data");
@@ -77,7 +77,7 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestSignatureDataInvalidWithMultipleSignatureValues()
         {
-            Assert.Throws<InvalidTlvStructureException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Multiple_Signature_Value);
             }, "Only one signature value must exist in signature data");
@@ -86,7 +86,7 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestSignatureDataInvalidWithoutCertificateIdTag()
         {
-            Assert.Throws<InvalidTlvStructureException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Certificate_Id_Missing);
             }, "Only one certificate id must exist in signature data");
@@ -95,7 +95,7 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestSignatureDataInvalidWithMultipleCertificateIds()
         {
-            Assert.Throws<InvalidTlvStructureException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Multiple_Certificate_Id);
             }, "Only one certificate id must exist in signature data");
@@ -104,7 +104,7 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestSignatureDataInvalidWithMultipleCertificateRepUris()
         {
-            Assert.Throws<InvalidTlvStructureException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Multiple_Certificate_Rep_Uri);
             }, "Only one certificate repository uri is allowed in signature data");
