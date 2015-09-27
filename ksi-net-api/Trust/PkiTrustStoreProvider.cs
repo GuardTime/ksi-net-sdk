@@ -2,6 +2,7 @@
 using System.Security.Cryptography.Pkcs;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
+using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Trust
 {
@@ -15,17 +16,18 @@ namespace Guardtime.KSI.Trust
         /// </summary>
         /// <param name="signedBytes"></param>
         /// <param name="signatureBytes"></param>
+        /// <exception cref="PkiVerificationException">thrown when invalid data is supplied or verification failed</exception>
         public void Verify(byte[] signedBytes, byte[] signatureBytes)
         {
             // TODO: Check for better exception
             if (signedBytes == null)
             {
-                throw new ArgumentNullException("signedBytes");
+                throw new PkiVerificationException("Signed bytes cannot be null.");
             }
 
             if (signatureBytes == null)
             {
-                throw new ArgumentNullException("signatureBytes");
+                throw new PkiVerificationException("Signature bytes cannot be null.");
             }
 
             ICryptoSignatureVerifier verifier = CryptoSignatureVerifierFactory.Pkcs7SignatureVerifier;

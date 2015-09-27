@@ -7,7 +7,7 @@ namespace Guardtime.KSI.Crypto
     /// </summary>
     public interface ICryptoSignatureVerifier
     {
-        // TODO: make third param better
+        // TODO: Change dictionary
         /// <summary>
         ///     Verify signed bytes and signature.
         /// </summary>
