@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Parser
@@ -15,13 +16,13 @@ namespace Guardtime.KSI.Parser
         ///     Create new Integer TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
+        /// <exception cref="TlvException">thrown when TLV tag is null or encodeValue returns null</exception>
         public IntegerTag(TlvTag tag) : base(tag)
         {
             byte[] data = tag.EncodeValue();
             if (data == null)
             {
-                // TODO: Check exception message
-                throw new ArgumentException("Invalid TLV element encoded value: null", "tag");
+                throw new TlvException("Invalid TLV element encoded value: null.");
             }
             _value = Util.DecodeUnsignedLong(data, 0, data.Length);
         }

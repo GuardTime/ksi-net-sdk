@@ -1,30 +1,37 @@
-﻿using System;
-using Guardtime.KSI.Exceptions;
+﻿using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
+    /// <summary>
+    ///     Rule checks that extender response input hash equals to signature aggregation root hash.
+    /// </summary>
     public sealed class UserProvidedPublicationExtendedSignatureInputHashRule : VerificationRule
     {
+        /// <summary>
+        /// Rule name.
+        /// </summary>
+        public const string RuleName = "UserProvidedPublicationExtendedSignatureInputHashRule";
+
         /// <see cref="VerificationRule.Verify" />
-        /// <exception cref="ArgumentNullException">thrown if context is missing</exception>
+        /// <exception cref="KsiException">thrown if verification context is missing</exception>
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new KsiException("Invalid verification context: null.");
             }
 
             if (context.Signature == null)
             {
-                throw new KsiVerificationException("Invalid KSI signature in context: null");
+                throw new KsiVerificationException("Invalid KSI signature in context: null.");
             }
 
             PublicationData userPublication = context.UserPublication;
             if (userPublication == null)
             {
-                throw new KsiVerificationException("Invalid user publication in context: null");
+                throw new KsiVerificationException("Invalid user publication in context: null.");
             }
 
             CalendarHashChain extendedTimeCalendarHashChain =
@@ -32,15 +39,15 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             if (extendedTimeCalendarHashChain == null)
             {
                 throw new KsiVerificationException(
-                    "Invalid extended calendar hash chain from context extension function: null");
+                    "Received invalid extended calendar hash chain from context extension function: null.");
             }
 
             if (extendedTimeCalendarHashChain.InputHash != context.Signature.GetAggregationHashChainRootHash())
             {
-                return VerificationResult.Fail;
+                return new VerificationResult(RuleName, VerificationResultCode.Fail, VerificationError.Pub03);
             }
 
-            return VerificationResult.Ok;
+            return new VerificationResult(RuleName, VerificationResultCode.Ok);
         }
     }
 }

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
+using Guardtime.KSI.Trust;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
@@ -21,7 +22,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             var rule = new PublicationsFileContainsSignaturePublicationRule();
 
             // Argument null exception when no context
-            Assert.Throws<ArgumentNullException>(delegate
+            Assert.Throws<KsiException>(delegate
             {
                 rule.Verify(null);
             });
@@ -51,7 +52,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             IPublicationsFile publicationsFile;
             using (var stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
             {
-                publicationsFile = new PublicationsFileFactory().Create(stream);
+                publicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider()).Create(stream);
             }
 
             // Check signature with not publications record
@@ -78,7 +79,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     PublicationsFile = publicationsFile
                 };
 
-                Assert.AreEqual(VerificationResult.Ok, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
 
             // Check signature
@@ -90,7 +92,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     PublicationsFile = publicationsFile
                 };
 
-                Assert.AreEqual(VerificationResult.Ok, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
 
             // Check invalid signature with publication record missing from publications file
@@ -102,7 +105,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     PublicationsFile = publicationsFile
                 };
 
-                Assert.AreEqual(VerificationResult.Fail, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
             }
         }
     }

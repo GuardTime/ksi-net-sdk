@@ -1,23 +1,31 @@
-﻿using System;
-using Guardtime.KSI.Exceptions;
+﻿using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
+    /// <summary>
+    ///     Rule checks that extended signature contains correct calendar hash chain input hash. It means that input hash
+    ///     equals to aggregation hash chain root hash.
+    /// </summary>
     public sealed class ExtendedSignatureCalendarChainInputHashRule : VerificationRule
     {
+        /// <summary>
+        /// Rule name.
+        /// </summary>
+        public const string RuleName = "ExtendedSignatureCalendarChainInputHashRule";
+
         /// <see cref="VerificationRule.Verify" />
-        /// <exception cref="ArgumentNullException">thrown if context is missing</exception>
+        /// <exception cref="KsiException">thrown if verification context is missing</exception>
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new KsiException("Invalid verification context: null.");
             }
 
             if (context.Signature == null)
             {
-                throw new KsiVerificationException("Invalid KSI signature in context: null");
+                throw new KsiVerificationException("Invalid KSI signature in context: null.");
             }
 
             CalendarHashChain calendarHashChain = context.Signature.CalendarHashChain;
@@ -28,16 +36,16 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             if (extendedCalendarHashChain == null)
             {
                 throw new KsiVerificationException(
-                    "Invalid extended calendar hash chain from context extension function: null");
+                    "Received invalid extended calendar hash chain from context extension function: null.");
             }
 
             if (context.Signature.GetAggregationHashChainRootHash() != extendedCalendarHashChain.InputHash)
             {
                 // TODO: Log
-                return VerificationResult.Fail;
+                return new VerificationResult(RuleName, VerificationResultCode.Fail, VerificationError.Cal02);
             }
 
-            return VerificationResult.Ok;
+            return new VerificationResult(RuleName, VerificationResultCode.Ok);
         }
     }
 }

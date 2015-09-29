@@ -1,29 +1,37 @@
-﻿using System;
-using Guardtime.KSI.Exceptions;
+﻿using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
+    /// <summary>
+    ///     Rule checks if extended signature aggregation hash chain links are with same structure and right links are equal to
+    ///     not extended signature right links.
+    /// </summary>
     public sealed class ExtendedSignatureAggregationChainRightLinksMatchesRule : VerificationRule
     {
+        /// <summary>
+        /// Rule name.
+        /// </summary>
+        public const string RuleName = "ExtendedSignatureAggregationChainRightLinksMatchesRule";
+
         /// <see cref="VerificationRule.Verify" />
-        /// <exception cref="ArgumentNullException">thrown if context is missing</exception>
+        /// <exception cref="KsiException">thrown if verification context is missing</exception>
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new KsiException("Invalid verification context: null.");
             }
 
             if (context.Signature == null)
             {
-                throw new KsiVerificationException("Invalid KSI signature in context: null");
+                throw new KsiVerificationException("Invalid KSI signature in context: null.");
             }
 
             CalendarHashChain calendarHashChain = context.Signature.CalendarHashChain;
             if (calendarHashChain == null)
             {
-                throw new KsiVerificationException("Invalid calendar hash chain in signature: null");
+                throw new KsiVerificationException("Invalid calendar hash chain in KSI signature: null.");
             }
 
             CalendarHashChain extendedCalendarHashChain =
@@ -31,12 +39,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             if (extendedCalendarHashChain == null)
             {
                 throw new KsiVerificationException(
-                    "Invalid extended calendar hash chain from context extension function: null");
+                    "Received invalid extended calendar hash chain from context extension function: null.");
             }
 
             return !calendarHashChain.AreRightLinksEqual(extendedCalendarHashChain)
-                ? VerificationResult.Fail
-                : VerificationResult.Ok;
+                ? new VerificationResult(RuleName, VerificationResultCode.Fail, VerificationError.Cal04)
+                : new VerificationResult(RuleName, VerificationResultCode.Ok);
         }
     }
 }

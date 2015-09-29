@@ -15,7 +15,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             var rule = new SignaturePublicationRecordExistenceRule();
 
             // Argument null exception when no context
-            Assert.Throws<ArgumentNullException>(delegate { rule.Verify(null); });
+            Assert.Throws<KsiException>(delegate { rule.Verify(null); });
 
             // Verification exception on missing KSI signature
             Assert.Throws<KsiVerificationException>(delegate
@@ -33,7 +33,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     Signature = new KsiSignatureFactory().Create(stream)
                 };
 
-                Assert.AreEqual(VerificationResult.Ok, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
 
             // Check signature
@@ -44,7 +45,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     Signature = new KsiSignatureFactory().Create(stream)
                 };
 
-                Assert.AreEqual(VerificationResult.Ok, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
 
             // Check invalid signature without publication record
@@ -55,7 +57,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     Signature = new KsiSignatureFactory().Create(stream)
                 };
 
-                Assert.AreEqual(VerificationResult.Na, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
             }
         }
     }

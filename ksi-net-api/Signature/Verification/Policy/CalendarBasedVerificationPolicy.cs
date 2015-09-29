@@ -3,12 +3,12 @@
 namespace Guardtime.KSI.Signature.Verification.Policy
 {
     /// <summary>
-    ///     Internal verification polcy.
+    ///     Policy for verifying KSI signature with calendar.
     /// </summary>
     public class CalendarBasedVerificationPolicy : VerificationPolicy
     {
         /// <summary>
-        ///     Create internal verification policy and add rules to it.
+        ///     Create calendar based verification policy with given rules.
         /// </summary>
         public CalendarBasedVerificationPolicy()
         {
@@ -17,8 +17,7 @@ namespace Guardtime.KSI.Signature.Verification.Policy
             ExtendedSignatureCalendarChainAggregationTimeRule extendedSignatureCalendarChainAggregationTimeRule =
                 new ExtendedSignatureCalendarChainAggregationTimeRule();
 
-            // Check for internal verification
-            _firstRule = new CalendarHashChainExistenceRule()
+            FirstRule = new CalendarHashChainExistenceRule()
                 .OnSuccess(
                     new SignaturePublicationRecordExistenceRule()
                         .OnSuccess(

@@ -1,4 +1,5 @@
 ﻿using System;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
@@ -63,7 +64,7 @@ namespace Guardtime.KSI.Parser
         [Test]
         public void TestTlvTagCreateFromInvalidEncodeTlvTag()
         {
-            Assert.Throws<ArgumentException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 new StringTag(new InvalidEncodeTlvTag(0x0, false, false));
             });
@@ -75,7 +76,7 @@ namespace Guardtime.KSI.Parser
             var rawTag = new RawTag(0x1, true, true,
                 new byte[] { 0x74, 0x65, 0x73, 0x74, 0x20, 0x6D, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65 });
 
-            Assert.Throws<FormatException>(delegate
+            Assert.Throws<KsiException>(delegate
             {
                 new StringTag(rawTag);
             }, "String must be null terminated");
@@ -84,7 +85,7 @@ namespace Guardtime.KSI.Parser
         [Test]
         public void TestStringTagCreateFromNullTag()
         {
-            Assert.Throws<ArgumentNullException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 new StringTag(null);
             });
@@ -93,7 +94,7 @@ namespace Guardtime.KSI.Parser
         [Test]
         public void TestStringTagCreateWithNullValue()
         {
-            Assert.Throws<ArgumentNullException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 new StringTag(0x1, true, true, null);
             });

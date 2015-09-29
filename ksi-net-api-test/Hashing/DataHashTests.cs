@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using Guardtime.KSI.Exceptions;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Hashing
@@ -42,7 +43,7 @@ namespace Guardtime.KSI.Hashing
         [Test]
         public void TestDataHashCreateWithNullAlgorithm()
         {
-            Assert.Throws<ArgumentNullException>(delegate
+            Assert.Throws<HashingException>(delegate
             {
                 new DataHash(null, new byte[] {});
             });
@@ -51,7 +52,7 @@ namespace Guardtime.KSI.Hashing
         [Test]
         public void TestDataHashCreateWithNullValue()
         {
-            Assert.Throws<ArgumentNullException>(delegate
+            Assert.Throws<HashingException>(delegate
             {
                 new DataHash(HashAlgorithm.Sha2256, null);
             });
@@ -60,16 +61,16 @@ namespace Guardtime.KSI.Hashing
         [Test]
         public void TestDataHashCreateWithInvalidValueLength()
         {
-            Assert.Throws<FormatException>(delegate
+            Assert.Throws<HashingException>(delegate
             {
                 new DataHash(HashAlgorithm.Sha2256, new byte[] {});
-            }, "Hash size(0) does not match SHA-256 size(32)");
+            });
         }
 
         [Test]
         public void TestDataHashCreateWithNullBytes()
         {
-            Assert.Throws<ArgumentNullException>(delegate
+            Assert.Throws<HashingException>(delegate
             {
                 new DataHash(null);
             });
@@ -78,7 +79,7 @@ namespace Guardtime.KSI.Hashing
         [Test]
         public void TestDataHashCreateWithZeroLengthBytes()
         {
-            Assert.Throws<ArgumentException>(delegate
+            Assert.Throws<HashingException>(delegate
             {
                 new DataHash(new byte[] {});
             });
@@ -87,19 +88,19 @@ namespace Guardtime.KSI.Hashing
         [Test]
         public void TestDataHashCreateWithInvalidAlgorithmFromBytes()
         {
-            Assert.Throws<FormatException>(delegate
+            Assert.Throws<HashingException>(delegate
             {
                 new DataHash(new byte[] { 255 });
-            }, "Hash algorithm ID unknown: 255");
+            });
         }
 
         [Test]
         public void TestDataHashCreateWithInvalidValueLengthFromBytes()
         {
-            Assert.Throws<FormatException>(delegate
+            Assert.Throws<HashingException>(delegate
             {
                 new DataHash(new byte[] { 1, 1, 2, 3, 4, 5, 6 });
-            }, "Hash size(6) does not match SHA-256 size(32)");
+            });
         }
 
         private class ChildDataHash : DataHash

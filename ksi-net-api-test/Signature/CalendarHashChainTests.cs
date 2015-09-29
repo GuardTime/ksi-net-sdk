@@ -26,7 +26,7 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestCalendarHashChainInvalidType()
         {
-            Assert.Throws<InvalidTlvStructureException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Type);
             }, "Invalid calendar hash chain type: 2051");
@@ -36,7 +36,7 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestCalendarHashChainInvalidExtraTag()
         {
-            Assert.Throws<InvalidTlvStructureException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Extra_Tag);
             }, "Invalid tag");
@@ -46,7 +46,7 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestCalendarHashChainInvalidMissingInputHash()
         {
-            Assert.Throws<InvalidTlvStructureException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Missing_Input_Hash);
             }, "Only one input hash must exist in calendar hash chain");
@@ -56,7 +56,7 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestCalendarHashChainInvalidMissingLinks()
         {
-            Assert.Throws<InvalidTlvStructureException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Missing_Links);
             }, "Links are missing in calendar hash chain");
@@ -66,7 +66,7 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestCalendarHashChainInvalidMissingPublicationTime()
         {
-            Assert.Throws<InvalidTlvStructureException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Missing_Publication_Time);
             }, "Only one publication time must exist in calendar hash chain");
@@ -76,7 +76,7 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestCalendarHashChainInvalidMultipleAggregationTime()
         {
-            Assert.Throws<InvalidTlvStructureException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Multiple_Aggregation_Time);
             }, "Only one aggregation time is allowed in calendar hash chain");
@@ -86,7 +86,7 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestCalendarHashChainInvalidMultipleInputHash()
         {
-            Assert.Throws<InvalidTlvStructureException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Multiple_Input_Hash);
             }, "Only one input hash must exist in calendar hash chain");
@@ -96,7 +96,7 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestCalendarHashChainInvalidMultiplePublicationTime()
         {
-            Assert.Throws<InvalidTlvStructureException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Multiple_Publication_Time);
             }, "Only one publication time must exist in calendar hash chain");

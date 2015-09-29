@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Guardtime.KSI.Exceptions;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Parser
@@ -74,7 +75,7 @@ namespace Guardtime.KSI.Parser
         {
             using (var reader = new TlvReader(new MemoryStream(new byte[] { 0x21 })))
             {
-                Assert.Throws<FormatException>(delegate
+                Assert.Throws<TlvException>(delegate
                 {
                     reader.ReadTag();
                 }, "Premature end of data");
@@ -86,7 +87,7 @@ namespace Guardtime.KSI.Parser
         {
             using (var reader = new TlvReader(new MemoryStream(new byte[] { 0x21, 0x2 })))
             {
-                Assert.Throws<FormatException>(delegate
+                Assert.Throws<TlvException>(delegate
                 {
                     reader.ReadTag();
                 }, "Premature end of data");

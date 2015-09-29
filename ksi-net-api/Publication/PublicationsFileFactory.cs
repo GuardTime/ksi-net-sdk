@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Trust;
@@ -12,26 +11,45 @@ namespace Guardtime.KSI.Publication
     /// </summary>
     public partial class PublicationsFileFactory
     {
+        private readonly IPkiTrustProvider _pkiTrustProvider;
+
         /// <summary>
-        ///     Create publications file instance from stream and with given buffer size.
+        ///     Create new publications file factory with PKI trust provider.
+        /// </summary>
+        /// <param name="pkiTrustProvider">pki trust provider</param>
+        /// <exception cref="KsiException">thrown when PKI trust provider is null</exception>
+        public PublicationsFileFactory(IPkiTrustProvider pkiTrustProvider)
+        {
+            if (pkiTrustProvider == null)
+            {
+                throw new KsiException("Invalid PKI trust provider: null.");
+            }
+
+            _pkiTrustProvider = pkiTrustProvider;
+        }
+
+        /// <summary>
+        ///     Create and verify publications file instance from stream and with given buffer size.
         /// </summary>
         /// <param name="stream">publications file stream</param>
         /// <param name="bufferSize">buffer size</param>
         /// <returns>publications file</returns>
-        /// <exception cref="ArgumentNullException">thrown when stream is null</exception>
+        /// <exception cref="KsiException">thrown when stream is null</exception>
+        /// <exception cref="PublicationsFileException">thrown when publications file data is invalid</exception>
         public IPublicationsFile Create(Stream stream, int bufferSize)
         {
             if (stream == null)
             {
-                throw new ArgumentNullException("stream");
+                throw new KsiException("Invalid input stream: null.");
             }
 
             byte[] data = new byte[PublicationsFile.FileBeginningMagicBytes.Length];
             int bytesRead = stream.Read(data, 0, data.Length);
 
-            if (bytesRead != PublicationsFile.FileBeginningMagicBytes.Length || !Util.IsArrayEqual(data, PublicationsFile.FileBeginningMagicBytes))
+            if (bytesRead != PublicationsFile.FileBeginningMagicBytes.Length ||
+                !Util.IsArrayEqual(data, PublicationsFile.FileBeginningMagicBytes))
             {
-                throw new PublicationsFileStructureException("Invalid publications file: incorrect file header");
+                throw new PublicationsFileException("Publications file header is incorrect.");
             }
 
             using (MemoryStream memoryStream = new MemoryStream())
@@ -42,39 +60,51 @@ namespace Guardtime.KSI.Publication
                     memoryStream.Write(buffer, 0, bytesRead);
                 }
 
-                PublicationsFile publicationsFile = new PublicationsFile(new RawTag(0x0, false, false, memoryStream.ToArray()));
-                Verify(publicationsFile);
+                PublicationsFile publicationsFile =
+                    new PublicationsFile(new RawTag(0x0, false, false, memoryStream.ToArray()));
+
+                try
+                {
+                    Verify(publicationsFile);
+                }
+                catch (PkiVerificationException e)
+                {
+                    throw new PublicationsFileException("Publications file verification failed.", e);
+                }
+
                 return publicationsFile;
             }
         }
 
         /// <summary>
-        ///     Create publications file from stream.
+        ///     Create and verify publications file from stream.
         /// </summary>
         /// <param name="stream">publications file stream</param>
         /// <returns>publications file</returns>
-        /// <exception cref="ArgumentNullException">thrown when stream is null</exception>
+        /// <exception cref="KsiException">thrown when stream is null</exception>
+        /// <exception cref="PublicationsFileException">thrown when publications file data is invalid</exception>
         public IPublicationsFile Create(Stream stream)
         {
             if (stream == null)
             {
-                throw new ArgumentNullException("stream");
+                throw new KsiException("Invalid input stream: null.");
             }
 
             return Create(stream, 8092);
         }
 
         /// <summary>
-        ///     Create publications file from bytes.
+        ///     Create and verify publications file from bytes.
         /// </summary>
         /// <param name="bytes">publications file bytes</param>
         /// <returns>publications file</returns>
-        /// <exception cref="ArgumentNullException">thrown when bytes is null</exception>
+        /// <exception cref="KsiException">thrown when bytes is null</exception>
+        /// <exception cref="PublicationsFileException">thrown when publications file data is invalid</exception>
         public IPublicationsFile Create(byte[] bytes)
         {
             if (bytes == null)
             {
-                throw new ArgumentNullException("bytes");
+                throw new KsiException("Invalid input data: null.");
             }
 
             using (MemoryStream stream = new MemoryStream(bytes))
@@ -83,10 +113,9 @@ namespace Guardtime.KSI.Publication
             }
         }
 
-        private static void Verify(PublicationsFile publicationsFile)
+        private void Verify(PublicationsFile publicationsFile)
         {
-            PkiTrustStoreProvider pkiTrustStoreProvider = new PkiTrustStoreProvider();
-            pkiTrustStoreProvider.Verify(publicationsFile.GetSignedBytes(), publicationsFile.GetSignatureBytes());
+            _pkiTrustProvider.Verify(publicationsFile.GetSignedBytes(), publicationsFile.GetSignatureBytes());
         }
     }
 }

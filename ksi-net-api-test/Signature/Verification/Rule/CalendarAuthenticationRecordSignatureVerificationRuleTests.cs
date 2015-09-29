@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
+using Guardtime.KSI.Trust;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
@@ -20,7 +21,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             var rule = new CalendarAuthenticationRecordSignatureVerificationRule();
 
             // Argument null exception when no context
-            Assert.Throws<ArgumentNullException>(delegate
+            Assert.Throws<KsiException>(delegate
             {
                 rule.Verify(null);
             });
@@ -36,7 +37,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             IPublicationsFile publicationsFile;
             using (var stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
             {
-                publicationsFile = new PublicationsFileFactory().Create(stream);
+                publicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider()).Create(stream);
             }
             
             // Check signature with no calendar authentication record
@@ -84,7 +85,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
                 context.PublicationsFile = publicationsFile;
 
-                Assert.AreEqual(VerificationResult.Ok, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
 
             // Check signature and verify calendar authentication record
@@ -96,7 +98,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     PublicationsFile =  publicationsFile
                 };
 
-                Assert.AreEqual(VerificationResult.Ok, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
 
             // Check invalid signature with invalid calendar authentication record signature
@@ -108,7 +111,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     PublicationsFile = publicationsFile
                 };
 
-                Assert.AreEqual(VerificationResult.Fail, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
             }
 
 

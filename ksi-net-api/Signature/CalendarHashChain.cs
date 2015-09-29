@@ -34,11 +34,12 @@ namespace Guardtime.KSI.Signature
         ///     Create new calendar hash chain TLV element from TLV element
         /// </summary>
         /// <param name="tag">TLV element</param>
+        /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
         public CalendarHashChain(TlvTag tag) : base(tag)
         {
             if (Type != TagType)
             {
-                throw new InvalidTlvStructureException("Invalid calendar hash chain type: " + Type);
+                throw new TlvException("Invalid calendar hash chain type(" + Type + ").");
             }
 
             int publicationTimeCount = 0;
@@ -78,22 +79,22 @@ namespace Guardtime.KSI.Signature
 
             if (publicationTimeCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one publication time must exist in calendar hash chain");
+                throw new TlvException("Only one publication time must exist in calendar hash chain.");
             }
 
             if (aggregationTimeCount > 1)
             {
-                throw new InvalidTlvStructureException("Only one aggregation time is allowed in calendar hash chain");
+                throw new TlvException("Only one aggregation time is allowed in calendar hash chain.");
             }
 
             if (inputHashCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one input hash must exist in calendar hash chain");
+                throw new TlvException("Only one input hash must exist in calendar hash chain.");
             }
 
             if (_chain.Count == 0)
             {
-                throw new InvalidTlvStructureException("Links are missing in calendar hash chain");
+                throw new TlvException("Links are missing in calendar hash chain.");
             }
 
             _registrationTime = CalculateRegistrationTime();
@@ -210,7 +211,7 @@ namespace Guardtime.KSI.Signature
         /// <param name="hashA">hash a</param>
         /// <param name="hashB">hash b</param>
         /// <returns>result hash</returns>
-        private DataHash HashTogether(HashAlgorithm algorithm, byte[] hashA, byte[] hashB)
+        private DataHash HashTogether(HashAlgorithm algorithm, ICollection<byte> hashA, ICollection<byte> hashB)
         {
             DataHasher hasher = new DataHasher(algorithm);
             hasher.AddData(hashA);
@@ -223,6 +224,7 @@ namespace Guardtime.KSI.Signature
         ///     Calculate registration time.
         /// </summary>
         /// <returns>registration time</returns>
+        /// <exception cref="TlvException">thrown when registration time calculation fails.</exception>
         private ulong CalculateRegistrationTime()
         {
             ulong r = _publicationTime.Value;
@@ -233,8 +235,7 @@ namespace Guardtime.KSI.Signature
             {
                 if (r <= 0)
                 {
-                    // TODO: Create child exception
-                    throw new KsiException("Invalid calendar hash chain shape for publication time");
+                    throw new TlvException("Invalid calendar hash chain shape for publication time.");
                 }
 
                 if (_chain[i].Direction == LinkDirection.Left)
@@ -250,7 +251,7 @@ namespace Guardtime.KSI.Signature
 
             if (r != 0)
             {
-                throw new KsiException("Calendar hash chain shape inconsistent with publication time");
+                throw new TlvException("Calendar hash chain shape inconsistent with publication time.");
             }
 
             return t;
@@ -293,7 +294,7 @@ namespace Guardtime.KSI.Signature
 
                 if (_direction == 0)
                 {
-                    throw new InvalidTlvStructureException("Invalid calendar hash chain link type: " + Type);
+                    throw new TlvException("Invalid calendar hash chain link type(" + Type + ").");
                 }
             }
 

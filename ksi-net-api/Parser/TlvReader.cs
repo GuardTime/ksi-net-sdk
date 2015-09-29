@@ -1,5 +1,5 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
+using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Parser
 {
@@ -50,6 +50,7 @@ namespace Guardtime.KSI.Parser
         ///     Reads a complete TLV item from the wrapped stream.
         /// </summary>
         /// <returns>raw tlv tag</returns>
+        /// <exception cref="TlvException">thrown when TLV tag reading fails</exception>
         public TlvTag ReadTag()
         {
             try
@@ -79,16 +80,15 @@ namespace Guardtime.KSI.Parser
 
                 if (bytesRead != length)
                 {
-                    throw new EndOfStreamException("Could not read TLV data with expected length of " + length +
-                                                   ", instead could only read " + bytesRead);
+                    throw new TlvException("Could not read TLV data with expected length(" + length +
+                                           "), instead could only read length(" + bytesRead + ").");
                 }
 
                 return new RawTag(type, nonCritical, forward, data);
             }
             catch (EndOfStreamException e)
             {
-                // TODO: Throw better exception
-                throw new FormatException("Premature end of data", e);
+                throw new TlvException("Premature end of input data.", e);
             }
         }
     }

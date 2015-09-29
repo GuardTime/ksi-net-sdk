@@ -17,8 +17,8 @@ namespace Guardtime.KSI.Service
         private const uint LoginIdTagType = 0x1;
         private const uint InstanceIdTagType = 0x2;
         private const uint MessageIdTagType = 0x3;
-        private readonly IntegerTag _instanceId;
 
+        private readonly IntegerTag _instanceId;
         private readonly StringTag _loginId;
         private readonly IntegerTag _messageId;
 
@@ -26,11 +26,12 @@ namespace Guardtime.KSI.Service
         ///     Create KSI PDU header from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
+        /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
         public KsiPduHeader(TlvTag tag) : base(tag)
         {
             if (Type != TagType)
             {
-                throw new InvalidTlvStructureException("Invalid ksi pdu header type: " + Type);
+                throw new TlvException("Invalid KSI PDU header type(" + Type + ").");
             }
 
             int loginIdCount = 0;
@@ -64,17 +65,17 @@ namespace Guardtime.KSI.Service
 
             if (loginIdCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one login id must exist in ksi pdu header");
+                throw new TlvException("Only one login id must exist in KSI PDU header.");
             }
 
             if (instanceIdCount > 1)
             {
-                throw new InvalidTlvStructureException("Only one instance id is allowed in ksi pdu header");
+                throw new TlvException("Only one instance id is allowed in KSI PDU header.");
             }
 
             if (messageIdCount > 1)
             {
-                throw new InvalidTlvStructureException("Only one message id is allowed in ksi pdu header");
+                throw new TlvException("Only one message id is allowed in KSI PDU header.");
             }
         }
 
@@ -103,6 +104,30 @@ namespace Guardtime.KSI.Service
 
             _messageId = new IntegerTag(MessageIdTagType, false, false, messageId);
             AddTag(_messageId);
+        }
+
+        /// <summary>
+        ///     Get login ID.
+        /// </summary>
+        public string LoginId
+        {
+            get { return _loginId.Value; }
+        }
+
+        /// <summary>
+        ///     Get instance ID if it exists.
+        /// </summary>
+        public ulong? InstanceId
+        {
+            get { return _instanceId == null ? (ulong?) null : _instanceId.Value; }
+        }
+
+        /// <summary>
+        ///     Get message ID if it exists.
+        /// </summary>
+        public ulong? MessageId
+        {
+            get { return _messageId == null ? (ulong?) null : _messageId.Value; }
         }
     }
 }

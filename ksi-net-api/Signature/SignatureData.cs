@@ -28,11 +28,12 @@ namespace Guardtime.KSI.Signature
         ///     Create new signature data TLV element from TLV element
         /// </summary>
         /// <param name="tag">TLV element</param>
+        /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
         public SignatureData(TlvTag tag) : base(tag)
         {
             if (Type != TagType)
             {
-                throw new InvalidTlvStructureException("Invalid signature data type: " + Type);
+                throw new TlvException("Invalid signature data type(" + Type + ").");
             }
 
             int signatureTypeCount = 0;
@@ -73,23 +74,23 @@ namespace Guardtime.KSI.Signature
 
             if (signatureTypeCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one signature type must exist in signature data");
+                throw new TlvException("Only one signature type must exist in signature data.");
             }
 
             if (signatureValueCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one signature value must exist in signature data");
+                throw new TlvException("Only one signature value must exist in signature data.");
             }
 
             if (certificateIdCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one certificate id must exist in signature data");
+                throw new TlvException("Only one certificate id must exist in signature data.");
             }
 
             if (certificateRepositoryUriCount > 1)
             {
-                throw new InvalidTlvStructureException(
-                    "Only one certificate repository uri is allowed in signature data");
+                throw new TlvException(
+                    "Only one certificate repository uri is allowed in signature data.");
             }
         }
 
@@ -115,6 +116,14 @@ namespace Guardtime.KSI.Signature
         public string SignatureType
         {
             get { return _signatureType.Value; }
+        }
+
+        /// <summary>
+        ///     Get certificate repository URI if it exists.
+        /// </summary>
+        public string CertificateRepositoryUri
+        {
+            get { return _certificateRepositoryUri == null ? null : _certificateRepositoryUri.Value; }
         }
     }
 }

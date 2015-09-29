@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using HashAlgorithm = Guardtime.KSI.Hashing.HashAlgorithm;
@@ -51,12 +51,13 @@ namespace Guardtime.KSI.Service
         /// <param name="nonCritical">Is TLV element non critical</param>
         /// <param name="forward">Is TLV element forwarded</param>
         /// <param name="value">TLV element list</param>
+        /// <exception cref="TlvException">thrown when TLV header is null</exception>
         protected KsiPdu(KsiPduHeader header, uint type, bool nonCritical, bool forward, List<TlvTag> value)
             : base(type, nonCritical, forward, value)
         {
             if (header == null)
             {
-                throw new ArgumentNullException("header");
+                throw new TlvException("Invalid TLV header: null.");
             }
 
             _header = header;

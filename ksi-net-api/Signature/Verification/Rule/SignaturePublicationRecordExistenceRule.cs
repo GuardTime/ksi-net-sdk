@@ -1,32 +1,33 @@
-﻿using System;
-using Guardtime.KSI.Exceptions;
+﻿using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
-    //* This rule is used to check if keyless signature contains publication record or not.
-
-
     /// <summary>
     ///     Rule checks if KSI signature contains publication record.
     /// </summary>
     public sealed class SignaturePublicationRecordExistenceRule : VerificationRule
     {
+        /// <summary>
+        /// Rule name.
+        /// </summary>
+        public const string RuleName = "SignaturePublicationRecordExistenceRule";
+
         /// <see cref="VerificationRule.Verify" />
-        /// <exception cref="ArgumentNullException">thrown if context is missing</exception>
+        /// <exception cref="KsiException">thrown if verification context is missing</exception>
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new KsiException("Invalid verification context: null.");
             }
 
             if (context.Signature == null)
             {
-                throw new KsiVerificationException("Invalid KSI signature: null");
+                throw new KsiVerificationException("Invalid KSI signature in context: null.");
             }
 
-            return context.Signature.PublicationRecord == null ? VerificationResult.Na : VerificationResult.Ok;
+            return context.Signature.PublicationRecord == null ? new VerificationResult(RuleName, VerificationResultCode.Na, VerificationError.Gen02) : new VerificationResult(RuleName, VerificationResultCode.Ok);
         }
     }
 }

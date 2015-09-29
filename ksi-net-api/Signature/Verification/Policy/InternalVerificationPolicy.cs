@@ -3,7 +3,7 @@
 namespace Guardtime.KSI.Signature.Verification.Policy
 {
     /// <summary>
-    ///     Internal verification polcy.
+    ///     Policy for verifying KSI signature internal consistency.
     /// </summary>
     public class InternalVerificationPolicy : VerificationPolicy
     {
@@ -13,7 +13,7 @@ namespace Guardtime.KSI.Signature.Verification.Policy
         public InternalVerificationPolicy()
         {
             // Verify aggregation chain
-            _firstRule = new AggregationChainInputHashVerificationRule()
+            FirstRule = new AggregationChainInputHashVerificationRule()
                 .OnSuccess(new AggregationHashChainConsistencyRule()
                     .OnSuccess(new AggregationHashChainTimeConsistencyRule()
                         .OnSuccess(

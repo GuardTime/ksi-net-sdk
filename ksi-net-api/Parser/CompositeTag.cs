@@ -5,21 +5,23 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Parser
 {
     /// <summary>
-    ///     TLV element containing other TLV elements
+    ///     TLV element containing other TLV elements.
     /// </summary>
     public abstract class CompositeTag : TlvTag, IEnumerable<TlvTag>, IEquatable<CompositeTag>
     {
         private readonly object _lock = new object();
-        private readonly List<TlvTag> _value = new List<TlvTag>();
+        private readonly IList<TlvTag> _value = new List<TlvTag>();
 
         /// <summary>
         ///     Create new composite TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
+        /// <exception cref="TlvException">thrown when TLV tag is null</exception>
         protected CompositeTag(TlvTag tag) : base(tag)
         {
             DecodeValue(tag.EncodeValue());
@@ -32,14 +34,19 @@ namespace Guardtime.KSI.Parser
         /// <param name="nonCritical">Is TLV element non critical</param>
         /// <param name="forward">Is TLV element forwarded</param>
         /// <param name="value">TLV element list</param>
-        protected CompositeTag(uint type, bool nonCritical, bool forward, List<TlvTag> value)
+        /// <exception cref="TlvException">thrown when input value is null</exception>
+        protected CompositeTag(uint type, bool nonCritical, bool forward, IList<TlvTag> value)
             : base(type, nonCritical, forward)
         {
             if (value == null)
             {
-                throw new ArgumentNullException("value");
+                throw new TlvException("Invalid TLV element list: null.");
             }
-            _value = value;
+
+            for (int i = 0; i < value.Count; i++)
+            {
+                _value.Add(value[i]);
+            }
         }
 
         /// <summary>
@@ -47,6 +54,7 @@ namespace Guardtime.KSI.Parser
         /// </summary>
         /// <param name="i">tlv element position</param>
         /// <returns>TLV element at given position</returns>
+        /// <exception cref="TlvException">thrown when trying to set null as value in array</exception>
         public TlvTag this[int i]
         {
             get
@@ -64,7 +72,7 @@ namespace Guardtime.KSI.Parser
                 {
                     if (value == null)
                     {
-                        throw new ArgumentNullException("value");
+                        throw new TlvException("Invalid TLV value: null.");
                     }
 
                     _value[i] = value;
@@ -202,13 +210,14 @@ namespace Guardtime.KSI.Parser
         /// <typeparam name="T">Tlv element type</typeparam>
         /// <param name="tag">New TLV element</param>
         /// <returns>Added TLV element</returns>
+        /// <exception cref="TlvException">thrown when TLV tag is null</exception>
         protected T AddTag<T>(T tag) where T : TlvTag
         {
             lock (_lock)
             {
                 if (tag == null)
                 {
-                    throw new ArgumentNullException("tag");
+                    throw new TlvException("Invalid TLV tag: null.");
                 }
 
                 _value.Add(tag);
@@ -256,12 +265,12 @@ namespace Guardtime.KSI.Parser
         {
             if (tag == null)
             {
-                throw new ArgumentNullException("tag");
+                throw new TlvException("Invalid TLV tag: null.");
             }
 
             if (!tag.NonCritical)
             {
-                throw new InvalidTlvStructureException("Invalid tag: " + tag.Type, tag);
+                throw new TlvException("Unknown tag type(" + tag.Type + ").");
             }
         }
 
@@ -312,41 +321,21 @@ namespace Guardtime.KSI.Parser
                 builder.Append(",F");
             }
 
-            builder.Append("]:").Append('\n');
+            builder.Append("]:").AppendLine();
 
             for (int i = 0; i < Count; i++)
             {
-                builder.Append(TabPrefix(_value[i].ToString()));
-                builder.Append("\n");
-            }
-
-            builder.Remove(builder.Length - 1, 1);
-
-            return builder.ToString();
-        }
-
-        /// <summary>
-        ///     Put tab prefix instead of new rows.
-        /// </summary>
-        /// <param name="s">string</param>
-        /// <returns>tab prefixed string</returns>
-        private static string TabPrefix(string s)
-        {
-            StringBuilder builder = new StringBuilder();
-
-            string[] lines = s.Split('\n');
-            for (int i = 0; i < lines.Length; i++)
-            {
-                builder.Append("  ");
-                builder.Append(lines[i]);
-                if (!lines[i].Equals(lines[lines.Length - 1]))
+                builder.Append(Util.TabPrefixString(_value[i].ToString()));
+                if (i < Count - 1)
                 {
-                    builder.Append("\n");
+                    builder.AppendLine();
                 }
             }
 
             return builder.ToString();
         }
+
+        
 
         /// <summary>
         ///     Compare two composite element objects.

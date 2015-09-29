@@ -10,8 +10,13 @@ namespace Guardtime.KSI.Crypto
     /// </summary>
     public class Pkcs7CryptoSignatureVerifier : ICryptoSignatureVerifier
     {
-        /// <see cref="ICryptoSignatureVerifier.Verify" />
-        /// <exception cref="CryptoVerificationException">thrown when signature verification throws any exception</exception>
+        /// <summary>
+        ///     Verify signed bytes and PKCS#7 signature.
+        /// </summary>
+        /// <param name="signedBytes">signed bytes</param>
+        /// <param name="signatureBytes">signature bytes</param>
+        /// <param name="data">other data</param>
+        /// <exception cref="PkiVerificationException">thrown when signature verification throws any exception</exception>
         public void Verify(byte[] signedBytes, byte[] signatureBytes, Dictionary<string, object> data)
         {
             try
@@ -22,7 +27,7 @@ namespace Guardtime.KSI.Crypto
             }
             catch (Exception e)
             {
-                throw new CryptoVerificationException("Failed to verify PKCS#7 signature", e);
+                throw new PkiVerificationException("Failed to verify PKCS#7 signature.", e);
             }
         }
     }

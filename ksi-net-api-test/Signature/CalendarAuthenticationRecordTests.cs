@@ -26,7 +26,7 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestCalendarAuthenticationRecordInvalidExtraTag()
         {
-            Assert.Throws<InvalidTlvStructureException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 GetCalendarAuthenticationRecordFromFile(Properties.Resources.CalendarAuthenticationRecord_Invalid_Extra_Tag);
             }, "Invalid tag");
@@ -36,7 +36,7 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestCalendarAuthenticationRecordInvalidMissingPublicationData()
         {
-            Assert.Throws<InvalidTlvStructureException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 GetCalendarAuthenticationRecordFromFile(Properties.Resources.CalendarAuthenticationRecord_Invalid_Missing_Publication_Data);
             }, "Only one publication data must exist in calendar authentication record");
@@ -46,7 +46,7 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestCalendarAuthenticationRecordInvalidMissingSignatureData()
         {
-            Assert.Throws<InvalidTlvStructureException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 GetCalendarAuthenticationRecordFromFile(Properties.Resources.CalendarAuthenticationRecord_Invalid_Missing_Signature_Data);
             }, "Only one signature data must exist in calendar authentication record");
@@ -56,7 +56,7 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestCalendarAuthenticationRecordInvalidMultiplePublicationData()
         {
-            Assert.Throws<InvalidTlvStructureException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 GetCalendarAuthenticationRecordFromFile(Properties.Resources.CalendarAuthenticationRecord_Invalid_Multiple_Publication_Data);
             }, "Only one publication data must exist in calendar authentication record");
@@ -66,7 +66,7 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestCalendarAuthenticationRecordInvalidMultipleSignatureData()
         {
-            Assert.Throws<InvalidTlvStructureException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 GetCalendarAuthenticationRecordFromFile(Properties.Resources.CalendarAuthenticationRecord_Invalid_Multiple_Signature_Data);
             }, "Only one signature data must exist in calendar authentication record");
@@ -76,7 +76,7 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestCalendarAuthenticationRecordInvalidType()
         {
-            Assert.Throws<InvalidTlvStructureException>(delegate
+            Assert.Throws<TlvException>(delegate
             {
                 GetCalendarAuthenticationRecordFromFile(Properties.Resources.CalendarAuthenticationRecord_Invalid_Type);
             }, "Invalid calendar authentication record type: 2054");

@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 
@@ -20,16 +21,18 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             var rule = new ExtendingPermittedVerificationRule();
 
             // Argument null exception when no context
-            Assert.Throws<ArgumentNullException>(delegate
+            Assert.Throws<KsiException>(delegate
             {
                 rule.Verify(null);
             });
 
             var context = new TestVerificationContext {IsExtendingAllowed = true};
-            Assert.AreEqual(VerificationResult.Ok, rule.Verify(context));
+            var verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
 
             context.IsExtendingAllowed = false;
-            Assert.AreEqual(VerificationResult.Na, rule.Verify(context));
+            verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
         }
     }
 }

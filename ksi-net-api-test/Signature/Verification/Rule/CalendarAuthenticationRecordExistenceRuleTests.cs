@@ -19,7 +19,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             var rule = new CalendarAuthenticationRecordExistenceRule();
 
             // Argument null exception when no context
-            Assert.Throws<ArgumentNullException>(delegate
+            Assert.Throws<KsiException>(delegate
             {
                 rule.Verify(null);
             });
@@ -40,7 +40,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     Signature = new KsiSignatureFactory().Create(stream)
                 };
 
-                Assert.AreEqual(VerificationResult.Ok, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
 
             // Check legacy signature for aggregation authentication record existence
@@ -51,7 +52,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     Signature = new KsiSignatureFactory().Create(stream)
                 };
 
-                Assert.AreEqual(VerificationResult.Ok, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
 
             // Check signature without calendar authentication record
@@ -62,7 +64,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     Signature = new KsiSignatureFactory().Create(stream)
                 };
 
-                Assert.AreEqual(VerificationResult.Na, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
             }
         }
     }

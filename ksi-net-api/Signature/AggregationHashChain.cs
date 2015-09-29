@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
@@ -33,11 +34,12 @@ namespace Guardtime.KSI.Signature
         ///     Create new aggregation hash chain TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
+        /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
         public AggregationHashChain(TlvTag tag) : base(tag)
         {
             if (Type != TagType)
             {
-                throw new InvalidTlvStructureException("Invalid aggregation hash chain type: " + Type);
+                throw new TlvException("Invalid aggregation hash chain type(" + Type + ").");
             }
 
             int aggregationTimeCount = 0;
@@ -88,32 +90,32 @@ namespace Guardtime.KSI.Signature
 
             if (aggregationTimeCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one aggregation time must exist in aggregation hash chain");
+                throw new TlvException("Only one aggregation time must exist in aggregation hash chain.");
             }
 
             if (_chainIndex.Count == 0)
             {
-                throw new InvalidTlvStructureException("Chain index is missing in aggregation hash chain");
+                throw new TlvException("Chain index is missing in aggregation hash chain.");
             }
 
             if (inputDataCount > 1)
             {
-                throw new InvalidTlvStructureException("Only one input data value is allowed in aggregation hash chain");
+                throw new TlvException("Only one input data value is allowed in aggregation hash chain.");
             }
 
             if (inputHashCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one input hash must exist in aggregation hash chain");
+                throw new TlvException("Only one input hash must exist in aggregation hash chain.");
             }
 
             if (aggrAlgorithmIdCount != 1)
             {
-                throw new InvalidTlvStructureException("Only one algorithm must exist in aggregation hash chain");
+                throw new TlvException("Only one algorithm must exist in aggregation hash chain.");
             }
 
             if (_chain.Count == 0)
             {
-                throw new InvalidTlvStructureException("Links are missing in aggregation hash chain");
+                throw new TlvException("Links are missing in aggregation hash chain.");
             }
         }
 
@@ -134,13 +136,28 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
+        ///     Get input data bytes if input data exists otherwise null.
+        /// </summary>
+        /// <returns>input data bytes</returns>
+        public byte[] GetInputData()
+        {
+            return _inputData == null ? null : _inputData.Value;
+        }
+
+
+        /// <summary>
         ///     Get output hash.
         /// </summary>
         /// <param name="result">last hashing result</param>
         /// <returns>output hash chain result</returns>
+        /// <exception cref="KsiException">thrown when chain result is null</exception>
         public ChainResult GetOutputHash(ChainResult result)
         {
-            // TODO: Check if not null
+            if (result == null)
+            {
+                throw new KsiException("Invalid aggregation chain result: null.");
+            }
+
             DataHash lastHash = result.Hash;
             ulong level = result.Level;
             for (int i = 0; i < _chain.Count; i++)
@@ -150,18 +167,17 @@ namespace Guardtime.KSI.Signature
 
                 if (link.Direction == LinkDirection.Left)
                 {
-                    lastHash = HashTogether(lastHash.Imprint, link.SiblingData, level);
+                    lastHash = HashTogether(lastHash.Imprint, link.GetSiblingData(), level);
                 }
                 if (link.Direction == LinkDirection.Right)
                 {
-                    lastHash = HashTogether(link.SiblingData, lastHash.Imprint, level);
+                    lastHash = HashTogether(link.GetSiblingData(), lastHash.Imprint, level);
                 }
             }
 
             return new ChainResult(level, lastHash);
         }
 
-        // TODO: Better name
         /// <summary>
         ///     Hash two hashes together.
         /// </summary>
@@ -169,7 +185,7 @@ namespace Guardtime.KSI.Signature
         /// <param name="hashB">second hash</param>
         /// <param name="level">hash chain level</param>
         /// <returns>resulting hash</returns>
-        private DataHash HashTogether(byte[] hashA, byte[] hashB, ulong level)
+        private DataHash HashTogether(ICollection<byte> hashA, ICollection<byte> hashB, ulong level)
         {
             DataHasher hasher = new DataHasher(HashAlgorithm.GetById((byte) _aggrAlgorithmId.Value));
             hasher.AddData(hashA);
@@ -190,12 +206,12 @@ namespace Guardtime.KSI.Signature
             private readonly LinkDirection _direction;
 
             private readonly IntegerTag _levelCorrection;
+
+            // the client ID extracted from metaHash
+            private readonly string _linkIdentity;
             private readonly MetaData _metaData;
             private readonly ImprintTag _metaHash;
             private readonly ImprintTag _siblingHash;
-
-            // the client ID extracted from metaHash
-            private string _metaHashId;
 
 
             public Link(TlvTag tag, LinkDirection direction) : base(tag)
@@ -237,19 +253,28 @@ namespace Guardtime.KSI.Signature
 
                 if (levelCorrectionCount > 1)
                 {
-                    throw new InvalidTlvStructureException(
-                        "Only one levelcorrection value is allowed in aggregation hash chain link");
+                    throw new TlvException(
+                        "Only one levelcorrection value is allowed in aggregation hash chain link.");
                 }
 
                 if ((siblingHashCount > 1 || metaHashCount > 1 || metaDataCount > 1) ||
                     !(siblingHashCount == 1 ^ metaHashCount == 1 ^ metaDataCount == 1) ||
                     (siblingHashCount == 1 && metaHashCount == 1 && metaDataCount == 1))
                 {
-                    throw new InvalidTlvStructureException(
-                        "Only one of three from siblinghash, metahash or metadata must exist in aggregation hash chain link");
+                    throw new TlvException(
+                        "Only one of three from siblinghash, metahash or metadata must exist in aggregation hash chain link.");
                 }
 
                 _direction = direction;
+                _linkIdentity = CalculateIdendity();
+            }
+
+            /// <summary>
+            ///     Get link idendity.
+            /// </summary>
+            public string Idendity
+            {
+                get { return _linkIdentity; }
             }
 
             /// <summary>
@@ -260,40 +285,66 @@ namespace Guardtime.KSI.Signature
                 get { return _levelCorrection == null ? 0UL : _levelCorrection.Value; }
             }
 
-            // TODO: Better name
-            /// <summary>
-            ///     Get data byte array
-            /// </summary>
-            public byte[] SiblingData
-            {
-                get
-                {
-                    if (_siblingHash != null)
-                    {
-                        return _siblingHash.EncodeValue();
-                    }
-
-                    if (_metaHash != null)
-                    {
-                        return _metaHash.EncodeValue();
-                    }
-
-                    if (_metaData != null)
-                    {
-                        return _metaData.EncodeValue();
-                    }
-
-                    // TODO: Throw exception?
-                    return null;
-                }
-            }
-
             /// <summary>
             ///     Get direction
             /// </summary>
             public LinkDirection Direction
             {
                 get { return _direction; }
+            }
+
+            private string CalculateIdendity()
+            {
+                if (_metaHash != null)
+                {
+                    return CalculateIdendityFromMetaHash();
+                }
+
+                if (_metaData != null)
+                {
+                    return _metaData.ClientId;
+                }
+
+                return "";
+            }
+
+            private string CalculateIdendityFromMetaHash()
+            {
+                ICollection<byte> data = _metaHash.Value.Imprint;
+                byte[] bytes = new byte[data.Count];
+                data.CopyTo(bytes, 0);
+
+                if (bytes.Length < 3)
+                {
+                    // TODO: Log exception
+                    return "";
+                }
+
+                int length = bytes[1] << 8 + bytes[2];
+                return Encoding.UTF8.GetString(bytes, 3, length);
+            }
+
+            /// <summary>
+            ///     Get data byte array
+            /// </summary>
+            public byte[] GetSiblingData()
+            {
+                if (_siblingHash != null)
+                {
+                    return _siblingHash.EncodeValue();
+                }
+
+                if (_metaHash != null)
+                {
+                    return _metaHash.EncodeValue();
+                }
+
+                if (_metaData != null)
+                {
+                    return _metaData.EncodeValue();
+                }
+
+                return null;
             }
         }
 
@@ -317,15 +368,11 @@ namespace Guardtime.KSI.Signature
             private readonly IntegerTag _requestTime;
             private readonly IntegerTag _sequenceNr;
 
-            /// <summary>
-            ///     Create Metadata from TLV element.
-            /// </summary>
-            /// <param name="tag">TLV element</param>
             public MetaData(TlvTag tag) : base(tag)
             {
                 if (Type != TagType)
                 {
-                    throw new InvalidTlvStructureException("Invalid aggregation hash chain link metadata type: " + Type);
+                    throw new TlvException("Invalid aggregation hash chain link metadata type(" + Type + ").");
                 }
 
                 int clientIdCount = 0;
@@ -365,27 +412,32 @@ namespace Guardtime.KSI.Signature
 
                 if (clientIdCount != 1)
                 {
-                    throw new InvalidTlvStructureException(
-                        "Only one client id must exist in aggregation hash chain link metadata");
+                    throw new TlvException(
+                        "Only one client id must exist in aggregation hash chain link metadata.");
                 }
 
                 if (machineIdCount > 1)
                 {
-                    throw new InvalidTlvStructureException(
-                        "Only one machine id is allowed in aggregation hash chain link metadata");
+                    throw new TlvException(
+                        "Only one machine id is allowed in aggregation hash chain link metadata.");
                 }
 
                 if (sequenceNrCount > 1)
                 {
-                    throw new InvalidTlvStructureException(
-                        "Only one sequence number is allowed in aggregation hash chain link metadata");
+                    throw new TlvException(
+                        "Only one sequence number is allowed in aggregation hash chain link metadata.");
                 }
 
                 if (requestTimeCount > 1)
                 {
-                    throw new InvalidTlvStructureException(
-                        "Only one request time is allowed in aggregation hash chain link metadata");
+                    throw new TlvException(
+                        "Only one request time is allowed in aggregation hash chain link metadata.");
                 }
+            }
+
+            public string ClientId
+            {
+                get { return _clientId.Value; }
             }
         }
 
@@ -411,8 +463,7 @@ namespace Guardtime.KSI.Signature
 
                     if (x._chainIndex[i].Value != y._chainIndex[i].Value)
                     {
-                        // TODO: throw better exception
-                        throw new KsiException("Chain index mismatch");
+                        throw new KsiException("Chain index mismatch.");
                     }
                 }
 

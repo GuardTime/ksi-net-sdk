@@ -11,7 +11,10 @@ namespace Guardtime.KSI.Crypto
     public class RsaCryptoSignatureVerifier : ICryptoSignatureVerifier
     {
         /// <see cref="ICryptoSignatureVerifier" />
-        /// <exception cref="CryptoVerificationException">thrown when verification process cannot complete</exception>
+        /// <param name="signedBytes">signed bytes</param>
+        /// <param name="signatureBytes">signature bytes</param>
+        /// <param name="data">must consist of 2 parameters, "certificate" => X509Certificate2, "digestAlgorithm" => string</param>
+        /// <exception cref="PkiVerificationException">thrown when verification process cannot complete</exception>
         public void Verify(byte[] signedBytes, byte[] signatureBytes, Dictionary<string, object> data)
         {
             X509Certificate2 certificate = null;
@@ -31,24 +34,24 @@ namespace Guardtime.KSI.Crypto
 
             if (certificate == null)
             {
-                throw new CryptoVerificationException("Invalid certificate in data: null");
+                throw new PkiVerificationException("Certificate in data parameter cannot be null.");
             }
 
             if (digestAlgorithm == null)
             {
-                throw new CryptoVerificationException("Invalid digest algorithm in data: null");
+                throw new PkiVerificationException("Digest algorithm in data parameter cannot be null.");
             }
 
             if (certificate.PublicKey == null)
             {
-                throw new CryptoVerificationException("No public key in certificate");
+                throw new PkiVerificationException("No public key in certificate.");
             }
 
             using (RSACryptoServiceProvider serviceProvider = (RSACryptoServiceProvider) certificate.PublicKey.Key)
             {
                 if (!serviceProvider.VerifyData(signedBytes, data["digestAlgorithm"], signatureBytes))
                 {
-                    throw new CryptoVerificationException("Failed to verify RSA signature");
+                    throw new PkiVerificationException("Failed to verify RSA signature.");
                 }
             }
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Crypto
 {
@@ -32,12 +33,10 @@ namespace Guardtime.KSI.Crypto
                     digestAlgorithm = "SHA256";
                     return RsaSignatureVerifier;
                 case "1.2.840.113549.1.7.2":
-                    // TODO: Not required
                     digestAlgorithm = null;
                     return Pkcs7SignatureVerifier;
                 default:
-                    // TODO: better exception
-                    throw new InvalidOperationException("Cryptographic signature not supported");
+                    throw new PkiVerificationException("Cryptographic signature not supported.");
             }
         }
     }

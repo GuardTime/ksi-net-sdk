@@ -5,32 +5,36 @@ using Guardtime.KSI.Exceptions;
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
     /// <summary>
-    ///     Aggregation hash chain time consistency verification VerificationRule.
+    ///     Rule checks that aggregation hash chain times are consistent. It means that previous aggregation hash chain
+    ///     aggregation time equals to current one.
     /// </summary>
     public sealed class AggregationHashChainTimeConsistencyRule : VerificationRule
     {
-        private VerificationRule _verificationRule;
+        /// <summary>
+        /// Rule name
+        /// </summary>
+        public const string RuleName = "AggregationHashChainTimeConsistencyRule";
 
         /// <see cref="VerificationRule.Verify" />
-        /// <exception cref="ArgumentNullException">thrown if context is missing</exception>
+        /// <exception cref="KsiException">thrown if verification context is missing</exception>
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new KsiException("Invalid verification context: null.");
             }
 
             if (context.Signature == null)
             {
-                throw new KsiVerificationException("Invalid KSI signature: null");
+                throw new KsiVerificationException("Invalid KSI signature in context: null.");
             }
 
             ReadOnlyCollection<AggregationHashChain> aggregationHashChainCollection =
                 context.Signature.GetAggregationHashChains();
             if (aggregationHashChainCollection == null)
             {
-                throw new KsiVerificationException("Aggregation hash chains missing in KSI signature");
+                throw new KsiVerificationException("Aggregation hash chains are missing from KSI signature.");
             }
 
             ulong? time = null;
@@ -48,11 +52,11 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     Console.WriteLine(
                         "Previous aggregation hash chain aggregation time {0} does not match current aggregation time {1}",
                         time, aggregationHashChainCollection[i].AggregationTime);
-                    return VerificationResult.Fail;
+                    return new VerificationResult(RuleName, VerificationResultCode.Fail, VerificationError.Int02);
                 }
             }
 
-            return VerificationResult.Ok;
+            return new VerificationResult(RuleName, VerificationResultCode.Ok);
         }
     }
 }

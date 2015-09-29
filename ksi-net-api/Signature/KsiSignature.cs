@@ -9,10 +9,11 @@ using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Signature
 {
-
+    /// <summary>
+    ///     KSI signature factory.
+    /// </summary>
     public partial class KsiSignatureFactory
     {
-
         /// <summary>
         ///     KSI Signature implementation.
         /// </summary>
@@ -37,11 +38,12 @@ namespace Guardtime.KSI.Signature
             ///     Create new KSI signature TLV element from TLV element.
             /// </summary>
             /// <param name="tag">TLV element</param>
+            /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
             public KsiSignature(TlvTag tag) : base(tag)
             {
                 if (Type != TagType)
                 {
-                    throw new InvalidTlvStructureException("Invalid signature type: " + Type);
+                    throw new TlvException("Invalid KSI signature type(" + Type + ").");
                 }
 
                 int calendarChainCount = 0;
@@ -92,44 +94,52 @@ namespace Guardtime.KSI.Signature
 
                 if (_aggregationHashChainCollection.Count == 0)
                 {
-                    throw new InvalidTlvStructureException("Aggregation hash chains must exist in signature data object");
+                    throw new TlvException("Aggregation hash chains must exist in KSI signature.");
                 }
 
                 if (calendarChainCount > 1)
                 {
-                    throw new InvalidTlvStructureException(
-                        "Only one calendar hash chain is allowed in signature data object");
+                    throw new TlvException(
+                        "Only one calendar hash chain is allowed in KSI signature.");
                 }
 
                 if (calendarChainCount == 0 && (publicationRecordCount != 0 || calendarAuthenticationRecordCount != 0))
                 {
-                    throw new InvalidTlvStructureException(
-                        "No publication record or calendar authentication record is allowed in signature data object if there is no calendar hash chain");
+                    throw new TlvException(
+                        "No publication record or calendar authentication record is allowed in KSI signature if there is no calendar hash chain.");
                 }
 
                 if ((publicationRecordCount == 1 && calendarAuthenticationRecordCount == 1) ||
                     publicationRecordCount > 1 ||
                     calendarAuthenticationRecordCount > 1)
                 {
-                    throw new InvalidTlvStructureException(
-                        "Only one from publication record or calendar authentication record is allowed in signature data object");
+                    throw new TlvException(
+                        "Only one from publication record or calendar authentication record is allowed in KSI signature.");
                 }
 
                 if (aggregationAuthenticationRecordCount > 1)
                 {
-                    throw new InvalidTlvStructureException(
-                        "Only one aggregation authentication record is allowed in signature data object");
+                    throw new TlvException(
+                        "Only one aggregation authentication record is allowed in KSI signature.");
                 }
 
                 if (rfc3161RecordCount > 1)
                 {
-                    throw new InvalidTlvStructureException(
-                        "Only one RFC 3161 record is allowed in signature data object");
+                    throw new TlvException(
+                        "Only one RFC 3161 record is allowed in KSI signature.");
                 }
 
                 // TODO: Aggregation authentication record
 
                 _aggregationHashChainCollection.Sort(new AggregationHashChain.ChainIndexOrdering());
+            }
+
+            /// <summary>
+            ///     Get aggregation authentication record if it exists.
+            /// </summary>
+            public AggregationAuthenticationRecord AggregationAuthenticationRecord
+            {
+                get { return _aggregationAuthenticationRecord; }
             }
 
             /// <summary>
@@ -199,7 +209,7 @@ namespace Guardtime.KSI.Signature
             }
 
             /// <summary>
-            /// Get aggregation time.
+            ///     Get aggregation time.
             /// </summary>
             public ulong AggregationTime
             {
@@ -207,15 +217,28 @@ namespace Guardtime.KSI.Signature
             }
 
             /// <summary>
-            /// Extend KSI signature with given calendar hash chain.
+            ///     Extend KSI signature with given calendar hash chain.
             /// </summary>
             /// <param name="calendarHashChain">calendar hash chain</param>
             /// <returns>extended KSI signature</returns>
+            /// <exception cref="ArgumentNullException">thrown if calendar hash chain is null</exception>
             public IKsiSignature Extend(CalendarHashChain calendarHashChain)
+            {
+                return Extend(calendarHashChain, null);
+            }
+
+            /// <summary>
+            ///     Extend signature to publication.
+            /// </summary>
+            /// <param name="calendarHashChain">extended calendar hash chain</param>
+            /// <param name="publicationRecord">extended publication record</param>
+            /// <returns>extended KSI signature</returns>
+            /// <exception cref="KsiException">thrown if calendar hash chain is null</exception>
+            public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecord publicationRecord)
             {
                 if (calendarHashChain == null)
                 {
-                    throw new ArgumentNullException("calendarHashChain");
+                    throw new KsiException("Invalid calendar hash chain: null.");
                 }
 
                 using (MemoryStream stream = new MemoryStream())
@@ -226,6 +249,13 @@ namespace Guardtime.KSI.Signature
                         if (this[i].Type == CalendarHashChain.TagType)
                         {
                             writer.WriteTag(calendarHashChain);
+                            continue;
+                        }
+
+                        // TODO: Remove if extend without record?
+                        if (publicationRecord != null && this[i].Type == PublicationRecord.TagTypeSignature)
+                        {
+                            writer.WriteTag(publicationRecord);
                             continue;
                         }
 
