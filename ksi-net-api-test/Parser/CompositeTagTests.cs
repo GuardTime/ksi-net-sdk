@@ -75,7 +75,7 @@ namespace Guardtime.KSI.Parser
         public void TestToString()
         {
             var tag = new CompositeTestTag(0x1, true, true, new List<TlvTag>() { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }), new CompositeTestTag(0x5, false, false, new List<TlvTag>() {new RawTag(0x1, false, false, new byte[]{})}) });
-            Assert.AreEqual("TLV[0x1,N,F]:\n  TLV[0x1]:0x0102\n  TLV[0x2]:0x0304\n  TLV[0x5]:\n    TLV[0x1]:0x", tag.ToString(), "Tag string representation should be correct");
+            Assert.AreEqual("TLV[0x1,N,F]:" + Environment.NewLine + "  TLV[0x1]:0x0102" + Environment.NewLine + "  TLV[0x2]:0x0304" + Environment.NewLine + "  TLV[0x5]:" + Environment.NewLine + "    TLV[0x1]:0x", tag.ToString(), "Tag string representation should be correct");
         }
 
         [Test]
