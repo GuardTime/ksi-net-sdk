@@ -22,7 +22,7 @@ namespace Guardtime.KSI.Publication
         {
             if (pkiTrustProvider == null)
             {
-                throw new KsiException("PKI trust provider cannot be null.");
+                throw new KsiException("Invalid PKI trust provider: null.");
             }
 
             _pkiTrustProvider = pkiTrustProvider;
@@ -40,7 +40,7 @@ namespace Guardtime.KSI.Publication
         {
             if (stream == null)
             {
-                throw new KsiException("Input stream cannot be null.");
+                throw new KsiException("Invalid input stream: null.");
             }
 
             byte[] data = new byte[PublicationsFile.FileBeginningMagicBytes.Length];
@@ -87,7 +87,7 @@ namespace Guardtime.KSI.Publication
         {
             if (stream == null)
             {
-                throw new KsiException("Input stream cannot be null.");
+                throw new KsiException("Invalid input stream: null.");
             }
 
             return Create(stream, 8092);
@@ -104,7 +104,7 @@ namespace Guardtime.KSI.Publication
         {
             if (bytes == null)
             {
-                throw new KsiException("Input data cannot be null.");
+                throw new KsiException("Invalid input data: null.");
             }
 
             using (MemoryStream stream = new MemoryStream(bytes))
