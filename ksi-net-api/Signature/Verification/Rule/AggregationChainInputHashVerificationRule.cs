@@ -10,6 +10,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class AggregationChainInputHashVerificationRule : VerificationRule
     {
+        public const string RuleName = "AggregationChainInputHashVerificationRule";
+
         /// <see cref="VerificationRule.Verify" />
         /// <exception cref="KsiException">thrown if verification context is missing</exception>
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
@@ -24,13 +26,13 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             DataHash inputHash = context.DocumentHash;
             if (signature == null)
             {
-                throw new KsiVerificationException("Invalid KSI signature: null");
+                throw new KsiVerificationException("Invalid KSI signature in context: null.");
             }
 
             ReadOnlyCollection<AggregationHashChain> aggregationHashChains = signature.GetAggregationHashChains();
             if (aggregationHashChains == null || aggregationHashChains.Count == 0)
             {
-                throw new KsiVerificationException("Aggregation hash chains missing in KSI signature");
+                throw new KsiVerificationException("Aggregation hash chains missing in KSI signature.");
             }
 
             DataHash aggregationHashChainInputHash = aggregationHashChains[0].InputHash;
@@ -39,14 +41,21 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 DataHasher hasher = new DataHasher(aggregationHashChainInputHash.Algorithm);
                 if (signature.Rfc3161Record == null)
                 {
-                    throw new KsiVerificationException("No RFC 3161 record in KSI signature");
+                    throw new KsiVerificationException("No RFC 3161 record in KSI signature.");
                 }
 
                 hasher.AddData(signature.Rfc3161Record.GetOutputHash(inputHash).Imprint);
                 inputHash = hasher.GetHash();
+
+                return inputHash != aggregationHashChainInputHash ? new VerificationResult(RuleName, VerificationResultCode.Fail, VerificationError.Int01) : new VerificationResult(RuleName, VerificationResultCode.Ok);
             }
 
-            return inputHash != aggregationHashChainInputHash ? VerificationResult.Fail : VerificationResult.Ok;
+            if (inputHash == null)
+            {
+                return new VerificationResult(RuleName, VerificationResultCode.Ok);
+            }
+
+            return inputHash != aggregationHashChainInputHash ? new VerificationResult(RuleName, VerificationResultCode.Fail, VerificationError.Gen01) : new VerificationResult(RuleName, VerificationResultCode.Ok);
         }
     }
 }

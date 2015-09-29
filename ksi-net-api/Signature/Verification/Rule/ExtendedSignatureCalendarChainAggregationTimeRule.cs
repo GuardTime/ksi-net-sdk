@@ -8,6 +8,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class ExtendedSignatureCalendarChainAggregationTimeRule : VerificationRule
     {
+        public const string RuleName = "ExtendedSignatureCalendarChainAggregationTimeRule";
+
         /// <see cref="VerificationRule.Verify" />
         /// <exception cref="KsiException">thrown if verification context is missing</exception>
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
@@ -20,13 +22,13 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (context.Signature == null)
             {
-                throw new KsiVerificationException("Signature cannot be null");
+                throw new KsiVerificationException("Invalid KSI signature in context: null.");
             }
 
             CalendarHashChain calendarHashChain = context.Signature.CalendarHashChain;
             if (calendarHashChain == null)
             {
-                throw new KsiVerificationException("Invalid calendar hash chain in context signature: null");
+                throw new KsiVerificationException("Invalid calendar hash chain in KSI signature: null.");
             }
 
             CalendarHashChain extendedCalendarHashChain = calendarHashChain.PublicationData == null
@@ -36,7 +38,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             if (extendedCalendarHashChain == null)
             {
                 throw new KsiVerificationException(
-                    "Invalid extended calendar hash chain from context extension function: null");
+                    "Received invalid extended calendar hash chain from context extension function: null.");
             }
 
             ReadOnlyCollection<AggregationHashChain> aggregationHashChainCollection =
@@ -46,10 +48,10 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (aggregationTime != extendedCalendarHashChain.AggregationTime)
             {
-                return VerificationResult.Fail;
+                return new VerificationResult(RuleName, VerificationResultCode.Fail, VerificationError.Cal03);
             }
 
-            return VerificationResult.Ok;
+            return new VerificationResult(RuleName, VerificationResultCode.Ok);
         }
     }
 }

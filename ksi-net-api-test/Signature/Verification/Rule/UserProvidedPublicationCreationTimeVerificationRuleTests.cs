@@ -70,7 +70,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K")
                 };
 
-                Assert.AreEqual(VerificationResult.Ok, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
 
             // Check extended signature
@@ -82,7 +83,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K")
                 };
 
-                Assert.AreEqual(VerificationResult.Ok, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
 
             // Check invalid signature
@@ -94,7 +96,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     UserPublication = new PublicationData("AAAAAA-CVUWRI-AANGVK-SV7GJL-36LN65-AVJYZR-6XRZSL-HIMRH3-6GU7WR-YNRY7C-X2XEC3-YOVLRM")
                 };
 
-                Assert.AreEqual(VerificationResult.Na, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
             }
         }
     }

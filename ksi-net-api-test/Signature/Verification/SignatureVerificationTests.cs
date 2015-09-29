@@ -42,20 +42,20 @@ namespace Guardtime.KSI.Signature.Verification
 
                 Console.WriteLine(@"// Internal verification policy");
                 VerificationPolicy policy = new InternalVerificationPolicy();
-                policy.Verify(context);
+                Console.WriteLine("{0}", policy.Verify(context));
 
                 Console.WriteLine(@"// Publications based");
                 policy = new PublicationBasedVerificationPolicy();
-                policy.Verify(context);
+                Console.WriteLine("{0}", policy.Verify(context));
 
                 Console.WriteLine(@"// Key based");
                 policy = new KeyBasedVerificationPolicy();
-                policy.Verify(context);
+                Console.WriteLine("{0}", policy.Verify(context));
 
                 Console.WriteLine(@"// Calendar based verification");
                 policy = new CalendarBasedVerificationPolicy();
-                policy.Verify(context);
-                
+                Console.WriteLine("{0}", policy.Verify(context));
+
 
             }
         }

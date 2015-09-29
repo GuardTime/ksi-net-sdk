@@ -70,7 +70,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
                 context.PublicationsFile = publicationsFile;
 
-                Assert.AreEqual(VerificationResult.Ok, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
 
             // Check signature for certificate existence in publications file with given id in calendar authentication record
@@ -82,7 +83,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     PublicationsFile = publicationsFile
                 };
 
-                Assert.AreEqual(VerificationResult.Ok, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
 
             // Check invalid signature with invalid certificate id
@@ -94,7 +96,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     PublicationsFile = publicationsFile
                 };
 
-                Assert.AreEqual(VerificationResult.Fail, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
             }
         }
     }

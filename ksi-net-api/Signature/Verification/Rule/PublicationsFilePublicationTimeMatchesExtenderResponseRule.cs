@@ -9,6 +9,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class PublicationsFilePublicationTimeMatchesExtenderResponseRule : VerificationRule
     {
+        public const string RuleName = "PublicationsFilePublicationTimeMatchesExtenderResponseRule";
+
         /// <see cref="VerificationRule.Verify" />
         /// <exception cref="KsiException">thrown if verification context is missing</exception>
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
@@ -21,19 +23,19 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (context.Signature == null)
             {
-                throw new KsiVerificationException("Invalid KSI signature in context: null");
+                throw new KsiVerificationException("Invalid KSI signature in context: null.");
             }
 
             IPublicationsFile publicationsFile = context.PublicationsFile;
             if (publicationsFile == null)
             {
-                throw new KsiVerificationException("Invalid publications file in context: null");
+                throw new KsiVerificationException("Invalid publications file in context: null.");
             }
 
             CalendarHashChain signatureCalendarHashChain = context.Signature.CalendarHashChain;
             if (signatureCalendarHashChain == null)
             {
-                throw new KsiVerificationException("Invalid calendar hash chain in signature: null");
+                throw new KsiVerificationException("Invalid calendar hash chain in KSI signature: null.");
             }
 
             PublicationRecord publicationRecord =
@@ -42,7 +44,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 throw new KsiVerificationException(
                     "No publication record found in publications file after registration time: " +
-                    signatureCalendarHashChain.RegistrationTime);
+                    signatureCalendarHashChain.RegistrationTime + ".");
             }
 
             CalendarHashChain extendedTimeCalendarHashChain =
@@ -50,20 +52,20 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             if (extendedTimeCalendarHashChain == null)
             {
                 throw new KsiVerificationException(
-                    "Invalid extended calendar hash chain from context extension function: null");
+                    "Received invalid extended calendar hash chain from context extension function: null.");
             }
 
             if (publicationRecord.PublicationData.PublicationTime != extendedTimeCalendarHashChain.PublicationTime)
             {
-                return VerificationResult.Fail;
+                return new VerificationResult(RuleName, VerificationResultCode.Fail, VerificationError.Pub02);
             }
 
             if (context.Signature.AggregationTime != extendedTimeCalendarHashChain.RegistrationTime)
             {
-                return VerificationResult.Fail;
+                return new VerificationResult(RuleName, VerificationResultCode.Fail, VerificationError.Pub02);
             }
 
-            return VerificationResult.Ok;
+            return new VerificationResult(RuleName, VerificationResultCode.Ok);
         }
     }
 }

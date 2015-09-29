@@ -117,7 +117,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     KsiService = ksiService
                 };
 
-                Assert.AreEqual(VerificationResult.Ok, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
 
             // Check signature
@@ -130,7 +131,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     KsiService = ksiService
                 };
 
-                Assert.AreEqual(VerificationResult.Ok, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
 
             // Check invalid signature with invalid extender data
@@ -144,7 +146,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 };
 
                 serviceProtocol.FailNext = true;
-                Assert.AreEqual(VerificationResult.Fail, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
             }
         }
     }

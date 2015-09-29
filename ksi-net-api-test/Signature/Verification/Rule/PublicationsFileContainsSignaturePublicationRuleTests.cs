@@ -79,7 +79,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     PublicationsFile = publicationsFile
                 };
 
-                Assert.AreEqual(VerificationResult.Ok, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
 
             // Check signature
@@ -91,7 +92,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     PublicationsFile = publicationsFile
                 };
 
-                Assert.AreEqual(VerificationResult.Ok, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
 
             // Check invalid signature with publication record missing from publications file
@@ -103,7 +105,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     PublicationsFile = publicationsFile
                 };
 
-                Assert.AreEqual(VerificationResult.Fail, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
             }
         }
     }

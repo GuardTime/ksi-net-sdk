@@ -8,6 +8,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class CertificateExistenceRule : VerificationRule
     {
+        public const string RuleName = "CertificateExistenceRule";
+
         /// <see cref="VerificationRule.Verify" />
         /// <exception cref="KsiException">thrown if verification context is missing</exception>
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
@@ -20,27 +22,27 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (context.Signature == null)
             {
-                throw new KsiVerificationException("Signature cannot be null");
+                throw new KsiVerificationException("Invalid KSI signature in context: null.");
             }
 
             if (context.PublicationsFile == null)
             {
-                throw new KsiVerificationException("Invalid publications file: null");
+                throw new KsiVerificationException("Invalid publications file in context: null.");
             }
 
             CalendarAuthenticationRecord calendarAuthenticationRecord = context.Signature.CalendarAuthenticationRecord;
             if (calendarAuthenticationRecord == null)
             {
-                throw new KsiVerificationException("Invalid calendar authentication record: null");
+                throw new KsiVerificationException("Invalid calendar authentication record in KSI signature: null.");
             }
 
             SignatureData signatureData = calendarAuthenticationRecord.SignatureData;
             if (context.PublicationsFile.FindCertificateById(signatureData.CertificateId) == null)
             {
-                return VerificationResult.Fail;
+                return new VerificationResult(RuleName, VerificationResultCode.Fail, VerificationError.Key01);
             }
 
-            return VerificationResult.Ok;
+            return new VerificationResult(RuleName, VerificationResultCode.Ok);
         }
     }
 }

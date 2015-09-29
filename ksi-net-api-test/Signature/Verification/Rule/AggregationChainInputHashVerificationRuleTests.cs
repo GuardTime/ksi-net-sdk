@@ -38,7 +38,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     Signature = new KsiSignatureFactory().Create(stream)
                 };
 
-                Assert.Throws<ArgumentNullException>(delegate
+                Assert.Throws<KsiException>(delegate
                 {
                     rule.Verify(context);
                 });
@@ -54,7 +54,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                         new DataHash(Base16.Decode("015466E3CBA14A843A5E93B78E3D6AB8D3491EDCAC7E06431CE1A7F49828C340C3"))
                 };
 
-                Assert.AreEqual(VerificationResult.Ok, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
 
             // Check signature input hash
@@ -67,7 +68,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                         new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D"))
                 };
 
-                Assert.AreEqual(VerificationResult.Ok, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
 
             // Check signature invalid input hash
@@ -80,7 +82,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                         new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772E"))
                 };
 
-                Assert.AreEqual(VerificationResult.Fail, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
             }
         }
     }

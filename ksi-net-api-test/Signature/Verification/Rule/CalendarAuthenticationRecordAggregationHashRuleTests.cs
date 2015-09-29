@@ -40,7 +40,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     Signature = new KsiSignatureFactory().Create(stream)
                 };
 
-                Assert.AreEqual(VerificationResult.Ok, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
 
             // Check signature for calendar authentication record hash
@@ -51,7 +52,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     Signature = new KsiSignatureFactory().Create(stream)
                 };
 
-                Assert.AreEqual(VerificationResult.Ok, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
 
             // Check signature with no calendar authentication record
@@ -62,7 +64,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     Signature = new KsiSignatureFactory().Create(stream)
                 };
 
-                Assert.AreEqual(VerificationResult.Ok, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
 
             // Check invalid signature with invalid publication hash in calendar authentication record
@@ -73,7 +76,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     Signature = new KsiSignatureFactory().Create(stream)
                 };
 
-                Assert.AreEqual(VerificationResult.Fail, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
             }
         }
     }

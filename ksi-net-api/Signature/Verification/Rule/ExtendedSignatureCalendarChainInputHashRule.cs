@@ -8,6 +8,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class ExtendedSignatureCalendarChainInputHashRule : VerificationRule
     {
+        public const string RuleName = "ExtendedSignatureCalendarChainInputHashRule";
+
         /// <see cref="VerificationRule.Verify" />
         /// <exception cref="KsiException">thrown if verification context is missing</exception>
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
@@ -20,7 +22,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (context.Signature == null)
             {
-                throw new KsiVerificationException("Invalid KSI signature in context: null");
+                throw new KsiVerificationException("Invalid KSI signature in context: null.");
             }
 
             CalendarHashChain calendarHashChain = context.Signature.CalendarHashChain;
@@ -31,16 +33,16 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             if (extendedCalendarHashChain == null)
             {
                 throw new KsiVerificationException(
-                    "Invalid extended calendar hash chain from context extension function: null");
+                    "Received invalid extended calendar hash chain from context extension function: null.");
             }
 
             if (context.Signature.GetAggregationHashChainRootHash() != extendedCalendarHashChain.InputHash)
             {
                 // TODO: Log
-                return VerificationResult.Fail;
+                return new VerificationResult(RuleName, VerificationResultCode.Fail, VerificationError.Cal02);
             }
 
-            return VerificationResult.Ok;
+            return new VerificationResult(RuleName, VerificationResultCode.Ok);
         }
     }
 }

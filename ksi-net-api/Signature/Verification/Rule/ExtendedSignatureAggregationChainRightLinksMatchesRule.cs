@@ -8,6 +8,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class ExtendedSignatureAggregationChainRightLinksMatchesRule : VerificationRule
     {
+        public const string RuleName = "ExtendedSignatureAggregationChainRightLinksMatchesRule";
+
         /// <see cref="VerificationRule.Verify" />
         /// <exception cref="KsiException">thrown if verification context is missing</exception>
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
@@ -20,13 +22,13 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (context.Signature == null)
             {
-                throw new KsiVerificationException("Invalid KSI signature in context: null");
+                throw new KsiVerificationException("Invalid KSI signature in context: null.");
             }
 
             CalendarHashChain calendarHashChain = context.Signature.CalendarHashChain;
             if (calendarHashChain == null)
             {
-                throw new KsiVerificationException("Invalid calendar hash chain in signature: null");
+                throw new KsiVerificationException("Invalid calendar hash chain in KSI signature: null.");
             }
 
             CalendarHashChain extendedCalendarHashChain =
@@ -34,12 +36,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             if (extendedCalendarHashChain == null)
             {
                 throw new KsiVerificationException(
-                    "Invalid extended calendar hash chain from context extension function: null");
+                    "Received invalid extended calendar hash chain from context extension function: null.");
             }
 
             return !calendarHashChain.AreRightLinksEqual(extendedCalendarHashChain)
-                ? VerificationResult.Fail
-                : VerificationResult.Ok;
+                ? new VerificationResult(RuleName, VerificationResultCode.Fail, VerificationError.Cal04)
+                : new VerificationResult(RuleName, VerificationResultCode.Ok);
         }
     }
 }

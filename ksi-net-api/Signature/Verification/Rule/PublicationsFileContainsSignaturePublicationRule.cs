@@ -8,6 +8,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class PublicationsFileContainsSignaturePublicationRule : VerificationRule
     {
+        public const string RuleName = "PublicationsFileContainsSignaturePublicationRule";
+
         /// <see cref="VerificationRule.Verify" />
         /// <exception cref="KsiException">thrown if verification context is missing</exception>
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
@@ -20,26 +22,26 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (context.Signature == null)
             {
-                throw new KsiVerificationException("Invalid KSI signature in context: null");
+                throw new KsiVerificationException("Invalid KSI signature in context: null.");
             }
 
             IKsiTrustProvider publicationsFile = context.PublicationsFile;
             if (publicationsFile == null)
             {
-                throw new KsiVerificationException("Invalid publications file in context: null");
+                throw new KsiVerificationException("Invalid publications file in context: null.");
             }
 
             if (context.Signature.PublicationRecord == null)
             {
-                throw new KsiVerificationException("Invalid publications record in signature: null");
+                throw new KsiVerificationException("Invalid publications record in KSI signature: null.");
             }
 
             if (!publicationsFile.Contains(context.Signature.PublicationRecord))
             {
-                return VerificationResult.Fail;
+                return new VerificationResult(RuleName, VerificationResultCode.Na, VerificationError.Gen02);
             }
 
-            return VerificationResult.Ok;
+            return new VerificationResult(RuleName, VerificationResultCode.Ok);
         }
     }
 }

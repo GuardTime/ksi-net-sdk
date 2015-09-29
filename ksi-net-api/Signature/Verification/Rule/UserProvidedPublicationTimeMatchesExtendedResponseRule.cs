@@ -8,6 +8,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class UserProvidedPublicationTimeMatchesExtendedResponseRule : VerificationRule
     {
+        public const string RuleName = "UserProvidedPublicationTimeMatchesExtendedResponseRule";
+
         /// <see cref="VerificationRule.Verify" />
         /// <exception cref="KsiException">thrown if verification context is missing</exception>
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
@@ -21,13 +23,13 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             PublicationData userPublication = context.UserPublication;
             if (userPublication == null)
             {
-                throw new KsiVerificationException("Invalid user publication in context: null");
+                throw new KsiVerificationException("Invalid user publication in context: null.");
             }
 
             IKsiSignature signature = context.Signature;
             if (signature == null)
             {
-                throw new KsiVerificationException("Invalid KSI signature in context: null");
+                throw new KsiVerificationException("Invalid KSI signature in context: null.");
             }
 
             CalendarHashChain extendedTimeCalendarHashChain =
@@ -36,21 +38,21 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             if (extendedTimeCalendarHashChain == null)
             {
                 throw new KsiVerificationException(
-                    "Invalid extended calendar hash chain from context extension function: null");
+                    "Received invalid extended calendar hash chain from context extension function: null.");
             }
 
             if (userPublication.PublicationTime != extendedTimeCalendarHashChain.PublicationData.PublicationTime)
             {
-                return VerificationResult.Fail;
+                return new VerificationResult(RuleName, VerificationResultCode.Fail, VerificationError.Pub02);
             }
 
             if (signature.AggregationTime != extendedTimeCalendarHashChain.RegistrationTime)
             {
-                return VerificationResult.Fail;
+                return new VerificationResult(RuleName, VerificationResultCode.Fail, VerificationError.Pub02);
             }
 
 
-            return VerificationResult.Ok;
+            return new VerificationResult(RuleName, VerificationResultCode.Ok);
         }
     }
 }

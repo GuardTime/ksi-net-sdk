@@ -5,10 +5,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 {
     /// <summary>
     ///     Rule checks if KSI signature contains publication record. If publication record is missing,
-    ///     <see cref="VerificationResult.Ok" /> is returned.
+    ///     <see cref="VerificationResultCode.Ok" /> is returned.
     /// </summary>
     public sealed class SignaturePublicationRecordPublicationHashRule : VerificationRule
     {
+        public const string RuleName = "SignaturePublicationRecordPublicationHashRule";
+
         /// <see cref="VerificationRule.Verify" />
         /// <exception cref="KsiException">thrown if verification context is missing</exception>
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
@@ -21,25 +23,25 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (context.Signature == null)
             {
-                throw new KsiVerificationException("Invalid KSI signature in context: null");
+                throw new KsiVerificationException("Invalid KSI signature in context: null.");
             }
 
             PublicationRecord publicationRecord = context.Signature.PublicationRecord;
             if (publicationRecord == null)
             {
-                return VerificationResult.Ok;
+                return new VerificationResult(RuleName, VerificationResultCode.Ok);
             }
 
             CalendarHashChain calendarHashChain = context.Signature.CalendarHashChain;
             if (calendarHashChain == null)
             {
-                throw new KsiVerificationException("Calendar hash chain missing in KSI signature");
+                throw new KsiVerificationException("Calendar hash chain is missing in KSI signature.");
             }
 
             return publicationRecord.PublicationData.PublicationHash !=
                    calendarHashChain.PublicationData.PublicationHash
-                ? VerificationResult.Fail
-                : VerificationResult.Ok;
+                ? new VerificationResult(RuleName, VerificationResultCode.Fail, VerificationError.Int09)
+                : new VerificationResult(RuleName, VerificationResultCode.Ok);
         }
     }
 }

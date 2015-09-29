@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Signature.Verification.Rule;
 
 namespace Guardtime.KSI.Signature.Verification.Policy
@@ -22,18 +24,19 @@ namespace Guardtime.KSI.Signature.Verification.Policy
         {
             if (context == null)
             {
-                throw new ArgumentNullException("context");
+                throw new KsiException("Invalid context: null.");
             }
-
-            VerificationRule verificationRule = FirstRule ?? Empty;
+            
+            VerificationRule verificationRule = FirstRule;
+            List<VerificationResult> verificationResults = new List<VerificationResult>();
             while (verificationRule != null)
             {
                 VerificationResult result = verificationRule.Verify(context);
-                Console.WriteLine("VerificationRule {0}: {1}", verificationRule.GetType().Name, result);
-                verificationRule = verificationRule.NextRule(result);
+                verificationResults.Add(result);
+                verificationRule = verificationRule.NextRule(result.ResultCode);
             }
 
-            return VerificationResult.Ok;
+            return new VerificationResult(GetType().Name, verificationResults);
         }
     }
 }

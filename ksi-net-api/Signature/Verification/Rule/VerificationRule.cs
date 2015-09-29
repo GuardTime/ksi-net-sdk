@@ -5,6 +5,7 @@
     /// </summary>
     public abstract class VerificationRule
     {
+
         /// <summary>
         ///     Return empty verification rule.
         /// </summary>
@@ -18,17 +19,17 @@
         /// <summary>
         ///     Get next rule based on verification result.
         /// </summary>
-        /// <param name="result">verification result</param>
+        /// <param name="resultCode">verification result</param>
         /// <returns>next verification rule</returns>
-        public VerificationRule NextRule(VerificationResult result)
+        public VerificationRule NextRule(VerificationResultCode resultCode)
         {
-            switch (result)
+            switch (resultCode)
             {
-                case VerificationResult.Ok:
+                case VerificationResultCode.Ok:
                     return _onSuccess;
-                case VerificationResult.Fail:
+                case VerificationResultCode.Fail:
                     return _onFailure;
-                case VerificationResult.Na:
+                case VerificationResultCode.Na:
                     return _onNa;
                 default:
                     return null;
@@ -79,7 +80,12 @@
         {
             public override VerificationResult Verify(IVerificationContext context)
             {
-                return VerificationResult.Ok;
+                return new VerificationResult(string.Empty, VerificationResultCode.Ok);
+            }
+
+            public override string ToString()
+            {
+                return string.Empty;
             }
         }
     }

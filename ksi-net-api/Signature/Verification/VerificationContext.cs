@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
@@ -29,7 +30,7 @@ namespace Guardtime.KSI.Signature.Verification
         {
             if (signature == null)
             {
-                throw new ArgumentNullException("signature");
+                throw new KsiException("Invalid KSI signature: null.");
             }
 
             _signature = signature;
@@ -108,7 +109,7 @@ namespace Guardtime.KSI.Signature.Verification
         {
             if (_ksiService == null)
             {
-                throw new InvalidOperationException("Invalid KSI service: null");
+                throw new KsiException("Invalid KSI service: null.");
             }
 
             return publicationTime == null

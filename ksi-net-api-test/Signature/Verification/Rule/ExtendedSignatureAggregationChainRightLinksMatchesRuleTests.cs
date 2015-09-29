@@ -76,7 +76,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     KsiService = ksiService
                 };
 
-                Assert.AreEqual(VerificationResult.Ok, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
 
             // Check signature right links to same time extended chain. To prevent zeros problem in chain which fill after extending
@@ -88,7 +89,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     KsiService = ksiService
                 };
 
-                Assert.AreEqual(VerificationResult.Ok, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
 
             // Check invalid signature extended signature at same time gives different result
@@ -100,7 +102,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     KsiService = ksiService
                 };
 
-                Assert.AreEqual(VerificationResult.Fail, rule.Verify(context));
+                var verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
             }
         }
     }

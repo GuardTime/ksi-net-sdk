@@ -10,7 +10,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class AggregationHashChainTimeConsistencyRule : VerificationRule
     {
-        private VerificationRule _verificationRule;
+        public const string RuleName = "AggregationHashChainTimeConsistencyRule";
 
         /// <see cref="VerificationRule.Verify" />
         /// <exception cref="KsiException">thrown if verification context is missing</exception>
@@ -24,14 +24,14 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (context.Signature == null)
             {
-                throw new KsiVerificationException("Invalid KSI signature: null");
+                throw new KsiVerificationException("Invalid KSI signature in context: null.");
             }
 
             ReadOnlyCollection<AggregationHashChain> aggregationHashChainCollection =
                 context.Signature.GetAggregationHashChains();
             if (aggregationHashChainCollection == null)
             {
-                throw new KsiVerificationException("Aggregation hash chains missing in KSI signature");
+                throw new KsiVerificationException("Aggregation hash chains are missing from KSI signature.");
             }
 
             ulong? time = null;
@@ -49,11 +49,11 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     Console.WriteLine(
                         "Previous aggregation hash chain aggregation time {0} does not match current aggregation time {1}",
                         time, aggregationHashChainCollection[i].AggregationTime);
-                    return VerificationResult.Fail;
+                    return new VerificationResult(RuleName, VerificationResultCode.Fail, VerificationError.Int02);
                 }
             }
 
-            return VerificationResult.Ok;
+            return new VerificationResult(RuleName, VerificationResultCode.Ok);
         }
     }
 }

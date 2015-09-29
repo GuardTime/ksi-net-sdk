@@ -27,10 +27,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             });
 
             var context = new TestVerificationContext {IsExtendingAllowed = true};
-            Assert.AreEqual(VerificationResult.Ok, rule.Verify(context));
+            var verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
 
             context.IsExtendingAllowed = false;
-            Assert.AreEqual(VerificationResult.Na, rule.Verify(context));
+            verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
         }
     }
 }
