@@ -26,12 +26,12 @@ namespace Guardtime.KSI.Hashing
         {
             if (algorithm == null)
             {
-                throw new HashingException("Algorithm cannot be null.");
+                throw new HashingException("Invalid hash algorithm: null.");
             }
 
             if (valueBytes == null)
             {
-                throw new HashingException("Value bytes cannot be null.");
+                throw new HashingException("Invalid value bytes: null.");
             }
 
             if (valueBytes.Length != algorithm.Length)
@@ -57,12 +57,12 @@ namespace Guardtime.KSI.Hashing
         {
             if (imprintBytes == null)
             {
-                throw new HashingException("Hash imprint cannot be null.");
+                throw new HashingException("Invalid hash imprint: null.");
             }
 
             if (imprintBytes.Length == 0)
             {
-                throw new HashingException("Hash imprint too short.");
+                throw new HashingException("Hash imprint is too short.");
             }
 
             _algorithm = HashAlgorithm.GetById(imprintBytes[0]);

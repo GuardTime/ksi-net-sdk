@@ -25,7 +25,7 @@ namespace Guardtime.KSI.Hashing
         {
             if (algorithm == null)
             {
-                throw new HashingException("Hash algorithm cannot be null.");
+                throw new HashingException("Invalid hash algorithm: null.");
             }
 
             /*
@@ -72,7 +72,7 @@ namespace Guardtime.KSI.Hashing
 
             if (data == null)
             {
-                throw new HashingException("Input data cannot be null.");
+                throw new HashingException("Invalid input data: null.");
             }
 
             _messageHasher.TransformBlock(data, offset, length, null, 0);
@@ -89,7 +89,7 @@ namespace Guardtime.KSI.Hashing
         {
             if (data == null)
             {
-                throw new HashingException("Input data cannot be null.");
+                throw new HashingException("Invalid input data: null.");
             }
 
             return AddData(data, 0, data.Length);
@@ -105,7 +105,7 @@ namespace Guardtime.KSI.Hashing
         {
             if (data == null)
             {
-                throw new HashingException("Input data cannot be null.");
+                throw new HashingException("Invalid input data: null.");
             }
 
             byte[] bytes = new byte[data.Count];
@@ -146,7 +146,7 @@ namespace Guardtime.KSI.Hashing
         {
             if (inStream == null)
             {
-                throw new HashingException("Input stream cannot be null.");
+                throw new HashingException("Invalid input stream: null.");
             }
 
             byte[] buffer = new byte[bufferSize];
@@ -174,7 +174,7 @@ namespace Guardtime.KSI.Hashing
         {
             if (fileHandle == null)
             {
-                throw new HashingException("File handle cannot be null.");
+                throw new HashingException("Invalid file handle: null.");
             }
 
             using (FileStream inStream = new FileStream(fileHandle, FileAccess.Read))
