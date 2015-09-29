@@ -22,7 +22,7 @@ namespace Guardtime.KSI.Parser
             byte[] data = tag.EncodeValue();
             if (data == null)
             {
-                throw new TlvException("TLV element encoded value cannot be null.");
+                throw new TlvException("Invalid TLV element encoded value: null.");
             }
             _value = Util.DecodeUnsignedLong(data, 0, data.Length);
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Utils
 {
@@ -86,7 +87,7 @@ namespace Guardtime.KSI.Utils
         {
             if (data == null)
             {
-                throw new ArgumentNullException("data");
+                throw new KsiException("Invalid input data: null.");
             }
 
             ulong retval = ival ^ 0xffffffff;

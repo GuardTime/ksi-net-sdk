@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Parser
 {
@@ -39,7 +40,7 @@ namespace Guardtime.KSI.Parser
         {
             if (value == null)
             {
-                throw new TlvException("TLV element list cannot be null.");
+                throw new TlvException("Invalid TLV element list: null.");
             }
             _value = value;
         }
@@ -67,7 +68,7 @@ namespace Guardtime.KSI.Parser
                 {
                     if (value == null)
                     {
-                        throw new TlvException("Value cannot be null.");
+                        throw new TlvException("Invalid TLV value: null.");
                     }
 
                     _value[i] = value;
@@ -212,7 +213,7 @@ namespace Guardtime.KSI.Parser
             {
                 if (tag == null)
                 {
-                    throw new TlvException("TLV tag cannot be null.");
+                    throw new TlvException("Invalid TLV tag: null.");
                 }
 
                 _value.Add(tag);
@@ -260,7 +261,7 @@ namespace Guardtime.KSI.Parser
         {
             if (tag == null)
             {
-                throw new TlvException("TlvTag cannot be null.");
+                throw new TlvException("Invalid TLV tag: null.");
             }
 
             if (!tag.NonCritical)
@@ -316,41 +317,21 @@ namespace Guardtime.KSI.Parser
                 builder.Append(",F");
             }
 
-            builder.Append("]:").Append('\n');
+            builder.Append("]:").AppendLine();
 
             for (int i = 0; i < Count; i++)
             {
-                builder.Append(TabPrefix(_value[i].ToString()));
-                builder.Append("\n");
-            }
-
-            builder.Remove(builder.Length - 1, 1);
-
-            return builder.ToString();
-        }
-
-        /// <summary>
-        ///     Put tab prefix instead of new rows.
-        /// </summary>
-        /// <param name="s">string</param>
-        /// <returns>tab prefixed string</returns>
-        private static string TabPrefix(string s)
-        {
-            StringBuilder builder = new StringBuilder();
-
-            string[] lines = s.Split('\n');
-            for (int i = 0; i < lines.Length; i++)
-            {
-                builder.Append("  ");
-                builder.Append(lines[i]);
-                if (!lines[i].Equals(lines[lines.Length - 1]))
+                builder.Append(Util.TabPrefixString(_value[i].ToString()));
+                if (i < Count - 1)
                 {
-                    builder.Append("\n");
+                    builder.AppendLine();
                 }
             }
 
             return builder.ToString();
         }
+
+        
 
         /// <summary>
         ///     Compare two composite element objects.

@@ -218,5 +218,28 @@ namespace Guardtime.KSI.Utils
         {
             return (a*b)/GCD(a, b);
         }
+
+        /// <summary>
+        ///     Put tab prefix instead of new rows.
+        /// </summary>
+        /// <param name="s">string</param>
+        /// <returns>tab prefixed string</returns>
+        public static string TabPrefixString(string s)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            string[] lines = s.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+            for (int i = 0; i < lines.Length; i++)
+            {
+                builder.Append("  ");
+                builder.Append(lines[i]);
+                if (!lines[i].Equals(lines[lines.Length - 1]))
+                {
+                    builder.AppendLine();
+                }
+            }
+
+            return builder.ToString();
+        }
     }
 }

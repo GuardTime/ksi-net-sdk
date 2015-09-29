@@ -36,7 +36,7 @@ namespace Guardtime.KSI.Parser
         {
             if (tag == null)
             {
-                throw new TlvException("TLV tag cannot be null.");
+                throw new TlvException("Invalid TLV tag: null.");
             }
 
             _type = tag.Type;
