@@ -15,7 +15,7 @@ namespace Guardtime.KSI.Parser
     public abstract class CompositeTag : TlvTag, IEnumerable<TlvTag>, IEquatable<CompositeTag>
     {
         private readonly object _lock = new object();
-        private readonly List<TlvTag> _value = new List<TlvTag>();
+        private readonly IList<TlvTag> _value = new List<TlvTag>();
 
         /// <summary>
         ///     Create new composite TLV element from TLV element.
@@ -35,14 +35,18 @@ namespace Guardtime.KSI.Parser
         /// <param name="forward">Is TLV element forwarded</param>
         /// <param name="value">TLV element list</param>
         /// <exception cref="TlvException">thrown when input value is null</exception>
-        protected CompositeTag(uint type, bool nonCritical, bool forward, List<TlvTag> value)
+        protected CompositeTag(uint type, bool nonCritical, bool forward, IList<TlvTag> value)
             : base(type, nonCritical, forward)
         {
             if (value == null)
             {
                 throw new TlvException("Invalid TLV element list: null.");
             }
-            _value = value;
+
+            for (int i = 0; i < value.Count; i++)
+            {
+                _value.Add(value[i]);
+            }
         }
 
         /// <summary>
