@@ -104,7 +104,7 @@ namespace Guardtime.KSI.Service
         {
             if (hash == null)
             {
-                throw new TlvException("Data hash cannot be null.");
+                throw new TlvException("Invalid data hash: null.");
             }
 
             _requestId = new IntegerTag(RequestIdTagType, false, false, Util.GetRandomUnsignedLong());

@@ -57,7 +57,7 @@ namespace Guardtime.KSI.Service
         {
             if (header == null)
             {
-                throw new TlvException("TLV header cannot be null.");
+                throw new TlvException("Invalid TLV header: null.");
             }
 
             _header = header;

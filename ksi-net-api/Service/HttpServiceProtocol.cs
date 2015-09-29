@@ -81,7 +81,7 @@ namespace Guardtime.KSI.Service
         {
             if (data == null)
             {
-                throw new ArgumentNullException("data");
+                throw new KsiException("Invalid input data: null.");
             }
 
             HttpWebRequest request = WebRequest.Create(_extendingUrl) as HttpWebRequest;
@@ -159,7 +159,7 @@ namespace Guardtime.KSI.Service
         {
             if (data == null)
             {
-                throw new ArgumentNullException("data");
+                throw new KsiException("Invalid input data: null.");
             }
 
             HttpWebRequest request = WebRequest.Create(_signingUrl) as HttpWebRequest;
@@ -333,7 +333,7 @@ namespace Guardtime.KSI.Service
             {
                 if (request == null)
                 {
-                    throw new ArgumentNullException("request");
+                    throw new KsiException("Invalid HTTP web request: null.");
                 }
 
                 _request = request;
@@ -356,7 +356,7 @@ namespace Guardtime.KSI.Service
                 {
                     if (value == null)
                     {
-                        throw new ArgumentNullException("value");
+                        throw new KsiException("Invalid IAsyncResult: null.");
                     }
                     _streamAsyncResult = value;
                 }
@@ -370,7 +370,7 @@ namespace Guardtime.KSI.Service
                 {
                     if (value == null)
                     {
-                        throw new ArgumentNullException("value");
+                        throw new KsiException("Invalid IAsyncResult: null.");
                     }
                     _responseAsyncResult = value;
                 }
@@ -451,7 +451,7 @@ namespace Guardtime.KSI.Service
 
                 if (!_waitHandle.Set())
                 {
-                    throw new Exception("WaitHandle completion failed");
+                    throw new KsiException("WaitHandle completion failed");
                 }
             }
         }

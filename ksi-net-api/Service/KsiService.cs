@@ -40,17 +40,17 @@ namespace Guardtime.KSI.Service
         {
             if (serviceSettings == null)
             {
-                throw new ArgumentNullException("serviceSettings");
+                throw new KsiException("Invalid service settings: null.");
             }
 
             if (publicationsFileFactory == null)
             {
-                throw new ArgumentNullException("publicationsFileFactory");
+                throw new KsiException("Invalid publications file factory: null.");
             }
 
             if (ksiSignatureFactory == null)
             {
-                throw new ArgumentNullException("ksiSignatureFactory");
+                throw new KsiException("Invalid KSI signature factory: null.");
             }
 
             _sigingServiceProtocol = signingServiceProtocol;
@@ -83,7 +83,7 @@ namespace Guardtime.KSI.Service
         {
             if (_sigingServiceProtocol == null)
             {
-                throw new InvalidOperationException("Signing service protocol is missing from service");
+                throw new KsiServiceException("Signing service protocol is missing from service.");
             }
 
             AggregationPdu pdu = new AggregationPdu(new KsiPduHeader(_serviceSettings.LoginId),
@@ -103,19 +103,18 @@ namespace Guardtime.KSI.Service
         {
             if (_sigingServiceProtocol == null)
             {
-                throw new InvalidOperationException("Signing service protocol is missing from service");
+                throw new KsiServiceException("Signing service protocol is missing from service.");
             }
 
             if (asyncResult == null)
             {
-                throw new ArgumentNullException("asyncResult");
+                throw new KsiException("Invalid IAsyncResult: null.");
             }
 
             KsiServiceAsyncResult serviceAsyncResult = asyncResult as CreateSignatureKsiServiceAsyncResult;
             if (serviceAsyncResult == null)
             {
-                // TODO: Better name
-                throw new InvalidCastException("asyncResult");
+                throw new KsiServiceException("Invalid IAsyncResult, could not cast to correct object.");
             }
 
             if (!serviceAsyncResult.IsCompleted)
@@ -126,7 +125,7 @@ namespace Guardtime.KSI.Service
             byte[] data = _sigingServiceProtocol.EndSign(serviceAsyncResult.ServiceProtocolAsyncResult);
             if (data == null)
             {
-                throw new KsiException("Invalid sign response payload: null");
+                throw new KsiException("Invalid sign response payload: null.");
             }
 
             using (MemoryStream memoryStream = new MemoryStream(data))
@@ -196,20 +195,19 @@ namespace Guardtime.KSI.Service
         {
             if (_extendingServiceProtocol == null)
             {
-                throw new InvalidOperationException("Extending service protocol is missing from service");
+                throw new KsiServiceException("Extending service protocol is missing from service.");
             }
 
             if (asyncResult == null)
             {
-                throw new ArgumentNullException("asyncResult");
+                throw new KsiException("Invalid IAsyncResult: null.");
             }
 
             ExtendSignatureKsiServiceAsyncResult serviceAsyncResult =
                 asyncResult as ExtendSignatureKsiServiceAsyncResult;
             if (serviceAsyncResult == null)
             {
-                // TODO: Better name
-                throw new InvalidCastException("asyncResult");
+                throw new KsiServiceException("Invalid IAsyncResult, could not cast to correct object.");
             }
 
             if (!serviceAsyncResult.IsCompleted)
@@ -220,7 +218,7 @@ namespace Guardtime.KSI.Service
             byte[] data = _extendingServiceProtocol.EndExtend(serviceAsyncResult.ServiceProtocolAsyncResult);
             if (data == null)
             {
-                throw new KsiException("Invalid extend response payload: null");
+                throw new KsiException("Invalid extend response payload: null.");
             }
 
             using (MemoryStream memoryStream = new MemoryStream(data))
@@ -231,14 +229,12 @@ namespace Guardtime.KSI.Service
                 //Console.WriteLine(tag);
                 if (payload == null)
                 {
-                    // TODO: Throw correct exception
-                    throw new KsiException("Invalid extend response payload");
+                    throw new KsiException("Invalid extend response payload: null.");
                 }
 
                 if (payload.CalendarHashChain == null)
                 {
-                    // TODO: better exception
-                    throw new KsiException("No calendar hash chain in payload, error");
+                    throw new KsiServiceException("No calendar hash chain in payload.");
                 }
 
                 return payload.CalendarHashChain;
@@ -264,7 +260,7 @@ namespace Guardtime.KSI.Service
         {
             if (_publicationsFileServiceProtocol == null)
             {
-                throw new InvalidOperationException("Publications file service protocol is missing from service");
+                throw new KsiServiceException("Publications file service protocol is missing from service.");
             }
 
             IAsyncResult serviceProtocolAsyncResult = _publicationsFileServiceProtocol.BeginGetPublicationsFile(
@@ -281,19 +277,19 @@ namespace Guardtime.KSI.Service
         {
             if (_publicationsFileServiceProtocol == null)
             {
-                throw new InvalidOperationException("Publications file service protocol is missing from service");
+                throw new KsiServiceException("Publications file service protocol is missing from service.");
             }
 
             if (asyncResult == null)
             {
-                throw new ArgumentNullException("asyncResult");
+                throw new KsiException("Invalid IAsyncResult: null.");
             }
 
             KsiServiceAsyncResult serviceAsyncResult = asyncResult as PublicationKsiServiceAsyncResult;
             if (serviceAsyncResult == null)
             {
-                // TODO: Better name
-                throw new InvalidCastException("asyncResult");
+                // TODO: KsiException?
+                throw new KsiServiceException("Invalid IAsyncResult, could not cast to correct object.");
             }
 
             if (!serviceAsyncResult.IsCompleted)
@@ -317,7 +313,7 @@ namespace Guardtime.KSI.Service
         {
             if (_extendingServiceProtocol == null)
             {
-                throw new InvalidOperationException("Extending service protocol is missing from service");
+                throw new KsiServiceException("Extending service protocol is missing from service.");
             }
 
             ExtendPdu pdu = new ExtendPdu(new KsiPduHeader(_serviceSettings.LoginId), payload);
@@ -372,7 +368,7 @@ namespace Guardtime.KSI.Service
             {
                 if (serviceProtocolAsyncResult == null)
                 {
-                    throw new ArgumentNullException("serviceProtocolAsyncResult");
+                    throw new KsiException("Invalid service protocol IAsyncResult: null.");
                 }
 
                 _serviceProtocolAsyncResult = serviceProtocolAsyncResult;

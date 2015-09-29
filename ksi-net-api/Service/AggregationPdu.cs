@@ -90,7 +90,7 @@ namespace Guardtime.KSI.Service
         {
             if (payload == null)
             {
-                throw new TlvException("Payload cannot be null.");
+                throw new TlvException("Invalid aggregation payload: null.");
             }
 
             _payload = AddTag(payload);

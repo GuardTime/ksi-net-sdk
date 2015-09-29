@@ -93,6 +93,7 @@
     <Compile Include="Exceptions\HashingException.cs" />
     <Compile Include="IKsi.cs" />
     <Compile Include="Ksi.cs" />
+    <Compile Include="KSIDoc.cs" />
     <Compile Include="Parser\ImprintTag.cs" />
     <Compile Include="Parser\IntegerTag.cs" />
     <Compile Include="Parser\RawTag.cs" />
@@ -188,6 +189,8 @@
     <Compile Include="Signature\Verification\VerificationContext.cs" />
     <Compile Include="Signature\Verification\VerificationError.cs" />
     <Compile Include="Signature\Verification\VerificationResult.cs" />
+    <Compile Include="Signature\Verification\VerificationResultCode.cs" />
+    <Compile Include="Signature\Verification\Verifier.cs" />
     <Compile Include="Trust\IKsiTrustProvider.cs" />
     <Compile Include="Trust\IPkiTrustProvider.cs" />
     <Compile Include="Trust\PkiTrustStoreProvider.cs" />
