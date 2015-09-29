@@ -3,6 +3,8 @@ using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature;
+using Guardtime.KSI.Signature.Verification;
+using Guardtime.KSI.Signature.Verification.Rule;
 
 namespace Guardtime.KSI
 {
@@ -120,7 +122,7 @@ namespace Guardtime.KSI
         ///     </example>
         /// </summary>
         /// <returns>publications file</returns>
-        /// <exception cref="KsiException">thrown when null is returned from ksi service</exception>
+        /// <exception cref="KsiException">thrown when null is returned from KSI service</exception>
         public IPublicationsFile GetPublicationsFile()
         {
             IPublicationsFile publicationsFile = _ksiService.GetPublicationsFile();
@@ -130,6 +132,23 @@ namespace Guardtime.KSI
             }
 
             return publicationsFile;
+        }
+
+        /// <summary>
+        /// Verify keyless signature.
+        /// </summary>
+        /// <param name="context">verification context</param>
+        /// <param name="policy">verification rule</param>
+        /// <returns>verification result</returns>
+        /// <exception cref="KsiException">thrown when verification policy is null</exception>
+        public VerificationResult Verify(IVerificationContext context, VerificationRule policy)
+        {
+            if (policy == null)
+            {
+                throw new KsiException("Invalid verification rule: null.");
+            }
+
+            return policy.Verify(context);
         }
     }
 }

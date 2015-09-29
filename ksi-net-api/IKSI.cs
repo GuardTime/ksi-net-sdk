@@ -1,6 +1,8 @@
 ﻿using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Signature;
+using Guardtime.KSI.Signature.Verification;
+using Guardtime.KSI.Signature.Verification.Rule;
 
 namespace Guardtime.KSI
 {
@@ -36,5 +38,13 @@ namespace Guardtime.KSI
         /// </summary>
         /// <returns>publications file</returns>
         IPublicationsFile GetPublicationsFile();
+
+        /// <summary>
+        /// Verify keyless signature.
+        /// </summary>
+        /// <param name="context">verification context</param>
+        /// <param name="policy">verification policy</param>
+        /// <returns>verification result</returns>
+        VerificationResult Verify(IVerificationContext context, VerificationRule policy);
     }
 }
