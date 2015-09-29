@@ -155,7 +155,7 @@ namespace Guardtime.KSI.Signature
         {
             if (result == null)
             {
-                throw new KsiException("Chain result cannot be null.");
+                throw new KsiException("Invalid aggregation chain result: null.");
             }
 
             DataHash lastHash = result.Hash;

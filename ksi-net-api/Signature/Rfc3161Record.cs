@@ -183,11 +183,12 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         /// <param name="inputHash">document hash</param>
         /// <returns>aggregation input hash</returns>
+        /// <exception cref="KsiException">thrown when input hash is null</exception>
         public DataHash GetOutputHash(DataHash inputHash)
         {
             if (inputHash == null)
             {
-                throw new ArgumentNullException("inputHash");
+                throw new KsiException("Invalid input hash: null.");
             }
 
             DataHasher hasher = new DataHasher(HashAlgorithm.GetById((byte) _tstInfoAlgorithm.Value));

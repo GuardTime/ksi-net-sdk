@@ -233,12 +233,12 @@ namespace Guardtime.KSI.Signature
             /// <param name="calendarHashChain">extended calendar hash chain</param>
             /// <param name="publicationRecord">extended publication record</param>
             /// <returns>extended KSI signature</returns>
-            /// <exception cref="ArgumentNullException">thrown if calendar hash chain is null</exception>
+            /// <exception cref="KsiException">thrown if calendar hash chain is null</exception>
             public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecord publicationRecord)
             {
                 if (calendarHashChain == null)
                 {
-                    throw new ArgumentNullException("calendarHashChain");
+                    throw new KsiException("Invalid calendar hash chain: null.");
                 }
 
                 using (MemoryStream stream = new MemoryStream())
