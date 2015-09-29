@@ -22,12 +22,12 @@ namespace Guardtime.KSI.Trust
             // TODO: Check for better exception
             if (signedBytes == null)
             {
-                throw new PkiVerificationException("Signed bytes cannot be null.");
+                throw new PkiVerificationException("Invalid signed bytes: null.");
             }
 
             if (signatureBytes == null)
             {
-                throw new PkiVerificationException("Signature bytes cannot be null.");
+                throw new PkiVerificationException("Invalid signature bytes: null.");
             }
 
             ICryptoSignatureVerifier verifier = CryptoSignatureVerifierFactory.Pkcs7SignatureVerifier;
