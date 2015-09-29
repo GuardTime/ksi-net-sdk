@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Publication;
@@ -15,7 +14,6 @@ namespace Guardtime.KSI.Signature.Verification
         private readonly IKsiSignature _signature;
         private DataHash _documentHash;
 
-        private IDictionary<int, CalendarHashChain> _extendedCalendars;
         private bool _extendingAllowed;
         private IKsiService _ksiService;
         private IPublicationsFile _publicationsFile;

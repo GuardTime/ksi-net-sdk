@@ -8,6 +8,9 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class UserProvidedPublicationExtendedSignatureInputHashRule : VerificationRule
     {
+        /// <summary>
+        /// Rule name.
+        /// </summary>
         public const string RuleName = "UserProvidedPublicationExtendedSignatureInputHashRule";
 
         /// <see cref="VerificationRule.Verify" />

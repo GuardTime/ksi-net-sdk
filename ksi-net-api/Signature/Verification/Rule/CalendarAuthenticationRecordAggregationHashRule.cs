@@ -8,6 +8,9 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class CalendarAuthenticationRecordAggregationHashRule : VerificationRule
     {
+        /// <summary>
+        /// Rule name
+        /// </summary>
         public const string RuleName = "CalendarAuthenticationRecordAggregationHashRule";
 
         /// <see cref="VerificationRule.Verify" />

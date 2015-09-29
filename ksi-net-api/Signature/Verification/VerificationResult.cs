@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Utils;
@@ -77,6 +76,13 @@ namespace Guardtime.KSI.Signature.Verification
             return resultList[resultList.Count - 1].ResultCode;
         }
 
+
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>
+        /// A string that represents the current object.
+        /// </returns>
         public override string ToString()
         {
             

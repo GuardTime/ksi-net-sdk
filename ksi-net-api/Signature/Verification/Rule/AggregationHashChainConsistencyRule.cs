@@ -10,7 +10,9 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class AggregationHashChainConsistencyRule : VerificationRule
     {
-
+        /// <summary>
+        /// Rule name
+        /// </summary>
         public const string RuleName = "AggregationHashChainConsistencyRule";
 
         /// <see cref="VerificationRule.Verify" />

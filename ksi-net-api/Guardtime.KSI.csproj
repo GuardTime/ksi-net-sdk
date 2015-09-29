@@ -190,7 +190,6 @@
     <Compile Include="Signature\Verification\VerificationError.cs" />
     <Compile Include="Signature\Verification\VerificationResult.cs" />
     <Compile Include="Signature\Verification\VerificationResultCode.cs" />
-    <Compile Include="Signature\Verification\Verifier.cs" />
     <Compile Include="Trust\IKsiTrustProvider.cs" />
     <Compile Include="Trust\IPkiTrustProvider.cs" />
     <Compile Include="Trust\PkiTrustStoreProvider.cs" />

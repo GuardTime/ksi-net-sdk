@@ -7,6 +7,9 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class CalendarAuthenticationRecordExistenceRule : VerificationRule
     {
+        /// <summary>
+        /// Rule name.
+        /// </summary>
         public const string RuleName = "CalendarAuthenticationRecordExistenceRule";
 
         /// <see cref="VerificationRule.Verify" />

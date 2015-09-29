@@ -7,6 +7,9 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class SignaturePublicationRecordExistenceRule : VerificationRule
     {
+        /// <summary>
+        /// Rule name.
+        /// </summary>
         public const string RuleName = "SignaturePublicationRecordExistenceRule";
 
         /// <see cref="VerificationRule.Verify" />
