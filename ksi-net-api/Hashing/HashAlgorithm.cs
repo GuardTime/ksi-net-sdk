@@ -218,9 +218,9 @@ namespace Guardtime.KSI.Hashing
         ///     Get list of supported the algorithms.
         /// </summary>
         /// <returns>List of supported hash algorithm names</returns>
-        public static List<string> GetNamesList()
+        public static IList<string> GetNamesList()
         {
-            List<string> names = new List<string>();
+            IList<string> names = new List<string>();
             foreach (HashAlgorithm algorithm in Values())
             {
                 names.Add(algorithm.Name);
