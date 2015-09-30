@@ -163,7 +163,6 @@ namespace Guardtime.KSI.Service
                     memoryStream.Dispose();
                 }
             }
-            
         }
 
         /// <summary>

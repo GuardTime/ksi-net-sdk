@@ -171,7 +171,6 @@ namespace Guardtime.KSI.Parser
                         _value.Add(tlvReader.ReadTag());
                     }
                 }
-                
             }
             finally
             {
@@ -180,8 +179,6 @@ namespace Guardtime.KSI.Parser
                     stream.Dispose();
                 }
             }
-            
-            
         }
 
         /// <summary>
@@ -202,7 +199,7 @@ namespace Guardtime.KSI.Parser
                         writer.WriteTag(this[i]);
                     }
 
-                    return ((MemoryStream)writer.BaseStream).ToArray();
+                    return ((MemoryStream) writer.BaseStream).ToArray();
                 }
             }
             finally
@@ -212,7 +209,6 @@ namespace Guardtime.KSI.Parser
                     stream.Dispose();
                 }
             }
-            
         }
 
         // TODO: Use better name or replace this functionality

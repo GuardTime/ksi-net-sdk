@@ -265,7 +265,9 @@ namespace Guardtime.KSI.Signature
                             writer.WriteTag(this[i]);
                         }
 
-                        return new KsiSignature(new RawTag(TagType, false, false, ((MemoryStream)writer.BaseStream).ToArray()));
+                        return
+                            new KsiSignature(new RawTag(TagType, false, false,
+                                ((MemoryStream) writer.BaseStream).ToArray()));
                     }
                 }
                 finally
@@ -290,7 +292,7 @@ namespace Guardtime.KSI.Signature
 
                 if (!outputStream.CanWrite)
                 {
-                    throw new KsiException("Output stream is not writable.");   
+                    throw new KsiException("Output stream is not writable.");
                 }
 
                 using (TlvWriter writer = new TlvWriter(outputStream))

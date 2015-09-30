@@ -434,6 +434,11 @@ namespace Guardtime.KSI.Service
                 }
             }
 
+            public void Dispose()
+            {
+                _waitHandle.Close();
+            }
+
             public void SetComplete(bool errorOccured)
             {
                 lock (_lock)
@@ -453,11 +458,6 @@ namespace Guardtime.KSI.Service
                 {
                     throw new KsiException("WaitHandle completion failed");
                 }
-            }
-
-            public void Dispose()
-            {
-                _waitHandle.Close();
             }
         }
     }

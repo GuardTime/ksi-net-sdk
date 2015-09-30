@@ -225,7 +225,7 @@ namespace Guardtime.KSI.Publication
                         {
                             writer.WriteTag(this[i]);
                         }
-                        return ((MemoryStream)writer.BaseStream).ToArray();
+                        return ((MemoryStream) writer.BaseStream).ToArray();
                     }
                 }
                 finally

@@ -88,7 +88,7 @@ namespace Guardtime.KSI.Parser
                 {
                     stream = null;
                     writer.WriteTag(this);
-                    return ((MemoryStream)writer.BaseStream).ToArray();
+                    return ((MemoryStream) writer.BaseStream).ToArray();
                 }
             }
             finally
@@ -98,7 +98,6 @@ namespace Guardtime.KSI.Parser
                     stream.Dispose();
                 }
             }
-            
         }
 
         /// <summary>
