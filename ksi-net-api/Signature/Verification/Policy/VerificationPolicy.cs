@@ -25,7 +25,7 @@ namespace Guardtime.KSI.Signature.Verification.Policy
             {
                 throw new KsiException("Invalid context: null.");
             }
-            
+
             VerificationRule verificationRule = FirstRule;
             List<VerificationResult> verificationResults = new List<VerificationResult>();
             while (verificationRule != null)

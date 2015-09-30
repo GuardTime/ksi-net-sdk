@@ -9,7 +9,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public sealed class UserProvidedPublicationTimeMatchesExtendedResponseRule : VerificationRule
     {
         /// <summary>
-        /// Rule name.
+        ///     Rule name.
         /// </summary>
         public const string RuleName = "UserProvidedPublicationTimeMatchesExtendedResponseRule";
 
