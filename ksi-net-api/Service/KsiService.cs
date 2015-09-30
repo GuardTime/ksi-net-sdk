@@ -9,7 +9,6 @@ using Guardtime.KSI.Signature;
 
 namespace Guardtime.KSI.Service
 {
-    // TODO: Implement timeout
     /// <summary>
     ///     KSI service.
     /// </summary>
@@ -128,15 +127,43 @@ namespace Guardtime.KSI.Service
                 throw new KsiException("Invalid sign response payload: null.");
             }
 
-            using (MemoryStream memoryStream = new MemoryStream(data))
-            using (TlvReader reader = new TlvReader(memoryStream))
+            MemoryStream memoryStream = null;
+            try
             {
-                AggregationPdu tag = new AggregationPdu(reader.ReadTag());
-                AggregationResponsePayload payload = tag.Payload as AggregationResponsePayload;
-                // TODO: Check mac
+                memoryStream = new MemoryStream(data);
+                using (TlvReader reader = new TlvReader(memoryStream))
+                {
+                    memoryStream = null;
 
-                return _ksiSignatureFactory.Create(payload);
+                    AggregationPdu pdu = new AggregationPdu(reader.ReadTag());
+                    AggregationResponsePayload payload = pdu.Payload as AggregationResponsePayload;
+
+                    if (payload == null)
+                    {
+                        throw new KsiException("Invalid aggregation response payload: null.");
+                    }
+
+                    if (payload.Status != 0)
+                    {
+                        throw new KsiException("Error occured during aggregation: " + payload.ErrorMessage + ".");
+                    }
+
+                    if (!pdu.ValidateMac(_serviceSettings.LoginKey))
+                    {
+                        throw new KsiServiceException("Invalid HMAC in aggregation response payload");
+                    }
+
+                    return _ksiSignatureFactory.Create(payload);
+                }
             }
+            finally
+            {
+                if (memoryStream != null)
+                {
+                    memoryStream.Dispose();
+                }
+            }
+            
         }
 
         /// <summary>
@@ -221,23 +248,46 @@ namespace Guardtime.KSI.Service
                 throw new KsiException("Invalid extend response payload: null.");
             }
 
-            using (MemoryStream memoryStream = new MemoryStream(data))
-            using (TlvReader reader = new TlvReader(memoryStream))
+            MemoryStream memoryStream = null;
+            try
             {
-                ExtendPdu tag = new ExtendPdu(reader.ReadTag());
-                ExtendResponsePayload payload = tag.Payload as ExtendResponsePayload;
-                //Console.WriteLine(tag);
-                if (payload == null)
+                memoryStream = new MemoryStream(data);
+                using (TlvReader reader = new TlvReader(memoryStream))
                 {
-                    throw new KsiException("Invalid extend response payload: null.");
-                }
+                    memoryStream = null;
 
-                if (payload.CalendarHashChain == null)
+                    ExtendPdu pdu = new ExtendPdu(reader.ReadTag());
+                    ExtendResponsePayload payload = pdu.Payload as ExtendResponsePayload;
+
+                    if (payload == null)
+                    {
+                        throw new KsiException("Invalid extend response payload: null.");
+                    }
+
+                    if (payload.Status != 0)
+                    {
+                        throw new KsiException("Error occured during extending: " + payload.ErrorMessage + ".");
+                    }
+
+                    if (!pdu.ValidateMac(_serviceSettings.LoginKey))
+                    {
+                        throw new KsiServiceException("Invalid HMAC in aggregation response payload");
+                    }
+
+                    if (payload.CalendarHashChain == null)
+                    {
+                        throw new KsiServiceException("No calendar hash chain in payload.");
+                    }
+
+                    return payload.CalendarHashChain;
+                }
+            }
+            finally
+            {
+                if (memoryStream != null)
                 {
-                    throw new KsiServiceException("No calendar hash chain in payload.");
+                    memoryStream.Dispose();
                 }
-
-                return payload.CalendarHashChain;
             }
         }
 
@@ -288,7 +338,6 @@ namespace Guardtime.KSI.Service
             KsiServiceAsyncResult serviceAsyncResult = asyncResult as PublicationKsiServiceAsyncResult;
             if (serviceAsyncResult == null)
             {
-                // TODO: KsiException?
                 throw new KsiServiceException("Invalid IAsyncResult, could not cast to correct object.");
             }
 

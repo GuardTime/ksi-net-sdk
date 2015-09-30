@@ -52,7 +52,7 @@ namespace Guardtime.KSI.Service
         /// <param name="forward">Is TLV element forwarded</param>
         /// <param name="value">TLV element list</param>
         /// <exception cref="TlvException">thrown when TLV header is null</exception>
-        protected KsiPdu(KsiPduHeader header, uint type, bool nonCritical, bool forward, List<TlvTag> value)
+        protected KsiPdu(KsiPduHeader header, uint type, bool nonCritical, bool forward, IList<TlvTag> value)
             : base(type, nonCritical, forward, value)
         {
             if (header == null)
@@ -75,15 +75,29 @@ namespace Guardtime.KSI.Service
         /// <param name="key">hmac key</param>
         public void SetMac(byte[] key)
         {
-            using (MemoryStream stream = new MemoryStream())
-            using (TlvWriter writer = new TlvWriter(stream))
+            MemoryStream stream = null;
+            try
             {
-                writer.WriteTag(_header);
-                writer.WriteTag(Payload);
+                stream = new MemoryStream();
+                using (TlvWriter writer = new TlvWriter(stream))
+                {
+                    stream = null;
 
-                ImprintTag mac = new ImprintTag(MacTagType, false, false, CalculateMac(key, stream.ToArray()));
-                _mac = PutTag(mac, _mac);
+                    writer.WriteTag(_header);
+                    writer.WriteTag(Payload);
+
+                    ImprintTag mac = new ImprintTag(MacTagType, false, false, CalculateMac(key, ((MemoryStream)writer.BaseStream).ToArray()));
+                    _mac = PutTag(mac, _mac);
+                }
             }
+            finally
+            {
+                if (stream != null)
+                {
+                    stream.Dispose();
+                }
+            }
+            
         }
 
         /// <summary>
@@ -110,14 +124,27 @@ namespace Guardtime.KSI.Service
                 return false;
             }
 
-            using (MemoryStream stream = new MemoryStream())
-            using (TlvWriter writer = new TlvWriter(stream))
+            MemoryStream stream = null;
+            try
             {
-                writer.WriteTag(_header);
-                writer.WriteTag(Payload);
+                stream = new MemoryStream();
+                using (TlvWriter writer = new TlvWriter(stream))
+                {
+                    stream = null;
 
-                DataHash hash = CalculateMac(key, stream.ToArray());
-                return hash.Equals(_mac.Value);
+                    writer.WriteTag(_header);
+                    writer.WriteTag(Payload);
+
+                    DataHash hash = CalculateMac(key, ((MemoryStream)writer.BaseStream).ToArray());
+                    return hash.Equals(_mac.Value);
+                }
+            }
+            finally
+            {
+                if (stream != null)
+                {
+                    stream.Dispose();
+                }
             }
         }
     }

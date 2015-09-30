@@ -40,7 +40,7 @@ namespace Guardtime.KSI.Service
             }
 
             int requestIdCount = 0;
-            int statusCount = 1;
+            int statusCount = 0;
             int errorMessageCount = 0;
             int configCount = 0;
             int requestAcknowledgmentCount = 0;
@@ -55,7 +55,6 @@ namespace Guardtime.KSI.Service
                         requestIdCount++;
                         break;
                     case StatusTagType:
-                        // TODO: Status should be there but it is not
                         _status = new IntegerTag(this[i]);
                         this[i] = _status;
                         statusCount++;
@@ -92,7 +91,8 @@ namespace Guardtime.KSI.Service
                 throw new TlvException("Only one request id must exist in aggregation response payload.");
             }
 
-            if (statusCount != 1)
+            // TODO: Should be mandatory element, but server side is broken.
+            if (statusCount > 1)
             {
                 throw new TlvException("Only one status code must exist in aggregation response payload.");
             }
@@ -136,7 +136,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         public ulong Status
         {
-            get { return _status.Value; }
+            get { return _status == null ? 0 : _status.Value; }
         }
     }
 }
