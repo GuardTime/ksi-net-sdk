@@ -8,7 +8,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public sealed class UserProvidedPublicationExistenceRule : VerificationRule
     {
         /// <summary>
-        /// Rule name.
+        ///     Rule name.
         /// </summary>
         public const string RuleName = "UserProvidedPublicationExistenceRule";
 
@@ -21,7 +21,9 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 throw new KsiException("Invalid verification context: null.");
             }
 
-            return context.UserPublication == null ? new VerificationResult(RuleName, VerificationResultCode.Na, VerificationError.Gen02) : new VerificationResult(RuleName, VerificationResultCode.Ok);
+            return context.UserPublication == null
+                ? new VerificationResult(RuleName, VerificationResultCode.Na, VerificationError.Gen02)
+                : new VerificationResult(RuleName, VerificationResultCode.Ok);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Guardtime.KSI.Signature.Verification
             {
                 var serviceProtocol = new HttpKsiServiceProtocol(
                     "http://ksigw.test.guardtime.com:3333/gt-signingservice",
-                    "http://ksigw.test.guardtime.com:8010/gt-extendingservice",
+                    "http://172.20.20.100:8081",
                     "http://verify.guardtime.com/ksi-publications.bin");
 
                 var ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"), new PublicationsFileFactory(new PkiTrustStoreProvider()), new KsiSignatureFactory());

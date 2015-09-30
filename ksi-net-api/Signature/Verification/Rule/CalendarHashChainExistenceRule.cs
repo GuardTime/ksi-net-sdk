@@ -9,7 +9,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public sealed class CalendarHashChainExistenceRule : VerificationRule
     {
         /// <summary>
-        /// Rule name.
+        ///     Rule name.
         /// </summary>
         public const string RuleName = "CalendarHashChainExistenceRule";
 
@@ -28,7 +28,9 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 throw new KsiVerificationException("Invalid KSI signature in context: null.");
             }
 
-            return context.Signature.CalendarHashChain == null ? new VerificationResult(RuleName, VerificationResultCode.Na, VerificationError.Gen02) : new VerificationResult(RuleName, VerificationResultCode.Ok);
+            return context.Signature.CalendarHashChain == null
+                ? new VerificationResult(RuleName, VerificationResultCode.Na, VerificationError.Gen02)
+                : new VerificationResult(RuleName, VerificationResultCode.Ok);
         }
     }
 }

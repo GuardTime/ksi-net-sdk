@@ -7,9 +7,6 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 {
     public class TestVerificationContext : IVerificationContext
     {
-        public TestVerificationContext()
-        {
-        }
 
         public DataHash DocumentHash { get; set; }
         public IKsiSignature Signature { get; set; }
@@ -17,20 +14,17 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         public IKsiService KsiService { get; set; }
         public bool IsExtendingAllowed { get; set; }
         public IPublicationsFile PublicationsFile { get; set; }
+
+        public CalendarHashChain LatestCalendarHashChain;
         public CalendarHashChain GetExtendedLatestCalendarHashChain()
         {
-            return GetExtendedTimeCalendarHashChain(null);
+            return LatestCalendarHashChain;
         }
 
-        // TODO: Cache result and make signature mandatory and unchangeable
+        public CalendarHashChain ExtendedCalendarHashChain;
         public CalendarHashChain GetExtendedTimeCalendarHashChain(ulong? publicationTime)
         {
-            if (KsiService == null)
-            {
-                throw new InvalidOperationException("Invalid KSI service: null");
-            }
-
-            return publicationTime == null ? KsiService.Extend(Signature.AggregationTime) : KsiService.Extend(Signature.AggregationTime, publicationTime.Value);
+            return ExtendedCalendarHashChain;
         }
     }
 }

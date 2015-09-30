@@ -228,7 +228,7 @@ namespace Guardtime.KSI.Utils
         {
             StringBuilder builder = new StringBuilder();
 
-            string[] lines = s.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+            string[] lines = s.Split(new string[] {Environment.NewLine}, StringSplitOptions.None);
             for (int i = 0; i < lines.Length; i++)
             {
                 builder.Append("  ");

@@ -11,7 +11,6 @@ namespace Guardtime.KSI.Parser
     {
         private readonly byte[] _value;
 
-        // TODO: Test with encode returning null
         /// <summary>
         ///     Create new octet string TLV element from TLV element.
         /// </summary>

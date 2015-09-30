@@ -1,11 +1,12 @@
-﻿using Guardtime.KSI.Trust;
+﻿using Guardtime.KSI.Parser;
+using Guardtime.KSI.Trust;
 
 namespace Guardtime.KSI.Publication
 {
     /// <summary>
     ///     Publications file interface.
     /// </summary>
-    public interface IPublicationsFile : IKsiTrustProvider
+    public interface IPublicationsFile : ITlvTag, IKsiTrustProvider
     {
         /// <summary>
         ///     Get neared publication record to time.

@@ -309,7 +309,7 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     HTTP KSI service protocol async result.
         /// </summary>
-        private class HttpKsiServiceProtocolAsyncResult : IAsyncResult
+        private class HttpKsiServiceProtocolAsyncResult : IAsyncResult, IDisposable
         {
             private readonly object _asyncState;
 
@@ -432,6 +432,11 @@ namespace Guardtime.KSI.Service
                         return _isCompleted;
                     }
                 }
+            }
+
+            public void Dispose()
+            {
+                _waitHandle.Close();
             }
 
             public void SetComplete(bool errorOccured)

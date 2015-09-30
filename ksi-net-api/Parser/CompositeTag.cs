@@ -158,12 +158,25 @@ namespace Guardtime.KSI.Parser
         /// <param name="bytes">TLV bytes</param>
         private void DecodeValue(byte[] bytes)
         {
-            using (MemoryStream stream = new MemoryStream(bytes))
-            using (TlvReader tlvReader = new TlvReader(stream))
+            MemoryStream stream = null;
+
+            try
             {
-                while (stream.Position < stream.Length)
+                stream = new MemoryStream(bytes);
+                using (TlvReader tlvReader = new TlvReader(stream))
                 {
-                    _value.Add(tlvReader.ReadTag());
+                    stream = null;
+                    while (tlvReader.BaseStream.Position < tlvReader.BaseStream.Length)
+                    {
+                        _value.Add(tlvReader.ReadTag());
+                    }
+                }
+            }
+            finally
+            {
+                if (stream != null)
+                {
+                    stream.Dispose();
                 }
             }
         }
@@ -174,15 +187,27 @@ namespace Guardtime.KSI.Parser
         /// <returns>TLV list elements as byte array</returns>
         public override byte[] EncodeValue()
         {
-            using (MemoryStream stream = new MemoryStream())
-            using (TlvWriter writer = new TlvWriter(stream))
+            MemoryStream stream = null;
+            try
             {
-                for (int i = 0; i < Count; i++)
+                stream = new MemoryStream();
+                using (TlvWriter writer = new TlvWriter(stream))
                 {
-                    writer.WriteTag(this[i]);
-                }
+                    stream = null;
+                    for (int i = 0; i < Count; i++)
+                    {
+                        writer.WriteTag(this[i]);
+                    }
 
-                return stream.ToArray();
+                    return ((MemoryStream) writer.BaseStream).ToArray();
+                }
+            }
+            finally
+            {
+                if (stream != null)
+                {
+                    stream.Dispose();
+                }
             }
         }
 
@@ -335,7 +360,6 @@ namespace Guardtime.KSI.Parser
             return builder.ToString();
         }
 
-        
 
         /// <summary>
         ///     Compare two composite element objects.

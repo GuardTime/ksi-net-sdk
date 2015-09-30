@@ -129,8 +129,6 @@ namespace Guardtime.KSI.Signature
                         "Only one RFC 3161 record is allowed in KSI signature.");
                 }
 
-                // TODO: Aggregation authentication record
-
                 _aggregationHashChainCollection.Sort(new AggregationHashChain.ChainIndexOrdering());
             }
 
@@ -241,28 +239,65 @@ namespace Guardtime.KSI.Signature
                     throw new KsiException("Invalid calendar hash chain: null.");
                 }
 
-                using (MemoryStream stream = new MemoryStream())
-                using (TlvWriter writer = new TlvWriter(stream))
+                MemoryStream stream = null;
+                try
                 {
-                    for (int i = 0; i < Count; i++)
+                    stream = new MemoryStream();
+                    using (TlvWriter writer = new TlvWriter(stream))
                     {
-                        if (this[i].Type == CalendarHashChain.TagType)
+                        stream = null;
+
+                        for (int i = 0; i < Count; i++)
                         {
-                            writer.WriteTag(calendarHashChain);
-                            continue;
+                            if (this[i].Type == CalendarHashChain.TagType)
+                            {
+                                writer.WriteTag(calendarHashChain);
+                                continue;
+                            }
+
+                            // TODO: Remove if extend without record?
+                            if (publicationRecord != null && this[i].Type == PublicationRecord.TagTypeSignature)
+                            {
+                                writer.WriteTag(publicationRecord);
+                                continue;
+                            }
+
+                            writer.WriteTag(this[i]);
                         }
 
-                        // TODO: Remove if extend without record?
-                        if (publicationRecord != null && this[i].Type == PublicationRecord.TagTypeSignature)
-                        {
-                            writer.WriteTag(publicationRecord);
-                            continue;
-                        }
-
-                        writer.WriteTag(this[i]);
+                        return
+                            new KsiSignature(new RawTag(TagType, false, false,
+                                ((MemoryStream) writer.BaseStream).ToArray()));
                     }
+                }
+                finally
+                {
+                    if (stream != null)
+                    {
+                        stream.Dispose();
+                    }
+                }
+            }
 
-                    return new KsiSignature(new RawTag(TagType, false, false, stream.ToArray()));
+            /// <summary>
+            ///     Write KSI signature to stream.
+            /// </summary>
+            /// <param name="outputStream">output stream</param>
+            public void WriteTo(Stream outputStream)
+            {
+                if (outputStream == null)
+                {
+                    throw new KsiException("Invalid output stream: null.");
+                }
+
+                if (!outputStream.CanWrite)
+                {
+                    throw new KsiException("Output stream is not writable.");
+                }
+
+                using (TlvWriter writer = new TlvWriter(outputStream))
+                {
+                    writer.WriteTag(this);
                 }
             }
         }

@@ -22,14 +22,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             return GetExtendedTimeCalendarHashChain(null);
         }
 
-        // TODO: Cache result and make signature mandatory and unchangeable
         public CalendarHashChain GetExtendedTimeCalendarHashChain(ulong? publicationTime)
         {
-            if (KsiService == null)
-            {
-                throw new InvalidOperationException("Cannot extend when KSI service is missing");
-            }
-
             return null;
         }
     }

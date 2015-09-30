@@ -6,21 +6,22 @@ using Guardtime.KSI.Utils;
 namespace Guardtime.KSI.Signature.Verification
 {
     /// <summary>
-    /// Rule verification result.
+    ///     Rule verification result.
     /// </summary>
     public class VerificationResult
     {
-        private readonly string _ruleName;
-        private readonly VerificationResultCode _resultCode;
-        private readonly VerificationError _error;
         private readonly IList<VerificationResult> _childResults = new List<VerificationResult>();
+        private readonly VerificationError _error;
+        private readonly VerificationResultCode _resultCode;
+        private readonly string _ruleName;
 
         /// <summary>
-        /// Create new rule verification result from list.
+        ///     Create new rule verification result from list.
         /// </summary>
         /// <param name="ruleName">verification rule name</param>
         /// <param name="resultList">verification result list</param>
-        public VerificationResult(string ruleName, IList<VerificationResult> resultList) : this(ruleName, GetVerificationResultCodeFromList(resultList))
+        public VerificationResult(string ruleName, IList<VerificationResult> resultList)
+            : this(ruleName, GetVerificationResultCodeFromList(resultList))
         {
             for (int i = 0; i < resultList.Count; i++)
             {
@@ -29,7 +30,7 @@ namespace Guardtime.KSI.Signature.Verification
         }
 
         /// <summary>
-        /// Create new verification result instance.
+        ///     Create new verification result instance.
         /// </summary>
         /// <param name="ruleName">verification rule name</param>
         /// <param name="resultCode">verification result code</param>
@@ -38,7 +39,7 @@ namespace Guardtime.KSI.Signature.Verification
         }
 
         /// <summary>
-        /// Create new verification result instance.
+        ///     Create new verification result instance.
         /// </summary>
         /// <param name="ruleName">verification rule name</param>
         /// <param name="resultCode">verification result code</param>
@@ -51,7 +52,7 @@ namespace Guardtime.KSI.Signature.Verification
         }
 
         /// <summary>
-        /// Get verification result code.
+        ///     Get verification result code.
         /// </summary>
         public VerificationResultCode ResultCode
         {
@@ -59,7 +60,7 @@ namespace Guardtime.KSI.Signature.Verification
         }
 
         /// <summary>
-        /// Get verification error if exists, otherwise null.
+        ///     Get verification error if exists, otherwise null.
         /// </summary>
         public VerificationError VerificationError
         {
@@ -78,14 +79,13 @@ namespace Guardtime.KSI.Signature.Verification
 
 
         /// <summary>
-        /// Returns a string that represents the current object.
+        ///     Returns a string that represents the current object.
         /// </summary>
         /// <returns>
-        /// A string that represents the current object.
+        ///     A string that represents the current object.
         /// </returns>
         public override string ToString()
         {
-            
             StringBuilder builder = new StringBuilder();
             builder.Append(_ruleName).Append(": ");
             builder.Append(_resultCode);

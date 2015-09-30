@@ -5,6 +5,7 @@ namespace Guardtime.KSI.Exceptions
     /// <summary>
     ///     Invalid TLV exception.
     /// </summary>
+    [Serializable]
     public class TlvException : KsiException
     {
         /// <summary>

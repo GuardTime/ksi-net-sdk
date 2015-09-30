@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
+using System.IO;
 using Guardtime.KSI.Hashing;
+using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Signature
@@ -7,7 +9,7 @@ namespace Guardtime.KSI.Signature
     /// <summary>
     ///     KSI signature interface.
     /// </summary>
-    public interface IKsiSignature
+    public interface IKsiSignature : ITlvTag
     {
         /// <summary>
         ///     Get RFC 3161 record
@@ -65,5 +67,11 @@ namespace Guardtime.KSI.Signature
         /// <param name="publicationRecord">extended publication record</param>
         /// <returns>extended KSI signature</returns>
         IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecord publicationRecord);
+
+        /// <summary>
+        ///     Write KSI signature to stream.
+        /// </summary>
+        /// <param name="outputStream">output stream</param>
+        void WriteTo(Stream outputStream);
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Security.Cryptography.Pkcs;
-using System.Security.Cryptography.X509Certificates;
+﻿using System.Security.Cryptography.Pkcs;
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
 
@@ -37,7 +35,7 @@ namespace Guardtime.KSI.Trust
             signedCms.Decode(signatureBytes);
 
             // TODO: Verify email also
-            Console.WriteLine(signedCms.SignerInfos[0].Certificate.GetNameInfo(X509NameType.EmailName, false));
+            //Console.WriteLine(signedCms.SignerInfos[0].Certificate.GetNameInfo(X509NameType.EmailName, false));
         }
     }
 }

@@ -119,7 +119,6 @@
     </Compile>
     <Compile Include="Publication\PublicationDataTests.cs" />
     <Compile Include="Publication\PublicationsFileTests.cs" />
-    <Compile Include="Service\HttpAggregationRequestTests.cs" />
     <Compile Include="Service\TestKsiServiceProtocol.cs" />
     <Compile Include="Signature\CalendarAuthenticationRecordTests.cs" />
     <Compile Include="Signature\AggregationAuthenticationRecordTests.cs" />
@@ -184,39 +183,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="resources\extender-response\response-invalid-anon-1404215325-1404259200.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\extender-response\response-invalid-anon-1404215325-1408060800.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\extender-response\response-invalid-anon-1404215325-1439596800.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\extender-response\response-ok-anon-1401915603-1401926400.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\extender-response\response-ok-anon-1401915603-1408060800.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\extender-response\response-ok-anon-1401915603-1439596800.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\extender-response\response-ok-anon-1401915603.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\extender-response\response-ok-anon-1404215325-1404259200.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\extender-response\response-ok-anon-1404215325-1408060800.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\extender-response\response-ok-anon-1404215325-1439596800.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\extender-response\response-ok-anon-1404215325.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="resources\publication\publicationdata\missingtag.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

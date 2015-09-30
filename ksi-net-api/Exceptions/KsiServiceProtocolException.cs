@@ -5,6 +5,7 @@ namespace Guardtime.KSI.Exceptions
     /// <summary>
     ///     KSI service protocol exception.
     /// </summary>
+    [Serializable]
     public class KsiServiceProtocolException : KsiException
     {
         /// <summary>

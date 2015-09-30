@@ -99,6 +99,7 @@
     <Compile Include="Parser\RawTag.cs" />
     <Compile Include="Parser\StringTag.cs" />
     <Compile Include="Parser\CompositeTag.cs" />
+    <Compile Include="Parser\ITlvTag.cs" />
     <Compile Include="Parser\TlvTag.cs" />
     <Compile Include="Parser\TlvReader.cs" />
     <Compile Include="Parser\TlvWriter.cs" />
@@ -114,6 +115,7 @@
     <Compile Include="Publication\PublicationsFileHeader.cs" />
     <Compile Include="Publication\PublicationsFile.cs" />
     <Compile Include="Publication\PublicationData.cs" />
+    <None Include="README" />
     <Compile Include="Service\ExtendRequestPayload.cs" />
     <Compile Include="Service\ExtendError.cs" />
     <Compile Include="Service\AggregationError.cs" />

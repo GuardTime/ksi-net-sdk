@@ -8,7 +8,7 @@ namespace Guardtime.KSI.Parser
     /// <summary>
     ///     TLV objects base class.
     /// </summary>
-    public abstract class TlvTag
+    public abstract class TlvTag : ITlvTag
     {
         private readonly bool _forward;
         private readonly bool _nonCritical;
@@ -32,7 +32,7 @@ namespace Guardtime.KSI.Parser
         /// </summary>
         /// <param name="tag">TLV element</param>
         /// <exception cref="TlvException">thrown when input TLV tag is invalid.</exception>
-        protected TlvTag(TlvTag tag)
+        protected TlvTag(ITlvTag tag)
         {
             if (tag == null)
             {
@@ -80,11 +80,23 @@ namespace Guardtime.KSI.Parser
         /// <returns>TLV object as bytes</returns>
         public byte[] Encode()
         {
-            using (MemoryStream stream = new MemoryStream())
-            using (TlvWriter writer = new TlvWriter(stream))
+            MemoryStream stream = null;
+            try
             {
-                writer.WriteTag(this);
-                return stream.ToArray();
+                stream = new MemoryStream();
+                using (TlvWriter writer = new TlvWriter(stream))
+                {
+                    stream = null;
+                    writer.WriteTag(this);
+                    return ((MemoryStream) writer.BaseStream).ToArray();
+                }
+            }
+            finally
+            {
+                if (stream != null)
+                {
+                    stream.Dispose();
+                }
             }
         }
 

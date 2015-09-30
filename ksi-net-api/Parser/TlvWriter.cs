@@ -20,7 +20,7 @@ namespace Guardtime.KSI.Parser
         ///     Write TLV object to given stream.
         /// </summary>
         /// <param name="tag">TLV object</param>
-        public void WriteTag(TlvTag tag)
+        public void WriteTag(ITlvTag tag)
         {
             if (tag == null)
             {

@@ -8,7 +8,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public sealed class ExtendingPermittedVerificationRule : VerificationRule
     {
         /// <summary>
-        /// Rule name.
+        ///     Rule name.
         /// </summary>
         public const string RuleName = "ExtendingPermittedVerificationRule";
 
@@ -21,7 +21,9 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 throw new KsiException("Invalid verification context: null.");
             }
 
-            return context.IsExtendingAllowed ? new VerificationResult(RuleName, VerificationResultCode.Ok) : new VerificationResult(RuleName, VerificationResultCode.Na, VerificationError.Gen02);
+            return context.IsExtendingAllowed
+                ? new VerificationResult(RuleName, VerificationResultCode.Ok)
+                : new VerificationResult(RuleName, VerificationResultCode.Na, VerificationError.Gen02);
         }
     }
 }

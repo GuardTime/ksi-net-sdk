@@ -5,7 +5,6 @@
     /// </summary>
     public abstract class VerificationRule
     {
-
         /// <summary>
         ///     Return empty verification rule.
         /// </summary>

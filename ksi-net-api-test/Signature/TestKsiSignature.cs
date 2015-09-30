@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
+using System.IO;
 using Guardtime.KSI.Hashing;
+using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Signature
@@ -41,6 +43,24 @@ namespace Guardtime.KSI.Signature
         public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecord publicationRecord)
         {
             return ExtendedKsiSignature;
+        }
+
+        public void WriteTo(Stream outputStream)
+        {
+            using (TlvWriter writer = new TlvWriter(outputStream))
+            {
+                writer.WriteTag(this);
+            }
+        }
+
+        public uint Type { get; set; }
+        public bool NonCritical { get; set; }
+        public bool Forward { get; set; }
+
+        public byte[] EncodedValue;
+        public byte[] EncodeValue()
+        {
+            return EncodedValue;
         }
     }
 }

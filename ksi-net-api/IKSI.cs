@@ -40,7 +40,7 @@ namespace Guardtime.KSI
         IPublicationsFile GetPublicationsFile();
 
         /// <summary>
-        /// Verify keyless signature.
+        ///     Verify keyless signature.
         /// </summary>
         /// <param name="context">verification context</param>
         /// <param name="policy">verification policy</param>
