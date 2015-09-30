@@ -135,7 +135,7 @@ namespace Guardtime.KSI
         }
 
         /// <summary>
-        /// Verify keyless signature.
+        ///     Verify keyless signature.
         /// </summary>
         /// <param name="context">verification context</param>
         /// <param name="policy">verification rule</param>
