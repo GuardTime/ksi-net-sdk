@@ -212,15 +212,28 @@ namespace Guardtime.KSI.Publication
             /// <returns>signature bytes</returns>
             public byte[] GetSignedBytes()
             {
-                using (MemoryStream stream = new MemoryStream())
-                using (TlvWriter writer = new TlvWriter(stream))
+                MemoryStream stream = null;
+                try
                 {
-                    writer.Write(FileBeginningMagicBytes);
-                    for (int i = 0; i < Count - 1; i++)
+                    stream = new MemoryStream();
+                    using (TlvWriter writer = new TlvWriter(stream))
                     {
-                        writer.WriteTag(this[i]);
+                        stream = null;
+
+                        writer.Write(FileBeginningMagicBytes);
+                        for (int i = 0; i < Count - 1; i++)
+                        {
+                            writer.WriteTag(this[i]);
+                        }
+                        return ((MemoryStream)writer.BaseStream).ToArray();
                     }
-                    return stream.ToArray();
+                }
+                finally
+                {
+                    if (stream != null)
+                    {
+                        stream.Dispose();
+                    }
                 }
             }
 
