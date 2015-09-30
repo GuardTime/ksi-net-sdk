@@ -5,6 +5,7 @@ namespace Guardtime.KSI.Exceptions
     /// <summary>
     ///     Hashing functionality exception.
     /// </summary>
+    [Serializable]
     public class HashingException : KsiException
     {
         /// <summary>

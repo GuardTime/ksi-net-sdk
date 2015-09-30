@@ -5,6 +5,7 @@ namespace Guardtime.KSI.Exceptions
     /// <summary>
     ///     Publications file exception.
     /// </summary>
+    [Serializable]
     public class PublicationsFileException : KsiException
     {
         /// <summary>

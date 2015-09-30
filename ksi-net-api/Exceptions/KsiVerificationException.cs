@@ -5,6 +5,7 @@ namespace Guardtime.KSI.Exceptions
     /// <summary>
     ///     KSI signature verification exception.
     /// </summary>
+    [Serializable]
     public class KsiVerificationException : KsiException
     {
         /// <summary>
