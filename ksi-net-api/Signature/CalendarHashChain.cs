@@ -11,7 +11,6 @@ namespace Guardtime.KSI.Signature
     /// </summary>
     public sealed class CalendarHashChain : CompositeTag
     {
-        // TODO: Better name
         /// <summary>
         ///     Calendar hash chain tag type
         /// </summary>

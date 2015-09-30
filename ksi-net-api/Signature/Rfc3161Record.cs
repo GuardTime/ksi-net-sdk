@@ -10,7 +10,6 @@ namespace Guardtime.KSI.Signature
     /// </summary>
     public sealed class Rfc3161Record : CompositeTag
     {
-        // TODO: Better name
         /// <summary>
         ///     RFC3161 record tag type
         /// </summary>

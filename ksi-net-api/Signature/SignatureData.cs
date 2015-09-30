@@ -8,7 +8,6 @@ namespace Guardtime.KSI.Signature
     /// </summary>
     public sealed class SignatureData : CompositeTag
     {
-        // TODO: Better name
         /// <summary>
         ///     Signature data tag type
         /// </summary>
