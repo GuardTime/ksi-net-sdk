@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Parser;
+using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
@@ -31,6 +33,24 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
                 rule.Verify(context);
             });
+
+            // Check legacy signature for missing calendar hash chain and existing calendar authentication record
+            using (var stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok, FileMode.Open))
+            {
+                Assert.Throws<KsiVerificationException>(delegate
+                {
+                    var signature = new KsiSignatureFactory().Create(stream);
+                    var context = new TestVerificationContext()
+                    {
+                        Signature = new TestKsiSignature()
+                        {
+                            CalendarAuthenticationRecord = signature.CalendarAuthenticationRecord
+                        }
+                    };
+
+                    rule.Verify(context);
+                });
+            }
 
             // Check legacy signature for calendar authentication record hash
             using (var stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok, FileMode.Open))

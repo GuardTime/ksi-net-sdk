@@ -32,6 +32,17 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 rule.Verify(context);
             });
 
+            // Verification exception on missing KSI signature aggregation hash chain 
+            Assert.Throws<KsiVerificationException>(delegate
+            {
+                var context = new TestVerificationContext()
+                {
+                    Signature = new TestKsiSignature()
+                };
+
+                rule.Verify(context);
+            });
+
             // Check legacy signature for aggregation hash chain time consistency
             using (var stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok, FileMode.Open))
             {

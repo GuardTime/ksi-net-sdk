@@ -44,6 +44,22 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 });
             }
 
+            // Check signature without aggregation hash chains
+            using (var stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
+            {
+                Assert.Throws<KsiVerificationException>(delegate
+                {
+                    var context = new TestVerificationContext()
+                    {
+                        Signature = new TestKsiSignature(),
+                        DocumentHash =
+                            new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D"))
+                    };
+
+                    rule.Verify(context);
+                });
+            }
+
             // Check legacy signature input hash
             using (var stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok, FileMode.Open))
             {

@@ -56,7 +56,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 var context = new TestVerificationContextFaultyFunctions()
                 {
-                    Signature = new KsiSignatureFactory().Create(stream)
+                    Signature = new KsiSignatureFactory().Create(stream),
+                    UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K")
                 };
 
                 Assert.Throws<KsiVerificationException>(delegate

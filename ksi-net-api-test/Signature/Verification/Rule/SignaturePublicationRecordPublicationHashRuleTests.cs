@@ -32,6 +32,24 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 rule.Verify(context);
             });
 
+            // Check legacy signature for missing calendar hash chain and existing publication record
+            using (var stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))
+            {
+                Assert.Throws<KsiVerificationException>(delegate
+                {
+                    var signature = new KsiSignatureFactory().Create(stream);
+                    var context = new TestVerificationContext()
+                    {
+                        Signature = new TestKsiSignature()
+                        {
+                            PublicationRecord = signature.PublicationRecord
+                        }
+                    };
+
+                    rule.Verify(context);
+                });
+            }
+
             // Check signature without publications record
             using (var stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
             {

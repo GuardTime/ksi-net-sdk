@@ -29,6 +29,14 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 rule.Verify(null);
             });
 
+            // Verification exception on missing KSI signature 
+            Assert.Throws<KsiVerificationException>(delegate
+            {
+                var context = new TestVerificationContext();
+
+                rule.Verify(context);
+            });
+
             // Check signature without user publication
             using (var stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
             {
@@ -48,7 +56,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 var context = new TestVerificationContextFaultyFunctions()
                 {
-                    Signature = new KsiSignatureFactory().Create(stream)
+                    Signature = new KsiSignatureFactory().Create(stream),
+                    UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K")
                 };
 
                 Assert.Throws<KsiVerificationException>(delegate

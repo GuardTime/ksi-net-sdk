@@ -34,6 +34,18 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 rule.Verify(context);
             });
 
+            // Verification exception on missing publication record
+            Assert.Throws<KsiVerificationException>(delegate
+            {
+                var context = new TestVerificationContext()
+                {
+                    Signature = new TestKsiSignature(),
+                    UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K")
+                };
+
+                rule.Verify(context);
+            });
+
             // Check signature without user publication
             using (var stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
             {
