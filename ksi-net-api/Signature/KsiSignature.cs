@@ -249,20 +249,21 @@ namespace Guardtime.KSI.Signature
 
                         for (int i = 0; i < Count; i++)
                         {
-                            if (this[i].Type == CalendarHashChain.TagType)
+                            switch (this[i].Type)
                             {
-                                writer.WriteTag(calendarHashChain);
-                                continue;
+                                case CalendarHashChain.TagType:
+                                    writer.WriteTag(calendarHashChain);
+                                    break;
+                                case PublicationRecord.TagTypeSignature:
+                                    if (publicationRecord != null)
+                                    {
+                                        writer.WriteTag(publicationRecord);
+                                    }
+                                    break;
+                                default:
+                                    writer.WriteTag(this[i]);
+                                    break;
                             }
-
-                            // TODO: Remove if extend without record?
-                            if (publicationRecord != null && this[i].Type == PublicationRecord.TagTypeSignature)
-                            {
-                                writer.WriteTag(publicationRecord);
-                                continue;
-                            }
-
-                            writer.WriteTag(this[i]);
                         }
 
                         return

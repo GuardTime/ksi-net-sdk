@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Properties;
@@ -150,6 +151,16 @@ namespace Guardtime.KSI.Hashing
             Assert.Throws<HashingException>(delegate
             {
                 hasher.AddData((byte[])null);
+            });
+        }
+
+        [Test]
+        public void TestDataHasherWithNullICollection()
+        {
+            var hasher = new DataHasher();
+            Assert.Throws<HashingException>(delegate
+            {
+                hasher.AddData((ICollection<byte>)null);
             });
         }
 

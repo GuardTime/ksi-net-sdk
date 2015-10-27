@@ -1,10 +1,16 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:Boolean x:Key="/Default/CoverageSessionsPersistenceManagerSettings/SessionPersistentData/=6B4C400FC6144F068256FFB162F5E632/@KeyIndexDefined">True</s:Boolean>
-	<s:String x:Key="/Default/CoverageSessionsPersistenceManagerSettings/SessionPersistentData/=6B4C400FC6144F068256FFB162F5E632/ProductVersion/@EntryValue">3.2</s:String>
-	<s:String x:Key="/Default/CoverageSessionsPersistenceManagerSettings/SessionPersistentData/=6B4C400FC6144F068256FFB162F5E632/SnapshotLocation/@EntryValue">C:\Users\martt\AppData\Local\Temp\ssm.Jelomip.tmp</s:String>
-	<s:Boolean x:Key="/Default/CoverageSessionsPersistenceManagerSettings/SessionPersistentData/=E910214BEE8245F4A67C5852C8854080/@KeyIndexDefined">True</s:Boolean>
-	<s:String x:Key="/Default/CoverageSessionsPersistenceManagerSettings/SessionPersistentData/=E910214BEE8245F4A67C5852C8854080/ProductVersion/@EntryValue">3.2</s:String>
-	<s:String x:Key="/Default/CoverageSessionsPersistenceManagerSettings/SessionPersistentData/=E910214BEE8245F4A67C5852C8854080/SnapshotLocation/@EntryValue">C:\Users\martt\AppData\Local\Temp\ssm.Cytahal.tmp</s:String>
+	<s:Boolean x:Key="/Default/CoverageSessionsPersistenceManagerSettings/SessionPersistentData/=95FB11D9F5344342B9DE0255B0E2A7A8/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/CoverageSessionsPersistenceManagerSettings/SessionPersistentData/=95FB11D9F5344342B9DE0255B0E2A7A8/ProductVersion/@EntryValue">3.2</s:String>
+	<s:String x:Key="/Default/CoverageSessionsPersistenceManagerSettings/SessionPersistentData/=95FB11D9F5344342B9DE0255B0E2A7A8/SnapshotLocation/@EntryValue">C:\Users\Martti\AppData\Local\Temp\ssm.Huhinyf.tmp</s:String>
+	<s:Boolean x:Key="/Default/CoverageSessionsPersistenceManagerSettings/SessionPersistentData/=FDCB44E614F64BEAB233A772ADA21015/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/CoverageSessionsPersistenceManagerSettings/SessionPersistentData/=FDCB44E614F64BEAB233A772ADA21015/ProductVersion/@EntryValue">3.2</s:String>
+	<s:String x:Key="/Default/CoverageSessionsPersistenceManagerSettings/SessionPersistentData/=FDCB44E614F64BEAB233A772ADA21015/SnapshotLocation/@EntryValue">C:\Users\Martti\AppData\Local\Temp\ssm.Suqenen.tmp</s:String>
+	
+	
+	
+	
+	
+	
 	
 	
 	

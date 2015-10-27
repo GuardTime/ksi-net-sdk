@@ -125,6 +125,7 @@
     <Compile Include="Signature\KsiSignatureDoTests.cs" />
     <Compile Include="Signature\AggregationHashChainTests.cs" />
     <Compile Include="Signature\CalendarHashChainTests.cs" />
+    <Compile Include="Signature\KsiSignatureFactoryTests.cs" />
     <Compile Include="Signature\Rfc3161RecordTests.cs" />
     <Compile Include="Signature\SignatureDataTests.cs" />
     <Compile Include="Signature\TestKsiSignature.cs" />
