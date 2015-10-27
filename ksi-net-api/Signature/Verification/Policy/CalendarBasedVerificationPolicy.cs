@@ -17,22 +17,23 @@ namespace Guardtime.KSI.Signature.Verification.Policy
             ExtendedSignatureCalendarChainAggregationTimeRule extendedSignatureCalendarChainAggregationTimeRule =
                 new ExtendedSignatureCalendarChainAggregationTimeRule();
 
-            FirstRule = new CalendarHashChainExistenceRule()
-                .OnSuccess(
-                    new SignaturePublicationRecordExistenceRule()
-                        .OnSuccess(
-                            new ExtendedSignatureCalendarChainRootHashRule()
-                                .OnSuccess(
-                                    extendedSignatureCalendarChainInputHashRule
-                                        .OnSuccess(extendedSignatureCalendarChainAggregationTimeRule)))
-                        .OnNa(
-                            new ExtendedSignatureAggregationChainRightLinksMatchesRule()
-                                .OnSuccess(
-                                    extendedSignatureCalendarChainInputHashRule
-                                        .OnSuccess(extendedSignatureCalendarChainAggregationTimeRule))))
-                .OnNa(
-                    extendedSignatureCalendarChainInputHashRule
-                        .OnSuccess(extendedSignatureCalendarChainAggregationTimeRule));
+            FirstRule = new InternalVerificationPolicy()
+                .OnSuccess(new CalendarHashChainExistenceRule()
+                    .OnSuccess(
+                        new SignaturePublicationRecordExistenceRule()
+                            .OnSuccess(
+                                new ExtendedSignatureCalendarChainRootHashRule()
+                                    .OnSuccess(
+                                        extendedSignatureCalendarChainInputHashRule
+                                            .OnSuccess(extendedSignatureCalendarChainAggregationTimeRule)))
+                            .OnNa(
+                                new ExtendedSignatureAggregationChainRightLinksMatchesRule()
+                                    .OnSuccess(
+                                        extendedSignatureCalendarChainInputHashRule
+                                            .OnSuccess(extendedSignatureCalendarChainAggregationTimeRule))))
+                    .OnNa(
+                        extendedSignatureCalendarChainInputHashRule
+                            .OnSuccess(extendedSignatureCalendarChainAggregationTimeRule)));
         }
     }
 }

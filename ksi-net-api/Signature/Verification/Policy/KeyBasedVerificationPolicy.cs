@@ -13,10 +13,11 @@ namespace Guardtime.KSI.Signature.Verification.Policy
         public KeyBasedVerificationPolicy()
         {
             // Check for internal verification
-            FirstRule = new CalendarHashChainExistenceRule()
-                .OnSuccess(new CalendarAuthenticationRecordExistenceRule()
-                    .OnSuccess(new CertificateExistenceRule()
-                        .OnSuccess(new CalendarAuthenticationRecordSignatureVerificationRule())));
+            FirstRule = new InternalVerificationPolicy()
+                .OnSuccess(new CalendarHashChainExistenceRule()
+                    .OnSuccess(new CalendarAuthenticationRecordExistenceRule()
+                        .OnSuccess(new CertificateExistenceRule()
+                            .OnSuccess(new CalendarAuthenticationRecordSignatureVerificationRule()))));
         }
     }
 }

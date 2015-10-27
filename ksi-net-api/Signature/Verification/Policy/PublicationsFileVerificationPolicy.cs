@@ -2,22 +2,26 @@
 
 namespace Guardtime.KSI.Signature.Verification.Policy
 {
-    /// <summary>
-    ///     Policy for verifying KSI signature with publications file.
-    /// </summary>
-    public class PublicationsFileVerificationPolicy : VerificationPolicy
+
+    public partial class PublicationBasedVerificationPolicy
     {
         /// <summary>
-        ///     Create publications file verification policy instance.
+        ///     Policy for verifying KSI signature with publications file.
         /// </summary>
-        public PublicationsFileVerificationPolicy()
+        private class PublicationsFileVerificationPolicy : VerificationPolicy
         {
-            FirstRule = new SignaturePublicationRecordExistenceRule()
-                .OnSuccess(new PublicationsFileContainsSignaturePublicationRule())
-                .OnNa(new ExtendingPermittedVerificationRule()
-                    .OnSuccess(new PublicationsFilePublicationHashMatchesExtenderResponseRule()
-                        .OnSuccess(new PublicationsFilePublicationTimeMatchesExtenderResponseRule()
-                            .OnSuccess(new PublicationsFileExtendedSignatureInputHashRule()))));
+            /// <summary>
+            ///     Create publications file verification policy instance.
+            /// </summary>
+            public PublicationsFileVerificationPolicy()
+            {
+                FirstRule = new SignaturePublicationRecordExistenceRule()
+                    .OnSuccess(new PublicationsFileContainsSignaturePublicationRule())
+                    .OnNa(new ExtendingPermittedVerificationRule()
+                        .OnSuccess(new PublicationsFilePublicationHashMatchesExtenderResponseRule()
+                            .OnSuccess(new PublicationsFilePublicationTimeMatchesExtenderResponseRule()
+                                .OnSuccess(new PublicationsFileExtendedSignatureInputHashRule()))));
+            }
         }
     }
 }

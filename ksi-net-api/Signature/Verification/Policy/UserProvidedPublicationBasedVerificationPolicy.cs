@@ -2,26 +2,31 @@
 
 namespace Guardtime.KSI.Signature.Verification.Policy
 {
-    /// <summary>
-    ///     Policy for verifying KSI signature with user provided publication.
-    /// </summary>
-    public class UserProvidedPublicationBasedVerificationPolicy : VerificationPolicy
+
+    public partial class PublicationBasedVerificationPolicy
     {
         /// <summary>
-        ///     Create user provided publication based verification policy with given rules.
+        ///     Policy for verifying KSI signature with user provided publication.
         /// </summary>
-        public UserProvidedPublicationBasedVerificationPolicy()
+        private class UserProvidedPublicationBasedVerificationPolicy : VerificationPolicy
         {
-            VerificationRule verificationRule = new ExtendingPermittedVerificationRule()
-                .OnSuccess(new UserProvidedPublicationHashMatchesExtendedResponseRule()
-                    .OnSuccess(new UserProvidedPublicationTimeMatchesExtendedResponseRule()
-                        .OnSuccess(new UserProvidedPublicationExtendedSignatureInputHashRule())));
+            /// <summary>
+            ///     Create user provided publication based verification policy with given rules.
+            /// </summary>
+            public UserProvidedPublicationBasedVerificationPolicy()
+            {
+                VerificationRule verificationRule = new ExtendingPermittedVerificationRule()
+                    .OnSuccess(new UserProvidedPublicationHashMatchesExtendedResponseRule()
+                        .OnSuccess(new UserProvidedPublicationTimeMatchesExtendedResponseRule()
+                            .OnSuccess(new UserProvidedPublicationExtendedSignatureInputHashRule())));
 
-            FirstRule = new UserProvidedPublicationExistenceRule()
-                .OnSuccess(new SignaturePublicationRecordExistenceRule()
-                    .OnSuccess(new UserProvidedPublicationVerificationRule())
-                    .OnNa(new UserProvidedPublicationCreationTimeVerificationRule()
-                        .OnSuccess(verificationRule)));
+                FirstRule = new UserProvidedPublicationExistenceRule()
+                    .OnSuccess(new SignaturePublicationRecordExistenceRule()
+                        .OnSuccess(new UserProvidedPublicationVerificationRule())
+                        .OnNa(new UserProvidedPublicationCreationTimeVerificationRule()
+                            .OnSuccess(verificationRule)));
+            }
         }
     }
+    
 }
