@@ -38,6 +38,8 @@ namespace Guardtime.KSI.Trust
             {
                 trustStoreProvider.Verify(data, null);
             });
+
+
         }
     }
 }

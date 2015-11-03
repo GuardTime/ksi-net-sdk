@@ -6,6 +6,7 @@ using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Signature;
+using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Service
 {
@@ -146,7 +147,7 @@ namespace Guardtime.KSI.Service
                     if (payload.Status != 0)
                     {
                         throw new KsiException("Error occured during aggregation: " + payload.ErrorMessage + ".");
-                    }
+                    } 
 
                     if (!pdu.ValidateMac(_serviceSettings.LoginKey))
                     {
@@ -155,6 +156,10 @@ namespace Guardtime.KSI.Service
 
                     return _ksiSignatureFactory.Create(payload);
                 }
+            }
+            catch (TlvException e)
+            {
+                throw new KsiException("Could not parse response message: " + Base16.Encode(data), e);
             }
             finally
             {
@@ -280,6 +285,10 @@ namespace Guardtime.KSI.Service
 
                     return payload.CalendarHashChain;
                 }
+            }
+            catch (TlvException e)
+            {
+                throw new KsiException("Could not parse response message: " + Base16.Encode(data), e);
             }
             finally
             {

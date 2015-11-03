@@ -104,6 +104,8 @@
     <Compile Include="Hashing\DataHasherTests.cs" />
     <Compile Include="Hashing\DataHashTests.cs" />
     <Compile Include="Hashing\HashAlgorithmTests.cs" />
+    <Compile Include="Integration\IntegrationTests.cs" />
+    <Compile Include="Integration\SignIntegrationTests.cs" />
     <Compile Include="Parser\CompositeTagTests.cs" />
     <Compile Include="Parser\IntegerTagTests.cs" />
     <Compile Include="Parser\RawTagTests.cs" />
