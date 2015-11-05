@@ -103,5 +103,4 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             }
         }
     }
-
 }

@@ -47,7 +47,7 @@ namespace Guardtime.KSI.Crypto
                 throw new PkiVerificationException("No public key in certificate.");
             }
 
-            using (RSACryptoServiceProvider serviceProvider = (RSACryptoServiceProvider) certificate.PublicKey.Key)
+            using (RSACryptoServiceProvider serviceProvider = (RSACryptoServiceProvider)certificate.PublicKey.Key)
             {
                 if (!serviceProvider.VerifyData(signedBytes, data["digestAlgorithm"], signatureBytes))
                 {

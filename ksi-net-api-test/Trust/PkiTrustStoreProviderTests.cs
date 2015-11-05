@@ -15,7 +15,7 @@ namespace Guardtime.KSI.Trust
             using (var stream = new FileStream("resources/trust/pkitrustprovider/data.bin", FileMode.Open))
             {
                 data = new byte[stream.Length];
-                stream.Read(data, 0, (int) stream.Length);
+                stream.Read(data, 0, (int)stream.Length);
             }
 
             byte[] sigBytes;
@@ -38,8 +38,6 @@ namespace Guardtime.KSI.Trust
             {
                 trustStoreProvider.Verify(data, null);
             });
-
-
         }
     }
 }

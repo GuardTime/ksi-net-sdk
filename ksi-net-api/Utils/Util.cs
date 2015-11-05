@@ -92,7 +92,7 @@ namespace Guardtime.KSI.Utils
 
             for (ulong t = value; t > 0; t >>= 8)
             {
-                res[--n] = (byte) t;
+                res[--n] = (byte)t;
             }
 
             return res;
@@ -106,7 +106,7 @@ namespace Guardtime.KSI.Utils
         public static ulong ConvertDateTimeToUnixTime(DateTime time)
         {
             TimeSpan timeSpan = (time - new DateTime(1970, 1, 1, 0, 0, 0));
-            return (ulong) timeSpan.TotalSeconds;
+            return (ulong)timeSpan.TotalSeconds;
         }
 
         /// <summary>
@@ -201,7 +201,7 @@ namespace Guardtime.KSI.Utils
             while (b != 0)
             {
                 int tmp = b;
-                b = a%b;
+                b = a % b;
                 a = tmp;
             }
 
@@ -216,7 +216,7 @@ namespace Guardtime.KSI.Utils
         /// <returns>The least common multiple</returns>
         public static int LCM(int a, int b)
         {
-            return (a*b)/GCD(a, b);
+            return (a * b) / GCD(a, b);
         }
 
         /// <summary>

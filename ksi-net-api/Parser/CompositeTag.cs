@@ -199,7 +199,7 @@ namespace Guardtime.KSI.Parser
                         writer.WriteTag(this[i]);
                     }
 
-                    return ((MemoryStream) writer.BaseStream).ToArray();
+                    return ((MemoryStream)writer.BaseStream).ToArray();
                 }
             }
             finally
@@ -310,7 +310,7 @@ namespace Guardtime.KSI.Parser
                 int res = 1;
                 for (int i = 0; i < _value.Count; i++)
                 {
-                    res = 31*res + (_value[i] == null ? 0 : _value[i].GetHashCode());
+                    res = 31 * res + (_value[i] == null ? 0 : _value[i].GetHashCode());
                 }
 
                 return res + Type.GetHashCode() + Forward.GetHashCode() + NonCritical.GetHashCode();

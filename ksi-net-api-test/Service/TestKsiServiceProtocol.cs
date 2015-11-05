@@ -9,7 +9,6 @@ namespace Guardtime.KSI.Service
 {
     public class TestKsiServiceProtocol : IKsiSigningServiceProtocol, IKsiExtendingServiceProtocol, IKsiPublicationsFileServiceProtocol
     {
-
         public bool FailNext { get; set; }
 
         public IAsyncResult BeginSign(byte[] data, AsyncCallback callback, object asyncState)
@@ -22,12 +21,14 @@ namespace Guardtime.KSI.Service
             var result = (AsyncResult)asyncResult;
 
             using (var stream = new MemoryStream(result.Request))
-            using (var reader = new TlvReader(stream))
             {
-                var pdu = new AggregationPdu(reader.ReadTag());
-                var payload = (AggregationRequestPayload) pdu.Payload;
-                // TODO: Get stuff based on hash
-                //payload.RequestHash
+                using (var reader = new TlvReader(stream))
+                {
+                    var pdu = new AggregationPdu(reader.ReadTag());
+                    var payload = (AggregationRequestPayload)pdu.Payload;
+                    // TODO: Get stuff based on hash
+                    //payload.RequestHash
+                }
             }
 
             return null;
@@ -43,19 +44,21 @@ namespace Guardtime.KSI.Service
             var result = (AsyncResult)asyncResult;
 
             using (var stream = new MemoryStream(result.Request))
-            using (var reader = new TlvReader(stream))
             {
-                var pdu = new ExtendPdu(reader.ReadTag());
-                var payload = (ExtendRequestPayload)pdu.Payload;
-                var filename = "response-" + (FailNext ? "invalid" : "ok") + "-anon-";
-                FailNext = false;
-
-                if (payload.PublicationTime == null)
+                using (var reader = new TlvReader(stream))
                 {
-                    return ReadFile("resources/extender-response/" + filename + payload.AggregationTime + ".tlv");
-                }
+                    var pdu = new ExtendPdu(reader.ReadTag());
+                    var payload = (ExtendRequestPayload)pdu.Payload;
+                    var filename = "response-" + (FailNext ? "invalid" : "ok") + "-anon-";
+                    FailNext = false;
 
-                return ReadFile("resources/extender-response/" + filename + payload.AggregationTime + "-" + payload.PublicationTime + ".tlv");
+                    if (payload.PublicationTime == null)
+                    {
+                        return ReadFile("resources/extender-response/" + filename + payload.AggregationTime + ".tlv");
+                    }
+
+                    return ReadFile("resources/extender-response/" + filename + payload.AggregationTime + "-" + payload.PublicationTime + ".tlv");
+                }
             }
         }
 
@@ -99,10 +102,7 @@ namespace Guardtime.KSI.Service
 
             public WaitHandle AsyncWaitHandle
             {
-                get
-                {
-                    return resetEvent;
-                }
+                get { return resetEvent; }
             }
 
             public object AsyncState
@@ -115,7 +115,5 @@ namespace Guardtime.KSI.Service
                 get { return true; }
             }
         }
-
-        
     }
 }

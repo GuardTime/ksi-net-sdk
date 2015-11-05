@@ -67,7 +67,7 @@ namespace Guardtime.KSI.Utils
                 throw new ArgumentException("The size of the encoding alphabet is not a power of 2", "alphabet");
             }
 
-            _block = 8/Util.GCD(8, _bits);
+            _block = 8 / Util.GCD(8, _bits);
 
             // the encoding lookup table
             _chars = alphabet.ToCharArray();
@@ -191,13 +191,13 @@ namespace Guardtime.KSI.Utils
             }
 
             // create the output buffer
-            int outLen = (8*len + _bits - 1)/_bits;
-            outLen = (outLen + _block - 1)/_block*_block;
+            int outLen = (8 * len + _bits - 1) / _bits;
+            outLen = (outLen + _block - 1) / _block * _block;
             if (freq > 0)
             {
                 if (sep != null)
                 {
-                    outLen += (outLen - 1)/freq*sep.Length;
+                    outLen += (outLen - 1) / freq * sep.Length;
                 }
             }
 
@@ -209,9 +209,9 @@ namespace Guardtime.KSI.Utils
             int buf = 0; // buffer of input bits not yet sent to output
             int bufBits = 0; // number of bits in the bit buffer
             int bufMask = (1 << _bits) - 1;
-            while (_bits*outCount < 8*len)
+            while (_bits * outCount < 8 * len)
             {
-                if (freq > 0 && outCount > 0 && outCount%freq == 0)
+                if (freq > 0 && outCount > 0 && outCount % freq == 0)
                 {
                     builder.Append(sep);
                 }
@@ -234,9 +234,9 @@ namespace Guardtime.KSI.Utils
             }
 
             // pad
-            while (outCount%_block != 0)
+            while (outCount % _block != 0)
             {
-                if (freq > 0 && outCount > 0 && outCount%freq == 0)
+                if (freq > 0 && outCount > 0 && outCount % freq == 0)
                 {
                     builder.Append(sep);
                 }
@@ -261,7 +261,7 @@ namespace Guardtime.KSI.Utils
             }
 
             // create the result buffer
-            byte[] outputBytes = new byte[s.Length*_bits/8];
+            byte[] outputBytes = new byte[s.Length * _bits / 8];
 
             // decode
             int outCount = 0; // number of output bytes produced
@@ -286,14 +286,17 @@ namespace Guardtime.KSI.Utils
                 bufBits += _bits;
                 while (bufBits >= 8)
                 {
-                    outputBytes[outCount] = (byte) ((buf >> (bufBits - 8)) & 0xff);
+                    outputBytes[outCount] = (byte)((buf >> (bufBits - 8)) & 0xff);
                     bufBits -= 8;
                     outCount++;
                 }
             }
 
             // trim the result if there were any skipped characters
-            if (outCount >= outputBytes.Length) return outputBytes;
+            if (outCount >= outputBytes.Length)
+            {
+                return outputBytes;
+            }
 
             byte[] tmp = outputBytes;
             outputBytes = new byte[outCount];

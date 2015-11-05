@@ -12,7 +12,6 @@ namespace Guardtime.KSI.Signature.Verification
     [TestFixture]
     public class SignatureVerificationTests
     {
-
         [Test]
         public void TestVerifySignatureOk()
         {
@@ -23,7 +22,8 @@ namespace Guardtime.KSI.Signature.Verification
                     "http://172.20.20.100:8081",
                     "http://verify.guardtime.com/ksi-publications.bin");
 
-                var ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"), new PublicationsFileFactory(new PkiTrustStoreProvider()), new KsiSignatureFactory());
+                var ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"),
+                    new PublicationsFileFactory(new PkiTrustStoreProvider()), new KsiSignatureFactory());
                 var context = new VerificationContext(new KsiSignatureFactory().Create(stream))
                 {
                     DocumentHash =
@@ -37,7 +37,8 @@ namespace Guardtime.KSI.Signature.Verification
                     //UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K"),
                     IsExtendingAllowed = true,
                     KsiService = ksiService,
-                    PublicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider()).Create(new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+                    PublicationsFile =
+                        new PublicationsFileFactory(new PkiTrustStoreProvider()).Create(new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
                 };
 
                 Console.WriteLine(@"// Internal verification policy");
@@ -55,10 +56,7 @@ namespace Guardtime.KSI.Signature.Verification
                 Console.WriteLine(@"// Calendar based verification");
                 policy = new CalendarBasedVerificationPolicy();
                 Console.WriteLine("{0}", policy.Verify(context));
-
-
             }
         }
-
     }
 }

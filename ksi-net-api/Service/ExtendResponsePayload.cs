@@ -130,7 +130,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         public ulong? LastTime
         {
-            get { return _lastTime == null ? (ulong?) null : _lastTime.Value; }
+            get { return _lastTime == null ? (ulong?)null : _lastTime.Value; }
         }
 
         /// <summary>

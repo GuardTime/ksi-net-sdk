@@ -190,7 +190,10 @@ namespace Guardtime.KSI.Hashing
         /// <returns>calculated hash</returns>
         public DataHash GetHash()
         {
-            if (_outputHash != null) return _outputHash;
+            if (_outputHash != null)
+            {
+                return _outputHash;
+            }
             _messageHasher.TransformFinalBlock(new byte[] {}, 0, 0);
             byte[] hash = _messageHasher.Hash;
             _outputHash = new DataHash(_algorithm, hash);

@@ -8,7 +8,6 @@ namespace Guardtime.KSI.Signature
     [TestFixture]
     public class AggregationAuthenticationRecordTests
     {
-
         [Test]
         public void TestAggregationAuthenticationRecordOk()
         {
@@ -50,7 +49,6 @@ namespace Guardtime.KSI.Signature
             {
                 GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Missing_Input_Hash);
             }, "Only one input hash must exist in aggregation authentication record");
-            
         }
 
         [Test]
@@ -60,7 +58,6 @@ namespace Guardtime.KSI.Signature
             {
                 GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Missing_Signature_Data);
             }, "Only one signature data must exist in aggregation authentication record");
-            
         }
 
         [Test]
@@ -70,7 +67,6 @@ namespace Guardtime.KSI.Signature
             {
                 GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Multiple_Aggregation_Time);
             }, "Only one aggregation time must exist in aggregation authentication record");
-            
         }
 
         [Test]
@@ -80,7 +76,6 @@ namespace Guardtime.KSI.Signature
             {
                 GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Multiple_Input_Hash);
             }, "Only one input hash must exist in aggregation authentication record");
-            
         }
 
         [Test]
@@ -90,7 +85,6 @@ namespace Guardtime.KSI.Signature
             {
                 GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Multiple_Signature_Data);
             }, "Only one signature data must exist in aggregation authentication record");
-            
         }
 
         [Test]
@@ -105,15 +99,14 @@ namespace Guardtime.KSI.Signature
         private AggregationAuthenticationRecord GetAggregationAuthenticationRecordFromFile(string file)
         {
             using (var stream = new FileStream(file, FileMode.Open))
-            using (var reader = new TlvReader(stream))
             {
-                AggregationAuthenticationRecord aggregationAuthenticationRecord = new AggregationAuthenticationRecord(reader.ReadTag());
+                using (var reader = new TlvReader(stream))
+                {
+                    AggregationAuthenticationRecord aggregationAuthenticationRecord = new AggregationAuthenticationRecord(reader.ReadTag());
 
-                return aggregationAuthenticationRecord;
+                    return aggregationAuthenticationRecord;
+                }
             }
         }
-
-
-
     }
 }

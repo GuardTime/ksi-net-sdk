@@ -39,7 +39,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 publicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider()).Create(stream);
             }
-            
+
             // Check signature with no calendar authentication record
             using (var stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record, FileMode.Open))
             {
@@ -95,7 +95,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 var context = new TestVerificationContext()
                 {
                     Signature = new KsiSignatureFactory().Create(stream),
-                    PublicationsFile =  publicationsFile
+                    PublicationsFile = publicationsFile
                 };
 
                 var verificationResult = rule.Verify(context);
@@ -114,8 +114,6 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 var verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
             }
-
-
         }
     }
 }

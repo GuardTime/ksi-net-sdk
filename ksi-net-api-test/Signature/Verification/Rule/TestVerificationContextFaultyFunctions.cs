@@ -17,6 +17,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         public IKsiService KsiService { get; set; }
         public bool IsExtendingAllowed { get; set; }
         public IPublicationsFile PublicationsFile { get; set; }
+
         public CalendarHashChain GetExtendedLatestCalendarHashChain()
         {
             return GetExtendedTimeCalendarHashChain(null);

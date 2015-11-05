@@ -2,7 +2,6 @@
 
 namespace Guardtime.KSI.Signature.Verification.Policy
 {
-
     public partial class PublicationBasedVerificationPolicy
     {
         /// <summary>
@@ -28,5 +27,4 @@ namespace Guardtime.KSI.Signature.Verification.Policy
             }
         }
     }
-    
 }

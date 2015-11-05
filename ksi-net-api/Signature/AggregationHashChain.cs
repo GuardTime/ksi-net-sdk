@@ -76,9 +76,9 @@ namespace Guardtime.KSI.Signature
                         this[i] = _aggrAlgorithmId;
                         aggrAlgorithmIdCount++;
                         break;
-                    case (uint) LinkDirection.Left:
-                    case (uint) LinkDirection.Right:
-                        Link linkTag = new Link(this[i], (LinkDirection) this[i].Type);
+                    case (uint)LinkDirection.Left:
+                    case (uint)LinkDirection.Right:
+                        Link linkTag = new Link(this[i], (LinkDirection)this[i].Type);
                         _chain.Add(linkTag);
                         this[i] = linkTag;
                         break;
@@ -187,7 +187,7 @@ namespace Guardtime.KSI.Signature
         /// <returns>resulting hash</returns>
         private DataHash HashTogether(ICollection<byte> hashA, ICollection<byte> hashB, ulong level)
         {
-            DataHasher hasher = new DataHasher(HashAlgorithm.GetById((byte) _aggrAlgorithmId.Value));
+            DataHasher hasher = new DataHasher(HashAlgorithm.GetById((byte)_aggrAlgorithmId.Value));
             hasher.AddData(hashA);
             hasher.AddData(hashB);
             hasher.AddData(Util.EncodeUnsignedLong(level));

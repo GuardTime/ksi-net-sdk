@@ -35,19 +35,19 @@ namespace Guardtime.KSI.Parser
             byte[] data = tag.EncodeValue();
             bool tlv16 = tag.Type > TlvReader.TypeMask
                          || (data != null && data.Length > byte.MaxValue);
-            byte firstByte = (byte) ((tlv16 ? TlvReader.Tlv16Flag : 0)
-                                     + (tag.NonCritical ? TlvReader.NonCriticalFlag : 0)
-                                     + (tag.Forward ? TlvReader.ForwardFlag : 0));
+            byte firstByte = (byte)((tlv16 ? TlvReader.Tlv16Flag : 0)
+                                    + (tag.NonCritical ? TlvReader.NonCriticalFlag : 0)
+                                    + (tag.Forward ? TlvReader.ForwardFlag : 0));
 
             if (tlv16)
             {
-                firstByte = (byte) (firstByte
-                                    | (tag.Type >> TlvReader.ByteBits) & TlvReader.TypeMask);
+                firstByte = (byte)(firstByte
+                                   | (tag.Type >> TlvReader.ByteBits) & TlvReader.TypeMask);
                 Write(firstByte);
-                Write((byte) tag.Type);
+                Write((byte)tag.Type);
                 if (data == null)
                 {
-                    Write((byte) 0);
+                    Write((byte)0);
                 }
                 else
                 {
@@ -55,22 +55,22 @@ namespace Guardtime.KSI.Parser
                     {
                         throw new ArgumentOutOfRangeException("tag");
                     }
-                    Write((byte) (data.Length >> TlvReader.ByteBits));
-                    Write((byte) data.Length);
+                    Write((byte)(data.Length >> TlvReader.ByteBits));
+                    Write((byte)data.Length);
                     Write(data);
                 }
             }
             else
             {
-                firstByte = (byte) (firstByte | tag.Type & TlvReader.TypeMask);
+                firstByte = (byte)(firstByte | tag.Type & TlvReader.TypeMask);
                 Write(firstByte);
                 if (data == null)
                 {
-                    Write((byte) 0);
+                    Write((byte)0);
                 }
                 else
                 {
-                    Write((byte) data.Length);
+                    Write((byte)data.Length);
                     Write(data);
                 }
             }

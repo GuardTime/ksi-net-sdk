@@ -2,7 +2,6 @@
 
 namespace Guardtime.KSI.Signature.Verification.Policy
 {
-
     /// <summary>
     ///     Policy for verifying KSI signature with publication.
     /// </summary>

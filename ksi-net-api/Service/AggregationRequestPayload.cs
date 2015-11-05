@@ -143,7 +143,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         public ulong? RequestLevel
         {
-            get { return _requestLevel == null ? (ulong?) null : _requestLevel.Value; }
+            get { return _requestLevel == null ? (ulong?)null : _requestLevel.Value; }
         }
     }
 }

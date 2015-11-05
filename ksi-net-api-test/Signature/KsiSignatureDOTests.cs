@@ -21,7 +21,6 @@ namespace Guardtime.KSI.Signature
         {
             var signature = GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Ok_Missing_Calendar_Hash_Chain);
             Assert.Null(signature.CalendarHashChain, "Calendar hash chain must be null");
-
         }
 
         [Test]
@@ -46,7 +45,6 @@ namespace Guardtime.KSI.Signature
             {
                 GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Type);
             }, "Invalid signature type: 2201");
-            
         }
 
         [Test]
@@ -56,7 +54,6 @@ namespace Guardtime.KSI.Signature
             {
                 GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Contain_Publication_Record_And_Calendar_Authentication_Record);
             }, "Only one from publication record or calendar authentication record is allowed in signature data object");
-            
         }
 
         [Test]
@@ -66,7 +63,6 @@ namespace Guardtime.KSI.Signature
             {
                 GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Extra_Tag);
             }, "Invalid tag");
-            
         }
 
         [Test]
@@ -76,7 +72,6 @@ namespace Guardtime.KSI.Signature
             {
                 GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Missing_Aggregation_Hash_Chain);
             }, "Aggregation hash chains must exist in signature data object");
-            
         }
 
         [Test]
@@ -86,10 +81,8 @@ namespace Guardtime.KSI.Signature
             {
                 GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Missing_Calendar_Hash_Chain);
             }, "No publication record or calendar authentication record is allowed in signature data object if there is no calendar hash chain");
-            
         }
 
-        
 
         [Test]
         public void TestKsiSignatureDoInvalidMultipleCalendarAuthenticationRecords()
@@ -98,7 +91,6 @@ namespace Guardtime.KSI.Signature
             {
                 GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Multiple_Calendar_Authentication_Records);
             }, "Only one from publication record or calendar authentication record is allowed in signature data object");
-            
         }
 
         [Test]
@@ -108,7 +100,6 @@ namespace Guardtime.KSI.Signature
             {
                 GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Multiple_Calendar_Hash_Chains);
             }, "Only one calendar hash chain is allowed in signature data object");
-            
         }
 
         [Test]
@@ -118,7 +109,6 @@ namespace Guardtime.KSI.Signature
             {
                 GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Multiple_Publication_Records);
             }, "Only one from publication record or calendar authentication record is allowed in signature data object");
-            
         }
 
         [Test]
@@ -128,7 +118,6 @@ namespace Guardtime.KSI.Signature
             {
                 GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Multiple_Rfc_3161_Records);
             }, "Only one RFC 3161 record is allowed in signature data object");
-            
         }
 
         // TODO: Multiple aggregation authentication record test is missing

@@ -138,7 +138,10 @@ namespace Guardtime.KSI.Publication
                 for (int i = 0; i < _publicationRecordList.Count; i++)
                 {
                     ulong publicationTime = _publicationRecordList[i].PublicationData.PublicationTime;
-                    if (publicationTime != time && publicationTime <= time) continue;
+                    if (publicationTime != time && publicationTime <= time)
+                    {
+                        continue;
+                    }
 
                     if (nearestPublicationRecord == null)
                     {
@@ -225,7 +228,7 @@ namespace Guardtime.KSI.Publication
                         {
                             writer.WriteTag(this[i]);
                         }
-                        return ((MemoryStream) writer.BaseStream).ToArray();
+                        return ((MemoryStream)writer.BaseStream).ToArray();
                     }
                 }
                 finally

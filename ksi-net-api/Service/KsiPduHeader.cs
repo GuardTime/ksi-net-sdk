@@ -119,7 +119,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         public ulong? InstanceId
         {
-            get { return _instanceId == null ? (ulong?) null : _instanceId.Value; }
+            get { return _instanceId == null ? (ulong?)null : _instanceId.Value; }
         }
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         public ulong? MessageId
         {
-            get { return _messageId == null ? (ulong?) null : _messageId.Value; }
+            get { return _messageId == null ? (ulong?)null : _messageId.Value; }
         }
     }
 }

@@ -104,7 +104,7 @@ namespace Guardtime.KSI.Parser
                 int res = 1;
                 for (int i = 0; i < Value.Length; i++)
                 {
-                    res = 31*res + Value[i];
+                    res = 31 * res + Value[i];
                 }
 
                 return res + Type.GetHashCode() + Forward.GetHashCode() + NonCritical.GetHashCode();

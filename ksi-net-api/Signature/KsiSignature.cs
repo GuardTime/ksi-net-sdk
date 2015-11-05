@@ -268,7 +268,7 @@ namespace Guardtime.KSI.Signature
 
                         return
                             new KsiSignature(new RawTag(TagType, false, false,
-                                ((MemoryStream) writer.BaseStream).ToArray()));
+                                ((MemoryStream)writer.BaseStream).ToArray()));
                     }
                 }
                 finally

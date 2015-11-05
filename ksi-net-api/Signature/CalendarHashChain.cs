@@ -64,8 +64,8 @@ namespace Guardtime.KSI.Signature
                         this[i] = _inputHash;
                         inputHashCount++;
                         break;
-                    case (uint) LinkDirection.Left:
-                    case (uint) LinkDirection.Right:
+                    case (uint)LinkDirection.Left:
+                    case (uint)LinkDirection.Right:
                         Link chainTag = new Link(this[i]);
                         _chain.Add(chainTag);
                         this[i] = chainTag;
@@ -168,7 +168,10 @@ namespace Guardtime.KSI.Signature
 
             for (int i = 0; i < _chain.Count; i++)
             {
-                if (calendarHashChain._chain[i].Direction != LinkDirection.Right) continue;
+                if (calendarHashChain._chain[i].Direction != LinkDirection.Right)
+                {
+                    continue;
+                }
 
                 if (_chain[i] != calendarHashChain._chain[i])
                 {
@@ -281,12 +284,12 @@ namespace Guardtime.KSI.Signature
 
             public Link(TlvTag tag) : base(tag)
             {
-                if (tag.Type == (int) LinkDirection.Left)
+                if (tag.Type == (int)LinkDirection.Left)
                 {
                     _direction = LinkDirection.Left;
                 }
 
-                if (tag.Type == (int) LinkDirection.Right)
+                if (tag.Type == (int)LinkDirection.Right)
                 {
                     _direction = LinkDirection.Right;
                 }

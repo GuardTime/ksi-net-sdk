@@ -58,6 +58,7 @@ namespace Guardtime.KSI.Signature
         public bool Forward { get; set; }
 
         public byte[] EncodedValue;
+
         public byte[] EncodeValue()
         {
             return EncodedValue;

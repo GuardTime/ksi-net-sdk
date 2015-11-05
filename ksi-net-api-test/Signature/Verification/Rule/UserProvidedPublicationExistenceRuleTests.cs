@@ -35,7 +35,6 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     "AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K");
             verificationResult = rule.Verify(context);
             Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-
         }
     }
 }

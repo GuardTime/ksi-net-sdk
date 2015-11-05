@@ -61,14 +61,14 @@ namespace Guardtime.KSI.Parser
                 bool nonCritical = (firstByte & NonCriticalFlag) != 0;
                 bool forward = (firstByte & ForwardFlag) != 0;
 
-                uint type = (uint) (firstByte & TypeMask);
+                uint type = (uint)(firstByte & TypeMask);
                 ushort length;
 
                 if (tlv16)
                 {
                     byte typeLsb = ReadByte();
                     type = (type << ByteBits) | typeLsb;
-                    length = (ushort) ((ReadByte() << ByteBits) | ReadByte());
+                    length = (ushort)((ReadByte() << ByteBits) | ReadByte());
                 }
                 else
                 {

@@ -125,7 +125,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         public ulong? PublicationTime
         {
-            get { return _publicationTime == null ? (ulong?) null : _publicationTime.Value; }
+            get { return _publicationTime == null ? (ulong?)null : _publicationTime.Value; }
         }
     }
 }

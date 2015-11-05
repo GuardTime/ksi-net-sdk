@@ -17,7 +17,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         public void TestVerify()
         {
             var rule = new CalendarHashChainExistenceRule();
-            
+
             // Argument null exception when no context
             Assert.Throws<KsiException>(delegate
             {

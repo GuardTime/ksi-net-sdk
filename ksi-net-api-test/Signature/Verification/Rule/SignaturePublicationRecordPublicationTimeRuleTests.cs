@@ -35,10 +35,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             // Check signature with publication record and calendar hash chain is missing
             using (var stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))
             {
-
                 Assert.Throws<KsiVerificationException>(delegate
                 {
-
                     var signature = new KsiSignatureFactory().Create(stream);
                     var context = new TestVerificationContext()
                     {

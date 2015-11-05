@@ -87,7 +87,7 @@ namespace Guardtime.KSI.Service
                     writer.WriteTag(Payload);
 
                     ImprintTag mac = new ImprintTag(MacTagType, false, false,
-                        CalculateMac(key, ((MemoryStream) writer.BaseStream).ToArray()));
+                        CalculateMac(key, ((MemoryStream)writer.BaseStream).ToArray()));
                     _mac = PutTag(mac, _mac);
                 }
             }
@@ -135,7 +135,7 @@ namespace Guardtime.KSI.Service
                     writer.WriteTag(_header);
                     writer.WriteTag(Payload);
 
-                    DataHash hash = CalculateMac(key, ((MemoryStream) writer.BaseStream).ToArray());
+                    DataHash hash = CalculateMac(key, ((MemoryStream)writer.BaseStream).ToArray());
                     return hash.Equals(_mac.Value);
                 }
             }

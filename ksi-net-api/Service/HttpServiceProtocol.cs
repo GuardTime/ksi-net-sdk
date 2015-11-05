@@ -10,7 +10,7 @@ namespace Guardtime.KSI.Service
     ///     HTTP KSI service protocol.
     /// </summary>
     public class HttpKsiServiceProtocol : IKsiSigningServiceProtocol, IKsiExtendingServiceProtocol,
-        IKsiPublicationsFileServiceProtocol
+                                          IKsiPublicationsFileServiceProtocol
     {
         private readonly int _bufferSize = 8092;
         private readonly string _extendingUrl;
@@ -41,7 +41,7 @@ namespace Guardtime.KSI.Service
         /// <param name="publicationsFileUrl">publications file url</param>
         /// <param name="requestTimeout">request timeout</param>
         public HttpKsiServiceProtocol(string signingUrl, string extendingUrl, string publicationsFileUrl,
-            int requestTimeout) : this(signingUrl, extendingUrl, publicationsFileUrl)
+                                      int requestTimeout) : this(signingUrl, extendingUrl, publicationsFileUrl)
         {
             if (requestTimeout < 0)
             {
@@ -60,7 +60,7 @@ namespace Guardtime.KSI.Service
         /// <param name="requestTimeout">request timeout</param>
         /// <param name="bufferSize">buffer size</param>
         public HttpKsiServiceProtocol(string signingUrl, string extendingUrl, string publicationsFileUrl,
-            int requestTimeout, int bufferSize) : this(signingUrl, extendingUrl, publicationsFileUrl, requestTimeout)
+                                      int requestTimeout, int bufferSize) : this(signingUrl, extendingUrl, publicationsFileUrl, requestTimeout)
         {
             if (bufferSize < 0)
             {
@@ -193,7 +193,7 @@ namespace Guardtime.KSI.Service
 
         private void EndAsyncGetRequestStreamCallback(object state, bool timedOut)
         {
-            HttpKsiServiceProtocolAsyncResult httpAsyncResult = (HttpKsiServiceProtocolAsyncResult) state;
+            HttpKsiServiceProtocolAsyncResult httpAsyncResult = (HttpKsiServiceProtocolAsyncResult)state;
 
 
             if (timedOut)
@@ -235,7 +235,7 @@ namespace Guardtime.KSI.Service
         private void EndAsyncGetResponseCallback(object state, bool timedOut)
         {
             HttpKsiServiceProtocolAsyncResult httpAsyncResult =
-                (HttpKsiServiceProtocolAsyncResult) state;
+                (HttpKsiServiceProtocolAsyncResult)state;
 
             if (timedOut)
             {
@@ -273,16 +273,20 @@ namespace Guardtime.KSI.Service
             {
                 using (
                     WebResponse response = httpAsyncResult.Request.EndGetResponse(httpAsyncResult.ResponseAsyncResult))
-                using (Stream s = response.GetResponseStream())
-                using (MemoryStream memoryStream = new MemoryStream())
                 {
-                    int bytesLength;
-                    while (s != null && (bytesLength = s.Read(buffer, 0, buffer.Length)) > 0)
+                    using (Stream s = response.GetResponseStream())
                     {
-                        memoryStream.Write(buffer, 0, bytesLength);
-                    }
+                        using (MemoryStream memoryStream = new MemoryStream())
+                        {
+                            int bytesLength;
+                            while (s != null && (bytesLength = s.Read(buffer, 0, buffer.Length)) > 0)
+                            {
+                                memoryStream.Write(buffer, 0, bytesLength);
+                            }
 
-                    return memoryStream.ToArray();
+                            return memoryStream.ToArray();
+                        }
+                    }
                 }
             }
             catch (WebException e)
@@ -293,15 +297,17 @@ namespace Guardtime.KSI.Service
                 }
 
                 using (Stream s = e.Response.GetResponseStream())
-                using (MemoryStream memoryStream = new MemoryStream())
                 {
-                    int bytesLength;
-                    while (s != null && (bytesLength = s.Read(buffer, 0, buffer.Length)) > 0)
+                    using (MemoryStream memoryStream = new MemoryStream())
                     {
-                        memoryStream.Write(buffer, 0, bytesLength);
-                    }
+                        int bytesLength;
+                        while (s != null && (bytesLength = s.Read(buffer, 0, buffer.Length)) > 0)
+                        {
+                            memoryStream.Write(buffer, 0, bytesLength);
+                        }
 
-                    return memoryStream.ToArray();
+                        return memoryStream.ToArray();
+                    }
                 }
             }
         }
@@ -329,7 +335,7 @@ namespace Guardtime.KSI.Service
             private IAsyncResult _streamAsyncResult;
 
             public HttpKsiServiceProtocolAsyncResult(HttpWebRequest request, byte[] postData, AsyncCallback callback,
-                object asyncState)
+                                                     object asyncState)
             {
                 if (request == null)
                 {
@@ -388,7 +394,7 @@ namespace Guardtime.KSI.Service
 
             public int TimeElapsed
             {
-                get { return (int) (DateTime.Now - _startTime).TotalMilliseconds; }
+                get { return (int)(DateTime.Now - _startTime).TotalMilliseconds; }
             }
 
             public bool IsErroneous

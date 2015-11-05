@@ -32,11 +32,11 @@ namespace Guardtime.KSI.Service
         /// <param name="publicationsFileFactory">publications file factory</param>
         /// <param name="ksiSignatureFactory">ksi signature factory</param>
         public KsiService(IKsiSigningServiceProtocol signingServiceProtocol,
-            IKsiExtendingServiceProtocol extendingServiceProtocol,
-            IKsiPublicationsFileServiceProtocol publicationsFileServiceProtocol,
-            IKsiServiceSettings serviceSettings,
-            PublicationsFileFactory publicationsFileFactory,
-            KsiSignatureFactory ksiSignatureFactory)
+                          IKsiExtendingServiceProtocol extendingServiceProtocol,
+                          IKsiPublicationsFileServiceProtocol publicationsFileServiceProtocol,
+                          IKsiServiceSettings serviceSettings,
+                          PublicationsFileFactory publicationsFileFactory,
+                          KsiSignatureFactory ksiSignatureFactory)
         {
             if (serviceSettings == null)
             {
@@ -147,7 +147,7 @@ namespace Guardtime.KSI.Service
                     if (payload.Status != 0)
                     {
                         throw new KsiException("Error occured during aggregation: " + payload.ErrorMessage + ".");
-                    } 
+                    }
 
                     if (!pdu.ValidateMac(_serviceSettings.LoginKey))
                     {
@@ -212,7 +212,7 @@ namespace Guardtime.KSI.Service
         /// <param name="asyncState">async state object</param>
         /// <returns>async result</returns>
         public IAsyncResult BeginExtend(ulong aggregationTime, ulong publicationTime, AsyncCallback callback,
-            object asyncState)
+                                        object asyncState)
         {
             return BeginExtend(new ExtendRequestPayload(aggregationTime, publicationTime), callback, asyncState);
         }

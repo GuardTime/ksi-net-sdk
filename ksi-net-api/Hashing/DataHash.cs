@@ -156,7 +156,7 @@ namespace Guardtime.KSI.Hashing
                 int res = 1;
                 for (int i = 0; i < _imprint.Length; i++)
                 {
-                    res = 31*res + _imprint[i];
+                    res = 31 * res + _imprint[i];
                 }
 
                 return res;

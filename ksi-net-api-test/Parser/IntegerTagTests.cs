@@ -8,7 +8,6 @@ namespace Guardtime.KSI.Parser
     [TestFixture]
     public class IntegerTagTest
     {
-
         [Test]
         public void TestIntegerTagCreateFromTag()
         {
