@@ -59,9 +59,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 CryptoSignatureVerifierFactory.GetCryptoSignatureVerifierByOid(signatureData.SignatureType,
                     out digestAlgorithm);
 
-            Dictionary<string, object> data = new Dictionary<string, object>();
-            data.Add("certificate", certificate);
-            data.Add("digestAlgorithm", digestAlgorithm);
+            var data = new CryptoSignatureVerificationData(certificate, digestAlgorithm);
 
             try
             {

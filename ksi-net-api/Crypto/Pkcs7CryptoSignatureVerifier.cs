@@ -17,7 +17,7 @@ namespace Guardtime.KSI.Crypto
         /// <param name="signatureBytes">signature bytes</param>
         /// <param name="data">other data</param>
         /// <exception cref="PkiVerificationException">thrown when signature verification throws any exception</exception>
-        public void Verify(byte[] signedBytes, byte[] signatureBytes, Dictionary<string, object> data)
+        public void Verify(byte[] signedBytes, byte[] signatureBytes, CryptoSignatureVerificationData data)
         {
             try
             {
