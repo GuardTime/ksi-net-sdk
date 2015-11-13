@@ -7,7 +7,7 @@ namespace Guardtime.KSI.Parser
     /// <summary>
     ///     Octet String TLV element.
     /// </summary>
-    public class RawTag : TlvTag, IEquatable<RawTag>
+    public class RawTag : TlvTag
     {
         private readonly byte[] _value;
 
@@ -53,36 +53,6 @@ namespace Guardtime.KSI.Parser
         }
 
         /// <summary>
-        ///     Compare TLV element against raw TLV element.
-        /// </summary>
-        /// <param name="tag">Raw TLV element</param>
-        /// <returns>true if elements are equal</returns>
-        public bool Equals(RawTag tag)
-        {
-            // If parameter is null, return false. 
-            if (ReferenceEquals(tag, null))
-            {
-                return false;
-            }
-
-            if (ReferenceEquals(this, tag))
-            {
-                return true;
-            }
-
-            // If run-time types are not exactly the same, return false. 
-            if (GetType() != tag.GetType())
-            {
-                return false;
-            }
-
-            return Type == tag.Type &&
-                   Forward == tag.Forward &&
-                   NonCritical == tag.NonCritical &&
-                   Util.IsArrayEqual(EncodeValue(), tag.EncodeValue());
-        }
-
-        /// <summary>
         ///     Return TLV element byte array value.
         /// </summary>
         /// <returns>TLV element value</returns>
@@ -107,38 +77,6 @@ namespace Guardtime.KSI.Parser
 
                 return res + Type.GetHashCode() + Forward.GetHashCode() + NonCritical.GetHashCode();
             }
-        }
-
-        /// <summary>
-        ///     Compare TLV element to object.
-        /// </summary>
-        /// <param name="obj">Comparable object.</param>
-        /// <returns>Is given object equal</returns>
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as RawTag);
-        }
-
-        /// <summary>
-        ///     Compare raw TLV elements against each other.
-        /// </summary>
-        /// <param name="a">Raw TLV element</param>
-        /// <param name="b">Raw TLV element</param>
-        /// <returns>true if elements are equal</returns>
-        public static bool operator ==(RawTag a, RawTag b)
-        {
-            return ReferenceEquals(a, null) ? ReferenceEquals(b, null) : a.Equals(b);
-        }
-
-        /// <summary>
-        ///     Compare raw TLV elements non equity.
-        /// </summary>
-        /// <param name="a">Raw TLV element</param>
-        /// <param name="b">Raw TLV element</param>
-        /// <returns>true if elements are not equal</returns>
-        public static bool operator !=(RawTag a, RawTag b)
-        {
-            return !(a == b);
         }
     }
 }

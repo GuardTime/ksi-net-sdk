@@ -12,7 +12,7 @@ namespace Guardtime.KSI.Parser
     /// <summary>
     ///     TLV element containing other TLV elements.
     /// </summary>
-    public abstract class CompositeTag : TlvTag, IEnumerable<TlvTag>, IEquatable<CompositeTag>
+    public abstract class CompositeTag : TlvTag, IEnumerable<TlvTag>
     {
         private readonly object _lock = new object();
         private readonly IList<TlvTag> _value = new List<TlvTag>();
@@ -112,45 +112,7 @@ namespace Guardtime.KSI.Parser
             return GetEnumerator();
         }
 
-        /// <summary>
-        ///     Compare Composite element to composite element
-        /// </summary>
-        /// <param name="tag">composite element</param>
-        /// <returns>true if objects are equal</returns>
-        public bool Equals(CompositeTag tag)
-        {
-            // If parameter is null, return false. 
-            if (ReferenceEquals(tag, null))
-            {
-                return false;
-            }
-
-            if (ReferenceEquals(this, tag))
-            {
-                return true;
-            }
-
-            // If run-time types are not exactly the same, return false. 
-            if (GetType() != tag.GetType())
-            {
-                return false;
-            }
-
-            if (Count != tag.Count || Type != tag.Type || Forward != tag.Forward || NonCritical != tag.NonCritical)
-            {
-                return false;
-            }
-
-            for (int i = 0; i < Count; i++)
-            {
-                if (!this[i].Equals(tag[i]))
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
+       
 
         /// <summary>
         ///     Decode bytes to TLV list.
@@ -318,16 +280,6 @@ namespace Guardtime.KSI.Parser
         }
 
         /// <summary>
-        ///     Compare TLV element to object.
-        /// </summary>
-        /// <param name="obj">Comparable object.</param>
-        /// <returns>Is given object equal</returns>
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as CompositeTag);
-        }
-
-        /// <summary>
         ///     Convert TLV element to string.
         /// </summary>
         /// <returns>TLV element as string</returns>
@@ -358,29 +310,6 @@ namespace Guardtime.KSI.Parser
             }
 
             return builder.ToString();
-        }
-
-
-        /// <summary>
-        ///     Compare two composite element objects.
-        /// </summary>
-        /// <param name="a">composite element</param>
-        /// <param name="b">composite element</param>
-        /// <returns>true if objects are equal</returns>
-        public static bool operator ==(CompositeTag a, CompositeTag b)
-        {
-            return ReferenceEquals(a, null) ? ReferenceEquals(b, null) : a.Equals(b);
-        }
-
-        /// <summary>
-        ///     Compare two composite elements non equality.
-        /// </summary>
-        /// <param name="a">composite element</param>
-        /// <param name="b">composite element</param>
-        /// <returns>true if objects are not equal</returns>
-        public static bool operator !=(CompositeTag a, CompositeTag b)
-        {
-            return !(a == b);
         }
 
         /// <summary>

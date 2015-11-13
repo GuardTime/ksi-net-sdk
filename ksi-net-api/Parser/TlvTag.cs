@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Utils;
@@ -8,7 +9,7 @@ namespace Guardtime.KSI.Parser
     /// <summary>
     ///     TLV objects base class.
     /// </summary>
-    public abstract class TlvTag : ITlvTag
+    public abstract class TlvTag : ITlvTag, IEquatable<TlvTag>
     {
         private readonly bool _forward;
         private readonly bool _nonCritical;
@@ -98,6 +99,74 @@ namespace Guardtime.KSI.Parser
                     stream.Dispose();
                 }
             }
+        }
+
+        /// <summary>
+        ///     Compare tlv element to tlv element
+        /// </summary>
+        /// <param name="tag">composite element</param>
+        /// <returns>true if objects are equal</returns>
+        public bool Equals(TlvTag tag)
+        {
+            // If parameter is null, return false. 
+            if (ReferenceEquals(tag, null))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, tag))
+            {
+                return true;
+            }
+
+            // If run-time types are not exactly the same, return false. 
+            if (GetType() != tag.GetType())
+            {
+                return false;
+            }
+
+            byte[] valueBytes = EncodeValue();
+            byte[] tagValueBytes = tag.EncodeValue();
+
+            if (valueBytes.Length != tagValueBytes.Length || Type != tag.Type || Forward != tag.Forward || NonCritical != tag.NonCritical)
+            {
+                return false;
+            }
+
+            return Util.IsArrayEqual(valueBytes, tagValueBytes);
+        }
+
+        /// <summary>
+        ///     Compare TLV element to object.
+        /// </summary>
+        /// <param name="obj">Comparable object.</param>
+        /// <returns>Is given object equal</returns>
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as TlvTag);
+        }
+
+
+        /// <summary>
+        ///     Compare two composite element objects.
+        /// </summary>
+        /// <param name="a">composite element</param>
+        /// <param name="b">composite element</param>
+        /// <returns>true if objects are equal</returns>
+        public static bool operator ==(TlvTag a, TlvTag b)
+        {
+            return ReferenceEquals(a, null) ? ReferenceEquals(b, null) : a.Equals(b);
+        }
+
+        /// <summary>
+        ///     Compare two composite elements non equality.
+        /// </summary>
+        /// <param name="a">composite element</param>
+        /// <param name="b">composite element</param>
+        /// <returns>true if objects are not equal</returns>
+        public static bool operator !=(TlvTag a, TlvTag b)
+        {
+            return !(a == b);
         }
 
         /// <summary>
