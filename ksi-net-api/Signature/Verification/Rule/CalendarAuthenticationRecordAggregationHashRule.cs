@@ -32,7 +32,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             CalendarAuthenticationRecord calendarAuthenticationRecord = signature.CalendarAuthenticationRecord;
             if (calendarAuthenticationRecord == null)
             {
-                return new VerificationResult(RuleName, VerificationResultCode.Ok);
+                return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
             }
 
             CalendarHashChain calendarHashChain = signature.CalendarHashChain;
@@ -43,10 +43,10 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (calendarHashChain.OutputHash != calendarAuthenticationRecord.PublicationData.PublicationHash)
             {
-                return new VerificationResult(RuleName, VerificationResultCode.Fail, VerificationError.Int08);
+                return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int08);
             }
 
-            return new VerificationResult(RuleName, VerificationResultCode.Ok);
+            return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }
     }
 }

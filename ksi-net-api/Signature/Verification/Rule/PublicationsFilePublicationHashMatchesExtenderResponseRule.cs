@@ -8,10 +8,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class PublicationsFilePublicationHashMatchesExtenderResponseRule : VerificationRule
     {
-        /// <summary>
-        ///     Rule name.
-        /// </summary>
-        public const string RuleName = "PublicationsFilePublicationHashMatchesExtenderResponseRule";
+        
 
         /// <see cref="VerificationRule.Verify" />
         /// <exception cref="KsiException">thrown if verification context is missing</exception>
@@ -59,10 +56,10 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (extendedTimeCalendarHashChain.OutputHash != publicationRecord.PublicationData.PublicationHash)
             {
-                return new VerificationResult(RuleName, VerificationResultCode.Fail, VerificationError.Pub01);
+                return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Pub01);
             }
 
-            return new VerificationResult(RuleName, VerificationResultCode.Ok);
+            return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }
     }
 }

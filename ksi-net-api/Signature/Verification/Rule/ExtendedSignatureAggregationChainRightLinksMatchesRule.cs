@@ -8,10 +8,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class ExtendedSignatureAggregationChainRightLinksMatchesRule : VerificationRule
     {
-        /// <summary>
-        ///     Rule name.
-        /// </summary>
-        public const string RuleName = "ExtendedSignatureAggregationChainRightLinksMatchesRule";
+        
 
         /// <see cref="VerificationRule.Verify" />
         /// <exception cref="KsiException">thrown if verification context is missing</exception>
@@ -43,8 +40,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             }
 
             return !calendarHashChain.AreRightLinksEqual(extendedCalendarHashChain)
-                ? new VerificationResult(RuleName, VerificationResultCode.Fail, VerificationError.Cal04)
-                : new VerificationResult(RuleName, VerificationResultCode.Ok);
+                ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Cal04)
+                : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }
     }
 }

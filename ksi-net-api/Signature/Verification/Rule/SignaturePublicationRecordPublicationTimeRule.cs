@@ -9,11 +9,6 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class SignaturePublicationRecordPublicationTimeRule : VerificationRule
     {
-        /// <summary>
-        ///     Rule name.
-        /// </summary>
-        public const string RuleName = "SignaturePublicationRecordPublicationTimeRule";
-
         /// <see cref="VerificationRule.Verify" />
         /// <exception cref="KsiException">thrown if verification context is missing</exception>
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
@@ -31,7 +26,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (context.Signature.PublicationRecord == null)
             {
-                return new VerificationResult(RuleName, VerificationResultCode.Ok);
+                return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
             }
 
             if (context.Signature.CalendarHashChain == null)
@@ -44,10 +39,10 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (publicationRecordPublicationData.PublicationTime != calendarHashChainPublicationData.PublicationTime)
             {
-                return new VerificationResult(RuleName, VerificationResultCode.Fail, VerificationError.Int07);
+                return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int07);
             }
 
-            return new VerificationResult(RuleName, VerificationResultCode.Ok);
+            return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }
     }
 }
