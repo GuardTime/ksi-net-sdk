@@ -10,15 +10,6 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public sealed class ExtendRequestPayload : ExtendPduPayload
     {
-        /// <summary>
-        ///     Extend request payload TLV type.
-        /// </summary>
-        public const uint TagType = 0x301;
-
-        private const uint RequestIdTagType = 0x1;
-        private const uint AggregationTimeTagType = 0x2;
-        private const uint PublicationTimeTagType = 0x3;
-
         private readonly IntegerTag _aggregationTime;
         private readonly IntegerTag _publicationTime;
         private readonly IntegerTag _requestId;
@@ -30,7 +21,7 @@ namespace Guardtime.KSI.Service
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
         public ExtendRequestPayload(TlvTag tag) : base(tag)
         {
-            if (Type != TagType)
+            if (Type != Constants.ExtendRequestPayload.TagType)
             {
                 throw new TlvException("Invalid extend request payload type(" + Type + ").");
             }
@@ -43,17 +34,17 @@ namespace Guardtime.KSI.Service
             {
                 switch (this[i].Type)
                 {
-                    case RequestIdTagType:
+                    case Constants.ExtendRequestPayload.RequestIdTagType:
                         _requestId = new IntegerTag(this[i]);
                         this[i] = _requestId;
                         requestIdCount++;
                         break;
-                    case AggregationTimeTagType:
+                    case Constants.ExtendRequestPayload.AggregationTimeTagType:
                         _aggregationTime = new IntegerTag(this[i]);
                         this[i] = _aggregationTime;
                         aggregationTimeCount++;
                         break;
-                    case PublicationTimeTagType:
+                    case Constants.ExtendRequestPayload.PublicationTimeTagType:
                         _publicationTime = new IntegerTag(this[i]);
                         this[i] = _publicationTime;
                         publicationTimeCount++;
@@ -87,7 +78,7 @@ namespace Guardtime.KSI.Service
         /// <param name="publicationTime">publication time</param>
         public ExtendRequestPayload(ulong aggregationTime, ulong publicationTime) : this(aggregationTime)
         {
-            _publicationTime = new IntegerTag(PublicationTimeTagType, false, false, publicationTime);
+            _publicationTime = new IntegerTag(Constants.ExtendRequestPayload.PublicationTimeTagType, false, false, publicationTime);
             AddTag(_publicationTime);
         }
 
@@ -95,12 +86,12 @@ namespace Guardtime.KSI.Service
         ///     Create extend request payload from aggregation time.
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
-        public ExtendRequestPayload(ulong aggregationTime) : base(TagType, false, false, new List<TlvTag>())
+        public ExtendRequestPayload(ulong aggregationTime) : base(Constants.ExtendRequestPayload.TagType, false, false, new List<TlvTag>())
         {
-            _requestId = new IntegerTag(RequestIdTagType, false, false, Util.GetRandomUnsignedLong());
+            _requestId = new IntegerTag(Constants.ExtendRequestPayload.RequestIdTagType, false, false, Util.GetRandomUnsignedLong());
             AddTag(_requestId);
 
-            _aggregationTime = new IntegerTag(AggregationTimeTagType, false, false, aggregationTime);
+            _aggregationTime = new IntegerTag(Constants.ExtendRequestPayload.AggregationTimeTagType, false, false, aggregationTime);
             AddTag(_aggregationTime);
         }
 

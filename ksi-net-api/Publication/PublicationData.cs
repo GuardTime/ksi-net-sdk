@@ -12,13 +12,6 @@ namespace Guardtime.KSI.Publication
     /// </summary>
     public sealed class PublicationData : CompositeTag
     {
-        /// <summary>
-        ///     Publication data tag type.
-        /// </summary>
-        public const uint TagType = 0x10;
-
-        private const uint PublicationTimeTagType = 0x2;
-        private const uint PublicationHashTagType = 0x4;
         private readonly ImprintTag _publicationHash;
 
         private readonly IntegerTag _publicationTime;
@@ -30,7 +23,7 @@ namespace Guardtime.KSI.Publication
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
         public PublicationData(TlvTag tag) : base(tag)
         {
-            if (Type != TagType)
+            if (Type != Constants.PublicationData.TagType)
             {
                 throw new TlvException("Invalid publication data type(" + Type + ").");
             }
@@ -42,12 +35,12 @@ namespace Guardtime.KSI.Publication
             {
                 switch (this[i].Type)
                 {
-                    case PublicationTimeTagType:
+                    case Constants.PublicationData.PublicationTimeTagType:
                         _publicationTime = new IntegerTag(this[i]);
                         this[i] = _publicationTime;
                         publicationTimeCount++;
                         break;
-                    case PublicationHashTagType:
+                    case Constants.PublicationData.PublicationHashTagType:
                         _publicationHash = new ImprintTag(this[i]);
                         this[i] = _publicationHash;
                         publicationHashCount++;
@@ -75,11 +68,11 @@ namespace Guardtime.KSI.Publication
         /// <param name="publicationTime">publication time</param>
         /// <param name="publicationHash">publication hash</param>
         public PublicationData(ulong publicationTime, DataHash publicationHash)
-            : base(TagType, false, true, new List<TlvTag>())
+            : base(Constants.PublicationData.TagType, false, true, new List<TlvTag>())
         {
-            _publicationTime = new IntegerTag(PublicationTimeTagType, false, false, publicationTime);
+            _publicationTime = new IntegerTag(Constants.PublicationData.PublicationTimeTagType, false, false, publicationTime);
             AddTag(_publicationTime);
-            _publicationHash = new ImprintTag(PublicationHashTagType, false, false, publicationHash);
+            _publicationHash = new ImprintTag(Constants.PublicationData.PublicationHashTagType, false, false, publicationHash);
             AddTag(_publicationHash);
         }
 
@@ -88,7 +81,7 @@ namespace Guardtime.KSI.Publication
         /// </summary>
         /// <param name="publicationString">publication string</param>
         /// <exception cref="TlvException">thrown when TLV parsing fails from publication string</exception>
-        public PublicationData(string publicationString) : base(TagType, false, true, new List<TlvTag>())
+        public PublicationData(string publicationString) : base(Constants.PublicationData.TagType, false, true, new List<TlvTag>())
         {
             if (publicationString == null)
             {
@@ -120,11 +113,11 @@ namespace Guardtime.KSI.Publication
             byte[] publicationTimeBytes = new byte[8];
             Array.Copy(dataBytesWithCrc32, 0, publicationTimeBytes, 0, 8);
 
-            _publicationTime = new IntegerTag(PublicationTimeTagType, false, false,
+            _publicationTime = new IntegerTag(Constants.PublicationData.PublicationTimeTagType, false, false,
                 Util.DecodeUnsignedLong(publicationTimeBytes, 0, publicationTimeBytes.Length));
             AddTag(_publicationTime);
 
-            _publicationHash = new ImprintTag(PublicationHashTagType, false, false, new DataHash(hashImprint));
+            _publicationHash = new ImprintTag(Constants.PublicationData.PublicationHashTagType, false, false, new DataHash(hashImprint));
             AddTag(_publicationHash);
         }
 

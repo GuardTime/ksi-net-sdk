@@ -9,15 +9,6 @@ namespace Guardtime.KSI.Publication
     /// </summary>
     public sealed class PublicationsFileHeader : CompositeTag
     {
-        /// <summary>
-        ///     Publications file header TLV type.
-        /// </summary>
-        public const uint TagType = 0x701;
-
-        private const uint VersionTagType = 0x1;
-        private const uint CreationTimeTagType = 0x2;
-        private const uint RepUriTagType = 0x3;
-
         private readonly IntegerTag _creationTime;
         private readonly StringTag _repUri;
         private readonly IntegerTag _version;
@@ -29,7 +20,7 @@ namespace Guardtime.KSI.Publication
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
         public PublicationsFileHeader(TlvTag tag) : base(tag)
         {
-            if (Type != TagType)
+            if (Type != Constants.PublicationsFileHeader.TagType)
             {
                 throw new TlvException("Invalid certificate record type(" + Type + ").");
             }
@@ -42,18 +33,18 @@ namespace Guardtime.KSI.Publication
             {
                 switch (this[i].Type)
                 {
-                    case VersionTagType:
+                    case Constants.PublicationsFileHeader.VersionTagType:
                         _version = new IntegerTag(this[i]);
                         this[i] = _version;
                         versionCount++;
                         break;
-                    case CreationTimeTagType:
+                    case Constants.PublicationsFileHeader.CreationTimeTagType:
                         _creationTime = new IntegerTag(this[i].Type, this[i].NonCritical, this[i].Forward,
                             Util.DecodeUnsignedLong(this[i].EncodeValue(), 0, this[i].EncodeValue().Length));
                         this[i] = _creationTime;
                         creationTimeCount++;
                         break;
-                    case RepUriTagType:
+                    case Constants.PublicationsFileHeader.RepUriTagType:
                         _repUri = new StringTag(this[i]);
                         this[i] = _repUri;
                         repUriCount++;

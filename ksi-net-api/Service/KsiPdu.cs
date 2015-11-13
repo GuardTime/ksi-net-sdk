@@ -13,11 +13,6 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public abstract class KsiPdu : CompositeTag
     {
-        /// <summary>
-        ///     Mac TLV type.
-        /// </summary>
-        protected const uint MacTagType = 0x1f;
-
         private readonly KsiPduHeader _header;
         private ImprintTag _mac;
 
@@ -31,11 +26,11 @@ namespace Guardtime.KSI.Service
             {
                 switch (this[i].Type)
                 {
-                    case KsiPduHeader.TagType:
+                    case Constants.KsiPduHeader.TagType:
                         _header = new KsiPduHeader(this[i]);
                         this[i] = _header;
                         break;
-                    case MacTagType:
+                    case Constants.KsiPdu.MacTagType:
                         _mac = new ImprintTag(this[i]);
                         this[i] = _mac;
                         break;
@@ -86,7 +81,7 @@ namespace Guardtime.KSI.Service
                     writer.WriteTag(_header);
                     writer.WriteTag(Payload);
 
-                    ImprintTag mac = new ImprintTag(MacTagType, false, false,
+                    ImprintTag mac = new ImprintTag(Constants.KsiPdu.MacTagType, false, false,
                         CalculateMac(key, ((MemoryStream)writer.BaseStream).ToArray()));
                     _mac = PutTag(mac, _mac);
                 }

@@ -80,7 +80,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants\Constants.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Crypto\CryptoSignatureVerificationData.cs" />
     <Compile Include="Crypto\CryptoSignatureVerifierFactory.cs" />
     <Compile Include="Crypto\ICryptoSignatureVerifier.cs" />

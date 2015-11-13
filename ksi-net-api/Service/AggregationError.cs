@@ -8,11 +8,6 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public sealed class AggregationError : AggregationPduPayload
     {
-        /// <summary>
-        ///     Aggregation error payload TLV type.
-        /// </summary>
-        public const uint TagType = 0x203;
-
         private readonly StringTag _errorMessage;
         private readonly IntegerTag _status;
 
@@ -23,7 +18,7 @@ namespace Guardtime.KSI.Service
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
         public AggregationError(TlvTag tag) : base(tag)
         {
-            if (Type != TagType)
+            if (Type != Constants.AggregationError.TagType)
             {
                 throw new TlvException("Invalid aggregation error type(" + Type + ").");
             }
@@ -35,12 +30,12 @@ namespace Guardtime.KSI.Service
             {
                 switch (this[i].Type)
                 {
-                    case StatusTagType:
+                    case Constants.KsiPduPayload.StatusTagType:
                         _status = new IntegerTag(this[i]);
                         this[i] = _status;
                         statusCount++;
                         break;
-                    case ErrorMessageTagType:
+                    case Constants.KsiPduPayload.ErrorMessageTagType:
                         _errorMessage = new StringTag(this[i]);
                         this[i] = _errorMessage;
                         errorMessageCount++;

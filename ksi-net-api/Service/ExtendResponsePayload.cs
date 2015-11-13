@@ -9,14 +9,6 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public sealed class ExtendResponsePayload : ExtendPduPayload
     {
-        /// <summary>
-        ///     Extension response payload TLV type.
-        /// </summary>
-        public const uint TagType = 0x302;
-
-        private const uint RequestIdTagType = 0x1;
-        private const uint LastTimeTagType = 0x10;
-
         private readonly CalendarHashChain _calendarHashChain;
         private readonly StringTag _errorMessage;
         private readonly IntegerTag _lastTime;
@@ -30,7 +22,7 @@ namespace Guardtime.KSI.Service
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
         public ExtendResponsePayload(TlvTag tag) : base(tag)
         {
-            if (Type != TagType)
+            if (Type != Constants.ExtendResponsePayload.TagType)
             {
                 throw new TlvException("Invalid extend response payload type(" + Type + ").");
             }
@@ -45,27 +37,27 @@ namespace Guardtime.KSI.Service
             {
                 switch (this[i].Type)
                 {
-                    case RequestIdTagType:
+                    case Constants.ExtendResponsePayload.RequestIdTagType:
                         _requestId = new IntegerTag(this[i]);
                         this[i] = _requestId;
                         requestIdCount++;
                         break;
-                    case StatusTagType:
+                    case Constants.KsiPduPayload.StatusTagType:
                         _status = new IntegerTag(this[i]);
                         this[i] = _status;
                         statusCount++;
                         break;
-                    case ErrorMessageTagType:
+                    case Constants.KsiPduPayload.ErrorMessageTagType:
                         _errorMessage = new StringTag(this[i]);
                         this[i] = _errorMessage;
                         errorMessageCount++;
                         break;
-                    case LastTimeTagType:
+                    case Constants.ExtendResponsePayload.LastTimeTagType:
                         _lastTime = new IntegerTag(this[i]);
                         this[i] = _lastTime;
                         lastTimeCount++;
                         break;
-                    case CalendarHashChain.TagType:
+                    case Constants.CalendarHashChain.TagType:
                         _calendarHashChain = new CalendarHashChain(this[i]);
                         this[i] = _calendarHashChain;
                         calendarHashChainCount++;

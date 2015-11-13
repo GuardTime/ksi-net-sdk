@@ -10,15 +10,6 @@ namespace Guardtime.KSI.Signature
     /// </summary>
     public sealed class AggregationAuthenticationRecord : CompositeTag
     {
-        /// <summary>
-        ///     Aggregation authentication record tag type
-        /// </summary>
-        public const uint TagType = 0x804;
-
-        private const uint AggregationTimeTagType = 0x2;
-        private const uint ChainIndexTagType = 0x3;
-        private const uint InputHashTagType = 0x5;
-
         private readonly IntegerTag _aggregationTime;
         private readonly List<IntegerTag> _chainIndex = new List<IntegerTag>();
         private readonly ImprintTag _inputHash;
@@ -31,7 +22,7 @@ namespace Guardtime.KSI.Signature
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
         public AggregationAuthenticationRecord(TlvTag tag) : base(tag)
         {
-            if (Type != TagType)
+            if (Type != Constants.AggregationAuthenticationRecord.TagType)
             {
                 throw new TlvException("Invalid aggregation authentication record type(" + Type + ").");
             }
@@ -44,22 +35,22 @@ namespace Guardtime.KSI.Signature
             {
                 switch (this[i].Type)
                 {
-                    case AggregationTimeTagType:
+                    case Constants.AggregationAuthenticationRecord.AggregationTimeTagType:
                         _aggregationTime = new IntegerTag(this[i]);
                         this[i] = _aggregationTime;
                         aggregationTimeCount++;
                         break;
-                    case ChainIndexTagType:
+                    case Constants.AggregationAuthenticationRecord.ChainIndexTagType:
                         IntegerTag chainIndexTag = new IntegerTag(this[i]);
                         _chainIndex.Add(chainIndexTag);
                         this[i] = chainIndexTag;
                         break;
-                    case InputHashTagType:
+                    case Constants.AggregationAuthenticationRecord.InputHashTagType:
                         _inputHash = new ImprintTag(this[i]);
                         this[i] = _inputHash;
                         inputHashCount++;
                         break;
-                    case SignatureData.TagType:
+                    case Constants.SignatureData.TagType:
                         _signatureData = new SignatureData(this[i]);
                         this[i] = _signatureData;
                         signatureDataCount++;

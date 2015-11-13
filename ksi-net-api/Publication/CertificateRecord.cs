@@ -8,14 +8,6 @@ namespace Guardtime.KSI.Publication
     /// </summary>
     public sealed class CertificateRecord : CompositeTag
     {
-        /// <summary>
-        ///     Certificate record TLV type.
-        /// </summary>
-        public const uint TagType = 0x702;
-
-        private const uint CertificateIdTagType = 0x1;
-        private const uint X509CertificateTagType = 0x2;
-
         private readonly RawTag _certificateId;
         private readonly RawTag _x509Certificate;
 
@@ -26,7 +18,7 @@ namespace Guardtime.KSI.Publication
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
         public CertificateRecord(TlvTag tag) : base(tag)
         {
-            if (Type != TagType)
+            if (Type != Constants.CertificateRecord.TagType)
             {
                 throw new TlvException("Invalid certificate record type(" + Type + ").");
             }
@@ -38,12 +30,12 @@ namespace Guardtime.KSI.Publication
             {
                 switch (this[i].Type)
                 {
-                    case CertificateIdTagType:
+                    case Constants.CertificateRecord.CertificateIdTagType:
                         _certificateId = new RawTag(this[i]);
                         this[i] = _certificateId;
                         certificateIdCount++;
                         break;
-                    case X509CertificateTagType:
+                    case Constants.CertificateRecord.X509CertificateTagType:
                         _x509Certificate = new RawTag(this[i]);
                         this[i] = _x509Certificate;
                         x509CertificateCount++;

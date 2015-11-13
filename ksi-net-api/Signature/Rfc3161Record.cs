@@ -10,21 +10,6 @@ namespace Guardtime.KSI.Signature
     /// </summary>
     public sealed class Rfc3161Record : CompositeTag
     {
-        /// <summary>
-        ///     RFC3161 record tag type
-        /// </summary>
-        public const uint TagType = 0x806;
-
-        private const uint AggregationTimeTagType = 0x2;
-        private const uint ChainIndexTagType = 0x3;
-        private const uint InputHashTagType = 0x5;
-        private const uint TstInfoPrefixTagType = 0x10;
-        private const uint TstInfoSuffixTagType = 0x11;
-        private const uint TstInfoAlgorithmTagType = 0x12;
-        private const uint SignedAttributesPrefixTagType = 0x13;
-        private const uint SignedAttributesSuffixTagType = 0x14;
-        private const uint SignedAttributesAlgorithmTagType = 0x15;
-
         private readonly IntegerTag _aggregationTime;
         private readonly List<IntegerTag> _chainIndex = new List<IntegerTag>();
         private readonly ImprintTag _inputHash;
@@ -44,7 +29,7 @@ namespace Guardtime.KSI.Signature
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
         public Rfc3161Record(TlvTag tag) : base(tag)
         {
-            if (Type != TagType)
+            if (Type != Constants.Rfc3161Record.TagType)
             {
                 throw new TlvException("Invalid RFC#3161 record type(" + Type + ").");
             }
@@ -62,47 +47,47 @@ namespace Guardtime.KSI.Signature
             {
                 switch (this[i].Type)
                 {
-                    case AggregationTimeTagType:
+                    case Constants.Rfc3161Record.AggregationTimeTagType:
                         _aggregationTime = new IntegerTag(this[i]);
                         this[i] = _aggregationTime;
                         aggregationTimeCount++;
                         break;
-                    case ChainIndexTagType:
+                    case Constants.Rfc3161Record.ChainIndexTagType:
                         IntegerTag chainTag = new IntegerTag(this[i]);
                         _chainIndex.Add(chainTag);
                         this[i] = chainTag;
                         break;
-                    case InputHashTagType:
+                    case Constants.Rfc3161Record.InputHashTagType:
                         _inputHash = new ImprintTag(this[i]);
                         this[i] = _inputHash;
                         inputHashCount++;
                         break;
-                    case TstInfoPrefixTagType:
+                    case Constants.Rfc3161Record.TstInfoPrefixTagType:
                         _tstInfoPrefix = new RawTag(this[i]);
                         this[i] = _tstInfoPrefix;
                         tstInfoPrefixCount++;
                         break;
-                    case TstInfoSuffixTagType:
+                    case Constants.Rfc3161Record.TstInfoSuffixTagType:
                         _tstInfoSuffix = new RawTag(this[i]);
                         this[i] = _tstInfoSuffix;
                         tstInfoSuffixCount++;
                         break;
-                    case TstInfoAlgorithmTagType:
+                    case Constants.Rfc3161Record.TstInfoAlgorithmTagType:
                         _tstInfoAlgorithm = new IntegerTag(this[i]);
                         this[i] = _tstInfoAlgorithm;
                         tstInfoAlgorithmCount++;
                         break;
-                    case SignedAttributesPrefixTagType:
+                    case Constants.Rfc3161Record.SignedAttributesPrefixTagType:
                         _signedAttributesPrefix = new RawTag(this[i]);
                         this[i] = _signedAttributesPrefix;
                         signedAttributesPrefixCount++;
                         break;
-                    case SignedAttributesSuffixTagType:
+                    case Constants.Rfc3161Record.SignedAttributesSuffixTagType:
                         _signedAttributesSuffix = new RawTag(this[i]);
                         this[i] = _signedAttributesSuffix;
                         signedAttributesSuffixCount++;
                         break;
-                    case SignedAttributesAlgorithmTagType:
+                    case Constants.Rfc3161Record.SignedAttributesAlgorithmTagType:
                         _signedAttributesAlgorithm = new IntegerTag(this[i]);
                         this[i] = _signedAttributesAlgorithm;
                         signedAttributesAlgorithmCount++;

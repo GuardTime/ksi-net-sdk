@@ -9,19 +9,6 @@ namespace Guardtime.KSI.Publication
     /// </summary>
     public sealed class PublicationRecord : CompositeTag
     {
-        /// <summary>
-        ///     Signature publication record TLV type.
-        /// </summary>
-        public const uint TagTypeSignature = 0x803;
-
-        /// <summary>
-        ///     Publication publication record TLV type.
-        /// </summary>
-        public const uint TagTypePublication = 0x703;
-
-        private const uint PublicationReferencesTagType = 0x9;
-        private const uint PublicationRepositoryUriTagType = 0xa;
-
         private readonly PublicationData _publicationData;
         private readonly List<StringTag> _publicationReferences = new List<StringTag>();
         private readonly List<StringTag> _publicationRepositoryUri = new List<StringTag>();
@@ -33,7 +20,7 @@ namespace Guardtime.KSI.Publication
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
         public PublicationRecord(TlvTag tag) : base(tag)
         {
-            if (Type != TagTypeSignature && Type != TagTypePublication)
+            if (Type != Constants.PublicationRecord.TagTypeSignature && Type != Constants.PublicationRecord.TagTypePublication)
             {
                 throw new TlvException("Invalid publication record type(" + Type + ").");
             }
@@ -46,17 +33,17 @@ namespace Guardtime.KSI.Publication
 
                 switch (this[i].Type)
                 {
-                    case PublicationData.TagType:
+                    case Constants.PublicationData.TagType:
                         _publicationData = new PublicationData(this[i]);
                         this[i] = _publicationData;
                         publicationDataCount++;
                         break;
-                    case PublicationReferencesTagType:
+                    case Constants.PublicationRecord.PublicationReferencesTagType:
                         listTag = new StringTag(this[i]);
                         _publicationReferences.Add(listTag);
                         this[i] = listTag;
                         break;
-                    case PublicationRepositoryUriTagType:
+                    case Constants.PublicationRecord.PublicationRepositoryUriTagType:
                         listTag = new StringTag(this[i]);
                         _publicationRepositoryUri.Add(listTag);
                         this[i] = listTag;

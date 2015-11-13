@@ -10,15 +10,6 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public sealed class AggregationResponsePayload : AggregationPduPayload
     {
-        /// <summary>
-        ///     Aggregation response payload TLV type.
-        /// </summary>
-        public const uint TagType = 0x202;
-
-        private const uint RequestIdTagType = 0x1;
-        private const uint ConfigTagType = 0x10;
-        private const uint RequestAcknowledgmentTagType = 0x11;
-
         // TODO: Create config
         private readonly RawTag _config;
         private readonly StringTag _errorMessage;
@@ -34,7 +25,7 @@ namespace Guardtime.KSI.Service
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
         public AggregationResponsePayload(TlvTag tag) : base(tag)
         {
-            if (Type != TagType)
+            if (Type != Constants.AggregationResponsePayload.TagType)
             {
                 throw new TlvException("Invalid aggregation response payload type(" + Type + ").");
             }
@@ -49,36 +40,36 @@ namespace Guardtime.KSI.Service
             {
                 switch (this[i].Type)
                 {
-                    case RequestIdTagType:
+                    case Constants.AggregationResponsePayload.RequestIdTagType:
                         _requestId = new IntegerTag(this[i]);
                         this[i] = _requestId;
                         requestIdCount++;
                         break;
-                    case StatusTagType:
+                    case Constants.KsiPduPayload.StatusTagType:
                         _status = new IntegerTag(this[i]);
                         this[i] = _status;
                         statusCount++;
                         break;
-                    case ErrorMessageTagType:
+                    case Constants.KsiPduPayload.ErrorMessageTagType:
                         _errorMessage = new StringTag(this[i]);
                         this[i] = _errorMessage;
                         errorMessageCount++;
                         break;
-                    case ConfigTagType:
+                    case Constants.AggregationResponsePayload.ConfigTagType:
                         _config = new RawTag(this[i]);
                         this[i] = _config;
                         configCount++;
                         break;
-                    case RequestAcknowledgmentTagType:
+                    case Constants.AggregationResponsePayload.RequestAcknowledgmentTagType:
                         _requestAcknowledgment = new RawTag(this[i]);
                         this[i] = _requestAcknowledgment;
                         requestAcknowledgmentCount++;
                         break;
-                    case AggregationHashChain.TagType:
-                    case CalendarHashChain.TagType:
-                    case PublicationRecord.TagTypeSignature:
-                    case AggregationAuthenticationRecord.TagType:
-                    case CalendarAuthenticationRecord.TagType:
+                    case Constants.AggregationHashChain.TagType:
+                    case Constants.CalendarHashChain.TagType:
+                    case Constants.PublicationRecord.TagTypeSignature:
+                    case Constants.AggregationAuthenticationRecord.TagType:
+                    case Constants.CalendarAuthenticationRecord.TagType:
                         break;
                     default:
                         VerifyCriticalFlag(this[i]);

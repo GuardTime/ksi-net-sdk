@@ -9,15 +9,6 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public sealed class KsiPduHeader : CompositeTag
     {
-        /// <summary>
-        ///     KSI PDU header TLV type.
-        /// </summary>
-        public const uint TagType = 0x1;
-
-        private const uint LoginIdTagType = 0x1;
-        private const uint InstanceIdTagType = 0x2;
-        private const uint MessageIdTagType = 0x3;
-
         private readonly IntegerTag _instanceId;
         private readonly StringTag _loginId;
         private readonly IntegerTag _messageId;
@@ -29,7 +20,7 @@ namespace Guardtime.KSI.Service
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
         public KsiPduHeader(TlvTag tag) : base(tag)
         {
-            if (Type != TagType)
+            if (Type != Constants.KsiPduHeader.TagType)
             {
                 throw new TlvException("Invalid KSI PDU header type(" + Type + ").");
             }
@@ -42,17 +33,17 @@ namespace Guardtime.KSI.Service
             {
                 switch (this[i].Type)
                 {
-                    case LoginIdTagType:
+                    case Constants.KsiPduHeader.LoginIdTagType:
                         _loginId = new StringTag(this[i]);
                         this[i] = _loginId;
                         loginIdCount++;
                         break;
-                    case InstanceIdTagType:
+                    case Constants.KsiPduHeader.InstanceIdTagType:
                         _instanceId = new IntegerTag(this[i]);
                         this[i] = _instanceId;
                         instanceIdCount++;
                         break;
-                    case MessageIdTagType:
+                    case Constants.KsiPduHeader.MessageIdTagType:
                         _messageId = new IntegerTag(this[i]);
                         this[i] = _messageId;
                         messageIdCount++;
@@ -94,15 +85,15 @@ namespace Guardtime.KSI.Service
         /// <param name="instanceId">instance ID</param>
         /// <param name="messageId">message ID</param>
         public KsiPduHeader(string loginId, ulong instanceId, ulong messageId)
-            : base(TagType, false, false, new List<TlvTag>())
+            : base(Constants.KsiPduHeader.TagType, false, false, new List<TlvTag>())
         {
-            _loginId = new StringTag(LoginIdTagType, false, false, loginId);
+            _loginId = new StringTag(Constants.KsiPduHeader.LoginIdTagType, false, false, loginId);
             AddTag(_loginId);
 
-            _instanceId = new IntegerTag(InstanceIdTagType, false, false, instanceId);
+            _instanceId = new IntegerTag(Constants.KsiPduHeader.InstanceIdTagType, false, false, instanceId);
             AddTag(_instanceId);
 
-            _messageId = new IntegerTag(MessageIdTagType, false, false, messageId);
+            _messageId = new IntegerTag(Constants.KsiPduHeader.MessageIdTagType, false, false, messageId);
             AddTag(_messageId);
         }
 
