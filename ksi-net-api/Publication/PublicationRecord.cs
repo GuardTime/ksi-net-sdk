@@ -35,18 +35,15 @@ namespace Guardtime.KSI.Publication
                 {
                     case Constants.PublicationData.TagType:
                         _publicationData = new PublicationData(this[i]);
-                        this[i] = _publicationData;
                         publicationDataCount++;
                         break;
                     case Constants.PublicationRecord.PublicationReferencesTagType:
                         listTag = new StringTag(this[i]);
                         _publicationReferences.Add(listTag);
-                        this[i] = listTag;
                         break;
                     case Constants.PublicationRecord.PublicationRepositoryUriTagType:
                         listTag = new StringTag(this[i]);
                         _publicationRepositoryUri.Add(listTag);
-                        this[i] = listTag;
                         break;
                     default:
                         VerifyCriticalFlag(this[i]);

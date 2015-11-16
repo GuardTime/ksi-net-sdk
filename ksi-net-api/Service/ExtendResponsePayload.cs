@@ -39,27 +39,22 @@ namespace Guardtime.KSI.Service
                 {
                     case Constants.ExtendResponsePayload.RequestIdTagType:
                         _requestId = new IntegerTag(this[i]);
-                        this[i] = _requestId;
                         requestIdCount++;
                         break;
                     case Constants.KsiPduPayload.StatusTagType:
                         _status = new IntegerTag(this[i]);
-                        this[i] = _status;
                         statusCount++;
                         break;
                     case Constants.KsiPduPayload.ErrorMessageTagType:
                         _errorMessage = new StringTag(this[i]);
-                        this[i] = _errorMessage;
                         errorMessageCount++;
                         break;
                     case Constants.ExtendResponsePayload.LastTimeTagType:
                         _lastTime = new IntegerTag(this[i]);
-                        this[i] = _lastTime;
                         lastTimeCount++;
                         break;
                     case Constants.CalendarHashChain.TagType:
                         _calendarHashChain = new CalendarHashChain(this[i]);
-                        this[i] = _calendarHashChain;
                         calendarHashChainCount++;
                         break;
                     default:

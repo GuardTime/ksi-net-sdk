@@ -54,31 +54,25 @@ namespace Guardtime.KSI.Signature
                         case Constants.AggregationHashChain.TagType:
                             AggregationHashChain aggregationChainTag = new AggregationHashChain(this[i]);
                             _aggregationHashChainCollection.Add(aggregationChainTag);
-                            this[i] = aggregationChainTag;
                             break;
                         case Constants.CalendarHashChain.TagType:
                             _calendarChain = new CalendarHashChain(this[i]);
-                            this[i] = _calendarChain;
                             calendarChainCount++;
                             break;
                         case Constants.PublicationRecord.TagTypeSignature:
                             _publicationRecord = new PublicationRecord(this[i]);
-                            this[i] = _publicationRecord;
                             publicationRecordCount++;
                             break;
                         case Constants.AggregationAuthenticationRecord.TagType:
                             _aggregationAuthenticationRecord = new AggregationAuthenticationRecord(this[i]);
-                            this[i] = _aggregationAuthenticationRecord;
                             aggregationAuthenticationRecordCount++;
                             break;
                         case Constants.CalendarAuthenticationRecord.TagType:
                             _calendarAuthenticationRecord = new CalendarAuthenticationRecord(this[i]);
-                            this[i] = _calendarAuthenticationRecord;
                             calendarAuthenticationRecordCount++;
                             break;
                         case Constants.Rfc3161Record.TagType:
                             _rfc3161Record = new Rfc3161Record(this[i]);
-                            this[i] = _rfc3161Record;
                             rfc3161RecordCount++;
                             break;
                         default:

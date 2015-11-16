@@ -32,12 +32,10 @@ namespace Guardtime.KSI.Publication
                 {
                     case Constants.CertificateRecord.CertificateIdTagType:
                         _certificateId = new RawTag(this[i]);
-                        this[i] = _certificateId;
                         certificateIdCount++;
                         break;
                     case Constants.CertificateRecord.X509CertificateTagType:
                         _x509Certificate = new RawTag(this[i]);
-                        this[i] = _x509Certificate;
                         x509CertificateCount++;
                         break;
                     default:

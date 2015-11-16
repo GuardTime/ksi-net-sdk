@@ -35,17 +35,14 @@ namespace Guardtime.KSI.Service
                 {
                     case Constants.KsiPduHeader.LoginIdTagType:
                         _loginId = new StringTag(this[i]);
-                        this[i] = _loginId;
                         loginIdCount++;
                         break;
                     case Constants.KsiPduHeader.InstanceIdTagType:
                         _instanceId = new IntegerTag(this[i]);
-                        this[i] = _instanceId;
                         instanceIdCount++;
                         break;
                     case Constants.KsiPduHeader.MessageIdTagType:
                         _messageId = new IntegerTag(this[i]);
-                        this[i] = _messageId;
                         messageIdCount++;
                         break;
                     default:
@@ -85,16 +82,16 @@ namespace Guardtime.KSI.Service
         /// <param name="instanceId">instance ID</param>
         /// <param name="messageId">message ID</param>
         public KsiPduHeader(string loginId, ulong instanceId, ulong messageId)
-            : base(Constants.KsiPduHeader.TagType, false, false, new List<TlvTag>())
+            : base(Constants.KsiPduHeader.TagType, false, false, new List<TlvTag>()
+            {
+                new StringTag(Constants.KsiPduHeader.LoginIdTagType, false, false, loginId),
+                new IntegerTag(Constants.KsiPduHeader.InstanceIdTagType, false, false, instanceId),
+                new IntegerTag(Constants.KsiPduHeader.MessageIdTagType, false, false, messageId)
+            })
         {
-            _loginId = new StringTag(Constants.KsiPduHeader.LoginIdTagType, false, false, loginId);
-            AddTag(_loginId);
-
-            _instanceId = new IntegerTag(Constants.KsiPduHeader.InstanceIdTagType, false, false, instanceId);
-            AddTag(_instanceId);
-
-            _messageId = new IntegerTag(Constants.KsiPduHeader.MessageIdTagType, false, false, messageId);
-            AddTag(_messageId);
+            _loginId = (StringTag)this[0];
+            _instanceId = (IntegerTag)this[1];
+            _messageId = (IntegerTag)this[2];
         }
 
         /// <summary>
@@ -110,7 +107,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         public ulong? InstanceId
         {
-            get { return _instanceId == null ? (ulong?)null : _instanceId.Value; }
+            get { return _instanceId?.Value; }
         }
 
         /// <summary>
@@ -118,7 +115,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         public ulong? MessageId
         {
-            get { return _messageId == null ? (ulong?)null : _messageId.Value; }
+            get { return _messageId?.Value; }
         }
     }
 }

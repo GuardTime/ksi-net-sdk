@@ -42,27 +42,22 @@ namespace Guardtime.KSI.Service
                 {
                     case Constants.AggregationResponsePayload.RequestIdTagType:
                         _requestId = new IntegerTag(this[i]);
-                        this[i] = _requestId;
                         requestIdCount++;
                         break;
                     case Constants.KsiPduPayload.StatusTagType:
                         _status = new IntegerTag(this[i]);
-                        this[i] = _status;
                         statusCount++;
                         break;
                     case Constants.KsiPduPayload.ErrorMessageTagType:
                         _errorMessage = new StringTag(this[i]);
-                        this[i] = _errorMessage;
                         errorMessageCount++;
                         break;
                     case Constants.AggregationResponsePayload.ConfigTagType:
                         _config = new RawTag(this[i]);
-                        this[i] = _config;
                         configCount++;
                         break;
                     case Constants.AggregationResponsePayload.RequestAcknowledgmentTagType:
                         _requestAcknowledgment = new RawTag(this[i]);
-                        this[i] = _requestAcknowledgment;
                         requestAcknowledgmentCount++;
                         break;
                     case Constants.AggregationHashChain.TagType:

@@ -41,7 +41,6 @@ namespace Guardtime.KSI.Publication
                     {
                         case Constants.PublicationsFileHeader.TagType:
                             _publicationsHeader = new PublicationsFileHeader(this[i]);
-                            this[i] = _publicationsHeader;
                             publicationsHeaderCount++;
                             if (i != 0)
                             {
@@ -52,7 +51,6 @@ namespace Guardtime.KSI.Publication
                         case Constants.CertificateRecord.TagType:
                             CertificateRecord certificateRecordTag = new CertificateRecord(this[i]);
                             _certificateRecordList.Add(certificateRecordTag);
-                            this[i] = certificateRecordTag;
                             if (_publicationRecordList.Count != 0)
                             {
                                 throw new PublicationsFileException(
@@ -62,7 +60,6 @@ namespace Guardtime.KSI.Publication
                         case Constants.PublicationRecord.TagTypePublication:
                             PublicationRecord publicationRecordTag = new PublicationRecord(this[i]);
                             _publicationRecordList.Add(publicationRecordTag);
-                            this[i] = publicationRecordTag;
                             break;
                         case Constants.PublicationsFile.CmsSignatureTagType:
                             _cmsSignature = new RawTag(this[i]);

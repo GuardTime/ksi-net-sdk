@@ -86,9 +86,9 @@ namespace Guardtime.KSI.Service
                 throw new KsiServiceException("Signing service protocol is missing from service.");
             }
 
-            AggregationPdu pdu = new AggregationPdu(new KsiPduHeader(_serviceSettings.LoginId),
-                new AggregationRequestPayload(hash));
-            pdu.SetMac(_serviceSettings.LoginKey);
+            KsiPduHeader header = new KsiPduHeader(_serviceSettings.LoginId);
+            AggregationRequestPayload payload = new AggregationRequestPayload(hash);
+            AggregationPdu pdu = new AggregationPdu(header, payload, KsiPdu.GetHashMacTag(_serviceSettings.LoginKey, header, payload));
             IAsyncResult serviceProtocolAsyncResult = _sigingServiceProtocol.BeginSign(pdu.Encode(), callback,
                 asyncState);
             return new CreateSignatureKsiServiceAsyncResult(serviceProtocolAsyncResult, asyncState);
@@ -135,14 +135,16 @@ namespace Guardtime.KSI.Service
                 {
                     AggregationPdu pdu = new AggregationPdu(reader.ReadTag());
                     AggregationResponsePayload payload = pdu.Payload as AggregationResponsePayload;
+                    AggregationError errorPayload = pdu.Payload as AggregationError;
 
-                    if (payload == null)
+                    if (payload == null && errorPayload == null)
                     {
                         throw new KsiException("Invalid aggregation response payload: null.");
                     }
 
-                    if (payload.Status != 0)
+                    if (payload == null || payload.Status != 0)
                     {
+                        string errorMessage = payload == null ? errorPayload.ErrorMessage : payload.ErrorMessage;
                         throw new KsiException("Error occured during aggregation: " + payload.ErrorMessage + ".");
                     }
 
@@ -249,16 +251,19 @@ namespace Guardtime.KSI.Service
                 {
                     ExtendPdu pdu = new ExtendPdu(reader.ReadTag());
                     ExtendResponsePayload payload = pdu.Payload as ExtendResponsePayload;
+                    ExtendError errorPayload = pdu.Payload as ExtendError;
 
-                    if (payload == null)
+                    if (payload == null && errorPayload == null)
                     {
-                        throw new KsiException("Invalid extend response payload: null.");
+                        throw new KsiException("Invalid extension response payload: null.");
                     }
 
-                    if (payload.Status != 0)
+                    if (payload == null || payload.Status != 0)
                     {
-                        throw new KsiException("Error occured during extending: " + payload.ErrorMessage + ".");
+                        string errorMessage = payload == null ? errorPayload.ErrorMessage : payload.ErrorMessage;
+                        throw new KsiException("Error occured during extending: " + errorMessage + ".");
                     }
+
 
                     if (!pdu.ValidateMac(_serviceSettings.LoginKey))
                     {
@@ -353,8 +358,8 @@ namespace Guardtime.KSI.Service
                 throw new KsiServiceException("Extending service protocol is missing from service.");
             }
 
-            ExtendPdu pdu = new ExtendPdu(new KsiPduHeader(_serviceSettings.LoginId), payload);
-            pdu.SetMac(_serviceSettings.LoginKey);
+            KsiPduHeader header = new KsiPduHeader(_serviceSettings.LoginId);
+            ExtendPdu pdu = new ExtendPdu(header, payload, KsiPdu.GetHashMacTag(_serviceSettings.LoginKey, header, payload));
             IAsyncResult serviceProtocolAsyncResult = _extendingServiceProtocol.BeginExtend(pdu.Encode(), callback,
                 asyncState);
             return new ExtendSignatureKsiServiceAsyncResult(serviceProtocolAsyncResult, asyncState);

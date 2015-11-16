@@ -43,34 +43,28 @@ namespace Guardtime.KSI.Signature
                 {
                     case Constants.AggregationHashChain.AggregationTimeTagType:
                         _aggregationTime = new IntegerTag(this[i]);
-                        this[i] = _aggregationTime;
                         aggregationTimeCount++;
                         break;
                     case Constants.AggregationHashChain.ChainIndexTagType:
                         IntegerTag chainIndexTag = new IntegerTag(this[i]);
                         _chainIndex.Add(chainIndexTag);
-                        this[i] = chainIndexTag;
                         break;
                     case Constants.AggregationHashChain.InputDataTagType:
                         _inputData = new RawTag(this[i]);
-                        this[i] = _inputData;
                         inputDataCount++;
                         break;
                     case Constants.AggregationHashChain.InputHashTagType:
                         _inputHash = new ImprintTag(this[i]);
-                        this[i] = _inputHash;
                         inputHashCount++;
                         break;
                     case Constants.AggregationHashChain.AggregationAlgorithmIdTagType:
                         _aggrAlgorithmId = new IntegerTag(this[i]);
-                        this[i] = _aggrAlgorithmId;
                         aggrAlgorithmIdCount++;
                         break;
                     case (uint)LinkDirection.Left:
                     case (uint)LinkDirection.Right:
                         Link linkTag = new Link(this[i], (LinkDirection)this[i].Type);
                         _chain.Add(linkTag);
-                        this[i] = linkTag;
                         break;
                     default:
                         VerifyCriticalFlag(this[i]);
@@ -213,22 +207,18 @@ namespace Guardtime.KSI.Signature
                     {
                         case Constants.AggregationHashChain.Link.LevelCorrectionTagType:
                             _levelCorrection = new IntegerTag(this[i]);
-                            this[i] = _levelCorrection;
                             levelCorrectionCount++;
                             break;
                         case Constants.AggregationHashChain.Link.SiblingHashTagType:
                             _siblingHash = new ImprintTag(this[i]);
-                            this[i] = _siblingHash;
                             siblingHashCount++;
                             break;
                         case Constants.AggregationHashChain.Link.MetaHashTagType:
                             _metaHash = new ImprintTag(this[i]);
-                            this[i] = _metaHash;
                             metaHashCount++;
                             break;
                         case Constants.AggregationHashChain.MetaData.TagType:
                             _metaData = new MetaData(this[i]);
-                            this[i] = _metaData;
                             metaDataCount++;
                             break;
                         default:
@@ -360,22 +350,18 @@ namespace Guardtime.KSI.Signature
                     {
                         case Constants.AggregationHashChain.MetaData.ClientIdTagType:
                             _clientId = new StringTag(this[i]);
-                            this[i] = _clientId;
                             clientIdCount++;
                             break;
                         case Constants.AggregationHashChain.MetaData.MachineIdTagType:
                             _machineId = new StringTag(this[i]);
-                            this[i] = _machineId;
                             machineIdCount++;
                             break;
                         case Constants.AggregationHashChain.MetaData.SequenceNumberTagType:
                             _sequenceNr = new IntegerTag(this[i]);
-                            this[i] = _sequenceNr;
                             sequenceNrCount++;
                             break;
                         case Constants.AggregationHashChain.MetaData.RequestTimeTagType:
                             _requestTime = new IntegerTag(this[i]);
-                            this[i] = _requestTime;
                             requestTimeCount++;
                             break;
                         default:

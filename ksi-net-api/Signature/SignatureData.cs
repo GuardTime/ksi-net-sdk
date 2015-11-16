@@ -37,22 +37,18 @@ namespace Guardtime.KSI.Signature
                 {
                     case Constants.SignatureData.SignatureTypeTagType:
                         _signatureType = new StringTag(this[i]);
-                        this[i] = _signatureType;
                         signatureTypeCount++;
                         break;
                     case Constants.SignatureData.SignatureValueTagType:
                         _signatureValue = new RawTag(this[i]);
-                        this[i] = _signatureValue;
                         signatureValueCount++;
                         break;
                     case Constants.SignatureData.CertificateIdTagType:
                         _certificateId = new RawTag(this[i]);
-                        this[i] = _certificateId;
                         certificateIdCount++;
                         break;
                     case Constants.SignatureData.CertificateRepositoryUriTagType:
                         _certificateRepositoryUri = new StringTag(this[i]);
-                        this[i] = _certificateRepositoryUri;
                         certificateRepositoryUriCount++;
                         break;
                     default:

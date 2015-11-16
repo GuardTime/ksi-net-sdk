@@ -8,7 +8,7 @@ namespace Guardtime.KSI.Parser
     /// <summary>
     ///     Imprint TLV element
     /// </summary>
-    public class ImprintTag : TlvTag, IEquatable<ImprintTag>
+    public class ImprintTag : TlvTag
     {
         private readonly DataHash _value;
 
@@ -55,36 +55,6 @@ namespace Guardtime.KSI.Parser
         }
 
         /// <summary>
-        ///     Compare TLV element against imprint TLV element.
-        /// </summary>
-        /// <param name="tag">Imprint TLV element</param>
-        /// <returns>true if elements are equal</returns>
-        public bool Equals(ImprintTag tag)
-        {
-            // If parameter is null, return false. 
-            if (ReferenceEquals(tag, null))
-            {
-                return false;
-            }
-
-            if (ReferenceEquals(this, tag))
-            {
-                return true;
-            }
-
-            // If run-time types are not exactly the same, return false. 
-            if (GetType() != tag.GetType())
-            {
-                return false;
-            }
-
-            return Type == tag.Type &&
-                   Forward == tag.Forward &&
-                   NonCritical == tag.NonCritical &&
-                   Value == tag.Value;
-        }
-
-        /// <summary>
         ///     Encode data hash to byte array.
         /// </summary>
         /// <returns>Data hash as byte array</returns>
@@ -103,38 +73,6 @@ namespace Guardtime.KSI.Parser
             {
                 return Value.GetHashCode() + Type.GetHashCode() + Forward.GetHashCode() + NonCritical.GetHashCode();
             }
-        }
-
-        /// <summary>
-        ///     Compare TLV element to object.
-        /// </summary>
-        /// <param name="obj">Comparable object.</param>
-        /// <returns>Is given object equal</returns>
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as ImprintTag);
-        }
-
-        /// <summary>
-        ///     Compare imprint TLV elements against each other.
-        /// </summary>
-        /// <param name="a">Imprint TLV element</param>
-        /// <param name="b">Imprint TLV element</param>
-        /// <returns>true if elements are equal</returns>
-        public static bool operator ==(ImprintTag a, ImprintTag b)
-        {
-            return ReferenceEquals(a, null) ? ReferenceEquals(b, null) : a.Equals(b);
-        }
-
-        /// <summary>
-        ///     Compare imprint TLV element non equity to another imprint TLV element.
-        /// </summary>
-        /// <param name="a">Imprint TLV element</param>
-        /// <param name="b">Imprint TLV element</param>
-        /// <returns>true if elements are not equal</returns>
-        public static bool operator !=(ImprintTag a, ImprintTag b)
-        {
-            return !(a == b);
         }
     }
 }

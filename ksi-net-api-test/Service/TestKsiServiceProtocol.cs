@@ -86,7 +86,7 @@ namespace Guardtime.KSI.Service
 
         private class AsyncResult : IAsyncResult
         {
-            ManualResetEvent resetEvent = new ManualResetEvent(true);
+            private ManualResetEvent resetEvent = new ManualResetEvent(true);
 
             public AsyncResult(byte[] request)
             {

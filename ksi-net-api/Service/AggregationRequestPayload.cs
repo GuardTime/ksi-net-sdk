@@ -39,22 +39,18 @@ namespace Guardtime.KSI.Service
                 {
                     case Constants.AggregationRequestPayload.RequestIdTagType:
                         _requestId = new IntegerTag(this[i]);
-                        this[i] = _requestId;
                         requestIdCount++;
                         break;
                     case Constants.AggregationRequestPayload.RequestHashTagType:
                         _requestHash = new ImprintTag(this[i]);
-                        this[i] = _requestHash;
                         requestHashCount++;
                         break;
                     case Constants.AggregationRequestPayload.RequestLevelTagType:
                         _requestLevel = new IntegerTag(this[i]);
-                        this[i] = _requestLevel;
                         requestLevelCount++;
                         break;
                     case Constants.AggregationRequestPayload.ConfigTagType:
                         _config = new RawTag(this[i]);
-                        this[i] = _config;
                         configCount++;
                         break;
                     default:
@@ -90,18 +86,14 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="hash">data hash</param>
         /// <exception cref="TlvException">thrown when data hash is null</exception>
-        public AggregationRequestPayload(DataHash hash) : base(Constants.AggregationRequestPayload.TagType, false, false, new List<TlvTag>())
+        public AggregationRequestPayload(DataHash hash) : base(Constants.AggregationRequestPayload.TagType, false, false, new List<TlvTag>()
         {
-            if (hash == null)
-            {
-                throw new TlvException("Invalid data hash: null.");
-            }
-
-            _requestId = new IntegerTag(Constants.AggregationRequestPayload.RequestIdTagType, false, false, Util.GetRandomUnsignedLong());
-            AddTag(_requestId);
-
-            _requestHash = new ImprintTag(Constants.AggregationRequestPayload.RequestHashTagType, false, false, hash);
-            AddTag(_requestHash);
+            new IntegerTag(Constants.AggregationRequestPayload.RequestIdTagType, false, false, Util.GetRandomUnsignedLong()),
+            new ImprintTag(Constants.AggregationRequestPayload.RequestHashTagType, false, false, hash)
+        })
+        {
+            _requestId = (IntegerTag)this[0];
+            _requestHash = (ImprintTag)this[1];
         }
 
         /// <summary>
@@ -133,7 +125,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         public ulong? RequestLevel
         {
-            get { return _requestLevel == null ? (ulong?)null : _requestLevel.Value; }
+            get { return _requestLevel?.Value; }
         }
     }
 }

@@ -49,47 +49,38 @@ namespace Guardtime.KSI.Signature
                 {
                     case Constants.Rfc3161Record.AggregationTimeTagType:
                         _aggregationTime = new IntegerTag(this[i]);
-                        this[i] = _aggregationTime;
                         aggregationTimeCount++;
                         break;
                     case Constants.Rfc3161Record.ChainIndexTagType:
                         IntegerTag chainTag = new IntegerTag(this[i]);
                         _chainIndex.Add(chainTag);
-                        this[i] = chainTag;
                         break;
                     case Constants.Rfc3161Record.InputHashTagType:
                         _inputHash = new ImprintTag(this[i]);
-                        this[i] = _inputHash;
                         inputHashCount++;
                         break;
                     case Constants.Rfc3161Record.TstInfoPrefixTagType:
                         _tstInfoPrefix = new RawTag(this[i]);
-                        this[i] = _tstInfoPrefix;
                         tstInfoPrefixCount++;
                         break;
                     case Constants.Rfc3161Record.TstInfoSuffixTagType:
                         _tstInfoSuffix = new RawTag(this[i]);
-                        this[i] = _tstInfoSuffix;
                         tstInfoSuffixCount++;
                         break;
                     case Constants.Rfc3161Record.TstInfoAlgorithmTagType:
                         _tstInfoAlgorithm = new IntegerTag(this[i]);
-                        this[i] = _tstInfoAlgorithm;
                         tstInfoAlgorithmCount++;
                         break;
                     case Constants.Rfc3161Record.SignedAttributesPrefixTagType:
                         _signedAttributesPrefix = new RawTag(this[i]);
-                        this[i] = _signedAttributesPrefix;
                         signedAttributesPrefixCount++;
                         break;
                     case Constants.Rfc3161Record.SignedAttributesSuffixTagType:
                         _signedAttributesSuffix = new RawTag(this[i]);
-                        this[i] = _signedAttributesSuffix;
                         signedAttributesSuffixCount++;
                         break;
                     case Constants.Rfc3161Record.SignedAttributesAlgorithmTagType:
                         _signedAttributesAlgorithm = new IntegerTag(this[i]);
-                        this[i] = _signedAttributesAlgorithm;
                         signedAttributesAlgorithmCount++;
                         break;
                     default:
