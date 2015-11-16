@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Service
@@ -38,17 +39,14 @@ namespace Guardtime.KSI.Service
                 {
                     case AggregationRequestPayload.TagType:
                         _payload = new AggregationRequestPayload(this[i]);
-                        this[i] = _payload;
                         payloadCount++;
                         break;
                     case AggregationResponsePayload.TagType:
                         _payload = new AggregationResponsePayload(this[i]);
-                        this[i] = _payload;
                         payloadCount++;
                         break;
                     case AggregationError.TagType:
                         _payload = new AggregationError(this[i]);
-                        this[i] = _payload;
                         payloadCount++;
                         break;
                     case KsiPduHeader.TagType:
@@ -85,15 +83,10 @@ namespace Guardtime.KSI.Service
         /// <param name="header">KSI PDU header</param>
         /// <param name="payload">aggregation payload</param>
         /// <exception cref="TlvException">thrown when payload is null</exception>
-        public AggregationPdu(KsiPduHeader header, AggregationPduPayload payload)
-            : base(header, TagType, false, false, new List<TlvTag>())
+        public AggregationPdu(KsiPduHeader header, AggregationPduPayload payload, ImprintTag mac)
+            : base(header, mac, TagType, false, false, new List<TlvTag>() { header, payload, mac })
         {
-            if (payload == null)
-            {
-                throw new TlvException("Invalid aggregation payload: null.");
-            }
-
-            _payload = AddTag(payload);
+            _payload = payload;
         }
 
         /// <summary>

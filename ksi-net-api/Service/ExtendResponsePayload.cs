@@ -47,27 +47,22 @@ namespace Guardtime.KSI.Service
                 {
                     case RequestIdTagType:
                         _requestId = new IntegerTag(this[i]);
-                        this[i] = _requestId;
                         requestIdCount++;
                         break;
                     case StatusTagType:
                         _status = new IntegerTag(this[i]);
-                        this[i] = _status;
                         statusCount++;
                         break;
                     case ErrorMessageTagType:
                         _errorMessage = new StringTag(this[i]);
-                        this[i] = _errorMessage;
                         errorMessageCount++;
                         break;
                     case LastTimeTagType:
                         _lastTime = new IntegerTag(this[i]);
-                        this[i] = _lastTime;
                         lastTimeCount++;
                         break;
                     case CalendarHashChain.TagType:
                         _calendarHashChain = new CalendarHashChain(this[i]);
-                        this[i] = _calendarHashChain;
                         calendarHashChainCount++;
                         break;
                     default:

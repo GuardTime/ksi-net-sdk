@@ -38,12 +38,10 @@ namespace Guardtime.KSI.Signature
                 {
                     case PublicationData.TagType:
                         _publicationData = new PublicationData(this[i]);
-                        this[i] = _publicationData;
                         publicationDataCount++;
                         break;
                     case SignatureData.TagType:
                         _signatureData = new SignatureData(this[i]);
-                        this[i] = _signatureData;
                         signatureDataCount++;
                         break;
                     default:

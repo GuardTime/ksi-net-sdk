@@ -44,18 +44,15 @@ namespace Guardtime.KSI.Publication
                 {
                     case VersionTagType:
                         _version = new IntegerTag(this[i]);
-                        this[i] = _version;
                         versionCount++;
                         break;
                     case CreationTimeTagType:
                         _creationTime = new IntegerTag(this[i].Type, this[i].NonCritical, this[i].Forward,
                             Util.DecodeUnsignedLong(this[i].EncodeValue(), 0, this[i].EncodeValue().Length));
-                        this[i] = _creationTime;
                         creationTimeCount++;
                         break;
                     case RepUriTagType:
                         _repUri = new StringTag(this[i]);
-                        this[i] = _repUri;
                         repUriCount++;
                         break;
                     default:

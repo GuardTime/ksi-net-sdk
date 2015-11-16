@@ -53,34 +53,28 @@ namespace Guardtime.KSI.Signature
                 {
                     case AggregationTimeTagType:
                         _aggregationTime = new IntegerTag(this[i]);
-                        this[i] = _aggregationTime;
                         aggregationTimeCount++;
                         break;
                     case ChainIndexTagType:
                         IntegerTag chainIndexTag = new IntegerTag(this[i]);
                         _chainIndex.Add(chainIndexTag);
-                        this[i] = chainIndexTag;
                         break;
                     case InputDataTagType:
                         _inputData = new RawTag(this[i]);
-                        this[i] = _inputData;
                         inputDataCount++;
                         break;
                     case InputHashTagType:
                         _inputHash = new ImprintTag(this[i]);
-                        this[i] = _inputHash;
                         inputHashCount++;
                         break;
                     case AggregationAlgorithmIdTagType:
                         _aggrAlgorithmId = new IntegerTag(this[i]);
-                        this[i] = _aggrAlgorithmId;
                         aggrAlgorithmIdCount++;
                         break;
                     case (uint)LinkDirection.Left:
                     case (uint)LinkDirection.Right:
                         Link linkTag = new Link(this[i], (LinkDirection)this[i].Type);
                         _chain.Add(linkTag);
-                        this[i] = linkTag;
                         break;
                     default:
                         VerifyCriticalFlag(this[i]);
@@ -227,22 +221,18 @@ namespace Guardtime.KSI.Signature
                     {
                         case LevelCorrectionTagType:
                             _levelCorrection = new IntegerTag(this[i]);
-                            this[i] = _levelCorrection;
                             levelCorrectionCount++;
                             break;
                         case SiblingHashTagType:
                             _siblingHash = new ImprintTag(this[i]);
-                            this[i] = _siblingHash;
                             siblingHashCount++;
                             break;
                         case MetaHashTagType:
                             _metaHash = new ImprintTag(this[i]);
-                            this[i] = _metaHash;
                             metaHashCount++;
                             break;
                         case MetaData.TagType:
                             _metaData = new MetaData(this[i]);
-                            this[i] = _metaData;
                             metaDataCount++;
                             break;
                         default:
@@ -386,22 +376,18 @@ namespace Guardtime.KSI.Signature
                     {
                         case ClientIdTagType:
                             _clientId = new StringTag(this[i]);
-                            this[i] = _clientId;
                             clientIdCount++;
                             break;
                         case MachineIdTagType:
                             _machineId = new StringTag(this[i]);
-                            this[i] = _machineId;
                             machineIdCount++;
                             break;
                         case SequenceNumberTagType:
                             _sequenceNr = new IntegerTag(this[i]);
-                            this[i] = _sequenceNr;
                             sequenceNrCount++;
                             break;
                         case RequestTimeTagType:
                             _requestTime = new IntegerTag(this[i]);
-                            this[i] = _requestTime;
                             requestTimeCount++;
                             break;
                         default:

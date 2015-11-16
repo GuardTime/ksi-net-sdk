@@ -51,24 +51,20 @@ namespace Guardtime.KSI.Signature
                 {
                     case PublicationTimeTagType:
                         _publicationTime = new IntegerTag(this[i]);
-                        this[i] = _publicationTime;
                         publicationTimeCount++;
                         break;
                     case AggregationTimeTagType:
                         _aggregationTime = new IntegerTag(this[i]);
-                        this[i] = _aggregationTime;
                         aggregationTimeCount++;
                         break;
                     case InputHashTagType:
                         _inputHash = new ImprintTag(this[i]);
-                        this[i] = _inputHash;
                         inputHashCount++;
                         break;
                     case (uint)LinkDirection.Left:
                     case (uint)LinkDirection.Right:
                         Link chainTag = new Link(this[i]);
                         _chain.Add(chainTag);
-                        this[i] = chainTag;
                         break;
                     default:
                         VerifyCriticalFlag(this[i]);

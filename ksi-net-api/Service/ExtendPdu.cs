@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 
@@ -38,17 +39,14 @@ namespace Guardtime.KSI.Service
                 {
                     case ExtendRequestPayload.TagType:
                         _payload = new ExtendRequestPayload(this[i]);
-                        this[i] = _payload;
                         payloadCount++;
                         break;
                     case ExtendResponsePayload.TagType:
                         _payload = new ExtendResponsePayload(this[i]);
-                        this[i] = _payload;
                         payloadCount++;
                         break;
                     case ExtendError.TagType:
                         _payload = new ExtendError(this[i]);
-                        this[i] = _payload;
                         payloadCount++;
                         break;
                     case KsiPduHeader.TagType:
@@ -85,15 +83,10 @@ namespace Guardtime.KSI.Service
         /// <param name="header">KSI header</param>
         /// <param name="payload">Extend pdu payload</param>
         /// <exception cref="TlvException">thrown when payload is null</exception>
-        public ExtendPdu(KsiPduHeader header, ExtendPduPayload payload)
-            : base(header, TagType, false, false, new List<TlvTag>())
+        public ExtendPdu(KsiPduHeader header, ExtendPduPayload payload, ImprintTag mac)
+            : base(header, mac, TagType, false, false, new List<TlvTag>() { header, payload, mac  })
         {
-            if (payload == null)
-            {
-                throw new TlvException("Invalid extending payload: null.");
-            }
-
-            _payload = AddTag(payload);
+            _payload = payload;
         }
 
         /// <summary>

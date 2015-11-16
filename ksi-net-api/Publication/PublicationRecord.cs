@@ -47,19 +47,17 @@ namespace Guardtime.KSI.Publication
                 switch (this[i].Type)
                 {
                     case PublicationData.TagType:
+
                         _publicationData = new PublicationData(this[i]);
-                        this[i] = _publicationData;
                         publicationDataCount++;
                         break;
                     case PublicationReferencesTagType:
                         listTag = new StringTag(this[i]);
                         _publicationReferences.Add(listTag);
-                        this[i] = listTag;
                         break;
                     case PublicationRepositoryUriTagType:
                         listTag = new StringTag(this[i]);
                         _publicationRepositoryUri.Add(listTag);
-                        this[i] = listTag;
                         break;
                     default:
                         VerifyCriticalFlag(this[i]);

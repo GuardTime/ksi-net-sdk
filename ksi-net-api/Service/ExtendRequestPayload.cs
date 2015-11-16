@@ -45,17 +45,14 @@ namespace Guardtime.KSI.Service
                 {
                     case RequestIdTagType:
                         _requestId = new IntegerTag(this[i]);
-                        this[i] = _requestId;
                         requestIdCount++;
                         break;
                     case AggregationTimeTagType:
                         _aggregationTime = new IntegerTag(this[i]);
-                        this[i] = _aggregationTime;
                         aggregationTimeCount++;
                         break;
                     case PublicationTimeTagType:
                         _publicationTime = new IntegerTag(this[i]);
-                        this[i] = _publicationTime;
                         publicationTimeCount++;
                         break;
                     default:
@@ -85,23 +82,30 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
         /// <param name="publicationTime">publication time</param>
-        public ExtendRequestPayload(ulong aggregationTime, ulong publicationTime) : this(aggregationTime)
+        public ExtendRequestPayload(ulong aggregationTime, ulong publicationTime) : base(TagType, false, false, new List<TlvTag>()
         {
-            _publicationTime = new IntegerTag(PublicationTimeTagType, false, false, publicationTime);
-            AddTag(_publicationTime);
+            new IntegerTag(RequestIdTagType, false, false, Util.GetRandomUnsignedLong()),
+            new IntegerTag(AggregationTimeTagType, false, false, aggregationTime),
+            new IntegerTag(PublicationTimeTagType, false, false, publicationTime)
+        })
+        {
+            _requestId = (IntegerTag)this[0];
+            _aggregationTime = (IntegerTag)this[1];
+            _publicationTime = (IntegerTag)this[2];
         }
 
         /// <summary>
         ///     Create extend request payload from aggregation time.
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
-        public ExtendRequestPayload(ulong aggregationTime) : base(TagType, false, false, new List<TlvTag>())
+        public ExtendRequestPayload(ulong aggregationTime) : base(TagType, false, false, new List<TlvTag>()
         {
-            _requestId = new IntegerTag(RequestIdTagType, false, false, Util.GetRandomUnsignedLong());
-            AddTag(_requestId);
-
-            _aggregationTime = new IntegerTag(AggregationTimeTagType, false, false, aggregationTime);
-            AddTag(_aggregationTime);
+            new IntegerTag(RequestIdTagType, false, false, Util.GetRandomUnsignedLong()),
+            new IntegerTag(AggregationTimeTagType, false, false, aggregationTime),
+        })
+        {
+            _requestId = (IntegerTag)this[0];
+            _aggregationTime = (IntegerTag)this[1];
         }
 
         /// <summary>

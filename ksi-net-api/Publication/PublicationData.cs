@@ -44,12 +44,10 @@ namespace Guardtime.KSI.Publication
                 {
                     case PublicationTimeTagType:
                         _publicationTime = new IntegerTag(this[i]);
-                        this[i] = _publicationTime;
                         publicationTimeCount++;
                         break;
                     case PublicationHashTagType:
                         _publicationHash = new ImprintTag(this[i]);
-                        this[i] = _publicationHash;
                         publicationHashCount++;
                         break;
                     default:
@@ -75,12 +73,14 @@ namespace Guardtime.KSI.Publication
         /// <param name="publicationTime">publication time</param>
         /// <param name="publicationHash">publication hash</param>
         public PublicationData(ulong publicationTime, DataHash publicationHash)
-            : base(TagType, false, true, new List<TlvTag>())
+            : base(TagType, false, true, new List<TlvTag>()
+            {
+                new IntegerTag(PublicationTimeTagType, false, false, publicationTime),
+                new ImprintTag(PublicationHashTagType, false, false, publicationHash)
+            })
         {
-            _publicationTime = new IntegerTag(PublicationTimeTagType, false, false, publicationTime);
-            AddTag(_publicationTime);
-            _publicationHash = new ImprintTag(PublicationHashTagType, false, false, publicationHash);
-            AddTag(_publicationHash);
+            _publicationTime = (IntegerTag)this[0];
+            _publicationHash = (ImprintTag)this[1];
         }
 
         /// <summary>
@@ -88,7 +88,13 @@ namespace Guardtime.KSI.Publication
         /// </summary>
         /// <param name="publicationString">publication string</param>
         /// <exception cref="TlvException">thrown when TLV parsing fails from publication string</exception>
-        public PublicationData(string publicationString) : base(TagType, false, true, new List<TlvTag>())
+        public PublicationData(string publicationString) : base(TagType, false, true, DecodePublicationString(publicationString))
+        {
+            _publicationTime = (IntegerTag)this[0];
+            _publicationHash = (ImprintTag)this[1];
+        }
+
+        private static List<TlvTag> DecodePublicationString(string publicationString)
         {
             if (publicationString == null)
             {
@@ -120,13 +126,12 @@ namespace Guardtime.KSI.Publication
             byte[] publicationTimeBytes = new byte[8];
             Array.Copy(dataBytesWithCrc32, 0, publicationTimeBytes, 0, 8);
 
-            _publicationTime = new IntegerTag(PublicationTimeTagType, false, false,
-                Util.DecodeUnsignedLong(publicationTimeBytes, 0, publicationTimeBytes.Length));
-            AddTag(_publicationTime);
-
-            _publicationHash = new ImprintTag(PublicationHashTagType, false, false, new DataHash(hashImprint));
-            AddTag(_publicationHash);
-        }
+            return new List<TlvTag>()
+            {
+                new IntegerTag(PublicationTimeTagType, false, false, Util.DecodeUnsignedLong(publicationTimeBytes, 0, publicationTimeBytes.Length)),
+                new ImprintTag(PublicationHashTagType, false, false, new DataHash(hashImprint))
+            };
+        } 
 
         /// <summary>
         ///     Get publication time.

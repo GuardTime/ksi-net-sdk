@@ -37,12 +37,10 @@ namespace Guardtime.KSI.Service
                 {
                     case StatusTagType:
                         _status = new IntegerTag(this[i]);
-                        this[i] = _status;
                         statusCount++;
                         break;
                     case ErrorMessageTagType:
                         _errorMessage = new StringTag(this[i]);
-                        this[i] = _errorMessage;
                         errorMessageCount++;
                         break;
                     default:

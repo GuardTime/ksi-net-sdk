@@ -33,11 +33,9 @@ namespace Guardtime.KSI.Service
                 {
                     case KsiPduHeader.TagType:
                         _header = new KsiPduHeader(this[i]);
-                        this[i] = _header;
                         break;
                     case MacTagType:
                         _mac = new ImprintTag(this[i]);
-                        this[i] = _mac;
                         break;
                 }
             }
@@ -52,7 +50,7 @@ namespace Guardtime.KSI.Service
         /// <param name="forward">Is TLV element forwarded</param>
         /// <param name="value">TLV element list</param>
         /// <exception cref="TlvException">thrown when TLV header is null</exception>
-        protected KsiPdu(KsiPduHeader header, uint type, bool nonCritical, bool forward, IList<TlvTag> value)
+        protected KsiPdu(KsiPduHeader header, ImprintTag mac, uint type, bool nonCritical, bool forward, IList<TlvTag> value)
             : base(type, nonCritical, forward, value)
         {
             if (header == null)
@@ -60,9 +58,28 @@ namespace Guardtime.KSI.Service
                 throw new TlvException("Invalid TLV header: null.");
             }
 
+            if (mac == null)
+            {
+                throw new TlvException("Invalid hashmac hash: null");
+            }
+
             _header = header;
-            AddTag(_header);
+            _mac = mac;
         }
+
+        /// <summary>
+        /// Append list to another list.
+        /// </summary>
+        /// <param name="initialList">initial list</param>
+        /// <param name="addList">added list</param>
+        /// <returns>new appended list</returns>
+        private static List<TlvTag> AppendList(IList<TlvTag> initialList, IList<TlvTag> addList)
+        {
+            List<TlvTag> list = new List<TlvTag>();
+            list.AddRange(initialList);
+            list.AddRange(addList);
+            return list;
+        } 
 
         /// <summary>
         ///     Get KSI PDU payload.
@@ -73,7 +90,9 @@ namespace Guardtime.KSI.Service
         ///     Calculate MAC and attach it to PDU.
         /// </summary>
         /// <param name="key">hmac key</param>
-        public void SetMac(byte[] key)
+        /// <param name="header">KSI header</param>
+        /// <param name="payload">KSI payload</param>
+        public static ImprintTag GetHashMacTag(byte[] key, KsiPduHeader header, KsiPduPayload payload)
         {
             MemoryStream stream = null;
             try
@@ -83,20 +102,15 @@ namespace Guardtime.KSI.Service
                 {
                     stream = null;
 
-                    writer.WriteTag(_header);
-                    writer.WriteTag(Payload);
+                    writer.WriteTag(header);
+                    writer.WriteTag(payload);
 
-                    ImprintTag mac = new ImprintTag(MacTagType, false, false,
-                        CalculateMac(key, ((MemoryStream)writer.BaseStream).ToArray()));
-                    _mac = PutTag(mac, _mac);
+                    return new ImprintTag(MacTagType, false, false, CalculateMac(key, ((MemoryStream)writer.BaseStream).ToArray()));
                 }
             }
             finally
             {
-                if (stream != null)
-                {
-                    stream.Dispose();
-                }
+                stream?.Dispose();
             }
         }
 
@@ -141,10 +155,7 @@ namespace Guardtime.KSI.Service
             }
             finally
             {
-                if (stream != null)
-                {
-                    stream.Dispose();
-                }
+                stream?.Dispose();
             }
         }
     }

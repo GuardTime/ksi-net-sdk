@@ -45,14 +45,6 @@ namespace Guardtime.KSI.Parser
             CollectionAssert.AreEqual(new List<TlvTag> {new RawTag(0x1, false, false, new byte[] {0x1, 0x2}), new RawTag(0x2, false, false, new byte[] {0x3, 0x4})},
                 tag.CompositeTestTagValue, "Tag child value should be decoded correctly");
             CollectionAssert.AreEqual(new byte[] {0x5, 0x8, 0x1, 0x2, 0x1, 0x2, 0x2, 0x2, 0x3, 0x4}, tag.EncodeValue(), "Tag value should be encoded correctly");
-
-            tag.SetCompositeTestTagValue(new CompositeTestTag(0x5, false, false, new List<TlvTag>() {new RawTag(0x1, false, false, new byte[] {0x1})}));
-            CollectionAssert.AreEqual(new List<TlvTag> {new RawTag(0x1, false, false, new byte[] {0x1})}, tag.CompositeTestTagValue, "Tag child value should be decoded correctly");
-            CollectionAssert.AreEqual(new byte[] {0x5, 0x3, 0x1, 0x1, 0x1}, tag.EncodeValue(), "Tag value should be encoded correctly");
-
-            tag.SetCompositeTestTagValue(new CompositeTestTag(0x5, false, false, new List<TlvTag>() {new RawTag(0x2, false, false, new byte[] {0x0})}));
-            CollectionAssert.AreEqual(new List<TlvTag> {new RawTag(0x2, false, false, new byte[] {0x0})}, tag.CompositeTestTagValue, "Tag child value should be decoded correctly");
-            CollectionAssert.AreEqual(new byte[] {0x5, 0x3, 0x2, 0x1, 0x0}, tag.EncodeValue(), "Tag value should be encoded correctly");
         }
 
         [Test]
@@ -121,47 +113,11 @@ namespace Guardtime.KSI.Parser
         }
 
         [Test]
-        public void TestPutNullTagToCompositeTagList()
-        {
-            var tag = new CompositeTestTag(0x1, false, false,
-                new List<TlvTag>() {new RawTag(0x1, false, false, new byte[] {0x1, 0x2}), new RawTag(0x2, false, false, new byte[] {0x3, 0x4})});
-            Assert.Throws<ArgumentNullException>(delegate
-            {
-                tag.SetCompositeTestTagValue(null);
-            });
-        }
-
-        [Test]
         public void TestCompositeTagAddNullValueToSpecificPosition()
         {
-            var tag = new CompositeTestTag(0x1, false, false, new List<TlvTag>() {new RawTag(0x1, false, false, new byte[] {0x1, 0x2})});
             Assert.Throws<TlvException>(delegate
             {
-                tag.SetTagToFirstPosition(null);
-            });
-        }
-
-        [Test]
-        public void TestTryReplaceTagNotInCompositeTagList()
-        {
-            var tag = new CompositeTestTag(0x1, false, false,
-                new List<TlvTag>()
-                {
-                    new RawTag(0x1, false, false, new byte[] {0x1, 0x2}),
-                    new RawTag(0x2, false, false, new byte[] {0x3, 0x4}),
-                    new RawTag(0x1, false, false, new byte[] {0x4})
-                });
-            Assert.IsNull(tag.ReplaceTagImpl(tag, new RawTag(0x5, false, false, new byte[] {})));
-        }
-
-        [Test]
-        public void TestAddNullTagToCompositeTagList()
-        {
-            var tag = new CompositeTestTag(0x1, false, false,
-                new List<TlvTag>() {new RawTag(0x1, false, false, new byte[] {0x1, 0x2}), new RawTag(0x2, false, false, new byte[] {0x3, 0x4})});
-            Assert.Throws<TlvException>(delegate
-            {
-                tag.AddTagImpl(null);
+                var tag = new CompositeTestTag(0x1, false, false, new List<TlvTag>() { null });
             });
         }
 
@@ -228,7 +184,6 @@ namespace Guardtime.KSI.Parser
                     {
                         case 0x5:
                             CompositeTestTagValue = new CompositeTestTag(this[i]);
-                            this[i] = CompositeTestTagValue;
                             break;
                         case 0x2:
                         case 0x1:
@@ -238,27 +193,6 @@ namespace Guardtime.KSI.Parser
                             break;
                     }
                 }
-            }
-
-            public void SetCompositeTestTagValue(CompositeTestTag tag)
-            {
-                PutTag(tag, CompositeTestTagValue);
-                CompositeTestTagValue = tag;
-            }
-
-            public TlvTag AddTagImpl(TlvTag tag)
-            {
-                return AddTag(tag);
-            }
-
-            public TlvTag ReplaceTagImpl(TlvTag tag, TlvTag previousTag)
-            {
-                return ReplaceTag(tag, previousTag);
-            }
-
-            public void SetTagToFirstPosition(TlvTag tag)
-            {
-                this[0] = tag;
             }
 
             public void VerifyCriticalFlagWithoutTag()

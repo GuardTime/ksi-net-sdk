@@ -14,7 +14,6 @@ namespace Guardtime.KSI.Parser
     /// </summary>
     public abstract class CompositeTag : TlvTag, IEnumerable<TlvTag>
     {
-        private readonly object _lock = new object();
         private readonly IList<TlvTag> _value = new List<TlvTag>();
 
         /// <summary>
@@ -45,6 +44,10 @@ namespace Guardtime.KSI.Parser
 
             for (int i = 0; i < value.Count; i++)
             {
+                if (value[i] == null)
+                {
+                    throw new TlvException("Invalid TLV in element list: null.");
+                }
                 _value.Add(value[i]);
             }
         }
@@ -57,27 +60,7 @@ namespace Guardtime.KSI.Parser
         /// <exception cref="TlvException">thrown when trying to set null as value in array</exception>
         public TlvTag this[int i]
         {
-            get
-            {
-                lock (_lock)
-                {
-                    return _value[i];
-                }
-            }
-
-            // TODO: Thread safe
-            protected set
-            {
-                lock (_lock)
-                {
-                    if (value == null)
-                    {
-                        throw new TlvException("Invalid TLV value: null.");
-                    }
-
-                    _value[i] = value;
-                }
-            }
+            get { return _value[i]; }
         }
 
         /// <summary>
@@ -85,13 +68,7 @@ namespace Guardtime.KSI.Parser
         /// </summary>
         public int Count
         {
-            get
-            {
-                lock (_lock)
-                {
-                    return _value.Count;
-                }
-            }
+            get { return _value.Count; }
         }
 
         /// <summary>
@@ -100,7 +77,7 @@ namespace Guardtime.KSI.Parser
         /// <returns>TLV composite elemnet enumerator.</returns>
         public IEnumerator<TlvTag> GetEnumerator()
         {
-            return new ThreadSafeIEnumerator<TlvTag>(_value.GetEnumerator(), _lock);
+            return _value.GetEnumerator();
         }
 
         /// <summary>
@@ -173,77 +150,6 @@ namespace Guardtime.KSI.Parser
             }
         }
 
-        // TODO: Use better name or replace this functionality
-        /// <summary>
-        ///     Put TLV element to child list, if null, remove it from list.
-        /// </summary>
-        /// <typeparam name="T">TLV element type</typeparam>
-        /// <param name="tag">New TLV element to put in list</param>
-        /// <param name="previousTag">Previous TLV element in list</param>
-        /// <returns>Added Tlv element</returns>
-        protected T PutTag<T>(T tag, TlvTag previousTag) where T : TlvTag
-        {
-            if (ReplaceTag(tag, previousTag) == null)
-            {
-                AddTag(tag);
-            }
-
-            return tag;
-        }
-
-        /// <summary>
-        ///     Add TLV element to list.
-        /// </summary>
-        /// <typeparam name="T">Tlv element type</typeparam>
-        /// <param name="tag">New TLV element</param>
-        /// <returns>Added TLV element</returns>
-        /// <exception cref="TlvException">thrown when TLV tag is null</exception>
-        protected T AddTag<T>(T tag) where T : TlvTag
-        {
-            lock (_lock)
-            {
-                if (tag == null)
-                {
-                    throw new TlvException("Invalid TLV tag: null.");
-                }
-
-                _value.Add(tag);
-                return tag;
-            }
-        }
-
-        /// <summary>
-        ///     Replace TLV element in list.
-        /// </summary>
-        /// <typeparam name="T">TLV element type</typeparam>
-        /// <param name="tag">New TLV element</param>
-        /// <param name="previousTag">Previous TLV element in list</param>
-        /// <returns>Replaced TLV element</returns>
-        protected T ReplaceTag<T>(T tag, TlvTag previousTag) where T : TlvTag
-        {
-            lock (_lock)
-            {
-                if (tag == null)
-                {
-                    throw new ArgumentNullException("tag");
-                }
-
-                if (previousTag == null)
-                {
-                    return null;
-                }
-
-                int i = _value.IndexOf(previousTag);
-                if (i == -1)
-                {
-                    return null;
-                }
-
-                _value[i] = tag;
-                return tag;
-            }
-        }
-
         /// <summary>
         ///     Verify unknown tag for critical flag and throw exception.
         /// </summary>
@@ -311,48 +217,6 @@ namespace Guardtime.KSI.Parser
 
             return builder.ToString();
         }
-
-        /// <summary>
-        ///     Thread safe enumerator for composite tag element
-        /// </summary>
-        /// <typeparam name="T">composite element</typeparam>
-        private class ThreadSafeIEnumerator<T> : IEnumerator<T>
-        {
-            private readonly IEnumerator<T> _childEnumerator;
-            private readonly object _lock;
-
-            public ThreadSafeIEnumerator(IEnumerator<T> childEnumerator, object lockObject)
-            {
-                _childEnumerator = childEnumerator;
-                _lock = lockObject;
-
-                Monitor.Enter(_lock);
-            }
-
-            public T Current
-            {
-                get { return _childEnumerator.Current; }
-            }
-
-            object IEnumerator.Current
-            {
-                get { return _childEnumerator.Current; }
-            }
-
-            public void Dispose()
-            {
-                Monitor.Exit(_lock);
-            }
-
-            public bool MoveNext()
-            {
-                return _childEnumerator.MoveNext();
-            }
-
-            public void Reset()
-            {
-                _childEnumerator.Reset();
-            }
-        }
+     
     }
 }

@@ -64,47 +64,38 @@ namespace Guardtime.KSI.Signature
                 {
                     case AggregationTimeTagType:
                         _aggregationTime = new IntegerTag(this[i]);
-                        this[i] = _aggregationTime;
                         aggregationTimeCount++;
                         break;
                     case ChainIndexTagType:
                         IntegerTag chainTag = new IntegerTag(this[i]);
                         _chainIndex.Add(chainTag);
-                        this[i] = chainTag;
                         break;
                     case InputHashTagType:
                         _inputHash = new ImprintTag(this[i]);
-                        this[i] = _inputHash;
                         inputHashCount++;
                         break;
                     case TstInfoPrefixTagType:
                         _tstInfoPrefix = new RawTag(this[i]);
-                        this[i] = _tstInfoPrefix;
                         tstInfoPrefixCount++;
                         break;
                     case TstInfoSuffixTagType:
                         _tstInfoSuffix = new RawTag(this[i]);
-                        this[i] = _tstInfoSuffix;
                         tstInfoSuffixCount++;
                         break;
                     case TstInfoAlgorithmTagType:
                         _tstInfoAlgorithm = new IntegerTag(this[i]);
-                        this[i] = _tstInfoAlgorithm;
                         tstInfoAlgorithmCount++;
                         break;
                     case SignedAttributesPrefixTagType:
                         _signedAttributesPrefix = new RawTag(this[i]);
-                        this[i] = _signedAttributesPrefix;
                         signedAttributesPrefixCount++;
                         break;
                     case SignedAttributesSuffixTagType:
                         _signedAttributesSuffix = new RawTag(this[i]);
-                        this[i] = _signedAttributesSuffix;
                         signedAttributesSuffixCount++;
                         break;
                     case SignedAttributesAlgorithmTagType:
                         _signedAttributesAlgorithm = new IntegerTag(this[i]);
-                        this[i] = _signedAttributesAlgorithm;
                         signedAttributesAlgorithmCount++;
                         break;
                     default:

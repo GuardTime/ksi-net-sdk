@@ -51,27 +51,22 @@ namespace Guardtime.KSI.Service
                 {
                     case RequestIdTagType:
                         _requestId = new IntegerTag(this[i]);
-                        this[i] = _requestId;
                         requestIdCount++;
                         break;
                     case StatusTagType:
                         _status = new IntegerTag(this[i]);
-                        this[i] = _status;
                         statusCount++;
                         break;
                     case ErrorMessageTagType:
                         _errorMessage = new StringTag(this[i]);
-                        this[i] = _errorMessage;
                         errorMessageCount++;
                         break;
                     case ConfigTagType:
                         _config = new RawTag(this[i]);
-                        this[i] = _config;
                         configCount++;
                         break;
                     case RequestAcknowledgmentTagType:
                         _requestAcknowledgment = new RawTag(this[i]);
-                        this[i] = _requestAcknowledgment;
                         requestAcknowledgmentCount++;
                         break;
                     case AggregationHashChain.TagType:

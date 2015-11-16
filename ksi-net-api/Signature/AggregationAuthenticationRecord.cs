@@ -46,22 +46,18 @@ namespace Guardtime.KSI.Signature
                 {
                     case AggregationTimeTagType:
                         _aggregationTime = new IntegerTag(this[i]);
-                        this[i] = _aggregationTime;
                         aggregationTimeCount++;
                         break;
                     case ChainIndexTagType:
                         IntegerTag chainIndexTag = new IntegerTag(this[i]);
                         _chainIndex.Add(chainIndexTag);
-                        this[i] = chainIndexTag;
                         break;
                     case InputHashTagType:
                         _inputHash = new ImprintTag(this[i]);
-                        this[i] = _inputHash;
                         inputHashCount++;
                         break;
                     case SignatureData.TagType:
                         _signatureData = new SignatureData(this[i]);
-                        this[i] = _signatureData;
                         signatureDataCount++;
                         break;
                     default:

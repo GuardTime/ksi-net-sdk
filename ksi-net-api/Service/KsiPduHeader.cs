@@ -44,17 +44,14 @@ namespace Guardtime.KSI.Service
                 {
                     case LoginIdTagType:
                         _loginId = new StringTag(this[i]);
-                        this[i] = _loginId;
                         loginIdCount++;
                         break;
                     case InstanceIdTagType:
                         _instanceId = new IntegerTag(this[i]);
-                        this[i] = _instanceId;
                         instanceIdCount++;
                         break;
                     case MessageIdTagType:
                         _messageId = new IntegerTag(this[i]);
-                        this[i] = _messageId;
                         messageIdCount++;
                         break;
                     default:
@@ -94,16 +91,16 @@ namespace Guardtime.KSI.Service
         /// <param name="instanceId">instance ID</param>
         /// <param name="messageId">message ID</param>
         public KsiPduHeader(string loginId, ulong instanceId, ulong messageId)
-            : base(TagType, false, false, new List<TlvTag>())
+            : base(TagType, false, false, new List<TlvTag>()
+            {
+                new StringTag(LoginIdTagType, false, false, loginId),
+                new IntegerTag(InstanceIdTagType, false, false, instanceId),
+                new IntegerTag(MessageIdTagType, false, false, messageId)
+            })
         {
-            _loginId = new StringTag(LoginIdTagType, false, false, loginId);
-            AddTag(_loginId);
-
-            _instanceId = new IntegerTag(InstanceIdTagType, false, false, instanceId);
-            AddTag(_instanceId);
-
-            _messageId = new IntegerTag(MessageIdTagType, false, false, messageId);
-            AddTag(_messageId);
+            _loginId = (StringTag)this[0];
+            _instanceId = (IntegerTag)this[1];
+            _messageId = (IntegerTag)this[2];
         }
 
         /// <summary>

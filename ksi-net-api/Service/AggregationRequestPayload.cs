@@ -49,22 +49,18 @@ namespace Guardtime.KSI.Service
                 {
                     case RequestIdTagType:
                         _requestId = new IntegerTag(this[i]);
-                        this[i] = _requestId;
                         requestIdCount++;
                         break;
                     case RequestHashTagType:
                         _requestHash = new ImprintTag(this[i]);
-                        this[i] = _requestHash;
                         requestHashCount++;
                         break;
                     case RequestLevelTagType:
                         _requestLevel = new IntegerTag(this[i]);
-                        this[i] = _requestLevel;
                         requestLevelCount++;
                         break;
                     case ConfigTagType:
                         _config = new RawTag(this[i]);
-                        this[i] = _config;
                         configCount++;
                         break;
                     default:
@@ -100,18 +96,14 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="hash">data hash</param>
         /// <exception cref="TlvException">thrown when data hash is null</exception>
-        public AggregationRequestPayload(DataHash hash) : base(TagType, false, false, new List<TlvTag>())
+        public AggregationRequestPayload(DataHash hash) : base(TagType, false, false, new List<TlvTag>()
         {
-            if (hash == null)
-            {
-                throw new TlvException("Invalid data hash: null.");
-            }
-
-            _requestId = new IntegerTag(RequestIdTagType, false, false, Util.GetRandomUnsignedLong());
-            AddTag(_requestId);
-
-            _requestHash = new ImprintTag(RequestHashTagType, false, false, hash);
-            AddTag(_requestHash);
+            new IntegerTag(RequestIdTagType, false, false, Util.GetRandomUnsignedLong()),
+            new ImprintTag(RequestHashTagType, false, false, hash)
+        })
+        {
+            _requestId = (IntegerTag)this[0];
+            _requestHash = (ImprintTag)this[1];
         }
 
         /// <summary>
