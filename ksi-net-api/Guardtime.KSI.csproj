@@ -80,6 +80,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
+    <Compile Include="Crypto\CryptoSignatureVerificationData.cs" />
     <Compile Include="Crypto\CryptoSignatureVerifierFactory.cs" />
     <Compile Include="Crypto\ICryptoSignatureVerifier.cs" />
     <Compile Include="Crypto\Pkcs7CryptoSignatureVerifier.cs" />
@@ -93,6 +95,7 @@
     <Compile Include="Exceptions\KsiVerificationException.cs" />
     <Compile Include="Hashing\DataHash.cs" />
     <Compile Include="Hashing\DataHasher.cs" />
+    <Compile Include="Hashing\HashAlgorithm.Constants.cs" />
     <Compile Include="Hashing\HashAlgorithm.cs" />
     <Compile Include="Exceptions\HashingException.cs" />
     <Compile Include="IKsi.cs" />

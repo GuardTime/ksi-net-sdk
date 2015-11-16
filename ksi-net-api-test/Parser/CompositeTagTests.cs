@@ -117,7 +117,7 @@ namespace Guardtime.KSI.Parser
         {
             Assert.Throws<TlvException>(delegate
             {
-                var tag = new CompositeTestTag(0x1, false, false, new List<TlvTag>() { null });
+                var tag = new CompositeTestTag(0x1, false, false, new List<TlvTag>() {null});
             });
         }
 

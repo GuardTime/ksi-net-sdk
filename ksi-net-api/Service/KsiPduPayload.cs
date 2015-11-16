@@ -9,16 +9,6 @@ namespace Guardtime.KSI.Service
     public abstract class KsiPduPayload : CompositeTag
     {
         /// <summary>
-        ///     Status TLV element type.
-        /// </summary>
-        protected const uint StatusTagType = 0x4;
-
-        /// <summary>
-        ///     Error message TLV element type.
-        /// </summary>
-        protected const uint ErrorMessageTagType = 0x5;
-
-        /// <summary>
         ///     Create KSI PDU payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>

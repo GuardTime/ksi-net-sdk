@@ -81,23 +81,10 @@ namespace Guardtime.KSI.Parser
         /// <returns>TLV object as bytes</returns>
         public byte[] Encode()
         {
-            MemoryStream stream = null;
-            try
+            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
             {
-                stream = new MemoryStream();
-                using (TlvWriter writer = new TlvWriter(stream))
-                {
-                    stream = null;
-                    writer.WriteTag(this);
-                    return ((MemoryStream)writer.BaseStream).ToArray();
-                }
-            }
-            finally
-            {
-                if (stream != null)
-                {
-                    stream.Dispose();
-                }
+                writer.WriteTag(this);
+                return ((MemoryStream)writer.BaseStream).ToArray();
             }
         }
 

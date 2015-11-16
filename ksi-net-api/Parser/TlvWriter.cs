@@ -27,22 +27,22 @@ namespace Guardtime.KSI.Parser
                 return;
             }
 
-            if (tag.Type > TlvReader.MaxType)
+            if (tag.Type > Constants.Tlv.MaxType)
             {
                 throw new ArgumentOutOfRangeException("tag");
             }
 
             byte[] data = tag.EncodeValue();
-            bool tlv16 = tag.Type > TlvReader.TypeMask
+            bool tlv16 = tag.Type > Constants.Tlv.TypeMask
                          || (data != null && data.Length > byte.MaxValue);
-            byte firstByte = (byte)((tlv16 ? TlvReader.Tlv16Flag : 0)
-                                    + (tag.NonCritical ? TlvReader.NonCriticalFlag : 0)
-                                    + (tag.Forward ? TlvReader.ForwardFlag : 0));
+            byte firstByte = (byte)((tlv16 ? Constants.Tlv.Tlv16Flag : 0)
+                                    + (tag.NonCritical ? Constants.Tlv.NonCriticalFlag : 0)
+                                    + (tag.Forward ? Constants.Tlv.ForwardFlag : 0));
 
             if (tlv16)
             {
                 firstByte = (byte)(firstByte
-                                   | (tag.Type >> TlvReader.ByteBits) & TlvReader.TypeMask);
+                                   | (tag.Type >> Constants.BitsInByte) & Constants.Tlv.TypeMask);
                 Write(firstByte);
                 Write((byte)tag.Type);
                 if (data == null)
@@ -55,14 +55,14 @@ namespace Guardtime.KSI.Parser
                     {
                         throw new ArgumentOutOfRangeException("tag");
                     }
-                    Write((byte)(data.Length >> TlvReader.ByteBits));
+                    Write((byte)(data.Length >> Constants.BitsInByte));
                     Write((byte)data.Length);
                     Write(data);
                 }
             }
             else
             {
-                firstByte = (byte)(firstByte | tag.Type & TlvReader.TypeMask);
+                firstByte = (byte)(firstByte | tag.Type & Constants.Tlv.TypeMask);
                 Write(firstByte);
                 if (data == null)
                 {

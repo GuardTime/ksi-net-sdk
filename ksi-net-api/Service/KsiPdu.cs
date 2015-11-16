@@ -13,11 +13,6 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public abstract class KsiPdu : CompositeTag
     {
-        /// <summary>
-        ///     Mac TLV type.
-        /// </summary>
-        protected const uint MacTagType = 0x1f;
-
         private readonly KsiPduHeader _header;
         private ImprintTag _mac;
 
@@ -31,10 +26,10 @@ namespace Guardtime.KSI.Service
             {
                 switch (this[i].Type)
                 {
-                    case KsiPduHeader.TagType:
+                    case Constants.KsiPduHeader.TagType:
                         _header = new KsiPduHeader(this[i]);
                         break;
-                    case MacTagType:
+                    case Constants.KsiPdu.MacTagType:
                         _mac = new ImprintTag(this[i]);
                         break;
                 }
@@ -94,23 +89,11 @@ namespace Guardtime.KSI.Service
         /// <param name="payload">KSI payload</param>
         public static ImprintTag GetHashMacTag(byte[] key, KsiPduHeader header, KsiPduPayload payload)
         {
-            MemoryStream stream = null;
-            try
+            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
             {
-                stream = new MemoryStream();
-                using (TlvWriter writer = new TlvWriter(stream))
-                {
-                    stream = null;
-
-                    writer.WriteTag(header);
-                    writer.WriteTag(payload);
-
-                    return new ImprintTag(MacTagType, false, false, CalculateMac(key, ((MemoryStream)writer.BaseStream).ToArray()));
-                }
-            }
-            finally
-            {
-                stream?.Dispose();
+                writer.WriteTag(header);
+                writer.WriteTag(payload);
+                return new ImprintTag(Constants.KsiPdu.MacTagType, false, false, CalculateMac(key, ((MemoryStream)writer.BaseStream).ToArray()));
             }
         }
 
@@ -138,24 +121,14 @@ namespace Guardtime.KSI.Service
                 return false;
             }
 
-            MemoryStream stream = null;
-            try
-            {
-                stream = new MemoryStream();
-                using (TlvWriter writer = new TlvWriter(stream))
-                {
-                    stream = null;
 
-                    writer.WriteTag(_header);
-                    writer.WriteTag(Payload);
-
-                    DataHash hash = CalculateMac(key, ((MemoryStream)writer.BaseStream).ToArray());
-                    return hash.Equals(_mac.Value);
-                }
-            }
-            finally
+            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
             {
-                stream?.Dispose();
+                writer.WriteTag(_header);
+                writer.WriteTag(Payload);
+
+                DataHash hash = CalculateMac(key, ((MemoryStream)writer.BaseStream).ToArray());
+                return hash.Equals(_mac.Value);
             }
         }
     }

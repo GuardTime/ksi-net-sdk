@@ -19,11 +19,6 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         private sealed class KsiSignature : CompositeTag, IKsiSignature
         {
-            /// <summary>
-            ///     KSI signature tag type
-            /// </summary>
-            public const uint TagType = 0x800;
-
             private readonly AggregationAuthenticationRecord _aggregationAuthenticationRecord;
 
             private readonly List<AggregationHashChain> _aggregationHashChainCollection =
@@ -41,7 +36,7 @@ namespace Guardtime.KSI.Signature
             /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
             public KsiSignature(TlvTag tag) : base(tag)
             {
-                if (Type != TagType)
+                if (Type != Constants.KsiSignature.TagType)
                 {
                     throw new TlvException("Invalid KSI signature type(" + Type + ").");
                 }
@@ -56,27 +51,27 @@ namespace Guardtime.KSI.Signature
                 {
                     switch (this[i].Type)
                     {
-                        case AggregationHashChain.TagType:
+                        case Constants.AggregationHashChain.TagType:
                             AggregationHashChain aggregationChainTag = new AggregationHashChain(this[i]);
                             _aggregationHashChainCollection.Add(aggregationChainTag);
                             break;
-                        case CalendarHashChain.TagType:
+                        case Constants.CalendarHashChain.TagType:
                             _calendarChain = new CalendarHashChain(this[i]);
                             calendarChainCount++;
                             break;
-                        case PublicationRecord.TagTypeSignature:
+                        case Constants.PublicationRecord.TagTypeSignature:
                             _publicationRecord = new PublicationRecord(this[i]);
                             publicationRecordCount++;
                             break;
-                        case AggregationAuthenticationRecord.TagType:
+                        case Constants.AggregationAuthenticationRecord.TagType:
                             _aggregationAuthenticationRecord = new AggregationAuthenticationRecord(this[i]);
                             aggregationAuthenticationRecordCount++;
                             break;
-                        case CalendarAuthenticationRecord.TagType:
+                        case Constants.CalendarAuthenticationRecord.TagType:
                             _calendarAuthenticationRecord = new CalendarAuthenticationRecord(this[i]);
                             calendarAuthenticationRecordCount++;
                             break;
-                        case Rfc3161Record.TagType:
+                        case Constants.Rfc3161Record.TagType:
                             _rfc3161Record = new Rfc3161Record(this[i]);
                             rfc3161RecordCount++;
                             break;
@@ -233,44 +228,31 @@ namespace Guardtime.KSI.Signature
                     throw new KsiException("Invalid calendar hash chain: null.");
                 }
 
-                MemoryStream stream = null;
-                try
-                {
-                    stream = new MemoryStream();
-                    using (TlvWriter writer = new TlvWriter(stream))
-                    {
-                        stream = null;
 
-                        for (int i = 0; i < Count; i++)
+                using (TlvWriter writer = new TlvWriter(new MemoryStream()))
+                {
+                    for (int i = 0; i < Count; i++)
+                    {
+                        switch (this[i].Type)
                         {
-                            switch (this[i].Type)
-                            {
-                                case CalendarHashChain.TagType:
-                                    writer.WriteTag(calendarHashChain);
-                                    break;
-                                case PublicationRecord.TagTypeSignature:
-                                    if (publicationRecord != null)
-                                    {
-                                        writer.WriteTag(publicationRecord);
-                                    }
-                                    break;
-                                default:
-                                    writer.WriteTag(this[i]);
-                                    break;
-                            }
+                            case Constants.CalendarHashChain.TagType:
+                                writer.WriteTag(calendarHashChain);
+                                break;
+                            case Constants.PublicationRecord.TagTypeSignature:
+                                if (publicationRecord != null)
+                                {
+                                    writer.WriteTag(publicationRecord);
+                                }
+                                break;
+                            default:
+                                writer.WriteTag(this[i]);
+                                break;
                         }
+                    }
 
-                        return
-                            new KsiSignature(new RawTag(TagType, false, false,
-                                ((MemoryStream)writer.BaseStream).ToArray()));
-                    }
-                }
-                finally
-                {
-                    if (stream != null)
-                    {
-                        stream.Dispose();
-                    }
+                    return
+                        new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false,
+                            ((MemoryStream)writer.BaseStream).ToArray()));
                 }
             }
 

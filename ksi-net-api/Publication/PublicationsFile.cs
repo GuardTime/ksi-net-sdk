@@ -15,8 +15,6 @@ namespace Guardtime.KSI.Publication
         /// </summary>
         private sealed class PublicationsFile : CompositeTag, IPublicationsFile
         {
-            private const uint CmsSignatureTagType = 0x704;
-
             /// <summary>
             ///     Publications file beginning bytes "KSIPUBLF".
             /// </summary>
@@ -41,7 +39,7 @@ namespace Guardtime.KSI.Publication
                 {
                     switch (this[i].Type)
                     {
-                        case PublicationsFileHeader.TagType:
+                        case Constants.PublicationsFileHeader.TagType:
                             _publicationsHeader = new PublicationsFileHeader(this[i]);
                             publicationsHeaderCount++;
                             if (i != 0)
@@ -50,7 +48,7 @@ namespace Guardtime.KSI.Publication
                                     "Publications file header should be the first element in publications file.");
                             }
                             break;
-                        case CertificateRecord.TagType:
+                        case Constants.CertificateRecord.TagType:
                             CertificateRecord certificateRecordTag = new CertificateRecord(this[i]);
                             _certificateRecordList.Add(certificateRecordTag);
                             if (_publicationRecordList.Count != 0)
@@ -59,11 +57,11 @@ namespace Guardtime.KSI.Publication
                                     "Certificate records should be before publication records.");
                             }
                             break;
-                        case PublicationRecord.TagTypePublication:
+                        case Constants.PublicationRecord.TagTypePublication:
                             PublicationRecord publicationRecordTag = new PublicationRecord(this[i]);
                             _publicationRecordList.Add(publicationRecordTag);
                             break;
-                        case CmsSignatureTagType:
+                        case Constants.PublicationsFile.CmsSignatureTagType:
                             _cmsSignature = new RawTag(this[i]);
                             cmsSignatureCount++;
                             if (i != Count - 1)
@@ -212,28 +210,14 @@ namespace Guardtime.KSI.Publication
             /// <returns>signature bytes</returns>
             public byte[] GetSignedBytes()
             {
-                MemoryStream stream = null;
-                try
+                using (TlvWriter writer = new TlvWriter(new MemoryStream()))
                 {
-                    stream = new MemoryStream();
-                    using (TlvWriter writer = new TlvWriter(stream))
+                    writer.Write(FileBeginningMagicBytes);
+                    for (int i = 0; i < Count - 1; i++)
                     {
-                        stream = null;
-
-                        writer.Write(FileBeginningMagicBytes);
-                        for (int i = 0; i < Count - 1; i++)
-                        {
-                            writer.WriteTag(this[i]);
-                        }
-                        return ((MemoryStream)writer.BaseStream).ToArray();
+                        writer.WriteTag(this[i]);
                     }
-                }
-                finally
-                {
-                    if (stream != null)
-                    {
-                        stream.Dispose();
-                    }
+                    return ((MemoryStream)writer.BaseStream).ToArray();
                 }
             }
 

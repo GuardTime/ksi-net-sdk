@@ -89,7 +89,6 @@ namespace Guardtime.KSI.Parser
             return GetEnumerator();
         }
 
-       
 
         /// <summary>
         ///     Decode bytes to TLV list.
@@ -97,25 +96,11 @@ namespace Guardtime.KSI.Parser
         /// <param name="bytes">TLV bytes</param>
         private void DecodeValue(byte[] bytes)
         {
-            MemoryStream stream = null;
-
-            try
+            using (TlvReader tlvReader = new TlvReader(new MemoryStream(bytes)))
             {
-                stream = new MemoryStream(bytes);
-                using (TlvReader tlvReader = new TlvReader(stream))
+                while (tlvReader.BaseStream.Position < tlvReader.BaseStream.Length)
                 {
-                    stream = null;
-                    while (tlvReader.BaseStream.Position < tlvReader.BaseStream.Length)
-                    {
-                        _value.Add(tlvReader.ReadTag());
-                    }
-                }
-            }
-            finally
-            {
-                if (stream != null)
-                {
-                    stream.Dispose();
+                    _value.Add(tlvReader.ReadTag());
                 }
             }
         }
@@ -126,27 +111,14 @@ namespace Guardtime.KSI.Parser
         /// <returns>TLV list elements as byte array</returns>
         public override byte[] EncodeValue()
         {
-            MemoryStream stream = null;
-            try
+            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
             {
-                stream = new MemoryStream();
-                using (TlvWriter writer = new TlvWriter(stream))
+                for (int i = 0; i < Count; i++)
                 {
-                    stream = null;
-                    for (int i = 0; i < Count; i++)
-                    {
-                        writer.WriteTag(this[i]);
-                    }
+                    writer.WriteTag(this[i]);
+                }
 
-                    return ((MemoryStream)writer.BaseStream).ToArray();
-                }
-            }
-            finally
-            {
-                if (stream != null)
-                {
-                    stream.Dispose();
-                }
+                return ((MemoryStream)writer.BaseStream).ToArray();
             }
         }
 
@@ -217,6 +189,5 @@ namespace Guardtime.KSI.Parser
 
             return builder.ToString();
         }
-     
     }
 }

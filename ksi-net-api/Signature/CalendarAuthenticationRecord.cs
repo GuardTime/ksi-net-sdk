@@ -9,11 +9,6 @@ namespace Guardtime.KSI.Signature
     /// </summary>
     public sealed class CalendarAuthenticationRecord : CompositeTag
     {
-        /// <summary>
-        ///     Calendar authentication record TLV type
-        /// </summary>
-        public const uint TagType = 0x805;
-
         private readonly PublicationData _publicationData;
         private readonly SignatureData _signatureData;
 
@@ -24,7 +19,7 @@ namespace Guardtime.KSI.Signature
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
         public CalendarAuthenticationRecord(TlvTag tag) : base(tag)
         {
-            if (Type != TagType)
+            if (Type != Constants.CalendarAuthenticationRecord.TagType)
             {
                 throw new TlvException("Invalid calendar authentication record type(" + Type + ").");
             }
@@ -36,11 +31,11 @@ namespace Guardtime.KSI.Signature
             {
                 switch (this[i].Type)
                 {
-                    case PublicationData.TagType:
+                    case Constants.PublicationData.TagType:
                         _publicationData = new PublicationData(this[i]);
                         publicationDataCount++;
                         break;
-                    case SignatureData.TagType:
+                    case Constants.SignatureData.TagType:
                         _signatureData = new SignatureData(this[i]);
                         signatureDataCount++;
                         break;

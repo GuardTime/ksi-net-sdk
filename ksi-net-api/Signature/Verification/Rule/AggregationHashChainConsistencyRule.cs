@@ -13,10 +13,6 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        /// <summary>
-        ///     Rule name
-        /// </summary>
-        public const string RuleName = "AggregationHashChainConsistencyRule";
 
         /// <see cref="VerificationRule.Verify" />
         /// <exception cref="KsiException">thrown if verification context is missing</exception>
@@ -53,13 +49,13 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     Logger.Error(
                         "Previous aggregation hash chain output hash {0} does not match current input hash {1}",
                         chainResult.Hash, aggregationHashChainCollection[i].InputHash);
-                    return new VerificationResult(RuleName, VerificationResultCode.Fail, VerificationError.Int01);
+                    return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int01);
                 }
 
                 chainResult = aggregationHashChainCollection[i].GetOutputHash(chainResult);
             }
 
-            return new VerificationResult(RuleName, VerificationResultCode.Ok);
+            return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }
     }
 }

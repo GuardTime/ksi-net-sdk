@@ -92,6 +92,5 @@ namespace Guardtime.KSI.Parser
             builder.Append("i").Append(Value);
             return builder.ToString();
         }
-
     }
 }

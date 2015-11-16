@@ -15,21 +15,14 @@ namespace Guardtime.KSI.Crypto
         /// <param name="signatureBytes">signature bytes</param>
         /// <param name="data">must consist of 2 parameters, "certificate" => X509Certificate2, "digestAlgorithm" => string</param>
         /// <exception cref="PkiVerificationException">thrown when verification process cannot complete</exception>
-        public void Verify(byte[] signedBytes, byte[] signatureBytes, Dictionary<string, object> data)
+        public void Verify(byte[] signedBytes, byte[] signatureBytes, CryptoSignatureVerificationData data)
         {
             X509Certificate2 certificate = null;
             object digestAlgorithm = null;
             if (data != null)
             {
-                if (data.ContainsKey("certificate"))
-                {
-                    certificate = data["certificate"] as X509Certificate2;
-                }
-
-                if (data.ContainsKey("digestAlgorithm"))
-                {
-                    digestAlgorithm = data["digestAlgorithm"];
-                }
+                certificate = data.Certificate;
+                digestAlgorithm = data.DigestAlgorithm;
             }
 
             if (certificate == null)
@@ -49,7 +42,7 @@ namespace Guardtime.KSI.Crypto
 
             using (RSACryptoServiceProvider serviceProvider = (RSACryptoServiceProvider)certificate.PublicKey.Key)
             {
-                if (!serviceProvider.VerifyData(signedBytes, data["digestAlgorithm"], signatureBytes))
+                if (!serviceProvider.VerifyData(signedBytes, digestAlgorithm, signatureBytes))
                 {
                     throw new PkiVerificationException("Failed to verify RSA signature.");
                 }

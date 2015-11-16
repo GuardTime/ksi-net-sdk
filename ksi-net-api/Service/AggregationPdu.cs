@@ -10,11 +10,6 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public sealed class AggregationPdu : KsiPdu
     {
-        /// <summary>
-        ///     Aggregation PDU TLV type.
-        /// </summary>
-        public const uint TagType = 0x200;
-
         private readonly AggregationPduPayload _payload;
 
         /// <summary>
@@ -24,7 +19,7 @@ namespace Guardtime.KSI.Service
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
         public AggregationPdu(TlvTag tag) : base(tag)
         {
-            if (Type != TagType)
+            if (Type != Constants.AggregationPdu.TagType)
             {
                 throw new TlvException("Invalid aggregation PDU type(" + Type + ").");
             }
@@ -37,22 +32,22 @@ namespace Guardtime.KSI.Service
             {
                 switch (this[i].Type)
                 {
-                    case AggregationRequestPayload.TagType:
+                    case Constants.AggregationRequestPayload.TagType:
                         _payload = new AggregationRequestPayload(this[i]);
                         payloadCount++;
                         break;
-                    case AggregationResponsePayload.TagType:
+                    case Constants.AggregationResponsePayload.TagType:
                         _payload = new AggregationResponsePayload(this[i]);
                         payloadCount++;
                         break;
-                    case AggregationError.TagType:
+                    case Constants.AggregationError.TagType:
                         _payload = new AggregationError(this[i]);
                         payloadCount++;
                         break;
-                    case KsiPduHeader.TagType:
+                    case Constants.KsiPduHeader.TagType:
                         headerCount++;
                         break;
-                    case MacTagType:
+                    case Constants.KsiPdu.MacTagType:
                         macCount++;
                         break;
                     default:
@@ -66,12 +61,12 @@ namespace Guardtime.KSI.Service
                 throw new TlvException("Only one payload must exist in KSI PDU.");
             }
 
-            if (_payload.Type != AggregationError.TagType && headerCount != 1)
+            if (_payload.Type != Constants.AggregationError.TagType && headerCount != 1)
             {
                 throw new TlvException("Only one header must exist in KSI PDU.");
             }
 
-            if (_payload.Type != AggregationError.TagType && macCount != 1)
+            if (_payload.Type != Constants.AggregationError.TagType && macCount != 1)
             {
                 throw new TlvException("Only one mac must exist in KSI PDU");
             }
@@ -84,7 +79,7 @@ namespace Guardtime.KSI.Service
         /// <param name="payload">aggregation payload</param>
         /// <exception cref="TlvException">thrown when payload is null</exception>
         public AggregationPdu(KsiPduHeader header, AggregationPduPayload payload, ImprintTag mac)
-            : base(header, mac, TagType, false, false, new List<TlvTag>() { header, payload, mac })
+            : base(header, mac, Constants.AggregationPdu.TagType, false, false, new List<TlvTag>() { header, payload, mac })
         {
             _payload = payload;
         }

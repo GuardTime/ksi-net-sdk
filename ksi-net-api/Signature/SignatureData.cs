@@ -8,15 +8,6 @@ namespace Guardtime.KSI.Signature
     /// </summary>
     public sealed class SignatureData : CompositeTag
     {
-        /// <summary>
-        ///     Signature data tag type
-        /// </summary>
-        public const uint TagType = 0xb;
-
-        private const uint SignatureTypeTagType = 0x1;
-        private const uint SignatureValueTagType = 0x2;
-        private const uint CertificateIdTagType = 0x3;
-        private const uint CertificateRepositoryUriTagType = 0x4;
         private readonly RawTag _certificateId;
         private readonly StringTag _certificateRepositoryUri;
 
@@ -30,7 +21,7 @@ namespace Guardtime.KSI.Signature
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
         public SignatureData(TlvTag tag) : base(tag)
         {
-            if (Type != TagType)
+            if (Type != Constants.SignatureData.TagType)
             {
                 throw new TlvException("Invalid signature data type(" + Type + ").");
             }
@@ -44,19 +35,19 @@ namespace Guardtime.KSI.Signature
             {
                 switch (this[i].Type)
                 {
-                    case SignatureTypeTagType:
+                    case Constants.SignatureData.SignatureTypeTagType:
                         _signatureType = new StringTag(this[i]);
                         signatureTypeCount++;
                         break;
-                    case SignatureValueTagType:
+                    case Constants.SignatureData.SignatureValueTagType:
                         _signatureValue = new RawTag(this[i]);
                         signatureValueCount++;
                         break;
-                    case CertificateIdTagType:
+                    case Constants.SignatureData.CertificateIdTagType:
                         _certificateId = new RawTag(this[i]);
                         certificateIdCount++;
                         break;
-                    case CertificateRepositoryUriTagType:
+                    case Constants.SignatureData.CertificateRepositoryUriTagType:
                         _certificateRepositoryUri = new StringTag(this[i]);
                         certificateRepositoryUriCount++;
                         break;

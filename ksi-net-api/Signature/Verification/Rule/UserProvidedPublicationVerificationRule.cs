@@ -7,11 +7,6 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class UserProvidedPublicationVerificationRule : VerificationRule
     {
-        /// <summary>
-        ///     Rule name.
-        /// </summary>
-        public const string RuleName = "UserProvidedPublicationVerificationRule";
-
         /// <see cref="VerificationRule.Verify" />
         /// <exception cref="KsiException">thrown if verification context is missing</exception>
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
@@ -38,8 +33,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             }
 
             return context.UserPublication == context.Signature.PublicationRecord.PublicationData
-                ? new VerificationResult(RuleName, VerificationResultCode.Ok)
-                : new VerificationResult(RuleName, VerificationResultCode.Na, VerificationError.Gen02);
+                ? new VerificationResult(GetRuleName(), VerificationResultCode.Ok)
+                : new VerificationResult(GetRuleName(), VerificationResultCode.Na, VerificationError.Gen02);
         }
     }
 }

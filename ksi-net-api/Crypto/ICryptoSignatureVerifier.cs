@@ -14,6 +14,6 @@ namespace Guardtime.KSI.Crypto
         /// <param name="signedBytes">signed bytes</param>
         /// <param name="signatureBytes">signature bytes</param>
         /// <param name="data">other data</param>
-        void Verify(byte[] signedBytes, byte[] signatureBytes, Dictionary<string, object> data);
+        void Verify(byte[] signedBytes, byte[] signatureBytes, CryptoSignatureVerificationData data);
     }
 }

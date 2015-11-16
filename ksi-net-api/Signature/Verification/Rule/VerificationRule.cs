@@ -15,6 +15,11 @@
 
         private VerificationRule _onSuccess;
 
+        public string GetRuleName()
+        {
+            return this.GetType().Name;
+        }
+
         /// <summary>
         ///     Get next rule based on verification result.
         /// </summary>

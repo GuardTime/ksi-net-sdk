@@ -39,33 +39,20 @@ namespace Guardtime.KSI.Signature
                 throw new KsiException("Invalid aggregation response payload: null.");
             }
 
-            MemoryStream stream = null;
-            try
-            {
-                stream = new MemoryStream();
-                using (TlvWriter writer = new TlvWriter(stream))
-                {
-                    stream = null;
 
-                    for (int i = 0; i < payload.Count; i++)
+            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
+            {
+                for (int i = 0; i < payload.Count; i++)
+                {
+                    if (payload[i].Type > 0x800 && payload[i].Type < 0x900)
                     {
-                        if (payload[i].Type > 0x800 && payload[i].Type < 0x900)
-                        {
-                            writer.WriteTag(payload[i]);
-                        }
+                        writer.WriteTag(payload[i]);
                     }
+                }
 
-                    return
-                        new KsiSignature(new RawTag(KsiSignature.TagType, false, false,
-                            ((MemoryStream)writer.BaseStream).ToArray()));
-                }
-            }
-            finally
-            {
-                if (stream != null)
-                {
-                    stream.Dispose();
-                }
+                return
+                    new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false,
+                        ((MemoryStream)writer.BaseStream).ToArray()));
             }
         }
     }

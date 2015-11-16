@@ -10,11 +10,6 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class AggregationChainInputHashVerificationRule : VerificationRule
     {
-        /// <summary>
-        ///     Rule name
-        /// </summary>
-        public const string RuleName = "AggregationChainInputHashVerificationRule";
-
         /// <see cref="VerificationRule.Verify" />
         /// <exception cref="KsiException">thrown if verification context is missing</exception>
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
@@ -51,18 +46,18 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 inputHash = hasher.GetHash();
 
                 return inputHash != aggregationHashChainInputHash
-                    ? new VerificationResult(RuleName, VerificationResultCode.Fail, VerificationError.Int01)
-                    : new VerificationResult(RuleName, VerificationResultCode.Ok);
+                    ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int01)
+                    : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
             }
 
             if (inputHash == null)
             {
-                return new VerificationResult(RuleName, VerificationResultCode.Ok);
+                return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
             }
 
             return inputHash != aggregationHashChainInputHash
-                ? new VerificationResult(RuleName, VerificationResultCode.Fail, VerificationError.Gen01)
-                : new VerificationResult(RuleName, VerificationResultCode.Ok);
+                ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Gen01)
+                : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }
     }
 }

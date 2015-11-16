@@ -9,11 +9,6 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class CalendarHashChainAggregationTimeRule : VerificationRule
     {
-        /// <summary>
-        ///     Rule name.
-        /// </summary>
-        public const string RuleName = "CalendarHashChainAggregationTimeRule";
-
         /// <see cref="VerificationRule.Verify" />
         /// <exception cref="KsiException">thrown if verification context is missing</exception>
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
@@ -33,7 +28,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             CalendarHashChain calendarHashChain = context.Signature.CalendarHashChain;
             if (calendarHashChain == null)
             {
-                return new VerificationResult(RuleName, VerificationResultCode.Ok);
+                return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
             }
 
             ReadOnlyCollection<AggregationHashChain> aggregationHashChainCollection =
@@ -48,10 +43,10 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (aggregationTime != calendarHashChain.AggregationTime)
             {
-                return new VerificationResult(RuleName, VerificationResultCode.Fail, VerificationError.Int04);
+                return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int04);
             }
 
-            return new VerificationResult(RuleName, VerificationResultCode.Ok);
+            return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }
     }
 }

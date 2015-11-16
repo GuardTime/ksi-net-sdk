@@ -128,14 +128,11 @@ namespace Guardtime.KSI.Service
                 throw new KsiException("Invalid sign response payload: null.");
             }
 
-            MemoryStream memoryStream = null;
+
             try
             {
-                memoryStream = new MemoryStream(data);
-                using (TlvReader reader = new TlvReader(memoryStream))
+                using (TlvReader reader = new TlvReader(new MemoryStream(data)))
                 {
-                    memoryStream = null;
-
                     AggregationPdu pdu = new AggregationPdu(reader.ReadTag());
                     AggregationResponsePayload payload = pdu.Payload as AggregationResponsePayload;
                     AggregationError errorPayload = pdu.Payload as AggregationError;
@@ -162,13 +159,6 @@ namespace Guardtime.KSI.Service
             catch (TlvException e)
             {
                 throw new KsiException("Could not parse response message: " + Base16.Encode(data), e);
-            }
-            finally
-            {
-                if (memoryStream != null)
-                {
-                    memoryStream.Dispose();
-                }
             }
         }
 
@@ -254,14 +244,11 @@ namespace Guardtime.KSI.Service
                 throw new KsiException("Invalid extend response payload: null.");
             }
 
-            MemoryStream memoryStream = null;
+
             try
             {
-                memoryStream = new MemoryStream(data);
-                using (TlvReader reader = new TlvReader(memoryStream))
+                using (TlvReader reader = new TlvReader(new MemoryStream(data)))
                 {
-                    memoryStream = null;
-
                     ExtendPdu pdu = new ExtendPdu(reader.ReadTag());
                     ExtendResponsePayload payload = pdu.Payload as ExtendResponsePayload;
                     ExtendError errorPayload = pdu.Payload as ExtendError;
@@ -294,13 +281,6 @@ namespace Guardtime.KSI.Service
             catch (TlvException e)
             {
                 throw new KsiException("Could not parse response message: " + Base16.Encode(data), e);
-            }
-            finally
-            {
-                if (memoryStream != null)
-                {
-                    memoryStream.Dispose();
-                }
             }
         }
 

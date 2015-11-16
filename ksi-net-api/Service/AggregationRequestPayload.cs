@@ -11,16 +11,6 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public sealed class AggregationRequestPayload : AggregationPduPayload
     {
-        /// <summary>
-        ///     Aggregation request TLV type.
-        /// </summary>
-        public const uint TagType = 0x201;
-
-        private const uint RequestIdTagType = 0x1;
-        private const uint RequestHashTagType = 0x2;
-        private const uint RequestLevelTagType = 0x3;
-        private const uint ConfigTagType = 0x10;
-
         private readonly RawTag _config;
         private readonly ImprintTag _requestHash;
         private readonly IntegerTag _requestId;
@@ -33,7 +23,7 @@ namespace Guardtime.KSI.Service
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
         public AggregationRequestPayload(TlvTag tag) : base(tag)
         {
-            if (Type != TagType)
+            if (Type != Constants.AggregationRequestPayload.TagType)
             {
                 throw new TlvException("Invalid aggregation request payload type(" + Type + ").");
             }
@@ -47,19 +37,19 @@ namespace Guardtime.KSI.Service
             {
                 switch (this[i].Type)
                 {
-                    case RequestIdTagType:
+                    case Constants.AggregationRequestPayload.RequestIdTagType:
                         _requestId = new IntegerTag(this[i]);
                         requestIdCount++;
                         break;
-                    case RequestHashTagType:
+                    case Constants.AggregationRequestPayload.RequestHashTagType:
                         _requestHash = new ImprintTag(this[i]);
                         requestHashCount++;
                         break;
-                    case RequestLevelTagType:
+                    case Constants.AggregationRequestPayload.RequestLevelTagType:
                         _requestLevel = new IntegerTag(this[i]);
                         requestLevelCount++;
                         break;
-                    case ConfigTagType:
+                    case Constants.AggregationRequestPayload.ConfigTagType:
                         _config = new RawTag(this[i]);
                         configCount++;
                         break;
@@ -96,10 +86,10 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="hash">data hash</param>
         /// <exception cref="TlvException">thrown when data hash is null</exception>
-        public AggregationRequestPayload(DataHash hash) : base(TagType, false, false, new List<TlvTag>()
+        public AggregationRequestPayload(DataHash hash) : base(Constants.AggregationRequestPayload.TagType, false, false, new List<TlvTag>()
         {
-            new IntegerTag(RequestIdTagType, false, false, Util.GetRandomUnsignedLong()),
-            new ImprintTag(RequestHashTagType, false, false, hash)
+            new IntegerTag(Constants.AggregationRequestPayload.RequestIdTagType, false, false, Util.GetRandomUnsignedLong()),
+            new ImprintTag(Constants.AggregationRequestPayload.RequestHashTagType, false, false, hash)
         })
         {
             _requestId = (IntegerTag)this[0];
@@ -135,7 +125,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         public ulong? RequestLevel
         {
-            get { return _requestLevel == null ? (ulong?)null : _requestLevel.Value; }
+            get { return _requestLevel?.Value; }
         }
     }
 }

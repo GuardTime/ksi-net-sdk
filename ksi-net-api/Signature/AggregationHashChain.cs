@@ -12,16 +12,6 @@ namespace Guardtime.KSI.Signature
     /// </summary>
     public sealed class AggregationHashChain : CompositeTag
     {
-        /// <summary>
-        ///     Aggregation hash chain TLV type.
-        /// </summary>
-        public const uint TagType = 0x801;
-
-        private const uint AggregationTimeTagType = 0x2;
-        private const uint ChainIndexTagType = 0x3;
-        private const uint InputDataTagType = 0x4;
-        private const uint InputHashTagType = 0x5;
-        private const uint AggregationAlgorithmIdTagType = 0x6;
         private readonly IntegerTag _aggrAlgorithmId;
 
         private readonly IntegerTag _aggregationTime;
@@ -37,7 +27,7 @@ namespace Guardtime.KSI.Signature
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
         public AggregationHashChain(TlvTag tag) : base(tag)
         {
-            if (Type != TagType)
+            if (Type != Constants.AggregationHashChain.TagType)
             {
                 throw new TlvException("Invalid aggregation hash chain type(" + Type + ").");
             }
@@ -51,23 +41,23 @@ namespace Guardtime.KSI.Signature
             {
                 switch (this[i].Type)
                 {
-                    case AggregationTimeTagType:
+                    case Constants.AggregationHashChain.AggregationTimeTagType:
                         _aggregationTime = new IntegerTag(this[i]);
                         aggregationTimeCount++;
                         break;
-                    case ChainIndexTagType:
+                    case Constants.AggregationHashChain.ChainIndexTagType:
                         IntegerTag chainIndexTag = new IntegerTag(this[i]);
                         _chainIndex.Add(chainIndexTag);
                         break;
-                    case InputDataTagType:
+                    case Constants.AggregationHashChain.InputDataTagType:
                         _inputData = new RawTag(this[i]);
                         inputDataCount++;
                         break;
-                    case InputHashTagType:
+                    case Constants.AggregationHashChain.InputHashTagType:
                         _inputHash = new ImprintTag(this[i]);
                         inputHashCount++;
                         break;
-                    case AggregationAlgorithmIdTagType:
+                    case Constants.AggregationHashChain.AggregationAlgorithmIdTagType:
                         _aggrAlgorithmId = new IntegerTag(this[i]);
                         aggrAlgorithmIdCount++;
                         break;
@@ -193,10 +183,6 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         private class Link : CompositeTag
         {
-            private const uint LevelCorrectionTagType = 0x1;
-            private const uint SiblingHashTagType = 0x2;
-            private const uint MetaHashTagType = 0x3;
-
             private readonly LinkDirection _direction;
 
             private readonly IntegerTag _levelCorrection;
@@ -219,19 +205,19 @@ namespace Guardtime.KSI.Signature
                 {
                     switch (this[i].Type)
                     {
-                        case LevelCorrectionTagType:
+                        case Constants.AggregationHashChain.Link.LevelCorrectionTagType:
                             _levelCorrection = new IntegerTag(this[i]);
                             levelCorrectionCount++;
                             break;
-                        case SiblingHashTagType:
+                        case Constants.AggregationHashChain.Link.SiblingHashTagType:
                             _siblingHash = new ImprintTag(this[i]);
                             siblingHashCount++;
                             break;
-                        case MetaHashTagType:
+                        case Constants.AggregationHashChain.Link.MetaHashTagType:
                             _metaHash = new ImprintTag(this[i]);
                             metaHashCount++;
                             break;
-                        case MetaData.TagType:
+                        case Constants.AggregationHashChain.MetaData.TagType:
                             _metaData = new MetaData(this[i]);
                             metaDataCount++;
                             break;
@@ -340,17 +326,6 @@ namespace Guardtime.KSI.Signature
 
         private class MetaData : CompositeTag
         {
-            /// <summary>
-            ///     Metadata TLV type.
-            /// </summary>
-            // ReSharper disable once MemberHidesStaticFromOuterClass
-            public const uint TagType = 0x4;
-
-            private const uint ClientIdTagType = 0x1;
-            private const uint MachineIdTagType = 0x2;
-            private const uint SequenceNumberTagType = 0x3;
-            private const uint RequestTimeTagType = 0x4;
-
             private readonly StringTag _clientId;
             private readonly StringTag _machineId;
 
@@ -360,7 +335,7 @@ namespace Guardtime.KSI.Signature
 
             public MetaData(TlvTag tag) : base(tag)
             {
-                if (Type != TagType)
+                if (Type != Constants.AggregationHashChain.MetaData.TagType)
                 {
                     throw new TlvException("Invalid aggregation hash chain link metadata type(" + Type + ").");
                 }
@@ -374,19 +349,19 @@ namespace Guardtime.KSI.Signature
                 {
                     switch (this[i].Type)
                     {
-                        case ClientIdTagType:
+                        case Constants.AggregationHashChain.MetaData.ClientIdTagType:
                             _clientId = new StringTag(this[i]);
                             clientIdCount++;
                             break;
-                        case MachineIdTagType:
+                        case Constants.AggregationHashChain.MetaData.MachineIdTagType:
                             _machineId = new StringTag(this[i]);
                             machineIdCount++;
                             break;
-                        case SequenceNumberTagType:
+                        case Constants.AggregationHashChain.MetaData.SequenceNumberTagType:
                             _sequenceNr = new IntegerTag(this[i]);
                             sequenceNrCount++;
                             break;
-                        case RequestTimeTagType:
+                        case Constants.AggregationHashChain.MetaData.RequestTimeTagType:
                             _requestTime = new IntegerTag(this[i]);
                             requestTimeCount++;
                             break;

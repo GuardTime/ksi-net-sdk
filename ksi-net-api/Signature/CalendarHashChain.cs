@@ -11,14 +11,6 @@ namespace Guardtime.KSI.Signature
     /// </summary>
     public sealed class CalendarHashChain : CompositeTag
     {
-        /// <summary>
-        ///     Calendar hash chain tag type
-        /// </summary>
-        public const uint TagType = 0x802;
-
-        private const uint PublicationTimeTagType = 0x1;
-        private const uint AggregationTimeTagType = 0x2;
-        private const uint InputHashTagType = 0x5;
         private readonly IntegerTag _aggregationTime;
         private readonly List<Link> _chain = new List<Link>();
         private readonly ImprintTag _inputHash;
@@ -36,7 +28,7 @@ namespace Guardtime.KSI.Signature
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
         public CalendarHashChain(TlvTag tag) : base(tag)
         {
-            if (Type != TagType)
+            if (Type != Constants.CalendarHashChain.TagType)
             {
                 throw new TlvException("Invalid calendar hash chain type(" + Type + ").");
             }
@@ -49,15 +41,15 @@ namespace Guardtime.KSI.Signature
             {
                 switch (this[i].Type)
                 {
-                    case PublicationTimeTagType:
+                    case Constants.CalendarHashChain.PublicationTimeTagType:
                         _publicationTime = new IntegerTag(this[i]);
                         publicationTimeCount++;
                         break;
-                    case AggregationTimeTagType:
+                    case Constants.CalendarHashChain.AggregationTimeTagType:
                         _aggregationTime = new IntegerTag(this[i]);
                         aggregationTimeCount++;
                         break;
-                    case InputHashTagType:
+                    case Constants.CalendarHashChain.InputHashTagType:
                         _inputHash = new ImprintTag(this[i]);
                         inputHashCount++;
                         break;
