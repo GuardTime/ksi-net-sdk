@@ -234,44 +234,31 @@ namespace Guardtime.KSI.Signature
                     throw new KsiException("Invalid calendar hash chain: null.");
                 }
 
-                MemoryStream stream = null;
-                try
-                {
-                    stream = new MemoryStream();
-                    using (TlvWriter writer = new TlvWriter(stream))
-                    {
-                        stream = null;
 
-                        for (int i = 0; i < Count; i++)
+                using (TlvWriter writer = new TlvWriter(new MemoryStream()))
+                {
+                    for (int i = 0; i < Count; i++)
+                    {
+                        switch (this[i].Type)
                         {
-                            switch (this[i].Type)
-                            {
-                                case Constants.CalendarHashChain.TagType:
-                                    writer.WriteTag(calendarHashChain);
-                                    break;
-                                case Constants.PublicationRecord.TagTypeSignature:
-                                    if (publicationRecord != null)
-                                    {
-                                        writer.WriteTag(publicationRecord);
-                                    }
-                                    break;
-                                default:
-                                    writer.WriteTag(this[i]);
-                                    break;
-                            }
+                            case Constants.CalendarHashChain.TagType:
+                                writer.WriteTag(calendarHashChain);
+                                break;
+                            case Constants.PublicationRecord.TagTypeSignature:
+                                if (publicationRecord != null)
+                                {
+                                    writer.WriteTag(publicationRecord);
+                                }
+                                break;
+                            default:
+                                writer.WriteTag(this[i]);
+                                break;
                         }
+                    }
 
-                        return
-                            new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false,
-                                ((MemoryStream)writer.BaseStream).ToArray()));
-                    }
-                }
-                finally
-                {
-                    if (stream != null)
-                    {
-                        stream.Dispose();
-                    }
+                    return
+                        new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false,
+                            ((MemoryStream)writer.BaseStream).ToArray()));
                 }
             }
 

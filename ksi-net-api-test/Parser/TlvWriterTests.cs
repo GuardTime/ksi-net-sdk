@@ -65,14 +65,11 @@ namespace Guardtime.KSI.Parser
         [Test]
         public void TestWriteNullValue()
         {
-            using (var stream = new MemoryStream())
+            using (var writer = new TlvWriter(new MemoryStream()))
             {
-                using (var writer = new TlvWriter(stream))
-                {
-                    writer.WriteTag(new AllowNullValueTlvTag(0x1, false, false));
-                    writer.WriteTag(new AllowNullValueTlvTag(0x257, true, true));
-                    CollectionAssert.AreEqual(new byte[] {0x1, 0x0, 0xe2, 0x57, 0x0}, stream.ToArray(), "Writer should output correct byte array");
-                }
+                writer.WriteTag(new AllowNullValueTlvTag(0x1, false, false));
+                writer.WriteTag(new AllowNullValueTlvTag(0x257, true, true));
+                CollectionAssert.AreEqual(new byte[] {0x1, 0x0, 0xe2, 0x57, 0x0}, ((MemoryStream)writer.BaseStream).ToArray(), "Writer should output correct byte array");
             }
         }
 

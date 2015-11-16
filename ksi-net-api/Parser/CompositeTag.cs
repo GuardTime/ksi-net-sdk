@@ -187,27 +187,14 @@ namespace Guardtime.KSI.Parser
         /// <returns>TLV list elements as byte array</returns>
         public override byte[] EncodeValue()
         {
-            MemoryStream stream = null;
-            try
+            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
             {
-                stream = new MemoryStream();
-                using (TlvWriter writer = new TlvWriter(stream))
+                for (int i = 0; i < Count; i++)
                 {
-                    stream = null;
-                    for (int i = 0; i < Count; i++)
-                    {
-                        writer.WriteTag(this[i]);
-                    }
+                    writer.WriteTag(this[i]);
+                }
 
-                    return ((MemoryStream)writer.BaseStream).ToArray();
-                }
-            }
-            finally
-            {
-                if (stream != null)
-                {
-                    stream.Dispose();
-                }
+                return ((MemoryStream)writer.BaseStream).ToArray();
             }
         }
 

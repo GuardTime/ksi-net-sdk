@@ -70,28 +70,14 @@ namespace Guardtime.KSI.Service
         /// <param name="key">hmac key</param>
         public void SetMac(byte[] key)
         {
-            MemoryStream stream = null;
-            try
+            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
             {
-                stream = new MemoryStream();
-                using (TlvWriter writer = new TlvWriter(stream))
-                {
-                    stream = null;
+                writer.WriteTag(_header);
+                writer.WriteTag(Payload);
 
-                    writer.WriteTag(_header);
-                    writer.WriteTag(Payload);
-
-                    ImprintTag mac = new ImprintTag(Constants.KsiPdu.MacTagType, false, false,
-                        CalculateMac(key, ((MemoryStream)writer.BaseStream).ToArray()));
-                    _mac = PutTag(mac, _mac);
-                }
-            }
-            finally
-            {
-                if (stream != null)
-                {
-                    stream.Dispose();
-                }
+                ImprintTag mac = new ImprintTag(Constants.KsiPdu.MacTagType, false, false,
+                    CalculateMac(key, ((MemoryStream)writer.BaseStream).ToArray()));
+                _mac = PutTag(mac, _mac);
             }
         }
 
@@ -119,27 +105,14 @@ namespace Guardtime.KSI.Service
                 return false;
             }
 
-            MemoryStream stream = null;
-            try
-            {
-                stream = new MemoryStream();
-                using (TlvWriter writer = new TlvWriter(stream))
-                {
-                    stream = null;
 
-                    writer.WriteTag(_header);
-                    writer.WriteTag(Payload);
-
-                    DataHash hash = CalculateMac(key, ((MemoryStream)writer.BaseStream).ToArray());
-                    return hash.Equals(_mac.Value);
-                }
-            }
-            finally
+            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
             {
-                if (stream != null)
-                {
-                    stream.Dispose();
-                }
+                writer.WriteTag(_header);
+                writer.WriteTag(Payload);
+
+                DataHash hash = CalculateMac(key, ((MemoryStream)writer.BaseStream).ToArray());
+                return hash.Equals(_mac.Value);
             }
         }
     }
