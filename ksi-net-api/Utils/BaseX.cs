@@ -298,11 +298,7 @@ namespace Guardtime.KSI.Utils
                 return outputBytes;
             }
 
-            byte[] tmp = outputBytes;
-            outputBytes = new byte[outCount];
-            Array.Copy(tmp, 0, outputBytes, 0, outCount);
-
-            return outputBytes;
+            return Util.Clone(outputBytes, 0, outCount);
         }
     }
 }

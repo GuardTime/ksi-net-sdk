@@ -102,29 +102,25 @@ namespace Guardtime.KSI.Publication
                 throw new TlvException("Publication string base 32 decode failed.");
             }
 
-            byte[] dataBytes = new byte[dataBytesWithCrc32.Length - 4];
-            Array.Copy(dataBytesWithCrc32, 0, dataBytes, 0, dataBytesWithCrc32.Length - 4);
+            byte[] dataBytes = Util.Clone(dataBytesWithCrc32, 0, dataBytesWithCrc32.Length - 4);
 
             byte[] computedCrc32 = Util.EncodeUnsignedLong(Crc32.Calculate(dataBytes, 0));
-            byte[] messageCrc32 = new byte[4];
-            Array.Copy(dataBytesWithCrc32, dataBytesWithCrc32.Length - 4, messageCrc32, 0, 4);
+            byte[] messageCrc32 = Util.Clone(dataBytesWithCrc32, dataBytesWithCrc32.Length - 4, 4);
+
             if (!Util.IsArrayEqual(computedCrc32, messageCrc32))
             {
                 throw new TlvException("Publication string CRC 32 check failed.");
             }
 
-            byte[] hashImprint = new byte[dataBytesWithCrc32.Length - 12];
-            Array.Copy(dataBytesWithCrc32, 8, hashImprint, 0, dataBytesWithCrc32.Length - 12);
-
-            byte[] publicationTimeBytes = new byte[8];
-            Array.Copy(dataBytesWithCrc32, 0, publicationTimeBytes, 0, 8);
+            byte[] hashImprint = Util.Clone(dataBytesWithCrc32, 8, dataBytesWithCrc32.Length - 12);
+            byte[] publicationTimeBytes = Util.Clone(dataBytesWithCrc32, 0, 8);
 
             return new List<TlvTag>()
             {
                 new IntegerTag(Constants.PublicationData.PublicationTimeTagType, false, false, Util.DecodeUnsignedLong(publicationTimeBytes, 0, publicationTimeBytes.Length)),
                 new ImprintTag(Constants.PublicationData.PublicationHashTagType, false, false, new DataHash(hashImprint))
             };
-        } 
+        }
 
         /// <summary>
         ///     Get publication time.

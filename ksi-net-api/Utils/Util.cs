@@ -11,10 +11,29 @@ namespace Guardtime.KSI.Utils
     {
         private static readonly Random Random = new Random();
 
-        public static byte[] Clone(byte[] data)
+        /// <summary>
+        ///     Clone given byte array
+        /// </summary>
+        /// <param name="source">byte array to be cloned</param>
+        /// <returns></returns>
+        public static byte[] Clone(byte[] source)
         {
-            byte[] bytes = new byte[data.Length];
-            data.CopyTo(bytes, 0);
+            byte[] bytes = new byte[source.Length];
+            source.CopyTo(bytes, 0);
+            return bytes;
+        }
+
+        /// <summary>
+        ///     Clone part of byte array
+        /// </summary>
+        /// <param name="source">byte array to be cloned</param>
+        /// <param name="startIndex">source array index to start cloning from</param>
+        /// <param name="byteCount">amount of bytes to clone</param>
+        /// <returns></returns>
+        public static byte[] Clone(byte[] source, int startIndex, int byteCount)
+        {
+            byte[] bytes = new byte[byteCount];
+            Array.Copy(source, startIndex, bytes, 0, byteCount);
             return bytes;
         }
 
