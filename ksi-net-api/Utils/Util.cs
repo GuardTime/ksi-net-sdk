@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using Guardtime.KSI.Exceptions;
 
@@ -10,6 +11,13 @@ namespace Guardtime.KSI.Utils
     public static class Util
     {
         private static readonly Random Random = new Random();
+
+        public static byte[] Clone(byte[] data)
+        {
+            byte[] bytes = new byte[data.Length];
+            data.CopyTo(bytes, 0);
+            return bytes;
+        }
 
         /// <summary>
         ///     Are given arrays equal with same data ordering.

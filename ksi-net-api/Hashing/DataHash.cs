@@ -95,17 +95,17 @@ namespace Guardtime.KSI.Hashing
         ///     Get data imprint.
         ///     Imprint is created by concatenating hash algorithm id with hash value.
         /// </summary>
-        public ICollection<byte> Imprint
+        public byte[] Imprint
         {
-            get { return new ReadOnlyCollection<byte>(_imprint); }
+            get { return Util.Clone(_imprint); }
         }
 
         /// <summary>
         ///     Get the computed hash value for DataHash.
         /// </summary>
-        public ICollection<byte> Value
+        public byte[] Value
         {
-            get { return new ReadOnlyCollection<byte>(_value); }
+            get { return Util.Clone(_value); }
         }
 
         /// <summary>

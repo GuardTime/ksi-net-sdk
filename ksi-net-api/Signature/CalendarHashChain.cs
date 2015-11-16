@@ -205,7 +205,7 @@ namespace Guardtime.KSI.Signature
         /// <param name="hashA">hash a</param>
         /// <param name="hashB">hash b</param>
         /// <returns>result hash</returns>
-        private DataHash HashTogether(HashAlgorithm algorithm, ICollection<byte> hashA, ICollection<byte> hashB)
+        private DataHash HashTogether(HashAlgorithm algorithm, byte[] hashA, byte[] hashB)
         {
             DataHasher hasher = new DataHasher(algorithm);
             hasher.AddData(hashA);

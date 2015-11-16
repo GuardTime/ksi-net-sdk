@@ -175,7 +175,7 @@ namespace Guardtime.KSI.Signature
         /// <param name="hashB">second hash</param>
         /// <param name="level">hash chain level</param>
         /// <returns>resulting hash</returns>
-        private DataHash HashTogether(ICollection<byte> hashA, ICollection<byte> hashB, ulong level)
+        private DataHash HashTogether(byte[] hashA, byte[] hashB, ulong level)
         {
             DataHasher hasher = new DataHasher(HashAlgorithm.GetById((byte)_aggrAlgorithmId.Value));
             hasher.AddData(hashA);
@@ -296,9 +296,8 @@ namespace Guardtime.KSI.Signature
 
             private string CalculateIdendityFromMetaHash()
             {
-                ICollection<byte> data = _metaHash.Value.Imprint;
-                byte[] bytes = new byte[data.Count];
-                data.CopyTo(bytes, 0);
+                byte[] bytes = _metaHash.Value.Imprint;
+
 
                 if (bytes.Length < 3)
                 {

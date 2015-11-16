@@ -1,6 +1,7 @@
 ﻿using System;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
+using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Parser
 {
@@ -89,9 +90,7 @@ namespace Guardtime.KSI.Parser
         /// <returns>Data hash as byte array</returns>
         public override byte[] EncodeValue()
         {
-            byte[] value = new byte[_value.Imprint.Count];
-            _value.Imprint.CopyTo(value, 0);
-            return value;
+            return _value.Imprint;
         }
 
         /// <summary>
