@@ -158,25 +158,11 @@ namespace Guardtime.KSI.Parser
         /// <param name="bytes">TLV bytes</param>
         private void DecodeValue(byte[] bytes)
         {
-            MemoryStream stream = null;
-
-            try
+            using (TlvReader tlvReader = new TlvReader(new MemoryStream(bytes)))
             {
-                stream = new MemoryStream(bytes);
-                using (TlvReader tlvReader = new TlvReader(stream))
+                while (tlvReader.BaseStream.Position < tlvReader.BaseStream.Length)
                 {
-                    stream = null;
-                    while (tlvReader.BaseStream.Position < tlvReader.BaseStream.Length)
-                    {
-                        _value.Add(tlvReader.ReadTag());
-                    }
-                }
-            }
-            finally
-            {
-                if (stream != null)
-                {
-                    stream.Dispose();
+                    _value.Add(tlvReader.ReadTag());
                 }
             }
         }
