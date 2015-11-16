@@ -88,13 +88,6 @@ namespace Guardtime.KSI.Publication
                 }
             }
 
-            /// <summary>
-            ///     Get KSI trust provider name.
-            /// </summary>
-            public string Name
-            {
-                get { return "publications file"; }
-            }
 
             /// <summary>
             ///     Get latest publication record.

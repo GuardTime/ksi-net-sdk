@@ -9,11 +9,6 @@ namespace Guardtime.KSI.Trust
     public interface IKsiTrustProvider
     {
         /// <summary>
-        ///     Get KSI trust provider name.
-        /// </summary>
-        string Name { get; }
-
-        /// <summary>
         ///     KSI trust provider contains given publication record.
         /// </summary>
         /// <param name="publicationRecord">publication record</param>

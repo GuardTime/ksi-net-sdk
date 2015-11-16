@@ -140,7 +140,7 @@
     <Compile Include="Service\ExtendPdu.cs" />
     <Compile Include="Service\ExtendPduPayload.cs" />
     <Compile Include="Service\ExtendResponsePayload.cs" />
-    <Compile Include="Service\HttpServiceProtocol.cs" />
+    <Compile Include="Service\HttpKsiServiceProtocol.cs" />
     <Compile Include="Service\IKsiService.cs" />
     <Compile Include="Service\IKsiPublicationsFileServiceProtocol.cs" />
     <Compile Include="Service\IKsiSigningServiceProtocol.cs" />
