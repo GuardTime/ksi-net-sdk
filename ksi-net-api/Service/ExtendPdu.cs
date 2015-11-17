@@ -41,7 +41,7 @@ namespace Guardtime.KSI.Service
                         payloadCount++;
                         break;
                     case Constants.ExtendError.TagType:
-                        _payload = new ExtendError(this[i]);
+                        _payload = new ExtendErrorPayload(this[i]);
                         payloadCount++;
                         break;
                     case Constants.KsiPduHeader.TagType:

@@ -131,8 +131,8 @@
     <None Include="packages.config" />
     <None Include="README" />
     <Compile Include="Service\ExtendRequestPayload.cs" />
-    <Compile Include="Service\ExtendError.cs" />
-    <Compile Include="Service\AggregationError.cs" />
+    <Compile Include="Service\ExtendErrorPayload.cs" />
+    <Compile Include="Service\AggregationErrorPayload.cs" />
     <Compile Include="Service\AggregationResponsePayload.cs" />
     <Compile Include="Service\AggregationRequestPayload.cs" />
     <Compile Include="Service\AggregationPdu.cs" />
