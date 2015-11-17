@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Utils;
 
@@ -10,14 +9,12 @@ namespace Guardtime.KSI.Parser
     /// </summary>
     public class StringTag : TlvTag
     {
-        private readonly string _value;
-
         /// <summary>
         ///     Create string TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         /// <exception cref="TlvException">thrown when TLV tag is null or encodeValue returns null</exception>
-        public StringTag(TlvTag tag) : base(tag)
+        public StringTag(ITlvTag tag) : base(tag)
         {
             byte[] data = tag.EncodeValue();
             if (data == null)
@@ -25,7 +22,7 @@ namespace Guardtime.KSI.Parser
                 throw new TlvException("Invalid TLV element encoded value: null.");
             }
 
-            _value = Util.DecodeNullTerminatedUtf8String(data);
+            Value = Util.DecodeNullTerminatedUtf8String(data);
         }
 
         /// <summary>
@@ -43,16 +40,13 @@ namespace Guardtime.KSI.Parser
             {
                 throw new TlvException("Invalid input value: null.");
             }
-            _value = value;
+            Value = value;
         }
 
         /// <summary>
         ///     Get TLV element string value.
         /// </summary>
-        public string Value
-        {
-            get { return _value; }
-        }
+        public string Value { get; }
 
         /// <summary>
         ///     Encode element value string to byte array.

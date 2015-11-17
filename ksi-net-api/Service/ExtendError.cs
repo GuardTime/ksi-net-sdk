@@ -16,7 +16,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="tag">TLV element</param>
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
-        public ExtendError(TlvTag tag) : base(tag)
+        public ExtendError(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.ExtendError.TagType)
             {
@@ -58,17 +58,11 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Get error message.
         /// </summary>
-        public string ErrorMessage
-        {
-            get { return _errorMessage == null ? null : _errorMessage.Value; }
-        }
+        public string ErrorMessage => _errorMessage?.Value;
 
         /// <summary>
         ///     Get status code.
         /// </summary>
-        public ulong Status
-        {
-            get { return _status.Value; }
-        }
+        public ulong Status => _status.Value;
     }
 }

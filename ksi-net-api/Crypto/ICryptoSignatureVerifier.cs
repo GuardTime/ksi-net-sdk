@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Guardtime.KSI.Crypto
+﻿namespace Guardtime.KSI.Crypto
 {
     /// <summary>
     ///     Crypto signature verifier interface.

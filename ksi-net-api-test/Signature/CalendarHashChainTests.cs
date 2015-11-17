@@ -94,11 +94,11 @@ namespace Guardtime.KSI.Signature
             }, "Only one publication time must exist in calendar hash chain");
         }
 
-        private CalendarHashChain GetCalendarHashChainFromFile(string file)
+        private static CalendarHashChain GetCalendarHashChainFromFile(string file)
         {
-            using (var stream = new FileStream(file, FileMode.Open))
+            using (FileStream stream = new FileStream(file, FileMode.Open))
             {
-                using (var reader = new TlvReader(stream))
+                using (TlvReader reader = new TlvReader(stream))
                 {
                     CalendarHashChain calendarHashChain = new CalendarHashChain(reader.ReadTag());
 

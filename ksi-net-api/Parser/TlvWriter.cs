@@ -29,7 +29,7 @@ namespace Guardtime.KSI.Parser
 
             if (tag.Type > Constants.Tlv.MaxType)
             {
-                throw new ArgumentOutOfRangeException("tag");
+                throw new ArgumentOutOfRangeException(nameof(tag));
             }
 
             byte[] data = tag.EncodeValue();
@@ -53,7 +53,7 @@ namespace Guardtime.KSI.Parser
                 {
                     if (data.Length > ushort.MaxValue)
                     {
-                        throw new ArgumentOutOfRangeException("tag");
+                        throw new ArgumentOutOfRangeException(nameof(tag));
                     }
                     Write((byte)(data.Length >> Constants.BitsInByte));
                     Write((byte)data.Length);

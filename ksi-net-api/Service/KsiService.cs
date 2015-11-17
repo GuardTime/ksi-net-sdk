@@ -145,7 +145,7 @@ namespace Guardtime.KSI.Service
                     if (payload == null || payload.Status != 0)
                     {
                         string errorMessage = payload == null ? errorPayload.ErrorMessage : payload.ErrorMessage;
-                        throw new KsiException("Error occured during aggregation: " + payload.ErrorMessage + ".");
+                        throw new KsiException("Error occured during aggregation: " + errorMessage + ".");
                     }
 
                     if (!pdu.ValidateMac(_serviceSettings.LoginKey))
@@ -403,9 +403,6 @@ namespace Guardtime.KSI.Service
         /// </summary>
         private abstract class KsiServiceAsyncResult : IAsyncResult
         {
-            private readonly object _asyncState;
-            private readonly IAsyncResult _serviceProtocolAsyncResult;
-
             protected KsiServiceAsyncResult(IAsyncResult serviceProtocolAsyncResult, object asyncState)
             {
                 if (serviceProtocolAsyncResult == null)
@@ -413,34 +410,19 @@ namespace Guardtime.KSI.Service
                     throw new KsiException("Invalid service protocol IAsyncResult: null.");
                 }
 
-                _serviceProtocolAsyncResult = serviceProtocolAsyncResult;
-                _asyncState = asyncState;
+                ServiceProtocolAsyncResult = serviceProtocolAsyncResult;
+                AsyncState = asyncState;
             }
 
-            public IAsyncResult ServiceProtocolAsyncResult
-            {
-                get { return _serviceProtocolAsyncResult; }
-            }
+            public IAsyncResult ServiceProtocolAsyncResult { get; }
 
-            public object AsyncState
-            {
-                get { return _asyncState; }
-            }
+            public object AsyncState { get; }
 
-            public WaitHandle AsyncWaitHandle
-            {
-                get { return _serviceProtocolAsyncResult.AsyncWaitHandle; }
-            }
+            public WaitHandle AsyncWaitHandle => ServiceProtocolAsyncResult.AsyncWaitHandle;
 
-            public bool CompletedSynchronously
-            {
-                get { return _serviceProtocolAsyncResult.CompletedSynchronously; }
-            }
+            public bool CompletedSynchronously => ServiceProtocolAsyncResult.CompletedSynchronously;
 
-            public bool IsCompleted
-            {
-                get { return _serviceProtocolAsyncResult.IsCompleted; }
-            }
+            public bool IsCompleted => ServiceProtocolAsyncResult.IsCompleted;
         }
     }
 }

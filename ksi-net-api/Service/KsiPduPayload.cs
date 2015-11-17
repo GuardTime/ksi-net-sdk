@@ -12,7 +12,7 @@ namespace Guardtime.KSI.Service
         ///     Create KSI PDU payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        protected KsiPduPayload(TlvTag tag) : base(tag)
+        protected KsiPduPayload(ITlvTag tag) : base(tag)
         {
         }
 
@@ -23,7 +23,7 @@ namespace Guardtime.KSI.Service
         /// <param name="nonCritical">is TLV non critical</param>
         /// <param name="forward">is TLV forwarded</param>
         /// <param name="value">TLV element list</param>
-        protected KsiPduPayload(uint type, bool nonCritical, bool forward, List<TlvTag> value)
+        protected KsiPduPayload(uint type, bool nonCritical, bool forward, List<ITlvTag> value)
             : base(type, nonCritical, forward, value)
         {
         }

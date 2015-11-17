@@ -11,16 +11,13 @@ namespace Guardtime.KSI.Signature.Verification
     public class VerificationResult
     {
         private readonly IList<VerificationResult> _childResults = new List<VerificationResult>();
-        private readonly VerificationError _error;
-        private readonly VerificationResultCode _resultCode;
-        private readonly string _ruleName;
 
         /// <summary>
         ///     Create new rule verification result from list.
         /// </summary>
         /// <param name="ruleName">verification rule name</param>
         /// <param name="resultList">verification result list</param>
-        public VerificationResult(string ruleName, IList<VerificationResult> resultList)
+        public VerificationResult(string ruleName, List<VerificationResult> resultList)
             : this(ruleName, GetVerificationResultCodeFromList(resultList))
         {
             for (int i = 0; i < resultList.Count; i++)
@@ -46,26 +43,25 @@ namespace Guardtime.KSI.Signature.Verification
         /// <param name="error">verification error</param>
         public VerificationResult(string ruleName, VerificationResultCode resultCode, VerificationError error)
         {
-            _resultCode = resultCode;
-            _ruleName = ruleName;
-            _error = error;
+            ResultCode = resultCode;
+            RuleName = ruleName;
+            VerificationError = error;
         }
+
+        /// <summary>
+        ///     Get verification rule name.
+        /// </summary>
+        public string RuleName { get; }
 
         /// <summary>
         ///     Get verification result code.
         /// </summary>
-        public VerificationResultCode ResultCode
-        {
-            get { return _resultCode; }
-        }
+        public VerificationResultCode ResultCode { get; }
 
         /// <summary>
         ///     Get verification error if exists, otherwise null.
         /// </summary>
-        public VerificationError VerificationError
-        {
-            get { return _error; }
-        }
+        public VerificationError VerificationError { get; }
 
         private static VerificationResultCode GetVerificationResultCodeFromList(IList<VerificationResult> resultList)
         {
@@ -87,8 +83,8 @@ namespace Guardtime.KSI.Signature.Verification
         public override string ToString()
         {
             StringBuilder builder = new StringBuilder();
-            builder.Append(_ruleName).Append(": ");
-            builder.Append(_resultCode);
+            builder.Append(RuleName).Append(": ");
+            builder.Append(ResultCode);
 
             if (_childResults.Count > 0)
             {

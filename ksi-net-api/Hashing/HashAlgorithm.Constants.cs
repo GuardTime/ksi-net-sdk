@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Guardtime.KSI.Hashing
+﻿namespace Guardtime.KSI.Hashing
 {
     partial class HashAlgorithm
     {

@@ -18,7 +18,7 @@ namespace Guardtime.KSI.Publication
         /// </summary>
         /// <param name="tag">TLV element</param>
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
-        public PublicationsFileHeader(TlvTag tag) : base(tag)
+        public PublicationsFileHeader(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.PublicationsFileHeader.TagType)
             {
@@ -71,25 +71,16 @@ namespace Guardtime.KSI.Publication
         /// <summary>
         ///     Get publications file creation time.
         /// </summary>
-        public ulong CreationTime
-        {
-            get { return _creationTime.Value; }
-        }
+        public ulong CreationTime => _creationTime.Value;
 
         /// <summary>
         ///     Get publications file repository uri if it exists.
         /// </summary>
-        public string RepUri
-        {
-            get { return _repUri != null ? _repUri.Value : null; }
-        }
+        public string RepUri => _repUri?.Value;
 
         /// <summary>
         ///     Get publications file version.
         /// </summary>
-        public ulong Version
-        {
-            get { return _version.Value; }
-        }
+        public ulong Version => _version.Value;
     }
 }

@@ -36,12 +36,9 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 throw new KsiVerificationException("Calendar hash chain is missing from KSI signature.");
             }
 
-            if (calendarHashChain.OutputHash != calendarAuthenticationRecord.PublicationData.PublicationHash)
-            {
-                return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int08);
-            }
-
-            return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
+            return calendarHashChain.OutputHash != calendarAuthenticationRecord.PublicationData.PublicationHash
+                ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int08)
+                : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }
     }
 }

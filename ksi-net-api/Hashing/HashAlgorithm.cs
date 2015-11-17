@@ -36,11 +36,6 @@ namespace Guardtime.KSI.Hashing
 
         private readonly string[] _alternatives;
 
-        private readonly byte _id;
-        private readonly int _length;
-        private readonly string _name;
-        private readonly AlgorithmStatus _status;
-
         /// <summary>
         ///     Static constructor for creating lookup table for names.
         /// </summary>
@@ -63,30 +58,18 @@ namespace Guardtime.KSI.Hashing
         /// <param name="id">algorithm Guardtime id</param>
         /// <param name="length">algorithm value length</param>
         /// <param name="status">algorithm status</param>
-        private HashAlgorithm(string name, byte id, int length, AlgorithmStatus status)
-            : this(name, id, length, status, null)
-        {
-        }
-
-        /// <summary>
-        ///     Private constructor for HashAlgorithm object.
-        /// </summary>
-        /// <param name="name">algorithm name</param>
-        /// <param name="id">algorithm Guardtime id</param>
-        /// <param name="length">algorithm value length</param>
-        /// <param name="status">algorithm status</param>
         /// <param name="alternatives">algorithm alternative names</param>
-        private HashAlgorithm(string name, byte id, int length, AlgorithmStatus status, string[] alternatives)
+        private HashAlgorithm(string name, byte id, int length, AlgorithmStatus status, string[] alternatives = null)
         {
             if (alternatives == null)
             {
                 alternatives = new string[] {};
             }
 
-            _name = name;
-            _id = id;
-            _length = length;
-            _status = status;
+            Name = name;
+            Id = id;
+            Length = length;
+            Status = status;
             _alternatives = alternatives;
         }
 
@@ -94,34 +77,22 @@ namespace Guardtime.KSI.Hashing
         /// <summary>
         ///     Return Guardtime id of algorithm.
         /// </summary>
-        public byte Id
-        {
-            get { return _id; }
-        }
+        public byte Id { get; }
 
         /// <summary>
         ///     Return name of algorithm.
         /// </summary>
-        public string Name
-        {
-            get { return _name; }
-        }
+        public string Name { get; }
 
         /// <summary>
         ///     Return length of the algorithm value.
         /// </summary>
-        public int Length
-        {
-            get { return _length; }
-        }
+        public int Length { get; }
 
         /// <summary>
         ///     Return status of the algorithm.
         /// </summary>
-        public AlgorithmStatus Status
-        {
-            get { return _status; }
-        }
+        public AlgorithmStatus Status { get; }
 
         /// <summary>
         ///     Get hash algorithm by id/code.
@@ -156,13 +127,14 @@ namespace Guardtime.KSI.Hashing
         ///     Get list of supported the algorithms.
         /// </summary>
         /// <returns>List of supported hash algorithm names</returns>
-        public static IList<string> GetNamesList()
+        public static List<string> GetNamesList()
         {
-            IList<string> names = new List<string>();
+            List<string> names = new List<string>();
             foreach (HashAlgorithm algorithm in Values())
             {
                 names.Add(algorithm.Name);
             }
+
             return names;
         }
 

@@ -1,27 +1,19 @@
 ﻿using NUnit.Framework;
-using Guardtime.KSI.Signature.Verification.Rule;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
-using Guardtime.KSI.Service;
-using Guardtime.KSI.Trust;
 using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
-    [TestFixture()]
+    [TestFixture]
     public class UserProvidedPublicationHashMatchesExtendedResponseRuleTests
     {
-        [Test()]
+        [Test]
         public void TestVerify()
         {
-            var rule = new UserProvidedPublicationHashMatchesExtendedResponseRule();
+            UserProvidedPublicationHashMatchesExtendedResponseRule rule = new UserProvidedPublicationHashMatchesExtendedResponseRule();
 
             // Argument null exception when no context
             Assert.Throws<KsiException>(delegate
@@ -32,15 +24,15 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             // Verification exception on missing KSI signature 
             Assert.Throws<KsiVerificationException>(delegate
             {
-                var context = new TestVerificationContext();
+                TestVerificationContext context = new TestVerificationContext();
 
                 rule.Verify(context);
             });
 
             // Check signature without user publication
-            using (var stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
             {
-                var context = new TestVerificationContext()
+                TestVerificationContext context = new TestVerificationContext()
                 {
                     Signature = new KsiSignatureFactory().Create(stream)
                 };
@@ -52,9 +44,9 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             }
 
             // Check invalid extended calendar chain from context extension function
-            using (var stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
             {
-                var context = new TestVerificationContextFaultyFunctions()
+                TestVerificationContextFaultyFunctions context = new TestVerificationContextFaultyFunctions()
                 {
                     Signature = new KsiSignatureFactory().Create(stream),
                     UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K")
@@ -67,9 +59,9 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             }
 
             // Check legacy signature with publication record
-            using (var stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok_With_Publication_Record, FileMode.Open))
+            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok_With_Publication_Record, FileMode.Open))
             {
-                var context = new TestVerificationContext()
+                TestVerificationContext context = new TestVerificationContext()
                 {
                     Signature = new KsiSignatureFactory().Create(stream),
                     ExtendedCalendarHashChain =
@@ -79,14 +71,14 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K")
                 };
 
-                var verificationResult = rule.Verify(context);
+                VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
 
             // Check signature with publication record
-            using (var stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))
+            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))
             {
-                var context = new TestVerificationContext()
+                TestVerificationContext context = new TestVerificationContext()
                 {
                     Signature = new KsiSignatureFactory().Create(stream),
                     ExtendedCalendarHashChain =
@@ -96,14 +88,14 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K")
                 };
 
-                var verificationResult = rule.Verify(context);
+                VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
 
             // Check invalid signature
-            using (var stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
             {
-                var context = new TestVerificationContext()
+                TestVerificationContext context = new TestVerificationContext()
                 {
                     Signature = new KsiSignatureFactory().Create(stream),
                     ExtendedCalendarHashChain =
@@ -113,7 +105,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K")
                 };
 
-                var verificationResult = rule.Verify(context);
+                VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
             }
         }

@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Exceptions;
-using System;
 
 namespace Guardtime.KSI.Signature
 {
@@ -278,11 +277,11 @@ namespace Guardtime.KSI.Signature
             }, "Only one sequence number is allowed in aggregation hash chain link metadata");
         }
 
-        private AggregationHashChain GetAggregationHashChainFromFile(string file)
+        private static AggregationHashChain GetAggregationHashChainFromFile(string file)
         {
-            using (var stream = new FileStream(file, FileMode.Open))
+            using (FileStream stream = new FileStream(file, FileMode.Open))
             {
-                using (var reader = new TlvReader(stream))
+                using (TlvReader reader = new TlvReader(stream))
                 {
                     AggregationHashChain aggregationHashChain = new AggregationHashChain(reader.ReadTag());
 

@@ -12,7 +12,6 @@ namespace Guardtime.KSI.Hashing
     /// </summary>
     public class DataHash : IEquatable<DataHash>
     {
-        private readonly HashAlgorithm _algorithm;
         private readonly byte[] _imprint;
         private readonly byte[] _value;
 
@@ -40,7 +39,7 @@ namespace Guardtime.KSI.Hashing
                                            + algorithm.Name + " size(" + algorithm.Length + ").");
             }
 
-            _algorithm = algorithm;
+            Algorithm = algorithm;
             _value = valueBytes;
 
             _imprint = new byte[Algorithm.Length + 1];
@@ -65,31 +64,28 @@ namespace Guardtime.KSI.Hashing
                 throw new HashingException("Hash imprint is too short.");
             }
 
-            _algorithm = HashAlgorithm.GetById(imprintBytes[0]);
+            Algorithm = HashAlgorithm.GetById(imprintBytes[0]);
 
-            if (_algorithm == null)
+            if (Algorithm == null)
             {
                 throw new HashingException("Hash algorithm id(" + imprintBytes[0] + ") is unknown.");
             }
 
-            if (_algorithm.Length + 1 != imprintBytes.Length)
+            if (Algorithm.Length + 1 != imprintBytes.Length)
             {
                 throw new HashingException("Hash size(" + (imprintBytes.Length - 1) + ") does not match "
-                                           + _algorithm.Name + " size(" + _algorithm.Length + ").");
+                                           + Algorithm.Name + " size(" + Algorithm.Length + ").");
             }
 
-            _value = new byte[_algorithm.Length];
-            Array.Copy(imprintBytes, 1, _value, 0, _algorithm.Length);
+            _value = new byte[Algorithm.Length];
+            Array.Copy(imprintBytes, 1, _value, 0, Algorithm.Length);
             _imprint = imprintBytes;
         }
 
         /// <summary>
         ///     Get the HashAlgorithm used to compute this DataHash.
         /// </summary>
-        public HashAlgorithm Algorithm
-        {
-            get { return _algorithm; }
-        }
+        public HashAlgorithm Algorithm { get; }
 
         /// <summary>
         ///     Get data imprint.
@@ -126,13 +122,7 @@ namespace Guardtime.KSI.Hashing
                 return true;
             }
 
-            // If run-time types are not exactly the same, return false. 
-            if (GetType() != hash.GetType())
-            {
-                return false;
-            }
-
-            return Util.IsArrayEqual(_imprint, hash._imprint);
+            return GetType() == hash.GetType() && Util.IsArrayEqual(_imprint, hash._imprint);
         }
 
         /// <summary>

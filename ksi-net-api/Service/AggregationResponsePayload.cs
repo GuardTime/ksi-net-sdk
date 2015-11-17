@@ -1,7 +1,5 @@
 ﻿using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
-using Guardtime.KSI.Publication;
-using Guardtime.KSI.Signature;
 
 namespace Guardtime.KSI.Service
 {
@@ -23,7 +21,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="tag">TLV element</param>
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
-        public AggregationResponsePayload(TlvTag tag) : base(tag)
+        public AggregationResponsePayload(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.AggregationResponsePayload.TagType)
             {
@@ -104,25 +102,16 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Get error message if it exists.
         /// </summary>
-        public string ErrorMessage
-        {
-            get { return _errorMessage == null ? null : _errorMessage.Value; }
-        }
+        public string ErrorMessage => _errorMessage?.Value;
 
         /// <summary>
         ///     Get request ID.
         /// </summary>
-        public ulong RequestId
-        {
-            get { return _requestId.Value; }
-        }
+        public ulong RequestId => _requestId.Value;
 
         /// <summary>
         ///     Get status code.
         /// </summary>
-        public ulong Status
-        {
-            get { return _status == null ? 0 : _status.Value; }
-        }
+        public ulong Status => _status?.Value ?? 0;
     }
 }

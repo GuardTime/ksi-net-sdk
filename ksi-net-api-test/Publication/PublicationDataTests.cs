@@ -10,9 +10,9 @@ namespace Guardtime.KSI.Publication
         public void TestPublicationDataFromTag()
         {
             using (
-                var stream = new FileStream("resources/publication/publicationdata/publicationdata.tlv", FileMode.Open))
+                FileStream stream = new FileStream("resources/publication/publicationdata/publicationdata.tlv", FileMode.Open))
             {
-                var data = new byte[stream.Length];
+                byte[] data = new byte[stream.Length];
                 stream.Read(data, 0, (int)stream.Length);
                 //                new PublicationData(data);
             }

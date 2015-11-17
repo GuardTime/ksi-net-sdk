@@ -41,12 +41,9 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             ulong aggregationTime =
                 aggregationHashChainCollection[aggregationHashChainCollection.Count - 1].AggregationTime;
 
-            if (aggregationTime != calendarHashChain.AggregationTime)
-            {
-                return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int04);
-            }
-
-            return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
+            return aggregationTime != calendarHashChain.AggregationTime
+                ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int04)
+                : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }
     }
 }

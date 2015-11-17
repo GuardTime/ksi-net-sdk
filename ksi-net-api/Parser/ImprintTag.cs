@@ -1,5 +1,4 @@
-﻿using System;
-using Guardtime.KSI.Exceptions;
+﻿using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 
 namespace Guardtime.KSI.Parser
@@ -9,21 +8,19 @@ namespace Guardtime.KSI.Parser
     /// </summary>
     public class ImprintTag : TlvTag
     {
-        private readonly DataHash _value;
-
         /// <summary>
         ///     Create new imprint TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         /// <exception cref="TlvException">thrown when TLV tag is null or encodeValue returns null</exception>
-        public ImprintTag(TlvTag tag) : base(tag)
+        public ImprintTag(ITlvTag tag) : base(tag)
         {
             byte[] data = tag.EncodeValue();
             if (data == null)
             {
                 throw new TlvException("Invalid TLV element encoded value: null.");
             }
-            _value = new DataHash(data);
+            Value = new DataHash(data);
         }
 
         /// <summary>
@@ -42,16 +39,13 @@ namespace Guardtime.KSI.Parser
                 throw new TlvException("Invalid input value: null.");
             }
 
-            _value = value;
+            Value = value;
         }
 
         /// <summary>
         ///     Get TLV element data hash
         /// </summary>
-        public DataHash Value
-        {
-            get { return _value; }
-        }
+        public DataHash Value { get; }
 
         /// <summary>
         ///     Encode data hash to byte array.
@@ -59,8 +53,8 @@ namespace Guardtime.KSI.Parser
         /// <returns>Data hash as byte array</returns>
         public override byte[] EncodeValue()
         {
-            byte[] value = new byte[_value.Imprint.Count];
-            _value.Imprint.CopyTo(value, 0);
+            byte[] value = new byte[Value.Imprint.Count];
+            Value.Imprint.CopyTo(value, 0);
             return value;
         }
 

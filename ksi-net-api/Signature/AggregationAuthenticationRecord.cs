@@ -13,14 +13,13 @@ namespace Guardtime.KSI.Signature
         private readonly IntegerTag _aggregationTime;
         private readonly List<IntegerTag> _chainIndex = new List<IntegerTag>();
         private readonly ImprintTag _inputHash;
-        private readonly SignatureData _signatureData;
 
         /// <summary>
         ///     Create new aggregation authentication record TLV element from TLV element
         /// </summary>
         /// <param name="tag">TLV element</param>
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
-        public AggregationAuthenticationRecord(TlvTag tag) : base(tag)
+        public AggregationAuthenticationRecord(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.AggregationAuthenticationRecord.TagType)
             {
@@ -48,7 +47,7 @@ namespace Guardtime.KSI.Signature
                         inputHashCount++;
                         break;
                     case Constants.SignatureData.TagType:
-                        _signatureData = new SignatureData(this[i]);
+                        SignatureData = new SignatureData(this[i]);
                         signatureDataCount++;
                         break;
                     default:
@@ -84,25 +83,16 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         ///     Get aggregation time.
         /// </summary>
-        public ulong AggregationTime
-        {
-            get { return _aggregationTime.Value; }
-        }
+        public ulong AggregationTime => _aggregationTime.Value;
 
         /// <summary>
         ///     Get input hash.
         /// </summary>
-        public DataHash InputHash
-        {
-            get { return _inputHash.Value; }
-        }
+        public DataHash InputHash => _inputHash.Value;
 
         /// <summary>
         ///     Get signature data.
         /// </summary>
-        public SignatureData SignatureData
-        {
-            get { return _signatureData; }
-        }
+        public SignatureData SignatureData { get; }
     }
 }

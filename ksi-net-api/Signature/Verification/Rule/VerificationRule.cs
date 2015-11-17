@@ -17,7 +17,7 @@
 
         public string GetRuleName()
         {
-            return this.GetType().Name;
+            return GetType().Name;
         }
 
         /// <summary>

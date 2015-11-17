@@ -1,6 +1,4 @@
-﻿using System;
-using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Utils;
+﻿using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Parser
 {
@@ -9,21 +7,19 @@ namespace Guardtime.KSI.Parser
     /// </summary>
     public class RawTag : TlvTag
     {
-        private readonly byte[] _value;
-
         /// <summary>
         ///     Create new octet string TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         /// <exception cref="TlvException">thrown when TLV tag is null or encodeValue returns null</exception>
-        public RawTag(TlvTag tag) : base(tag)
+        public RawTag(ITlvTag tag) : base(tag)
         {
             byte[] data = tag.EncodeValue();
             if (data == null)
             {
                 throw new TlvException("Invalid TLV element encoded value: null.");
             }
-            _value = data;
+            Value = data;
         }
 
         /// <summary>
@@ -41,16 +37,13 @@ namespace Guardtime.KSI.Parser
             {
                 throw new TlvException("Invalid input value: null.");
             }
-            _value = value;
+            Value = value;
         }
 
         /// <summary>
         ///     Get TLV element byte array value.
         /// </summary>
-        public byte[] Value
-        {
-            get { return _value; }
-        }
+        public byte[] Value { get; }
 
         /// <summary>
         ///     Return TLV element byte array value.
@@ -58,7 +51,7 @@ namespace Guardtime.KSI.Parser
         /// <returns>TLV element value</returns>
         public override byte[] EncodeValue()
         {
-            return _value;
+            return Value;
         }
 
         /// <summary>
@@ -70,9 +63,9 @@ namespace Guardtime.KSI.Parser
             unchecked
             {
                 int res = 1;
-                for (int i = 0; i < _value.Length; i++)
+                for (int i = 0; i < Value.Length; i++)
                 {
-                    res = 31 * res + _value[i];
+                    res = 31 * res + Value[i];
                 }
 
                 return res + Type.GetHashCode() + Forward.GetHashCode() + NonCritical.GetHashCode();

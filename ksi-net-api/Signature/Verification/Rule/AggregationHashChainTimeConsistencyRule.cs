@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using Guardtime.KSI.Exceptions;
 using NLog;
 
@@ -45,13 +44,15 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     continue;
                 }
 
-                if (aggregationHashChainCollection[i].AggregationTime != time)
+                if (aggregationHashChainCollection[i].AggregationTime == time)
                 {
-                    // TODO: Correct logging
-                    Logger.Error("Previous aggregation hash chain aggregation time {0} does not match current aggregation time {1}",
-                        time, aggregationHashChainCollection[i].AggregationTime);
-                    return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int02);
+                    continue;
                 }
+
+                // TODO: Correct logging
+                Logger.Error("Previous aggregation hash chain aggregation time {0} does not match current aggregation time {1}",
+                    time, aggregationHashChainCollection[i].AggregationTime);
+                return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int02);
             }
 
             return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);

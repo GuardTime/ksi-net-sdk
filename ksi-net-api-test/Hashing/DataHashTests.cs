@@ -1,7 +1,7 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using Guardtime.KSI.Exceptions;
+﻿using Guardtime.KSI.Exceptions;
 using NUnit.Framework;
+
+// ReSharper disable ObjectCreationAsStatement
 
 namespace Guardtime.KSI.Hashing
 {
@@ -11,7 +11,7 @@ namespace Guardtime.KSI.Hashing
         [Test]
         public void TestDataHashFromAlgorithmAndValue()
         {
-            var dataHash = new DataHash(HashAlgorithm.Sha2256,
+            DataHash dataHash = new DataHash(HashAlgorithm.Sha2256,
                 new byte[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32});
             Assert.AreEqual(HashAlgorithm.Sha2256, dataHash.Algorithm, "Algorithm should be preserved");
             CollectionAssert.AreEqual(new byte[] {1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32},
@@ -25,7 +25,7 @@ namespace Guardtime.KSI.Hashing
         [Test]
         public void TestDataHashFromImprint()
         {
-            var dataHash = new DataHash(new byte[] {1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32});
+            DataHash dataHash = new DataHash(new byte[] {1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32});
             Assert.AreEqual(HashAlgorithm.Sha2256, dataHash.Algorithm, "Algorithm should be preserved");
             CollectionAssert.AreEqual(new byte[] {1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32},
                 dataHash.Imprint, "Hash imprint should be created correctly");
@@ -38,7 +38,7 @@ namespace Guardtime.KSI.Hashing
         [Test]
         public void TestDataHashEquals()
         {
-            var dataHash = new DataHash(new byte[] {1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32});
+            DataHash dataHash = new DataHash(new byte[] {1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32});
             Assert.IsTrue(
                 dataHash.Equals(new DataHash(new byte[] {1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32})),
                 "Hash should be equal to itself");
@@ -120,10 +120,6 @@ namespace Guardtime.KSI.Hashing
 
         private class ChildDataHash : DataHash
         {
-            public ChildDataHash(HashAlgorithm algorithm, byte[] valueBytes) : base(algorithm, valueBytes)
-            {
-            }
-
             public ChildDataHash(byte[] imprintBytes) : base(imprintBytes)
             {
             }

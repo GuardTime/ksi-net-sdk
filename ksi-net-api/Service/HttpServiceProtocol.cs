@@ -232,7 +232,7 @@ namespace Guardtime.KSI.Service
             }
         }
 
-        private void EndAsyncGetResponseCallback(object state, bool timedOut)
+        private static void EndAsyncGetResponseCallback(object state, bool timedOut)
         {
             HttpKsiServiceProtocolAsyncResult httpAsyncResult =
                 (HttpKsiServiceProtocolAsyncResult)state;
@@ -317,17 +317,11 @@ namespace Guardtime.KSI.Service
         /// </summary>
         private class HttpKsiServiceProtocolAsyncResult : IAsyncResult, IDisposable
         {
-            private readonly object _asyncState;
-
             private readonly AsyncCallback _callback;
             private readonly object _lock;
-            private readonly byte[] _postData;
-
-            private readonly HttpWebRequest _request;
 
             private readonly DateTime _startTime = DateTime.Now;
             private readonly ManualResetEvent _waitHandle;
-            private Exception _error;
             private bool _isCompleted;
             private bool _isCompletedSynchronously;
             private IAsyncResult _responseAsyncResult;
@@ -342,10 +336,10 @@ namespace Guardtime.KSI.Service
                     throw new KsiException("Invalid HTTP web request: null.");
                 }
 
-                _request = request;
-                _postData = postData;
+                Request = request;
+                PostData = postData;
                 _callback = callback;
-                _asyncState = asyncState;
+                AsyncState = asyncState;
 
                 _isCompleted = false;
                 _isCompletedSynchronously = false;
@@ -382,41 +376,19 @@ namespace Guardtime.KSI.Service
                 }
             }
 
-            public HttpWebRequest Request
-            {
-                get { return _request; }
-            }
+            public HttpWebRequest Request { get; }
 
-            public byte[] PostData
-            {
-                get { return _postData; }
-            }
+            public byte[] PostData { get; }
 
-            public int TimeElapsed
-            {
-                get { return (int)(DateTime.Now - _startTime).TotalMilliseconds; }
-            }
+            public int TimeElapsed => (int)(DateTime.Now - _startTime).TotalMilliseconds;
 
-            public bool IsErroneous
-            {
-                get { return _error != null; }
-            }
+            public bool IsErroneous => Error != null;
 
-            public Exception Error
-            {
-                get { return _error; }
-                set { _error = value; }
-            }
+            public Exception Error { get; set; }
 
-            public object AsyncState
-            {
-                get { return _asyncState; }
-            }
+            public object AsyncState { get; }
 
-            public WaitHandle AsyncWaitHandle
-            {
-                get { return _waitHandle; }
-            }
+            public WaitHandle AsyncWaitHandle => _waitHandle;
 
             public bool CompletedSynchronously
             {
@@ -453,9 +425,9 @@ namespace Guardtime.KSI.Service
                     {
                         _isCompleted = true;
                         _isCompletedSynchronously = true;
-                        if (errorOccured == false && _callback != null)
+                        if (errorOccured == false)
                         {
-                            _callback.Invoke(this);
+                            _callback?.Invoke(this);
                         }
                     }
                 }

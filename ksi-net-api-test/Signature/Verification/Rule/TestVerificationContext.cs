@@ -1,5 +1,4 @@
-﻿using System;
-using Guardtime.KSI.Hashing;
+﻿using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 

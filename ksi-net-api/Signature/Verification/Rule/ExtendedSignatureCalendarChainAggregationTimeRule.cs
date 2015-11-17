@@ -46,6 +46,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (aggregationTime != extendedCalendarHashChain.AggregationTime)
             {
+                // TODO: log
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Cal03);
             }
 

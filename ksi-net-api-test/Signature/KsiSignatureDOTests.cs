@@ -1,7 +1,5 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Parser;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Signature
@@ -12,21 +10,21 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestKsiSignatureDoOk()
         {
-            var signature = GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Ok);
+            IKsiSignature signature = GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Ok);
             Assert.NotNull(signature.CalendarHashChain, "Calendar hash chain cannot be null");
         }
 
         [Test]
         public void TestKsiSignatureDoOkMissingCalendarHashChain()
         {
-            var signature = GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Ok_Missing_Calendar_Hash_Chain);
+            IKsiSignature signature = GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Ok_Missing_Calendar_Hash_Chain);
             Assert.Null(signature.CalendarHashChain, "Calendar hash chain must be null");
         }
 
         [Test]
         public void TestKsiSignatureDoOkMissingPublicationRecord()
         {
-            var signature = GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record);
+            IKsiSignature signature = GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record);
             Assert.Null(signature.PublicationRecord, "Publication record must be null");
             Assert.Null(signature.CalendarAuthenticationRecord, "Calendar authentication record must be null");
         }
@@ -34,7 +32,7 @@ namespace Guardtime.KSI.Signature
         [Test]
         public void TestLegacyKsiSignatureDoOk()
         {
-            var signature = GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Legacy_Ok);
+            IKsiSignature signature = GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Legacy_Ok);
             Assert.IsTrue(signature.IsRfc3161Signature, "RFC3161 tag must exist");
         }
 
@@ -122,9 +120,9 @@ namespace Guardtime.KSI.Signature
 
         // TODO: Multiple aggregation authentication record test is missing
 
-        private IKsiSignature GetKsiSignatureDoFromFile(string file)
+        private static IKsiSignature GetKsiSignatureDoFromFile(string file)
         {
-            using (var stream = new FileStream(file, FileMode.Open))
+            using (FileStream stream = new FileStream(file, FileMode.Open))
             {
                 return new KsiSignatureFactory().Create(stream);
             }

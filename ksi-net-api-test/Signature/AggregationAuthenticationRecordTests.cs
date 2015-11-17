@@ -96,11 +96,11 @@ namespace Guardtime.KSI.Signature
             }, "Invalid aggregation authentication record type: 2053");
         }
 
-        private AggregationAuthenticationRecord GetAggregationAuthenticationRecordFromFile(string file)
+        private static AggregationAuthenticationRecord GetAggregationAuthenticationRecordFromFile(string file)
         {
-            using (var stream = new FileStream(file, FileMode.Open))
+            using (FileStream stream = new FileStream(file, FileMode.Open))
             {
-                using (var reader = new TlvReader(stream))
+                using (TlvReader reader = new TlvReader(stream))
                 {
                     AggregationAuthenticationRecord aggregationAuthenticationRecord = new AggregationAuthenticationRecord(reader.ReadTag());
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 
@@ -17,7 +16,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="tag">TLV element</param>
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
-        public ExtendPdu(TlvTag tag) : base(tag)
+        public ExtendPdu(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.ExtendPdu.TagType)
             {
@@ -77,9 +76,10 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="header">KSI header</param>
         /// <param name="payload">Extend pdu payload</param>
+        /// <param name="mac">Extend pdu hmac</param>
         /// <exception cref="TlvException">thrown when payload is null</exception>
         public ExtendPdu(KsiPduHeader header, ExtendPduPayload payload, ImprintTag mac)
-            : base(header, mac, Constants.ExtendPdu.TagType, false, false, new List<TlvTag>() { header, payload, mac  })
+            : base(header, mac, Constants.ExtendPdu.TagType, false, false, new List<ITlvTag>() {header, payload, mac})
         {
             _payload = payload;
         }
@@ -87,9 +87,6 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Get extension PDU payload.
         /// </summary>
-        public override KsiPduPayload Payload
-        {
-            get { return _payload; }
-        }
+        public override KsiPduPayload Payload => _payload;
     }
 }

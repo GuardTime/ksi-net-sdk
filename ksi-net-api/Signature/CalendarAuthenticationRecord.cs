@@ -9,15 +9,12 @@ namespace Guardtime.KSI.Signature
     /// </summary>
     public sealed class CalendarAuthenticationRecord : CompositeTag
     {
-        private readonly PublicationData _publicationData;
-        private readonly SignatureData _signatureData;
-
         /// <summary>
         ///     Create new calendar authentication record TLV element from TLV element
         /// </summary>
         /// <param name="tag">TLV element</param>
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
-        public CalendarAuthenticationRecord(TlvTag tag) : base(tag)
+        public CalendarAuthenticationRecord(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.CalendarAuthenticationRecord.TagType)
             {
@@ -32,11 +29,11 @@ namespace Guardtime.KSI.Signature
                 switch (this[i].Type)
                 {
                     case Constants.PublicationData.TagType:
-                        _publicationData = new PublicationData(this[i]);
+                        PublicationData = new PublicationData(this[i]);
                         publicationDataCount++;
                         break;
                     case Constants.SignatureData.TagType:
-                        _signatureData = new SignatureData(this[i]);
+                        SignatureData = new SignatureData(this[i]);
                         signatureDataCount++;
                         break;
                     default:
@@ -61,17 +58,11 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         ///     Get publication data.
         /// </summary>
-        public PublicationData PublicationData
-        {
-            get { return _publicationData; }
-        }
+        public PublicationData PublicationData { get; }
 
         /// <summary>
         ///     Get signature data.
         /// </summary>
-        public SignatureData SignatureData
-        {
-            get { return _signatureData; }
-        }
+        public SignatureData SignatureData { get; }
     }
 }

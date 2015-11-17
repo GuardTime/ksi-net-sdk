@@ -9,7 +9,6 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public sealed class ExtendResponsePayload : ExtendPduPayload
     {
-        private readonly CalendarHashChain _calendarHashChain;
         private readonly StringTag _errorMessage;
         private readonly IntegerTag _lastTime;
         private readonly IntegerTag _requestId;
@@ -20,7 +19,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="tag">TLV element</param>
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
-        public ExtendResponsePayload(TlvTag tag) : base(tag)
+        public ExtendResponsePayload(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.ExtendResponsePayload.TagType)
             {
@@ -54,7 +53,7 @@ namespace Guardtime.KSI.Service
                         lastTimeCount++;
                         break;
                     case Constants.CalendarHashChain.TagType:
-                        _calendarHashChain = new CalendarHashChain(this[i]);
+                        CalendarHashChain = new CalendarHashChain(this[i]);
                         calendarHashChainCount++;
                         break;
                     default:
@@ -99,41 +98,26 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Get calendar hash chain.
         /// </summary>
-        public CalendarHashChain CalendarHashChain
-        {
-            get { return _calendarHashChain; }
-        }
+        public CalendarHashChain CalendarHashChain { get; }
 
         /// <summary>
         ///     Get error message if it exists.
         /// </summary>
-        public string ErrorMessage
-        {
-            get { return _errorMessage == null ? null : _errorMessage.Value; }
-        }
+        public string ErrorMessage => _errorMessage?.Value;
 
         /// <summary>
         ///     Get last time if it exists.
         /// </summary>
-        public ulong? LastTime
-        {
-            get { return _lastTime == null ? (ulong?)null : _lastTime.Value; }
-        }
+        public ulong? LastTime => _lastTime?.Value;
 
         /// <summary>
         ///     Get request ID.
         /// </summary>
-        public ulong RequestId
-        {
-            get { return _requestId.Value; }
-        }
+        public ulong RequestId => _requestId.Value;
 
         /// <summary>
         ///     Get status code.
         /// </summary>
-        public ulong Status
-        {
-            get { return _status.Value; }
-        }
+        public ulong Status => _status.Value;
     }
 }

@@ -19,22 +19,15 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         private sealed class KsiSignature : CompositeTag, IKsiSignature
         {
-            private readonly AggregationAuthenticationRecord _aggregationAuthenticationRecord;
-
             private readonly List<AggregationHashChain> _aggregationHashChainCollection =
                 new List<AggregationHashChain>();
-
-            private readonly CalendarAuthenticationRecord _calendarAuthenticationRecord;
-            private readonly CalendarHashChain _calendarChain;
-            private readonly PublicationRecord _publicationRecord;
-            private readonly Rfc3161Record _rfc3161Record;
 
             /// <summary>
             ///     Create new KSI signature TLV element from TLV element.
             /// </summary>
             /// <param name="tag">TLV element</param>
             /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
-            public KsiSignature(TlvTag tag) : base(tag)
+            public KsiSignature(ITlvTag tag) : base(tag)
             {
                 if (Type != Constants.KsiSignature.TagType)
                 {
@@ -56,23 +49,23 @@ namespace Guardtime.KSI.Signature
                             _aggregationHashChainCollection.Add(aggregationChainTag);
                             break;
                         case Constants.CalendarHashChain.TagType:
-                            _calendarChain = new CalendarHashChain(this[i]);
+                            CalendarHashChain = new CalendarHashChain(this[i]);
                             calendarChainCount++;
                             break;
                         case Constants.PublicationRecord.TagTypeSignature:
-                            _publicationRecord = new PublicationRecord(this[i]);
+                            PublicationRecord = new PublicationRecord(this[i]);
                             publicationRecordCount++;
                             break;
                         case Constants.AggregationAuthenticationRecord.TagType:
-                            _aggregationAuthenticationRecord = new AggregationAuthenticationRecord(this[i]);
+                            AggregationAuthenticationRecord = new AggregationAuthenticationRecord(this[i]);
                             aggregationAuthenticationRecordCount++;
                             break;
                         case Constants.CalendarAuthenticationRecord.TagType:
-                            _calendarAuthenticationRecord = new CalendarAuthenticationRecord(this[i]);
+                            CalendarAuthenticationRecord = new CalendarAuthenticationRecord(this[i]);
                             calendarAuthenticationRecordCount++;
                             break;
                         case Constants.Rfc3161Record.TagType:
-                            _rfc3161Record = new Rfc3161Record(this[i]);
+                            Rfc3161Record = new Rfc3161Record(this[i]);
                             rfc3161RecordCount++;
                             break;
                         default:
@@ -124,50 +117,32 @@ namespace Guardtime.KSI.Signature
             /// <summary>
             ///     Get aggregation authentication record if it exists.
             /// </summary>
-            public AggregationAuthenticationRecord AggregationAuthenticationRecord
-            {
-                get { return _aggregationAuthenticationRecord; }
-            }
+            public AggregationAuthenticationRecord AggregationAuthenticationRecord { get; }
 
             /// <summary>
             ///     Get RFC 3161 record
             /// </summary>
-            public Rfc3161Record Rfc3161Record
-            {
-                get { return _rfc3161Record; }
-            }
+            public Rfc3161Record Rfc3161Record { get; }
 
             /// <summary>
             ///     Is signature RFC 3161 format
             /// </summary>
-            public bool IsRfc3161Signature
-            {
-                get { return _rfc3161Record != null; }
-            }
+            public bool IsRfc3161Signature => Rfc3161Record != null;
 
             /// <summary>
             ///     Get calendar hash chain.
             /// </summary>
-            public CalendarHashChain CalendarHashChain
-            {
-                get { return _calendarChain; }
-            }
+            public CalendarHashChain CalendarHashChain { get; }
 
             /// <summary>
             ///     Get calendar authentication record.
             /// </summary>
-            public CalendarAuthenticationRecord CalendarAuthenticationRecord
-            {
-                get { return _calendarAuthenticationRecord; }
-            }
+            public CalendarAuthenticationRecord CalendarAuthenticationRecord { get; }
 
             /// <summary>
             ///     Get publication record.
             /// </summary>
-            public PublicationRecord PublicationRecord
-            {
-                get { return _publicationRecord; }
-            }
+            public PublicationRecord PublicationRecord { get; }
 
             /// <summary>
             ///     Get aggregation hash chains list.
@@ -198,10 +173,7 @@ namespace Guardtime.KSI.Signature
             /// <summary>
             ///     Get aggregation time.
             /// </summary>
-            public ulong AggregationTime
-            {
-                get { return _aggregationHashChainCollection[0].AggregationTime; }
-            }
+            public ulong AggregationTime => _aggregationHashChainCollection[0].AggregationTime;
 
             /// <summary>
             ///     Extend KSI signature with given calendar hash chain.

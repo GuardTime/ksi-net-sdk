@@ -27,7 +27,7 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         /// <param name="tag">TLV element</param>
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
-        public Rfc3161Record(TlvTag tag) : base(tag)
+        public Rfc3161Record(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.Rfc3161Record.TagType)
             {
@@ -139,18 +139,12 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         ///     Get aggregation time.
         /// </summary>
-        public ulong AggregationTime
-        {
-            get { return _aggregationTime.Value; }
-        }
+        public ulong AggregationTime => _aggregationTime.Value;
 
         /// <summary>
         ///     Get RFC3161 input hash
         /// </summary>
-        public DataHash InputHash
-        {
-            get { return _inputHash.Value; }
-        }
+        public DataHash InputHash => _inputHash.Value;
 
         /// <summary>
         ///     Get output hash for RFC 3161 from document hash

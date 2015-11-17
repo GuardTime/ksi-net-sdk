@@ -35,12 +35,10 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             }
 
             SignatureData signatureData = calendarAuthenticationRecord.SignatureData;
-            if (context.PublicationsFile.FindCertificateById(signatureData.CertificateId) == null)
-            {
-                return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Key01);
-            }
-
-            return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
+            // TODO: Log exception
+            return context.PublicationsFile.FindCertificateById(signatureData.GetCertificateId()) == null
+                ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Key01)
+                : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }
     }
 }

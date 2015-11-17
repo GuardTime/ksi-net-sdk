@@ -25,7 +25,7 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         /// <param name="tag">TLV element</param>
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
-        public AggregationHashChain(TlvTag tag) : base(tag)
+        public AggregationHashChain(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.AggregationHashChain.TagType)
             {
@@ -106,18 +106,12 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         ///     Get hash chain input hash.
         /// </summary>
-        public DataHash InputHash
-        {
-            get { return _inputHash.Value; }
-        }
+        public DataHash InputHash => _inputHash.Value;
 
         /// <summary>
         ///     Get aggregation time.
         /// </summary>
-        public ulong AggregationTime
-        {
-            get { return _aggregationTime.Value; }
-        }
+        public ulong AggregationTime => _aggregationTime.Value;
 
         /// <summary>
         ///     Get input data bytes if input data exists otherwise null.
@@ -125,7 +119,7 @@ namespace Guardtime.KSI.Signature
         /// <returns>input data bytes</returns>
         public byte[] GetInputData()
         {
-            return _inputData == null ? null : _inputData.Value;
+            return _inputData?.Value;
         }
 
 
@@ -183,18 +177,15 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         private class Link : CompositeTag
         {
-            private readonly LinkDirection _direction;
-
             private readonly IntegerTag _levelCorrection;
 
             // the client ID extracted from metaHash
-            private readonly string _linkIdentity;
             private readonly MetaData _metaData;
             private readonly ImprintTag _metaHash;
             private readonly ImprintTag _siblingHash;
 
 
-            public Link(TlvTag tag, LinkDirection direction) : base(tag)
+            public Link(ITlvTag tag, LinkDirection direction) : base(tag)
             {
                 int levelCorrectionCount = 0;
                 int siblingHashCount = 0;
@@ -241,33 +232,24 @@ namespace Guardtime.KSI.Signature
                         "Only one of three from siblinghash, metahash or metadata must exist in aggregation hash chain link.");
                 }
 
-                _direction = direction;
-                _linkIdentity = CalculateIdendity();
+                Direction = direction;
+                Idendity = CalculateIdendity();
             }
 
             /// <summary>
             ///     Get link idendity.
             /// </summary>
-            public string Idendity
-            {
-                get { return _linkIdentity; }
-            }
+            public string Idendity { get; }
 
             /// <summary>
             ///     Get level correction
             /// </summary>
-            public ulong LevelCorrection
-            {
-                get { return _levelCorrection == null ? 0UL : _levelCorrection.Value; }
-            }
+            public ulong LevelCorrection => _levelCorrection?.Value ?? 0UL;
 
             /// <summary>
             ///     Get direction
             /// </summary>
-            public LinkDirection Direction
-            {
-                get { return _direction; }
-            }
+            public LinkDirection Direction { get; }
 
             private string CalculateIdendity()
             {
@@ -276,12 +258,7 @@ namespace Guardtime.KSI.Signature
                     return CalculateIdendityFromMetaHash();
                 }
 
-                if (_metaData != null)
-                {
-                    return _metaData.ClientId;
-                }
-
-                return "";
+                return _metaData != null ? _metaData.ClientId : "";
             }
 
             private string CalculateIdendityFromMetaHash()
@@ -315,12 +292,7 @@ namespace Guardtime.KSI.Signature
                     return _metaHash.EncodeValue();
                 }
 
-                if (_metaData != null)
-                {
-                    return _metaData.EncodeValue();
-                }
-
-                return null;
+                return _metaData?.EncodeValue();
             }
         }
 
@@ -333,7 +305,7 @@ namespace Guardtime.KSI.Signature
             private readonly IntegerTag _requestTime;
             private readonly IntegerTag _sequenceNr;
 
-            public MetaData(TlvTag tag) : base(tag)
+            public MetaData(ITlvTag tag) : base(tag)
             {
                 if (Type != Constants.AggregationHashChain.MetaData.TagType)
                 {
@@ -396,10 +368,7 @@ namespace Guardtime.KSI.Signature
                 }
             }
 
-            public string ClientId
-            {
-                get { return _clientId.Value; }
-            }
+            public string ClientId => _clientId.Value;
         }
 
         /// <summary>
@@ -437,9 +406,6 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         public class ChainResult
         {
-            private readonly DataHash _hash;
-            private readonly ulong _level;
-
             /// <summary>
             ///     Create chain result from level and data hash.
             /// </summary>
@@ -447,25 +413,19 @@ namespace Guardtime.KSI.Signature
             /// <param name="hash">output hash</param>
             public ChainResult(ulong level, DataHash hash)
             {
-                _level = level;
-                _hash = hash;
+                Level = level;
+                Hash = hash;
             }
 
             /// <summary>
             ///     Get aggregation chain output hash
             /// </summary>
-            public DataHash Hash
-            {
-                get { return _hash; }
-            }
+            public DataHash Hash { get; }
 
             /// <summary>
             ///     Get aggregation chain output hash level
             /// </summary>
-            public ulong Level
-            {
-                get { return _level; }
-            }
+            public ulong Level { get; }
         }
     }
 }

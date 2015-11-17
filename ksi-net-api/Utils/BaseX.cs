@@ -64,7 +64,7 @@ namespace Guardtime.KSI.Utils
             }
             if ((1 << _bits) != alphabet.Length)
             {
-                throw new ArgumentException("The size of the encoding alphabet is not a power of 2", "alphabet");
+                throw new ArgumentException("The size of the encoding alphabet is not a power of 2", nameof(alphabet));
             }
 
             _block = 8 / Util.GCD(8, _bits);
@@ -95,7 +95,7 @@ namespace Guardtime.KSI.Utils
             // the padding
             if (padding >= _min && padding <= _max && _values[padding - _min] != -1)
             {
-                throw new ArgumentException("The padding character appears in the encoding alphabet", "padding");
+                throw new ArgumentException("The padding character appears in the encoding alphabet", nameof(padding));
             }
 
             _pad = padding;
@@ -105,7 +105,7 @@ namespace Guardtime.KSI.Utils
         {
             if (chars == null)
             {
-                throw new ArgumentNullException("chars");
+                throw new ArgumentNullException(nameof(chars));
             }
 
             for (int i = 0; i < chars.Length; i++)
@@ -126,7 +126,7 @@ namespace Guardtime.KSI.Utils
         {
             if (chars == null)
             {
-                throw new ArgumentNullException("chars");
+                throw new ArgumentNullException(nameof(chars));
             }
 
             for (int i = 0; i < chars.Length; i++)
@@ -134,7 +134,7 @@ namespace Guardtime.KSI.Utils
                 int c = chars[i] - _min;
                 if (_values[c] != -1 && _values[c] != i)
                 {
-                    throw new ArgumentException("Duplicate characters in the encoding alphapbet", "chars");
+                    throw new ArgumentException("Duplicate characters in the encoding alphapbet", nameof(chars));
                 }
                 _values[c] = i;
             }
@@ -166,7 +166,7 @@ namespace Guardtime.KSI.Utils
             // sanitize the parameters
             if (bytes == null)
             {
-                throw new ArgumentNullException("bytes");
+                throw new ArgumentNullException(nameof(bytes));
             }
 
             if (off < 0 || len < 0 || off + len < 0 || off + len > bytes.Length)
@@ -257,7 +257,7 @@ namespace Guardtime.KSI.Utils
             // sanitize the parameters
             if (s == null)
             {
-                throw new ArgumentNullException("s");
+                throw new ArgumentNullException(nameof(s));
             }
 
             // create the result buffer

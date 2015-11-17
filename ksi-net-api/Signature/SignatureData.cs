@@ -19,7 +19,7 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         /// <param name="tag">TLV element</param>
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
-        public SignatureData(TlvTag tag) : base(tag)
+        public SignatureData(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.SignatureData.TagType)
             {
@@ -83,33 +83,27 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         ///     Get certificate ID.
         /// </summary>
-        public byte[] CertificateId
+        public byte[] GetCertificateId()
         {
-            get { return _certificateId.Value; }
+            return _certificateId.Value;
         }
 
         /// <summary>
         ///     Get signature value.
         /// </summary>
-        public byte[] SignatureValue
+        public byte[] GetSignatureValue()
         {
-            get { return _signatureValue.Value; }
+            return _signatureValue.Value;
         }
 
         /// <summary>
         ///     Get signature type.
         /// </summary>
-        public string SignatureType
-        {
-            get { return _signatureType.Value; }
-        }
+        public string SignatureType => _signatureType.Value;
 
         /// <summary>
         ///     Get certificate repository URI if it exists.
         /// </summary>
-        public string CertificateRepositoryUri
-        {
-            get { return _certificateRepositoryUri == null ? null : _certificateRepositoryUri.Value; }
-        }
+        public string CertificateRepositoryUri => _certificateRepositoryUri?.Value;
     }
 }

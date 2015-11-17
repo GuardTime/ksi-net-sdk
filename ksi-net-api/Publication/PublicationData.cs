@@ -21,7 +21,7 @@ namespace Guardtime.KSI.Publication
         /// </summary>
         /// <param name="tag">TLV element</param>
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
-        public PublicationData(TlvTag tag) : base(tag)
+        public PublicationData(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.PublicationData.TagType)
             {
@@ -66,7 +66,7 @@ namespace Guardtime.KSI.Publication
         /// <param name="publicationTime">publication time</param>
         /// <param name="publicationHash">publication hash</param>
         public PublicationData(ulong publicationTime, DataHash publicationHash)
-            : base(Constants.PublicationData.TagType, false, true, new List<TlvTag>()
+            : base(Constants.PublicationData.TagType, false, true, new List<ITlvTag>()
             {
                 new IntegerTag(Constants.PublicationData.PublicationTimeTagType, false, false, publicationTime),
                 new ImprintTag(Constants.PublicationData.PublicationHashTagType, false, false, publicationHash)
@@ -87,7 +87,7 @@ namespace Guardtime.KSI.Publication
             _publicationHash = (ImprintTag)this[1];
         }
 
-        private static List<TlvTag> DecodePublicationString(string publicationString)
+        private static List<ITlvTag> DecodePublicationString(string publicationString)
         {
             if (publicationString == null)
             {
@@ -119,27 +119,21 @@ namespace Guardtime.KSI.Publication
             byte[] publicationTimeBytes = new byte[8];
             Array.Copy(dataBytesWithCrc32, 0, publicationTimeBytes, 0, 8);
 
-            return new List<TlvTag>()
+            return new List<ITlvTag>()
             {
                 new IntegerTag(Constants.PublicationData.PublicationTimeTagType, false, false, Util.DecodeUnsignedLong(publicationTimeBytes, 0, publicationTimeBytes.Length)),
                 new ImprintTag(Constants.PublicationData.PublicationHashTagType, false, false, new DataHash(hashImprint))
             };
-        } 
+        }
 
         /// <summary>
         ///     Get publication time.
         /// </summary>
-        public ulong PublicationTime
-        {
-            get { return _publicationTime.Value; }
-        }
+        public ulong PublicationTime => _publicationTime.Value;
 
         /// <summary>
         ///     Get publication hash.
         /// </summary>
-        public DataHash PublicationHash
-        {
-            get { return _publicationHash.Value; }
-        }
+        public DataHash PublicationHash => _publicationHash.Value;
     }
 }

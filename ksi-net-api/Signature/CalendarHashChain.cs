@@ -14,19 +14,15 @@ namespace Guardtime.KSI.Signature
         private readonly IntegerTag _aggregationTime;
         private readonly List<Link> _chain = new List<Link>();
         private readonly ImprintTag _inputHash;
-        private readonly DataHash _outputHash;
-        private readonly PublicationData _publicationData;
 
         private readonly IntegerTag _publicationTime;
-
-        private readonly ulong _registrationTime;
 
         /// <summary>
         ///     Create new calendar hash chain TLV element from TLV element
         /// </summary>
         /// <param name="tag">TLV element</param>
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
-        public CalendarHashChain(TlvTag tag) : base(tag)
+        public CalendarHashChain(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.CalendarHashChain.TagType)
             {
@@ -84,9 +80,9 @@ namespace Guardtime.KSI.Signature
                 throw new TlvException("Links are missing in calendar hash chain.");
             }
 
-            _registrationTime = CalculateRegistrationTime();
-            _outputHash = CalculateOutputHash();
-            _publicationData = new PublicationData(_publicationTime.Value, _outputHash);
+            RegistrationTime = CalculateRegistrationTime();
+            OutputHash = CalculateOutputHash();
+            PublicationData = new PublicationData(_publicationTime.Value, OutputHash);
         }
 
         /// <summary>
@@ -100,42 +96,27 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         ///     Get publication time.
         /// </summary>
-        public ulong PublicationTime
-        {
-            get { return _publicationTime.Value; }
-        }
+        public ulong PublicationTime => _publicationTime.Value;
 
         /// <summary>
         ///     Get registration time.
         /// </summary>
-        public ulong RegistrationTime
-        {
-            get { return _registrationTime; }
-        }
+        public ulong RegistrationTime { get; }
 
         /// <summary>
         ///     Get input hash.
         /// </summary>
-        public DataHash InputHash
-        {
-            get { return _inputHash.Value; }
-        }
+        public DataHash InputHash => _inputHash.Value;
 
         /// <summary>
         ///     Get output hash.
         /// </summary>
-        public DataHash OutputHash
-        {
-            get { return _outputHash; }
-        }
+        public DataHash OutputHash { get; }
 
         /// <summary>
         ///     Get publication data.
         /// </summary>
-        public PublicationData PublicationData
-        {
-            get { return _publicationData; }
-        }
+        public PublicationData PublicationData { get; }
 
         /// <summary>
         ///     Compare right links if they are equal.
@@ -144,12 +125,7 @@ namespace Guardtime.KSI.Signature
         /// <returns>true if right links are equal and on same position</returns>
         public bool AreRightLinksEqual(CalendarHashChain calendarHashChain)
         {
-            if (calendarHashChain == null)
-            {
-                return false;
-            }
-
-            if (_chain.Count != calendarHashChain._chain.Count)
+            if (_chain.Count != calendarHashChain?._chain.Count)
             {
                 return false;
             }
@@ -201,7 +177,7 @@ namespace Guardtime.KSI.Signature
         /// <param name="hashA">hash a</param>
         /// <param name="hashB">hash b</param>
         /// <returns>result hash</returns>
-        private DataHash HashTogether(HashAlgorithm algorithm, ICollection<byte> hashA, ICollection<byte> hashB)
+        private static DataHash HashTogether(HashAlgorithm algorithm, ICollection<byte> hashA, ICollection<byte> hashB)
         {
             DataHasher hasher = new DataHasher(algorithm);
             hasher.AddData(hashA);
@@ -268,30 +244,25 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         private class Link : ImprintTag
         {
-            private readonly LinkDirection _direction;
-
-            public Link(TlvTag tag) : base(tag)
+            public Link(ITlvTag tag) : base(tag)
             {
                 if (tag.Type == (int)LinkDirection.Left)
                 {
-                    _direction = LinkDirection.Left;
+                    Direction = LinkDirection.Left;
                 }
 
                 if (tag.Type == (int)LinkDirection.Right)
                 {
-                    _direction = LinkDirection.Right;
+                    Direction = LinkDirection.Right;
                 }
 
-                if (_direction == 0)
+                if (Direction == 0)
                 {
                     throw new TlvException("Invalid calendar hash chain link type(" + Type + ").");
                 }
             }
 
-            public LinkDirection Direction
-            {
-                get { return _direction; }
-            }
+            public LinkDirection Direction { get; }
         }
     }
 }

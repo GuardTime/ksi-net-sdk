@@ -21,7 +21,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="tag">TLV element</param>
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
-        public AggregationRequestPayload(TlvTag tag) : base(tag)
+        public AggregationRequestPayload(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.AggregationRequestPayload.TagType)
             {
@@ -86,7 +86,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="hash">data hash</param>
         /// <exception cref="TlvException">thrown when data hash is null</exception>
-        public AggregationRequestPayload(DataHash hash) : base(Constants.AggregationRequestPayload.TagType, false, false, new List<TlvTag>()
+        public AggregationRequestPayload(DataHash hash) : base(Constants.AggregationRequestPayload.TagType, false, false, new List<ITlvTag>()
         {
             new IntegerTag(Constants.AggregationRequestPayload.RequestIdTagType, false, false, Util.GetRandomUnsignedLong()),
             new ImprintTag(Constants.AggregationRequestPayload.RequestHashTagType, false, false, hash)
@@ -99,33 +99,21 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Get request hash.
         /// </summary>
-        public DataHash RequestHash
-        {
-            get { return _requestHash.Value; }
-        }
+        public DataHash RequestHash => _requestHash.Value;
 
         /// <summary>
         ///     Is config requested.
         /// </summary>
-        public bool IsConfigRequested
-        {
-            get { return _config == null; }
-        }
+        public bool IsConfigRequested => _config == null;
 
         /// <summary>
         ///     Get request ID.
         /// </summary>
-        public ulong RequestId
-        {
-            get { return _requestId.Value; }
-        }
+        public ulong RequestId => _requestId.Value;
 
         /// <summary>
         ///     Get request level if it exists.
         /// </summary>
-        public ulong? RequestLevel
-        {
-            get { return _requestLevel?.Value; }
-        }
+        public ulong? RequestLevel => _requestLevel?.Value;
     }
 }

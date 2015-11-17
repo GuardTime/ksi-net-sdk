@@ -120,29 +120,20 @@
         public static readonly VerificationError Cal04 = new VerificationError("CAL-04",
             "Aggregation hash chain right links are inconsistent");
 
-        private readonly string _code;
-        private readonly string _message;
-
         private VerificationError(string code, string message)
         {
-            _code = code;
-            _message = message;
+            Code = code;
+            Message = message;
         }
 
         /// <summary>
         ///     Get verification error code.
         /// </summary>
-        public string Code
-        {
-            get { return _code; }
-        }
+        public string Code { get; }
 
         /// <summary>
         ///     Get verification error message.
         /// </summary>
-        public string Message
-        {
-            get { return _message; }
-        }
+        public string Message { get; }
     }
 }

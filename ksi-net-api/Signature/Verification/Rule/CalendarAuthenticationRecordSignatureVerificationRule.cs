@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
@@ -41,11 +40,11 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             }
 
             SignatureData signatureData = calendarAuthenticationRecord.SignatureData;
-            X509Certificate2 certificate = context.PublicationsFile.FindCertificateById(signatureData.CertificateId);
+            X509Certificate2 certificate = context.PublicationsFile.FindCertificateById(signatureData.GetCertificateId());
             if (certificate == null)
             {
                 throw new KsiVerificationException("No certificate found in publications file with id: " +
-                                                   Base16.Encode(signatureData.CertificateId) + ".");
+                                                   Base16.Encode(signatureData.GetCertificateId()) + ".");
             }
 
             byte[] signedBytes = calendarAuthenticationRecord.PublicationData.Encode();
@@ -54,13 +53,13 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 CryptoSignatureVerifierFactory.GetCryptoSignatureVerifierByOid(signatureData.SignatureType,
                     out digestAlgorithm);
 
-            var data = new CryptoSignatureVerificationData(certificate, digestAlgorithm);
+            CryptoSignatureVerificationData data = new CryptoSignatureVerificationData(certificate, digestAlgorithm);
 
             try
             {
                 cryptoSignatureVerifier.Verify(signedBytes, signatureData.SignatureValue, data);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // TODO: Log exception
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Key02);

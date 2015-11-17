@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
@@ -15,16 +14,16 @@ namespace Guardtime.KSI.Signature.Verification
         [Test]
         public void TestVerifySignatureOk()
         {
-            using (var stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
             {
-                var serviceProtocol = new HttpKsiServiceProtocol(
+                HttpKsiServiceProtocol serviceProtocol = new HttpKsiServiceProtocol(
                     "http://ksigw.test.guardtime.com:3333/gt-signingservice",
                     "http://172.20.20.100:8081",
                     "http://verify.guardtime.com/ksi-publications.bin");
 
-                var ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"),
+                KsiService ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"),
                     new PublicationsFileFactory(new PkiTrustStoreProvider()), new KsiSignatureFactory());
-                var context = new VerificationContext(new KsiSignatureFactory().Create(stream))
+                VerificationContext context = new VerificationContext(new KsiSignatureFactory().Create(stream))
                 {
                     DocumentHash =
                         new Hashing.DataHash(new byte[]
@@ -43,19 +42,19 @@ namespace Guardtime.KSI.Signature.Verification
 
                 Console.WriteLine(@"// Internal verification policy");
                 VerificationPolicy policy = new InternalVerificationPolicy();
-                Console.WriteLine("{0}", policy.Verify(context));
+                Console.WriteLine(policy.Verify(context));
 
                 Console.WriteLine(@"// Publications based");
                 policy = new PublicationBasedVerificationPolicy();
-                Console.WriteLine("{0}", policy.Verify(context));
+                Console.WriteLine(policy.Verify(context));
 
                 Console.WriteLine(@"// Key based");
                 policy = new KeyBasedVerificationPolicy();
-                Console.WriteLine("{0}", policy.Verify(context));
+                Console.WriteLine(policy.Verify(context));
 
                 Console.WriteLine(@"// Calendar based verification");
                 policy = new CalendarBasedVerificationPolicy();
-                Console.WriteLine("{0}", policy.Verify(context));
+                Console.WriteLine(policy.Verify(context));
             }
         }
     }

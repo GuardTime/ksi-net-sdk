@@ -18,7 +18,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="tag">TLV element</param>
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
-        public KsiPduHeader(TlvTag tag) : base(tag)
+        public KsiPduHeader(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.KsiPduHeader.TagType)
             {
@@ -82,7 +82,7 @@ namespace Guardtime.KSI.Service
         /// <param name="instanceId">instance ID</param>
         /// <param name="messageId">message ID</param>
         public KsiPduHeader(string loginId, ulong instanceId, ulong messageId)
-            : base(Constants.KsiPduHeader.TagType, false, false, new List<TlvTag>()
+            : base(Constants.KsiPduHeader.TagType, false, false, new List<ITlvTag>()
             {
                 new StringTag(Constants.KsiPduHeader.LoginIdTagType, false, false, loginId),
                 new IntegerTag(Constants.KsiPduHeader.InstanceIdTagType, false, false, instanceId),
@@ -97,25 +97,16 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Get login ID.
         /// </summary>
-        public string LoginId
-        {
-            get { return _loginId.Value; }
-        }
+        public string LoginId => _loginId.Value;
 
         /// <summary>
         ///     Get instance ID if it exists.
         /// </summary>
-        public ulong? InstanceId
-        {
-            get { return _instanceId?.Value; }
-        }
+        public ulong? InstanceId => _instanceId?.Value;
 
         /// <summary>
         ///     Get message ID if it exists.
         /// </summary>
-        public ulong? MessageId
-        {
-            get { return _messageId?.Value; }
-        }
+        public ulong? MessageId => _messageId?.Value;
     }
 }

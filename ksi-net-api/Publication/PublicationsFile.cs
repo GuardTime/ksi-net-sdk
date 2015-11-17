@@ -30,7 +30,7 @@ namespace Guardtime.KSI.Publication
             /// </summary>
             /// <param name="tag">TLV element</param>
             /// <exception cref="PublicationsFileException">thrown when TLV parsing fails</exception>
-            public PublicationsFile(TlvTag tag) : base(tag)
+            public PublicationsFile(ITlvTag tag) : base(tag)
             {
                 int publicationsHeaderCount = 0;
                 int cmsSignatureCount = 0;

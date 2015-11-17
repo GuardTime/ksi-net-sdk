@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Utils;
@@ -14,7 +13,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         [Test]
         public void TestVerify()
         {
-            var rule = new AggregationChainInputHashVerificationRule();
+            AggregationChainInputHashVerificationRule rule = new AggregationChainInputHashVerificationRule();
 
             // Argument null exception when no context
             Assert.Throws<KsiException>(delegate
@@ -25,15 +24,15 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             // Verification exception on missing KSI signature 
             Assert.Throws<KsiVerificationException>(delegate
             {
-                var context = new TestVerificationContext();
+                TestVerificationContext context = new TestVerificationContext();
 
                 rule.Verify(context);
             });
 
             // Check legacy signature without document hash
-            using (var stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok, FileMode.Open))
             {
-                var context = new TestVerificationContext()
+                TestVerificationContext context = new TestVerificationContext()
                 {
                     Signature = new KsiSignatureFactory().Create(stream)
                 };
@@ -45,60 +44,57 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             }
 
             // Check signature without aggregation hash chains
-            using (var stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
+            Assert.Throws<KsiVerificationException>(delegate
             {
-                Assert.Throws<KsiVerificationException>(delegate
+                TestVerificationContext context = new TestVerificationContext()
                 {
-                    var context = new TestVerificationContext()
-                    {
-                        Signature = new TestKsiSignature(),
-                        DocumentHash =
-                            new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D"))
-                    };
+                    Signature = new TestKsiSignature(),
+                    DocumentHash =
+                        new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D"))
+                };
 
-                    rule.Verify(context);
-                });
-            }
+                rule.Verify(context);
+            });
 
             // Check legacy signature input hash
-            using (var stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok, FileMode.Open))
             {
-                var context = new TestVerificationContext()
+                TestVerificationContext context = new TestVerificationContext()
                 {
                     Signature = new KsiSignatureFactory().Create(stream),
                     DocumentHash =
                         new DataHash(Base16.Decode("015466E3CBA14A843A5E93B78E3D6AB8D3491EDCAC7E06431CE1A7F49828C340C3"))
                 };
 
-                var verificationResult = rule.Verify(context);
+                VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
 
             // Check signature input hash
-            using (var stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
             {
-                var context = new TestVerificationContext()
+                TestVerificationContext context = new TestVerificationContext()
                 {
                     Signature = new KsiSignatureFactory().Create(stream),
                     DocumentHash =
                         new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D"))
                 };
 
-                var verificationResult = rule.Verify(context);
+                VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
 
             // Check signature invalid input hash
-            using (var stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
             {
-                var context = new TestVerificationContext()
+                TestVerificationContext context = new TestVerificationContext()
                 {
                     Signature = new KsiSignatureFactory().Create(stream),
                     DocumentHash =
                         new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772E"))
                 };
 
-                var verificationResult = rule.Verify(context);
+                VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
             }
         }

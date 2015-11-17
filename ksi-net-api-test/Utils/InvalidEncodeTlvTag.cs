@@ -8,7 +8,7 @@ namespace Guardtime.KSI.Utils
         {
         }
 
-        public InvalidEncodeTlvTag(TlvTag tag) : base(tag)
+        public InvalidEncodeTlvTag(ITlvTag tag) : base(tag)
         {
         }
 

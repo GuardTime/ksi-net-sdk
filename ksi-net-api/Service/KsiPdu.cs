@@ -14,13 +14,13 @@ namespace Guardtime.KSI.Service
     public abstract class KsiPdu : CompositeTag
     {
         private readonly KsiPduHeader _header;
-        private ImprintTag _mac;
+        private readonly ImprintTag _mac;
 
         /// <summary>
         ///     Create KSI PDU from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        protected KsiPdu(TlvTag tag) : base(tag)
+        protected KsiPdu(ITlvTag tag) : base(tag)
         {
             for (int i = 0; i < Count; i++)
             {
@@ -40,12 +40,13 @@ namespace Guardtime.KSI.Service
         ///     Create KSI PDU from PDU header and data.
         /// </summary>
         /// <param name="header">KSI PDU header</param>
+        /// <param name="mac">KSI pdu hmac</param>
         /// <param name="type">TLV type</param>
         /// <param name="nonCritical">Is TLV element non critical</param>
         /// <param name="forward">Is TLV element forwarded</param>
         /// <param name="value">TLV element list</param>
         /// <exception cref="TlvException">thrown when TLV header is null</exception>
-        protected KsiPdu(KsiPduHeader header, ImprintTag mac, uint type, bool nonCritical, bool forward, IList<TlvTag> value)
+        protected KsiPdu(KsiPduHeader header, ImprintTag mac, uint type, bool nonCritical, bool forward, List<ITlvTag> value)
             : base(type, nonCritical, forward, value)
         {
             if (header == null)
@@ -61,20 +62,6 @@ namespace Guardtime.KSI.Service
             _header = header;
             _mac = mac;
         }
-
-        /// <summary>
-        /// Append list to another list.
-        /// </summary>
-        /// <param name="initialList">initial list</param>
-        /// <param name="addList">added list</param>
-        /// <returns>new appended list</returns>
-        private static List<TlvTag> AppendList(IList<TlvTag> initialList, IList<TlvTag> addList)
-        {
-            List<TlvTag> list = new List<TlvTag>();
-            list.AddRange(initialList);
-            list.AddRange(addList);
-            return list;
-        } 
 
         /// <summary>
         ///     Get KSI PDU payload.

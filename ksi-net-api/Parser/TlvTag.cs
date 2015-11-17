@@ -11,10 +11,6 @@ namespace Guardtime.KSI.Parser
     /// </summary>
     public abstract class TlvTag : ITlvTag, IEquatable<TlvTag>
     {
-        private readonly bool _forward;
-        private readonly bool _nonCritical;
-        private readonly uint _type;
-
         /// <summary>
         ///     Create new TLV element from data.
         /// </summary>
@@ -23,9 +19,9 @@ namespace Guardtime.KSI.Parser
         /// <param name="forward">Is TLV element forwarded</param>
         protected TlvTag(uint type, bool nonCritical, bool forward)
         {
-            _type = type;
-            _nonCritical = nonCritical;
-            _forward = forward;
+            Type = type;
+            NonCritical = nonCritical;
+            Forward = forward;
         }
 
         /// <summary>
@@ -40,34 +36,25 @@ namespace Guardtime.KSI.Parser
                 throw new TlvException("Invalid TLV tag: null.");
             }
 
-            _type = tag.Type;
-            _nonCritical = tag.NonCritical;
-            _forward = tag.Forward;
+            Type = tag.Type;
+            NonCritical = tag.NonCritical;
+            Forward = tag.Forward;
         }
 
         /// <summary>
         ///     Tlv tag type.
         /// </summary>
-        public uint Type
-        {
-            get { return _type; }
-        }
+        public uint Type { get; }
 
         /// <summary>
         ///     Is tlv tag non critical.
         /// </summary>
-        public bool NonCritical
-        {
-            get { return _nonCritical; }
-        }
+        public bool NonCritical { get; }
 
         /// <summary>
         ///     Is tlv forwarded.
         /// </summary>
-        public bool Forward
-        {
-            get { return _forward; }
-        }
+        public bool Forward { get; }
 
         /// <summary>
         ///     Encode TLV object value.

@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using NUnit.Framework;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Exceptions;
@@ -82,11 +81,11 @@ namespace Guardtime.KSI.Signature
             }, "Invalid calendar authentication record type: 2054");
         }
 
-        private CalendarAuthenticationRecord GetCalendarAuthenticationRecordFromFile(string file)
+        private static CalendarAuthenticationRecord GetCalendarAuthenticationRecordFromFile(string file)
         {
-            using (var stream = new FileStream(file, FileMode.Open))
+            using (FileStream stream = new FileStream(file, FileMode.Open))
             {
-                using (var reader = new TlvReader(stream))
+                using (TlvReader reader = new TlvReader(stream))
                 {
                     CalendarAuthenticationRecord calendarAuthenticationRecord = new CalendarAuthenticationRecord(reader.ReadTag());
 

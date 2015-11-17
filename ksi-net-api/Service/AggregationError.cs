@@ -16,7 +16,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="tag">TLV element</param>
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
-        public AggregationError(TlvTag tag) : base(tag)
+        public AggregationError(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.AggregationError.TagType)
             {
@@ -58,17 +58,11 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Get aggregation error status code.
         /// </summary>
-        public ulong Status
-        {
-            get { return _status.Value; }
-        }
+        public ulong Status => _status.Value;
 
         /// <summary>
         ///     Get aggregation error message if it exists.
         /// </summary>
-        public string ErrorMessage
-        {
-            get { return _errorMessage?.Value; }
-        }
+        public string ErrorMessage => _errorMessage?.Value;
     }
 }

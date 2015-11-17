@@ -8,15 +8,12 @@ namespace Guardtime.KSI.Publication
     /// </summary>
     public sealed class CertificateRecord : CompositeTag
     {
-        private readonly RawTag _certificateId;
-        private readonly RawTag _x509Certificate;
-
         /// <summary>
         ///     Create new certificate record TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
-        public CertificateRecord(TlvTag tag) : base(tag)
+        public CertificateRecord(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.CertificateRecord.TagType)
             {
@@ -31,11 +28,11 @@ namespace Guardtime.KSI.Publication
                 switch (this[i].Type)
                 {
                     case Constants.CertificateRecord.CertificateIdTagType:
-                        _certificateId = new RawTag(this[i]);
+                        CertificateId = new RawTag(this[i]);
                         certificateIdCount++;
                         break;
                     case Constants.CertificateRecord.X509CertificateTagType:
-                        _x509Certificate = new RawTag(this[i]);
+                        X509Certificate = new RawTag(this[i]);
                         x509CertificateCount++;
                         break;
                     default:
@@ -58,17 +55,11 @@ namespace Guardtime.KSI.Publication
         /// <summary>
         ///     Get certificate ID.
         /// </summary>
-        public RawTag CertificateId
-        {
-            get { return _certificateId; }
-        }
+        public RawTag CertificateId { get; }
 
         /// <summary>
         ///     Get X509 certificate.
         /// </summary>
-        public RawTag X509Certificate
-        {
-            get { return _x509Certificate; }
-        }
+        public RawTag X509Certificate { get; }
     }
 }

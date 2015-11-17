@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Utils;
 
@@ -10,21 +9,19 @@ namespace Guardtime.KSI.Parser
     /// </summary>
     public class IntegerTag : TlvTag
     {
-        private readonly ulong _value;
-
         /// <summary>
         ///     Create new Integer TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         /// <exception cref="TlvException">thrown when TLV tag is null or encodeValue returns null</exception>
-        public IntegerTag(TlvTag tag) : base(tag)
+        public IntegerTag(ITlvTag tag) : base(tag)
         {
             byte[] data = tag.EncodeValue();
             if (data == null)
             {
                 throw new TlvException("Invalid TLV element encoded value: null.");
             }
-            _value = Util.DecodeUnsignedLong(data, 0, data.Length);
+            Value = Util.DecodeUnsignedLong(data, 0, data.Length);
         }
 
         /// <summary>
@@ -37,16 +34,13 @@ namespace Guardtime.KSI.Parser
         public IntegerTag(uint type, bool nonCritical, bool forward, ulong value)
             : base(type, nonCritical, forward)
         {
-            _value = value;
+            Value = value;
         }
 
         /// <summary>
         ///     Get TLV element unsigned long value.
         /// </summary>
-        public ulong Value
-        {
-            get { return _value; }
-        }
+        public ulong Value { get; }
 
         /// <summary>
         ///     Encode element value ulong to byte array.

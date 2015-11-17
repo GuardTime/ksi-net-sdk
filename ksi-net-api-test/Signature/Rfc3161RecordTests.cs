@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using NUnit.Framework;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Exceptions;
@@ -197,11 +196,11 @@ namespace Guardtime.KSI.Signature
             }, "Only one tstInfo suffix must exist in RFC 3161 record");
         }
 
-        private Rfc3161Record GetRfc3161RecordFromFile(string file)
+        private static Rfc3161Record GetRfc3161RecordFromFile(string file)
         {
-            using (var stream = new FileStream(file, FileMode.Open))
+            using (FileStream stream = new FileStream(file, FileMode.Open))
             {
-                using (var reader = new TlvReader(stream))
+                using (TlvReader reader = new TlvReader(stream))
                 {
                     Rfc3161Record rfc3161Record = new Rfc3161Record(reader.ReadTag());
 

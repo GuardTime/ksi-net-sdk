@@ -19,7 +19,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="tag">TLV element</param>
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
-        public ExtendRequestPayload(TlvTag tag) : base(tag)
+        public ExtendRequestPayload(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.ExtendRequestPayload.TagType)
             {
@@ -73,7 +73,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
         /// <param name="publicationTime">publication time</param>
-        public ExtendRequestPayload(ulong aggregationTime, ulong publicationTime) : base(Constants.ExtendRequestPayload.TagType, false, false, new List<TlvTag>()
+        public ExtendRequestPayload(ulong aggregationTime, ulong publicationTime) : base(Constants.ExtendRequestPayload.TagType, false, false, new List<ITlvTag>()
         {
             new IntegerTag(Constants.ExtendRequestPayload.RequestIdTagType, false, false, Util.GetRandomUnsignedLong()),
             new IntegerTag(Constants.ExtendRequestPayload.AggregationTimeTagType, false, false, aggregationTime),
@@ -89,10 +89,10 @@ namespace Guardtime.KSI.Service
         ///     Create extend request payload from aggregation time.
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
-        public ExtendRequestPayload(ulong aggregationTime) : base(Constants.ExtendRequestPayload.TagType, false, false, new List<TlvTag>()
+        public ExtendRequestPayload(ulong aggregationTime) : base(Constants.ExtendRequestPayload.TagType, false, false, new List<ITlvTag>()
         {
             new IntegerTag(Constants.ExtendRequestPayload.RequestIdTagType, false, false, Util.GetRandomUnsignedLong()),
-            new IntegerTag(Constants.ExtendRequestPayload.AggregationTimeTagType, false, false, aggregationTime),
+            new IntegerTag(Constants.ExtendRequestPayload.AggregationTimeTagType, false, false, aggregationTime)
         })
         {
             _requestId = (IntegerTag)this[0];
@@ -102,25 +102,16 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Get request ID.
         /// </summary>
-        public ulong RequestId
-        {
-            get { return _requestId.Value; }
-        }
+        public ulong RequestId => _requestId.Value;
 
         /// <summary>
         ///     Get aggregation time.
         /// </summary>
-        public ulong AggregationTime
-        {
-            get { return _aggregationTime.Value; }
-        }
+        public ulong AggregationTime => _aggregationTime.Value;
 
         /// <summary>
         ///     Get publication time if exists otherwise null.
         /// </summary>
-        public ulong? PublicationTime
-        {
-            get { return _publicationTime?.Value; }
-        }
+        public ulong? PublicationTime => _publicationTime?.Value;
     }
 }
