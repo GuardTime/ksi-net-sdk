@@ -65,7 +65,7 @@ namespace Guardtime.KSI.Service
                     case Constants.CalendarAuthenticationRecord.TagType:
                         break;
                     default:
-                        VerifyCriticalFlag(this[i]);
+                        VerifyUnknownTag(this[i]);
                         break;
                 }
             }

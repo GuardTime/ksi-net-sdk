@@ -12,6 +12,7 @@ namespace Guardtime.KSI.Publication
     public partial class PublicationsFileFactory
     {
         private readonly IPkiTrustProvider _pkiTrustProvider;
+        private const int DefaultBufferSize = 8092;
 
         /// <summary>
         ///     Create new publications file factory with PKI trust provider.
@@ -90,7 +91,8 @@ namespace Guardtime.KSI.Publication
                 throw new KsiException("Invalid input stream: null.");
             }
 
-            return Create(stream, 8092);
+
+            return Create(stream, DefaultBufferSize);
         }
 
         /// <summary>

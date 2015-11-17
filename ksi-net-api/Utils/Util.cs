@@ -12,6 +12,32 @@ namespace Guardtime.KSI.Utils
         private static readonly Random Random = new Random();
 
         /// <summary>
+        ///     Clone given byte array
+        /// </summary>
+        /// <param name="source">byte array to be cloned</param>
+        /// <returns></returns>
+        public static byte[] Clone(byte[] source)
+        {
+            byte[] bytes = new byte[source.Length];
+            source.CopyTo(bytes, 0);
+            return bytes;
+        }
+
+        /// <summary>
+        ///     Clone part of byte array
+        /// </summary>
+        /// <param name="source">byte array to be cloned</param>
+        /// <param name="startIndex">source array index to start cloning from</param>
+        /// <param name="byteCount">amount of bytes to clone</param>
+        /// <returns></returns>
+        public static byte[] Clone(byte[] source, int startIndex, int byteCount)
+        {
+            byte[] bytes = new byte[byteCount];
+            Array.Copy(source, startIndex, bytes, 0, byteCount);
+            return bytes;
+        }
+
+        /// <summary>
         ///     Are given arrays equal with same data ordering.
         /// </summary>
         /// <typeparam name="T">any type</typeparam>
@@ -20,7 +46,13 @@ namespace Guardtime.KSI.Utils
         /// <returns>true if arrays are equal</returns>
         public static bool IsArrayEqual<T>(T[] arr1, T[] arr2)
         {
-            if (arr1 == null || arr2 == null)
+            if (arr1 == null && arr2 == null)
+            {
+                return true;
+            }
+
+            // If only one is null
+            if (arr1 == null ^ arr2 == null)
             {
                 return false;
             }
@@ -228,7 +260,7 @@ namespace Guardtime.KSI.Utils
         {
             StringBuilder builder = new StringBuilder();
 
-            string[] lines = s.Split(new string[] {Environment.NewLine}, StringSplitOptions.None);
+            string[] lines = s.Split(new[] {Environment.NewLine}, StringSplitOptions.None);
             for (int i = 0; i < lines.Length; i++)
             {
                 builder.Append("  ");
@@ -240,6 +272,34 @@ namespace Guardtime.KSI.Utils
             }
 
             return builder.ToString();
+        }
+
+        public static bool IsOneValueEqualTo<T>(T expectedValue, params T[] values) 
+        {
+            int count = 0;
+            foreach (var value in values)
+            {
+                if (expectedValue == null)
+                {
+                    if (value != null)
+                    {
+                        continue;
+                    }
+                }
+                else if (!expectedValue.Equals(value))
+                {
+                    continue;
+                }
+
+                count++;
+
+                if (count > 1)
+                {
+                    return false;
+                }
+            }
+
+            return count == 1;
         }
     }
 }

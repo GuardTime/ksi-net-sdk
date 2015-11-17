@@ -55,7 +55,7 @@ namespace Guardtime.KSI.Signature
                         _chain.Add(chainTag);
                         break;
                     default:
-                        VerifyCriticalFlag(this[i]);
+                        VerifyUnknownTag(this[i]);
                         break;
                 }
             }
@@ -177,7 +177,7 @@ namespace Guardtime.KSI.Signature
         /// <param name="hashA">hash a</param>
         /// <param name="hashB">hash b</param>
         /// <returns>result hash</returns>
-        private static DataHash HashTogether(HashAlgorithm algorithm, ICollection<byte> hashA, ICollection<byte> hashB)
+        private static DataHash HashTogether(HashAlgorithm algorithm, byte[] hashA, byte[] hashB)
         {
             DataHasher hasher = new DataHasher(algorithm);
             hasher.AddData(hashA);
@@ -246,19 +246,20 @@ namespace Guardtime.KSI.Signature
         {
             public Link(ITlvTag tag) : base(tag)
             {
-                if (tag.Type == (int)LinkDirection.Left)
+                switch (tag.Type)
                 {
-                    Direction = LinkDirection.Left;
-                }
-
-                if (tag.Type == (int)LinkDirection.Right)
-                {
-                    Direction = LinkDirection.Right;
-                }
-
-                if (Direction == 0)
-                {
-                    throw new TlvException("Invalid calendar hash chain link type(" + Type + ").");
+                    case (int)LinkDirection.Left:
+                        Direction = LinkDirection.Left;
+                        break;
+                    case (int)LinkDirection.Right:
+                        Direction = LinkDirection.Right;
+                        break;
+                    default:
+                        if (Direction == 0)
+                        {
+                            throw new TlvException("Invalid calendar hash chain link type(" + Type + ").");
+                        }
+                        break;
                 }
             }
 

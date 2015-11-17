@@ -71,7 +71,7 @@ namespace Guardtime.KSI.Publication
                             }
                             break;
                         default:
-                            VerifyCriticalFlag(this[i]);
+                            VerifyUnknownTag(this[i]);
                             break;
                     }
                 }
@@ -88,13 +88,6 @@ namespace Guardtime.KSI.Publication
                 }
             }
 
-            /// <summary>
-            ///     Get KSI trust provider name.
-            /// </summary>
-            public string Name
-            {
-                get { return "publications file"; }
-            }
 
             /// <summary>
             ///     Get latest publication record.

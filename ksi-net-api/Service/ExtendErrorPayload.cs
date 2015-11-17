@@ -6,7 +6,7 @@ namespace Guardtime.KSI.Service
     /// <summary>
     ///     Extension error payload.
     /// </summary>
-    public sealed class ExtendError : ExtendPduPayload
+    public sealed class ExtendErrorPayload : ExtendPduPayload
     {
         private readonly StringTag _errorMessage;
         private readonly IntegerTag _status;
@@ -16,7 +16,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="tag">TLV element</param>
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
-        public ExtendError(ITlvTag tag) : base(tag)
+        public ExtendErrorPayload(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.ExtendError.TagType)
             {
@@ -39,7 +39,7 @@ namespace Guardtime.KSI.Service
                         errorMessageCount++;
                         break;
                     default:
-                        VerifyCriticalFlag(this[i]);
+                        VerifyUnknownTag(this[i]);
                         break;
                 }
             }

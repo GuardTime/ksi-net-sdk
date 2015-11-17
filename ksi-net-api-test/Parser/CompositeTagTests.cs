@@ -191,7 +191,7 @@ namespace Guardtime.KSI.Parser
                         case 0x1:
                             break;
                         default:
-                            VerifyCriticalFlag(this[i]);
+                            VerifyUnknownTag(this[i]);
                             break;
                     }
                 }
@@ -199,7 +199,7 @@ namespace Guardtime.KSI.Parser
 
             public void VerifyCriticalFlagWithoutTag()
             {
-                VerifyCriticalFlag(null);
+                VerifyUnknownTag(null);
             }
         }
 

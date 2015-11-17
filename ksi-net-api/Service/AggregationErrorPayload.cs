@@ -6,7 +6,7 @@ namespace Guardtime.KSI.Service
     /// <summary>
     ///     Aggregation Error payload TLV element.
     /// </summary>
-    public sealed class AggregationError : AggregationPduPayload
+    public sealed class AggregationErrorPayload : AggregationPduPayload
     {
         private readonly StringTag _errorMessage;
         private readonly IntegerTag _status;
@@ -16,7 +16,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="tag">TLV element</param>
         /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
-        public AggregationError(ITlvTag tag) : base(tag)
+        public AggregationErrorPayload(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.AggregationError.TagType)
             {
@@ -39,7 +39,7 @@ namespace Guardtime.KSI.Service
                         errorMessageCount++;
                         break;
                     default:
-                        VerifyCriticalFlag(this[i]);
+                        VerifyUnknownTag(this[i]);
                         break;
                 }
             }

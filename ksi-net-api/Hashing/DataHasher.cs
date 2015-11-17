@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Utils;
 using Microsoft.Win32.SafeHandles;
 
 namespace Guardtime.KSI.Hashing
@@ -95,23 +96,6 @@ namespace Guardtime.KSI.Hashing
             return AddData(data, 0, data.Length);
         }
 
-        /// <summary>
-        ///     Adds data to the digest using the specified collection of bytes, starting at an offset of 0.
-        /// </summary>
-        /// <param name="data">collection of bytes</param>
-        /// <returns>the same DataHasher object for chaining calls</returns>
-        /// <exception cref="HashingException">thrown when input data is invalid</exception>
-        public DataHasher AddData(ICollection<byte> data)
-        {
-            if (data == null)
-            {
-                throw new HashingException("Invalid input data: null.");
-            }
-
-            byte[] bytes = new byte[data.Count];
-            data.CopyTo(bytes, 0);
-            return AddData(bytes, 0, bytes.Length);
-        }
 
         /// <summary>
         ///     Adds data to the digest using the specified input stream of bytes, starting at an offset of 0.

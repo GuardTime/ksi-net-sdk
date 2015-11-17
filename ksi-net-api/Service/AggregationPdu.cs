@@ -40,7 +40,7 @@ namespace Guardtime.KSI.Service
                         payloadCount++;
                         break;
                     case Constants.AggregationError.TagType:
-                        _payload = new AggregationError(this[i]);
+                        _payload = new AggregationErrorPayload(this[i]);
                         payloadCount++;
                         break;
                     case Constants.KsiPduHeader.TagType:
@@ -50,7 +50,7 @@ namespace Guardtime.KSI.Service
                         macCount++;
                         break;
                     default:
-                        VerifyCriticalFlag(this[i]);
+                        VerifyUnknownTag(this[i]);
                         break;
                 }
             }

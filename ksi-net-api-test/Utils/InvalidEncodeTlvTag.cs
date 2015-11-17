@@ -16,5 +16,10 @@ namespace Guardtime.KSI.Utils
         {
             return null;
         }
+
+        public override int GetHashCode()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

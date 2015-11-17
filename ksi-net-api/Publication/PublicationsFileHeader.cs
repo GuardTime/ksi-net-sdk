@@ -47,7 +47,7 @@ namespace Guardtime.KSI.Publication
                         repUriCount++;
                         break;
                     default:
-                        VerifyCriticalFlag(this[i]);
+                        VerifyUnknownTag(this[i]);
                         break;
                 }
             }

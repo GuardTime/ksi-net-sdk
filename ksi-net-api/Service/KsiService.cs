@@ -135,7 +135,7 @@ namespace Guardtime.KSI.Service
                 {
                     AggregationPdu pdu = new AggregationPdu(reader.ReadTag());
                     AggregationResponsePayload payload = pdu.Payload as AggregationResponsePayload;
-                    AggregationError errorPayload = pdu.Payload as AggregationError;
+                    AggregationErrorPayload errorPayload = pdu.Payload as AggregationErrorPayload;
 
                     if (payload == null && errorPayload == null)
                     {
@@ -251,16 +251,16 @@ namespace Guardtime.KSI.Service
                 {
                     ExtendPdu pdu = new ExtendPdu(reader.ReadTag());
                     ExtendResponsePayload payload = pdu.Payload as ExtendResponsePayload;
-                    ExtendError errorPayload = pdu.Payload as ExtendError;
+                    ExtendErrorPayload errorPayloadPayload = pdu.Payload as ExtendErrorPayload;
 
-                    if (payload == null && errorPayload == null)
+                    if (payload == null && errorPayloadPayload == null)
                     {
                         throw new KsiException("Invalid extension response payload: null.");
                     }
 
                     if (payload == null || payload.Status != 0)
                     {
-                        string errorMessage = payload == null ? errorPayload.ErrorMessage : payload.ErrorMessage;
+                        string errorMessage = payload == null ? errorPayloadPayload.ErrorMessage : payload.ErrorMessage;
                         throw new KsiException("Error occured during extending: " + errorMessage + ".");
                     }
 

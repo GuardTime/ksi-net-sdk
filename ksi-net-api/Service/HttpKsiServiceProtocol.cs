@@ -216,9 +216,10 @@ namespace Guardtime.KSI.Service
             byte[] data = httpAsyncResult.PostData;
             try
             {
-                Stream stream = httpAsyncResult.Request.EndGetRequestStream(httpAsyncResult.StreamAsyncResult);
-                stream.Write(data, 0, data.Length);
-                stream.Close();
+                using (Stream stream = httpAsyncResult.Request.EndGetRequestStream(httpAsyncResult.StreamAsyncResult))
+                {
+                    stream.Write(data, 0, data.Length);
+                }
 
                 httpAsyncResult.ResponseAsyncResult = httpAsyncResult.Request.BeginGetResponse(null, httpAsyncResult);
                 ThreadPool.RegisterWaitForSingleObject(httpAsyncResult.ResponseAsyncResult.AsyncWaitHandle,
@@ -263,30 +264,17 @@ namespace Guardtime.KSI.Service
                 httpAsyncResult.AsyncWaitHandle.WaitOne();
             }
 
-            if (httpAsyncResult.IsErroneous)
+            if (httpAsyncResult.HasError)
             {
                 throw httpAsyncResult.Error;
             }
 
-            byte[] buffer = new byte[_bufferSize];
+
             try
             {
-                using (
-                    WebResponse response = httpAsyncResult.Request.EndGetResponse(httpAsyncResult.ResponseAsyncResult))
+                using (WebResponse response = httpAsyncResult.Request.EndGetResponse(httpAsyncResult.ResponseAsyncResult))
                 {
-                    using (Stream s = response.GetResponseStream())
-                    {
-                        using (MemoryStream memoryStream = new MemoryStream())
-                        {
-                            int bytesLength;
-                            while (s != null && (bytesLength = s.Read(buffer, 0, buffer.Length)) > 0)
-                            {
-                                memoryStream.Write(buffer, 0, bytesLength);
-                            }
-
-                            return memoryStream.ToArray();
-                        }
-                    }
+                    return HandleWebResponse(response);
                 }
             }
             catch (WebException e)
@@ -296,18 +284,25 @@ namespace Guardtime.KSI.Service
                     throw new KsiServiceProtocolException("Error occured while trying to get response.", e);
                 }
 
-                using (Stream s = e.Response.GetResponseStream())
-                {
-                    using (MemoryStream memoryStream = new MemoryStream())
-                    {
-                        int bytesLength;
-                        while (s != null && (bytesLength = s.Read(buffer, 0, buffer.Length)) > 0)
-                        {
-                            memoryStream.Write(buffer, 0, bytesLength);
-                        }
+                return HandleWebResponse(e.Response);
+            }
+        }
 
-                        return memoryStream.ToArray();
+        private byte[] HandleWebResponse(WebResponse response)
+        {
+            byte[] buffer = new byte[_bufferSize];
+
+            using (Stream s = response.GetResponseStream())
+            {
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    int bytesLength;
+                    while (s != null && (bytesLength = s.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+                        memoryStream.Write(buffer, 0, bytesLength);
                     }
+
+                    return memoryStream.ToArray();
                 }
             }
         }
@@ -382,7 +377,7 @@ namespace Guardtime.KSI.Service
 
             public int TimeElapsed => (int)(DateTime.Now - _startTime).TotalMilliseconds;
 
-            public bool IsErroneous => Error != null;
+            public bool HasError => Error != null;
 
             public Exception Error { get; set; }
 

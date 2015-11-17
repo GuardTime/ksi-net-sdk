@@ -119,7 +119,7 @@ namespace Guardtime.KSI.Parser
         ///     Verify unknown tag for critical flag and throw exception.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        protected void VerifyCriticalFlag(ITlvTag tag)
+        protected void VerifyUnknownTag(ITlvTag tag)
         {
             if (tag == null)
             {

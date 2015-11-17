@@ -37,7 +37,7 @@ namespace Guardtime.KSI.Signature
                         signatureDataCount++;
                         break;
                     default:
-                        VerifyCriticalFlag(this[i]);
+                        VerifyUnknownTag(this[i]);
                         break;
                 }
             }

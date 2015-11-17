@@ -67,7 +67,7 @@ namespace Guardtime.KSI.Signature
                         _chain.Add(linkTag);
                         break;
                     default:
-                        VerifyCriticalFlag(this[i]);
+                        VerifyUnknownTag(this[i]);
                         break;
                 }
             }
@@ -129,7 +129,7 @@ namespace Guardtime.KSI.Signature
         /// <param name="result">last hashing result</param>
         /// <returns>output hash chain result</returns>
         /// <exception cref="KsiException">thrown when chain result is null</exception>
-        public ChainResult GetOutputHash(ChainResult result)
+        public AggregationHashChainResult GetOutputHash(AggregationHashChainResult result)
         {
             if (result == null)
             {
@@ -153,7 +153,7 @@ namespace Guardtime.KSI.Signature
                 }
             }
 
-            return new ChainResult(level, lastHash);
+            return new AggregationHashChainResult(level, lastHash);
         }
 
         /// <summary>
@@ -163,7 +163,7 @@ namespace Guardtime.KSI.Signature
         /// <param name="hashB">second hash</param>
         /// <param name="level">hash chain level</param>
         /// <returns>resulting hash</returns>
-        private DataHash HashTogether(ICollection<byte> hashA, ICollection<byte> hashB, ulong level)
+        private DataHash HashTogether(byte[] hashA, byte[] hashB, ulong level)
         {
             DataHasher hasher = new DataHasher(HashAlgorithm.GetById((byte)_aggrAlgorithmId.Value));
             hasher.AddData(hashA);
@@ -213,7 +213,7 @@ namespace Guardtime.KSI.Signature
                             metaDataCount++;
                             break;
                         default:
-                            VerifyCriticalFlag(this[i]);
+                            VerifyUnknownTag(this[i]);
                             break;
                     }
                 }
@@ -224,9 +224,7 @@ namespace Guardtime.KSI.Signature
                         "Only one levelcorrection value is allowed in aggregation hash chain link.");
                 }
 
-                if ((siblingHashCount > 1 || metaHashCount > 1 || metaDataCount > 1) ||
-                    !(siblingHashCount == 1 ^ metaHashCount == 1 ^ metaDataCount == 1) ||
-                    (siblingHashCount == 1 && metaHashCount == 1 && metaDataCount == 1))
+                if (!Util.IsOneValueEqualTo(1, siblingHashCount, metaHashCount, metaDataCount))
                 {
                     throw new TlvException(
                         "Only one of three from siblinghash, metahash or metadata must exist in aggregation hash chain link.");
@@ -263,9 +261,8 @@ namespace Guardtime.KSI.Signature
 
             private string CalculateIdendityFromMetaHash()
             {
-                ICollection<byte> data = _metaHash.Value.Imprint;
-                byte[] bytes = new byte[data.Count];
-                data.CopyTo(bytes, 0);
+                byte[] bytes = _metaHash.Value.Imprint;
+
 
                 if (bytes.Length < 3)
                 {
@@ -338,7 +335,7 @@ namespace Guardtime.KSI.Signature
                             requestTimeCount++;
                             break;
                         default:
-                            VerifyCriticalFlag(this[i]);
+                            VerifyUnknownTag(this[i]);
                             break;
                     }
                 }
@@ -399,33 +396,6 @@ namespace Guardtime.KSI.Signature
 
                 return x._chainIndex.Count == y._chainIndex.Count ? 0 : 1;
             }
-        }
-
-        /// <summary>
-        ///     Aggregation chain output result
-        /// </summary>
-        public class ChainResult
-        {
-            /// <summary>
-            ///     Create chain result from level and data hash.
-            /// </summary>
-            /// <param name="level">hash chain level</param>
-            /// <param name="hash">output hash</param>
-            public ChainResult(ulong level, DataHash hash)
-            {
-                Level = level;
-                Hash = hash;
-            }
-
-            /// <summary>
-            ///     Get aggregation chain output hash
-            /// </summary>
-            public DataHash Hash { get; }
-
-            /// <summary>
-            ///     Get aggregation chain output hash level
-            /// </summary>
-            public ulong Level { get; }
         }
     }
 }

@@ -3,13 +3,13 @@
 namespace Guardtime.KSI.Exceptions
 {
     /// <summary>
-    ///     Invalid TLV exception.
+    ///     TLV exception.
     /// </summary>
     [Serializable]
     public class TlvException : KsiException
     {
         /// <summary>
-        ///     Create new InvalidTlvStructure exception.
+        ///     Create new TlvException exception.
         /// </summary>
         /// <param name="message">exception message</param>
         public TlvException(string message) : base(message)
@@ -17,7 +17,7 @@ namespace Guardtime.KSI.Exceptions
         }
 
         /// <summary>
-        ///     Create new InvalidTlvStructure exception.
+        ///     Create new TlvException exception.
         /// </summary>
         /// <param name="message">exception message</param>
         /// <param name="innerException">inner exception</param>
