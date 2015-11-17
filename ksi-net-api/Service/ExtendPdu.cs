@@ -10,7 +10,10 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public sealed class ExtendPdu : KsiPdu
     {
-        private readonly ExtendPduPayload _payload;
+        /// <summary>
+        ///     Get PDU payload.
+        /// </summary>
+        public override KsiPduPayload Payload { get; }
 
         /// <summary>
         ///     Create extend PDU from TLV element.
@@ -33,15 +36,15 @@ namespace Guardtime.KSI.Service
                 switch (this[i].Type)
                 {
                     case Constants.ExtendRequestPayload.TagType:
-                        _payload = new ExtendRequestPayload(this[i]);
+                        Payload = new ExtendRequestPayload(this[i]);
                         payloadCount++;
                         break;
                     case Constants.ExtendResponsePayload.TagType:
-                        _payload = new ExtendResponsePayload(this[i]);
+                        Payload = new ExtendResponsePayload(this[i]);
                         payloadCount++;
                         break;
-                    case Constants.ExtendError.TagType:
-                        _payload = new ExtendErrorPayload(this[i]);
+                    case Constants.ExtendErrorPayload.TagType:
+                        Payload = new ExtendErrorPayload(this[i]);
                         payloadCount++;
                         break;
                     case Constants.KsiPduHeader.TagType:
@@ -61,12 +64,12 @@ namespace Guardtime.KSI.Service
                 throw new TlvException("Only one payload must exist in KSI PDU.");
             }
 
-            if (_payload.Type != Constants.ExtendError.TagType && headerCount != 1)
+            if (Payload.Type != Constants.ExtendErrorPayload.TagType && headerCount != 1)
             {
                 throw new TlvException("Only one header must exist in KSI PDU.");
             }
 
-            if (_payload.Type != Constants.ExtendError.TagType && macCount != 1)
+            if (Payload.Type != Constants.ExtendErrorPayload.TagType && macCount != 1)
             {
                 throw new TlvException("Only one mac must exist in KSI PDU.");
             }
@@ -78,18 +81,10 @@ namespace Guardtime.KSI.Service
         /// <param name="header">KSI header</param>
         /// <param name="payload">Extend pdu payload</param>
         /// <exception cref="TlvException">thrown when payload is null</exception>
-        public ExtendPdu(KsiPduHeader header, ExtendPduPayload payload, ImprintTag mac)
-            : base(header, mac, Constants.ExtendPdu.TagType, false, false, new List<TlvTag>() { header, payload, mac  })
+        public ExtendPdu(KsiPduHeader header, KsiPduPayload payload, ImprintTag mac)
+            : base(header, mac, Constants.ExtendPdu.TagType, false, false, new List<TlvTag>() {header, payload, mac})
         {
-            _payload = payload;
-        }
-
-        /// <summary>
-        ///     Get extension PDU payload.
-        /// </summary>
-        public override KsiPduPayload Payload
-        {
-            get { return _payload; }
+            Payload = payload;
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Guardtime.KSI.Service
     /// <summary>
     ///     Aggregation request payload.
     /// </summary>
-    public sealed class AggregationRequestPayload : AggregationPduPayload
+    public sealed class AggregationRequestPayload : KsiPduPayload
     {
         private readonly RawTag _config;
         private readonly ImprintTag _requestHash;
@@ -99,33 +99,21 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Get request hash.
         /// </summary>
-        public DataHash RequestHash
-        {
-            get { return _requestHash.Value; }
-        }
+        public DataHash RequestHash => _requestHash.Value;
 
         /// <summary>
         ///     Is config requested.
         /// </summary>
-        public bool IsConfigRequested
-        {
-            get { return _config == null; }
-        }
+        public bool IsConfigRequested => _config == null;
 
         /// <summary>
         ///     Get request ID.
         /// </summary>
-        public ulong RequestId
-        {
-            get { return _requestId.Value; }
-        }
+        public ulong RequestId => _requestId.Value;
 
         /// <summary>
         ///     Get request level if it exists.
         /// </summary>
-        public ulong? RequestLevel
-        {
-            get { return _requestLevel?.Value; }
-        }
+        public ulong? RequestLevel => _requestLevel?.Value;
     }
 }

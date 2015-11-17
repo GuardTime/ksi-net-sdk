@@ -7,7 +7,7 @@ namespace Guardtime.KSI.Service
     /// <summary>
     ///     Extension response payload.
     /// </summary>
-    public sealed class ExtendResponsePayload : ExtendPduPayload
+    public sealed class ExtendResponsePayload : KsiPduPayload
     {
         private readonly CalendarHashChain _calendarHashChain;
         private readonly StringTag _errorMessage;

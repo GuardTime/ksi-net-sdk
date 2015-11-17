@@ -120,7 +120,7 @@
             internal const uint ErrorMessageTagType = 0x5;
         }
 
-        internal static class AggregationError
+        internal static class AggregationErrorPayload
         {
             /// <summary>
             ///     Aggregation error payload TLV type.
@@ -162,7 +162,7 @@
             internal const uint RequestAcknowledgmentTagType = 0x11;
         }
 
-        internal static class ExtendError
+        internal static class ExtendErrorPayload
         {
             /// <summary>
             ///     Extension error payload TLV type.

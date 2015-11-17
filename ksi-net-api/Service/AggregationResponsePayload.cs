@@ -8,7 +8,7 @@ namespace Guardtime.KSI.Service
     /// <summary>
     ///     Aggregation response payload.
     /// </summary>
-    public sealed class AggregationResponsePayload : AggregationPduPayload
+    public sealed class AggregationResponsePayload : KsiPduPayload
     {
         // TODO: Create config
         private readonly RawTag _config;

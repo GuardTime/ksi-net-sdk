@@ -145,7 +145,7 @@ namespace Guardtime.KSI.Service
                     if (payload == null || payload.Status != 0)
                     {
                         string errorMessage = payload == null ? errorPayload.ErrorMessage : payload.ErrorMessage;
-                        throw new KsiException("Error occured during aggregation: " + payload.ErrorMessage + ".");
+                        throw new KsiException("Error occured during aggregation: " + errorMessage + ".");
                     }
 
                     if (!pdu.ValidateMac(_serviceSettings.LoginKey))
@@ -351,7 +351,7 @@ namespace Guardtime.KSI.Service
         /// <param name="callback">callback when extending signature is finished</param>
         /// <param name="asyncState">async state object</param>
         /// <returns></returns>
-        private IAsyncResult BeginExtend(ExtendPduPayload payload, AsyncCallback callback, object asyncState)
+        private IAsyncResult BeginExtend(KsiPduPayload payload, AsyncCallback callback, object asyncState)
         {
             if (_extendingServiceProtocol == null)
             {
