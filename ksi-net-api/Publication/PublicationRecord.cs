@@ -46,7 +46,7 @@ namespace Guardtime.KSI.Publication
                         _publicationRepositoryUri.Add(listTag);
                         break;
                     default:
-                        VerifyCriticalFlag(this[i]);
+                        VerifyUnknownTag(this[i]);
                         break;
                 }
             }

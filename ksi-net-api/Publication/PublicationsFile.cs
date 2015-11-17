@@ -71,7 +71,7 @@ namespace Guardtime.KSI.Publication
                             }
                             break;
                         default:
-                            VerifyCriticalFlag(this[i]);
+                            VerifyUnknownTag(this[i]);
                             break;
                     }
                 }

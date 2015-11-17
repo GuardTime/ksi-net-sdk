@@ -58,7 +58,7 @@ namespace Guardtime.KSI.Service
                         calendarHashChainCount++;
                         break;
                     default:
-                        VerifyCriticalFlag(this[i]);
+                        VerifyUnknownTag(this[i]);
                         break;
                 }
             }

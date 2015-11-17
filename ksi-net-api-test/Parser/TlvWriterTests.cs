@@ -117,6 +117,11 @@ namespace Guardtime.KSI.Parser
             public AllowNullValueTlvTag(uint type, bool nonCritical, bool forward) : base(type, nonCritical, forward)
             {
             }
+
+            public override int GetHashCode()
+            {
+                throw new System.NotImplementedException();
+            }
         }
     }
 }

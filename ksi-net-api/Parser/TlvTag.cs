@@ -75,6 +75,8 @@ namespace Guardtime.KSI.Parser
         /// <returns>TLV object value as bytes</returns>
         public abstract byte[] EncodeValue();
 
+        public abstract override int GetHashCode();
+
         /// <summary>
         ///     Encode TLV object.
         /// </summary>
@@ -112,16 +114,22 @@ namespace Guardtime.KSI.Parser
                 return false;
             }
 
+            if (Type != tag.Type || Forward != tag.Forward || NonCritical != tag.NonCritical)
+            {
+                return false;
+            }
+
             byte[] valueBytes = EncodeValue();
             byte[] tagValueBytes = tag.EncodeValue();
 
-            if (valueBytes.Length != tagValueBytes.Length || Type != tag.Type || Forward != tag.Forward || NonCritical != tag.NonCritical)
+            if (valueBytes.Length != tagValueBytes.Length)
             {
                 return false;
             }
 
             return Util.IsArrayEqual(valueBytes, tagValueBytes);
         }
+
 
         /// <summary>
         ///     Compare TLV element to object.

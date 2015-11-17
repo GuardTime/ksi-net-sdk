@@ -51,7 +51,7 @@ namespace Guardtime.KSI.Service
                         macCount++;
                         break;
                     default:
-                        VerifyCriticalFlag(this[i]);
+                        VerifyUnknownTag(this[i]);
                         break;
                 }
             }

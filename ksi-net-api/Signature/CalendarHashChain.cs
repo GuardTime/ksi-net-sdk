@@ -59,7 +59,7 @@ namespace Guardtime.KSI.Signature
                         _chain.Add(chainTag);
                         break;
                     default:
-                        VerifyCriticalFlag(this[i]);
+                        VerifyUnknownTag(this[i]);
                         break;
                 }
             }

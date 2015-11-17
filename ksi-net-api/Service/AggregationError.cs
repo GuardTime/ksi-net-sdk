@@ -39,7 +39,7 @@ namespace Guardtime.KSI.Service
                         errorMessageCount++;
                         break;
                     default:
-                        VerifyCriticalFlag(this[i]);
+                        VerifyUnknownTag(this[i]);
                         break;
                 }
             }

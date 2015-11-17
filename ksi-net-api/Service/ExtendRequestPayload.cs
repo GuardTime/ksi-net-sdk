@@ -47,7 +47,7 @@ namespace Guardtime.KSI.Service
                         publicationTimeCount++;
                         break;
                     default:
-                        VerifyCriticalFlag(this[i]);
+                        VerifyUnknownTag(this[i]);
                         break;
                 }
             }

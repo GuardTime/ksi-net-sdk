@@ -54,7 +54,7 @@ namespace Guardtime.KSI.Service
                         configCount++;
                         break;
                     default:
-                        VerifyCriticalFlag(this[i]);
+                        VerifyUnknownTag(this[i]);
                         break;
                 }
             }

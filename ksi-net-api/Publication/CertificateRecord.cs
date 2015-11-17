@@ -39,7 +39,7 @@ namespace Guardtime.KSI.Publication
                         x509CertificateCount++;
                         break;
                     default:
-                        VerifyCriticalFlag(this[i]);
+                        VerifyUnknownTag(this[i]);
                         break;
                 }
             }

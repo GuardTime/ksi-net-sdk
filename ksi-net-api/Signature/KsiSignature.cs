@@ -76,7 +76,7 @@ namespace Guardtime.KSI.Signature
                             rfc3161RecordCount++;
                             break;
                         default:
-                            VerifyCriticalFlag(this[i]);
+                            VerifyUnknownTag(this[i]);
                             break;
                     }
                 }

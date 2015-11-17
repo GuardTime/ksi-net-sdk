@@ -67,7 +67,7 @@ namespace Guardtime.KSI.Signature
                         _chain.Add(linkTag);
                         break;
                     default:
-                        VerifyCriticalFlag(this[i]);
+                        VerifyUnknownTag(this[i]);
                         break;
                 }
             }
@@ -222,7 +222,7 @@ namespace Guardtime.KSI.Signature
                             metaDataCount++;
                             break;
                         default:
-                            VerifyCriticalFlag(this[i]);
+                            VerifyUnknownTag(this[i]);
                             break;
                     }
                 }
@@ -365,7 +365,7 @@ namespace Guardtime.KSI.Signature
                             requestTimeCount++;
                             break;
                         default:
-                            VerifyCriticalFlag(this[i]);
+                            VerifyUnknownTag(this[i]);
                             break;
                     }
                 }
