@@ -189,18 +189,18 @@ namespace Guardtime.KSI.Publication
             }
 
             /// <summary>
-            ///     Get signed bytes.
+            ///     Get signature
             /// </summary>
-            /// <returns>signed bytes</returns>
-            public byte[] GetSignatureBytes()
+            /// <returns>signature bytes</returns>
+            public byte[] GetSignatureValue()
             {
                 return _cmsSignature.EncodeValue();
             }
 
             /// <summary>
-            ///     Get signature bytes.
+            ///     Get signed bytes.
             /// </summary>
-            /// <returns>signature bytes</returns>
+            /// <returns>signed bytes</returns>
             public byte[] GetSignedBytes()
             {
                 using (TlvWriter writer = new TlvWriter(new MemoryStream()))

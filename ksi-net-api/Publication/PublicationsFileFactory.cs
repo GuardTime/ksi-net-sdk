@@ -117,7 +117,7 @@ namespace Guardtime.KSI.Publication
 
         private void Verify(PublicationsFile publicationsFile)
         {
-            _pkiTrustProvider.Verify(publicationsFile.GetSignedBytes(), publicationsFile.GetSignatureBytes());
+            _pkiTrustProvider.Verify(publicationsFile.GetSignedBytes(), publicationsFile.GetSignatureValue());
         }
     }
 }
