@@ -8,7 +8,7 @@ namespace Guardtime.KSI.Service
     /// <summary>
     ///     Extend request payload.
     /// </summary>
-    public sealed class ExtendRequestPayload : ExtendPduPayload
+    public sealed class ExtendRequestPayload : KsiPduPayload
     {
         private readonly IntegerTag _aggregationTime;
         private readonly IntegerTag _publicationTime;

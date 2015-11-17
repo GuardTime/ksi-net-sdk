@@ -17,6 +17,11 @@ namespace Guardtime.KSI.Service
         private readonly ImprintTag _mac;
 
         /// <summary>
+        ///     Get PDU payload.
+        /// </summary>
+        public abstract KsiPduPayload Payload { get; }
+
+        /// <summary>
         ///     Create KSI PDU from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
@@ -62,11 +67,6 @@ namespace Guardtime.KSI.Service
             _header = header;
             _mac = mac;
         }
-
-        /// <summary>
-        ///     Get KSI PDU payload.
-        /// </summary>
-        public abstract KsiPduPayload Payload { get; }
 
         /// <summary>
         ///     Calculate MAC and attach it to PDU.

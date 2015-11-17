@@ -57,7 +57,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             try
             {
-                cryptoSignatureVerifier.Verify(signedBytes, signatureData.SignatureValue, data);
+                cryptoSignatureVerifier.Verify(signedBytes, signatureData.GetSignatureValue(), data);
             }
             catch (Exception)
             {

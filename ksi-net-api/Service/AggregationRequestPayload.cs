@@ -9,7 +9,7 @@ namespace Guardtime.KSI.Service
     /// <summary>
     ///     Aggregation request payload.
     /// </summary>
-    public sealed class AggregationRequestPayload : AggregationPduPayload
+    public sealed class AggregationRequestPayload : KsiPduPayload
     {
         private readonly RawTag _config;
         private readonly ImprintTag _requestHash;

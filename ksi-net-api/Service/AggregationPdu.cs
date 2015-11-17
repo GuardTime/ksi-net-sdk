@@ -9,7 +9,10 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public sealed class AggregationPdu : KsiPdu
     {
-        private readonly AggregationPduPayload _payload;
+        /// <summary>
+        ///     Get PDU payload.
+        /// </summary>
+        public override KsiPduPayload Payload { get; }
 
         /// <summary>
         ///     Create aggregation pdu TLV element from TLV element.
@@ -32,15 +35,15 @@ namespace Guardtime.KSI.Service
                 switch (this[i].Type)
                 {
                     case Constants.AggregationRequestPayload.TagType:
-                        _payload = new AggregationRequestPayload(this[i]);
+                        Payload = new AggregationRequestPayload(this[i]);
                         payloadCount++;
                         break;
                     case Constants.AggregationResponsePayload.TagType:
-                        _payload = new AggregationResponsePayload(this[i]);
+                        Payload = new AggregationResponsePayload(this[i]);
                         payloadCount++;
                         break;
-                    case Constants.AggregationError.TagType:
-                        _payload = new AggregationErrorPayload(this[i]);
+                    case Constants.AggregationErrorPayload.TagType:
+                        Payload = new AggregationErrorPayload(this[i]);
                         payloadCount++;
                         break;
                     case Constants.KsiPduHeader.TagType:
@@ -60,12 +63,12 @@ namespace Guardtime.KSI.Service
                 throw new TlvException("Only one payload must exist in KSI PDU.");
             }
 
-            if (_payload.Type != Constants.AggregationError.TagType && headerCount != 1)
+            if (Payload.Type != Constants.AggregationErrorPayload.TagType && headerCount != 1)
             {
                 throw new TlvException("Only one header must exist in KSI PDU.");
             }
 
-            if (_payload.Type != Constants.AggregationError.TagType && macCount != 1)
+            if (Payload.Type != Constants.AggregationErrorPayload.TagType && macCount != 1)
             {
                 throw new TlvException("Only one mac must exist in KSI PDU");
             }
@@ -78,15 +81,10 @@ namespace Guardtime.KSI.Service
         /// <param name="payload">aggregation payload</param>
         /// <param name="mac">pdu message hmac</param>
         /// <exception cref="TlvException">thrown when payload is null</exception>
-        public AggregationPdu(KsiPduHeader header, AggregationPduPayload payload, ImprintTag mac)
+        public AggregationPdu(KsiPduHeader header, KsiPduPayload payload, ImprintTag mac)
             : base(header, mac, Constants.AggregationPdu.TagType, false, false, new List<ITlvTag>() {header, payload, mac})
         {
-            _payload = payload;
+            Payload = payload;
         }
-
-        /// <summary>
-        ///     Get aggregation message payload.
-        /// </summary>
-        public override KsiPduPayload Payload => _payload;
     }
 }
