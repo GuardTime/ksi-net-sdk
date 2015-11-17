@@ -153,6 +153,7 @@
     <Compile Include="Service\ServiceCredentials.cs" />
     <Compile Include="Signature\AggregationAuthenticationRecord.cs" />
     <Compile Include="Signature\AggregationHashChain.cs" />
+    <Compile Include="Signature\AggregationHashChainResult.cs" />
     <Compile Include="Signature\CalendarAuthenticationRecord.cs" />
     <Compile Include="Signature\CalendarHashChain.cs" />
     <Compile Include="Signature\IKsiSignature.cs" />

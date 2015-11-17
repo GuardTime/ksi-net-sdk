@@ -272,19 +272,20 @@ namespace Guardtime.KSI.Signature
 
             public Link(TlvTag tag) : base(tag)
             {
-                if (tag.Type == (int)LinkDirection.Left)
+                switch (tag.Type)
                 {
-                    _direction = LinkDirection.Left;
-                }
-
-                if (tag.Type == (int)LinkDirection.Right)
-                {
-                    _direction = LinkDirection.Right;
-                }
-
-                if (_direction == 0)
-                {
-                    throw new TlvException("Invalid calendar hash chain link type(" + Type + ").");
+                    case (int)LinkDirection.Left:
+                        _direction = LinkDirection.Left;
+                        break;
+                    case (int)LinkDirection.Right:
+                        _direction = LinkDirection.Right;
+                        break;
+                    default:
+                        if (_direction == 0)
+                        {
+                            throw new TlvException("Invalid calendar hash chain link type(" + Type + ").");
+                        }
+                        break;
                 }
             }
 

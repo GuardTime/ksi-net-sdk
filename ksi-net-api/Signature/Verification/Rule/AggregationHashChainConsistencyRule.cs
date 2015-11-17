@@ -36,12 +36,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 throw new KsiVerificationException("Aggregation hash chains are missing from KSI signature.");
             }
 
-            AggregationHashChain.ChainResult chainResult = null;
+            AggregationHashChainResult chainResult = null;
             for (int i = 0; i < aggregationHashChainCollection.Count; i++)
             {
                 if (chainResult == null)
                 {
-                    chainResult = new AggregationHashChain.ChainResult(0, aggregationHashChainCollection[0].InputHash);
+                    chainResult = new AggregationHashChainResult(0, aggregationHashChainCollection[0].InputHash);
                 }
 
                 if (aggregationHashChainCollection[i].InputHash != chainResult.Hash)

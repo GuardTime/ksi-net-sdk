@@ -254,7 +254,7 @@ namespace Guardtime.KSI.Utils
         {
             StringBuilder builder = new StringBuilder();
 
-            string[] lines = s.Split(new string[] {Environment.NewLine}, StringSplitOptions.None);
+            string[] lines = s.Split(new[] {Environment.NewLine}, StringSplitOptions.None);
             for (int i = 0; i < lines.Length; i++)
             {
                 builder.Append("  ");
@@ -266,6 +266,34 @@ namespace Guardtime.KSI.Utils
             }
 
             return builder.ToString();
+        }
+
+        public static bool IsOneValueEqualTo<T>(T expectedValue, params T[] values) 
+        {
+            int count = 0;
+            foreach (var value in values)
+            {
+                if (expectedValue == null)
+                {
+                    if (value != null)
+                    {
+                        continue;
+                    }
+                }
+                else if (!expectedValue.Equals(value))
+                {
+                    continue;
+                }
+
+                count++;
+
+                if (count > 1)
+                {
+                    return false;
+                }
+            }
+
+            return count == 1;
         }
     }
 }

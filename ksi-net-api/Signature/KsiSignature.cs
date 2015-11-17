@@ -185,7 +185,7 @@ namespace Guardtime.KSI.Signature
             public DataHash GetAggregationHashChainRootHash()
             {
                 // Store result
-                AggregationHashChain.ChainResult lastResult = new AggregationHashChain.ChainResult(0,
+                AggregationHashChainResult lastResult = new AggregationHashChainResult(0,
                     _aggregationHashChainCollection[0].InputHash);
                 for (int i = 0; i < _aggregationHashChainCollection.Count; i++)
                 {
