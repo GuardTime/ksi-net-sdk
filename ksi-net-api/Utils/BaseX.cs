@@ -67,7 +67,7 @@ namespace Guardtime.KSI.Utils
                 throw new ArgumentException("The size of the encoding alphabet is not a power of 2", nameof(alphabet));
             }
 
-            _block = 8 / Util.GCD(8, _bits);
+            _block = 8 / Util.GetGreatestCommonDivisor(8, _bits);
 
             // the encoding lookup table
             _chars = alphabet.ToCharArray();
@@ -218,10 +218,7 @@ namespace Guardtime.KSI.Utils
                 // fetch the next byte(s), padding with zero bits as needed
                 while (bufBits < _bits)
                 {
-                    int next = (inCount < len
-                        ? bytes[off + inCount]
-                        : 0)
-                        ;
+                    int next = inCount < len ? bytes[off + inCount] : 0;
                     inCount++;
                     buf = (buf << 8) | (next & 0xff); // we want unsigned bytes
                     bufBits += 8;

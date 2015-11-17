@@ -1,6 +1,5 @@
 ﻿using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
-using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Parser
 {

@@ -137,7 +137,7 @@ namespace Guardtime.KSI.Utils
         /// <returns>unix time</returns>
         public static ulong ConvertDateTimeToUnixTime(DateTime time)
         {
-            TimeSpan timeSpan = (time - new DateTime(1970, 1, 1, 0, 0, 0));
+            TimeSpan timeSpan = time - new DateTime(1970, 1, 1, 0, 0, 0);
             return (ulong)timeSpan.TotalSeconds;
         }
 
@@ -228,7 +228,7 @@ namespace Guardtime.KSI.Utils
         /// <param name="a">Number a</param>
         /// <param name="b">Number b</param>
         /// <returns>The greatest common Divisor</returns>
-        public static int GCD(int a, int b)
+        public static int GetGreatestCommonDivisor(int a, int b)
         {
             while (b != 0)
             {
@@ -246,9 +246,9 @@ namespace Guardtime.KSI.Utils
         /// <param name="a">Number a</param>
         /// <param name="b">Number b</param>
         /// <returns>The least common multiple</returns>
-        public static int LCM(int a, int b)
+        public static int GetLeastCommonMultiple(int a, int b)
         {
-            return (a * b) / GCD(a, b);
+            return (a * b) / GetGreatestCommonDivisor(a, b);
         }
 
         /// <summary>
@@ -274,7 +274,7 @@ namespace Guardtime.KSI.Utils
             return builder.ToString();
         }
 
-        public static bool IsOneValueEqualTo<T>(T expectedValue, params T[] values) 
+        public static bool IsOneValueEqualTo<T>(T expectedValue, params T[] values)
         {
             int count = 0;
             foreach (var value in values)

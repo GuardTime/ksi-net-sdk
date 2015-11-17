@@ -8,10 +8,6 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public abstract class ErrorPayload : KsiPduPayload
     {
-        private readonly StringTag _errorMessage;
-        private readonly IntegerTag _status;
-
-
         /// <summary>
         ///     Create aggregation error payload TLV element from TLV element.
         /// </summary>
@@ -33,11 +29,13 @@ namespace Guardtime.KSI.Service
                 switch (this[i].Type)
                 {
                     case Constants.KsiPduPayload.StatusTagType:
-                        _status = new IntegerTag(this[i]);
+                        IntegerTag statusTag = new IntegerTag(this[i]);
+                        Status = statusTag.Value;
                         statusCount++;
                         break;
                     case Constants.KsiPduPayload.ErrorMessageTagType:
-                        _errorMessage = new StringTag(this[i]);
+                        StringTag errorMessageTag = new StringTag(this[i]);
+                        ErrorMessage = errorMessageTag.Value;
                         errorMessageCount++;
                         break;
                     default:
@@ -60,17 +58,11 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Get aggregation error status code.
         /// </summary>
-        public ulong Status
-        {
-            get { return _status.Value; }
-        }
+        public ulong Status { get; }
 
         /// <summary>
         ///     Get aggregation error message if it exists.
         /// </summary>
-        public string ErrorMessage
-        {
-            get { return _errorMessage?.Value; }
-        }
+        public string ErrorMessage { get; }
     }
 }

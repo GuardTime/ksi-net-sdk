@@ -100,7 +100,6 @@
     <Compile Include="Exceptions\HashingException.cs" />
     <Compile Include="IKsi.cs" />
     <Compile Include="Ksi.cs" />
-    <Compile Include="KSIDoc.cs" />
     <Compile Include="Parser\ImprintTag.cs" />
     <Compile Include="Parser\IntegerTag.cs" />
     <Compile Include="Parser\RawTag.cs" />

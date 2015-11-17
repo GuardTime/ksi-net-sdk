@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Utils;
 using Microsoft.Win32.SafeHandles;
 
 namespace Guardtime.KSI.Hashing

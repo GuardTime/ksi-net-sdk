@@ -14,7 +14,6 @@ namespace Guardtime.KSI.Signature
         private readonly IntegerTag _aggregationTime;
         private readonly List<Link> _chain = new List<Link>();
         private readonly ImprintTag _inputHash;
-
         private readonly IntegerTag _publicationTime;
 
         /// <summary>
