@@ -9,7 +9,7 @@ namespace Guardtime.KSI.Publication
     public interface IPublicationsFile : ITlvTag, IKsiTrustProvider
     {
         /// <summary>
-        ///     Get neared publication record to time.
+        ///     Get nearest publication record to time.
         /// </summary>
         /// <param name="time">publication time</param>
         /// <returns>publication record closest to time</returns>

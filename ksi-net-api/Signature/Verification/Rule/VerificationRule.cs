@@ -207,6 +207,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             return userPublication;
         }
 
+        /// <summary>
+        ///  Get extended calendar hash chain from given publication time.
+        /// </summary>
+        /// <param name="context">verification context</param>
+        /// <param name="publicationTime">publication time</param>
+        /// <returns></returns>
         public static CalendarHashChain GetExtendedTimeCalendarHashChain(IVerificationContext context, ulong publicationTime)
         {
             CalendarHashChain hashChain = context.GetExtendedTimeCalendarHashChain(publicationTime);
@@ -217,6 +223,23 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             }
 
             return hashChain;
+        }
+
+        /// <summary>
+        /// Get nearest publication record to time from publication file.
+        /// </summary>
+        /// <param name="publicationsFile">publication file</param>
+        /// <param name="time">time</param>
+        /// <returns></returns>
+        public static PublicationRecord GetNearestPublicationRecord(IPublicationsFile publicationsFile, ulong time)
+        {
+            PublicationRecord publicationRecord = publicationsFile.GetNearestPublicationRecord(time);
+
+            if (publicationRecord == null)
+            {
+                throw new KsiVerificationException("No publication record found after registration time in publications file: " + time + ".");
+            }
+            return publicationRecord;
         }
     }
 }

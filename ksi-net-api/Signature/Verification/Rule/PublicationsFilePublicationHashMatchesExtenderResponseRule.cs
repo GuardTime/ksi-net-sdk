@@ -14,14 +14,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         public override VerificationResult Verify(IVerificationContext context)
         {
             IPublicationsFile publicationsFile = GetPublicationsFile(context);
-            CalendarHashChain signatureCalendarHashChain = GetCalendarHashChain(GetSignature(context));
-            PublicationRecord publicationRecord = publicationsFile.GetNearestPublicationRecord(signatureCalendarHashChain.RegistrationTime);
-
-            if (publicationRecord == null)
-            {
-                throw new KsiVerificationException("No publication record found after registration time in publications file: " + signatureCalendarHashChain.RegistrationTime + ".");
-            }
-
+            ulong registrationTime = GetCalendarHashChain(GetSignature(context)).RegistrationTime;
+            PublicationRecord publicationRecord = GetNearestPublicationRecord(publicationsFile, registrationTime);
             CalendarHashChain extendedTimeCalendarHashChain = GetExtendedTimeCalendarHashChain(context, publicationRecord.PublicationData.PublicationTime);
 
             return extendedTimeCalendarHashChain.OutputHash != publicationRecord.PublicationData.PublicationHash

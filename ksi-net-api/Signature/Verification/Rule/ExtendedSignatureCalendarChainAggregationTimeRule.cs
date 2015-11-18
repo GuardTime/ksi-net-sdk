@@ -15,7 +15,6 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         {
             IKsiSignature signature = GetSignature(context);
             CalendarHashChain calendarHashChain = GetCalendarHashChain(signature);
-
             CalendarHashChain extendedCalendarHashChain = calendarHashChain.PublicationData == null
                 ? context.GetExtendedLatestCalendarHashChain()
                 : context.GetExtendedTimeCalendarHashChain(calendarHashChain.PublicationData.PublicationTime);
