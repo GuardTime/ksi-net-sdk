@@ -5,7 +5,6 @@
     /// </summary>
     public interface ICryptoSignatureVerifier
     {
-        // TODO: Change dictionary
         /// <summary>
         ///     Verify signed bytes and signature.
         /// </summary>

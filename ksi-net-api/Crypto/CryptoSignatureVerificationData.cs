@@ -6,12 +6,9 @@ namespace Guardtime.KSI.Crypto
     {
         public X509Certificate2 Certificate { get; set; }
 
-        public string DigestAlgorithm { get; set; }
-
-        public CryptoSignatureVerificationData(X509Certificate2 certificate, string digestAlgorithm)
+        public CryptoSignatureVerificationData(X509Certificate2 certificate)
         {
             Certificate = certificate;
-            DigestAlgorithm = digestAlgorithm;
         }
     }
 }

@@ -28,9 +28,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             }
 
             byte[] signedBytes = calendarAuthenticationRecord.PublicationData.Encode();
-            string digestAlgorithm;
-            ICryptoSignatureVerifier cryptoSignatureVerifier = CryptoSignatureVerifierFactory.GetCryptoSignatureVerifierByOid(signatureData.SignatureType, out digestAlgorithm);
-            CryptoSignatureVerificationData data = new CryptoSignatureVerificationData(certificate, digestAlgorithm);
+            ICryptoSignatureVerifier cryptoSignatureVerifier = CryptoSignatureVerifierFactory.GetCryptoSignatureVerifierByOid(signatureData.SignatureType);
+            CryptoSignatureVerificationData data = new CryptoSignatureVerificationData(certificate);
 
             try
             {
