@@ -14,14 +14,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
-            IKsiSignature signature = GetSignature(context);
-            CalendarHashChain calendarHashChain = GetCalendarHashChain(signature);
-            CalendarHashChain extendedSignatureCalendarHashChain = context.GetExtendedTimeCalendarHashChain(calendarHashChain.PublicationTime);
-
-            if (extendedSignatureCalendarHashChain == null)
-            {
-                throw new KsiVerificationException("Invalid extended calendar hash chain from context extension function: null.");
-            }
+            CalendarHashChain calendarHashChain = GetCalendarHashChain(GetSignature(context));
+            CalendarHashChain extendedSignatureCalendarHashChain = GetExtendedTimeCalendarHashChain(context, calendarHashChain.PublicationTime);
 
             return calendarHashChain.OutputHash != extendedSignatureCalendarHashChain.OutputHash
                 ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Cal01)

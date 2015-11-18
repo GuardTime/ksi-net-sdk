@@ -15,21 +15,10 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         public override VerificationResult Verify(IVerificationContext context)
         {
             IKsiSignature signature = GetSignature(context);
-            IPublicationsFile publicationsFile = GetPublicationsFile(context);
-            CalendarHashChain signatureCalendarHashChain = GetCalendarHashChain(signature);
-            PublicationRecord publicationRecord = publicationsFile.GetNearestPublicationRecord(signatureCalendarHashChain.RegistrationTime);
 
-            if (publicationRecord == null)
-            {
-                throw new KsiVerificationException("No publication record found in publications file after registration time: " + signatureCalendarHashChain.RegistrationTime + ".");
-            }
-
-            CalendarHashChain extendedTimeCalendarHashChain = context.GetExtendedTimeCalendarHashChain(publicationRecord.PublicationData.PublicationTime);
-
-            if (extendedTimeCalendarHashChain == null)
-            {
-                throw new KsiVerificationException("Received invalid extended calendar hash chain from context extension function: null.");
-            }
+            ulong registrationTime = GetCalendarHashChain(signature).RegistrationTime;
+            PublicationRecord publicationRecord = GetNearestPublicationRecord(GetPublicationsFile(context), registrationTime);
+            CalendarHashChain extendedTimeCalendarHashChain = GetExtendedTimeCalendarHashChain(context, publicationRecord.PublicationData.PublicationTime);
 
             if (publicationRecord.PublicationData.PublicationTime != extendedTimeCalendarHashChain.PublicationTime)
             {
