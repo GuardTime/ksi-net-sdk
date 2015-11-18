@@ -290,12 +290,7 @@ namespace Guardtime.KSI.Utils
             }
 
             // trim the result if there were any skipped characters
-            if (outCount >= outputBytes.Length)
-            {
-                return outputBytes;
-            }
-
-            return Util.Clone(outputBytes, 0, outCount);
+            return outCount >= outputBytes.Length ? outputBytes : Util.Clone(outputBytes, 0, outCount);
         }
     }
 }

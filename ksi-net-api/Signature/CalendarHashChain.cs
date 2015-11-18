@@ -87,10 +87,7 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         ///     Get aggregation time
         /// </summary>
-        public ulong AggregationTime
-        {
-            get { return _aggregationTime == null ? _publicationTime.Value : _aggregationTime.Value; }
-        }
+        public ulong AggregationTime => _aggregationTime == null ? _publicationTime.Value : _aggregationTime.Value;
 
         /// <summary>
         ///     Get publication time.

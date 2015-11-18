@@ -17,7 +17,7 @@ namespace Guardtime.KSI.Signature.Verification
         /// </summary>
         /// <param name="ruleName">verification rule name</param>
         /// <param name="resultList">verification result list</param>
-        public VerificationResult(string ruleName, List<VerificationResult> resultList)
+        public VerificationResult(string ruleName, IList<VerificationResult> resultList)
             : this(ruleName, GetVerificationResultCodeFromList(resultList))
         {
             for (int i = 0; i < resultList.Count; i++)
