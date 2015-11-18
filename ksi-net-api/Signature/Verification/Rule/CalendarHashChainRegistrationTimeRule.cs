@@ -14,18 +14,9 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
-            if (context == null)
-            {
-                throw new KsiException("Invalid verification context: null.");
-            }
-
-            if (context.Signature == null)
-            {
-                throw new KsiVerificationException("Invalid KSI signature in context: null.");
-            }
+            CalendarHashChain calendarHashChain = GetSignature(context).CalendarHashChain;
 
             // If calendar hash chain is missing, verification successful
-            CalendarHashChain calendarHashChain = context.Signature.CalendarHashChain;
             if (calendarHashChain == null)
             {
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);

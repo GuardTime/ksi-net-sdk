@@ -13,28 +13,15 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
-            if (context == null)
-            {
-                throw new KsiException("Invalid verification context: null.");
-            }
-
-            IKsiSignature signature = context.Signature;
-            if (signature == null)
-            {
-                throw new KsiVerificationException("Invalid KSI signature in context: null.");
-            }
-
+            IKsiSignature signature = GetSignature(context);
             CalendarAuthenticationRecord calendarAuthenticationRecord = signature.CalendarAuthenticationRecord;
+
             if (calendarAuthenticationRecord == null)
             {
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
             }
 
-            CalendarHashChain calendarHashChain = signature.CalendarHashChain;
-            if (calendarHashChain == null)
-            {
-                throw new KsiVerificationException("Calendar hash chain is missing from KSI signature.");
-            }
+            CalendarHashChain calendarHashChain = GetCalendarHashChain(signature);
 
             return calendarHashChain.PublicationTime != calendarAuthenticationRecord.PublicationData.PublicationTime
                 ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int06)

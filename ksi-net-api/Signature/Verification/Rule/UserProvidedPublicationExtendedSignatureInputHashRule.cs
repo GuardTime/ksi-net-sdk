@@ -13,36 +13,16 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
-            if (context == null)
-            {
-                throw new KsiException("Invalid verification context: null.");
-            }
+            CalendarHashChain extendedTimeCalendarHashChain = context.GetExtendedTimeCalendarHashChain(GetUserPublication(context).PublicationTime);
 
-            if (context.Signature == null)
-            {
-                throw new KsiVerificationException("Invalid KSI signature in context: null.");
-            }
-
-            PublicationData userPublication = context.UserPublication;
-            if (userPublication == null)
-            {
-                throw new KsiVerificationException("Invalid user publication in context: null.");
-            }
-
-            CalendarHashChain extendedTimeCalendarHashChain =
-                context.GetExtendedTimeCalendarHashChain(userPublication.PublicationTime);
             if (extendedTimeCalendarHashChain == null)
             {
-                throw new KsiVerificationException(
-                    "Received invalid extended calendar hash chain from context extension function: null.");
+                throw new KsiVerificationException("Received invalid extended calendar hash chain from context extension function: null.");
             }
 
-            if (extendedTimeCalendarHashChain.InputHash != context.Signature.GetAggregationHashChainRootHash())
-            {
-                return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Pub03);
-            }
-
-            return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
+            return extendedTimeCalendarHashChain.InputHash != GetSignature(context).GetAggregationHashChainRootHash()
+                ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Pub03)
+                : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }
     }
 }

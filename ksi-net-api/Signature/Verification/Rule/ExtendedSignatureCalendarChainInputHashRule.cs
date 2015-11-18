@@ -13,34 +13,20 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
-            if (context == null)
-            {
-                throw new KsiException("Invalid verification context: null.");
-            }
-
-            if (context.Signature == null)
-            {
-                throw new KsiVerificationException("Invalid KSI signature in context: null.");
-            }
-
-            CalendarHashChain calendarHashChain = context.Signature.CalendarHashChain;
+            IKsiSignature signature = GetSignature(context);
+            CalendarHashChain calendarHashChain = GetCalendarHashChain(signature, true);
             CalendarHashChain extendedCalendarHashChain = calendarHashChain == null
                 ? context.GetExtendedLatestCalendarHashChain()
                 : context.GetExtendedTimeCalendarHashChain(calendarHashChain.PublicationTime);
 
             if (extendedCalendarHashChain == null)
             {
-                throw new KsiVerificationException(
-                    "Received invalid extended calendar hash chain from context extension function: null.");
+                throw new KsiVerificationException("Received invalid extended calendar hash chain from context extension function: null.");
             }
 
-            if (context.Signature.GetAggregationHashChainRootHash() != extendedCalendarHashChain.InputHash)
-            {
-                // TODO: Log
-                return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Cal02);
-            }
-
-            return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
+            return signature.GetAggregationHashChainRootHash() != extendedCalendarHashChain.InputHash
+                ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Cal02)
+                : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }
     }
 }

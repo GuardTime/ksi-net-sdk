@@ -15,28 +15,15 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
-            if (context == null)
-            {
-                throw new KsiException("Invalid verification context: null.");
-            }
-
-            IKsiSignature signature = context.Signature;
+            IKsiSignature signature = GetSignature(context);
             DataHash inputHash = context.DocumentHash;
-            if (signature == null)
-            {
-                throw new KsiVerificationException("Invalid KSI signature in context: null.");
-            }
-
-            ReadOnlyCollection<AggregationHashChain> aggregationHashChains = signature.GetAggregationHashChains();
-            if (aggregationHashChains == null || aggregationHashChains.Count == 0)
-            {
-                throw new KsiVerificationException("Aggregation hash chains missing in KSI signature.");
-            }
-
+            ReadOnlyCollection<AggregationHashChain> aggregationHashChains = GetAggregationHashChains(signature, false);
             DataHash aggregationHashChainInputHash = aggregationHashChains[0].InputHash;
+
             if (signature.IsRfc3161Signature)
             {
                 DataHasher hasher = new DataHasher(aggregationHashChainInputHash.Algorithm);
+
                 if (signature.Rfc3161Record == null)
                 {
                     throw new KsiVerificationException("No RFC 3161 record in KSI signature.");

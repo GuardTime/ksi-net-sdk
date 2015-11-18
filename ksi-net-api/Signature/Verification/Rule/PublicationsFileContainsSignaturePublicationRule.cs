@@ -1,4 +1,5 @@
 ﻿using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Publication;
 using Guardtime.KSI.Trust;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
@@ -13,33 +14,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
-            if (context == null)
-            {
-                throw new KsiException("Invalid verification context: null.");
-            }
+            IKsiTrustProvider publicationsFile = GetPublicationsFile(context);
+            PublicationRecord publicationRecord = GetPublicationRecord(GetSignature(context));
 
-            if (context.Signature == null)
-            {
-                throw new KsiVerificationException("Invalid KSI signature in context: null.");
-            }
-
-            IKsiTrustProvider publicationsFile = context.PublicationsFile;
-            if (publicationsFile == null)
-            {
-                throw new KsiVerificationException("Invalid publications file in context: null.");
-            }
-
-            if (context.Signature.PublicationRecord == null)
-            {
-                throw new KsiVerificationException("Invalid publications record in KSI signature: null.");
-            }
-
-            if (!publicationsFile.Contains(context.Signature.PublicationRecord))
-            {
-                return new VerificationResult(GetRuleName(), VerificationResultCode.Na, VerificationError.Gen02);
-            }
-
-            return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
+            return !publicationsFile.Contains(publicationRecord)
+                ? new VerificationResult(GetRuleName(), VerificationResultCode.Na, VerificationError.Gen02)
+                : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }
     }
 }
