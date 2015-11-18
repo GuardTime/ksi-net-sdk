@@ -24,12 +24,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 throw new KsiVerificationException("No publication record found in publications file after registration time: " + signatureCalendarHashChain.RegistrationTime + ".");
             }
 
-            CalendarHashChain extendedTimeCalendarHashChain = context.GetExtendedTimeCalendarHashChain(publicationRecord.PublicationData.PublicationTime);
-
-            if (extendedTimeCalendarHashChain == null)
-            {
-                throw new KsiVerificationException("Received invalid extended calendar hash chain from context extension function: null.");
-            }
+            CalendarHashChain extendedTimeCalendarHashChain = GetExtendedTimeCalendarHashChain(context, publicationRecord.PublicationData.PublicationTime);
 
             if (publicationRecord.PublicationData.PublicationTime != extendedTimeCalendarHashChain.PublicationTime)
             {

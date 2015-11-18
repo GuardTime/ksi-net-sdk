@@ -206,5 +206,17 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             }
             return userPublication;
         }
+
+        public static CalendarHashChain GetExtendedTimeCalendarHashChain(IVerificationContext context, ulong publicationTime)
+        {
+            CalendarHashChain hashChain = context.GetExtendedTimeCalendarHashChain(publicationTime);
+
+            if (hashChain == null)
+            {
+                throw new KsiVerificationException("Received invalid extended calendar hash chain from context extension function: null.");
+            }
+
+            return hashChain;
+        }
     }
 }
