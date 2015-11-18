@@ -277,7 +277,7 @@ namespace Guardtime.KSI.Utils
         public static bool IsOneValueEqualTo<T>(T expectedValue, params T[] values)
         {
             int count = 0;
-            foreach (var value in values)
+            foreach (T value in values)
             {
                 if (expectedValue == null)
                 {
