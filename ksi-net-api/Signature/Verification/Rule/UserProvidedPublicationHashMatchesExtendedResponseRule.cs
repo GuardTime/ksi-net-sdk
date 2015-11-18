@@ -13,31 +13,17 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
-            if (context == null)
-            {
-                throw new KsiException("Invalid verification context: null.");
-            }
+            PublicationData userPublication = GetUserPublication(context);
+            CalendarHashChain extendedCalendarHashChain = context.GetExtendedTimeCalendarHashChain(userPublication.PublicationTime);
 
-            PublicationData userPublication = context.UserPublication;
-            if (userPublication == null)
-            {
-                throw new KsiVerificationException("Invalid user publication in context: null.");
-            }
-
-            CalendarHashChain extendedCalendarHashChain =
-                context.GetExtendedTimeCalendarHashChain(userPublication.PublicationTime);
             if (extendedCalendarHashChain == null)
             {
-                throw new KsiVerificationException(
-                    "Received invalid extended calendar hash chain from context extension function: null.");
+                throw new KsiVerificationException("Received invalid extended calendar hash chain from context extension function: null.");
             }
 
-            if (extendedCalendarHashChain.PublicationData.PublicationHash != userPublication.PublicationHash)
-            {
-                return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Pub01);
-            }
-
-            return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
+            return extendedCalendarHashChain.PublicationData.PublicationHash != userPublication.PublicationHash
+                ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Pub01)
+                : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }
     }
 }

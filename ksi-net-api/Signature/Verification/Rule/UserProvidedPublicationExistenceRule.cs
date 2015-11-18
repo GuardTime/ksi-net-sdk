@@ -11,10 +11,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         /// <exception cref="KsiException">thrown if verification context is missing</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
-            if (context == null)
-            {
-                throw new KsiException("Invalid verification context: null.");
-            }
+            CheckVerificationContext(context);
 
             return context.UserPublication == null
                 ? new VerificationResult(GetRuleName(), VerificationResultCode.Na, VerificationError.Gen02)

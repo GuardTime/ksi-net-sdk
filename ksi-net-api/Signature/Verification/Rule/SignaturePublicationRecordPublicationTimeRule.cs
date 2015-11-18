@@ -14,35 +14,19 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
-            if (context == null)
-            {
-                throw new KsiException("Invalid verification context: null.");
-            }
+            IKsiSignature signature = GetSignature(context);
 
-            if (context.Signature == null)
-            {
-                throw new KsiVerificationException("Invalid KSI signature in context: null.");
-            }
-
-            if (context.Signature.PublicationRecord == null)
+            if (signature.PublicationRecord == null)
             {
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
             }
 
-            if (context.Signature.CalendarHashChain == null)
-            {
-                throw new KsiVerificationException("Calendar hash chain is missing in KSI signature.");
-            }
+            PublicationData publicationRecordPublicationData = signature.PublicationRecord.PublicationData;
+            PublicationData calendarHashChainPublicationData = GetCalendarHashChain(signature).PublicationData;
 
-            PublicationData publicationRecordPublicationData = context.Signature.PublicationRecord.PublicationData;
-            PublicationData calendarHashChainPublicationData = context.Signature.CalendarHashChain.PublicationData;
-
-            if (publicationRecordPublicationData.PublicationTime != calendarHashChainPublicationData.PublicationTime)
-            {
-                return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int07);
-            }
-
-            return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
+            return publicationRecordPublicationData.PublicationTime != calendarHashChainPublicationData.PublicationTime
+                ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int07)
+                : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }
     }
 }

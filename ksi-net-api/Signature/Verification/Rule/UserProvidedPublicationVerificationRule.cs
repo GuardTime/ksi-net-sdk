@@ -12,27 +12,14 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
-            if (context == null)
-            {
-                throw new KsiException("Invalid verification context: null.");
-            }
+            IKsiSignature signature = GetSignature(context);
 
-            if (context.Signature == null)
-            {
-                throw new KsiVerificationException("Invalid KSI signature in context: null.");
-            }
-
-            if (context.UserPublication == null)
-            {
-                throw new KsiVerificationException("Invalid user publication in context: null.");
-            }
-
-            if (context.Signature.PublicationRecord == null)
+            if (signature.PublicationRecord == null)
             {
                 throw new KsiVerificationException("Invalid publication record in KSI signature: null.");
             }
 
-            return context.UserPublication == context.Signature.PublicationRecord.PublicationData
+            return GetUserPublication(context) == GetPublicationRecord(signature).PublicationData
                 ? new VerificationResult(GetRuleName(), VerificationResultCode.Ok)
                 : new VerificationResult(GetRuleName(), VerificationResultCode.Na, VerificationError.Gen02);
         }

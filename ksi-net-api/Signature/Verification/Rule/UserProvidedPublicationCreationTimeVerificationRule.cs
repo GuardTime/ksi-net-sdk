@@ -1,4 +1,5 @@
 ﻿using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
@@ -12,35 +13,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
-            if (context == null)
-            {
-                throw new KsiException("Invalid verification context: null.");
-            }
+            ulong registrationTime = GetCalendarHashChain(GetSignature(context)).RegistrationTime;
+            ulong userPublicationTime = GetUserPublication(context).PublicationTime;
 
-            if (context.Signature == null)
-            {
-                throw new KsiVerificationException("Invalid KSI signature in context: null.");
-            }
-
-            if (context.Signature.CalendarHashChain == null)
-            {
-                throw new KsiVerificationException("Invalid calendar hash chain in KSI signature: null.");
-            }
-
-            if (context.UserPublication == null)
-            {
-                throw new KsiVerificationException("Invalid user publication in context: null.");
-            }
-
-            ulong registrationTime = context.Signature.CalendarHashChain.RegistrationTime;
-            ulong userPublicationTime = context.UserPublication.PublicationTime;
-
-            if (registrationTime >= userPublicationTime)
-            {
-                return new VerificationResult(GetRuleName(), VerificationResultCode.Na, VerificationError.Gen02);
-            }
-
-            return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
+            return registrationTime >= userPublicationTime
+                ? new VerificationResult(GetRuleName(), VerificationResultCode.Na, VerificationError.Gen02)
+                : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }
     }
 }

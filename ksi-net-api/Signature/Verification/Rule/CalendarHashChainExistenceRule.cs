@@ -13,17 +13,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
-            if (context == null)
-            {
-                throw new KsiException("Invalid verification context: null.");
-            }
-
-            if (context.Signature == null)
-            {
-                throw new KsiVerificationException("Invalid KSI signature in context: null.");
-            }
-
-            return context.Signature.CalendarHashChain == null
+            return GetSignature(context).CalendarHashChain == null
                 ? new VerificationResult(GetRuleName(), VerificationResultCode.Na, VerificationError.Gen02)
                 : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }

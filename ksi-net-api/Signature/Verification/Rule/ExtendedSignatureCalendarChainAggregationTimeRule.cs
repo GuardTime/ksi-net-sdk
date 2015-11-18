@@ -13,21 +13,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
-            if (context == null)
-            {
-                throw new KsiException("Invalid verification context: null.");
-            }
-
-            if (context.Signature == null)
-            {
-                throw new KsiVerificationException("Invalid KSI signature in context: null.");
-            }
-
-            CalendarHashChain calendarHashChain = context.Signature.CalendarHashChain;
-            if (calendarHashChain == null)
-            {
-                throw new KsiVerificationException("Invalid calendar hash chain in KSI signature: null.");
-            }
+            IKsiSignature signature = GetSignature(context);
+            CalendarHashChain calendarHashChain = GetCalendarHashChain(signature);
 
             CalendarHashChain extendedCalendarHashChain = calendarHashChain.PublicationData == null
                 ? context.GetExtendedLatestCalendarHashChain()
@@ -35,22 +22,15 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (extendedCalendarHashChain == null)
             {
-                throw new KsiVerificationException(
-                    "Received invalid extended calendar hash chain from context extension function: null.");
+                throw new KsiVerificationException("Received invalid extended calendar hash chain from context extension function: null.");
             }
 
-            ReadOnlyCollection<AggregationHashChain> aggregationHashChainCollection =
-                context.Signature.GetAggregationHashChains();
-            ulong aggregationTime =
-                aggregationHashChainCollection[aggregationHashChainCollection.Count - 1].AggregationTime;
+            ReadOnlyCollection<AggregationHashChain> aggregationHashChainCollection = GetAggregationHashChains(signature, false);
+            ulong aggregationTime = aggregationHashChainCollection[aggregationHashChainCollection.Count - 1].AggregationTime;
 
-            if (aggregationTime != extendedCalendarHashChain.AggregationTime)
-            {
-                // TODO: log
-                return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Cal03);
-            }
-
-            return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
+            return aggregationTime != extendedCalendarHashChain.AggregationTime
+                ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Cal03)
+                : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }
     }
 }

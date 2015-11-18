@@ -14,32 +14,17 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
-            if (context == null)
-            {
-                throw new KsiException("Invalid verification context: null.");
-            }
-
-            if (context.Signature == null)
-            {
-                throw new KsiVerificationException("Invalid KSI signature in context: null.");
-            }
+            IKsiSignature signature = GetSignature(context);
+            CalendarHashChain calendarHashChain = GetCalendarHashChain(signature, true);
 
             // If calendar hash chain is missing, verification successful
-            CalendarHashChain calendarHashChain = context.Signature.CalendarHashChain;
             if (calendarHashChain == null)
             {
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
             }
 
-            ReadOnlyCollection<AggregationHashChain> aggregationHashChainCollection =
-                context.Signature.GetAggregationHashChains();
-            if (aggregationHashChainCollection == null || aggregationHashChainCollection.Count == 0)
-            {
-                throw new KsiVerificationException("Aggregation hash chains are missing from KSI signature.");
-            }
-
-            ulong aggregationTime =
-                aggregationHashChainCollection[aggregationHashChainCollection.Count - 1].AggregationTime;
+            ReadOnlyCollection<AggregationHashChain> aggregationHashChainCollection = GetAggregationHashChains(signature, false);
+            ulong aggregationTime = aggregationHashChainCollection[aggregationHashChainCollection.Count - 1].AggregationTime;
 
             return aggregationTime != calendarHashChain.AggregationTime
                 ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int04)
