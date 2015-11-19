@@ -82,7 +82,7 @@ namespace Guardtime.KSI.Utils
         /// <param name="data">data bytes</param>
         /// <param name="ival">start value</param>
         /// <returns>crc32 value</returns>
-        public static ulong Calculate(IList<byte> data, ulong ival)
+        public static ulong Calculate(byte[] data, ulong ival)
         {
             if (data == null)
             {
@@ -91,7 +91,7 @@ namespace Guardtime.KSI.Utils
 
             ulong retval = ival ^ 0xffffffff;
 
-            for (int i = 0; i < data.Count; i++)
+            for (int i = 0; i < data.Length; i++)
             {
                 retval = Crc32Table[(retval ^ data[i]) & 0xff] ^ (retval >> 8);
             }
