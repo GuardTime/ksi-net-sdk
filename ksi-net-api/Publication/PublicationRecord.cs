@@ -23,26 +23,22 @@ namespace Guardtime.KSI.Publication
 
             int publicationDataCount = 0;
 
-            for (int i = 0; i < Count; i++)
+            foreach (ITlvTag childTag in this)
             {
-                StringTag listTag;
-
-                switch (this[i].Type)
+                switch (childTag.Type)
                 {
                     case Constants.PublicationData.TagType:
-                        PublicationData = new PublicationData(this[i]);
+                        PublicationData = new PublicationData(childTag);
                         publicationDataCount++;
                         break;
                     case Constants.PublicationRecord.PublicationReferencesTagType:
-                        listTag = new StringTag(this[i]);
-                        PublicationReferences.Add(listTag);
+                        PublicationReferences.Add(new StringTag(childTag));
                         break;
                     case Constants.PublicationRecord.PublicationRepositoryUriTagType:
-                        listTag = new StringTag(this[i]);
-                        PubRepUri.Add(listTag);
+                        PubRepUri.Add(new StringTag(childTag));
                         break;
                     default:
-                        VerifyUnknownTag(this[i]);
+                        VerifyUnknownTag(childTag);
                         break;
                 }
             }
@@ -61,11 +57,11 @@ namespace Guardtime.KSI.Publication
         /// <summary>
         ///     Get publication references.
         /// </summary>
-        public List<StringTag> PublicationReferences { get; } = new List<StringTag>();
+        public IList<StringTag> PublicationReferences { get; } = new List<StringTag>();
 
         /// <summary>
         ///     Get publication repository uri.
         /// </summary>
-        public List<StringTag> PubRepUri { get; } = new List<StringTag>();
+        public IList<StringTag> PubRepUri { get; } = new List<StringTag>();
     }
 }

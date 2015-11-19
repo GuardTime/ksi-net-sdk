@@ -10,7 +10,7 @@ namespace Guardtime.KSI.Signature.Verification
     /// </summary>
     public class VerificationResult
     {
-        private readonly IList<VerificationResult> _childResults = new List<VerificationResult>();
+        private readonly List<VerificationResult> _childResults = new List<VerificationResult>();
 
         /// <summary>
         ///     Create new rule verification result from list.
@@ -20,10 +20,7 @@ namespace Guardtime.KSI.Signature.Verification
         public VerificationResult(string ruleName, IList<VerificationResult> resultList)
             : this(ruleName, GetVerificationResultCodeFromList(resultList))
         {
-            for (int i = 0; i < resultList.Count; i++)
-            {
-                _childResults.Add(resultList[i]);
-            }
+            _childResults.AddRange(resultList);
         }
 
         /// <summary>
@@ -73,7 +70,6 @@ namespace Guardtime.KSI.Signature.Verification
             return resultList[resultList.Count - 1].ResultCode;
         }
 
-
         /// <summary>
         ///     Returns a string that represents the current object.
         /// </summary>
@@ -91,9 +87,9 @@ namespace Guardtime.KSI.Signature.Verification
                 builder.AppendLine();
             }
 
-            for (int i = 0; i < _childResults.Count; i++)
+            foreach (VerificationResult childResult in _childResults)
             {
-                builder.AppendLine(Util.TabPrefixString(_childResults[i].ToString()));
+                builder.AppendLine(Util.TabPrefixString(childResult.ToString()));
             }
             return builder.ToString();
         }

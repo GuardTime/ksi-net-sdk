@@ -29,24 +29,24 @@ namespace Guardtime.KSI.Service
             int instanceIdCount = 0;
             int messageIdCount = 0;
 
-            for (int i = 0; i < Count; i++)
+            foreach (ITlvTag childTag in this)
             {
-                switch (this[i].Type)
+                switch (childTag.Type)
                 {
                     case Constants.KsiPduHeader.LoginIdTagType:
-                        _loginId = new StringTag(this[i]);
+                        _loginId = new StringTag(childTag);
                         loginIdCount++;
                         break;
                     case Constants.KsiPduHeader.InstanceIdTagType:
-                        _instanceId = new IntegerTag(this[i]);
+                        _instanceId = new IntegerTag(childTag);
                         instanceIdCount++;
                         break;
                     case Constants.KsiPduHeader.MessageIdTagType:
-                        _messageId = new IntegerTag(this[i]);
+                        _messageId = new IntegerTag(childTag);
                         messageIdCount++;
                         break;
                     default:
-                        VerifyUnknownTag(this[i]);
+                        VerifyUnknownTag(childTag);
                         break;
                 }
             }
@@ -82,7 +82,7 @@ namespace Guardtime.KSI.Service
         /// <param name="instanceId">instance ID</param>
         /// <param name="messageId">message ID</param>
         public KsiPduHeader(string loginId, ulong instanceId, ulong messageId)
-            : base(Constants.KsiPduHeader.TagType, false, false, new List<ITlvTag>()
+            : base(Constants.KsiPduHeader.TagType, false, false, new ITlvTag[]
             {
                 new StringTag(Constants.KsiPduHeader.LoginIdTagType, false, false, loginId),
                 new IntegerTag(Constants.KsiPduHeader.InstanceIdTagType, false, false, instanceId),

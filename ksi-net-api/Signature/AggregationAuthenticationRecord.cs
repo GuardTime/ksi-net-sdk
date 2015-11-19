@@ -30,28 +30,28 @@ namespace Guardtime.KSI.Signature
             int inputHashCount = 0;
             int signatureDataCount = 0;
 
-            for (int i = 0; i < Count; i++)
+            foreach (ITlvTag childTag in this)
             {
-                switch (this[i].Type)
+                switch (childTag.Type)
                 {
                     case Constants.AggregationAuthenticationRecord.AggregationTimeTagType:
-                        _aggregationTime = new IntegerTag(this[i]);
+                        _aggregationTime = new IntegerTag(childTag);
                         aggregationTimeCount++;
                         break;
                     case Constants.AggregationAuthenticationRecord.ChainIndexTagType:
-                        IntegerTag chainIndexTag = new IntegerTag(this[i]);
+                        IntegerTag chainIndexTag = new IntegerTag(childTag);
                         _chainIndex.Add(chainIndexTag);
                         break;
                     case Constants.AggregationAuthenticationRecord.InputHashTagType:
-                        _inputHash = new ImprintTag(this[i]);
+                        _inputHash = new ImprintTag(childTag);
                         inputHashCount++;
                         break;
                     case Constants.SignatureData.TagType:
-                        SignatureData = new SignatureData(this[i]);
+                        SignatureData = new SignatureData(childTag);
                         signatureDataCount++;
                         break;
                     default:
-                        VerifyUnknownTag(this[i]);
+                        VerifyUnknownTag(childTag);
                         break;
                 }
             }

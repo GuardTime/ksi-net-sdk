@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Guardtime.KSI.Exceptions;
+﻿using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Utils;
@@ -30,20 +29,20 @@ namespace Guardtime.KSI.Publication
             int publicationTimeCount = 0;
             int publicationHashCount = 0;
 
-            for (int i = 0; i < Count; i++)
+            foreach (ITlvTag childTag in this)
             {
-                switch (this[i].Type)
+                switch (childTag.Type)
                 {
                     case Constants.PublicationData.PublicationTimeTagType:
-                        _publicationTime = new IntegerTag(this[i]);
+                        _publicationTime = new IntegerTag(childTag);
                         publicationTimeCount++;
                         break;
                     case Constants.PublicationData.PublicationHashTagType:
-                        _publicationHash = new ImprintTag(this[i]);
+                        _publicationHash = new ImprintTag(childTag);
                         publicationHashCount++;
                         break;
                     default:
-                        VerifyUnknownTag(this[i]);
+                        VerifyUnknownTag(childTag);
                         break;
                 }
             }
@@ -65,7 +64,7 @@ namespace Guardtime.KSI.Publication
         /// <param name="publicationTime">publication time</param>
         /// <param name="publicationHash">publication hash</param>
         public PublicationData(ulong publicationTime, DataHash publicationHash)
-            : base(Constants.PublicationData.TagType, false, true, new List<ITlvTag>()
+            : base(Constants.PublicationData.TagType, false, true, new ITlvTag[]
             {
                 new IntegerTag(Constants.PublicationData.PublicationTimeTagType, false, false, publicationTime),
                 new ImprintTag(Constants.PublicationData.PublicationHashTagType, false, false, publicationHash)
@@ -86,7 +85,7 @@ namespace Guardtime.KSI.Publication
             _publicationHash = (ImprintTag)this[1];
         }
 
-        private static List<ITlvTag> DecodePublicationString(string publicationString)
+        private static ITlvTag[] DecodePublicationString(string publicationString)
         {
             if (publicationString == null)
             {
@@ -114,7 +113,7 @@ namespace Guardtime.KSI.Publication
             byte[] hashImprint = Util.Clone(dataBytesWithCrc32, 8, dataBytesWithCrc32.Length - 12);
             byte[] publicationTimeBytes = Util.Clone(dataBytesWithCrc32, 0, 8);
 
-            return new List<ITlvTag>()
+            return new ITlvTag[]
             {
                 new IntegerTag(Constants.PublicationData.PublicationTimeTagType, false, false, Util.DecodeUnsignedLong(publicationTimeBytes, 0, publicationTimeBytes.Length)),
                 new ImprintTag(Constants.PublicationData.PublicationHashTagType, false, false, new DataHash(hashImprint))

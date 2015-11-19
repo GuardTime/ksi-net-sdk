@@ -23,20 +23,20 @@ namespace Guardtime.KSI.Publication
             int certificateIdCount = 0;
             int x509CertificateCount = 0;
 
-            for (int i = 0; i < Count; i++)
+            foreach (ITlvTag childTag in this)
             {
-                switch (this[i].Type)
+                switch (childTag.Type)
                 {
                     case Constants.CertificateRecord.CertificateIdTagType:
-                        CertificateId = new RawTag(this[i]);
+                        CertificateId = new RawTag(childTag);
                         certificateIdCount++;
                         break;
                     case Constants.CertificateRecord.X509CertificateTagType:
-                        X509Certificate = new RawTag(this[i]);
+                        X509Certificate = new RawTag(childTag);
                         x509CertificateCount++;
                         break;
                     default:
-                        VerifyUnknownTag(this[i]);
+                        VerifyUnknownTag(childTag);
                         break;
                 }
             }

@@ -27,15 +27,15 @@ namespace Guardtime.KSI.Service
         /// <param name="tag">TLV element</param>
         protected KsiPdu(ITlvTag tag) : base(tag)
         {
-            for (int i = 0; i < Count; i++)
+            foreach (ITlvTag childTag in this)
             {
-                switch (this[i].Type)
+                switch (childTag.Type)
                 {
                     case Constants.KsiPduHeader.TagType:
-                        _header = new KsiPduHeader(this[i]);
+                        _header = new KsiPduHeader(childTag);
                         break;
                     case Constants.KsiPdu.MacTagType:
-                        _mac = new ImprintTag(this[i]);
+                        _mac = new ImprintTag(childTag);
                         break;
                 }
             }
@@ -51,7 +51,7 @@ namespace Guardtime.KSI.Service
         /// <param name="forward">Is TLV element forwarded</param>
         /// <param name="value">TLV element list</param>
         /// <exception cref="TlvException">thrown when TLV header is null</exception>
-        protected KsiPdu(KsiPduHeader header, ImprintTag mac, uint type, bool nonCritical, bool forward, List<ITlvTag> value)
+        protected KsiPdu(KsiPduHeader header, ImprintTag mac, uint type, bool nonCritical, bool forward, ITlvTag[] value)
             : base(type, nonCritical, forward, value)
         {
             if (header == null)
@@ -107,7 +107,6 @@ namespace Guardtime.KSI.Service
             {
                 return false;
             }
-
 
             using (TlvWriter writer = new TlvWriter(new MemoryStream()))
             {

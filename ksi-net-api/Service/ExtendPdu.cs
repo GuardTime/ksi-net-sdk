@@ -30,20 +30,20 @@ namespace Guardtime.KSI.Service
             int payloadCount = 0;
             int macCount = 0;
 
-            for (int i = 0; i < Count; i++)
+            foreach (ITlvTag childTag in this)
             {
-                switch (this[i].Type)
+                switch (childTag.Type)
                 {
                     case Constants.ExtendRequestPayload.TagType:
-                        Payload = new ExtendRequestPayload(this[i]);
+                        Payload = new ExtendRequestPayload(childTag);
                         payloadCount++;
                         break;
                     case Constants.ExtendResponsePayload.TagType:
-                        Payload = new ExtendResponsePayload(this[i]);
+                        Payload = new ExtendResponsePayload(childTag);
                         payloadCount++;
                         break;
                     case Constants.ExtendErrorPayload.TagType:
-                        Payload = new ExtendErrorPayload(this[i]);
+                        Payload = new ExtendErrorPayload(childTag);
                         payloadCount++;
                         break;
                     case Constants.KsiPduHeader.TagType:
@@ -53,7 +53,7 @@ namespace Guardtime.KSI.Service
                         macCount++;
                         break;
                     default:
-                        VerifyUnknownTag(this[i]);
+                        VerifyUnknownTag(childTag);
                         break;
                 }
             }
@@ -82,7 +82,7 @@ namespace Guardtime.KSI.Service
         /// <param name="mac">Extend pdu hmac</param>
         /// <exception cref="TlvException">thrown when payload is null</exception>
         public ExtendPdu(KsiPduHeader header, KsiPduPayload payload, ImprintTag mac)
-            : base(header, mac, Constants.ExtendPdu.TagType, false, false, new List<ITlvTag>() {header, payload, mac})
+            : base(header, mac, Constants.ExtendPdu.TagType, false, false, new ITlvTag[] { header, payload, mac })
         {
             Payload = payload;
         }

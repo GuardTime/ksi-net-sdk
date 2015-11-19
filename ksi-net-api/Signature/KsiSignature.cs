@@ -6,6 +6,7 @@ using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
+using Guardtime.KSI.Signature.Verification;
 
 namespace Guardtime.KSI.Signature
 {
@@ -19,8 +20,7 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         private sealed class KsiSignature : CompositeTag, IKsiSignature
         {
-            private readonly List<AggregationHashChain> _aggregationHashChainCollection =
-                new List<AggregationHashChain>();
+            private readonly List<AggregationHashChain> _aggregationHashChains = new List<AggregationHashChain>();
 
             /// <summary>
             ///     Create new KSI signature TLV element from TLV element.
@@ -40,41 +40,41 @@ namespace Guardtime.KSI.Signature
                 int calendarAuthenticationRecordCount = 0;
                 int rfc3161RecordCount = 0;
 
-                for (int i = 0; i < Count; i++)
+                foreach (ITlvTag childTag in this)
                 {
-                    switch (this[i].Type)
+                    switch (childTag.Type)
                     {
                         case Constants.AggregationHashChain.TagType:
-                            AggregationHashChain aggregationChainTag = new AggregationHashChain(this[i]);
-                            _aggregationHashChainCollection.Add(aggregationChainTag);
+                            AggregationHashChain aggregationChainTag = new AggregationHashChain(childTag);
+                            _aggregationHashChains.Add(aggregationChainTag);
                             break;
                         case Constants.CalendarHashChain.TagType:
-                            CalendarHashChain = new CalendarHashChain(this[i]);
+                            CalendarHashChain = new CalendarHashChain(childTag);
                             calendarChainCount++;
                             break;
                         case Constants.PublicationRecord.TagTypeSignature:
-                            PublicationRecord = new PublicationRecord(this[i]);
+                            PublicationRecord = new PublicationRecord(childTag);
                             publicationRecordCount++;
                             break;
                         case Constants.AggregationAuthenticationRecord.TagType:
-                            AggregationAuthenticationRecord = new AggregationAuthenticationRecord(this[i]);
+                            AggregationAuthenticationRecord = new AggregationAuthenticationRecord(childTag);
                             aggregationAuthenticationRecordCount++;
                             break;
                         case Constants.CalendarAuthenticationRecord.TagType:
-                            CalendarAuthenticationRecord = new CalendarAuthenticationRecord(this[i]);
+                            CalendarAuthenticationRecord = new CalendarAuthenticationRecord(childTag);
                             calendarAuthenticationRecordCount++;
                             break;
                         case Constants.Rfc3161Record.TagType:
-                            Rfc3161Record = new Rfc3161Record(this[i]);
+                            Rfc3161Record = new Rfc3161Record(childTag);
                             rfc3161RecordCount++;
                             break;
                         default:
-                            VerifyUnknownTag(this[i]);
+                            VerifyUnknownTag(childTag);
                             break;
                     }
                 }
 
-                if (_aggregationHashChainCollection.Count == 0)
+                if (_aggregationHashChains.Count == 0)
                 {
                     throw new TlvException("Aggregation hash chains must exist in KSI signature.");
                 }
@@ -111,7 +111,7 @@ namespace Guardtime.KSI.Signature
                         "Only one RFC 3161 record is allowed in KSI signature.");
                 }
 
-                _aggregationHashChainCollection.Sort(new AggregationHashChain.ChainIndexOrdering());
+                _aggregationHashChains.Sort(new AggregationHashChain.ChainIndexOrdering());
             }
 
             /// <summary>
@@ -150,7 +150,7 @@ namespace Guardtime.KSI.Signature
             /// <returns>aggregations hash chains list</returns>
             public ReadOnlyCollection<AggregationHashChain> GetAggregationHashChains()
             {
-                return _aggregationHashChainCollection.AsReadOnly();
+                return _aggregationHashChains.AsReadOnly();
             }
 
             /// <summary>
@@ -160,11 +160,11 @@ namespace Guardtime.KSI.Signature
             public DataHash GetAggregationHashChainRootHash()
             {
                 // Store result
-                AggregationHashChainResult lastResult = new AggregationHashChainResult(0,
-                    _aggregationHashChainCollection[0].InputHash);
-                for (int i = 0; i < _aggregationHashChainCollection.Count; i++)
+                AggregationHashChainResult lastResult = new AggregationHashChainResult(0, _aggregationHashChains[0].InputHash);
+
+                foreach (AggregationHashChain chain in _aggregationHashChains)
                 {
-                    lastResult = _aggregationHashChainCollection[i].GetOutputHash(lastResult);
+                    lastResult = chain.GetOutputHash(lastResult);
                 }
 
                 return lastResult.Hash;
@@ -173,7 +173,7 @@ namespace Guardtime.KSI.Signature
             /// <summary>
             ///     Get aggregation time.
             /// </summary>
-            public ulong AggregationTime => _aggregationHashChainCollection[0].AggregationTime;
+            public ulong AggregationTime => _aggregationHashChains[0].AggregationTime;
 
             /// <summary>
             ///     Extend KSI signature with given calendar hash chain.
@@ -200,12 +200,11 @@ namespace Guardtime.KSI.Signature
                     throw new KsiException("Invalid calendar hash chain: null.");
                 }
 
-
                 using (TlvWriter writer = new TlvWriter(new MemoryStream()))
                 {
-                    for (int i = 0; i < Count; i++)
+                    foreach (ITlvTag childTag in this)
                     {
-                        switch (this[i].Type)
+                        switch (childTag.Type)
                         {
                             case Constants.CalendarHashChain.TagType:
                                 writer.WriteTag(calendarHashChain);
@@ -217,7 +216,7 @@ namespace Guardtime.KSI.Signature
                                 }
                                 break;
                             default:
-                                writer.WriteTag(this[i]);
+                                writer.WriteTag(childTag);
                                 break;
                         }
                     }

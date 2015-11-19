@@ -34,28 +34,28 @@ namespace Guardtime.KSI.Service
             int configCount = 0;
             int requestAcknowledgmentCount = 0;
 
-            for (int i = 0; i < Count; i++)
+            foreach (ITlvTag childTag in this)
             {
-                switch (this[i].Type)
+                switch (childTag.Type)
                 {
                     case Constants.AggregationResponsePayload.RequestIdTagType:
-                        _requestId = new IntegerTag(this[i]);
+                        _requestId = new IntegerTag(childTag);
                         requestIdCount++;
                         break;
                     case Constants.KsiPduPayload.StatusTagType:
-                        _status = new IntegerTag(this[i]);
+                        _status = new IntegerTag(childTag);
                         statusCount++;
                         break;
                     case Constants.KsiPduPayload.ErrorMessageTagType:
-                        _errorMessage = new StringTag(this[i]);
+                        _errorMessage = new StringTag(childTag);
                         errorMessageCount++;
                         break;
                     case Constants.AggregationResponsePayload.ConfigTagType:
-                        _config = new RawTag(this[i]);
+                        _config = new RawTag(childTag);
                         configCount++;
                         break;
                     case Constants.AggregationResponsePayload.RequestAcknowledgmentTagType:
-                        _requestAcknowledgment = new RawTag(this[i]);
+                        _requestAcknowledgment = new RawTag(childTag);
                         requestAcknowledgmentCount++;
                         break;
                     case Constants.AggregationHashChain.TagType:
@@ -65,7 +65,7 @@ namespace Guardtime.KSI.Service
                     case Constants.CalendarAuthenticationRecord.TagType:
                         break;
                     default:
-                        VerifyUnknownTag(this[i]);
+                        VerifyUnknownTag(childTag);
                         break;
                 }
             }

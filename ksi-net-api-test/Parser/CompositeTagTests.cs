@@ -13,12 +13,12 @@ namespace Guardtime.KSI.Parser
         [Test]
         public void TestCompositeTagCreateFromTlvTag()
         {
-            CompositeTestTag tag = new CompositeTestTag(new RawTag(0x1, false, false, new byte[] {0x1, 0x2, 0x1, 0x2, 0x2, 0x2, 0x3, 0x4}));
+            CompositeTestTag tag = new CompositeTestTag(new RawTag(0x1, false, false, new byte[] { 0x1, 0x2, 0x1, 0x2, 0x2, 0x2, 0x3, 0x4 }));
 
             Assert.AreEqual(0x1, tag.Type, "Tag type should be correct");
             Assert.IsFalse(tag.NonCritical, "Tag non critical flag should be correct");
             Assert.IsFalse(tag.Forward, "Tag forward flag should be correct");
-            CollectionAssert.AreEqual(new List<ITlvTag>() {new RawTag(0x1, false, false, new byte[] {0x1, 0x2}), new RawTag(0x2, false, false, new byte[] {0x3, 0x4})}, tag,
+            CollectionAssert.AreEqual(new ITlvTag[] { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }) }, tag,
                 "Tag value should be decoded correctly");
         }
 
@@ -26,12 +26,12 @@ namespace Guardtime.KSI.Parser
         public void TestCompositeTagCreateFromData()
         {
             CompositeTestTag tag = new CompositeTestTag(0x1, false, false,
-                new List<ITlvTag> {new RawTag(0x1, false, false, new byte[] {0x1, 0x2}), new RawTag(0x2, false, false, new byte[] {0x3, 0x4})});
+                new ITlvTag[] { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }) });
 
             Assert.AreEqual(0x1, tag.Type, "Tag type should be correct");
             Assert.IsFalse(tag.NonCritical, "Tag non critical flag should be correct");
             Assert.IsFalse(tag.Forward, "Tag forward flag should be correct");
-            CollectionAssert.AreEqual(new List<TlvTag>() {new RawTag(0x1, false, false, new byte[] {0x1, 0x2}), new RawTag(0x2, false, false, new byte[] {0x3, 0x4})}, tag,
+            CollectionAssert.AreEqual(new ITlvTag[] { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }) }, tag,
                 "Tag value should be decoded correctly");
         }
 
@@ -39,28 +39,28 @@ namespace Guardtime.KSI.Parser
         public void TestCompositeTagSettingAndGettingValue()
         {
             CompositeTestTag tag = new CompositeTestTag(0x1, false, false,
-                new List<ITlvTag>
+                new ITlvTag[]
                 {
                     new CompositeTestTag(0x5, false, false,
-                        new List<ITlvTag> {new RawTag(0x1, false, false, new byte[] {0x1, 0x2}), new RawTag(0x2, false, false, new byte[] {0x3, 0x4})})
+                        new ITlvTag[] { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }) })
                 });
-            CollectionAssert.AreEqual(new List<TlvTag>() {new RawTag(0x1, false, false, new byte[] {0x1, 0x2}), new RawTag(0x2, false, false, new byte[] {0x3, 0x4})},
+            CollectionAssert.AreEqual(new ITlvTag[] { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }) },
                 tag.CompositeTestTagValue, "Tag child value should be decoded correctly");
-            CollectionAssert.AreEqual(new byte[] {0x5, 0x8, 0x1, 0x2, 0x1, 0x2, 0x2, 0x2, 0x3, 0x4}, tag.EncodeValue(), "Tag value should be encoded correctly");
+            CollectionAssert.AreEqual(new byte[] { 0x5, 0x8, 0x1, 0x2, 0x1, 0x2, 0x2, 0x2, 0x3, 0x4 }, tag.EncodeValue(), "Tag value should be encoded correctly");
         }
 
         [Test]
         public void TestEncodeValue()
         {
-            CompositeTestTag tag = new CompositeTestTag(new RawTag(0x1, false, false, new byte[] {0x1, 0x2, 0x1, 0x2, 0x2, 0x2, 0x3, 0x4}));
-            CollectionAssert.AreEqual(new byte[] {0x1, 0x2, 0x1, 0x2, 0x2, 0x2, 0x3, 0x4}, tag.EncodeValue(), "Tag should encode value correctly");
+            CompositeTestTag tag = new CompositeTestTag(new RawTag(0x1, false, false, new byte[] { 0x1, 0x2, 0x1, 0x2, 0x2, 0x2, 0x3, 0x4 }));
+            CollectionAssert.AreEqual(new byte[] { 0x1, 0x2, 0x1, 0x2, 0x2, 0x2, 0x3, 0x4 }, tag.EncodeValue(), "Tag should encode value correctly");
         }
 
         [Test]
         public void TestHashCode()
         {
             CompositeTestTag tag = new CompositeTestTag(0x1, false, false,
-                new List<ITlvTag>() {new RawTag(0x1, false, false, new byte[] {0x1, 0x2}), new RawTag(0x2, false, false, new byte[] {0x3, 0x4})});
+                new ITlvTag[] { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }) });
             Assert.AreEqual(32867, tag.GetHashCode(), "Tag hash code should be correct");
         }
 
@@ -68,34 +68,34 @@ namespace Guardtime.KSI.Parser
         public void TestEquals()
         {
             CompositeTestTag tag = new CompositeTestTag(0x1, false, false,
-                new List<ITlvTag>() {new RawTag(0x1, false, false, new byte[] {0x1, 0x2}), new RawTag(0x2, false, false, new byte[] {0x3, 0x4})});
+                new ITlvTag[] { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }) });
             Assert.AreEqual(
                 new CompositeTestTag(0x1, false, false,
-                    new List<ITlvTag>() {new RawTag(0x1, false, false, new byte[] {0x1, 0x2}), new RawTag(0x2, false, false, new byte[] {0x3, 0x4})}), tag, "Tags should be equal");
+                    new ITlvTag[] { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }) }), tag, "Tags should be equal");
             Assert.IsTrue(
                 tag ==
                 new CompositeTestTag(0x1, false, false,
-                    new List<ITlvTag>() {new RawTag(0x1, false, false, new byte[] {0x1, 0x2}), new RawTag(0x2, false, false, new byte[] {0x3, 0x4})}), "Tags should be equal");
+                    new ITlvTag[] { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }) }), "Tags should be equal");
             Assert.IsTrue(
                 tag !=
                 new ChildCompositeTestTag(0x1, false, false,
-                    new List<ITlvTag>() {new RawTag(0x1, false, false, new byte[] {0x1, 0x2}), new RawTag(0x2, false, false, new byte[] {0x3, 0x4})}), "Tags should be equal");
+                    new ITlvTag[] { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }) }), "Tags should be equal");
             Assert.IsFalse(
                 new CompositeTestTag(0x2, false, false,
-                    new List<ITlvTag>() {new RawTag(0x1, false, false, new byte[] {0x1, 0x2}), new RawTag(0x2, false, false, new byte[] {0x3, 0x4})}) == tag,
+                    new ITlvTag[] { new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }), new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }) }) == tag,
                 "Tags should not be equal");
-            Assert.IsFalse(tag.Equals(new RawTag(0x1, false, false, new byte[] {})), "Tags should not be equal");
+            Assert.IsFalse(tag.Equals(new RawTag(0x1, false, false, new byte[] { })), "Tags should not be equal");
         }
 
         [Test]
         public void TestToString()
         {
             CompositeTestTag tag = new CompositeTestTag(0x1, true, true,
-                new List<ITlvTag>
+                new ITlvTag[]
                 {
-                    new RawTag(0x1, false, false, new byte[] {0x1, 0x2}),
-                    new RawTag(0x2, false, false, new byte[] {0x3, 0x4}),
-                    new CompositeTestTag(0x5, false, false, new List<ITlvTag>() {new RawTag(0x1, false, false, new byte[] {})})
+                    new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }),
+                    new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }),
+                    new CompositeTestTag(0x5, false, false, new ITlvTag[] { new RawTag(0x1, false, false, new byte[] { }) })
                 });
             Assert.AreEqual(
                 "TLV[0x1,N,F]:" + Environment.NewLine + "  TLV[0x1]:0x0102" + Environment.NewLine + "  TLV[0x2]:0x0304" + Environment.NewLine + "  TLV[0x5]:" + Environment.NewLine +
@@ -106,11 +106,11 @@ namespace Guardtime.KSI.Parser
         public void TestIsValidStructure()
         {
             new CompositeTestTag(0x1, false, false,
-                new List<ITlvTag>()
+                new ITlvTag[]
                 {
-                    new RawTag(0x1, false, false, new byte[] {0x1, 0x2}),
-                    new RawTag(0x2, false, false, new byte[] {0x3, 0x4}),
-                    new CompositeTestTag(0x5, false, false, new List<ITlvTag>() {new RawTag(0x1, false, false, new byte[] {})})
+                    new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }),
+                    new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }),
+                    new CompositeTestTag(0x5, false, false, new ITlvTag[] { new RawTag(0x1, false, false, new byte[] { }) })
                 });
         }
 
@@ -119,7 +119,7 @@ namespace Guardtime.KSI.Parser
         {
             Assert.Throws<TlvException>(delegate
             {
-                new CompositeTestTag(0x1, false, false, new List<ITlvTag>() {null});
+                new CompositeTestTag(0x1, false, false, new ITlvTag[] { null });
             });
         }
 
@@ -138,10 +138,10 @@ namespace Guardtime.KSI.Parser
             Assert.Throws<TlvException>(delegate
             {
                 new CompositeTestTag(0x1, false, false,
-                    new List<ITlvTag>()
+                    new ITlvTag[]
                     {
-                        new RawTag(0x1, false, false, new byte[] {0x1, 0x2}),
-                        new RawTag(0x3, false, false, new byte[] {0x3, 0x4})
+                        new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }),
+                        new RawTag(0x3, false, false, new byte[] { 0x3, 0x4 })
                     });
             });
         }
@@ -150,12 +150,12 @@ namespace Guardtime.KSI.Parser
         public void TestVerifyCriticalFlag()
         {
             CompositeTestTag tag = new CompositeTestTag(0x1, false, false,
-                new List<ITlvTag>()
+                new ITlvTag[]
                 {
-                    new RawTag(0x25, true, false, new byte[] {0x1, 0x2}),
-                    new RawTag(0x1, false, false, new byte[] {0x1, 0x2}),
-                    new RawTag(0x2, false, false, new byte[] {0x3, 0x4}),
-                    new CompositeTestTag(0x5, false, false, new List<ITlvTag> {new RawTag(0x1, false, false, new byte[] {})})
+                    new RawTag(0x25, true, false, new byte[] { 0x1, 0x2 }),
+                    new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }),
+                    new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }),
+                    new CompositeTestTag(0x5, false, false, new ITlvTag[] { new RawTag(0x1, false, false, new byte[] { }) })
                 });
             Assert.Throws<TlvException>(delegate
             {
@@ -172,7 +172,7 @@ namespace Guardtime.KSI.Parser
                 BuildStructure();
             }
 
-            public CompositeTestTag(uint type, bool nonCritical, bool forward, List<ITlvTag> value)
+            public CompositeTestTag(uint type, bool nonCritical, bool forward, ITlvTag[] value)
                 : base(type, nonCritical, forward, value)
             {
                 BuildStructure();
@@ -180,18 +180,18 @@ namespace Guardtime.KSI.Parser
 
             private void BuildStructure()
             {
-                for (int i = 0; i < Count; i++)
+                foreach (ITlvTag childTag in this)
                 {
-                    switch (this[i].Type)
+                    switch (childTag.Type)
                     {
                         case 0x5:
-                            CompositeTestTagValue = new CompositeTestTag(this[i]);
+                            CompositeTestTagValue = new CompositeTestTag(childTag);
                             break;
                         case 0x2:
                         case 0x1:
                             break;
                         default:
-                            VerifyUnknownTag(this[i]);
+                            VerifyUnknownTag(childTag);
                             break;
                     }
                 }
@@ -205,7 +205,7 @@ namespace Guardtime.KSI.Parser
 
         private class ChildCompositeTestTag : CompositeTestTag
         {
-            public ChildCompositeTestTag(uint type, bool nonCritical, bool forward, List<ITlvTag> value) : base(type, nonCritical, forward, value)
+            public ChildCompositeTestTag(uint type, bool nonCritical, bool forward, ITlvTag[] value) : base(type, nonCritical, forward, value)
             {
             }
         }

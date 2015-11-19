@@ -30,20 +30,20 @@ namespace Guardtime.KSI.Service
             int payloadCount = 0;
             int macCount = 0;
 
-            for (int i = 0; i < Count; i++)
+            foreach (ITlvTag childTag in this)
             {
-                switch (this[i].Type)
+                switch (childTag.Type)
                 {
                     case Constants.AggregationRequestPayload.TagType:
-                        Payload = new AggregationRequestPayload(this[i]);
+                        Payload = new AggregationRequestPayload(childTag);
                         payloadCount++;
                         break;
                     case Constants.AggregationResponsePayload.TagType:
-                        Payload = new AggregationResponsePayload(this[i]);
+                        Payload = new AggregationResponsePayload(childTag);
                         payloadCount++;
                         break;
                     case Constants.AggregationErrorPayload.TagType:
-                        Payload = new AggregationErrorPayload(this[i]);
+                        Payload = new AggregationErrorPayload(childTag);
                         payloadCount++;
                         break;
                     case Constants.KsiPduHeader.TagType:
@@ -53,7 +53,7 @@ namespace Guardtime.KSI.Service
                         macCount++;
                         break;
                     default:
-                        VerifyUnknownTag(this[i]);
+                        VerifyUnknownTag(childTag);
                         break;
                 }
             }
@@ -82,7 +82,7 @@ namespace Guardtime.KSI.Service
         /// <param name="mac">pdu message hmac</param>
         /// <exception cref="TlvException">thrown when payload is null</exception>
         public AggregationPdu(KsiPduHeader header, KsiPduPayload payload, ImprintTag mac)
-            : base(header, mac, Constants.AggregationPdu.TagType, false, false, new List<ITlvTag>() {header, payload, mac})
+            : base(header, mac, Constants.AggregationPdu.TagType, false, false, new ITlvTag[] { header, payload, mac })
         {
             Payload = payload;
         }

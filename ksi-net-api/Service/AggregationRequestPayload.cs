@@ -33,28 +33,28 @@ namespace Guardtime.KSI.Service
             int requestLevelCount = 0;
             int configCount = 0;
 
-            for (int i = 0; i < Count; i++)
+            foreach (ITlvTag childTag in this)
             {
-                switch (this[i].Type)
+                switch (childTag.Type)
                 {
                     case Constants.AggregationRequestPayload.RequestIdTagType:
-                        _requestId = new IntegerTag(this[i]);
+                        _requestId = new IntegerTag(childTag);
                         requestIdCount++;
                         break;
                     case Constants.AggregationRequestPayload.RequestHashTagType:
-                        _requestHash = new ImprintTag(this[i]);
+                        _requestHash = new ImprintTag(childTag);
                         requestHashCount++;
                         break;
                     case Constants.AggregationRequestPayload.RequestLevelTagType:
-                        _requestLevel = new IntegerTag(this[i]);
+                        _requestLevel = new IntegerTag(childTag);
                         requestLevelCount++;
                         break;
                     case Constants.AggregationRequestPayload.ConfigTagType:
-                        _config = new RawTag(this[i]);
+                        _config = new RawTag(childTag);
                         configCount++;
                         break;
                     default:
-                        VerifyUnknownTag(this[i]);
+                        VerifyUnknownTag(childTag);
                         break;
                 }
             }
@@ -86,7 +86,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="hash">data hash</param>
         /// <exception cref="TlvException">thrown when data hash is null</exception>
-        public AggregationRequestPayload(DataHash hash) : base(Constants.AggregationRequestPayload.TagType, false, false, new List<ITlvTag>()
+        public AggregationRequestPayload(DataHash hash) : base(Constants.AggregationRequestPayload.TagType, false, false, new ITlvTag[]
         {
             new IntegerTag(Constants.AggregationRequestPayload.RequestIdTagType, false, false, Util.GetRandomUnsignedLong()),
             new ImprintTag(Constants.AggregationRequestPayload.RequestHashTagType, false, false, hash)

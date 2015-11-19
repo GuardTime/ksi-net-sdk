@@ -28,6 +28,7 @@ namespace Guardtime.KSI.Signature.Verification.Policy
 
             VerificationRule verificationRule = FirstRule;
             List<VerificationResult> verificationResults = new List<VerificationResult>();
+
             while (verificationRule != null)
             {
                 VerificationResult result = verificationRule.Verify(context);

@@ -18,21 +18,21 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             ReadOnlyCollection<AggregationHashChain> aggregationHashChains = GetAggregationHashChains(GetSignature(context), true);
             ulong? time = null;
 
-            for (int i = 0; i < aggregationHashChains.Count; i++)
+            foreach (AggregationHashChain aggregationHashChain in aggregationHashChains)
             {
                 if (time == null)
                 {
-                    time = aggregationHashChains[i].AggregationTime;
+                    time = aggregationHashChain.AggregationTime;
                     continue;
                 }
 
-                if (aggregationHashChains[i].AggregationTime == time)
+                if (aggregationHashChain.AggregationTime == time)
                 {
                     continue;
                 }
 
                 // TODO: Correct logging
-                Logger.Error("Previous aggregation hash chain aggregation time {0} does not match current aggregation time {1}",time, aggregationHashChains[i].AggregationTime);
+                Logger.Error("Previous aggregation hash chain aggregation time {0} does not match current aggregation time {1}", time, aggregationHashChain.AggregationTime);
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int02);
             }
 

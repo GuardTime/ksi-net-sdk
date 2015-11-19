@@ -32,29 +32,29 @@ namespace Guardtime.KSI.Signature
             int aggregationTimeCount = 0;
             int inputHashCount = 0;
 
-            for (int i = 0; i < Count; i++)
+            foreach (ITlvTag childTag in this)
             {
-                switch (this[i].Type)
+                switch (childTag.Type)
                 {
                     case Constants.CalendarHashChain.PublicationTimeTagType:
-                        _publicationTime = new IntegerTag(this[i]);
+                        _publicationTime = new IntegerTag(childTag);
                         publicationTimeCount++;
                         break;
                     case Constants.CalendarHashChain.AggregationTimeTagType:
-                        _aggregationTime = new IntegerTag(this[i]);
+                        _aggregationTime = new IntegerTag(childTag);
                         aggregationTimeCount++;
                         break;
                     case Constants.CalendarHashChain.InputHashTagType:
-                        _inputHash = new ImprintTag(this[i]);
+                        _inputHash = new ImprintTag(childTag);
                         inputHashCount++;
                         break;
                     case (uint)LinkDirection.Left:
                     case (uint)LinkDirection.Right:
-                        Link chainTag = new Link(this[i]);
+                        Link chainTag = new Link(childTag);
                         _chain.Add(chainTag);
                         break;
                     default:
-                        VerifyUnknownTag(this[i]);
+                        VerifyUnknownTag(childTag);
                         break;
                 }
             }
@@ -149,17 +149,18 @@ namespace Guardtime.KSI.Signature
         private DataHash CalculateOutputHash()
         {
             DataHash inputHash = InputHash;
-            for (int i = 0; i < _chain.Count; i++)
+            foreach (Link link in _chain)
             {
-                DataHash siblingHash = _chain[i].Value;
-                if (_chain[i].Direction == LinkDirection.Left)
-                {
-                    inputHash = HashTogether(siblingHash.Algorithm, inputHash.Imprint, siblingHash.Imprint);
-                }
+                DataHash siblingHash = link.Value;
 
-                if (_chain[i].Direction == LinkDirection.Right)
+                switch (link.Direction)
                 {
-                    inputHash = HashTogether(inputHash.Algorithm, siblingHash.Imprint, inputHash.Imprint);
+                    case LinkDirection.Left:
+                        inputHash = HashTogether(siblingHash.Algorithm, inputHash.Imprint, siblingHash.Imprint);
+                        break;
+                    case LinkDirection.Right:
+                        inputHash = HashTogether(inputHash.Algorithm, siblingHash.Imprint, inputHash.Imprint);
+                        break;
                 }
             }
 
@@ -178,7 +179,7 @@ namespace Guardtime.KSI.Signature
             DataHasher hasher = new DataHasher(algorithm);
             hasher.AddData(hashA);
             hasher.AddData(hashB);
-            hasher.AddData(new byte[] {0xFF});
+            hasher.AddData(new byte[] { 0xFF });
             return hasher.GetHash();
         }
 

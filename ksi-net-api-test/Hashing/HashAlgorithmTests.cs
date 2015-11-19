@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Hashing
@@ -41,8 +42,8 @@ namespace Guardtime.KSI.Hashing
         [Test]
         public void TestGetNamesList()
         {
-            List<string> names = HashAlgorithm.GetNamesList();
-            Assert.AreEqual(11, names.Count);
+            IEnumerable<string> names = HashAlgorithm.GetNamesList();
+            Assert.AreEqual(11, names.Count());
         }
 
         [Test]

@@ -136,9 +136,10 @@ namespace Guardtime.KSI.Hashing
             unchecked
             {
                 int res = 1;
-                for (int i = 0; i < _imprint.Length; i++)
+
+                foreach (byte value in _imprint)
                 {
-                    res = 31 * res + _imprint[i];
+                    res = 31 * res + value;
                 }
 
                 return res;

@@ -30,24 +30,24 @@ namespace Guardtime.KSI.Service
             int aggregationTimeCount = 0;
             int publicationTimeCount = 0;
 
-            for (int i = 0; i < Count; i++)
+            foreach (ITlvTag childTag in this)
             {
-                switch (this[i].Type)
+                switch (childTag.Type)
                 {
                     case Constants.ExtendRequestPayload.RequestIdTagType:
-                        _requestId = new IntegerTag(this[i]);
+                        _requestId = new IntegerTag(childTag);
                         requestIdCount++;
                         break;
                     case Constants.ExtendRequestPayload.AggregationTimeTagType:
-                        _aggregationTime = new IntegerTag(this[i]);
+                        _aggregationTime = new IntegerTag(childTag);
                         aggregationTimeCount++;
                         break;
                     case Constants.ExtendRequestPayload.PublicationTimeTagType:
-                        _publicationTime = new IntegerTag(this[i]);
+                        _publicationTime = new IntegerTag(childTag);
                         publicationTimeCount++;
                         break;
                     default:
-                        VerifyUnknownTag(this[i]);
+                        VerifyUnknownTag(childTag);
                         break;
                 }
             }
@@ -73,7 +73,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
         /// <param name="publicationTime">publication time</param>
-        public ExtendRequestPayload(ulong aggregationTime, ulong publicationTime) : base(Constants.ExtendRequestPayload.TagType, false, false, new List<ITlvTag>()
+        public ExtendRequestPayload(ulong aggregationTime, ulong publicationTime) : base(Constants.ExtendRequestPayload.TagType, false, false, new ITlvTag[]
         {
             new IntegerTag(Constants.ExtendRequestPayload.RequestIdTagType, false, false, Util.GetRandomUnsignedLong()),
             new IntegerTag(Constants.ExtendRequestPayload.AggregationTimeTagType, false, false, aggregationTime),
@@ -89,7 +89,7 @@ namespace Guardtime.KSI.Service
         ///     Create extend request payload from aggregation time.
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
-        public ExtendRequestPayload(ulong aggregationTime) : base(Constants.ExtendRequestPayload.TagType, false, false, new List<ITlvTag>()
+        public ExtendRequestPayload(ulong aggregationTime) : base(Constants.ExtendRequestPayload.TagType, false, false, new ITlvTag[]
         {
             new IntegerTag(Constants.ExtendRequestPayload.RequestIdTagType, false, false, Util.GetRandomUnsignedLong()),
             new IntegerTag(Constants.ExtendRequestPayload.AggregationTimeTagType, false, false, aggregationTime)

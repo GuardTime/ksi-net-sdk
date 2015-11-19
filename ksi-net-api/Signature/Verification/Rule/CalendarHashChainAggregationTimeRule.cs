@@ -23,8 +23,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
             }
 
-            ReadOnlyCollection<AggregationHashChain> aggregationHashChainCollection = GetAggregationHashChains(signature, false);
-            ulong aggregationTime = aggregationHashChainCollection[aggregationHashChainCollection.Count - 1].AggregationTime;
+            ReadOnlyCollection<AggregationHashChain> aggregationHashChains = GetAggregationHashChains(signature, false);
+            ulong aggregationTime = aggregationHashChains[aggregationHashChains.Count - 1].AggregationTime;
 
             return aggregationTime != calendarHashChain.AggregationTime
                 ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int04)

@@ -29,25 +29,25 @@ namespace Guardtime.KSI.Publication
             int creationTimeCount = 0;
             int repUriCount = 0;
 
-            for (int i = 0; i < Count; i++)
+            foreach (ITlvTag childTag in this)
             {
-                switch (this[i].Type)
+                switch (childTag.Type)
                 {
                     case Constants.PublicationsFileHeader.VersionTagType:
-                        _version = new IntegerTag(this[i]);
+                        _version = new IntegerTag(childTag);
                         versionCount++;
                         break;
                     case Constants.PublicationsFileHeader.CreationTimeTagType:
-                        _creationTime = new IntegerTag(this[i].Type, this[i].NonCritical, this[i].Forward,
-                            Util.DecodeUnsignedLong(this[i].EncodeValue(), 0, this[i].EncodeValue().Length));
+                        _creationTime = new IntegerTag(childTag.Type, childTag.NonCritical, childTag.Forward,
+                            Util.DecodeUnsignedLong(childTag.EncodeValue(), 0, childTag.EncodeValue().Length));
                         creationTimeCount++;
                         break;
                     case Constants.PublicationsFileHeader.RepUriTagType:
-                        _repUri = new StringTag(this[i]);
+                        _repUri = new StringTag(childTag);
                         repUriCount++;
                         break;
                     default:
-                        VerifyUnknownTag(this[i]);
+                        VerifyUnknownTag(childTag);
                         break;
                 }
             }

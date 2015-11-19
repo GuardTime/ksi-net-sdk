@@ -226,7 +226,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         }
 
         /// <summary>
-        /// Get nearest publication record to time from publication file.
+        /// Get publication record from publication file that is nearest to the given time .
         /// </summary>
         /// <param name="publicationsFile">publication file</param>
         /// <param name="time">time</param>

@@ -260,12 +260,13 @@ namespace Guardtime.KSI.Utils
         {
             StringBuilder builder = new StringBuilder();
 
-            string[] lines = s.Split(new[] {Environment.NewLine}, StringSplitOptions.None);
+            string[] lines = s.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+
             for (int i = 0; i < lines.Length; i++)
             {
                 builder.Append("  ");
                 builder.Append(lines[i]);
-                if (!lines[i].Equals(lines[lines.Length - 1]))
+                if (i != lines.Length - 1)
                 {
                     builder.AppendLine();
                 }

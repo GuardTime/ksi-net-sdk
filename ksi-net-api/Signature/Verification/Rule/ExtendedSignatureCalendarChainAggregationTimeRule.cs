@@ -24,8 +24,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 throw new KsiVerificationException("Received invalid extended calendar hash chain from context extension function: null.");
             }
 
-            ReadOnlyCollection<AggregationHashChain> aggregationHashChainCollection = GetAggregationHashChains(signature, false);
-            ulong aggregationTime = aggregationHashChainCollection[aggregationHashChainCollection.Count - 1].AggregationTime;
+            ReadOnlyCollection<AggregationHashChain> aggregationHashChains = GetAggregationHashChains(signature, false);
+            ulong aggregationTime = aggregationHashChains[aggregationHashChains.Count - 1].AggregationTime;
 
             return aggregationTime != extendedCalendarHashChain.AggregationTime
                 ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Cal03)

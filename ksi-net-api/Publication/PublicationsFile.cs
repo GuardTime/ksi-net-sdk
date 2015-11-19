@@ -18,7 +18,7 @@ namespace Guardtime.KSI.Publication
             /// <summary>
             ///     Publications file beginning bytes "KSIPUBLF".
             /// </summary>
-            public static readonly byte[] FileBeginningMagicBytes = {0x4b, 0x53, 0x49, 0x50, 0x55, 0x42, 0x4c, 0x46};
+            public static readonly byte[] FileBeginningMagicBytes = { 0x4b, 0x53, 0x49, 0x50, 0x55, 0x42, 0x4c, 0x46 };
 
             private readonly List<CertificateRecord> _certificateRecordList = new List<CertificateRecord>();
             private readonly RawTag _cmsSignature;
@@ -37,10 +37,12 @@ namespace Guardtime.KSI.Publication
 
                 for (int i = 0; i < Count; i++)
                 {
-                    switch (this[i].Type)
+                    ITlvTag childTag = this[i];
+
+                    switch (childTag.Type)
                     {
                         case Constants.PublicationsFileHeader.TagType:
-                            _publicationsHeader = new PublicationsFileHeader(this[i]);
+                            _publicationsHeader = new PublicationsFileHeader(childTag);
                             publicationsHeaderCount++;
                             if (i != 0)
                             {
@@ -49,7 +51,7 @@ namespace Guardtime.KSI.Publication
                             }
                             break;
                         case Constants.CertificateRecord.TagType:
-                            CertificateRecord certificateRecordTag = new CertificateRecord(this[i]);
+                            CertificateRecord certificateRecordTag = new CertificateRecord(childTag);
                             _certificateRecordList.Add(certificateRecordTag);
                             if (_publicationRecordList.Count != 0)
                             {
@@ -58,11 +60,11 @@ namespace Guardtime.KSI.Publication
                             }
                             break;
                         case Constants.PublicationRecord.TagTypePublication:
-                            PublicationRecord publicationRecordTag = new PublicationRecord(this[i]);
+                            PublicationRecord publicationRecordTag = new PublicationRecord(childTag);
                             _publicationRecordList.Add(publicationRecordTag);
                             break;
                         case Constants.PublicationsFile.CmsSignatureTagType:
-                            _cmsSignature = new RawTag(this[i]);
+                            _cmsSignature = new RawTag(childTag);
                             cmsSignatureCount++;
                             if (i != Count - 1)
                             {
@@ -71,7 +73,7 @@ namespace Guardtime.KSI.Publication
                             }
                             break;
                         default:
-                            VerifyUnknownTag(this[i]);
+                            VerifyUnknownTag(childTag);
                             break;
                     }
                 }
@@ -88,7 +90,6 @@ namespace Guardtime.KSI.Publication
                 }
             }
 
-
             /// <summary>
             ///     Get latest publication record.
             /// </summary>
@@ -96,19 +97,18 @@ namespace Guardtime.KSI.Publication
             public PublicationRecord GetLatestPublication()
             {
                 PublicationRecord latest = null;
-                for (int i = 0; i < _publicationRecordList.Count; i++)
+
+                foreach (PublicationRecord publicationRecord in _publicationRecordList)
                 {
                     if (latest == null)
                     {
-                        latest = _publicationRecordList[i];
+                        latest = publicationRecord;
                         continue;
                     }
 
-                    if (
-                        _publicationRecordList[i].PublicationData.PublicationTime.CompareTo(
-                            latest.PublicationData.PublicationTime) > 0)
+                    if (publicationRecord.PublicationData.PublicationTime.CompareTo(latest.PublicationData.PublicationTime) > 0)
                     {
-                        latest = _publicationRecordList[i];
+                        latest = publicationRecord;
                     }
                 }
 
@@ -123,9 +123,10 @@ namespace Guardtime.KSI.Publication
             public PublicationRecord GetNearestPublicationRecord(ulong time)
             {
                 PublicationRecord nearestPublicationRecord = null;
-                for (int i = 0; i < _publicationRecordList.Count; i++)
+
+                foreach (PublicationRecord publicationRecord in _publicationRecordList)
                 {
-                    ulong publicationTime = _publicationRecordList[i].PublicationData.PublicationTime;
+                    ulong publicationTime = publicationRecord.PublicationData.PublicationTime;
                     if (publicationTime != time && publicationTime <= time)
                     {
                         continue;
@@ -133,11 +134,11 @@ namespace Guardtime.KSI.Publication
 
                     if (nearestPublicationRecord == null)
                     {
-                        nearestPublicationRecord = _publicationRecordList[i];
+                        nearestPublicationRecord = publicationRecord;
                     }
                     else if (publicationTime < nearestPublicationRecord.PublicationData.PublicationTime)
                     {
-                        nearestPublicationRecord = _publicationRecordList[i];
+                        nearestPublicationRecord = publicationRecord;
                     }
                 }
 
@@ -156,12 +157,10 @@ namespace Guardtime.KSI.Publication
                     return false;
                 }
 
-                for (int i = 0; i < _publicationRecordList.Count; i++)
+                foreach (PublicationRecord record in _publicationRecordList)
                 {
-                    if (_publicationRecordList[i].PublicationData.PublicationTime ==
-                        publicationRecord.PublicationData.PublicationTime &&
-                        _publicationRecordList[i].PublicationData.PublicationHash ==
-                        publicationRecord.PublicationData.PublicationHash)
+                    if (record.PublicationData.PublicationTime == publicationRecord.PublicationData.PublicationTime &&
+                        record.PublicationData.PublicationHash == publicationRecord.PublicationData.PublicationHash)
                     {
                         return true;
                     }
@@ -177,12 +176,11 @@ namespace Guardtime.KSI.Publication
             /// <returns>X509 certificate</returns>
             public X509Certificate2 FindCertificateById(byte[] certificateId)
             {
-                for (int i = 0; i < _certificateRecordList.Count; i++)
+                foreach (CertificateRecord certificateRecord in _certificateRecordList)
                 {
-                    if (Util.IsArrayEqual(_certificateRecordList[i].CertificateId.EncodeValue(),
-                        certificateId))
+                    if (Util.IsArrayEqual(certificateRecord.CertificateId.EncodeValue(), certificateId))
                     {
-                        return new X509Certificate2(_certificateRecordList[i].X509Certificate.EncodeValue());
+                        return new X509Certificate2(certificateRecord.X509Certificate.EncodeValue());
                     }
                 }
                 return null;
@@ -206,6 +204,8 @@ namespace Guardtime.KSI.Publication
                 using (TlvWriter writer = new TlvWriter(new MemoryStream()))
                 {
                     writer.Write(FileBeginningMagicBytes);
+
+                    // get all but last tag
                     for (int i = 0; i < Count - 1; i++)
                     {
                         writer.WriteTag(this[i]);

@@ -32,7 +32,7 @@ namespace Guardtime.KSI.Parser
         /// <param name="forward">Is TLV element forwarded</param>
         /// <param name="value">TLV element list</param>
         /// <exception cref="TlvException">thrown when input value is null</exception>
-        protected CompositeTag(uint type, bool nonCritical, bool forward, List<ITlvTag> value)
+        protected CompositeTag(uint type, bool nonCritical, bool forward, ITlvTag[] value)
             : base(type, nonCritical, forward)
         {
             if (value == null)
@@ -49,6 +49,11 @@ namespace Guardtime.KSI.Parser
 
                 _value.Add(tag);
             }
+        }
+
+        public List<ITlvTag> GetValue()
+        {
+            return _value;
         }
 
         /// <summary>
@@ -81,7 +86,6 @@ namespace Guardtime.KSI.Parser
         {
             return GetEnumerator();
         }
-
 
         /// <summary>
         ///     Decode bytes to TLV list.

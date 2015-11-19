@@ -63,9 +63,9 @@ namespace Guardtime.KSI.Parser
             unchecked
             {
                 int res = 1;
-                for (int i = 0; i < Value.Length; i++)
+                foreach (byte value in Value)
                 {
-                    res = 31 * res + Value[i];
+                    res = 31 * res + value;
                 }
 
                 return res + Type.GetHashCode() + Forward.GetHashCode() + NonCritical.GetHashCode();

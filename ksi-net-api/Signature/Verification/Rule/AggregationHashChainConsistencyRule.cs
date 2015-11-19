@@ -18,20 +18,20 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             ReadOnlyCollection<AggregationHashChain> aggregationHashChains = GetAggregationHashChains(GetSignature(context), true);
             AggregationHashChainResult chainResult = null;
 
-            for (int i = 0; i < aggregationHashChains.Count; i++)
+            foreach (AggregationHashChain aggregationHashChain in aggregationHashChains)
             {
                 if (chainResult == null)
                 {
                     chainResult = new AggregationHashChainResult(0, aggregationHashChains[0].InputHash);
                 }
 
-                if (aggregationHashChains[i].InputHash != chainResult.Hash)
+                if (aggregationHashChain.InputHash != chainResult.Hash)
                 {
-                    Logger.Error("Previous aggregation hash chain output hash {0} does not match current input hash {1}", chainResult.Hash, aggregationHashChains[i].InputHash);
+                    Logger.Error("Previous aggregation hash chain output hash {0} does not match current input hash {1}", chainResult.Hash, aggregationHashChain.InputHash);
                     return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int01);
                 }
 
-                chainResult = aggregationHashChains[i].GetOutputHash(chainResult);
+                chainResult = aggregationHashChain.GetOutputHash(chainResult);
             }
 
             return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);

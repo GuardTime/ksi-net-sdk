@@ -31,32 +31,31 @@ namespace Guardtime.KSI.Signature
             int certificateIdCount = 0;
             int certificateRepositoryUriCount = 0;
 
-            for (int i = 0; i < Count; i++)
+            foreach (ITlvTag childTag in this)
             {
-                switch (this[i].Type)
+                switch (childTag.Type)
                 {
                     case Constants.SignatureData.SignatureTypeTagType:
-                        _signatureType = new StringTag(this[i]);
+                        _signatureType = new StringTag(childTag);
                         signatureTypeCount++;
                         break;
                     case Constants.SignatureData.SignatureValueTagType:
-                        _signatureValue = new RawTag(this[i]);
+                        _signatureValue = new RawTag(childTag);
                         signatureValueCount++;
                         break;
                     case Constants.SignatureData.CertificateIdTagType:
-                        _certificateId = new RawTag(this[i]);
+                        _certificateId = new RawTag(childTag);
                         certificateIdCount++;
                         break;
                     case Constants.SignatureData.CertificateRepositoryUriTagType:
-                        _certificateRepositoryUri = new StringTag(this[i]);
+                        _certificateRepositoryUri = new StringTag(childTag);
                         certificateRepositoryUriCount++;
                         break;
                     default:
-                        VerifyUnknownTag(this[i]);
+                        VerifyUnknownTag(childTag);
                         break;
                 }
             }
-
 
             if (signatureTypeCount != 1)
             {

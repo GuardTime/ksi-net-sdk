@@ -31,7 +31,6 @@ namespace Guardtime.KSI.Hashing
             NotImplemented
         }
 
-
         private static readonly Dictionary<string, HashAlgorithm> Lookup = new Dictionary<string, HashAlgorithm>();
 
         private readonly string[] _alternatives;
@@ -63,7 +62,7 @@ namespace Guardtime.KSI.Hashing
         {
             if (alternatives == null)
             {
-                alternatives = new string[] {};
+                alternatives = new string[] { };
             }
 
             Name = name;
@@ -72,7 +71,6 @@ namespace Guardtime.KSI.Hashing
             Status = status;
             _alternatives = alternatives;
         }
-
 
         /// <summary>
         ///     Return Guardtime id of algorithm.
@@ -127,15 +125,12 @@ namespace Guardtime.KSI.Hashing
         ///     Get list of supported the algorithms.
         /// </summary>
         /// <returns>List of supported hash algorithm names</returns>
-        public static List<string> GetNamesList()
+        public static IEnumerable<string> GetNamesList()
         {
-            List<string> names = new List<string>();
             foreach (HashAlgorithm algorithm in Values())
             {
-                names.Add(algorithm.Name);
+                yield return algorithm.Name;
             }
-
-            return names;
         }
 
         /// <summary>
@@ -154,8 +149,7 @@ namespace Guardtime.KSI.Hashing
         /// <returns>Defined HashAlgorithm objects</returns>
         private static IEnumerable<HashAlgorithm> Values()
         {
-            return new HashAlgorithm[]
-            {Sha1, Sha2256, Ripemd160, Sha2224, Sha2384, Sha2512, Sha3224, Sha3256, Sha3384, Sha3512, Sm3};
+            return new HashAlgorithm[] { Sha1, Sha2256, Ripemd160, Sha2224, Sha2384, Sha2512, Sha3224, Sha3256, Sha3384, Sha3512, Sm3 };
         }
     }
 }
