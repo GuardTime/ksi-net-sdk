@@ -17,7 +17,6 @@ namespace Guardtime.KSI.Service
         ///     Create extend request payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        
         public ExtendRequestPayload(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.ExtendRequestPayload.TagType)

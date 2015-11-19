@@ -12,7 +12,6 @@ namespace Guardtime.KSI.Parser
         ///     Create new imprint TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        
         public ImprintTag(ITlvTag tag) : base(tag)
         {
             byte[] data = tag.EncodeValue();
@@ -30,7 +29,6 @@ namespace Guardtime.KSI.Parser
         /// <param name="nonCritical">Is TLV element non critical</param>
         /// <param name="forward">Is TLV element forwarded</param>
         /// <param name="value">data hash</param>
-        
         public ImprintTag(uint type, bool nonCritical, bool forward, DataHash value)
             : base(type, nonCritical, forward)
         {

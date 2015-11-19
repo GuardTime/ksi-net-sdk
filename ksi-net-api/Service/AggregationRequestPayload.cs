@@ -19,7 +19,6 @@ namespace Guardtime.KSI.Service
         ///     Create extend request payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        
         public AggregationRequestPayload(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.AggregationRequestPayload.TagType)
@@ -84,7 +83,6 @@ namespace Guardtime.KSI.Service
         ///     Create aggregation request payload from data hash.
         /// </summary>
         /// <param name="hash">data hash</param>
-        
         public AggregationRequestPayload(DataHash hash) : base(Constants.AggregationRequestPayload.TagType, false, false, new ITlvTag[]
         {
             new IntegerTag(Constants.AggregationRequestPayload.RequestIdTagType, false, false, Util.GetRandomUnsignedLong()),

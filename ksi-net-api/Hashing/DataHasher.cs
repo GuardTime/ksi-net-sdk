@@ -10,7 +10,6 @@ namespace Guardtime.KSI.Hashing
     public class DataHasher
     {
         private const int DefaultStreamBufferSize = 8192;
-
         private readonly HashAlgorithm _algorithm;
         private System.Security.Cryptography.HashAlgorithm _messageHasher;
         private DataHash _outputHash;

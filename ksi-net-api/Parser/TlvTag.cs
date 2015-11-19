@@ -28,7 +28,6 @@ namespace Guardtime.KSI.Parser
         ///     Create new TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        
         protected TlvTag(ITlvTag tag)
         {
             if (tag == null)
@@ -112,7 +111,6 @@ namespace Guardtime.KSI.Parser
             return Util.IsArrayEqual(valueBytes, tagValueBytes);
         }
 
-
         /// <summary>
         ///     Compare TLV element to object.
         /// </summary>
@@ -122,7 +120,6 @@ namespace Guardtime.KSI.Parser
         {
             return Equals(obj as TlvTag);
         }
-
 
         /// <summary>
         ///     Compare two composite element objects.

@@ -13,7 +13,6 @@ namespace Guardtime.KSI.Publication
         ///     Create new publication record TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        
         public PublicationRecord(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.PublicationRecord.TagTypeSignature && Type != Constants.PublicationRecord.TagTypePublication)

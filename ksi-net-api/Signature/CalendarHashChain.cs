@@ -20,7 +20,6 @@ namespace Guardtime.KSI.Signature
         ///     Create new calendar hash chain TLV element from TLV element
         /// </summary>
         /// <param name="tag">TLV element</param>
-        
         public CalendarHashChain(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.CalendarHashChain.TagType)
@@ -187,7 +186,6 @@ namespace Guardtime.KSI.Signature
         ///     Calculate registration time.
         /// </summary>
         /// <returns>registration time</returns>
-        
         private ulong CalculateRegistrationTime()
         {
             ulong r = _publicationTime.Value;

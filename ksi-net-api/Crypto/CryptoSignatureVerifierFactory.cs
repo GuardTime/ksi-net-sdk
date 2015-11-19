@@ -1,5 +1,4 @@
-﻿using System;
-using Guardtime.KSI.Exceptions;
+﻿using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Crypto
 {
@@ -12,9 +11,7 @@ namespace Guardtime.KSI.Crypto
         ///     Get crypto signature verifier by oid.
         /// </summary>
         /// <param name="oid">signature oid</param>
-        /// <param name="digestAlgorithm">algorithm used for given signature</param>
         /// <returns>signature verifier</returns>
-        
         public static ICryptoSignatureVerifier GetCryptoSignatureVerifierByOid(string oid)
         {
             switch (oid)

@@ -18,7 +18,6 @@ namespace Guardtime.KSI.Parser
         ///     Create new composite TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        
         protected CompositeTag(ITlvTag tag) : base(tag)
         {
             DecodeValue(tag.EncodeValue());
@@ -31,7 +30,6 @@ namespace Guardtime.KSI.Parser
         /// <param name="nonCritical">Is TLV element non critical</param>
         /// <param name="forward">Is TLV element forwarded</param>
         /// <param name="value">TLV element list</param>
-        
         protected CompositeTag(uint type, bool nonCritical, bool forward, ITlvTag[] value)
             : base(type, nonCritical, forward)
         {
@@ -61,7 +59,6 @@ namespace Guardtime.KSI.Parser
         /// </summary>
         /// <param name="i">tlv element position</param>
         /// <returns>TLV element at given position</returns>
-        
         public ITlvTag this[int i] => _value[i];
 
         /// <summary>

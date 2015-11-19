@@ -53,7 +53,6 @@ namespace Guardtime.KSI.Utils
         /// <param name="alphabet">base alphabet</param>
         /// <param name="caseSensitive">is base conversion case sensitive</param>
         /// <param name="padding">padding</param>
-        
         public BaseX(string alphabet, bool caseSensitive, char padding)
         {
             // the bit and byte counts

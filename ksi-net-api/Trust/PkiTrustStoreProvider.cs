@@ -14,7 +14,6 @@ namespace Guardtime.KSI.Trust
         /// </summary>
         /// <param name="signedBytes"></param>
         /// <param name="signatureBytes"></param>
-        
         public void Verify(byte[] signedBytes, byte[] signatureBytes)
         {
             // TODO: Check for better exception

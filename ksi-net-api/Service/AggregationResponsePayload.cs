@@ -20,7 +20,6 @@ namespace Guardtime.KSI.Service
         ///     Create aggregation response payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        
         public AggregationResponsePayload(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.AggregationResponsePayload.TagType)

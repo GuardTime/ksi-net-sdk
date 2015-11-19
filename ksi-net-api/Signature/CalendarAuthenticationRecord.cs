@@ -13,7 +13,6 @@ namespace Guardtime.KSI.Signature
         ///     Create new calendar authentication record TLV element from TLV element
         /// </summary>
         /// <param name="tag">TLV element</param>
-        
         public CalendarAuthenticationRecord(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.CalendarAuthenticationRecord.TagType)

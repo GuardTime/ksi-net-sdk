@@ -16,7 +16,6 @@ namespace Guardtime.KSI.Service
         ///     Create KSI PDU header from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        
         public KsiPduHeader(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.KsiPduHeader.TagType)

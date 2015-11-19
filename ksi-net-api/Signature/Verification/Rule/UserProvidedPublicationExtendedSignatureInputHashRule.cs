@@ -1,5 +1,4 @@
-﻿
-namespace Guardtime.KSI.Signature.Verification.Rule
+﻿namespace Guardtime.KSI.Signature.Verification.Rule
 {
     /// <summary>
     ///     Rule checks that extender response input hash equals to signature aggregation root hash.
@@ -7,8 +6,6 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public sealed class UserProvidedPublicationExtendedSignatureInputHashRule : VerificationRule
     {
         /// <see cref="VerificationRule.Verify" />
-        
-        
         public override VerificationResult Verify(IVerificationContext context)
         {
             ulong publicationTime = GetUserPublication(context).PublicationTime;

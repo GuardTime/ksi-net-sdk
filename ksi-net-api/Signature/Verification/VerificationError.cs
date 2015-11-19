@@ -18,74 +18,62 @@
         /// <summary>
         ///     Inconsistent aggregation hash chains error.
         /// </summary>
-        public static readonly VerificationError Int01 = new VerificationError("INT-01",
-            "Inconsistent aggregation hash chains");
+        public static readonly VerificationError Int01 = new VerificationError("INT-01", "Inconsistent aggregation hash chains");
 
         /// <summary>
         ///     Inconsistent aggregation hash chain aggregation times error.
         /// </summary>
-        public static readonly VerificationError Int02 = new VerificationError("INT-02",
-            "Inconsistent aggregation hash chain aggregation times");
+        public static readonly VerificationError Int02 = new VerificationError("INT-02", "Inconsistent aggregation hash chain aggregation times");
 
         /// <summary>
         ///     Calendar hash chain input hash mismatch error.
         /// </summary>
-        public static readonly VerificationError Int03 = new VerificationError("INT-03",
-            "Calendar hash chain input hash mismatch");
+        public static readonly VerificationError Int03 = new VerificationError("INT-03", "Calendar hash chain input hash mismatch");
 
         /// <summary>
         ///     Calendar hash chain aggregation time mismatch error.
         /// </summary>
-        public static readonly VerificationError Int04 = new VerificationError("INT-04",
-            "Calendar hash chain aggregation time mismatch");
+        public static readonly VerificationError Int04 = new VerificationError("INT-04", "Calendar hash chain aggregation time mismatch");
 
         /// <summary>
         ///     Calendar hash chain shape inconsistent with aggregation time error.
         /// </summary>
-        public static readonly VerificationError Int05 = new VerificationError("INT-05",
-            "Calendar hash chain shape inconsistent with aggregation time");
+        public static readonly VerificationError Int05 = new VerificationError("INT-05", "Calendar hash chain shape inconsistent with aggregation time");
 
         /// <summary>
         ///     Calendar hash chain time inconsistent with calendar authentication record time error.
         /// </summary>
-        public static readonly VerificationError Int06 = new VerificationError("INT-06",
-            "Calendar hash chain time inconsistent with calendar authentication record time");
+        public static readonly VerificationError Int06 = new VerificationError("INT-06", "Calendar hash chain time inconsistent with calendar authentication record time");
 
         /// <summary>
         ///     Calendar hash chain time inconsistent with publication time error.
         /// </summary>
-        public static readonly VerificationError Int07 = new VerificationError("INT-07",
-            "Calendar hash chain time inconsistent with publication time");
+        public static readonly VerificationError Int07 = new VerificationError("INT-07", "Calendar hash chain time inconsistent with publication time");
 
         /// <summary>
         ///     Calendar hash chain root has inconsistency with calendar authentication record time error.
         /// </summary>
-        public static readonly VerificationError Int08 = new VerificationError("INT-08",
-            "Calendar hash chain root has inconsistency with calendar authentication record time");
+        public static readonly VerificationError Int08 = new VerificationError("INT-08", "Calendar hash chain root has inconsistency with calendar authentication record time");
 
         /// <summary>
         ///     Calendar hash chain root has inconsistency with publication time error.
         /// </summary>
-        public static readonly VerificationError Int09 = new VerificationError("INT-09",
-            "Calendar hash chain root has inconsistency with publication time");
+        public static readonly VerificationError Int09 = new VerificationError("INT-09", "Calendar hash chain root has inconsistency with publication time");
 
         /// <summary>
         ///     Extender response calendar root hash mismatch error.
         /// </summary>
-        public static readonly VerificationError Pub01 = new VerificationError("PUB-01",
-            "Extender response calendar root hash mismatch");
+        public static readonly VerificationError Pub01 = new VerificationError("PUB-01", "Extender response calendar root hash mismatch");
 
         /// <summary>
         ///     Extender response inconsistent error.
         /// </summary>
-        public static readonly VerificationError Pub02 = new VerificationError("PUB-02",
-            "Extender response inconsistent");
+        public static readonly VerificationError Pub02 = new VerificationError("PUB-02", "Extender response inconsistent");
 
         /// <summary>
         ///     Extender response input hash mismatch error.
         /// </summary>
-        public static readonly VerificationError Pub03 = new VerificationError("PUB-03",
-            "Extender response input hash mismatch");
+        public static readonly VerificationError Pub03 = new VerificationError("PUB-03", "Extender response input hash mismatch");
 
         /// <summary>
         ///     Certificate not found error.
@@ -95,8 +83,7 @@
         /// <summary>
         ///     PKI signature not verified with certificate error.
         /// </summary>
-        public static readonly VerificationError Key02 = new VerificationError("KEY-02",
-            "PKI signature not verified with certificate");
+        public static readonly VerificationError Key02 = new VerificationError("KEY-02", "PKI signature not verified with certificate");
 
         /// <summary>
         ///     Calendar root hash mismatch error.
@@ -106,8 +93,7 @@
         /// <summary>
         ///     Aggregation hash chain root hash and calendar hash chain input hash mismatch error.
         /// </summary>
-        public static readonly VerificationError Cal02 = new VerificationError("CAL-02",
-            "Aggregation hash chain root hash and calendar hash chain input hash mismatch");
+        public static readonly VerificationError Cal02 = new VerificationError("CAL-02", "Aggregation hash chain root hash and calendar hash chain input hash mismatch");
 
         /// <summary>
         ///     Aggregation time mismatch error.
@@ -117,8 +103,7 @@
         /// <summary>
         ///     Aggregation hash chain right links are inconsistent error.
         /// </summary>
-        public static readonly VerificationError Cal04 = new VerificationError("CAL-04",
-            "Aggregation hash chain right links are inconsistent");
+        public static readonly VerificationError Cal04 = new VerificationError("CAL-04", "Aggregation hash chain right links are inconsistent");
 
         private VerificationError(string code, string message)
         {

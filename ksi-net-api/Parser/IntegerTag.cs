@@ -13,7 +13,6 @@ namespace Guardtime.KSI.Parser
         ///     Create new Integer TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        
         public IntegerTag(ITlvTag tag) : base(tag)
         {
             byte[] data = tag.EncodeValue();

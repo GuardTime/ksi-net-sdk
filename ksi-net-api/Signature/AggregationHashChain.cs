@@ -24,7 +24,6 @@ namespace Guardtime.KSI.Signature
         ///     Create new aggregation hash chain TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        
         public AggregationHashChain(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.AggregationHashChain.TagType)
@@ -127,7 +126,6 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         /// <param name="result">last hashing result</param>
         /// <returns>output hash chain result</returns>
-        
         public AggregationHashChainResult GetOutputHash(AggregationHashChainResult result)
         {
             if (result == null)

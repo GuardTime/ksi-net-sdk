@@ -16,9 +16,7 @@ namespace Guardtime.KSI.Service
         private readonly string _extendingUrl;
         private readonly string _publicationsFileUrl;
         private readonly int _requestTimeOut = 100000;
-
         private readonly string _signingUrl;
-
 
         /// <summary>
         ///     Create HTTP KSI service protocol with given url-s
@@ -190,11 +188,9 @@ namespace Guardtime.KSI.Service
             return EndGetResult(asyncResult);
         }
 
-
         private void EndAsyncGetRequestStreamCallback(object state, bool timedOut)
         {
             HttpKsiServiceProtocolAsyncResult httpAsyncResult = (HttpKsiServiceProtocolAsyncResult)state;
-
 
             if (timedOut)
             {
@@ -202,7 +198,6 @@ namespace Guardtime.KSI.Service
                 httpAsyncResult.SetComplete(true);
                 return;
             }
-
 
             int timeRemaining = _requestTimeOut - httpAsyncResult.TimeElapsed;
             if (timeRemaining < 0)
@@ -268,7 +263,6 @@ namespace Guardtime.KSI.Service
             {
                 throw httpAsyncResult.Error;
             }
-
 
             try
             {

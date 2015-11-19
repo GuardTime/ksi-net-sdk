@@ -11,7 +11,7 @@
         ///     SHA2-256 Hash Algorithm
         /// </summary>
         public static readonly HashAlgorithm Sha2256 = new HashAlgorithm("SHA-256", 0x01, 32, AlgorithmStatus.Normal,
-            new string[] {"SHA2-256", "SHA2", "DEFAULT"});
+            new string[] { "SHA2-256", "SHA2", "DEFAULT" });
 
         /// <summary>
         ///     RIPEMD-160 Hash Algorithm
@@ -22,19 +22,19 @@
         ///     SHA2-224 Hash Algorithm
         /// </summary>
         public static readonly HashAlgorithm Sha2224 = new HashAlgorithm("SHA-224", 0x03, 28, AlgorithmStatus.Normal,
-            new string[] {"SHA2-224"});
+            new string[] { "SHA2-224" });
 
         /// <summary>
         ///     SHA2-384 Hash Algorithm
         /// </summary>
         public static readonly HashAlgorithm Sha2384 = new HashAlgorithm("SHA-384", 0x04, 48, AlgorithmStatus.Normal,
-            new string[] {"SHA2-384"});
+            new string[] { "SHA2-384" });
 
         /// <summary>
         ///     SHA2-512 Hash Algorithm
         /// </summary>
         public static readonly HashAlgorithm Sha2512 = new HashAlgorithm("SHA-512", 0x05, 64, AlgorithmStatus.Normal,
-            new string[] {"SHA2-512"});
+            new string[] { "SHA2-512" });
 
         /// <summary>
         ///     SHA3-224 Hash Algorithm

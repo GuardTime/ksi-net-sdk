@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using Guardtime.KSI.Exceptions;
@@ -25,7 +24,6 @@ namespace Guardtime.KSI.Signature
             ///     Create new KSI signature TLV element from TLV element.
             /// </summary>
             /// <param name="tag">TLV element</param>
-            
             public KsiSignature(ITlvTag tag) : base(tag)
             {
                 if (Type != Constants.KsiSignature.TagType)
@@ -179,7 +177,6 @@ namespace Guardtime.KSI.Signature
             /// </summary>
             /// <param name="calendarHashChain">calendar hash chain</param>
             /// <returns>extended KSI signature</returns>
-            
             public IKsiSignature Extend(CalendarHashChain calendarHashChain)
             {
                 return Extend(calendarHashChain, null);
@@ -191,7 +188,6 @@ namespace Guardtime.KSI.Signature
             /// <param name="calendarHashChain">extended calendar hash chain</param>
             /// <param name="publicationRecord">extended publication record</param>
             /// <returns>extended KSI signature</returns>
-            
             public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecord publicationRecord)
             {
                 if (calendarHashChain == null)

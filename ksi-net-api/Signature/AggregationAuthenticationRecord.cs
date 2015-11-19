@@ -18,7 +18,6 @@ namespace Guardtime.KSI.Signature
         ///     Create new aggregation authentication record TLV element from TLV element
         /// </summary>
         /// <param name="tag">TLV element</param>
-        
         public AggregationAuthenticationRecord(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.AggregationAuthenticationRecord.TagType)

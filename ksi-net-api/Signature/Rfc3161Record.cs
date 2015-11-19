@@ -26,7 +26,6 @@ namespace Guardtime.KSI.Signature
         ///     Create new RFC3161 record TLV element from TLV element
         /// </summary>
         /// <param name="tag">TLV element</param>
-        
         public Rfc3161Record(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.Rfc3161Record.TagType)
@@ -151,7 +150,6 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         /// <param name="inputHash">document hash</param>
         /// <returns>aggregation input hash</returns>
-        
         public DataHash GetOutputHash(DataHash inputHash)
         {
             if (inputHash == null)

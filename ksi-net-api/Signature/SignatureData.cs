@@ -18,7 +18,6 @@ namespace Guardtime.KSI.Signature
         ///     Create new signature data TLV element from TLV element
         /// </summary>
         /// <param name="tag">TLV element</param>
-        
         public SignatureData(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.SignatureData.TagType)
