@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Guardtime.KSI.Exceptions;
+﻿using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Utils;
 
@@ -18,7 +17,7 @@ namespace Guardtime.KSI.Service
         ///     Create extend request payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
+        
         public ExtendRequestPayload(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.ExtendRequestPayload.TagType)

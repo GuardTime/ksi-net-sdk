@@ -20,7 +20,7 @@ namespace Guardtime.KSI.Parser
         ///     Reads a complete TLV item from the wrapped stream.
         /// </summary>
         /// <returns>raw tlv tag</returns>
-        /// <exception cref="TlvException">thrown when TLV tag reading fails</exception>
+        
         public TlvTag ReadTag()
         {
             try

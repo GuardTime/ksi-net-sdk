@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Guardtime.KSI.Parser;
+﻿using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Service
 {

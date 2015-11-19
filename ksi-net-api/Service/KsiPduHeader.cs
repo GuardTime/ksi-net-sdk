@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Guardtime.KSI.Exceptions;
+﻿using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Service
@@ -17,7 +16,7 @@ namespace Guardtime.KSI.Service
         ///     Create KSI PDU header from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
+        
         public KsiPduHeader(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.KsiPduHeader.TagType)

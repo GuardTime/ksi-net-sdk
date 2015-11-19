@@ -12,7 +12,7 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         /// <param name="stream">signature data stream</param>
         /// <returns>KSI signature</returns>
-        /// <exception cref="KsiException">thrown when stream is null</exception>
+        
         public IKsiSignature Create(Stream stream)
         {
             if (stream == null)
@@ -31,7 +31,7 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         /// <param name="payload">aggregation response payload</param>
         /// <returns>KSI signature</returns>
-        /// <exception cref="KsiException">thrown when aggregation response payload is null</exception>
+        
         public IKsiSignature Create(AggregationResponsePayload payload)
         {
             if (payload == null)

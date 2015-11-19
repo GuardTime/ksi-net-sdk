@@ -1,5 +1,4 @@
-﻿using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Publication;
+﻿using Guardtime.KSI.Publication;
 using Guardtime.KSI.Trust;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
@@ -10,8 +9,6 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public sealed class PublicationsFileContainsSignaturePublicationRule : VerificationRule
     {
         /// <see cref="VerificationRule.Verify" />
-        /// <exception cref="KsiException">thrown if verification context is missing</exception>
-        /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
             IKsiTrustProvider publicationsFile = GetPublicationsFile(context);

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Security.Cryptography;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
@@ -50,7 +49,7 @@ namespace Guardtime.KSI.Service
         /// <param name="nonCritical">Is TLV element non critical</param>
         /// <param name="forward">Is TLV element forwarded</param>
         /// <param name="value">TLV element list</param>
-        /// <exception cref="TlvException">thrown when TLV header is null</exception>
+        
         protected KsiPdu(KsiPduHeader header, ImprintTag mac, uint type, bool nonCritical, bool forward, ITlvTag[] value)
             : base(type, nonCritical, forward, value)
         {

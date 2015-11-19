@@ -12,7 +12,7 @@ namespace Guardtime.KSI.Publication
         ///     Create new certificate record TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
+        
         public CertificateRecord(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.CertificateRecord.TagType)

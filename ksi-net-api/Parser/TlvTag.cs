@@ -28,7 +28,7 @@ namespace Guardtime.KSI.Parser
         ///     Create new TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        /// <exception cref="TlvException">thrown when input TLV tag is invalid.</exception>
+        
         protected TlvTag(ITlvTag tag)
         {
             if (tag == null)

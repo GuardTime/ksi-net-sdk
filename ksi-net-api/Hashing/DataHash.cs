@@ -18,7 +18,7 @@ namespace Guardtime.KSI.Hashing
         /// </summary>
         /// <param name="algorithm">[NotNull] HashAlgorithm used to compute this hash.</param>
         /// <param name="valueBytes">[NotNull] hash value computed for the input data.</param>
-        /// <exception cref="HashingException">thrown when invalid data is supplied</exception>
+        
         public DataHash(HashAlgorithm algorithm, byte[] valueBytes)
         {
             if (algorithm == null)
@@ -49,7 +49,7 @@ namespace Guardtime.KSI.Hashing
         ///     Constructor which initializes the DataHash with imprint.
         /// </summary>
         /// <param name="imprintBytes">[NotNull] Hash imprint</param>
-        /// <exception cref="HashingException">thrown when invalid data is supplied</exception>
+        
         public DataHash(byte[] imprintBytes)
         {
             if (imprintBytes == null)

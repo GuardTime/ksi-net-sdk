@@ -1,6 +1,4 @@
-﻿using Guardtime.KSI.Exceptions;
-
-namespace Guardtime.KSI.Signature.Verification.Rule
+﻿namespace Guardtime.KSI.Signature.Verification.Rule
 {
     /// <summary>
     ///     Rule checks that extender response calendar hash chain (extension request with current calendar hash chain
@@ -10,8 +8,6 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public sealed class ExtendedSignatureCalendarChainRootHashRule : VerificationRule
     {
         /// <see cref="VerificationRule.Verify" />
-        /// <exception cref="KsiException">thrown if verification context is missing</exception>
-        /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
             CalendarHashChain calendarHashChain = GetCalendarHashChain(GetSignature(context));

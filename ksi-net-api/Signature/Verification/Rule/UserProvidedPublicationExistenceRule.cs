@@ -1,6 +1,4 @@
-﻿using Guardtime.KSI.Exceptions;
-
-namespace Guardtime.KSI.Signature.Verification.Rule
+﻿namespace Guardtime.KSI.Signature.Verification.Rule
 {
     /// <summary>
     ///     Rule checks that user has provided a publication.
@@ -8,7 +6,6 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public sealed class UserProvidedPublicationExistenceRule : VerificationRule
     {
         /// <see cref="VerificationRule.Verify" />
-        /// <exception cref="KsiException">thrown if verification context is missing</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
             CheckVerificationContext(context);

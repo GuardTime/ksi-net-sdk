@@ -1,5 +1,4 @@
-﻿using System;
-using Guardtime.KSI.Exceptions;
+﻿using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
@@ -15,7 +14,6 @@ namespace Guardtime.KSI.Signature.Verification
         ///     Create new verification context instance.
         /// </summary>
         /// <param name="signature">KSI signature</param>
-        /// <exception cref="ArgumentNullException">thrown when signature is null</exception>
         public VerificationContext(IKsiSignature signature)
         {
             if (signature == null)

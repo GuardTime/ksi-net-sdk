@@ -1,6 +1,4 @@
-﻿using Guardtime.KSI.Exceptions;
-
-namespace Guardtime.KSI.Signature.Verification.Rule
+﻿namespace Guardtime.KSI.Signature.Verification.Rule
 {
     /// <summary>
     ///     Rule checks if publications file contains certificate with certificate id contained in calendar authentication
@@ -9,8 +7,6 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public sealed class CertificateExistenceRule : VerificationRule
     {
         /// <see cref="VerificationRule.Verify" />
-        /// <exception cref="KsiException">thrown if verification context is missing</exception>
-        /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
             CalendarAuthenticationRecord calendarAuthenticationRecord = GetCalendarAuthenticationRecord(GetSignature(context));

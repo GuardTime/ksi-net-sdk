@@ -1,6 +1,4 @@
-﻿using Guardtime.KSI.Exceptions;
-
-namespace Guardtime.KSI.Signature.Verification.Rule
+﻿namespace Guardtime.KSI.Signature.Verification.Rule
 {
     /// <summary>
     ///     Rule for checking if KSI signature contains calendar hash chain.
@@ -9,8 +7,6 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public sealed class CalendarHashChainExistenceRule : VerificationRule
     {
         /// <see cref="VerificationRule.Verify" />
-        /// <exception cref="KsiException">thrown if verification context is missing</exception>
-        /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
             return GetSignature(context).CalendarHashChain == null

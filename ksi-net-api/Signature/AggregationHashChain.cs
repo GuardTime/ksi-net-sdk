@@ -24,7 +24,7 @@ namespace Guardtime.KSI.Signature
         ///     Create new aggregation hash chain TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
+        
         public AggregationHashChain(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.AggregationHashChain.TagType)
@@ -127,7 +127,7 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         /// <param name="result">last hashing result</param>
         /// <returns>output hash chain result</returns>
-        /// <exception cref="KsiException">thrown when chain result is null</exception>
+        
         public AggregationHashChainResult GetOutputHash(AggregationHashChainResult result)
         {
             if (result == null)
@@ -281,12 +281,7 @@ namespace Guardtime.KSI.Signature
                     return _siblingHash.EncodeValue();
                 }
 
-                if (_metaHash != null)
-                {
-                    return _metaHash.EncodeValue();
-                }
-
-                return _metaData?.EncodeValue();
+                return _metaHash != null ? _metaHash.EncodeValue() : _metaData?.EncodeValue();
             }
         }
 
@@ -297,7 +292,7 @@ namespace Guardtime.KSI.Signature
 
             // Please do keep in mind that request time is in milliseconds!
             private readonly IntegerTag _requestTime;
-            private readonly IntegerTag _sequenceNr;
+            private readonly IntegerTag _sequenceNumber;
 
             public MetaData(ITlvTag tag) : base(tag)
             {
@@ -308,7 +303,7 @@ namespace Guardtime.KSI.Signature
 
                 int clientIdCount = 0;
                 int machineIdCount = 0;
-                int sequenceNrCount = 0;
+                int sequenceNumberCount = 0;
                 int requestTimeCount = 0;
 
                 foreach (ITlvTag childTag in this)
@@ -324,8 +319,8 @@ namespace Guardtime.KSI.Signature
                             machineIdCount++;
                             break;
                         case Constants.AggregationHashChain.MetaData.SequenceNumberTagType:
-                            _sequenceNr = new IntegerTag(childTag);
-                            sequenceNrCount++;
+                            _sequenceNumber = new IntegerTag(childTag);
+                            sequenceNumberCount++;
                             break;
                         case Constants.AggregationHashChain.MetaData.RequestTimeTagType:
                             _requestTime = new IntegerTag(childTag);
@@ -349,7 +344,7 @@ namespace Guardtime.KSI.Signature
                         "Only one machine id is allowed in aggregation hash chain link metadata.");
                 }
 
-                if (sequenceNrCount > 1)
+                if (sequenceNumberCount > 1)
                 {
                     throw new TlvException(
                         "Only one sequence number is allowed in aggregation hash chain link metadata.");
@@ -363,6 +358,9 @@ namespace Guardtime.KSI.Signature
             }
 
             public string ClientId => _clientId.Value;
+            public string MachineId => _machineId.Value;
+            public ulong RequestTime => _requestTime.Value;
+            public ulong SequenceNumber => _sequenceNumber.Value;
         }
 
         /// <summary>

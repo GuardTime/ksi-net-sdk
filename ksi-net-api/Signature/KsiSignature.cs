@@ -6,7 +6,6 @@ using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
-using Guardtime.KSI.Signature.Verification;
 
 namespace Guardtime.KSI.Signature
 {
@@ -26,7 +25,7 @@ namespace Guardtime.KSI.Signature
             ///     Create new KSI signature TLV element from TLV element.
             /// </summary>
             /// <param name="tag">TLV element</param>
-            /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
+            
             public KsiSignature(ITlvTag tag) : base(tag)
             {
                 if (Type != Constants.KsiSignature.TagType)
@@ -180,7 +179,7 @@ namespace Guardtime.KSI.Signature
             /// </summary>
             /// <param name="calendarHashChain">calendar hash chain</param>
             /// <returns>extended KSI signature</returns>
-            /// <exception cref="ArgumentNullException">thrown if calendar hash chain is null</exception>
+            
             public IKsiSignature Extend(CalendarHashChain calendarHashChain)
             {
                 return Extend(calendarHashChain, null);
@@ -192,7 +191,7 @@ namespace Guardtime.KSI.Signature
             /// <param name="calendarHashChain">extended calendar hash chain</param>
             /// <param name="publicationRecord">extended publication record</param>
             /// <returns>extended KSI signature</returns>
-            /// <exception cref="KsiException">thrown if calendar hash chain is null</exception>
+            
             public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecord publicationRecord)
             {
                 if (calendarHashChain == null)

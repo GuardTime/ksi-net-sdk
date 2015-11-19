@@ -14,7 +14,7 @@ namespace Guardtime.KSI.Crypto
         /// <param name="oid">signature oid</param>
         /// <param name="digestAlgorithm">algorithm used for given signature</param>
         /// <returns>signature verifier</returns>
-        /// <exception cref="InvalidOperationException">thrown when signature oid is not supported</exception>
+        
         public static ICryptoSignatureVerifier GetCryptoSignatureVerifierByOid(string oid)
         {
             switch (oid)

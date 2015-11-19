@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Guardtime.KSI.Exceptions;
+﻿using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Service
@@ -18,7 +17,7 @@ namespace Guardtime.KSI.Service
         ///     Create aggregation pdu TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
+        
         public AggregationPdu(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.AggregationPdu.TagType)
@@ -80,7 +79,7 @@ namespace Guardtime.KSI.Service
         /// <param name="header">KSI PDU header</param>
         /// <param name="payload">aggregation payload</param>
         /// <param name="mac">pdu message hmac</param>
-        /// <exception cref="TlvException">thrown when payload is null</exception>
+        
         public AggregationPdu(KsiPduHeader header, KsiPduPayload payload, ImprintTag mac)
             : base(header, mac, Constants.AggregationPdu.TagType, false, false, new ITlvTag[] { header, payload, mac })
         {

@@ -13,7 +13,7 @@ namespace Guardtime.KSI.Parser
         ///     Create string TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        /// <exception cref="TlvException">thrown when TLV tag is null or encodeValue returns null</exception>
+        
         public StringTag(ITlvTag tag) : base(tag)
         {
             byte[] data = tag.EncodeValue();
@@ -32,7 +32,7 @@ namespace Guardtime.KSI.Parser
         /// <param name="nonCritical">Is TLV element non critical</param>
         /// <param name="forward">Is TLV element forwarded</param>
         /// <param name="value">TLV element string value</param>
-        /// <exception cref="TlvException">thrown when value is null</exception>
+        
         public StringTag(uint type, bool nonCritical, bool forward, string value)
             : base(type, nonCritical, forward)
         {

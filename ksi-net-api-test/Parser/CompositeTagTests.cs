@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Guardtime.KSI.Exceptions;
 using NUnit.Framework;
 
