@@ -80,7 +80,6 @@ namespace Guardtime.KSI.Utils
         /// <param name="ofs">data offset</param>
         /// <param name="len">data length</param>
         /// <returns>unsigned long</returns>
-        
         public static ulong DecodeUnsignedLong(byte[] buf, int ofs, int len)
         {
             if (buf == null)
@@ -156,7 +155,6 @@ namespace Guardtime.KSI.Utils
         /// </summary>
         /// <param name="bytes">string bytes</param>
         /// <returns>utf-8 string</returns>
-        
         public static string DecodeNullTerminatedUtf8String(byte[] bytes)
         {
             if (bytes == null)
@@ -177,7 +175,6 @@ namespace Guardtime.KSI.Utils
         /// </summary>
         /// <param name="value">utf-8 string</param>
         /// <returns>byte array</returns>
-        
         public static byte[] EncodeNullTerminatedUtf8String(string value)
         {
             if (value == null)
@@ -208,7 +205,6 @@ namespace Guardtime.KSI.Utils
         /// <param name="arr">array of values</param>
         /// <param name="value">value to write to array</param>
         /// <typeparam name="T">array type</typeparam>
-        
         public static void ArrayFill<T>(T[] arr, T value)
         {
             if (arr == null)

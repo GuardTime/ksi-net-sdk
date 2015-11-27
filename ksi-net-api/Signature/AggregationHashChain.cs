@@ -364,7 +364,7 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         ///     Aggregation hash chain chain index ordering.
         /// </summary>
-        public class ChainIndexOrdering : IComparer<AggregationHashChain>
+        internal class ChainIndexOrdering : IComparer<AggregationHashChain>
         {
             /// <summary>
             ///     Compare aggregation hash chains to eachother.

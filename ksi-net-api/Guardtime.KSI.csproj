@@ -192,7 +192,6 @@
     <Compile Include="Signature\Verification\Rule\UserProvidedPublicationCreationTimeVerificationRule.cs" />
     <Compile Include="Signature\Verification\Rule\SignaturePublicationRecordPublicationHashRule.cs" />
     <Compile Include="Signature\Verification\Rule\SignaturePublicationRecordPublicationTimeRule.cs" />
-    <Compile Include="Signature\Verification\Policy\IPolicy.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainTimeConsistencyRule.cs" />
     <Compile Include="Signature\Verification\Rule\CalendarHashChainRegistrationTimeRule.cs" />
     <Compile Include="Signature\Verification\Rule\CalendarHashChainAggregationTimeRule.cs" />

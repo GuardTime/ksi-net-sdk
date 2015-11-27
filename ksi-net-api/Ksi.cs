@@ -11,7 +11,7 @@ namespace Guardtime.KSI
     /// <summary>
     ///     Simple implementation of KSI services.
     /// </summary>
-    public class Ksi
+    public class Ksi : IKsi
     {
         private readonly IKsiService _ksiService;
 

@@ -143,7 +143,33 @@ namespace Guardtime.KSI.Service
         /// <returns>publications file bytes</returns>
         public byte[] EndGetPublicationsFile(IAsyncResult asyncResult)
         {
-            return EndGetResult(asyncResult);
+            HttpKsiServiceProtocolAsyncResult httpAsyncResult = asyncResult as HttpKsiServiceProtocolAsyncResult;
+            if (httpAsyncResult == null)
+            {
+                throw new KsiServiceProtocolException("Invalid IAsyncResult.");
+            }
+
+            if (!httpAsyncResult.IsCompleted)
+            {
+                httpAsyncResult.AsyncWaitHandle.WaitOne();
+            }
+
+            if (httpAsyncResult.HasError)
+            {
+                throw httpAsyncResult.Error;
+            }
+
+            try
+            {
+                using (WebResponse response = httpAsyncResult.Request.EndGetResponse(httpAsyncResult.ResponseAsyncResult))
+                {
+                    return HandleWebResponse(response);
+                }
+            }
+            catch (WebException e)
+            {
+                throw new KsiServiceProtocolException(e.Message, e);
+            }
         }
 
         /// <summary>
@@ -222,8 +248,7 @@ namespace Guardtime.KSI.Service
             }
             catch (Exception e)
             {
-                httpAsyncResult.Error =
-                    new KsiServiceProtocolException("Request failed with following error \"" + e + "\".", e);
+                httpAsyncResult.Error = new KsiServiceProtocolException("Request failed with following error \"" + e + "\".", e);
                 httpAsyncResult.SetComplete(true);
             }
         }

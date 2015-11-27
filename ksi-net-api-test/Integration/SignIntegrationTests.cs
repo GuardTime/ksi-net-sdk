@@ -42,7 +42,7 @@ namespace Guardtime.KSI.Integration
                     PublicationsFile = ksi.GetPublicationsFile()
                 };
                 VerificationResult verificationResult = ksi.Verify(verificationContext, new KeyBasedVerificationPolicy());
-                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode, "Signature should verify with key based policy");
+                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode, "Signature should not verify with key based policy using invalid hash");
             }
         }
     }

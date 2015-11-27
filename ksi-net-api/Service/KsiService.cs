@@ -248,16 +248,16 @@ namespace Guardtime.KSI.Service
                 {
                     ExtendPdu pdu = new ExtendPdu(reader.ReadTag());
                     ExtendResponsePayload payload = pdu.Payload as ExtendResponsePayload;
-                    ExtendErrorPayload errorPayloadPayload = pdu.Payload as ExtendErrorPayload;
+                    ExtendErrorPayload errorPayload = pdu.Payload as ExtendErrorPayload;
 
-                    if (payload == null && errorPayloadPayload == null)
+                    if (payload == null && errorPayload == null)
                     {
                         throw new KsiException("Invalid extension response payload: null.");
                     }
 
                     if (payload == null || payload.Status != 0)
                     {
-                        string errorMessage = payload == null ? errorPayloadPayload.ErrorMessage : payload.ErrorMessage;
+                        string errorMessage = payload == null ? errorPayload.ErrorMessage : payload.ErrorMessage;
                         throw new KsiException("Error occured during extending: " + errorMessage + ".");
                     }
 
@@ -335,8 +335,7 @@ namespace Guardtime.KSI.Service
                 serviceAsyncResult.AsyncWaitHandle.WaitOne();
             }
 
-            byte[] data =
-                _publicationsFileServiceProtocol.EndGetPublicationsFile(serviceAsyncResult.ServiceProtocolAsyncResult);
+            byte[] data = _publicationsFileServiceProtocol.EndGetPublicationsFile(serviceAsyncResult.ServiceProtocolAsyncResult);
             return _publicationsFileFactory.Create(data);
         }
 
