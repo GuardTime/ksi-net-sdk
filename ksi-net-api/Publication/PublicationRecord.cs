@@ -34,7 +34,7 @@ namespace Guardtime.KSI.Publication
                         PublicationReferences.Add(new StringTag(childTag));
                         break;
                     case Constants.PublicationRecord.PublicationRepositoryUriTagType:
-                        PubRepUri.Add(new StringTag(childTag));
+                        RepositoryUri.Add(new StringTag(childTag));
                         break;
                     default:
                         VerifyUnknownTag(childTag);
@@ -61,6 +61,6 @@ namespace Guardtime.KSI.Publication
         /// <summary>
         ///     Get publication repository uri.
         /// </summary>
-        public IList<StringTag> PubRepUri { get; } = new List<StringTag>();
+        public IList<StringTag> RepositoryUri { get; } = new List<StringTag>();
     }
 }

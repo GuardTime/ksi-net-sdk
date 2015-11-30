@@ -27,8 +27,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     continue;
                 }
 
-                // TODO: Correct logging
-                Logger.Error("Previous aggregation hash chain aggregation time {0} does not match current aggregation time {1}", time, aggregationHashChain.AggregationTime);
+                Logger.Warn("Previous aggregation hash chain aggregation time {0} does not match current aggregation time {1}", time, aggregationHashChain.AggregationTime);
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int02);
             }
 

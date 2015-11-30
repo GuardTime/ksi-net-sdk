@@ -10,7 +10,7 @@ namespace Guardtime.KSI.Publication
     public sealed class PublicationsFileHeader : CompositeTag
     {
         private readonly IntegerTag _creationTime;
-        private readonly StringTag _repUri;
+        private readonly StringTag _repositoryUri;
         private readonly IntegerTag _version;
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace Guardtime.KSI.Publication
 
             int versionCount = 0;
             int creationTimeCount = 0;
-            int repUriCount = 0;
+            int repositoryUriCount = 0;
 
             foreach (ITlvTag childTag in this)
             {
@@ -41,9 +41,9 @@ namespace Guardtime.KSI.Publication
                             Util.DecodeUnsignedLong(childTag.EncodeValue(), 0, childTag.EncodeValue().Length));
                         creationTimeCount++;
                         break;
-                    case Constants.PublicationsFileHeader.RepUriTagType:
-                        _repUri = new StringTag(childTag);
-                        repUriCount++;
+                    case Constants.PublicationsFileHeader.RepositoryUriTagType:
+                        _repositoryUri = new StringTag(childTag);
+                        repositoryUriCount++;
                         break;
                     default:
                         VerifyUnknownTag(childTag);
@@ -61,7 +61,7 @@ namespace Guardtime.KSI.Publication
                 throw new TlvException("Only one creation time must exist in publications file header.");
             }
 
-            if (repUriCount > 1)
+            if (repositoryUriCount > 1)
             {
                 throw new TlvException("Only one repository uri is allowed in publications file header.");
             }
@@ -75,7 +75,7 @@ namespace Guardtime.KSI.Publication
         /// <summary>
         ///     Get publications file repository uri if it exists.
         /// </summary>
-        public string RepUri => _repUri?.Value;
+        public string RepositoryUri => _repositoryUri?.Value;
 
         /// <summary>
         ///     Get publications file version.

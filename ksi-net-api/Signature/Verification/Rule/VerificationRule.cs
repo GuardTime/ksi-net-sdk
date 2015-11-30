@@ -237,7 +237,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (publicationRecord == null)
             {
-                throw new KsiVerificationException("No publication record found after registration time in publications file: " + time + ".");
+                throw new KsiVerificationException("No publication record found after given time in publications file: " + time + ".");
             }
             return publicationRecord;
         }

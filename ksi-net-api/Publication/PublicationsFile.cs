@@ -115,9 +115,9 @@ namespace Guardtime.KSI.Publication
             }
 
             /// <summary>
-            ///     Get neared publication record to time.
+            ///     Get nearest publication record subsequent to given time.
             /// </summary>
-            /// <param name="time">publication time</param>
+            /// <param name="time">time</param>
             /// <returns>publication record closest to time</returns>
             public PublicationRecord GetNearestPublicationRecord(ulong time)
             {
@@ -126,7 +126,7 @@ namespace Guardtime.KSI.Publication
                 foreach (PublicationRecord publicationRecord in _publicationRecordList)
                 {
                     ulong publicationTime = publicationRecord.PublicationData.PublicationTime;
-                    if (publicationTime != time && publicationTime <= time)
+                    if (publicationTime < time)
                     {
                         continue;
                     }
@@ -230,9 +230,9 @@ namespace Guardtime.KSI.Publication
                     builder.Append(", last publication: ").Append(latestPublication.PublicationData.PublicationTime);
                 }
 
-                if (_publicationsHeader.RepUri != null)
+                if (_publicationsHeader.RepositoryUri != null)
                 {
-                    builder.Append(", published at: ").Append(_publicationsHeader.RepUri);
+                    builder.Append(", published at: ").Append(_publicationsHeader.RepositoryUri);
                 }
 
                 return builder.ToString();

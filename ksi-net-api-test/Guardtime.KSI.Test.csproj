@@ -189,6 +189,7 @@
     <Folder Include="resources\signature\ksi-signature\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="resources\publication\publicationdata\missingtag.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

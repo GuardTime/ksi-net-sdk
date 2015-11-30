@@ -10,20 +10,20 @@ namespace Guardtime.KSI.Crypto
     /// </summary>
     public class RsaCryptoSignatureVerifier : ICryptoSignatureVerifier
     {
-        private readonly string _alrogithm;
+        private readonly string _algorithm;
 
         /// <summary>
         /// Create RSA crypto signature verifier instance.
         /// </summary>
-        /// <param name="alrogithm">digest algorithm</param>
-        public RsaCryptoSignatureVerifier(string alrogithm)
+        /// <param name="algorithm">digest algorithm</param>
+        public RsaCryptoSignatureVerifier(string algorithm)
         {
-            if (alrogithm == null)
+            if (algorithm == null)
             {
-                throw new ArgumentNullException(nameof(alrogithm));
+                throw new ArgumentNullException(nameof(algorithm));
             }
 
-            _alrogithm = alrogithm;
+            _algorithm = algorithm;
         }
 
         /// <see cref="ICryptoSignatureVerifier" />
@@ -43,7 +43,7 @@ namespace Guardtime.KSI.Crypto
                 throw new PkiVerificationException("Certificate in data parameter cannot be null.");
             }
 
-            if (_alrogithm == null)
+            if (_algorithm == null)
             {
                 throw new PkiVerificationException("Digest algorithm in data parameter cannot be null.");
             }
@@ -55,7 +55,7 @@ namespace Guardtime.KSI.Crypto
 
             using (RSACryptoServiceProvider serviceProvider = (RSACryptoServiceProvider)certificate.PublicKey.Key)
             {
-                if (!serviceProvider.VerifyData(signedBytes, _alrogithm, signatureBytes))
+                if (!serviceProvider.VerifyData(signedBytes, _algorithm, signatureBytes))
                 {
                     throw new PkiVerificationException("Failed to verify RSA signature.");
                 }

@@ -96,7 +96,7 @@
 
             public const uint VersionTagType = 0x1;
             public const uint CreationTimeTagType = 0x2;
-            public const uint RepUriTagType = 0x3;
+            public const uint RepositoryUriTagType = 0x3;
         }
 
         public static class KsiPdu

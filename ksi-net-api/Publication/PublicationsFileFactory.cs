@@ -3,6 +3,7 @@ using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Trust;
 using Guardtime.KSI.Utils;
+using NLog;
 
 namespace Guardtime.KSI.Publication
 {
@@ -13,6 +14,7 @@ namespace Guardtime.KSI.Publication
     {
         private readonly IPkiTrustProvider _pkiTrustProvider;
         private const int DefaultBufferSize = 8092;
+        protected static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         ///     Create new publications file factory with PKI trust provider.
@@ -44,10 +46,9 @@ namespace Guardtime.KSI.Publication
             byte[] data = new byte[PublicationsFile.FileBeginningMagicBytes.Length];
             int bytesRead = stream.Read(data, 0, data.Length);
 
-            if (bytesRead != PublicationsFile.FileBeginningMagicBytes.Length ||
-                !Util.IsArrayEqual(data, PublicationsFile.FileBeginningMagicBytes))
+            if (bytesRead != PublicationsFile.FileBeginningMagicBytes.Length || !Util.IsArrayEqual(data, PublicationsFile.FileBeginningMagicBytes))
             {
-                throw new PublicationsFileException("Publications file header is incorrect.");
+                throw new PublicationsFileException("Publications file header is incorrect. Invalid publications file magic bytes.");
             }
 
             using (MemoryStream memoryStream = new MemoryStream())
@@ -58,8 +59,7 @@ namespace Guardtime.KSI.Publication
                     memoryStream.Write(buffer, 0, bytesRead);
                 }
 
-                PublicationsFile publicationsFile =
-                    new PublicationsFile(new RawTag(0x0, false, false, memoryStream.ToArray()));
+                PublicationsFile publicationsFile = new PublicationsFile(new RawTag(0x0, false, false, memoryStream.ToArray()));
 
                 try
                 {
@@ -69,6 +69,8 @@ namespace Guardtime.KSI.Publication
                 {
                     throw new PublicationsFileException("Publications file verification failed.", e);
                 }
+
+                Logger.Info("Publications file decoded {0}", publicationsFile);
 
                 return publicationsFile;
             }
