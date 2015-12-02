@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using System.IO;
+using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
@@ -48,7 +49,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             IPublicationsFile publicationsFile;
             using (FileStream stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
             {
-                publicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider()).Create(stream);
+                publicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(), new CertificateRdnSubjectSelector("E=publications@guardtime.com"))).Create(stream);
             }
 
             // Check invalid calendar hash chain in signature: null

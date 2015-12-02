@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography.Pkcs;
+﻿using System;
+using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
 
@@ -9,6 +10,26 @@ namespace Guardtime.KSI.Trust
     /// </summary>
     public class PkiTrustStoreProvider : IPkiTrustProvider
     {
+
+        private readonly X509Certificate2Collection _trustAnchors;
+        private readonly ICertificateRdnSubjectSelector _certificateRdnSelector;
+
+        public PkiTrustStoreProvider(X509Certificate2Collection trustAnchors, ICertificateRdnSubjectSelector certificateRdnSelector)
+        {
+            if (trustAnchors == null)
+            {
+                throw new ArgumentNullException(nameof(trustAnchors));
+            }
+
+            if (certificateRdnSelector == null)
+            {
+                throw new ArgumentNullException(nameof(certificateRdnSelector));
+            }
+
+            _trustAnchors = trustAnchors;
+            _certificateRdnSelector = certificateRdnSelector;
+        }
+
         /// <summary>
         ///     Verify bytes with x509 signature.
         /// </summary>
@@ -28,11 +49,8 @@ namespace Guardtime.KSI.Trust
                 throw new PkiVerificationException("Invalid signature bytes: null.");
             }
 
-            ICryptoSignatureVerifier verifier = CryptoSignatureVerifierFactory.GetPkcs7CryptoSignatureVerifier();
+            ICryptoSignatureVerifier verifier = CryptoSignatureVerifierFactory.GetPkcs7CryptoSignatureVerifier(_trustAnchors, _certificateRdnSelector);
             verifier.Verify(signedBytes, signatureBytes, null);
-
-            SignedCms signedCms = new SignedCms(new ContentInfo(signedBytes), true);
-            signedCms.Decode(signatureBytes);
 
             // TODO: Verify email also
             //Console.WriteLine(signedCms.SignerInfos[0].Certificate.GetNameInfo(X509NameType.EmailName, false));

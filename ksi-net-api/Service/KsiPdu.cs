@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Security.Cryptography;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
@@ -92,8 +91,8 @@ namespace Guardtime.KSI.Service
         /// <returns>hmac data hash</returns>
         private static DataHash CalculateMac(byte[] key, byte[] data)
         {
-            HMACSHA256 hmac = new HMACSHA256(key);
-            return new DataHash(HashAlgorithm.Sha2256, hmac.ComputeHash(data));
+            IHmacHasher hmac = new HmacHasher();
+            return hmac.GetHash(key, data);
         }
 
         /// <summary>

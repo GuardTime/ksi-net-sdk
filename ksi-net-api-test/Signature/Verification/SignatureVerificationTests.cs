@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
+using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature.Verification.Policy;
 using Guardtime.KSI.Trust;
 using NUnit.Framework;
+using Org.BouncyCastle.Asn1.X509;
 
 namespace Guardtime.KSI.Signature.Verification
 {
@@ -22,7 +26,7 @@ namespace Guardtime.KSI.Signature.Verification
                     "http://verify.guardtime.com/ksi-publications.bin");
 
                 KsiService ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"),
-                    new PublicationsFileFactory(new PkiTrustStoreProvider()), new KsiSignatureFactory());
+                    new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStore.GetTrustAnchorCollection(), new CertificateRdnSubjectSelector("E=publications@guardtime.com"))), new KsiSignatureFactory());
                 VerificationContext context = new VerificationContext(new KsiSignatureFactory().Create(stream))
                 {
                     DocumentHash =
@@ -37,7 +41,7 @@ namespace Guardtime.KSI.Signature.Verification
                     IsExtendingAllowed = true,
                     KsiService = ksiService,
                     PublicationsFile =
-                        new PublicationsFileFactory(new PkiTrustStoreProvider()).Create(new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+                        new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStore.GetTrustAnchorCollection(), new CertificateRdnSubjectSelector(new Dictionary<string, string>() { { "1.2.840.113549.1.9.1", "publications@guardtime.com"} }))).Create(new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
                 };
 
                 Console.WriteLine(@"// Internal verification policy");
@@ -47,9 +51,9 @@ namespace Guardtime.KSI.Signature.Verification
                 Console.WriteLine(@"// Publications based");
                 policy = new PublicationBasedVerificationPolicy();
                 Console.WriteLine(policy.Verify(context));
-
+                
                 Console.WriteLine(@"// Key based");
-                policy = new KeyBasedVerificationPolicy();
+                policy = new KeyBasedVerificationPolicy(TrustStore.GetTrustAnchorCollection(), new CertificateRdnSubjectSelector((Dictionary<string, string>)null));
                 Console.WriteLine(policy.Verify(context));
 
                 Console.WriteLine(@"// Calendar based verification");

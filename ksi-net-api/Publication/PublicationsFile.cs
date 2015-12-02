@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
@@ -175,16 +174,17 @@ namespace Guardtime.KSI.Publication
             /// </summary>
             /// <param name="certificateId">certificate id</param>
             /// <returns>X509 certificate</returns>
-            public X509Certificate2 FindCertificateById(byte[] certificateId)
+            public byte[] FindCertificateById(byte[] certificateId)
             {
                 for (int i = 0; i < _certificateRecordList.Count; i++)
                 {
                     if (Util.IsArrayEqual(_certificateRecordList[i].CertificateId.EncodeValue(),
                         certificateId))
                     {
-                        return new X509Certificate2(_certificateRecordList[i].X509Certificate.EncodeValue());
+                        return _certificateRecordList[i].X509Certificate.EncodeValue();
                     }
                 }
+
                 return null;
             }
 

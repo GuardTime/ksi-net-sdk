@@ -75,29 +75,10 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Security" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
-    <Compile Include="Crypto\CryptoSignatureVerificationData.cs" />
     <Compile Include="Crypto\CryptoSignatureVerifierFactory.cs" />
-    <Compile Include="Crypto\ICryptoSignatureVerifier.cs" />
-    <Compile Include="Crypto\Pkcs7CryptoSignatureVerifier.cs" />
-    <Compile Include="Crypto\RsaCryptoSignatureVerifier.cs" />
-    <Compile Include="Exceptions\KsiServiceException.cs" />
-    <Compile Include="Exceptions\TlvException.cs" />
-    <Compile Include="Exceptions\PublicationsFileException.cs" />
-    <Compile Include="Exceptions\KsiServiceProtocolException.cs" />
-    <Compile Include="Exceptions\KsiException.cs" />
-    <Compile Include="Exceptions\PkiVerificationException.cs" />
-    <Compile Include="Exceptions\KsiVerificationException.cs" />
-    <Compile Include="Hashing\DataHash.cs" />
-    <Compile Include="Hashing\DataHasher.cs" />
-    <Compile Include="Hashing\HashAlgorithm.Constants.cs" />
-    <Compile Include="Hashing\HashAlgorithm.cs" />
-    <Compile Include="Exceptions\HashingException.cs" />
     <Compile Include="IKsi.cs" />
     <Compile Include="Ksi.cs" />
     <Compile Include="Parser\ImprintTag.cs" />
@@ -208,11 +189,6 @@
     <Compile Include="Trust\IKsiTrustProvider.cs" />
     <Compile Include="Trust\IPkiTrustProvider.cs" />
     <Compile Include="Trust\PkiTrustStoreProvider.cs" />
-    <Compile Include="Utils\Base16.cs" />
-    <Compile Include="Utils\Base32.cs" />
-    <Compile Include="Utils\BaseX.cs" />
-    <Compile Include="Utils\Crc32.cs" />
-    <Compile Include="Utils\Util.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -220,6 +196,16 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ksi-net-api-crypto-bouncycastle\ksi-net-api-crypto-bouncycastle.csproj">
+      <Project>{cc9c4947-e275-4381-a93a-c80498b450b4}</Project>
+      <Name>ksi-net-api-crypto-bouncycastle</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ksi-net-api-crypto\ksi-net-api-common.csproj">
+      <Project>{80aec649-428c-4ea3-82aa-a35f00670e06}</Project>
+      <Name>ksi-net-api-common</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

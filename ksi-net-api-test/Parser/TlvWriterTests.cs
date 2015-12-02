@@ -120,7 +120,7 @@ namespace Guardtime.KSI.Parser
 
             public override int GetHashCode()
             {
-                throw new NotImplementedException();
+                return 0;
             }
         }
     }

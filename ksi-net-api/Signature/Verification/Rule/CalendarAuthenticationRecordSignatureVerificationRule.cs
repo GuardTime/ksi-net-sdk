@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
@@ -13,6 +14,25 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class CalendarAuthenticationRecordSignatureVerificationRule : VerificationRule
     {
+        private readonly X509Certificate2Collection _trustAnchors;
+        private readonly ICertificateRdnSubjectSelector _certificateRdnSelector;
+
+        public CalendarAuthenticationRecordSignatureVerificationRule(X509Certificate2Collection trustAnchors, ICertificateRdnSubjectSelector certificateRdnSelector)
+        {
+            if (trustAnchors == null)
+            {
+                throw new ArgumentNullException(nameof(trustAnchors));
+            }
+
+            if (certificateRdnSelector == null)
+            {
+                throw new ArgumentNullException(nameof(certificateRdnSelector));
+            }
+
+            _trustAnchors = trustAnchors;
+            _certificateRdnSelector = certificateRdnSelector;
+        }
+
         /// <see cref="VerificationRule.Verify" />
         /// <exception cref="KsiException">thrown if verification context is missing</exception>
         /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
@@ -20,16 +40,16 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         {
             CalendarAuthenticationRecord calendarAuthenticationRecord = GetCalendarAuthenticationRecord(GetSignature(context));
             SignatureData signatureData = calendarAuthenticationRecord.SignatureData;
-            X509Certificate2 certificate = GetPublicationsFile(context).FindCertificateById(signatureData.GetCertificateId());
+            byte[] certificateBytes = GetPublicationsFile(context).FindCertificateById(signatureData.GetCertificateId());
 
-            if (certificate == null)
+            if (certificateBytes == null)
             {
                 throw new KsiVerificationException("No certificate found in publications file with id: " +Base16.Encode(signatureData.GetCertificateId()) + ".");
             }
 
             byte[] signedBytes = calendarAuthenticationRecord.PublicationData.Encode();
-            ICryptoSignatureVerifier cryptoSignatureVerifier = CryptoSignatureVerifierFactory.GetCryptoSignatureVerifierByOid(signatureData.SignatureType);
-            CryptoSignatureVerificationData data = new CryptoSignatureVerificationData(certificate);
+            ICryptoSignatureVerifier cryptoSignatureVerifier = CryptoSignatureVerifierFactory.GetCryptoSignatureVerifierByOid(signatureData.SignatureType, _trustAnchors, _certificateRdnSelector);
+            CryptoSignatureVerificationData data = new CryptoSignatureVerificationData(certificateBytes);
 
             try
             {
