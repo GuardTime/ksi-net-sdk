@@ -16,7 +16,7 @@ namespace Guardtime.KSI.Publication
         {
             using (FileStream stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
             {
-                new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStore.GetTrustAnchorCollection(), new CertificateRdnSubjectSelector("E=publications@guardtime.com"))).Create(stream);
+                new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(), new CertificateRdnSubjectSelector("E=publications@guardtime.com"))).Create(stream);
             }
         }
 
@@ -25,7 +25,7 @@ namespace Guardtime.KSI.Publication
         {
             using (FileStream stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
             {
-                IPublicationsFile publicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStore.GetTrustAnchorCollection(), new CertificateRdnSubjectSelector("E=publications@guardtime.com"))).Create(stream);
+                IPublicationsFile publicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(), new CertificateRdnSubjectSelector("E=publications@guardtime.com"))).Create(stream);
                 Assert.AreEqual("O=Guardtime, CN=H5", new X509Certificate2(publicationsFile.FindCertificateById(new byte[] {0x9a, 0x65, 0x82, 0x94})).Subject, "Certificate should be correct");
             }
         }
@@ -37,7 +37,7 @@ namespace Guardtime.KSI.Publication
             {
                 using (TlvReader reader = new TlvReader(new FileStream("resources/publication/publicationrecord/pub-record-18-09-2014.bin", FileMode.Open)))
                 {
-                    IPublicationsFile publicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStore.GetTrustAnchorCollection(), new CertificateRdnSubjectSelector("E=publications@guardtime.com"))).Create(stream);
+                    IPublicationsFile publicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(), new CertificateRdnSubjectSelector("E=publications@guardtime.com"))).Create(stream);
                     Assert.IsFalse(publicationsFile.Contains(null), "Should not crash when null object is used");
 
                     Assert.IsTrue(publicationsFile.Contains(new PublicationRecord(reader.ReadTag())), "Should contain given publication record");
@@ -52,7 +52,7 @@ namespace Guardtime.KSI.Publication
             {
                 using (TlvReader reader = new TlvReader(new FileStream("resources/publication/publicationrecord/pub-record-invalid-hash-18-09-2014.bin", FileMode.Open)))
                 {
-                    IPublicationsFile publicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStore.GetTrustAnchorCollection(), new CertificateRdnSubjectSelector("E=publications@guardtime.com"))).Create(stream);
+                    IPublicationsFile publicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(), new CertificateRdnSubjectSelector("E=publications@guardtime.com"))).Create(stream);
                     Assert.IsFalse(publicationsFile.Contains(new PublicationRecord(reader.ReadTag())), "Should contain given publication record");
                 }
             }
@@ -63,7 +63,7 @@ namespace Guardtime.KSI.Publication
         {
             using (FileStream stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
             {
-                IPublicationsFile publicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStore.GetTrustAnchorCollection(), new CertificateRdnSubjectSelector("E=publications@guardtime.com"))).Create(stream);
+                IPublicationsFile publicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(), new CertificateRdnSubjectSelector("E=publications@guardtime.com"))).Create(stream);
                 PublicationRecord publicationRecord = publicationsFile.GetLatestPublication();
 
                 Assert.AreEqual(1442275200, publicationRecord.PublicationData.PublicationTime, "Should be correct publication time for latest publication");

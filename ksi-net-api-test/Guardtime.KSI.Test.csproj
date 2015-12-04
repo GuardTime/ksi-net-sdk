@@ -201,7 +201,7 @@
     <Compile Include="Signature\Verification\Rule\UserProvidedPublicationVerificationRuleTests.cs" />
     <Compile Include="Signature\Verification\SignatureVerificationTests.cs" />
     <Compile Include="Trust\PkiTrustStoreProviderTests.cs" />
-    <Compile Include="Trust\TrustStore.cs" />
+    <Compile Include="Trust\TrustStoreUtilities.cs" />
     <Compile Include="Utils\InvalidEncodeTlvTag.cs" />
     <Compile Include="Utils\UtilTests.cs" />
   </ItemGroup>
