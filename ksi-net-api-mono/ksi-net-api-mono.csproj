@@ -7,7 +7,7 @@
     <ProjectGuid>{93AF7FE9-A3DF-40D2-8377-BEF243F02AC6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ksi_net_api_mono</RootNamespace>
+    <RootNamespace>Guardtime.KSI.Mono</RootNamespace>
     <AssemblyName>ksi-net-api-mono</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -36,14 +36,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="KsiProvider.cs" />
+    <Compile Include="MonoCryptoProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ksi-net-api-common\ksi-net-api-common.csproj">
-      <Project>{80aec649-428c-4ea3-82aa-a35f00670e06}</Project>
-      <Name>ksi-net-api-common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ksi-net-api-crypto-bouncycastle\ksi-net-api-crypto-bouncycastle.csproj">
       <Project>{cc9c4947-e275-4381-a93a-c80498b450b4}</Project>
       <Name>ksi-net-api-crypto-bouncycastle</Name>

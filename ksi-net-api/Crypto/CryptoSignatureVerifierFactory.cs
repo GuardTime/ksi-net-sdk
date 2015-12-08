@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Hashing;
-using Guardtime.KSI.Signature;
 
 namespace Guardtime.KSI.Crypto
 {
@@ -25,9 +23,9 @@ namespace Guardtime.KSI.Crypto
             switch (oid)
             {
                 case "1.2.840.113549.1.1.11":
-                    return CryptoProvider.GetRsaCryptoSignatureVerifier("SHA256");
+                    return KsiProvider.GetRsaCryptoSignatureVerifier("SHA256");
                 case "1.2.840.113549.1.7.2":
-                    return CryptoProvider.GetPkcs7CryptoSignatureVerifier(trustAnchors, certificateRdnSelector);
+                    return KsiProvider.GetPkcs7CryptoSignatureVerifier(trustAnchors, certificateRdnSelector);
                 default:
                     throw new PkiVerificationException("Cryptographic signature not supported.");
             }

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using Guardtime.KSI.Crypto;
+﻿using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature;

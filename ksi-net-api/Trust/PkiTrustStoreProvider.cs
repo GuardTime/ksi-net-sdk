@@ -2,7 +2,6 @@
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Signature;
 
 namespace Guardtime.KSI.Trust
 {
@@ -49,7 +48,7 @@ namespace Guardtime.KSI.Trust
                 throw new PkiVerificationException("Invalid signature bytes: null.");
             }
 
-            ICryptoSignatureVerifier verifier = CryptoProvider.GetPkcs7CryptoSignatureVerifier(_trustAnchors, _certificateRdnSelector);
+            ICryptoSignatureVerifier verifier = KsiProvider.GetPkcs7CryptoSignatureVerifier(_trustAnchors, _certificateRdnSelector);
             verifier.Verify(signedBytes, signatureBytes, null);
 
             // TODO: Verify email also

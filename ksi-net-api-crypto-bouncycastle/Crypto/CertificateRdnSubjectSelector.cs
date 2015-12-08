@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.Asn1.X509;
-using X509Certificate = Org.BouncyCastle.X509.X509Certificate;
+using Org.BouncyCastle.X509;
 
 namespace Guardtime.KSI.Crypto
 {

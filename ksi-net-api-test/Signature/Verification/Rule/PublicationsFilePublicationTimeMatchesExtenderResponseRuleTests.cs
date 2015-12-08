@@ -1,11 +1,11 @@
-﻿using NUnit.Framework;
-using System.IO;
+﻿using System.IO;
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Trust;
 using Guardtime.KSI.Utils;
+using NUnit.Framework;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {

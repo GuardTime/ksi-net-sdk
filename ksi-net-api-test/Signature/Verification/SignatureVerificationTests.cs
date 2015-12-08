@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature.Verification.Policy;
 using Guardtime.KSI.Trust;
 using NUnit.Framework;
-using Org.BouncyCastle.Asn1.X509;
 
 namespace Guardtime.KSI.Signature.Verification
 {

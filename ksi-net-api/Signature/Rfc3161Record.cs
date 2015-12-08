@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
@@ -160,14 +159,14 @@ namespace Guardtime.KSI.Signature
                 throw new KsiException("Invalid input hash: null.");
             }
 
-            IDataHasher hasher = CryptoProvider.GetDataHasher(HashAlgorithm.GetById((byte)_tstInfoAlgorithm.Value));
+            IDataHasher hasher = KsiProvider.GetDataHasher(HashAlgorithm.GetById((byte)_tstInfoAlgorithm.Value));
             hasher.AddData(_tstInfoPrefix.Value);
             hasher.AddData(inputHash.Value);
             hasher.AddData(_tstInfoSuffix.Value);
 
             inputHash = hasher.GetHash();
 
-            hasher = CryptoProvider.GetDataHasher(HashAlgorithm.GetById((byte)_signedAttributesAlgorithm.Value));
+            hasher = KsiProvider.GetDataHasher(HashAlgorithm.GetById((byte)_signedAttributesAlgorithm.Value));
             hasher.AddData(_signedAttributesPrefix.Value);
             hasher.AddData(inputHash.Value);
             hasher.AddData(_signedAttributesSuffix.Value);

@@ -1,10 +1,10 @@
 ﻿using System.IO;
-using NUnit.Framework;
-using Guardtime.KSI.Parser;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
+using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Utils;
+using NUnit.Framework;
 
 namespace Guardtime.KSI.Signature
 {

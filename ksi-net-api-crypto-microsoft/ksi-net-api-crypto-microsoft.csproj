@@ -42,9 +42,9 @@
     <Compile Include="Crypto\RsaCryptoSignatureVerifier.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ksi-net-api-common\ksi-net-api-common.csproj">
-      <Project>{80aec649-428c-4ea3-82aa-a35f00670e06}</Project>
-      <Name>ksi-net-api-common</Name>
+    <ProjectReference Include="..\ksi-net-api\Guardtime.KSI.csproj">
+      <Project>{F38B227F-DB4E-4C5A-8C1D-A543C82D2311}</Project>
+      <Name>Guardtime.KSI</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

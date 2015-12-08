@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using Guardtime.KSI.Exceptions;
 using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.Crypto.Digests;
-using Org.BouncyCastle.Crypto.IO;
 using Org.BouncyCastle.Security;
 
 namespace Guardtime.KSI.Hashing

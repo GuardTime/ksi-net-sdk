@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ksi_net_api_mono;
+﻿using Guardtime.KSI.Mono;
 using NUnit.Framework;
 
 namespace Guardtime.KSI
@@ -14,7 +9,8 @@ namespace Guardtime.KSI
         [SetUp]
         public void RunBeforeAnyTests()
         {
-            KsiProvider.Build();
+            KsiProvider.SetCryptoProvider(new MonoCryptoProvider());
+            //KsiProvider.SetCryptoProvider(new MSCryptoProvider());
         }
     }
 }

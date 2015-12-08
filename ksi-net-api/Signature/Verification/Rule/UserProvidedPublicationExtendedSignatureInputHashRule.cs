@@ -1,5 +1,4 @@
 ﻿using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {

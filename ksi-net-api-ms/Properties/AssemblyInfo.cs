@@ -1,15 +1,14 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ksi-net-api-crypto")]
+[assembly: AssemblyTitle("ksi-net-api-ms")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ksi-net-api-crypto")]
+[assembly: AssemblyProduct("ksi-net-api-ms")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("80aec649-428c-4ea3-82aa-a35f00670e06")]
+[assembly: Guid("c72c7288-b7cf-4869-9af7-380ca7198033")]
 
 // Version information for an assembly consists of the following four values:
 //

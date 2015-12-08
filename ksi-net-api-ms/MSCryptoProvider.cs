@@ -1,12 +1,10 @@
 ﻿using System.Security.Cryptography.X509Certificates;
-using Guardtime.KSI;
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Hashing;
-using HashAlgorithm = Guardtime.KSI.Hashing.HashAlgorithm;
 
-namespace ksi_net_api_mono
+namespace Guardtime.KSI.MS
 {
-    public class KsiProvider : IKsiProvider
+    public class MSCryptoProvider : ICryptoProvider
     {
         public IDataHasher GetDataHasher(HashAlgorithm algorithm)
         {
@@ -35,11 +33,6 @@ namespace ksi_net_api_mono
         public IHmacHasher GetHmacHasher()
         {
             return new HmacHasher();
-        }
-
-        public static void Build()
-        {
-            CryptoProvider.Build(new KsiProvider());
         }
     }
 }

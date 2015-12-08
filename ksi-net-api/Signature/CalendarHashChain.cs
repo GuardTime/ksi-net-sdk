@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
@@ -176,7 +175,7 @@ namespace Guardtime.KSI.Signature
         /// <returns>result hash</returns>
         private static DataHash GetStepHash(HashAlgorithm algorithm, byte[] hashA, byte[] hashB)
         {
-            IDataHasher hasher = CryptoProvider.GetDataHasher(algorithm);
+            IDataHasher hasher = KsiProvider.GetDataHasher(algorithm);
             hasher.AddData(hashA);
             hasher.AddData(hashB);
             hasher.AddData(new byte[] {0xFF});

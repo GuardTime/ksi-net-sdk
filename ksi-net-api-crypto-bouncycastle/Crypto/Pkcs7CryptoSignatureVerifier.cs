@@ -1,13 +1,13 @@
 ﻿ using System;
-using System.Collections;
-using System.Security.Cryptography.X509Certificates;
+ using System.Collections;
+ using System.Security.Cryptography.X509Certificates;
  using Guardtime.KSI.Exceptions;
  using Org.BouncyCastle.Cms;
-using Org.BouncyCastle.Pkix;
-using Org.BouncyCastle.Security;
-using Org.BouncyCastle.Utilities.Collections;
+ using Org.BouncyCastle.Pkix;
+ using Org.BouncyCastle.Security;
+ using Org.BouncyCastle.Utilities.Collections;
  using Org.BouncyCastle.X509.Store;
-using X509Certificate = Org.BouncyCastle.X509.X509Certificate;
+ using X509Certificate = Org.BouncyCastle.X509.X509Certificate;
 
 namespace Guardtime.KSI.Crypto
 {

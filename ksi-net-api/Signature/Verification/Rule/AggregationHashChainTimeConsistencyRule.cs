@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using Guardtime.KSI.Exceptions;
-using NLog;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {

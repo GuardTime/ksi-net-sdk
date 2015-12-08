@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using Guardtime.KSI.Crypto;
+﻿using System.Security.Cryptography.X509Certificates;
 
 namespace Guardtime.KSI.Trust
 {

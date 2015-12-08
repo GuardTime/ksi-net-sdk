@@ -2,13 +2,13 @@ using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Hashing;
 
-namespace Guardtime.KSI.Crypto
+namespace Guardtime.KSI
 {
-    public class CryptoProvider
+    public class KsiProvider
     {
-        static IKsiProvider _provider;
+        static ICryptoProvider _provider;
 
-        public static void Build(IKsiProvider provider)
+        public static void SetCryptoProvider(ICryptoProvider provider)
         {
             _provider = provider;
         }
