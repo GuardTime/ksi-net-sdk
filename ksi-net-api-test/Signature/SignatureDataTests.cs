@@ -113,14 +113,11 @@ namespace Guardtime.KSI.Signature
 
         private static SignatureData GetSignatureDataFromFile(string file)
         {
-            using (FileStream stream = new FileStream(file, FileMode.Open))
+            using (TlvReader reader = new TlvReader(new FileStream(file, FileMode.Open)))
             {
-                using (TlvReader reader = new TlvReader(stream))
-                {
-                    SignatureData signatureData = new SignatureData(reader.ReadTag());
+                SignatureData signatureData = new SignatureData(reader.ReadTag());
 
-                    return signatureData;
-                }
+                return signatureData;
             }
         }
     }

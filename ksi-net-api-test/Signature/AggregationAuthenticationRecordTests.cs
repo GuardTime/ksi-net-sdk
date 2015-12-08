@@ -98,14 +98,11 @@ namespace Guardtime.KSI.Signature
 
         private static AggregationAuthenticationRecord GetAggregationAuthenticationRecordFromFile(string file)
         {
-            using (FileStream stream = new FileStream(file, FileMode.Open))
+            using (TlvReader reader = new TlvReader(new FileStream(file, FileMode.Open)))
             {
-                using (TlvReader reader = new TlvReader(stream))
-                {
-                    AggregationAuthenticationRecord aggregationAuthenticationRecord = new AggregationAuthenticationRecord(reader.ReadTag());
+                AggregationAuthenticationRecord aggregationAuthenticationRecord = new AggregationAuthenticationRecord(reader.ReadTag());
 
-                    return aggregationAuthenticationRecord;
-                }
+                return aggregationAuthenticationRecord;
             }
         }
     }

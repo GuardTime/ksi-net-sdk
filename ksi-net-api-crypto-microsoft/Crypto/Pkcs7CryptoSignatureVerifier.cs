@@ -11,7 +11,7 @@ namespace Guardtime.KSI.Crypto
     {
         private readonly X509Certificate2Collection _trustAnchors;
 
-        public Pkcs7CryptoSignatureVerifier(X509Certificate2Collection trustAnchors, ICertificateRdnSubjectSelector certificateRdnSelecto)
+        public Pkcs7CryptoSignatureVerifier(X509Certificate2Collection trustAnchors, ICertificateRdnSubjectSelector certificateRdnSelector)
         {
             if (trustAnchors == null)
             {

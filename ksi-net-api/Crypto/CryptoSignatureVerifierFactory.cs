@@ -16,7 +16,6 @@ namespace Guardtime.KSI.Crypto
         /// <param name="trustAnchors">trust anchor collection</param>
         /// <param name="certificateRdnSelector"></param>
         /// <returns>signature verifier</returns>
-        /// <exception cref="InvalidOperationException">thrown when signature oid is not supported</exception>
         public static ICryptoSignatureVerifier GetCryptoSignatureVerifierByOid(string oid, X509Certificate2Collection trustAnchors,
                                                                                ICertificateRdnSubjectSelector certificateRdnSelector)
         {

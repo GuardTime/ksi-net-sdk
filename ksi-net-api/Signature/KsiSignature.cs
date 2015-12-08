@@ -179,7 +179,6 @@ namespace Guardtime.KSI.Signature
             /// </summary>
             /// <param name="calendarHashChain">calendar hash chain</param>
             /// <returns>extended KSI signature</returns>
-            /// <exception cref="ArgumentNullException">thrown if calendar hash chain is null</exception>
             public IKsiSignature Extend(CalendarHashChain calendarHashChain)
             {
                 return Extend(calendarHashChain, null);
@@ -198,7 +197,6 @@ namespace Guardtime.KSI.Signature
                 {
                     throw new KsiException("Invalid calendar hash chain: null.");
                 }
-
 
                 using (TlvWriter writer = new TlvWriter(new MemoryStream()))
                 {

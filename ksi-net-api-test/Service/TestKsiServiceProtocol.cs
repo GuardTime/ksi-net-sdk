@@ -19,14 +19,11 @@ namespace Guardtime.KSI.Service
         {
             AsyncResult result = (AsyncResult)asyncResult;
 
-            using (MemoryStream stream = new MemoryStream(result.Request))
+            using (TlvReader reader = new TlvReader(new MemoryStream(result.Request)))
             {
-                using (TlvReader reader = new TlvReader(stream))
-                {
-                    AggregationPdu pdu = new AggregationPdu(reader.ReadTag());
-                    AggregationRequestPayload payload = pdu.Payload as AggregationRequestPayload;
-                    Assert.IsNotNull(payload);
-                }
+                AggregationPdu pdu = new AggregationPdu(reader.ReadTag());
+                AggregationRequestPayload payload = pdu.Payload as AggregationRequestPayload;
+                Assert.IsNotNull(payload);
             }
 
             return null;
@@ -41,19 +38,16 @@ namespace Guardtime.KSI.Service
         {
             AsyncResult result = (AsyncResult)asyncResult;
 
-            using (MemoryStream stream = new MemoryStream(result.Request))
+            using (TlvReader reader = new TlvReader(new MemoryStream(result.Request)))
             {
-                using (TlvReader reader = new TlvReader(stream))
-                {
-                    ExtendPdu pdu = new ExtendPdu(reader.ReadTag());
-                    ExtendRequestPayload payload = (ExtendRequestPayload)pdu.Payload;
-                    string filename = "response-" + (FailNext ? "invalid" : "ok") + "-anon-";
-                    FailNext = false;
+                ExtendPdu pdu = new ExtendPdu(reader.ReadTag());
+                ExtendRequestPayload payload = (ExtendRequestPayload)pdu.Payload;
+                string filename = "response-" + (FailNext ? "invalid" : "ok") + "-anon-";
+                FailNext = false;
 
-                    return payload.PublicationTime == null
-                        ? ReadFile("resources/extender-response/" + filename + payload.AggregationTime + ".tlv")
-                        : ReadFile("resources/extender-response/" + filename + payload.AggregationTime + "-" + payload.PublicationTime + ".tlv");
-                }
+                return payload.PublicationTime == null
+                    ? ReadFile("resources/extender-response/" + filename + payload.AggregationTime + ".tlv")
+                    : ReadFile("resources/extender-response/" + filename + payload.AggregationTime + "-" + payload.PublicationTime + ".tlv");
             }
         }
 
@@ -79,7 +73,7 @@ namespace Guardtime.KSI.Service
             }
         }
 
-        private class AsyncResult : IAsyncResult
+        private class AsyncResult : IAsyncResult, IDisposable
         {
             private readonly ManualResetEvent _resetEvent = new ManualResetEvent(true);
 
@@ -97,6 +91,11 @@ namespace Guardtime.KSI.Service
             public object AsyncState => null;
 
             public bool CompletedSynchronously => true;
+
+            public void Dispose()
+            {
+                _resetEvent.Dispose();
+            }
         }
     }
 }

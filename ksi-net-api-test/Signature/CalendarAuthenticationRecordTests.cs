@@ -83,14 +83,11 @@ namespace Guardtime.KSI.Signature
 
         private static CalendarAuthenticationRecord GetCalendarAuthenticationRecordFromFile(string file)
         {
-            using (FileStream stream = new FileStream(file, FileMode.Open))
+            using (TlvReader reader = new TlvReader(new FileStream(file, FileMode.Open)))
             {
-                using (TlvReader reader = new TlvReader(stream))
-                {
-                    CalendarAuthenticationRecord calendarAuthenticationRecord = new CalendarAuthenticationRecord(reader.ReadTag());
+                CalendarAuthenticationRecord calendarAuthenticationRecord = new CalendarAuthenticationRecord(reader.ReadTag());
 
-                    return calendarAuthenticationRecord;
-                }
+                return calendarAuthenticationRecord;
             }
         }
     }
