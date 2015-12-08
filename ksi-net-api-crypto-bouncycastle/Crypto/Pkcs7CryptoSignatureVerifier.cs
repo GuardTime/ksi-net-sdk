@@ -33,11 +33,9 @@ namespace Guardtime.KSI.Crypto
 
             _certificateRdnSelector = certificateRdnSelector;
 
-            _trustAnchors.Add(new TrustAnchor(DotNetUtilities.FromX509Certificate(trustAnchors[41]), null));
-
             foreach (X509Certificate2 certificate in trustAnchors)
             {
-                //_trustAnchors.Add(new TrustAnchor(DotNetUtilities.FromX509Certificate(certificate), null));
+               _trustAnchors.Add(new TrustAnchor(DotNetUtilities.FromX509Certificate(certificate), null));
             }
 
         }
