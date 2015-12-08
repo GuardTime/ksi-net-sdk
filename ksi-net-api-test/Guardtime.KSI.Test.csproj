@@ -158,6 +158,7 @@
     <Compile Include="Publication\PublicationDataTests.cs" />
     <Compile Include="Publication\PublicationsFileTests.cs" />
     <Compile Include="Service\TestKsiServiceProtocol.cs" />
+    <Compile Include="TestSetup.cs" />
     <Compile Include="Signature\CalendarAuthenticationRecordTests.cs" />
     <Compile Include="Signature\AggregationAuthenticationRecordTests.cs" />
     <Compile Include="Signature\KsiSignatureDoTests.cs" />
@@ -210,9 +211,13 @@
       <Project>{cc9c4947-e275-4381-a93a-c80498b450b4}</Project>
       <Name>ksi-net-api-crypto-bouncycastle</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ksi-net-api-crypto\ksi-net-api-common.csproj">
+    <ProjectReference Include="..\ksi-net-api-common\ksi-net-api-common.csproj">
       <Project>{80aec649-428c-4ea3-82aa-a35f00670e06}</Project>
       <Name>ksi-net-api-common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ksi-net-api-mono\ksi-net-api-mono.csproj">
+      <Project>{93af7fe9-a3df-40d2-8377-bef243f02ac6}</Project>
+      <Name>ksi-net-api-mono</Name>
     </ProjectReference>
     <ProjectReference Include="..\ksi-net-api\Guardtime.KSI.csproj">
       <Project>{f38b227f-db4e-4c5a-8c1d-a543c82d2311}</Project>
