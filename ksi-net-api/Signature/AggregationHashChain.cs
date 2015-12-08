@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
@@ -122,7 +123,6 @@ namespace Guardtime.KSI.Signature
             return _inputData?.Value;
         }
 
-
         /// <summary>
         ///     Get output hash.
         /// </summary>
@@ -145,11 +145,11 @@ namespace Guardtime.KSI.Signature
 
                 if (link.Direction == LinkDirection.Left)
                 {
-                    lastHash = HashTogether(lastHash.Imprint, link.GetSiblingData(), level);
+                    lastHash = GetStepHash(lastHash.Imprint, link.GetSiblingData(), level);
                 }
                 if (link.Direction == LinkDirection.Right)
                 {
-                    lastHash = HashTogether(link.GetSiblingData(), lastHash.Imprint, level);
+                    lastHash = GetStepHash(link.GetSiblingData(), lastHash.Imprint, level);
                 }
             }
 
@@ -163,9 +163,9 @@ namespace Guardtime.KSI.Signature
         /// <param name="hashB">second hash</param>
         /// <param name="level">hash chain level</param>
         /// <returns>resulting hash</returns>
-        private DataHash HashTogether(byte[] hashA, byte[] hashB, ulong level)
+        private DataHash GetStepHash(byte[] hashA, byte[] hashB, ulong level)
         {
-            DataHasher hasher = new DataHasher(HashAlgorithm.GetById((byte)_aggrAlgorithmId.Value));
+            IDataHasher hasher = CryptoProvider.GetDataHasher(HashAlgorithm.GetById((byte)_aggrAlgorithmId.Value));
             hasher.AddData(hashA);
             hasher.AddData(hashB);
             hasher.AddData(Util.EncodeUnsignedLong(level));
@@ -183,7 +183,6 @@ namespace Guardtime.KSI.Signature
             private readonly MetaData _metaData;
             private readonly ImprintTag _metaHash;
             private readonly ImprintTag _siblingHash;
-
 
             public Link(ITlvTag tag, LinkDirection direction) : base(tag)
             {
@@ -262,7 +261,6 @@ namespace Guardtime.KSI.Signature
             private string CalculateIdendityFromMetaHash()
             {
                 byte[] bytes = _metaHash.Value.Imprint;
-
 
                 if (bytes.Length < 3)
                 {

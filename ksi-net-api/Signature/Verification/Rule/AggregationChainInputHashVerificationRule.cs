@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 
@@ -22,7 +23,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (signature.IsRfc3161Signature)
             {
-                DataHasher hasher = new DataHasher(aggregationHashChainInputHash.Algorithm);
+                IDataHasher hasher = CryptoProvider.GetDataHasher(aggregationHashChainInputHash.Algorithm);
 
                 if (signature.Rfc3161Record == null)
                 {

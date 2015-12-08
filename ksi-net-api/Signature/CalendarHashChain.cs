@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
@@ -154,12 +155,12 @@ namespace Guardtime.KSI.Signature
                 DataHash siblingHash = _chain[i].Value;
                 if (_chain[i].Direction == LinkDirection.Left)
                 {
-                    inputHash = HashTogether(siblingHash.Algorithm, inputHash.Imprint, siblingHash.Imprint);
+                    inputHash = GetStepHash(siblingHash.Algorithm, inputHash.Imprint, siblingHash.Imprint);
                 }
 
                 if (_chain[i].Direction == LinkDirection.Right)
                 {
-                    inputHash = HashTogether(inputHash.Algorithm, siblingHash.Imprint, inputHash.Imprint);
+                    inputHash = GetStepHash(inputHash.Algorithm, siblingHash.Imprint, inputHash.Imprint);
                 }
             }
 
@@ -173,9 +174,9 @@ namespace Guardtime.KSI.Signature
         /// <param name="hashA">hash a</param>
         /// <param name="hashB">hash b</param>
         /// <returns>result hash</returns>
-        private static DataHash HashTogether(HashAlgorithm algorithm, byte[] hashA, byte[] hashB)
+        private static DataHash GetStepHash(HashAlgorithm algorithm, byte[] hashA, byte[] hashB)
         {
-            DataHasher hasher = new DataHasher(algorithm);
+            IDataHasher hasher = CryptoProvider.GetDataHasher(algorithm);
             hasher.AddData(hashA);
             hasher.AddData(hashB);
             hasher.AddData(new byte[] {0xFF});

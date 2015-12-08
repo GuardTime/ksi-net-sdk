@@ -135,6 +135,8 @@
     <Compile Include="Signature\AggregationHashChainResult.cs" />
     <Compile Include="Signature\CalendarAuthenticationRecord.cs" />
     <Compile Include="Signature\CalendarHashChain.cs" />
+    <Compile Include="Crypto\CryptoProvider.cs" />
+    <Compile Include="IKsiProvider.cs" />
     <Compile Include="Signature\IKsiSignature.cs" />
     <Compile Include="Signature\KsiSignature.cs" />
     <Compile Include="Signature\KsiSignatureFactory.cs" />
@@ -198,11 +200,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ksi-net-api-crypto-bouncycastle\ksi-net-api-crypto-bouncycastle.csproj">
-      <Project>{cc9c4947-e275-4381-a93a-c80498b450b4}</Project>
-      <Name>ksi-net-api-crypto-bouncycastle</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ksi-net-api-crypto\ksi-net-api-common.csproj">
+    <ProjectReference Include="..\ksi-net-api-common\ksi-net-api-common.csproj">
       <Project>{80aec649-428c-4ea3-82aa-a35f00670e06}</Project>
       <Name>ksi-net-api-common</Name>
     </ProjectReference>
