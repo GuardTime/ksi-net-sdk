@@ -18,7 +18,6 @@ namespace Guardtime.KSI.Publication
         ///     Create new publications file factory with PKI trust provider.
         /// </summary>
         /// <param name="pkiTrustProvider">pki trust provider</param>
-        /// <exception cref="KsiException">thrown when PKI trust provider is null</exception>
         public PublicationsFileFactory(IPkiTrustProvider pkiTrustProvider)
         {
             if (pkiTrustProvider == null)
@@ -35,8 +34,6 @@ namespace Guardtime.KSI.Publication
         /// <param name="stream">publications file stream</param>
         /// <param name="bufferSize">buffer size</param>
         /// <returns>publications file</returns>
-        /// <exception cref="KsiException">thrown when stream is null</exception>
-        /// <exception cref="PublicationsFileException">thrown when publications file data is invalid</exception>
         public IPublicationsFile Create(Stream stream, int bufferSize)
         {
             if (stream == null)
@@ -82,15 +79,12 @@ namespace Guardtime.KSI.Publication
         /// </summary>
         /// <param name="stream">publications file stream</param>
         /// <returns>publications file</returns>
-        /// <exception cref="KsiException">thrown when stream is null</exception>
-        /// <exception cref="PublicationsFileException">thrown when publications file data is invalid</exception>
         public IPublicationsFile Create(Stream stream)
         {
             if (stream == null)
             {
                 throw new KsiException("Invalid input stream: null.");
             }
-
 
             return Create(stream, DefaultBufferSize);
         }
@@ -100,8 +94,6 @@ namespace Guardtime.KSI.Publication
         /// </summary>
         /// <param name="bytes">publications file bytes</param>
         /// <returns>publications file</returns>
-        /// <exception cref="KsiException">thrown when bytes is null</exception>
-        /// <exception cref="PublicationsFileException">thrown when publications file data is invalid</exception>
         public IPublicationsFile Create(byte[] bytes)
         {
             if (bytes == null)

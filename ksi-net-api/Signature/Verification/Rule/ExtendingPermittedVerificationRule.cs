@@ -8,7 +8,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public sealed class ExtendingPermittedVerificationRule : VerificationRule
     {
         /// <see cref="VerificationRule.Verify" />
-        /// <exception cref="KsiException">thrown if verification context is missing</exception>
+        
         public override VerificationResult Verify(IVerificationContext context)
         {
             CheckVerificationContext(context);

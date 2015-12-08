@@ -8,8 +8,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public sealed class UserProvidedPublicationExtendedSignatureInputHashRule : VerificationRule
     {
         /// <see cref="VerificationRule.Verify" />
-        /// <exception cref="KsiException">thrown if verification context is missing</exception>
-        /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
+        
+        
         public override VerificationResult Verify(IVerificationContext context)
         {
             ulong publicationTime = GetUserPublication(context).PublicationTime;

@@ -18,7 +18,6 @@ namespace Guardtime.KSI.Signature
         ///     Create new signature data TLV element from TLV element
         /// </summary>
         /// <param name="tag">TLV element</param>
-        /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
         public SignatureData(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.SignatureData.TagType)
@@ -56,7 +55,6 @@ namespace Guardtime.KSI.Signature
                         break;
                 }
             }
-
 
             if (signatureTypeCount != 1)
             {

@@ -20,7 +20,6 @@ namespace Guardtime.KSI.Hashing
         ///     Create new Datahasher with given algorithm
         /// </summary>
         /// <param name="algorithm">Hash algorithm</param>
-        /// <exception cref="HashingException">thrown when hasher input data is invalid or hasher could not be created</exception>
         public DataHasher(HashAlgorithm algorithm)
         {
             if (algorithm == null)
@@ -63,7 +62,6 @@ namespace Guardtime.KSI.Hashing
         /// <param name="offset">the offset to start from in the array of bytes.</param>
         /// <param name="length">the number of bytes to use, starting at the offset.</param>
         /// <returns>the same DataHasher object for chaining calls</returns>
-        /// <exception cref="HashingException">thrown when hash is already calculated or data is invalid</exception>
         public IDataHasher AddData(byte[] data, int offset, int length)
         {
             if (_outputHash != null)
@@ -85,7 +83,6 @@ namespace Guardtime.KSI.Hashing
         /// </summary>
         /// <param name="data">list of bytes</param>
         /// <returns>the same DataHasher object for chaining calls</returns>
-        /// <exception cref="HashingException">thrown when data is invalid</exception>
         public IDataHasher AddData(byte[] data)
         {
             if (data == null)
@@ -96,13 +93,11 @@ namespace Guardtime.KSI.Hashing
             return AddData(data, 0, data.Length);
         }
 
-
         /// <summary>
         ///     Adds data to the digest using the specified input stream of bytes, starting at an offset of 0.
         /// </summary>
         /// <param name="inStream">input stream of bytes.</param>
         /// <returns>the same DataHasher object for chaining calls</returns>
-        /// <exception cref="HashingException">thrown when invalid stream is supplied</exception>
         public IDataHasher AddData(Stream inStream)
         {
             return AddData(inStream, DefaultStreamBufferSize);
@@ -114,7 +109,6 @@ namespace Guardtime.KSI.Hashing
         /// <param name="inStream">input stream of bytes.</param>
         /// <param name="bufferSize">maximum allowed buffer size for reading data</param>
         /// <returns>the same DataHasher object for chaining calls</returns>
-        /// <exception cref="HashingException">thrown when invalid stream is supplied</exception>
         public IDataHasher AddData(Stream inStream, int bufferSize)
         {
             if (inStream == null)
@@ -167,6 +161,5 @@ namespace Guardtime.KSI.Hashing
 
             return this;
         }
-
     }
 }

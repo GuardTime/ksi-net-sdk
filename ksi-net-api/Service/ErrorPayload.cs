@@ -13,7 +13,6 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="tag">TLV element</param>
         /// <param name="expectedTagType">expected tag type</param>
-        /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
         protected ErrorPayload(ITlvTag tag, uint expectedTagType) : base(tag)
         {
             if (Type != expectedTagType)

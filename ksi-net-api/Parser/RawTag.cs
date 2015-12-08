@@ -8,14 +8,12 @@ namespace Guardtime.KSI.Parser
     /// </summary>
     public class RawTag : TlvTag
     {
-
         private readonly byte[] _value;
 
         /// <summary>
         ///     Create new octet string TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        /// <exception cref="TlvException">thrown when TLV tag is null or encodeValue returns null</exception>
         public RawTag(ITlvTag tag) : base(tag)
         {
             byte[] data = tag.EncodeValue();
@@ -34,7 +32,6 @@ namespace Guardtime.KSI.Parser
         /// <param name="nonCritical">Is TLV element non critical</param>
         /// <param name="forward">Is TLV element forwarded</param>
         /// <param name="value">TLV element byte array value</param>
-        /// <exception cref="TlvException">thrown when value is null</exception>
         public RawTag(uint type, bool nonCritical, bool forward, byte[] value)
             : base(type, nonCritical, forward)
         {

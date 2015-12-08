@@ -19,7 +19,6 @@ namespace Guardtime.KSI.Publication
         ///     Create new publication data TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
         public PublicationData(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.PublicationData.TagType)
@@ -79,7 +78,6 @@ namespace Guardtime.KSI.Publication
         ///     Create new publication data TLV element from publication string.
         /// </summary>
         /// <param name="publicationString">publication string</param>
-        /// <exception cref="TlvException">thrown when TLV parsing fails from publication string</exception>
         public PublicationData(string publicationString) : base(Constants.PublicationData.TagType, false, true, DecodePublicationString(publicationString))
         {
             _publicationTime = (IntegerTag)this[0];

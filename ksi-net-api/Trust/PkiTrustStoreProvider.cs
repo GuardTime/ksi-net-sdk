@@ -34,7 +34,6 @@ namespace Guardtime.KSI.Trust
         /// </summary>
         /// <param name="signedBytes"></param>
         /// <param name="signatureBytes"></param>
-        /// <exception cref="PkiVerificationException">thrown when invalid data is supplied or verification failed</exception>
         public void Verify(byte[] signedBytes, byte[] signatureBytes)
         {
             // TODO: Check for better exception
