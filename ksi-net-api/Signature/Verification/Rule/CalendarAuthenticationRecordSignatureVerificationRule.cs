@@ -13,6 +13,25 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class CalendarAuthenticationRecordSignatureVerificationRule : VerificationRule
     {
+        private readonly X509Certificate2Collection _trustAnchors;
+        private readonly ICertificateRdnSubjectSelector _certificateRdnSelector;
+
+        public CalendarAuthenticationRecordSignatureVerificationRule(X509Certificate2Collection trustAnchors, ICertificateRdnSubjectSelector certificateRdnSelector)
+        {
+            if (trustAnchors == null)
+            {
+                throw new ArgumentNullException(nameof(trustAnchors));
+            }
+
+            if (certificateRdnSelector == null)
+            {
+                throw new ArgumentNullException(nameof(certificateRdnSelector));
+            }
+
+            _trustAnchors = trustAnchors;
+            _certificateRdnSelector = certificateRdnSelector;
+        }
+
         /// <see cref="VerificationRule.Verify" />
         public override VerificationResult Verify(IVerificationContext context)
         {
@@ -26,14 +45,16 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             }
 
             byte[] signedBytes = calendarAuthenticationRecord.PublicationData.Encode();
-            ICryptoSignatureVerifier cryptoSignatureVerifier = CryptoSignatureVerifierFactory.GetCryptoSignatureVerifierByOid(signatureData.SignatureType);
-            CryptoSignatureVerificationData data = new CryptoSignatureVerificationData(certificate);
+            ICryptoSignatureVerifier cryptoSignatureVerifier = CryptoSignatureVerifierFactory.GetCryptoSignatureVerifierByOid(signatureData.SignatureType, _trustAnchors,
+                _certificateRdnSelector);
+            // TODO: Use x509 certificate instead of bytes
+            CryptoSignatureVerificationData data = new CryptoSignatureVerificationData(certificate.RawData);
 
             try
             {
                 cryptoSignatureVerifier.Verify(signedBytes, signatureData.GetSignatureValue(), data);
             }
-            catch (Exception)
+            catch (PkiVerificationFailedException ex)
             {
                 // TODO: Log exception
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Key02);

@@ -20,7 +20,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (signature.IsRfc3161Signature)
             {
-                DataHasher hasher = new DataHasher(aggregationHashChainInputHash.Algorithm);
+                IDataHasher hasher = KsiProvider.GetDataHasher(aggregationHashChainInputHash.Algorithm);
 
                 if (signature.Rfc3161Record == null)
                 {

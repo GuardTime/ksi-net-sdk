@@ -2,7 +2,6 @@
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Properties;
-using Microsoft.Win32.SafeHandles;
 using NUnit.Framework;
 
 // ReSharper disable ObjectCreationAsStatement
@@ -95,20 +94,6 @@ namespace Guardtime.KSI.Hashing
         }
 
         [Test]
-        public void TestDataHasherWithDefaultAlgorithmAndSafeFileHandle()
-        {
-            DataHasher hasher = new DataHasher();
-            FileStream stream = new FileStream(Resources.DataHasher_TestFile, FileMode.Open);
-            hasher.AddData(stream.SafeFileHandle);
-            Assert.AreEqual(HashAlgorithm.Sha2256.Length, hasher.GetHash().Value.Length, "Hash length should be correct");
-            byte[] bytes = new byte[hasher.GetHash().Value.Length];
-            hasher.GetHash().Value.CopyTo(bytes, 0);
-            Assert.AreEqual("54-66-E3-CB-A1-4A-84-3A-5E-93-B7-8E-3D-6A-B8-D3-49-1E-DC-AC-7E-06-43-1C-E1-A7-F4-98-28-C3-40-C3", BitConverter.ToString(bytes),
-                "Hash value should be calculated correctly");
-            stream.Close();
-        }
-
-        [Test]
         public void TestDataHasherWithDefaultAlgorithmAndFileStream()
         {
             DataHasher hasher = new DataHasher();
@@ -181,16 +166,6 @@ namespace Guardtime.KSI.Hashing
             Assert.Throws<HashingException>(delegate
             {
                 hasher.AddData(null, 0, 0);
-            });
-        }
-
-        [Test]
-        public void TestDataHasherWithNullSafeFileHandle()
-        {
-            DataHasher hasher = new DataHasher();
-            Assert.Throws<HashingException>(delegate
-            {
-                hasher.AddData((SafeFileHandle)null);
             });
         }
 

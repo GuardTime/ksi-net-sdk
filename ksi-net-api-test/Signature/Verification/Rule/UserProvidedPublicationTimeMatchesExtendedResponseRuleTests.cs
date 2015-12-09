@@ -1,9 +1,9 @@
-﻿using NUnit.Framework;
-using System.IO;
+﻿using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Utils;
+using NUnit.Framework;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
@@ -61,7 +61,6 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 });
             }
 
-
             // Check legacy signature
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok_With_Publication_Record, FileMode.Open))
             {
@@ -112,7 +111,6 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
             }
-
 
             // Check signature aggregation time with invalid registration time
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))

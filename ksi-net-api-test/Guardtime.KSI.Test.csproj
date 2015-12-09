@@ -82,7 +82,38 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Microsoft|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Microsoft\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Microsoft|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Microsoft\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Microsoft|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Microsoft\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.7.4114.6375, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\BouncyCastle.1.8\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <Private>False</Private>
     </Reference>
@@ -94,6 +125,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Security" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -125,6 +157,7 @@
     <Compile Include="Publication\PublicationDataTests.cs" />
     <Compile Include="Publication\PublicationsFileTests.cs" />
     <Compile Include="Service\TestKsiServiceProtocol.cs" />
+    <Compile Include="TestSetup.cs" />
     <Compile Include="Signature\CalendarAuthenticationRecordTests.cs" />
     <Compile Include="Signature\AggregationAuthenticationRecordTests.cs" />
     <Compile Include="Signature\KsiSignatureDoTests.cs" />
@@ -168,10 +201,15 @@
     <Compile Include="Signature\Verification\Rule\UserProvidedPublicationVerificationRuleTests.cs" />
     <Compile Include="Signature\Verification\SignatureVerificationTests.cs" />
     <Compile Include="Trust\PkiTrustStoreProviderTests.cs" />
+    <Compile Include="Trust\TrustStoreUtilities.cs" />
     <Compile Include="Utils\InvalidEncodeTlvTag.cs" />
     <Compile Include="Utils\UtilTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ksi-net-api-crypto-bouncycastle\ksi-net-api-crypto-bouncycastle.csproj">
+      <Project>{CC9C4947-E275-4381-A93A-C80498B450B4}</Project>
+      <Name>ksi-net-api-crypto-bouncycastle</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ksi-net-api\Guardtime.KSI.csproj">
       <Project>{f38b227f-db4e-4c5a-8c1d-a543c82d2311}</Project>
       <Name>Guardtime.KSI</Name>

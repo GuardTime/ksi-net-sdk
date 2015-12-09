@@ -1,9 +1,7 @@
 ﻿using System.IO;
-using System.Security.Cryptography;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
-using HashAlgorithm = Guardtime.KSI.Hashing.HashAlgorithm;
 
 namespace Guardtime.KSI.Service
 {
@@ -90,8 +88,8 @@ namespace Guardtime.KSI.Service
         /// <returns>hmac data hash</returns>
         private static DataHash CalculateMac(byte[] key, byte[] data)
         {
-            HMACSHA256 hmac = new HMACSHA256(key);
-            return new DataHash(HashAlgorithm.Sha2256, hmac.ComputeHash(data));
+            IHmacHasher hmac = KsiProvider.GetHmacHasher();
+            return hmac.GetHash(key, data);
         }
 
         /// <summary>

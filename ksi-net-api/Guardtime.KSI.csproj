@@ -75,29 +75,28 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Security" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Crypto\CryptoSignatureVerificationData.cs" />
     <Compile Include="Crypto\CryptoSignatureVerifierFactory.cs" />
+    <Compile Include="Crypto\ICertificateRdnSubjectSelector.cs" />
     <Compile Include="Crypto\ICryptoSignatureVerifier.cs" />
-    <Compile Include="Crypto\Pkcs7CryptoSignatureVerifier.cs" />
-    <Compile Include="Crypto\RsaCryptoSignatureVerifier.cs" />
-    <Compile Include="Exceptions\KsiServiceException.cs" />
-    <Compile Include="Exceptions\TlvException.cs" />
-    <Compile Include="Exceptions\PublicationsFileException.cs" />
-    <Compile Include="Exceptions\KsiServiceProtocolException.cs" />
+    <Compile Include="Exceptions\HashingException.cs" />
     <Compile Include="Exceptions\KsiException.cs" />
-    <Compile Include="Exceptions\PkiVerificationException.cs" />
+    <Compile Include="Exceptions\KsiServiceException.cs" />
+    <Compile Include="Exceptions\KsiServiceProtocolException.cs" />
     <Compile Include="Exceptions\KsiVerificationException.cs" />
+    <Compile Include="Exceptions\PkiVerificationErrorException.cs" />
+    <Compile Include="Exceptions\PkiVerificationException.cs" />
+    <Compile Include="Exceptions\PkiVerificationFailedException.cs" />
+    <Compile Include="Exceptions\PublicationsFileException.cs" />
+    <Compile Include="Exceptions\TlvException.cs" />
     <Compile Include="Hashing\DataHash.cs" />
-    <Compile Include="Hashing\DataHasher.cs" />
     <Compile Include="Hashing\HashAlgorithm.Constants.cs" />
     <Compile Include="Hashing\HashAlgorithm.cs" />
-    <Compile Include="Exceptions\HashingException.cs" />
+    <Compile Include="Hashing\IDataHasher.cs" />
+    <Compile Include="Hashing\IHmacHasher.cs" />
     <Compile Include="IKsi.cs" />
     <Compile Include="Ksi.cs" />
     <Compile Include="Parser\ImprintTag.cs" />
@@ -121,6 +120,11 @@
     <Compile Include="Publication\PublicationsFileHeader.cs" />
     <Compile Include="Publication\PublicationsFile.cs" />
     <Compile Include="Publication\PublicationData.cs" />
+    <Compile Include="Utils\Base16.cs" />
+    <Compile Include="Utils\Base32.cs" />
+    <Compile Include="Utils\BaseX.cs" />
+    <Compile Include="Utils\Crc32.cs" />
+    <Compile Include="Utils\Util.cs" />
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -154,6 +158,8 @@
     <Compile Include="Signature\AggregationHashChainResult.cs" />
     <Compile Include="Signature\CalendarAuthenticationRecord.cs" />
     <Compile Include="Signature\CalendarHashChain.cs" />
+    <Compile Include="KsiProvider.cs" />
+    <Compile Include="ICryptoProvider.cs" />
     <Compile Include="Signature\IKsiSignature.cs" />
     <Compile Include="Signature\KsiSignature.cs" />
     <Compile Include="Signature\KsiSignatureFactory.cs" />
@@ -207,11 +213,6 @@
     <Compile Include="Trust\IKsiTrustProvider.cs" />
     <Compile Include="Trust\IPkiTrustProvider.cs" />
     <Compile Include="Trust\PkiTrustStoreProvider.cs" />
-    <Compile Include="Utils\Base16.cs" />
-    <Compile Include="Utils\Base32.cs" />
-    <Compile Include="Utils\BaseX.cs" />
-    <Compile Include="Utils\Crc32.cs" />
-    <Compile Include="Utils\Util.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

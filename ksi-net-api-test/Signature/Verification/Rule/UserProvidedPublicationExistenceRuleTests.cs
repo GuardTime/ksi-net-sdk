@@ -1,6 +1,6 @@
-﻿using NUnit.Framework;
-using Guardtime.KSI.Exceptions;
+﻿using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
+using NUnit.Framework;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {

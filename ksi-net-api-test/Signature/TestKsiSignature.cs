@@ -17,7 +17,6 @@ namespace Guardtime.KSI.Signature
         public PublicationRecord PublicationRecord { get; set; }
         public ulong AggregationTime { get; set; }
 
-
         public ReadOnlyCollection<AggregationHashChain> AggregationHashChains;
         public DataHash AggregationHashChainRootHash;
         public IKsiSignature ExtendedKsiSignature;

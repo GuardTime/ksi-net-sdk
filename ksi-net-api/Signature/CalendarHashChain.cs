@@ -155,10 +155,10 @@ namespace Guardtime.KSI.Signature
                 switch (link.Direction)
                 {
                     case LinkDirection.Left:
-                        inputHash = HashTogether(siblingHash.Algorithm, inputHash.Imprint, siblingHash.Imprint);
+                        inputHash = GetStepHash(siblingHash.Algorithm, inputHash.Imprint, siblingHash.Imprint);
                         break;
                     case LinkDirection.Right:
-                        inputHash = HashTogether(inputHash.Algorithm, siblingHash.Imprint, inputHash.Imprint);
+                        inputHash = GetStepHash(inputHash.Algorithm, siblingHash.Imprint, inputHash.Imprint);
                         break;
                 }
             }
@@ -173,9 +173,9 @@ namespace Guardtime.KSI.Signature
         /// <param name="hashA">hash a</param>
         /// <param name="hashB">hash b</param>
         /// <returns>result hash</returns>
-        private static DataHash HashTogether(HashAlgorithm algorithm, byte[] hashA, byte[] hashB)
+        private static DataHash GetStepHash(HashAlgorithm algorithm, byte[] hashA, byte[] hashB)
         {
-            DataHasher hasher = new DataHasher(algorithm);
+            IDataHasher hasher = KsiProvider.GetDataHasher(algorithm);
             hasher.AddData(hashA);
             hasher.AddData(hashB);
             hasher.AddData(new byte[] { 0xFF });
@@ -250,8 +250,8 @@ namespace Guardtime.KSI.Signature
                         Direction = LinkDirection.Right;
                         break;
                     default:
-                        throw new TlvException("Invalid calendar hash chain link type(" + Type + ").");
-                }
+                            throw new TlvException("Invalid calendar hash chain link type(" + Type + ").");
+                        }
             }
 
             public LinkDirection Direction { get; }

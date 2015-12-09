@@ -142,11 +142,11 @@ namespace Guardtime.KSI.Signature
 
                 if (link.Direction == LinkDirection.Left)
                 {
-                    lastHash = HashTogether(lastHash.Imprint, link.GetSiblingData(), level);
+                    lastHash = GetStepHash(lastHash.Imprint, link.GetSiblingData(), level);
                 }
                 if (link.Direction == LinkDirection.Right)
                 {
-                    lastHash = HashTogether(link.GetSiblingData(), lastHash.Imprint, level);
+                    lastHash = GetStepHash(link.GetSiblingData(), lastHash.Imprint, level);
                 }
             }
 
@@ -160,9 +160,9 @@ namespace Guardtime.KSI.Signature
         /// <param name="hashB">second hash</param>
         /// <param name="level">hash chain level</param>
         /// <returns>resulting hash</returns>
-        private DataHash HashTogether(byte[] hashA, byte[] hashB, ulong level)
+        private DataHash GetStepHash(byte[] hashA, byte[] hashB, ulong level)
         {
-            DataHasher hasher = new DataHasher(HashAlgorithm.GetById((byte)_aggrAlgorithmId.Value));
+            IDataHasher hasher = KsiProvider.GetDataHasher(HashAlgorithm.GetById((byte)_aggrAlgorithmId.Value));
             hasher.AddData(hashA);
             hasher.AddData(hashB);
             hasher.AddData(Util.EncodeUnsignedLong(level));

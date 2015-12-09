@@ -1,14 +1,13 @@
-﻿using System.Security.Cryptography.X509Certificates;
-
-namespace Guardtime.KSI.Crypto
+﻿namespace Guardtime.KSI.Crypto
 {
     public class CryptoSignatureVerificationData
     {
-        public X509Certificate2 Certificate { get; set; }
+        public byte[] CertificateBytes { get; set; }
 
-        public CryptoSignatureVerificationData(X509Certificate2 certificate)
+        public CryptoSignatureVerificationData(byte[] certificate)
         {
-            Certificate = certificate;
+            // TODO: Check null?
+            CertificateBytes = certificate;
         }
     }
 }

@@ -1,10 +1,10 @@
 ﻿using System.IO;
-using NUnit.Framework;
-using Guardtime.KSI.Parser;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
+using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Utils;
+using NUnit.Framework;
 
 namespace Guardtime.KSI.Signature
 {
@@ -83,14 +83,11 @@ namespace Guardtime.KSI.Signature
 
         private static CalendarAuthenticationRecord GetCalendarAuthenticationRecordFromFile(string file)
         {
-            using (FileStream stream = new FileStream(file, FileMode.Open))
+            using (TlvReader reader = new TlvReader(new FileStream(file, FileMode.Open)))
             {
-                using (TlvReader reader = new TlvReader(stream))
-                {
-                    CalendarAuthenticationRecord calendarAuthenticationRecord = new CalendarAuthenticationRecord(reader.ReadTag());
+                CalendarAuthenticationRecord calendarAuthenticationRecord = new CalendarAuthenticationRecord(reader.ReadTag());
 
-                    return calendarAuthenticationRecord;
-                }
+                return calendarAuthenticationRecord;
             }
         }
     }

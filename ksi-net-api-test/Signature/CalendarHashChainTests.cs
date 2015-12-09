@@ -1,7 +1,7 @@
 ﻿using System.IO;
-using NUnit.Framework;
-using Guardtime.KSI.Parser;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Parser;
+using NUnit.Framework;
 
 namespace Guardtime.KSI.Signature
 {
@@ -96,14 +96,11 @@ namespace Guardtime.KSI.Signature
 
         private static CalendarHashChain GetCalendarHashChainFromFile(string file)
         {
-            using (FileStream stream = new FileStream(file, FileMode.Open))
+            using (TlvReader reader = new TlvReader(new FileStream(file, FileMode.Open)))
             {
-                using (TlvReader reader = new TlvReader(stream))
-                {
-                    CalendarHashChain calendarHashChain = new CalendarHashChain(reader.ReadTag());
+                CalendarHashChain calendarHashChain = new CalendarHashChain(reader.ReadTag());
 
-                    return calendarHashChain;
-                }
+                return calendarHashChain;
             }
         }
     }

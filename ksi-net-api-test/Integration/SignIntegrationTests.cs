@@ -1,9 +1,11 @@
 ﻿using System.IO;
 using System.Text;
+using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
+using Guardtime.KSI.Trust;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
@@ -22,7 +24,8 @@ namespace Guardtime.KSI.Integration
                     Base16.Decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")),
                 PublicationsFile = ksi.GetPublicationsFile()
             };
-            VerificationResult verificationResult = ksi.Verify(verificationContext, new KeyBasedVerificationPolicy());
+            VerificationResult verificationResult = ksi.Verify(verificationContext,
+                new KeyBasedVerificationPolicy(TrustStoreUtilities.GetTrustAnchorCollection(), new CertificateRdnSubjectSelector("E=publications@guardtime.com")));
             Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode, "Signature should verify with key based policy");
         }
 
@@ -41,8 +44,9 @@ namespace Guardtime.KSI.Integration
                         Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")),
                     PublicationsFile = ksi.GetPublicationsFile()
                 };
-                VerificationResult verificationResult = ksi.Verify(verificationContext, new KeyBasedVerificationPolicy());
-                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode, "Signature should not verify with key based policy using invalid hash");
+                VerificationResult verificationResult = ksi.Verify(verificationContext,
+                    new KeyBasedVerificationPolicy(TrustStoreUtilities.GetTrustAnchorCollection(), new CertificateRdnSubjectSelector("E=publications@guardtime.com")));
+                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode, "Signature should verify with key based policy");
             }
         }
     }

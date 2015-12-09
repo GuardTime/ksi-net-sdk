@@ -1,4 +1,6 @@
-﻿using Guardtime.KSI.Exceptions;
+﻿using System;
+using System.Security.Cryptography.X509Certificates;
+using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Crypto
 {
@@ -11,28 +13,21 @@ namespace Guardtime.KSI.Crypto
         ///     Get crypto signature verifier by oid.
         /// </summary>
         /// <param name="oid">signature oid</param>
+        /// <param name="trustAnchors">trust anchor collection</param>
+        /// <param name="certificateRdnSelector"></param>
         /// <returns>signature verifier</returns>
-        public static ICryptoSignatureVerifier GetCryptoSignatureVerifierByOid(string oid)
+        public static ICryptoSignatureVerifier GetCryptoSignatureVerifierByOid(string oid, X509Certificate2Collection trustAnchors,
+                                                                               ICertificateRdnSubjectSelector certificateRdnSelector)
         {
             switch (oid)
             {
                 case "1.2.840.113549.1.1.11":
-                    return GetRsaCryptoSignatureVerifier("SHA256");
+                    return KsiProvider.GetRsaCryptoSignatureVerifier("SHA256");
                 case "1.2.840.113549.1.7.2":
-                    return GetPkcs7CryptoSignatureVerifier();
+                    return KsiProvider.GetPkcs7CryptoSignatureVerifier(trustAnchors, certificateRdnSelector);
                 default:
-                    throw new PkiVerificationException("Cryptographic signature not supported.");
+                    throw new PkiVerificationErrorException("Cryptographic signature not supported.");
             }
-        }
-
-        public static Pkcs7CryptoSignatureVerifier GetPkcs7CryptoSignatureVerifier()
-        {
-            return new Pkcs7CryptoSignatureVerifier();
-        }
-
-        public static RsaCryptoSignatureVerifier GetRsaCryptoSignatureVerifier(string algorithm)
-        {
-            return new RsaCryptoSignatureVerifier(algorithm);
         }
     }
 }

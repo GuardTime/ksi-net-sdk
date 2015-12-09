@@ -49,11 +49,6 @@ namespace Guardtime.KSI.Parser
             }
         }
 
-        public List<ITlvTag> GetValue()
-        {
-            return _value;
-        }
-
         /// <summary>
         ///     Get or set TLV child object
         /// </summary>

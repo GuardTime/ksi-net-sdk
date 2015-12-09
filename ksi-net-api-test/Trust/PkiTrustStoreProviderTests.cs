@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
 using NUnit.Framework;
 
@@ -24,16 +25,17 @@ namespace Guardtime.KSI.Trust
                 stream.Read(sigBytes, 0, (int)stream.Length);
             }
 
-            PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider();
+            PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(),
+                new CertificateRdnSubjectSelector("E=publications@guardtime.com"));
 
             trustStoreProvider.Verify(data, sigBytes);
 
-            Assert.Throws<PkiVerificationException>(delegate
+            Assert.Throws<PkiVerificationErrorException>(delegate
             {
                 trustStoreProvider.Verify(null, sigBytes);
             });
 
-            Assert.Throws<PkiVerificationException>(delegate
+            Assert.Throws<PkiVerificationErrorException>(delegate
             {
                 trustStoreProvider.Verify(data, null);
             });

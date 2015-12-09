@@ -1,4 +1,5 @@
-﻿using Guardtime.KSI.Publication;
+﻿using Guardtime.KSI.Crypto;
+using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Trust;
@@ -23,7 +24,7 @@ namespace Guardtime.KSI.Integration
                         KsiServiceProtocol,
                         new ServiceCredentials("anon", "anon"),
                         new PublicationsFileFactory(
-                            new PkiTrustStoreProvider()),
+                            new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(), new CertificateRdnSubjectSelector("E=publications@guardtime.com"))),
                         new KsiSignatureFactory()))
             }
         };

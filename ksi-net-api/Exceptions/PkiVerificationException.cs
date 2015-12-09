@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Guardtime.KSI.Exceptions
 {
@@ -17,7 +19,7 @@ namespace Guardtime.KSI.Exceptions
         }
 
         /// <summary>
-        ///     Create new PKI signature verification exception  with message and inner exception.
+        ///     Create new PKI signature verification exception with message and inner exception.
         /// </summary>
         /// <param name="message">exception message</param>
         /// <param name="innerException">inner exception</param>

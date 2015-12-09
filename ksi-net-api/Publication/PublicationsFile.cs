@@ -182,6 +182,7 @@ namespace Guardtime.KSI.Publication
                         return new X509Certificate2(certificateRecord.X509Certificate.EncodeValue());
                     }
                 }
+
                 return null;
             }
 
