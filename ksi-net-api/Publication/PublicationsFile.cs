@@ -173,13 +173,13 @@ namespace Guardtime.KSI.Publication
             /// </summary>
             /// <param name="certificateId">certificate id</param>
             /// <returns>X509 certificate</returns>
-            public X509Certificate2 FindCertificateById(byte[] certificateId)
+            public byte[] FindCertificateById(byte[] certificateId)
             {
                 foreach (CertificateRecord certificateRecord in _certificateRecordList)
                 {
                     if (Util.IsArrayEqual(certificateRecord.CertificateId.EncodeValue(), certificateId))
                     {
-                        return new X509Certificate2(certificateRecord.X509Certificate.EncodeValue());
+                        return certificateRecord.X509Certificate.EncodeValue();
                     }
                 }
 

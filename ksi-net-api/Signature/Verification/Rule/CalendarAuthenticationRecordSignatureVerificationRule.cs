@@ -37,9 +37,9 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         {
             CalendarAuthenticationRecord calendarAuthenticationRecord = GetCalendarAuthenticationRecord(GetSignature(context));
             SignatureData signatureData = calendarAuthenticationRecord.SignatureData;
-            X509Certificate2 certificate = GetPublicationsFile(context).FindCertificateById(signatureData.GetCertificateId());
+            byte[] certificateBytes = GetPublicationsFile(context).FindCertificateById(signatureData.GetCertificateId());
 
-            if (certificate == null)
+            if (certificateBytes == null)
             {
                 throw new KsiVerificationException("No certificate found in publications file with id: " + Base16.Encode(signatureData.GetCertificateId()) + ".");
             }
@@ -47,8 +47,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             byte[] signedBytes = calendarAuthenticationRecord.PublicationData.Encode();
             ICryptoSignatureVerifier cryptoSignatureVerifier = CryptoSignatureVerifierFactory.GetCryptoSignatureVerifierByOid(signatureData.SignatureType, _trustAnchors,
                 _certificateRdnSelector);
-            // TODO: Use x509 certificate instead of bytes
-            CryptoSignatureVerificationData data = new CryptoSignatureVerificationData(certificate.RawData);
+            CryptoSignatureVerificationData data = new CryptoSignatureVerificationData(certificateBytes);
 
             try
             {
