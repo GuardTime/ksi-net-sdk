@@ -87,7 +87,9 @@
     <Compile Include="Exceptions\KsiServiceException.cs" />
     <Compile Include="Exceptions\KsiServiceProtocolException.cs" />
     <Compile Include="Exceptions\KsiVerificationException.cs" />
+    <Compile Include="Exceptions\PkiVerificationErrorException.cs" />
     <Compile Include="Exceptions\PkiVerificationException.cs" />
+    <Compile Include="Exceptions\PkiVerificationFailedException.cs" />
     <Compile Include="Exceptions\PublicationsFileException.cs" />
     <Compile Include="Exceptions\TlvException.cs" />
     <Compile Include="Hashing\DataHash.cs" />

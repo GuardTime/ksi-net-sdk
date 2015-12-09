@@ -1,4 +1,5 @@
 ﻿using System;
+using Guardtime.KSI.Exceptions;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.X509;
@@ -32,39 +33,53 @@ namespace Guardtime.KSI.Crypto
         /// <param name="data">must consist of 2 parameters, "certificate" => X509Certificate2, "digestAlgorithm" => string</param>
         public void Verify(byte[] signedBytes, byte[] signatureBytes, CryptoSignatureVerificationData data)
         {
-            // TODO: Check bytes
-            byte[] certificateBytes = null;
-            if (data != null)
+            if (signedBytes == null)
             {
-                certificateBytes = data.CertificateBytes;
+                throw new ArgumentNullException(nameof(signedBytes));
             }
+
+            if (signatureBytes == null)
+            {
+                throw new ArgumentNullException(nameof(signatureBytes));
+            }
+
+            if (data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+
+            byte[] certificateBytes = data.CertificateBytes;
 
             if (certificateBytes == null)
             {
-                throw new Exception("Certificate in data parameter cannot be null.");
+                throw new PkiVerificationErrorException("Certificate in data parameter cannot be null.");
             }
-
-            X509Certificate certificate = new X509CertificateParser().ReadCertificate(certificateBytes);
 
             try
             {
-                
+                X509Certificate certificate = new X509CertificateParser().ReadCertificate(certificateBytes);
+
                 ISigner signer = SignerUtilities.GetSigner(_algorithm + "withRSA");
                 signer.Init(false, certificate.GetPublicKey());
                 signer.BlockUpdate(signedBytes, 0, signedBytes.Length);
+
                 if (!signer.VerifySignature(signatureBytes))
                 {
-                    throw new Exception("Failed to verify RSA signature.");
+                    throw new PkiVerificationFailedException("Failed to verify RSA signature.");
                 }
-
             }
-            catch (SecurityUtilityException e)
+            catch (PkiVerificationFailedException)
             {
-                // TODO: Better exception
-                throw new Exception("Invalid signature algorithm: " + _algorithm, e);
+                throw;
             }
-
-            
+            catch (PkiVerificationErrorException)
+            {
+                throw;
+            }
+            catch (Exception e)
+            {
+                throw new PkiVerificationErrorException("Error when verifying RSA signature.", e);
+            }
         }
     }
 }

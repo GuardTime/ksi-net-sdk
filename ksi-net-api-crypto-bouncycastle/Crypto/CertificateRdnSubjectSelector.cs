@@ -9,7 +9,6 @@ namespace Guardtime.KSI.Crypto
 {
     public class CertificateRdnSubjectSelector : ICertificateRdnSubjectSelector
     {
-
         private readonly X509Name _subjectDn;
 
         // TODO: If empty allow everything?
@@ -51,17 +50,16 @@ namespace Guardtime.KSI.Crypto
                 return false;
             }
 
-
             IList subjectDnOidList = _subjectDn.GetOidList();
+            IList valueList = _subjectDn.GetValueList();
 
             for (int i = 0; i < subjectDnOidList.Count; i++)
             {
-                if (!Contains(_subjectDn.GetValueList()[i], certificate.SubjectDN.GetValueList((DerObjectIdentifier)subjectDnOidList[i])))
+                if (!Contains(valueList[i], certificate.SubjectDN.GetValueList((DerObjectIdentifier)subjectDnOidList[i])))
                 {
                     return false;
                 }
             }
-
 
             return true;
         }
@@ -78,7 +76,6 @@ namespace Guardtime.KSI.Crypto
                 return true;
             }
 
-            
             foreach (object value in certificateValueList)
             {
                 if (value.Equals(searchValue))

@@ -30,12 +30,12 @@ namespace Guardtime.KSI.Trust
 
             trustStoreProvider.Verify(data, sigBytes);
 
-            Assert.Throws<PkiVerificationException>(delegate
+            Assert.Throws<PkiVerificationErrorException>(delegate
             {
                 trustStoreProvider.Verify(null, sigBytes);
             });
 
-            Assert.Throws<PkiVerificationException>(delegate
+            Assert.Throws<PkiVerificationErrorException>(delegate
             {
                 trustStoreProvider.Verify(data, null);
             });

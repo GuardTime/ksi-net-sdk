@@ -53,7 +53,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 cryptoSignatureVerifier.Verify(signedBytes, signatureData.GetSignatureValue(), data);
             }
-            catch (Exception ex)
+            catch (PkiVerificationFailedException ex)
             {
                 // TODO: Log exception
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Key02);

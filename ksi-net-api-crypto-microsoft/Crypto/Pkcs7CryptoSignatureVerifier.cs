@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography.Pkcs;
 using System.Security.Cryptography.X509Certificates;
+using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Crypto
 {
@@ -29,16 +30,35 @@ namespace Guardtime.KSI.Crypto
         /// <param name="data">other data</param>
         public void Verify(byte[] signedBytes, byte[] signatureBytes, CryptoSignatureVerificationData data)
         {
-            // TODO: Check bytes
+            if (signedBytes == null)
+            {
+                throw new ArgumentNullException(nameof(signedBytes));
+            }
+
+            if (signatureBytes == null)
+            {
+                throw new ArgumentNullException(nameof(signatureBytes));
+            }
+
+            SignedCms signedCms;
+
             try
             {
-                SignedCms signedCms = new SignedCms(new ContentInfo(signedBytes), true);
+                signedCms = new SignedCms(new ContentInfo(signedBytes), true);
                 signedCms.Decode(signatureBytes);
+            }
+            catch (Exception e)
+            {
+                throw new PkiVerificationErrorException("Error when verifying PKCS#7 signature.", e);
+            }
+
+            try
+            {
                 signedCms.CheckSignature(_trustAnchors, false);
             }
             catch (Exception e)
             {
-                throw new Exception("Failed to verify PKCS#7 signature.", e);
+                throw new PkiVerificationFailedException("Failed to verify PKCS#7 signature.", e);
             }
         }
     }

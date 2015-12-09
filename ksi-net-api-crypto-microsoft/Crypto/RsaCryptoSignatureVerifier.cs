@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Crypto
 {
@@ -31,32 +32,56 @@ namespace Guardtime.KSI.Crypto
         /// <param name="data">must consist of 2 parameters, "certificate" => X509Certificate2, "digestAlgorithm" => string</param>
         public void Verify(byte[] signedBytes, byte[] signatureBytes, CryptoSignatureVerificationData data)
         {
-            // TODO: Check bytes
-            byte[] certificateBytes = null;
-
-            if (data != null)
+            if (signedBytes == null)
             {
-                certificateBytes = data.CertificateBytes;
+                throw new ArgumentNullException(nameof(signedBytes));
             }
+
+            if (signatureBytes == null)
+            {
+                throw new ArgumentNullException(nameof(signatureBytes));
+            }
+
+            if (data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+
+            byte[] certificateBytes = data.CertificateBytes;
 
             if (certificateBytes == null)
             {
-                throw new Exception("Certificate in data parameter cannot be null.");
+                throw new PkiVerificationErrorException("Certificate in data parameter cannot be null.");
             }
 
-            X509Certificate2 certificate = new X509Certificate2(certificateBytes);
-
-            if (certificate.PublicKey == null)
+            try
             {
-                throw new Exception("No public key in certificate.");
-            }
+                X509Certificate2 certificate = new X509Certificate2(certificateBytes);
 
-            using (RSACryptoServiceProvider serviceProvider = (RSACryptoServiceProvider)certificate.PublicKey.Key)
-            {
-                if (!serviceProvider.VerifyData(signedBytes, _algorithm, signatureBytes))
+                if (certificate.PublicKey == null)
                 {
-                    throw new Exception("Failed to verify RSA signature.");
+                    throw new Exception("No public key in certificate.");
                 }
+
+                using (RSACryptoServiceProvider serviceProvider = (RSACryptoServiceProvider)certificate.PublicKey.Key)
+                {
+                    if (!serviceProvider.VerifyData(signedBytes, _algorithm, signatureBytes))
+                    {
+                        throw new PkiVerificationFailedException("Failed to verify RSA signature.");
+                    }
+                }
+            }
+            catch (PkiVerificationFailedException)
+            {
+                throw;
+            }
+            catch (PkiVerificationErrorException)
+            {
+                throw;
+            }
+            catch (Exception e)
+            {
+                throw new PkiVerificationErrorException("Error when verifying RSA signature.", e);
             }
         }
     }
