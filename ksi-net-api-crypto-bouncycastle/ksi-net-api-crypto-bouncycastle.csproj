@@ -42,6 +42,7 @@
     <Compile Include="Hashing\DataHasher.cs" />
     <Compile Include="Hashing\HmacHasher.cs" />
     <Compile Include="Crypto\Pkcs7CryptoSignatureVerifier.cs" />
+    <Compile Include="BouncyCastleCryptoProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Crypto\RsaCryptoSignatureVerifier.cs" />
   </ItemGroup>

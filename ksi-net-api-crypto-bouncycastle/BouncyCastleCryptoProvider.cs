@@ -2,9 +2,9 @@
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Hashing;
 
-namespace Guardtime.KSI.Mono
+namespace Guardtime.KSI
 {
-    public class MonoCryptoProvider : ICryptoProvider
+    public class BouncyCastleCryptoProvider : ICryptoProvider
     {
         public IDataHasher GetDataHasher(HashAlgorithm algorithm)
         {

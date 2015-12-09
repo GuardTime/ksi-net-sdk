@@ -211,10 +211,6 @@
       <Project>{CC9C4947-E275-4381-A93A-C80498B450B4}</Project>
       <Name>ksi-net-api-crypto-bouncycastle</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ksi-net-api-mono\ksi-net-api-mono.csproj">
-      <Project>{93af7fe9-a3df-40d2-8377-bef243f02ac6}</Project>
-      <Name>ksi-net-api-mono</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ksi-net-api\Guardtime.KSI.csproj">
       <Project>{f38b227f-db4e-4c5a-8c1d-a543c82d2311}</Project>
       <Name>Guardtime.KSI</Name>

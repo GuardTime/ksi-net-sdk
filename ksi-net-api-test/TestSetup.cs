@@ -1,5 +1,4 @@
-﻿using Guardtime.KSI.Mono;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace Guardtime.KSI
 {
@@ -9,8 +8,8 @@ namespace Guardtime.KSI
         [SetUp]
         public void RunBeforeAnyTests()
         {
-            KsiProvider.SetCryptoProvider(new MonoCryptoProvider());
-            //KsiProvider.SetCryptoProvider(new MSCryptoProvider());
+            KsiProvider.SetCryptoProvider(new BouncyCastleCryptoProvider());
+            //KsiProvider.SetCryptoProvider(new MicrosoftCryptoProvider());
         }
     }
 }
