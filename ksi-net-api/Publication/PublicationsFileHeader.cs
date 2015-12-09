@@ -17,7 +17,6 @@ namespace Guardtime.KSI.Publication
         ///     Create publications file header TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        
         public PublicationsFileHeader(ITlvTag tag) : base(tag)
         {
             if (Type != Constants.PublicationsFileHeader.TagType)

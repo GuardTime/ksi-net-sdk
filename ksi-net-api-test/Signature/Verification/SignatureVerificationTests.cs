@@ -24,7 +24,8 @@ namespace Guardtime.KSI.Signature.Verification
                     "http://verify.guardtime.com/ksi-publications.bin");
 
                 KsiService ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"),
-                    new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(), new CertificateRdnSubjectSelector("E=publications@guardtime.com"))), new KsiSignatureFactory());
+                    new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(),
+                        new CertificateRdnSubjectSelector("E=publications@guardtime.com"))), new KsiSignatureFactory());
                 VerificationContext context = new VerificationContext(new KsiSignatureFactory().Create(stream))
                 {
                     DocumentHash =
@@ -39,7 +40,9 @@ namespace Guardtime.KSI.Signature.Verification
                     IsExtendingAllowed = true,
                     KsiService = ksiService,
                     PublicationsFile =
-                        new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(), new CertificateRdnSubjectSelector(new Dictionary<string, string>() { { "1.2.840.113549.1.9.1", "publications@guardtime.com"} }))).Create(new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+                        new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(),
+                            new CertificateRdnSubjectSelector(new Dictionary<string, string>() {{"1.2.840.113549.1.9.1", "publications@guardtime.com"}}))).Create(
+                                new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
                 };
 
                 Console.WriteLine(@"// Internal verification policy");
@@ -49,7 +52,7 @@ namespace Guardtime.KSI.Signature.Verification
                 Console.WriteLine(@"// Publications based");
                 policy = new PublicationBasedVerificationPolicy();
                 Console.WriteLine(policy.Verify(context));
-                
+
                 Console.WriteLine(@"// Key based");
                 policy = new KeyBasedVerificationPolicy(TrustStoreUtilities.GetTrustAnchorCollection(), new CertificateRdnSubjectSelector((Dictionary<string, string>)null));
                 Console.WriteLine(policy.Verify(context));

@@ -1,5 +1,4 @@
-﻿
-namespace Guardtime.KSI.Crypto
+﻿namespace Guardtime.KSI.Crypto
 {
     public class CryptoSignatureVerificationData
     {

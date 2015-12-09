@@ -31,7 +31,6 @@ namespace Guardtime.KSI.Hashing
             NotImplemented
         }
 
-
         private static readonly Dictionary<string, HashAlgorithm> Lookup = new Dictionary<string, HashAlgorithm>();
 
         private readonly string[] _alternatives;
@@ -72,7 +71,6 @@ namespace Guardtime.KSI.Hashing
             Status = status;
             _alternatives = alternatives;
         }
-
 
         /// <summary>
         ///     Return Guardtime id of algorithm.

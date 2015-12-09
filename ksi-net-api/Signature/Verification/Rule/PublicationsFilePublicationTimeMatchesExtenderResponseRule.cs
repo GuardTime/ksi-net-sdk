@@ -10,8 +10,6 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public sealed class PublicationsFilePublicationTimeMatchesExtenderResponseRule : VerificationRule
     {
         /// <see cref="VerificationRule.Verify" />
-        
-        
         public override VerificationResult Verify(IVerificationContext context)
         {
             IKsiSignature signature = GetSignature(context);

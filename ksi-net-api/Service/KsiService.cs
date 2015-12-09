@@ -61,7 +61,6 @@ namespace Guardtime.KSI.Service
             _ksiSignatureFactory = ksiSignatureFactory;
         }
 
-
         /// <summary>
         ///     Sync create signature with given data hash.
         /// </summary>
@@ -127,7 +126,6 @@ namespace Guardtime.KSI.Service
             {
                 throw new KsiException("Invalid sign response payload: null.");
             }
-
 
             try
             {
@@ -244,7 +242,6 @@ namespace Guardtime.KSI.Service
                 throw new KsiException("Invalid extend response payload: null.");
             }
 
-
             try
             {
                 using (TlvReader reader = new TlvReader(new MemoryStream(data)))
@@ -263,7 +260,6 @@ namespace Guardtime.KSI.Service
                         string errorMessage = payload == null ? errorPayloadPayload.ErrorMessage : payload.ErrorMessage;
                         throw new KsiException("Error occured during extending: " + errorMessage + ".");
                     }
-
 
                     if (!pdu.ValidateMac(_serviceSettings.LoginKey))
                     {

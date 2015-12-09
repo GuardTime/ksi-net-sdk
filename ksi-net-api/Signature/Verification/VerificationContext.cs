@@ -15,7 +15,6 @@ namespace Guardtime.KSI.Signature.Verification
         ///     Create new verification context instance.
         /// </summary>
         /// <param name="signature">KSI signature</param>
-        
         public VerificationContext(IKsiSignature signature)
         {
             if (signature == null)

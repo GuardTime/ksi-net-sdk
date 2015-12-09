@@ -18,7 +18,6 @@ namespace Guardtime.KSI.Hashing
         ///     Create new Datahasher with given algorithm
         /// </summary>
         /// <param name="algorithm">Hash algorithm</param>
-        
         public DataHasher(HashAlgorithm algorithm)
         {
             if (algorithm == null)
@@ -60,7 +59,6 @@ namespace Guardtime.KSI.Hashing
         /// <param name="offset">the offset to start from in the array of bytes.</param>
         /// <param name="length">the number of bytes to use, starting at the offset.</param>
         /// <returns>the same DataHasher object for chaining calls</returns>
-        
         public IDataHasher AddData(byte[] data, int offset, int length)
         {
             if (_outputHash != null)
@@ -82,7 +80,6 @@ namespace Guardtime.KSI.Hashing
         /// </summary>
         /// <param name="data">list of bytes</param>
         /// <returns>the same DataHasher object for chaining calls</returns>
-        
         public IDataHasher AddData(byte[] data)
         {
             if (data == null)
@@ -93,13 +90,11 @@ namespace Guardtime.KSI.Hashing
             return AddData(data, 0, data.Length);
         }
 
-
         /// <summary>
         ///     Adds data to the digest using the specified input stream of bytes, starting at an offset of 0.
         /// </summary>
         /// <param name="inStream">input stream of bytes.</param>
         /// <returns>the same DataHasher object for chaining calls</returns>
-        
         public IDataHasher AddData(Stream inStream)
         {
             return AddData(inStream, DefaultStreamBufferSize);
@@ -111,7 +106,6 @@ namespace Guardtime.KSI.Hashing
         /// <param name="inStream">input stream of bytes.</param>
         /// <param name="bufferSize">maximum allowed buffer size for reading data</param>
         /// <returns>the same DataHasher object for chaining calls</returns>
-        
         public IDataHasher AddData(Stream inStream, int bufferSize)
         {
             if (inStream == null)
@@ -163,6 +157,5 @@ namespace Guardtime.KSI.Hashing
 
             return this;
         }
-
     }
 }

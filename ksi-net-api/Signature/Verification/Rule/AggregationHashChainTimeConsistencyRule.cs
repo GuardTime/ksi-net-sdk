@@ -10,8 +10,6 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public sealed class AggregationHashChainTimeConsistencyRule : VerificationRule
     {
         /// <see cref="VerificationRule.Verify" />
-        
-        
         public override VerificationResult Verify(IVerificationContext context)
         {
             ReadOnlyCollection<AggregationHashChain> aggregationHashChains = GetAggregationHashChains(GetSignature(context), true);

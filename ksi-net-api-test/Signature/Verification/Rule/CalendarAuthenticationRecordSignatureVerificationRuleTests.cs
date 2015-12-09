@@ -13,7 +13,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         [Test]
         public void TestVerify()
         {
-            CalendarAuthenticationRecordSignatureVerificationRule rule = new CalendarAuthenticationRecordSignatureVerificationRule(TrustStoreUtilities.GetTrustAnchorCollection(), new CertificateRdnSubjectSelector("E=publications@guardtime.com"));
+            CalendarAuthenticationRecordSignatureVerificationRule rule = new CalendarAuthenticationRecordSignatureVerificationRule(TrustStoreUtilities.GetTrustAnchorCollection(),
+                new CertificateRdnSubjectSelector("E=publications@guardtime.com"));
 
             // Argument null exception when no context
             Assert.Throws<KsiException>(delegate
@@ -32,7 +33,9 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             IPublicationsFile publicationsFile;
             using (FileStream stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
             {
-                publicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(), new CertificateRdnSubjectSelector("E=publications@guardtime.com"))).Create(stream);
+                publicationsFile =
+                    new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(),
+                        new CertificateRdnSubjectSelector("E=publications@guardtime.com"))).Create(stream);
             }
 
             // Check signature with no calendar authentication record

@@ -10,8 +10,6 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public sealed class CalendarHashChainRegistrationTimeRule : VerificationRule
     {
         /// <see cref="VerificationRule.Verify" />
-        
-        
         public override VerificationResult Verify(IVerificationContext context)
         {
             CalendarHashChain calendarHashChain = GetSignature(context).CalendarHashChain;

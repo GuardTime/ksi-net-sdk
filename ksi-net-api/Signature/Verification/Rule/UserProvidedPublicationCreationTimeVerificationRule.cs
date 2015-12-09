@@ -8,8 +8,6 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public sealed class UserProvidedPublicationCreationTimeVerificationRule : VerificationRule
     {
         /// <see cref="VerificationRule.Verify" />
-        
-        
         public override VerificationResult Verify(IVerificationContext context)
         {
             ulong registrationTime = GetCalendarHashChain(GetSignature(context)).RegistrationTime;

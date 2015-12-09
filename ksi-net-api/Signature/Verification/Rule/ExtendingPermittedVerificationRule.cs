@@ -8,7 +8,6 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public sealed class ExtendingPermittedVerificationRule : VerificationRule
     {
         /// <see cref="VerificationRule.Verify" />
-        
         public override VerificationResult Verify(IVerificationContext context)
         {
             CheckVerificationContext(context);

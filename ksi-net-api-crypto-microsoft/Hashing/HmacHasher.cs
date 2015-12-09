@@ -17,7 +17,6 @@ namespace Guardtime.KSI.Hashing
                 throw new ArgumentNullException(nameof(key));
             }
 
-
             HMACSHA256 hMac = new HMACSHA256(key);
             return new DataHash(HashAlgorithm.Sha2256, hMac.ComputeHash(data));
         }
