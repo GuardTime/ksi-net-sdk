@@ -138,7 +138,7 @@ namespace Guardtime.KSI.Hashing
             {
                 return _outputHash;
             }
-            _messageHasher.TransformFinalBlock(new byte[] {}, 0, 0);
+            _messageHasher.TransformFinalBlock(new byte[] { }, 0, 0);
             byte[] hash = _messageHasher.Hash;
             _outputHash = new DataHash(_algorithm, hash);
 

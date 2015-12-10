@@ -1,5 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using Guardtime.KSI.Publication;
+﻿using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Trust
 {

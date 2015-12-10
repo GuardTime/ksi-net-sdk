@@ -11,29 +11,29 @@ namespace Guardtime.KSI.Parser
         [Test]
         public void TestConstructorWithEncoding()
         {
-            using (TlvReader reader = new TlvReader(new MemoryStream(new byte[] {0x21, 0x4, 0x0, 0x1, 0x2, 0x3})))
+            using (TlvReader reader = new TlvReader(new MemoryStream(new byte[] { 0x21, 0x4, 0x0, 0x1, 0x2, 0x3 })))
             {
                 TlvTag tag = reader.ReadTag();
-                Assert.AreEqual(new RawTag(0x1, false, true, new byte[] {0x0, 0x1, 0x2, 0x3}), tag, "Reader should output correct tag");
+                Assert.AreEqual(new RawTag(0x1, false, true, new byte[] { 0x0, 0x1, 0x2, 0x3 }), tag, "Reader should output correct tag");
             }
         }
 
         [Test]
         public void TestReadTagShort()
         {
-            using (TlvReader reader = new TlvReader(new MemoryStream(new byte[] {0x21, 0x4, 0x0, 0x1, 0x2, 0x3})))
+            using (TlvReader reader = new TlvReader(new MemoryStream(new byte[] { 0x21, 0x4, 0x0, 0x1, 0x2, 0x3 })))
             {
                 TlvTag tag = reader.ReadTag();
-                Assert.AreEqual(new RawTag(0x1, false, true, new byte[] {0x0, 0x1, 0x2, 0x3}), tag, "Reader should output correct tag");
+                Assert.AreEqual(new RawTag(0x1, false, true, new byte[] { 0x0, 0x1, 0x2, 0x3 }), tag, "Reader should output correct tag");
             }
         }
 
         [Test]
         public void TestReadTagShortWithLongType()
         {
-            using (TlvReader reader = new TlvReader(new MemoryStream(new byte[] {0xa0, 0x33, 0x0, 0x4, 0x0, 0x1, 0x2, 0x3})))
+            using (TlvReader reader = new TlvReader(new MemoryStream(new byte[] { 0xa0, 0x33, 0x0, 0x4, 0x0, 0x1, 0x2, 0x3 })))
             {
-                Assert.AreEqual(new RawTag(0x33, false, true, new byte[] {0x0, 0x1, 0x2, 0x3}), reader.ReadTag(), "Reader should output correct byte array");
+                Assert.AreEqual(new RawTag(0x33, false, true, new byte[] { 0x0, 0x1, 0x2, 0x3 }), reader.ReadTag(), "Reader should output correct byte array");
             }
         }
 
@@ -71,7 +71,7 @@ namespace Guardtime.KSI.Parser
         [Test]
         public void TestReadTooShortTag()
         {
-            using (TlvReader reader = new TlvReader(new MemoryStream(new byte[] {0x21})))
+            using (TlvReader reader = new TlvReader(new MemoryStream(new byte[] { 0x21 })))
             {
                 Assert.Throws<TlvException>(delegate
                 {
@@ -83,7 +83,7 @@ namespace Guardtime.KSI.Parser
         [Test]
         public void TestReadDataWithInvalidLength()
         {
-            using (TlvReader reader = new TlvReader(new MemoryStream(new byte[] {0x21, 0x2})))
+            using (TlvReader reader = new TlvReader(new MemoryStream(new byte[] { 0x21, 0x2 })))
             {
                 Assert.Throws<TlvException>(delegate
                 {

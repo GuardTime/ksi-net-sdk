@@ -41,7 +41,7 @@ namespace Guardtime.KSI.Signature.Verification
                     KsiService = ksiService,
                     PublicationsFile =
                         new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(),
-                            new CertificateRdnSubjectSelector(new Dictionary<string, string>() {{"1.2.840.113549.1.9.1", "publications@guardtime.com"}}))).Create(
+                            new CertificateRdnSubjectSelector(new Dictionary<string, string>() { { "1.2.840.113549.1.9.1", "publications@guardtime.com" } }))).Create(
                                 new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
                 };
 

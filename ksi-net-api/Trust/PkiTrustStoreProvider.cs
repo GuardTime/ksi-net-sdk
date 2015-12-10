@@ -36,7 +36,6 @@ namespace Guardtime.KSI.Trust
         /// <param name="signatureBytes"></param>
         public void Verify(byte[] signedBytes, byte[] signatureBytes)
         {
-            // TODO: Check for better exception
             if (signedBytes == null)
             {
                 throw new PkiVerificationErrorException("Invalid signed bytes: null.");
@@ -49,9 +48,6 @@ namespace Guardtime.KSI.Trust
 
             ICryptoSignatureVerifier verifier = KsiProvider.GetPkcs7CryptoSignatureVerifier(_trustAnchors, _certificateRdnSelector);
             verifier.Verify(signedBytes, signatureBytes, null);
-
-            // TODO: Verify email also
-            //Console.WriteLine(signedCms.SignerInfos[0].Certificate.GetNameInfo(X509NameType.EmailName, false));
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 rule.Verify(null);
             });
 
-            TestVerificationContext context = new TestVerificationContext {IsExtendingAllowed = true};
+            TestVerificationContext context = new TestVerificationContext { IsExtendingAllowed = true };
             VerificationResult verificationResult = rule.Verify(context);
             Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
 

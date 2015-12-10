@@ -119,15 +119,15 @@ namespace Guardtime.KSI.Crypto
         protected virtual void ValidateCertPath(X509Certificate certificate, IX509Store x509Store)
         {
             // Cert path checker
-            CertPathChecker certPathChecker = new CertPathChecker();
+            PkixCertPathChecker certPathChecker = new CertPathChecker();
 
             // Validate certificate path
-            X509CertStoreSelector x509CertStoreSelector = new X509CertStoreSelector {Certificate = certificate};
+            X509CertStoreSelector x509CertStoreSelector = new X509CertStoreSelector { Certificate = certificate };
 
             // Build cert path
             PkixBuilderParameters pkixBuilderParameters = new PkixBuilderParameters(_trustAnchors, x509CertStoreSelector);
             pkixBuilderParameters.AddStore(x509Store);
-            pkixBuilderParameters.AddCertPathChecker(certPathChecker);
+            //pkixBuilderParameters.AddCertPathChecker(certPathChecker);
             pkixBuilderParameters.IsRevocationEnabled = false;
 
             PkixCertPathBuilderResult pkixCertPathBuilderResult = new PkixCertPathBuilder().Build(pkixBuilderParameters);
@@ -135,7 +135,7 @@ namespace Guardtime.KSI.Crypto
 
             // Create pkix parameteres
             PkixParameters pkixParameters = new PkixParameters(_trustAnchors);
-            pkixParameters.AddCertPathChecker(certPathChecker);
+            //pkixParameters.AddCertPathChecker(certPathChecker);
             pkixParameters.IsRevocationEnabled = false;
 
             try
@@ -167,13 +167,13 @@ namespace Guardtime.KSI.Crypto
 
             public override void Check(X509Certificate cert, ISet unresolvedCritExts)
             {
-                // TODO: 
                 if (unresolvedCritExts.IsEmpty)
                 {
                     return;
                 }
 
-                unresolvedCritExts.Remove("2.5.29.37");
+                // TODO: is this correct behavior?
+                unresolvedCritExts.Remove(Org.BouncyCastle.Asn1.X509.X509Extensions.ExtendedKeyUsage);
             }
         }
     }

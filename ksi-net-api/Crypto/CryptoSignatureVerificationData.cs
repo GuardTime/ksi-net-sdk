@@ -1,4 +1,6 @@
-﻿namespace Guardtime.KSI.Crypto
+﻿using System;
+
+namespace Guardtime.KSI.Crypto
 {
     public class CryptoSignatureVerificationData
     {
@@ -6,7 +8,11 @@
 
         public CryptoSignatureVerificationData(byte[] certificate)
         {
-            // TODO: Check null?
+            if (certificate == null)
+            {
+                throw new ArgumentNullException(nameof(certificate));
+            }
+
             CertificateBytes = certificate;
         }
     }

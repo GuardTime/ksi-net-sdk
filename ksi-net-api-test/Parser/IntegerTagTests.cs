@@ -12,7 +12,7 @@ namespace Guardtime.KSI.Parser
         [Test]
         public void TestIntegerTagCreateFromTag()
         {
-            RawTag rawTag = new RawTag(0x1, false, false, new byte[] {0x1});
+            RawTag rawTag = new RawTag(0x1, false, false, new byte[] { 0x1 });
             IntegerTag tag = new IntegerTag(rawTag);
             Assert.AreEqual(0x1, tag.Type, "Tag type should be correct");
             Assert.IsFalse(tag.NonCritical, "Tag non critical flag should be correct");

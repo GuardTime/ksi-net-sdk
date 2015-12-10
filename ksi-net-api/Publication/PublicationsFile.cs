@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;

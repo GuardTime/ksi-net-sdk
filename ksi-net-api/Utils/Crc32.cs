@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Guardtime.KSI.Exceptions;
+﻿using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Utils
 {

@@ -81,7 +81,6 @@ namespace Guardtime.KSI.Signature
             }, "No publication record or calendar authentication record is allowed in signature data object if there is no calendar hash chain");
         }
 
-
         [Test]
         public void TestKsiSignatureDoInvalidMultipleCalendarAuthenticationRecords()
         {

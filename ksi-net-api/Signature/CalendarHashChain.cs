@@ -250,8 +250,8 @@ namespace Guardtime.KSI.Signature
                         Direction = LinkDirection.Right;
                         break;
                     default:
-                            throw new TlvException("Invalid calendar hash chain link type(" + Type + ").");
-                        }
+                        throw new TlvException("Invalid calendar hash chain link type(" + Type + ").");
+                }
             }
 
             public LinkDirection Direction { get; }

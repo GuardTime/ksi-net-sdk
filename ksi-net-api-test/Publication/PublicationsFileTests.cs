@@ -29,7 +29,7 @@ namespace Guardtime.KSI.Publication
                 IPublicationsFile publicationsFile =
                     new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(),
                         new CertificateRdnSubjectSelector("E=publications@guardtime.com"))).Create(stream);
-                Assert.AreEqual("O=Guardtime, CN=H5", new X509Certificate2(publicationsFile.FindCertificateById(new byte[] {0x9a, 0x65, 0x82, 0x94})).Subject,
+                Assert.AreEqual("O=Guardtime, CN=H5", new X509Certificate2(publicationsFile.FindCertificateById(new byte[] { 0x9a, 0x65, 0x82, 0x94 })).Subject,
                     "Certificate should be correct");
             }
         }

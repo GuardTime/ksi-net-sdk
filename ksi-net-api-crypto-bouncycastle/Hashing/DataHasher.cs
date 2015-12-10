@@ -142,7 +142,6 @@ namespace Guardtime.KSI.Hashing
                 return _outputHash;
             }
 
-            // TODO: Should check the length?
             byte[] hash = new byte[_algorithm.Length];
             _digester.DoFinal(hash, 0);
             _outputHash = new DataHash(_algorithm, hash);
