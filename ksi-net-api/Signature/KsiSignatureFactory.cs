@@ -2,11 +2,14 @@
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Service;
+using NLog;
 
 namespace Guardtime.KSI.Signature
 {
     public partial class KsiSignatureFactory
     {
+        protected static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         ///     Get KSI signature instance from stream.
         /// </summary>
@@ -18,10 +21,22 @@ namespace Guardtime.KSI.Signature
             {
                 throw new KsiException("Invalid input stream: null.");
             }
-
+            
             using (TlvReader reader = new TlvReader(stream))
             {
-                return new KsiSignature(reader.ReadTag());
+                try
+                {
+                    Logger.Debug("Creating KSI signature from stream.");
+                    KsiSignature signature = new KsiSignature(reader.ReadTag());
+                    Logger.Debug("KSI signature successfully created.");
+                    return signature;
+                }
+                catch (TlvException e)
+                {
+                    Logger.Warn("KSI signature creation failed: {0}", e);
+                    throw;
+                }
+                
             }
         }
 
@@ -47,9 +62,19 @@ namespace Guardtime.KSI.Signature
                     }
                 }
 
-                return
-                    new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false,
-                        ((MemoryStream)writer.BaseStream).ToArray()));
+                try
+                {
+                    Logger.Debug("Creating KSI signature from aggregation response.");
+                    KsiSignature signature = new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false, ((MemoryStream)writer.BaseStream).ToArray()));
+                    Logger.Debug("KSI signature successfully created.");
+                    return signature;
+                }
+                catch (TlvException e)
+                {
+                    Logger.Warn("KSI signature creation failed: {0}", e);
+                    throw;
+                }
+
             }
         }
     }
