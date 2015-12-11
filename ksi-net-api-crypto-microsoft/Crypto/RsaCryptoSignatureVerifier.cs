@@ -58,11 +58,6 @@ namespace Guardtime.KSI.Crypto
             {
                 X509Certificate2 certificate = new X509Certificate2(certificateBytes);
 
-                if (certificate.PublicKey == null)
-                {
-                    throw new Exception("No public key in certificate.");
-                }
-
                 using (RSACryptoServiceProvider serviceProvider = (RSACryptoServiceProvider)certificate.PublicKey.Key)
                 {
                     if (!serviceProvider.VerifyData(signedBytes, _algorithm, signatureBytes))
@@ -72,10 +67,6 @@ namespace Guardtime.KSI.Crypto
                 }
             }
             catch (PkiVerificationFailedException)
-            {
-                throw;
-            }
-            catch (PkiVerificationErrorException)
             {
                 throw;
             }

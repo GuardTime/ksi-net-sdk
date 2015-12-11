@@ -25,7 +25,7 @@ namespace Guardtime.KSI.Integration
                 PublicationsFile = ksi.GetPublicationsFile()
             };
             VerificationResult verificationResult = ksi.Verify(verificationContext,
-                new KeyBasedVerificationPolicy(TrustStoreUtilities.GetTrustAnchorCollection(), new CertificateRdnSubjectSelector("E=publications@guardtime.com")));
+                new KeyBasedVerificationPolicy(TrustStoreUtilities.GetTrustAnchorCollection(), new CertificateSubjectRdnSelector("E=publications@guardtime.com")));
             Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode, "Signature should verify with key based policy");
         }
 
@@ -45,7 +45,7 @@ namespace Guardtime.KSI.Integration
                     PublicationsFile = ksi.GetPublicationsFile()
                 };
                 VerificationResult verificationResult = ksi.Verify(verificationContext,
-                    new KeyBasedVerificationPolicy(TrustStoreUtilities.GetTrustAnchorCollection(), new CertificateRdnSubjectSelector("E=publications@guardtime.com")));
+                    new KeyBasedVerificationPolicy(TrustStoreUtilities.GetTrustAnchorCollection(), new CertificateSubjectRdnSelector("E=publications@guardtime.com")));
                 Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode, "Signature should verify with key based policy");
             }
         }

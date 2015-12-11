@@ -13,7 +13,7 @@ namespace Guardtime.KSI.Signature.Verification.Policy
         /// <summary>
         ///     Create key based verification policy and add rules to it.
         /// </summary>
-        public KeyBasedVerificationPolicy(X509Certificate2Collection trustAnchors, ICertificateRdnSubjectSelector certificateRdnSelector)
+        public KeyBasedVerificationPolicy(X509Certificate2Collection trustAnchors, ICertificateSubjectRdnSelector certificateRdnSelector)
         {
             if (trustAnchors == null)
             {

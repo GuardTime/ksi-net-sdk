@@ -80,8 +80,9 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Crypto\CryptoSignatureVerificationData.cs" />
     <Compile Include="Crypto\CryptoSignatureVerifierFactory.cs" />
-    <Compile Include="Crypto\ICertificateRdnSubjectSelector.cs" />
+    <Compile Include="Crypto\ICertificateSubjectRdnSelector.cs" />
     <Compile Include="Crypto\ICryptoSignatureVerifier.cs" />
+    <Compile Include="Crypto\CertificateSubjectRdn.cs" />
     <Compile Include="Exceptions\HashingException.cs" />
     <Compile Include="Exceptions\KsiException.cs" />
     <Compile Include="Exceptions\KsiServiceException.cs" />

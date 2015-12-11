@@ -11,15 +11,22 @@ namespace Guardtime.KSI.Crypto
     public class Pkcs7CryptoSignatureVerifier : ICryptoSignatureVerifier
     {
         private readonly X509Certificate2Collection _trustAnchors;
+        private readonly ICertificateSubjectRdnSelector _certificateRdnSelector;
 
-        public Pkcs7CryptoSignatureVerifier(X509Certificate2Collection trustAnchors, ICertificateRdnSubjectSelector certificateRdnSelector)
+        public Pkcs7CryptoSignatureVerifier(X509Certificate2Collection trustAnchors, ICertificateSubjectRdnSelector certificateRdnSelector)
         {
             if (trustAnchors == null)
             {
                 throw new ArgumentNullException(nameof(trustAnchors));
             }
 
+            if (certificateRdnSelector == null)
+            {
+                throw new ArgumentNullException(nameof(certificateRdnSelector));
+            }
+
             _trustAnchors = trustAnchors;
+            _certificateRdnSelector = certificateRdnSelector;
         }
 
         /// <summary>
@@ -51,6 +58,38 @@ namespace Guardtime.KSI.Crypto
             {
                 throw new PkiVerificationErrorException("Error when verifying PKCS#7 signature.", e);
             }
+
+            if (signedCms.SignerInfos.Count == 0)
+            {
+                throw new PkiVerificationErrorException("Signature does not contain any SignerInformation element.");
+            }
+
+            if (signedCms.SignerInfos.Count > 1)
+            {
+                throw new PkiVerificationErrorException("Signature contains more than one SignerInformation element.");
+            }
+
+            SignerInfo signerInfo = signedCms.SignerInfos[0];
+            X509Certificate2 certificate = signerInfo.Certificate;
+
+            try
+            {
+                // Verify certificate with rdn selector
+                if (!_certificateRdnSelector.Match(certificate))
+                {
+                    throw new PkiVerificationFailedException("Certificate did not match with certificate subject rdn selector.");
+                }
+            }
+            catch (PkiVerificationFailedException)
+            {
+                throw;
+            }
+            catch (Exception e)
+            {
+                throw new PkiVerificationErrorException("Error when verifying PKCS#7 signature.", e);
+            }
+            //Console.WriteLine("X500DistinguishedName: {0}{1}", dname.Name, Environment.NewLine);
+            //certificate.Reset();
 
             try
             {

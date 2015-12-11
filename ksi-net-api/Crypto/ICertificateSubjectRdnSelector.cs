@@ -1,6 +1,6 @@
 namespace Guardtime.KSI.Crypto
 {
-    public interface ICertificateRdnSubjectSelector
+    public interface ICertificateSubjectRdnSelector
     {
         bool Match(object obj);
     }

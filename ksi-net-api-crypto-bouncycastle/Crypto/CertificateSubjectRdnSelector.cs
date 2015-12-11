@@ -7,28 +7,36 @@ using Org.BouncyCastle.X509;
 
 namespace Guardtime.KSI.Crypto
 {
-    public class CertificateRdnSubjectSelector : ICertificateRdnSubjectSelector
+    public class CertificateSubjectRdnSelector : ICertificateSubjectRdnSelector
     {
         private readonly X509Name _subjectDn;
 
         // TODO: If empty allow everything?
-        public CertificateRdnSubjectSelector(Dictionary<string, string> subjectDn)
+        public CertificateSubjectRdnSelector(IList<CertificateSubjectRdn> rdnList)
         {
+            if (rdnList == null)
+            {
+                throw new ArgumentNullException(nameof(rdnList));
+            }
+
+            if (rdnList.Count == 0)
+            {
+                throw new ArgumentException("List cannot be empty.", nameof(rdnList));
+            }
+
             List<DerObjectIdentifier> oidList = new List<DerObjectIdentifier>();
             List<string> valueList = new List<string>();
 
-            if (subjectDn != null)
+            foreach (CertificateSubjectRdn rdn in rdnList)
             {
-                foreach (KeyValuePair<string, string> dn in subjectDn)
-                {
-                    oidList.Add(new DerObjectIdentifier(dn.Key));
-                    valueList.Add(dn.Value);
-                }
+                oidList.Add(new DerObjectIdentifier(rdn.Oid));
+                valueList.Add(rdn.Value);
             }
+
             _subjectDn = new X509Name(oidList, valueList);
         }
 
-        public CertificateRdnSubjectSelector(string subjectDn)
+        public CertificateSubjectRdnSelector(string subjectDn)
         {
             if (string.IsNullOrEmpty(subjectDn))
             {

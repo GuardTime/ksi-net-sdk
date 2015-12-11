@@ -17,9 +17,9 @@ namespace Guardtime.KSI.Crypto
     public class Pkcs7CryptoSignatureVerifier : ICryptoSignatureVerifier
     {
         private readonly ISet _trustAnchors = new HashSet();
-        private readonly ICertificateRdnSubjectSelector _certificateRdnSelector;
+        private readonly ICertificateSubjectRdnSelector _certificateRdnSelector;
 
-        public Pkcs7CryptoSignatureVerifier(X509Certificate2Collection trustAnchors, ICertificateRdnSubjectSelector certificateRdnSelector)
+        public Pkcs7CryptoSignatureVerifier(X509Certificate2Collection trustAnchors, ICertificateSubjectRdnSelector certificateRdnSelector)
         {
             if (trustAnchors == null)
             {
@@ -97,16 +97,12 @@ namespace Guardtime.KSI.Crypto
                 // Verify certificate with selector
                 if (!_certificateRdnSelector.Match(certificate))
                 {
-                    throw new PkiVerificationFailedException("Certificate did not match with certificate selector.");
+                    throw new PkiVerificationFailedException("Certificate did not match with certificate subject rdn selector.");
                 }
 
                 ValidateCertPath(certificate, x509Store);
             }
             catch (PkiVerificationFailedException)
-            {
-                throw;
-            }
-            catch (PkiVerificationErrorException)
             {
                 throw;
             }

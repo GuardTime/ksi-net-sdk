@@ -8,8 +8,8 @@ namespace Guardtime.KSI
         [SetUp]
         public void RunBeforeAnyTests()
         {
-            KsiProvider.SetCryptoProvider(new BouncyCastleCryptoProvider());
-            //KsiProvider.SetCryptoProvider(new MicrosoftCryptoProvider());
+            //KsiProvider.SetCryptoProvider(new BouncyCastleCryptoProvider());
+            KsiProvider.SetCryptoProvider(new MicrosoftCryptoProvider());
         }
     }
 }

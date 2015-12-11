@@ -50,7 +50,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 publicationsFile =
                     new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(),
-                        new CertificateRdnSubjectSelector("E=publications@guardtime.com"))).Create(stream);
+                        new CertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
             }
 
             // Check invalid publications record in signature: null

@@ -25,7 +25,7 @@ namespace Guardtime.KSI.Signature.Verification
 
                 KsiService ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"),
                     new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(),
-                        new CertificateRdnSubjectSelector("E=publications@guardtime.com"))), new KsiSignatureFactory());
+                        new CertificateSubjectRdnSelector("E=publications@guardtime.com"))), new KsiSignatureFactory());
                 VerificationContext context = new VerificationContext(new KsiSignatureFactory().Create(stream))
                 {
                     DocumentHash =
@@ -41,7 +41,8 @@ namespace Guardtime.KSI.Signature.Verification
                     KsiService = ksiService,
                     PublicationsFile =
                         new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(),
-                            new CertificateRdnSubjectSelector(new Dictionary<string, string>() { { "1.2.840.113549.1.9.1", "publications@guardtime.com" } }))).Create(
+                            new CertificateSubjectRdnSelector(new List<CertificateSubjectRdn> { new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com") })))
+                            .Create(
                                 new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
                 };
 
@@ -54,7 +55,9 @@ namespace Guardtime.KSI.Signature.Verification
                 Console.WriteLine(policy.Verify(context));
 
                 Console.WriteLine(@"// Key based");
-                policy = new KeyBasedVerificationPolicy(TrustStoreUtilities.GetTrustAnchorCollection(), new CertificateRdnSubjectSelector((Dictionary<string, string>)null));
+                policy = new KeyBasedVerificationPolicy(TrustStoreUtilities.GetTrustAnchorCollection(),
+                    new CertificateSubjectRdnSelector(new List<CertificateSubjectRdn> { new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com") }));
+                ;
                 Console.WriteLine(policy.Verify(context));
 
                 Console.WriteLine(@"// Calendar based verification");

@@ -35,6 +35,7 @@
     <Reference Include="System.Security" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Crypto\CertificateSubjectRdnSelector.cs" />
     <Compile Include="Hashing\DataHasher.cs" />
     <Compile Include="Crypto\Pkcs7CryptoSignatureVerifier.cs" />
     <Compile Include="Hashing\HmacHasher.cs" />

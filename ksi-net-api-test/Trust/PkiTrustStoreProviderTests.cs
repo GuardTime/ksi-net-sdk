@@ -26,7 +26,7 @@ namespace Guardtime.KSI.Trust
             }
 
             PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(),
-                new CertificateRdnSubjectSelector("E=publications@guardtime.com"));
+                new CertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
             trustStoreProvider.Verify(data, sigBytes);
 

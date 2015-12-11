@@ -1,6 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Trust;
 using NUnit.Framework;
@@ -12,12 +15,93 @@ namespace Guardtime.KSI.Publication
     public class PublicationsFileTests
     {
         [Test]
-        public void TestCreatePublicationsFileFromFile()
+        public void TestCreatePublicationsFileFromFile1()
         {
             using (FileStream stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
             {
                 new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(),
-                    new CertificateRdnSubjectSelector("E=publications@guardtime.com"))).Create(stream);
+                    new CertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
+            }
+        }
+
+        [Test]
+        public void TestCreatePublicationsFileFromFile2()
+        {
+            using (FileStream stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+            {
+                new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(),
+                    new CertificateSubjectRdnSelector("EMail=publications@guardtime.com"))).Create(stream);
+            }
+        }
+
+        [Test]
+        public void TestCreatePublicationsFileFromFile3()
+        {
+            using (FileStream stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+            {
+                new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(),
+                    new CertificateSubjectRdnSelector("1.2.840.113549.1.9.1=publications@guardtime.com"))).Create(stream);
+            }
+        }
+
+        [Test]
+        public void TestCreatePublicationsFileFromFile4()
+        {
+            using (FileStream stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+            {
+                ArgumentException ex = Assert.Throws<ArgumentException>(delegate
+                {
+                    new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(),
+                        new CertificateSubjectRdnSelector("EEE=publications@guardtime.com"))).Create(stream);
+                });
+
+                Assert.That(ex.Message, Is.StringContaining("is invalid."));
+            }
+        }
+
+        [Test]
+        public void TestCreatePublicationsFileFromFile5()
+        {
+            using (FileStream stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+            {
+                PublicationsFileException ex = Assert.Throws<PublicationsFileException>(delegate
+                {
+                    new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(),
+                        new CertificateSubjectRdnSelector("E=Xpublications@guardtime.com"))).Create(stream);
+                });
+
+                Assert.That(ex.Message, Is.StringStarting("Publications file verification failed."));
+            }
+        }
+
+        [Test]
+        public void TestCreatePublicationsFileFromFile6()
+        {
+            using (FileStream stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+            {
+                PublicationsFileException ex = Assert.Throws<PublicationsFileException>(delegate
+                {
+                    new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(),
+                        new CertificateSubjectRdnSelector("1.2.840.113549.1.9.1=Xpublications@guardtime.com"))).Create(stream);
+                });
+
+                Assert.That(ex.Message, Is.StringStarting("Publications file verification failed."));
+            }
+        }
+
+        [Test]
+        public void TestCreatePublicationsFileFromFile7()
+        {
+            using (FileStream stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+            {
+                ArgumentException ex = Assert.Throws<ArgumentException>(delegate
+                {
+                    new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(),
+                        new CertificateSubjectRdnSelector(new List<CertificateSubjectRdn> { new CertificateSubjectRdn("1.2.840.113549.1.9.1X", "publications@guardtime.com") })))
+                        .Create(stream);
+                });
+
+                Assert.That(ex.Message, Is.StringStarting("Rdn contains invalid Oid or Value."));
             }
         }
 
@@ -28,7 +112,7 @@ namespace Guardtime.KSI.Publication
             {
                 IPublicationsFile publicationsFile =
                     new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(),
-                        new CertificateRdnSubjectSelector("E=publications@guardtime.com"))).Create(stream);
+                        new CertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
                 Assert.AreEqual("O=Guardtime, CN=H5", new X509Certificate2(publicationsFile.FindCertificateById(new byte[] { 0x9a, 0x65, 0x82, 0x94 })).Subject,
                     "Certificate should be correct");
             }
@@ -43,7 +127,7 @@ namespace Guardtime.KSI.Publication
                 {
                     IPublicationsFile publicationsFile =
                         new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(),
-                            new CertificateRdnSubjectSelector("E=publications@guardtime.com"))).Create(stream);
+                            new CertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
                     Assert.IsFalse(publicationsFile.Contains(null), "Should not crash when null object is used");
 
                     Assert.IsTrue(publicationsFile.Contains(new PublicationRecord(reader.ReadTag())), "Should contain given publication record");
@@ -60,7 +144,7 @@ namespace Guardtime.KSI.Publication
                 {
                     IPublicationsFile publicationsFile =
                         new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(),
-                            new CertificateRdnSubjectSelector("E=publications@guardtime.com"))).Create(stream);
+                            new CertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
                     Assert.IsFalse(publicationsFile.Contains(new PublicationRecord(reader.ReadTag())), "Should contain given publication record");
                 }
             }
@@ -73,7 +157,7 @@ namespace Guardtime.KSI.Publication
             {
                 IPublicationsFile publicationsFile =
                     new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(),
-                        new CertificateRdnSubjectSelector("E=publications@guardtime.com"))).Create(stream);
+                        new CertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
                 PublicationRecord publicationRecord = publicationsFile.GetLatestPublication();
 
                 Assert.AreEqual(1442275200, publicationRecord.PublicationData.PublicationTime, "Should be correct publication time for latest publication");

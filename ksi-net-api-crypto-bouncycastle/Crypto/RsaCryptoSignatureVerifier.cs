@@ -72,10 +72,6 @@ namespace Guardtime.KSI.Crypto
             {
                 throw;
             }
-            catch (PkiVerificationErrorException)
-            {
-                throw;
-            }
             catch (Exception e)
             {
                 throw new PkiVerificationErrorException("Error when verifying RSA signature.", e);

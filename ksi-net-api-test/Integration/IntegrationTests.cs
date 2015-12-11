@@ -24,7 +24,7 @@ namespace Guardtime.KSI.Integration
                         KsiServiceProtocol,
                         new ServiceCredentials("anon", "anon"),
                         new PublicationsFileFactory(
-                            new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(), new CertificateRdnSubjectSelector("E=publications@guardtime.com"))),
+                            new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(), new CertificateSubjectRdnSelector("E=publications@guardtime.com"))),
                         new KsiSignatureFactory()))
             }
         };
