@@ -5,6 +5,7 @@ using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
+using NLog;
 
 namespace Guardtime.KSI.Signature
 {
@@ -14,6 +15,7 @@ namespace Guardtime.KSI.Signature
     public sealed class KsiSignature : CompositeTag, IKsiSignature
     {
         private readonly List<AggregationHashChain> _aggregationHashChains = new List<AggregationHashChain>();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         ///     Create new KSI signature TLV element from TLV element.
@@ -211,9 +213,19 @@ namespace Guardtime.KSI.Signature
                     }
                 }
 
-                return
-                    new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false,
-                        ((MemoryStream)writer.BaseStream).ToArray()));
+                
+                try
+                {
+                    Logger.Debug("Extending KSI signature.");
+                    KsiSignature signature = new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false, ((MemoryStream)writer.BaseStream).ToArray()));
+                    Logger.Debug("KSI signature successfully extennded.");
+                    return signature;
+                }
+                catch (TlvException e)
+                {
+                    Logger.Warn("KSI signature creation failed: {0}", e);
+                    throw;
+                }
             }
         }
 
