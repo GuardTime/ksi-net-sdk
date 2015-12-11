@@ -88,8 +88,6 @@ namespace Guardtime.KSI.Crypto
             {
                 throw new PkiVerificationErrorException("Error when verifying PKCS#7 signature.", e);
             }
-            //Console.WriteLine("X500DistinguishedName: {0}{1}", dname.Name, Environment.NewLine);
-            //certificate.Reset();
 
             try
             {

@@ -73,34 +73,29 @@ namespace Guardtime.KSI.Signature
 
             if (calendarChainCount > 1)
             {
-                throw new TlvException(
-                    "Only one calendar hash chain is allowed in KSI signature.");
+                throw new TlvException("Only one calendar hash chain is allowed in KSI signature.");
             }
 
             if (calendarChainCount == 0 && (publicationRecordCount != 0 || calendarAuthenticationRecordCount != 0))
             {
-                throw new TlvException(
-                    "No publication record or calendar authentication record is allowed in KSI signature if there is no calendar hash chain.");
+                throw new TlvException("No publication record or calendar authentication record is allowed in KSI signature if there is no calendar hash chain.");
             }
 
             if ((publicationRecordCount == 1 && calendarAuthenticationRecordCount == 1) ||
                 publicationRecordCount > 1 ||
                 calendarAuthenticationRecordCount > 1)
             {
-                throw new TlvException(
-                    "Only one from publication record or calendar authentication record is allowed in KSI signature.");
+                throw new TlvException("Only one from publication record or calendar authentication record is allowed in KSI signature.");
             }
 
             if (aggregationAuthenticationRecordCount > 1)
             {
-                throw new TlvException(
-                    "Only one aggregation authentication record is allowed in KSI signature.");
+                throw new TlvException("Only one aggregation authentication record is allowed in KSI signature.");
             }
 
             if (rfc3161RecordCount > 1)
             {
-                throw new TlvException(
-                    "Only one RFC 3161 record is allowed in KSI signature.");
+                throw new TlvException("Only one RFC 3161 record is allowed in KSI signature.");
             }
 
             _aggregationHashChains.Sort(new AggregationHashChain.ChainIndexOrdering());
