@@ -7,6 +7,7 @@ using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Utils;
+using NLog;
 
 namespace Guardtime.KSI.Service
 {
@@ -21,6 +22,7 @@ namespace Guardtime.KSI.Service
         private readonly IKsiPublicationsFileServiceProtocol _publicationsFileServiceProtocol;
         private readonly IKsiServiceSettings _serviceSettings;
         private readonly IKsiSigningServiceProtocol _sigingServiceProtocol;
+        protected static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         ///     Create KSI service with service protocol and service settings.
@@ -88,9 +90,11 @@ namespace Guardtime.KSI.Service
             KsiPduHeader header = new KsiPduHeader(_serviceSettings.LoginId);
             AggregationRequestPayload payload = new AggregationRequestPayload(hash);
             AggregationPdu pdu = new AggregationPdu(header, payload, KsiPdu.GetHashMacTag(_serviceSettings.LoginKey, header, payload));
-            IAsyncResult serviceProtocolAsyncResult = _sigingServiceProtocol.BeginSign(pdu.Encode(), callback,
-                asyncState);
-            return new CreateSignatureKsiServiceAsyncResult(serviceProtocolAsyncResult, asyncState);
+
+            Logger.Debug("Begin sign (request id: {0}){1}{2}", payload.RequestId, Environment.NewLine, pdu);
+            IAsyncResult serviceProtocolAsyncResult = _sigingServiceProtocol.BeginSign(pdu.Encode(), callback, asyncState);
+
+            return new CreateSignatureKsiServiceAsyncResult(payload.RequestId, serviceProtocolAsyncResult, asyncState);
         }
 
         /// <summary>
@@ -110,7 +114,7 @@ namespace Guardtime.KSI.Service
                 throw new KsiException("Invalid IAsyncResult: null.");
             }
 
-            KsiServiceAsyncResult serviceAsyncResult = asyncResult as CreateSignatureKsiServiceAsyncResult;
+            CreateSignatureKsiServiceAsyncResult serviceAsyncResult = asyncResult as CreateSignatureKsiServiceAsyncResult;
             if (serviceAsyncResult == null)
             {
                 throw new KsiServiceException("Invalid IAsyncResult, could not cast to correct object.");
@@ -122,13 +126,13 @@ namespace Guardtime.KSI.Service
             }
 
             byte[] data = _sigingServiceProtocol.EndSign(serviceAsyncResult.ServiceProtocolAsyncResult);
-            if (data == null)
-            {
-                throw new KsiException("Invalid sign response payload: null.");
-            }
-
             try
             {
+                if (data == null)
+                {
+                    throw new KsiException("Invalid sign response payload: null.");
+                }
+
                 using (TlvReader reader = new TlvReader(new MemoryStream(data)))
                 {
                     AggregationPdu pdu = new AggregationPdu(reader.ReadTag());
@@ -151,12 +155,21 @@ namespace Guardtime.KSI.Service
                         throw new KsiServiceException("Invalid HMAC in aggregation response payload");
                     }
 
+                    Logger.Debug("End sign successful (request id: {0}){1}{2}", serviceAsyncResult.RequestId, Environment.NewLine, pdu);
+
                     return _ksiSignatureFactory.Create(payload);
                 }
             }
             catch (TlvException e)
             {
-                throw new KsiException("Could not parse response message: " + Base16.Encode(data), e);
+                KsiException ksiException = new KsiException("Could not parse response message: " + Base16.Encode(data), e);
+                Logger.Warn("End sign request failed (request id: {0}): {1}", serviceAsyncResult.RequestId, ksiException);
+                throw ksiException;
+            }
+            catch (KsiException e)
+            {
+                Logger.Warn("End sign request failed (request id: {0}): {1}", serviceAsyncResult.RequestId, e);
+                throw;
             }
         }
 
@@ -224,8 +237,8 @@ namespace Guardtime.KSI.Service
                 throw new KsiException("Invalid IAsyncResult: null.");
             }
 
-            ExtendSignatureKsiServiceAsyncResult serviceAsyncResult =
-                asyncResult as ExtendSignatureKsiServiceAsyncResult;
+            ExtendSignatureKsiServiceAsyncResult serviceAsyncResult = asyncResult as ExtendSignatureKsiServiceAsyncResult;
+
             if (serviceAsyncResult == null)
             {
                 throw new KsiServiceException("Invalid IAsyncResult, could not cast to correct object.");
@@ -237,13 +250,13 @@ namespace Guardtime.KSI.Service
             }
 
             byte[] data = _extendingServiceProtocol.EndExtend(serviceAsyncResult.ServiceProtocolAsyncResult);
-            if (data == null)
-            {
-                throw new KsiException("Invalid extend response payload: null.");
-            }
-
             try
             {
+                if (data == null)
+                {
+                    throw new KsiException("Invalid extend response payload: null.");
+                }
+
                 using (TlvReader reader = new TlvReader(new MemoryStream(data)))
                 {
                     ExtendPdu pdu = new ExtendPdu(reader.ReadTag());
@@ -271,12 +284,21 @@ namespace Guardtime.KSI.Service
                         throw new KsiServiceException("No calendar hash chain in payload.");
                     }
 
+                    Logger.Debug("End extend successful (request id: {0}) {1}{2}", serviceAsyncResult.RequestId, Environment.NewLine, pdu);
+
                     return payload.CalendarHashChain;
                 }
             }
             catch (TlvException e)
             {
-                throw new KsiException("Could not parse response message: " + Base16.Encode(data), e);
+                KsiException ksiException = new KsiException("Could not parse response message: " + Base16.Encode(data), e);
+                Logger.Warn("End extend request failed (request id: {0}): {1}", serviceAsyncResult.RequestId, ksiException);
+                throw ksiException;
+            }
+            catch (KsiException e)
+            {
+                Logger.Warn("End extend request failed (request id: {0}): {1}", serviceAsyncResult.RequestId, e);
+                throw;
             }
         }
 
@@ -346,7 +368,7 @@ namespace Guardtime.KSI.Service
         /// <param name="callback">callback when extending signature is finished</param>
         /// <param name="asyncState">async state object</param>
         /// <returns></returns>
-        private IAsyncResult BeginExtend(KsiPduPayload payload, AsyncCallback callback, object asyncState)
+        private IAsyncResult BeginExtend(ExtendRequestPayload payload, AsyncCallback callback, object asyncState)
         {
             if (_extendingServiceProtocol == null)
             {
@@ -355,9 +377,11 @@ namespace Guardtime.KSI.Service
 
             KsiPduHeader header = new KsiPduHeader(_serviceSettings.LoginId);
             ExtendPdu pdu = new ExtendPdu(header, payload, KsiPdu.GetHashMacTag(_serviceSettings.LoginKey, header, payload));
-            IAsyncResult serviceProtocolAsyncResult = _extendingServiceProtocol.BeginExtend(pdu.Encode(), callback,
-                asyncState);
-            return new ExtendSignatureKsiServiceAsyncResult(serviceProtocolAsyncResult, asyncState);
+
+            Logger.Debug("Begin extend. (request id: {0}){1}{2}", payload.RequestId, Environment.NewLine, pdu);
+            IAsyncResult serviceProtocolAsyncResult = _extendingServiceProtocol.BeginExtend(pdu.Encode(), callback, asyncState);
+
+            return new ExtendSignatureKsiServiceAsyncResult(payload.RequestId, serviceProtocolAsyncResult, asyncState);
         }
 
         /// <summary>
@@ -365,10 +389,13 @@ namespace Guardtime.KSI.Service
         /// </summary>
         private class CreateSignatureKsiServiceAsyncResult : KsiServiceAsyncResult
         {
-            public CreateSignatureKsiServiceAsyncResult(IAsyncResult serviceProtocolAsyncResult, object asyncState)
+            public CreateSignatureKsiServiceAsyncResult(ulong requestId, IAsyncResult serviceProtocolAsyncResult, object asyncState)
                 : base(serviceProtocolAsyncResult, asyncState)
             {
+                RequestId = requestId;
             }
+
+            public ulong RequestId { get; }
         }
 
         /// <summary>
@@ -376,10 +403,13 @@ namespace Guardtime.KSI.Service
         /// </summary>
         private class ExtendSignatureKsiServiceAsyncResult : KsiServiceAsyncResult
         {
-            public ExtendSignatureKsiServiceAsyncResult(IAsyncResult serviceProtocolAsyncResult, object asyncState)
+            public ExtendSignatureKsiServiceAsyncResult(ulong requestId, IAsyncResult serviceProtocolAsyncResult, object asyncState)
                 : base(serviceProtocolAsyncResult, asyncState)
             {
+                RequestId = requestId;
             }
+
+            public ulong RequestId { get; }
         }
 
         /// <summary>
