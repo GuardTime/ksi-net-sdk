@@ -8,6 +8,10 @@ Then we are set up with the library and start coding.
 Now to start using KSI technology we have 2 possibilities, we can use the simple API wrapper or we write
 it directly. 
 
+// First thing always is to set crypto provider to bouncycastle or microsoft 
+KsiProvider.SetCryptoProvider(new BouncyCastleCryptoProvider()); 
+//KsiProvider.SetCryptoProvider(new MicrosoftCryptoProvider()); 
+
 // Create HTTP KSI service protocol
 var httpKsiServiceProtocol = new HttpKsiServiceProtocol("http://signingservice_url", "http://extendingservice_url", "http://publicationsfile_url");
 // Create new KSI service
