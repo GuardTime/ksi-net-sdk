@@ -43,7 +43,7 @@ namespace Guardtime.KSI.Publication
                 throw new KsiException("Invalid input stream: null.");
             }
 
-            Logger.Debug("Creating publication file.");
+            Logger.Debug("Creating publications file.");
 
             byte[] data = new byte[PublicationsFile.FileBeginningMagicBytes.Length];
             int bytesRead = stream.Read(data, 0, data.Length);
@@ -69,11 +69,11 @@ namespace Guardtime.KSI.Publication
                 }
                 catch (PkiVerificationException e)
                 {
-                    Logger.Warn("Publication file verification failed. {0}", e);
+                    Logger.Warn("Publications file verification failed. {0}", e);
                     throw new PublicationsFileException("Publications file verification failed.", e);
                 }
 
-                Logger.Debug("Publication file created.");
+                Logger.Debug("Publications file created.");
 
                 return publicationsFile;
             }

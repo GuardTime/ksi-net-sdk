@@ -49,7 +49,7 @@ namespace Guardtime.KSI.Signature.Verification.Policy
             finally
             {
                 verificationResult = new VerificationResult(GetRuleName(), verificationResults);
-                Logger.Debug("{1}{2}", GetRuleName(), Environment.NewLine, verificationResult);
+                Logger.Debug("{0}{1}{2}", GetRuleName(), Environment.NewLine, verificationResult);
             }
 
             return verificationResult;

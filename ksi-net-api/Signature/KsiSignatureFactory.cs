@@ -6,7 +6,7 @@ using NLog;
 
 namespace Guardtime.KSI.Signature
 {
-    public partial class KsiSignatureFactory
+    public class KsiSignatureFactory
     {
         protected static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
@@ -21,22 +21,21 @@ namespace Guardtime.KSI.Signature
             {
                 throw new KsiException("Invalid input stream: null.");
             }
-            
+
             using (TlvReader reader = new TlvReader(stream))
             {
                 try
                 {
                     Logger.Debug("Creating KSI signature from stream.");
                     KsiSignature signature = new KsiSignature(reader.ReadTag());
-                    Logger.Debug("KSI signature successfully created.");
+                    Logger.Debug("Creating KSI signature from stream successful.");
                     return signature;
                 }
                 catch (TlvException e)
                 {
-                    Logger.Warn("KSI signature creation failed: {0}", e);
+                    Logger.Warn("Creating KSI signature from stream failed: {0}", e);
                     throw;
                 }
-                
             }
         }
 
@@ -66,15 +65,14 @@ namespace Guardtime.KSI.Signature
                 {
                     Logger.Debug("Creating KSI signature from aggregation response.");
                     KsiSignature signature = new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false, ((MemoryStream)writer.BaseStream).ToArray()));
-                    Logger.Debug("KSI signature successfully created.");
+                    Logger.Debug("Creating KSI signature from aggregation response successful.");
                     return signature;
                 }
                 catch (TlvException e)
                 {
-                    Logger.Warn("KSI signature creation failed: {0}", e);
+                    Logger.Warn("Creating KSI signature from aggregation response failed: {0}", e);
                     throw;
                 }
-
             }
         }
     }

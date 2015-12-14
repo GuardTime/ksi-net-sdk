@@ -208,17 +208,16 @@ namespace Guardtime.KSI.Signature
                     }
                 }
 
-                
                 try
                 {
                     Logger.Debug("Extending KSI signature.");
                     KsiSignature signature = new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false, ((MemoryStream)writer.BaseStream).ToArray()));
-                    Logger.Debug("KSI signature successfully extennded.");
+                    Logger.Debug("Extending KSI signature successful.");
                     return signature;
                 }
                 catch (TlvException e)
                 {
-                    Logger.Warn("KSI signature creation failed: {0}", e);
+                    Logger.Warn("Extending KSI signature failed: {0}", e);
                     throw;
                 }
             }

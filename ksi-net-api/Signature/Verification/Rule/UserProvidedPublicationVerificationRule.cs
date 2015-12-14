@@ -1,4 +1,5 @@
-﻿using Guardtime.KSI.Exceptions;
+﻿using System;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
@@ -25,11 +26,16 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
             }
-            else
-            {
-                Logger.Info("User provided publication '{0}' does not equal to signature publication '{1}'", userPublication, signaturePublication);
-                return new VerificationResult(GetRuleName(), VerificationResultCode.Na, VerificationError.Gen02);
-            }
+
+            Logger.Debug("User provided publication does not equal to signature publication.{0}User provided publication:{1}{2}{3}Signature publication:{4}{5}",
+                Environment.NewLine,
+                Environment.NewLine,
+                userPublication,
+                Environment.NewLine,
+                Environment.NewLine,
+                signaturePublication);
+
+            return new VerificationResult(GetRuleName(), VerificationResultCode.Na, VerificationError.Gen02);
         }
     }
 }
