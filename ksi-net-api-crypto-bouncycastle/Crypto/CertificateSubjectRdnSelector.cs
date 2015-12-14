@@ -11,7 +11,6 @@ namespace Guardtime.KSI.Crypto
     {
         private readonly X509Name _subjectDn;
 
-        // TODO: If empty allow everything?
         public CertificateSubjectRdnSelector(IList<CertificateSubjectRdn> rdnList)
         {
             if (rdnList == null)

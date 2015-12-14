@@ -10,8 +10,6 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public abstract class VerificationRule
     {
-        protected static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
         private VerificationRule _onFailure;
         private VerificationRule _onNa;
         private VerificationRule _onSuccess;

@@ -18,7 +18,7 @@ namespace Guardtime.KSI.Service
         private readonly string _publicationsFileUrl;
         private readonly int _requestTimeOut = 100000;
         private readonly string _signingUrl;
-        protected static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         ///     Create HTTP KSI service protocol with given url-s

@@ -12,7 +12,6 @@
             CalendarAuthenticationRecord calendarAuthenticationRecord = GetCalendarAuthenticationRecord(GetSignature(context));
             SignatureData signatureData = calendarAuthenticationRecord.SignatureData;
 
-            // TODO: Log exception
             return GetPublicationsFile(context).FindCertificateById(signatureData.GetCertificateId()) == null
                 ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Key01)
                 : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);

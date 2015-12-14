@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Signature.Verification.Rule;
+using NLog;
 
 namespace Guardtime.KSI.Signature.Verification.Policy
 {
@@ -10,6 +11,8 @@ namespace Guardtime.KSI.Signature.Verification.Policy
     /// </summary>
     public abstract class VerificationPolicy : VerificationRule
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         ///     First rule to verify.
         /// </summary>

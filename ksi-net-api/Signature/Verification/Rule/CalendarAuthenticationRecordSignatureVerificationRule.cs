@@ -3,6 +3,7 @@ using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Utils;
+using NLog;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
@@ -53,9 +54,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 cryptoSignatureVerifier.Verify(signedBytes, signatureData.GetSignatureValue(), data);
             }
-            catch (PkiVerificationFailedException ex)
+            catch (PkiVerificationFailedException)
             {
-                // TODO: Log exception
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Key02);
             }
 

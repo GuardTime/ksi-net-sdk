@@ -22,7 +22,7 @@ namespace Guardtime.KSI.Service
         private readonly IKsiPublicationsFileServiceProtocol _publicationsFileServiceProtocol;
         private readonly IKsiServiceSettings _serviceSettings;
         private readonly IKsiSigningServiceProtocol _sigingServiceProtocol;
-        protected static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         ///     Create KSI service with service protocol and service settings.

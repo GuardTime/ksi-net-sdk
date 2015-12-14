@@ -14,7 +14,7 @@ namespace Guardtime.KSI.Publication
     {
         private readonly IPkiTrustProvider _pkiTrustProvider;
         private const int DefaultBufferSize = 8092;
-        protected static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         ///     Create new publications file factory with PKI trust provider.

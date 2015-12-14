@@ -8,7 +8,7 @@ namespace Guardtime.KSI.Signature
 {
     public class KsiSignatureFactory
     {
-        protected static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         ///     Get KSI signature instance from stream.

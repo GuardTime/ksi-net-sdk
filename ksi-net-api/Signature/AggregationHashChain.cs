@@ -4,6 +4,7 @@ using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Utils;
+using NLog;
 
 namespace Guardtime.KSI.Signature
 {
@@ -12,8 +13,8 @@ namespace Guardtime.KSI.Signature
     /// </summary>
     public sealed class AggregationHashChain : CompositeTag
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IntegerTag _aggrAlgorithmId;
-
         private readonly IntegerTag _aggregationTime;
         private readonly List<Link> _chain = new List<Link>();
         private readonly List<IntegerTag> _chainIndex = new List<IntegerTag>();
@@ -261,7 +262,7 @@ namespace Guardtime.KSI.Signature
 
                 if (bytes.Length < 3)
                 {
-                    // TODO: Log exception
+                    Logger.Warn("Meta hash byte array too short. Length: {0}", bytes.Length);
                     return "";
                 }
 
