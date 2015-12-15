@@ -2,6 +2,9 @@ using System.IO;
 
 namespace Guardtime.KSI.Hashing
 {
+    /// <summary>
+    /// Data hasher
+    /// </summary>
     public interface IDataHasher
     {
         /// <summary>

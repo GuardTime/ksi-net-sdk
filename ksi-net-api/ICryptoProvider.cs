@@ -4,6 +4,9 @@ using Guardtime.KSI.Hashing;
 
 namespace Guardtime.KSI
 {
+    /// <summary>
+    /// Crypto provider.
+    /// </summary>
     public interface ICryptoProvider
     {
         IDataHasher GetDataHasher(HashAlgorithm algorithm);

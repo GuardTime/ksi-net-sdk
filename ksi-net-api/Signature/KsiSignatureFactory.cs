@@ -6,6 +6,9 @@ using NLog;
 
 namespace Guardtime.KSI.Signature
 {
+    /// <summary>
+    /// KSI signature factory
+    /// </summary>
     public class KsiSignatureFactory
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();

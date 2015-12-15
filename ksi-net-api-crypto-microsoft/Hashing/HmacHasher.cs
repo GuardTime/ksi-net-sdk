@@ -3,8 +3,17 @@ using System.Security.Cryptography;
 
 namespace Guardtime.KSI.Hashing
 {
+    /// <summary>
+    /// Hmac hasher
+    /// </summary>
     public class HmacHasher : IHmacHasher
     {
+        /// <summary>
+        ///     Calculate HMAC for data with given key.
+        /// </summary>
+        /// <param name="key">hmac key</param>
+        /// <param name="data">hmac calculation data</param>
+        /// <returns>hmac data hash</returns>
         public DataHash GetHash(byte[] key, byte[] data)
         {
             if (data == null)

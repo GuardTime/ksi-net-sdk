@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 namespace Guardtime.KSI.Hashing
 {
     /// <summary>
-    ///     List of supported hash functions and also some convenience functions.
+    ///     List of supported hash functions and some convenience functions.
     /// </summary>
     public sealed partial class HashAlgorithm
     {

@@ -13,7 +13,7 @@ namespace Guardtime.KSI.Crypto
         /// </summary>
         /// <param name="oid">signature oid</param>
         /// <param name="trustAnchors">trust anchor collection</param>
-        /// <param name="certificateRdnSelector"></param>
+        /// <param name="certificateRdnSelector">sertificate subject rdn selector</param>
         /// <returns>signature verifier</returns>
         public static ICryptoSignatureVerifier GetCryptoSignatureVerifierByOid(string oid, X509Certificate2Collection trustAnchors,
                                                                                ICertificateSubjectRdnSelector certificateRdnSelector)

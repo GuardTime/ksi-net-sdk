@@ -13,6 +13,11 @@ namespace Guardtime.KSI.Trust
         private readonly X509Certificate2Collection _trustAnchors;
         private readonly ICertificateSubjectRdnSelector _certificateRdnSelector;
 
+        /// <summary>
+        /// Create PKI trust store provider instance.
+        /// </summary>
+        /// <param name="trustAnchors">trust anchors</param>
+        /// <param name="certificateRdnSelector">certificate subject rdn selector</param>
         public PkiTrustStoreProvider(X509Certificate2Collection trustAnchors, ICertificateSubjectRdnSelector certificateRdnSelector)
         {
             if (trustAnchors == null)
