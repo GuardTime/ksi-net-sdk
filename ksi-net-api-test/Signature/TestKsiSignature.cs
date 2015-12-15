@@ -10,16 +10,12 @@ namespace Guardtime.KSI.Signature
     {
         public Rfc3161Record Rfc3161Record { get; set; }
 
-        public bool IsRfc3161Signature
-        {
-            get { return Rfc3161Record != null; }
-        }
+        public bool IsRfc3161Signature => Rfc3161Record != null;
 
         public CalendarHashChain CalendarHashChain { get; set; }
         public CalendarAuthenticationRecord CalendarAuthenticationRecord { get; set; }
         public PublicationRecord PublicationRecord { get; set; }
         public ulong AggregationTime { get; set; }
-
 
         public ReadOnlyCollection<AggregationHashChain> AggregationHashChains;
         public DataHash AggregationHashChainRootHash;
@@ -58,6 +54,7 @@ namespace Guardtime.KSI.Signature
         public bool Forward { get; set; }
 
         public byte[] EncodedValue;
+
         public byte[] EncodeValue()
         {
             return EncodedValue;

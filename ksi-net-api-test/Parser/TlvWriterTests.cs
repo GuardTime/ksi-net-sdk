@@ -4,37 +4,38 @@ using NUnit.Framework;
 
 namespace Guardtime.KSI.Parser
 {
-    [TestFixture()]
+    [TestFixture]
     public class TlvWriterTests
     {
-        [Test()]
+        [Test]
         public void TestWriteTagShort()
         {
-            using (var writer = new TlvWriter(new MemoryStream()))
+            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
             {
                 writer.WriteTag(new RawTag(0x1, false, true, new byte[] { 0x0, 0x1, 0x2, 0x3 }));
                 CollectionAssert.AreEqual(new byte[] { 0x21, 0x4, 0x0, 0x1, 0x2, 0x3 }, ((MemoryStream)writer.BaseStream).ToArray(), "Writer should output correct byte array");
             }
         }
 
-        [Test()]
+        [Test]
         public void TestWriteTagShortWithLongType()
         {
-            using (var writer = new TlvWriter(new MemoryStream()))
+            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
             {
                 writer.WriteTag(new RawTag(0x33, false, true, new byte[] { 0x0, 0x1, 0x2, 0x3 }));
-                CollectionAssert.AreEqual(new byte[] { 0xa0, 0x33, 0x0, 0x4, 0x0, 0x1, 0x2, 0x3 }, ((MemoryStream)writer.BaseStream).ToArray(), "Writer should output correct byte array");
+                CollectionAssert.AreEqual(new byte[] { 0xa0, 0x33, 0x0, 0x4, 0x0, 0x1, 0x2, 0x3 }, ((MemoryStream)writer.BaseStream).ToArray(),
+                    "Writer should output correct byte array");
             }
         }
 
-        [Test()]
+        [Test]
         public void TestWriteTagLongWithShortType()
         {
-            using (var writer = new TlvWriter(new MemoryStream()))
+            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
             {
                 writer.WriteTag(new RawTag(0x1, true, true, new byte[256]));
 
-                var result = new byte[260];
+                byte[] result = new byte[260];
                 result[0] = 0xe0;
                 result[1] = 0x1;
                 result[2] = 0x1;
@@ -44,14 +45,14 @@ namespace Guardtime.KSI.Parser
             }
         }
 
-        [Test()]
+        [Test]
         public void TestWriteTagLongWithLongType()
         {
-            using (var writer = new TlvWriter(new MemoryStream()))
+            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
             {
                 writer.WriteTag(new RawTag(0x257, true, true, new byte[256]));
 
-                var result = new byte[260];
+                byte[] result = new byte[260];
                 result[0] = 0xe2;
                 result[1] = 0x57;
                 result[2] = 0x1;
@@ -64,29 +65,28 @@ namespace Guardtime.KSI.Parser
         [Test]
         public void TestWriteNullValue()
         {
-            using (var stream = new MemoryStream())
-            using (var writer = new TlvWriter(stream))
+            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
             {
                 writer.WriteTag(new AllowNullValueTlvTag(0x1, false, false));
                 writer.WriteTag(new AllowNullValueTlvTag(0x257, true, true));
-                CollectionAssert.AreEqual(new byte[] {0x1, 0x0, 0xe2, 0x57, 0x0}, stream.ToArray(), "Writer should output correct byte array");
+                CollectionAssert.AreEqual(new byte[] { 0x1, 0x0, 0xe2, 0x57, 0x0 }, ((MemoryStream)writer.BaseStream).ToArray(), "Writer should output correct byte array");
             }
         }
 
         [Test]
         public void TestWriteNullTag()
         {
-            using (var writer = new TlvWriter(new MemoryStream()))
+            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
             {
                 writer.WriteTag(null);
-                CollectionAssert.AreEqual(new byte[] {}, ((MemoryStream)writer.BaseStream).ToArray(), "Writer should output correct byte array");
+                CollectionAssert.AreEqual(new byte[] { }, ((MemoryStream)writer.BaseStream).ToArray(), "Writer should output correct byte array");
             }
         }
 
-        [Test()]
+        [Test]
         public void TestWriteTagWithTooLongType()
         {
-            using (var writer = new TlvWriter(new MemoryStream()))
+            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
             {
                 Assert.Throws<ArgumentOutOfRangeException>(delegate
                 {
@@ -95,10 +95,10 @@ namespace Guardtime.KSI.Parser
             }
         }
 
-        [Test()]
+        [Test]
         public void TestWriteTagWithTooLongData()
         {
-            using (var writer = new TlvWriter(new MemoryStream()))
+            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
             {
                 Assert.Throws<ArgumentOutOfRangeException>(delegate
                 {
@@ -109,7 +109,6 @@ namespace Guardtime.KSI.Parser
 
         private class AllowNullValueTlvTag : TlvTag
         {
-
             public override byte[] EncodeValue()
             {
                 return null;
@@ -117,6 +116,11 @@ namespace Guardtime.KSI.Parser
 
             public AllowNullValueTlvTag(uint type, bool nonCritical, bool forward) : base(type, nonCritical, forward)
             {
+            }
+
+            public override int GetHashCode()
+            {
+                return 0;
             }
         }
     }

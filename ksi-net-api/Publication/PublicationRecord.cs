@@ -10,59 +10,34 @@ namespace Guardtime.KSI.Publication
     public sealed class PublicationRecord : CompositeTag
     {
         /// <summary>
-        ///     Signature publication record TLV type.
-        /// </summary>
-        public const uint TagTypeSignature = 0x803;
-
-        /// <summary>
-        ///     Publication publication record TLV type.
-        /// </summary>
-        public const uint TagTypePublication = 0x703;
-
-        private const uint PublicationReferencesTagType = 0x9;
-        private const uint PublicationRepositoryUriTagType = 0xa;
-
-        private readonly PublicationData _publicationData;
-        private readonly List<StringTag> _publicationReferences = new List<StringTag>();
-        private readonly List<StringTag> _publicationRepositoryUri = new List<StringTag>();
-
-        /// <summary>
         ///     Create new publication record TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
-        public PublicationRecord(TlvTag tag) : base(tag)
+        public PublicationRecord(ITlvTag tag) : base(tag)
         {
-            if (Type != TagTypeSignature && Type != TagTypePublication)
+            if (Type != Constants.PublicationRecord.TagTypeSignature && Type != Constants.PublicationRecord.TagTypePublication)
             {
                 throw new TlvException("Invalid publication record type(" + Type + ").");
             }
 
             int publicationDataCount = 0;
 
-            for (int i = 0; i < Count; i++)
+            foreach (ITlvTag childTag in this)
             {
-                StringTag listTag;
-
-                switch (this[i].Type)
+                switch (childTag.Type)
                 {
-                    case PublicationData.TagType:
-                        _publicationData = new PublicationData(this[i]);
-                        this[i] = _publicationData;
+                    case Constants.PublicationData.TagType:
+                        PublicationData = new PublicationData(childTag);
                         publicationDataCount++;
                         break;
-                    case PublicationReferencesTagType:
-                        listTag = new StringTag(this[i]);
-                        _publicationReferences.Add(listTag);
-                        this[i] = listTag;
+                    case Constants.PublicationRecord.PublicationReferencesTagType:
+                        PublicationReferences.Add(new StringTag(childTag));
                         break;
-                    case PublicationRepositoryUriTagType:
-                        listTag = new StringTag(this[i]);
-                        _publicationRepositoryUri.Add(listTag);
-                        this[i] = listTag;
+                    case Constants.PublicationRecord.PublicationRepositoryUriTagType:
+                        RepositoryUri.Add(new StringTag(childTag));
                         break;
                     default:
-                        VerifyCriticalFlag(this[i]);
+                        VerifyUnknownTag(childTag);
                         break;
                 }
             }
@@ -76,25 +51,16 @@ namespace Guardtime.KSI.Publication
         /// <summary>
         ///     Get publication data.
         /// </summary>
-        public PublicationData PublicationData
-        {
-            get { return _publicationData; }
-        }
+        public PublicationData PublicationData { get; }
 
         /// <summary>
         ///     Get publication references.
         /// </summary>
-        public List<StringTag> PublicationReferences
-        {
-            get { return _publicationReferences; }
-        }
+        public IList<StringTag> PublicationReferences { get; } = new List<StringTag>();
 
         /// <summary>
         ///     Get publication repository uri.
         /// </summary>
-        public List<StringTag> PubRepUri
-        {
-            get { return _publicationRepositoryUri; }
-        }
+        public IList<StringTag> RepositoryUri { get; } = new List<StringTag>();
     }
 }

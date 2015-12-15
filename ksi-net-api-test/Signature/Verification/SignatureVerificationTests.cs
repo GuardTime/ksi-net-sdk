@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Collections.Generic;
 using System.IO;
+using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature.Verification.Policy;
@@ -12,19 +13,20 @@ namespace Guardtime.KSI.Signature.Verification
     [TestFixture]
     public class SignatureVerificationTests
     {
-
         [Test]
         public void TestVerifySignatureOk()
         {
-            using (var stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
             {
-                var serviceProtocol = new HttpKsiServiceProtocol(
+                HttpKsiServiceProtocol serviceProtocol = new HttpKsiServiceProtocol(
                     "http://ksigw.test.guardtime.com:3333/gt-signingservice",
                     "http://172.20.20.100:8081",
                     "http://verify.guardtime.com/ksi-publications.bin");
 
-                var ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"), new PublicationsFileFactory(new PkiTrustStoreProvider()), new KsiSignatureFactory());
-                var context = new VerificationContext(new KsiSignatureFactory().Create(stream))
+                KsiService ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"),
+                    new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(),
+                        new CertificateSubjectRdnSelector("E=publications@guardtime.com"))), new KsiSignatureFactory());
+                VerificationContext context = new VerificationContext(new KsiSignatureFactory().Create(stream))
                 {
                     DocumentHash =
                         new Hashing.DataHash(new byte[]
@@ -37,28 +39,31 @@ namespace Guardtime.KSI.Signature.Verification
                     //UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K"),
                     IsExtendingAllowed = true,
                     KsiService = ksiService,
-                    PublicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider()).Create(new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+                    PublicationsFile =
+                        new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(),
+                            new CertificateSubjectRdnSelector(new List<CertificateSubjectRdn> { new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com") })))
+                            .Create(
+                                new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
                 };
 
                 Console.WriteLine(@"// Internal verification policy");
                 VerificationPolicy policy = new InternalVerificationPolicy();
-                Console.WriteLine("{0}", policy.Verify(context));
+                Console.WriteLine(policy.Verify(context));
 
                 Console.WriteLine(@"// Publications based");
                 policy = new PublicationBasedVerificationPolicy();
-                Console.WriteLine("{0}", policy.Verify(context));
+                Console.WriteLine(policy.Verify(context));
 
                 Console.WriteLine(@"// Key based");
-                policy = new KeyBasedVerificationPolicy();
-                Console.WriteLine("{0}", policy.Verify(context));
+                policy = new KeyBasedVerificationPolicy(TrustStoreUtilities.GetTrustAnchorCollection(),
+                    new CertificateSubjectRdnSelector(new List<CertificateSubjectRdn> { new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com") }));
+                ;
+                Console.WriteLine(policy.Verify(context));
 
                 Console.WriteLine(@"// Calendar based verification");
                 policy = new CalendarBasedVerificationPolicy();
-                Console.WriteLine("{0}", policy.Verify(context));
-
-
+                Console.WriteLine(policy.Verify(context));
             }
         }
-
     }
 }

@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using Guardtime.KSI.Exceptions;
+﻿using System.Collections.ObjectModel;
+using NLog;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
@@ -10,53 +9,32 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class AggregationHashChainTimeConsistencyRule : VerificationRule
     {
-        /// <summary>
-        ///     Rule name
-        /// </summary>
-        public const string RuleName = "AggregationHashChainTimeConsistencyRule";
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         /// <see cref="VerificationRule.Verify" />
-        /// <exception cref="KsiException">thrown if verification context is missing</exception>
-        /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
-            if (context == null)
-            {
-                throw new KsiException("Invalid verification context: null.");
-            }
-
-            if (context.Signature == null)
-            {
-                throw new KsiVerificationException("Invalid KSI signature in context: null.");
-            }
-
-            ReadOnlyCollection<AggregationHashChain> aggregationHashChainCollection =
-                context.Signature.GetAggregationHashChains();
-            if (aggregationHashChainCollection == null)
-            {
-                throw new KsiVerificationException("Aggregation hash chains are missing from KSI signature.");
-            }
-
+            ReadOnlyCollection<AggregationHashChain> aggregationHashChains = GetAggregationHashChains(GetSignature(context), true);
             ulong? time = null;
-            for (int i = 0; i < aggregationHashChainCollection.Count; i++)
+
+            foreach (AggregationHashChain aggregationHashChain in aggregationHashChains)
             {
                 if (time == null)
                 {
-                    time = aggregationHashChainCollection[i].AggregationTime;
+                    time = aggregationHashChain.AggregationTime;
                     continue;
                 }
 
-                if (aggregationHashChainCollection[i].AggregationTime != time)
+                if (aggregationHashChain.AggregationTime == time)
                 {
-                    // TODO: Correct logging
-                    Console.WriteLine(
-                        "Previous aggregation hash chain aggregation time {0} does not match current aggregation time {1}",
-                        time, aggregationHashChainCollection[i].AggregationTime);
-                    return new VerificationResult(RuleName, VerificationResultCode.Fail, VerificationError.Int02);
+                    continue;
                 }
+
+                Logger.Warn("Previous aggregation hash chain aggregation time {0} does not match current aggregation time {1}.", time, aggregationHashChain.AggregationTime);
+                return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int02);
             }
 
-            return new VerificationResult(RuleName, VerificationResultCode.Ok);
+            return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }
     }
 }

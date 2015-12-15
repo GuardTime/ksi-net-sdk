@@ -2,17 +2,19 @@
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Service;
+using NLog;
 
 namespace Guardtime.KSI.Signature
 {
-    public partial class KsiSignatureFactory
+    public class KsiSignatureFactory
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         ///     Get KSI signature instance from stream.
         /// </summary>
         /// <param name="stream">signature data stream</param>
         /// <returns>KSI signature</returns>
-        /// <exception cref="KsiException">thrown when stream is null</exception>
         public IKsiSignature Create(Stream stream)
         {
             if (stream == null)
@@ -22,7 +24,18 @@ namespace Guardtime.KSI.Signature
 
             using (TlvReader reader = new TlvReader(stream))
             {
-                return new KsiSignature(reader.ReadTag());
+                try
+                {
+                    Logger.Debug("Creating KSI signature from stream.");
+                    KsiSignature signature = new KsiSignature(reader.ReadTag());
+                    Logger.Debug("Creating KSI signature from stream successful.");
+                    return signature;
+                }
+                catch (TlvException e)
+                {
+                    Logger.Warn("Creating KSI signature from stream failed: {0}", e);
+                    throw;
+                }
             }
         }
 
@@ -31,7 +44,6 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         /// <param name="payload">aggregation response payload</param>
         /// <returns>KSI signature</returns>
-        /// <exception cref="KsiException">thrown when aggregation response payload is null</exception>
         public IKsiSignature Create(AggregationResponsePayload payload)
         {
             if (payload == null)
@@ -39,32 +51,27 @@ namespace Guardtime.KSI.Signature
                 throw new KsiException("Invalid aggregation response payload: null.");
             }
 
-            MemoryStream stream = null;
-            try
+            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
             {
-                stream = new MemoryStream();
-                using (TlvWriter writer = new TlvWriter(stream))
+                foreach (ITlvTag childTag in payload)
                 {
-                    stream = null;
-
-                    for (int i = 0; i < payload.Count; i++)
+                    if (childTag.Type > 0x800 && childTag.Type < 0x900)
                     {
-                        if (payload[i].Type > 0x800 && payload[i].Type < 0x900)
-                        {
-                            writer.WriteTag(payload[i]);
-                        }
+                        writer.WriteTag(childTag);
                     }
-
-                    return
-                        new KsiSignature(new RawTag(KsiSignature.TagType, false, false,
-                            ((MemoryStream) writer.BaseStream).ToArray()));
                 }
-            }
-            finally
-            {
-                if (stream != null)
+
+                try
                 {
-                    stream.Dispose();
+                    Logger.Debug("Creating KSI signature from aggregation response.");
+                    KsiSignature signature = new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false, ((MemoryStream)writer.BaseStream).ToArray()));
+                    Logger.Debug("Creating KSI signature from aggregation response successful.");
+                    return signature;
+                }
+                catch (TlvException e)
+                {
+                    Logger.Warn("Creating KSI signature from aggregation response failed: {0}", e);
+                    throw;
                 }
             }
         }

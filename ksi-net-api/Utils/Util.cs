@@ -12,6 +12,32 @@ namespace Guardtime.KSI.Utils
         private static readonly Random Random = new Random();
 
         /// <summary>
+        ///     Clone given byte array
+        /// </summary>
+        /// <param name="source">byte array to be cloned</param>
+        /// <returns></returns>
+        public static byte[] Clone(byte[] source)
+        {
+            byte[] bytes = new byte[source.Length];
+            source.CopyTo(bytes, 0);
+            return bytes;
+        }
+
+        /// <summary>
+        ///     Clone part of byte array
+        /// </summary>
+        /// <param name="source">byte array to be cloned</param>
+        /// <param name="startIndex">source array index to start cloning from</param>
+        /// <param name="byteCount">amount of bytes to clone</param>
+        /// <returns></returns>
+        public static byte[] Clone(byte[] source, int startIndex, int byteCount)
+        {
+            byte[] bytes = new byte[byteCount];
+            Array.Copy(source, startIndex, bytes, 0, byteCount);
+            return bytes;
+        }
+
+        /// <summary>
         ///     Are given arrays equal with same data ordering.
         /// </summary>
         /// <typeparam name="T">any type</typeparam>
@@ -20,7 +46,13 @@ namespace Guardtime.KSI.Utils
         /// <returns>true if arrays are equal</returns>
         public static bool IsArrayEqual<T>(T[] arr1, T[] arr2)
         {
-            if (arr1 == null || arr2 == null)
+            if (arr1 == null && arr2 == null)
+            {
+                return true;
+            }
+
+            // If only one is null
+            if (arr1 == null ^ arr2 == null)
             {
                 return false;
             }
@@ -48,7 +80,6 @@ namespace Guardtime.KSI.Utils
         /// <param name="ofs">data offset</param>
         /// <param name="len">data length</param>
         /// <returns>unsigned long</returns>
-        /// <exception cref="KsiException">thrown if input data is invalid</exception>
         public static ulong DecodeUnsignedLong(byte[] buf, int ofs, int len)
         {
             if (buf == null)
@@ -92,7 +123,7 @@ namespace Guardtime.KSI.Utils
 
             for (ulong t = value; t > 0; t >>= 8)
             {
-                res[--n] = (byte) t;
+                res[--n] = (byte)t;
             }
 
             return res;
@@ -105,8 +136,8 @@ namespace Guardtime.KSI.Utils
         /// <returns>unix time</returns>
         public static ulong ConvertDateTimeToUnixTime(DateTime time)
         {
-            TimeSpan timeSpan = (time - new DateTime(1970, 1, 1, 0, 0, 0));
-            return (ulong) timeSpan.TotalSeconds;
+            TimeSpan timeSpan = time - new DateTime(1970, 1, 1, 0, 0, 0);
+            return (ulong)timeSpan.TotalSeconds;
         }
 
         /// <summary>
@@ -124,7 +155,6 @@ namespace Guardtime.KSI.Utils
         /// </summary>
         /// <param name="bytes">string bytes</param>
         /// <returns>utf-8 string</returns>
-        /// <exception cref="KsiException">thrown if input bytes are null or string is not null terminated</exception>
         public static string DecodeNullTerminatedUtf8String(byte[] bytes)
         {
             if (bytes == null)
@@ -145,7 +175,6 @@ namespace Guardtime.KSI.Utils
         /// </summary>
         /// <param name="value">utf-8 string</param>
         /// <returns>byte array</returns>
-        /// <exception cref="KsiException">thrown if string is null</exception>
         public static byte[] EncodeNullTerminatedUtf8String(string value)
         {
             if (value == null)
@@ -176,7 +205,6 @@ namespace Guardtime.KSI.Utils
         /// <param name="arr">array of values</param>
         /// <param name="value">value to write to array</param>
         /// <typeparam name="T">array type</typeparam>
-        /// <exception cref="KsiException">thrown if array is null</exception>
         public static void ArrayFill<T>(T[] arr, T value)
         {
             if (arr == null)
@@ -196,12 +224,12 @@ namespace Guardtime.KSI.Utils
         /// <param name="a">Number a</param>
         /// <param name="b">Number b</param>
         /// <returns>The greatest common Divisor</returns>
-        public static int GCD(int a, int b)
+        public static int GetGreatestCommonDivisor(int a, int b)
         {
             while (b != 0)
             {
                 int tmp = b;
-                b = a%b;
+                b = a % b;
                 a = tmp;
             }
 
@@ -214,9 +242,9 @@ namespace Guardtime.KSI.Utils
         /// <param name="a">Number a</param>
         /// <param name="b">Number b</param>
         /// <returns>The least common multiple</returns>
-        public static int LCM(int a, int b)
+        public static int GetLeastCommonMultiple(int a, int b)
         {
-            return (a*b)/GCD(a, b);
+            return (a * b) / GetGreatestCommonDivisor(a, b);
         }
 
         /// <summary>
@@ -228,18 +256,47 @@ namespace Guardtime.KSI.Utils
         {
             StringBuilder builder = new StringBuilder();
 
-            string[] lines = s.Split(new string[] {Environment.NewLine}, StringSplitOptions.None);
+            string[] lines = s.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+
             for (int i = 0; i < lines.Length; i++)
             {
                 builder.Append("  ");
                 builder.Append(lines[i]);
-                if (!lines[i].Equals(lines[lines.Length - 1]))
+                if (i != lines.Length - 1)
                 {
                     builder.AppendLine();
                 }
             }
 
             return builder.ToString();
+        }
+
+        public static bool IsOneValueEqualTo<T>(T expectedValue, params T[] values)
+        {
+            int count = 0;
+            foreach (T value in values)
+            {
+                if (expectedValue == null)
+                {
+                    if (value != null)
+                    {
+                        continue;
+                    }
+                }
+                else if (!expectedValue.Equals(value))
+                {
+                    continue;
+                }
+
+                count++;
+
+                if (count > 1)
+                {
+                    return false;
+                }
+            }
+
+            return count == 1;
         }
     }
 }

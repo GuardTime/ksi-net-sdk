@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Utils;
 
@@ -8,16 +7,13 @@ namespace Guardtime.KSI.Parser
     /// <summary>
     ///     String TLV element.
     /// </summary>
-    public class StringTag : TlvTag, IEquatable<StringTag>
+    public class StringTag : TlvTag
     {
-        private readonly string _value;
-
         /// <summary>
         ///     Create string TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        /// <exception cref="TlvException">thrown when TLV tag is null or encodeValue returns null</exception>
-        public StringTag(TlvTag tag) : base(tag)
+        public StringTag(ITlvTag tag) : base(tag)
         {
             byte[] data = tag.EncodeValue();
             if (data == null)
@@ -25,7 +21,7 @@ namespace Guardtime.KSI.Parser
                 throw new TlvException("Invalid TLV element encoded value: null.");
             }
 
-            _value = Util.DecodeNullTerminatedUtf8String(data);
+            Value = Util.DecodeNullTerminatedUtf8String(data);
         }
 
         /// <summary>
@@ -35,7 +31,6 @@ namespace Guardtime.KSI.Parser
         /// <param name="nonCritical">Is TLV element non critical</param>
         /// <param name="forward">Is TLV element forwarded</param>
         /// <param name="value">TLV element string value</param>
-        /// <exception cref="TlvException">thrown when value is null</exception>
         public StringTag(uint type, bool nonCritical, bool forward, string value)
             : base(type, nonCritical, forward)
         {
@@ -43,46 +38,13 @@ namespace Guardtime.KSI.Parser
             {
                 throw new TlvException("Invalid input value: null.");
             }
-            _value = value;
+            Value = value;
         }
 
         /// <summary>
         ///     Get TLV element string value.
         /// </summary>
-        public string Value
-        {
-            get { return _value; }
-        }
-
-        /// <summary>
-        ///     Compare TLV element against string TLV element.
-        /// </summary>
-        /// <param name="tag">String TLV element</param>
-        /// <returns>true if elements are equal</returns>
-        public bool Equals(StringTag tag)
-        {
-            // If parameter is null, return false. 
-            if (ReferenceEquals(tag, null))
-            {
-                return false;
-            }
-
-            if (ReferenceEquals(this, tag))
-            {
-                return true;
-            }
-
-            // If run-time types are not exactly the same, return false. 
-            if (GetType() != tag.GetType())
-            {
-                return false;
-            }
-
-            return Type == tag.Type &&
-                   Forward == tag.Forward &&
-                   NonCritical == tag.NonCritical &&
-                   Value == tag.Value;
-        }
+        public string Value { get; }
 
         /// <summary>
         ///     Encode element value string to byte array.
@@ -102,23 +64,13 @@ namespace Guardtime.KSI.Parser
             unchecked
             {
                 int res = 1;
-                for (int i = 0; i < Value.Length; i++)
+                foreach (char value in Value)
                 {
-                    res = 31*res + Value[i];
+                    res = 31 * res + value;
                 }
 
                 return res + Type.GetHashCode() + Forward.GetHashCode() + NonCritical.GetHashCode();
             }
-        }
-
-        /// <summary>
-        ///     Compare TLV element to object.
-        /// </summary>
-        /// <param name="obj">Comparable object.</param>
-        /// <returns>Is given object equal</returns>
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as StringTag);
         }
 
         /// <summary>
@@ -143,28 +95,6 @@ namespace Guardtime.KSI.Parser
             builder.Append("]:");
             builder.Append("\"").Append(Value).Append("\"");
             return builder.ToString();
-        }
-
-        /// <summary>
-        ///     Compare string TLV elements against each other.
-        /// </summary>
-        /// <param name="a">String TLV element</param>
-        /// <param name="b">String TLV element</param>
-        /// <returns>true if elements are equal</returns>
-        public static bool operator ==(StringTag a, StringTag b)
-        {
-            return ReferenceEquals(a, null) ? ReferenceEquals(b, null) : a.Equals(b);
-        }
-
-        /// <summary>
-        ///     Compare string TLV elements non equity.
-        /// </summary>
-        /// <param name="a">String TLV element</param>
-        /// <param name="b">String TLV element</param>
-        /// <returns>true if elements are not equal</returns>
-        public static bool operator !=(StringTag a, StringTag b)
-        {
-            return !(a == b);
         }
     }
 }

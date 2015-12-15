@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
@@ -15,12 +14,10 @@ namespace Guardtime.KSI.Publication
         /// </summary>
         private sealed class PublicationsFile : CompositeTag, IPublicationsFile
         {
-            private const uint CmsSignatureTagType = 0x704;
-
             /// <summary>
             ///     Publications file beginning bytes "KSIPUBLF".
             /// </summary>
-            public static readonly byte[] FileBeginningMagicBytes = {0x4b, 0x53, 0x49, 0x50, 0x55, 0x42, 0x4c, 0x46};
+            public static readonly byte[] FileBeginningMagicBytes = { 0x4b, 0x53, 0x49, 0x50, 0x55, 0x42, 0x4c, 0x46 };
 
             private readonly List<CertificateRecord> _certificateRecordList = new List<CertificateRecord>();
             private readonly RawTag _cmsSignature;
@@ -31,19 +28,19 @@ namespace Guardtime.KSI.Publication
             ///     Create new publications file TLV element from TLV element.
             /// </summary>
             /// <param name="tag">TLV element</param>
-            /// <exception cref="PublicationsFileException">thrown when TLV parsing fails</exception>
-            public PublicationsFile(TlvTag tag) : base(tag)
+            public PublicationsFile(ITlvTag tag) : base(tag)
             {
                 int publicationsHeaderCount = 0;
                 int cmsSignatureCount = 0;
 
                 for (int i = 0; i < Count; i++)
                 {
-                    switch (this[i].Type)
+                    ITlvTag childTag = this[i];
+
+                    switch (childTag.Type)
                     {
-                        case PublicationsFileHeader.TagType:
-                            _publicationsHeader = new PublicationsFileHeader(this[i]);
-                            this[i] = _publicationsHeader;
+                        case Constants.PublicationsFileHeader.TagType:
+                            _publicationsHeader = new PublicationsFileHeader(childTag);
                             publicationsHeaderCount++;
                             if (i != 0)
                             {
@@ -51,23 +48,21 @@ namespace Guardtime.KSI.Publication
                                     "Publications file header should be the first element in publications file.");
                             }
                             break;
-                        case CertificateRecord.TagType:
-                            CertificateRecord certificateRecordTag = new CertificateRecord(this[i]);
+                        case Constants.CertificateRecord.TagType:
+                            CertificateRecord certificateRecordTag = new CertificateRecord(childTag);
                             _certificateRecordList.Add(certificateRecordTag);
-                            this[i] = certificateRecordTag;
                             if (_publicationRecordList.Count != 0)
                             {
                                 throw new PublicationsFileException(
                                     "Certificate records should be before publication records.");
                             }
                             break;
-                        case PublicationRecord.TagTypePublication:
-                            PublicationRecord publicationRecordTag = new PublicationRecord(this[i]);
+                        case Constants.PublicationRecord.TagTypePublication:
+                            PublicationRecord publicationRecordTag = new PublicationRecord(childTag);
                             _publicationRecordList.Add(publicationRecordTag);
-                            this[i] = publicationRecordTag;
                             break;
-                        case CmsSignatureTagType:
-                            _cmsSignature = new RawTag(this[i]);
+                        case Constants.PublicationsFile.CmsSignatureTagType:
+                            _cmsSignature = new RawTag(childTag);
                             cmsSignatureCount++;
                             if (i != Count - 1)
                             {
@@ -76,7 +71,7 @@ namespace Guardtime.KSI.Publication
                             }
                             break;
                         default:
-                            VerifyCriticalFlag(this[i]);
+                            VerifyUnknownTag(childTag);
                             break;
                     }
                 }
@@ -94,33 +89,24 @@ namespace Guardtime.KSI.Publication
             }
 
             /// <summary>
-            ///     Get KSI trust provider name.
-            /// </summary>
-            public string Name
-            {
-                get { return "publications file"; }
-            }
-
-            /// <summary>
             ///     Get latest publication record.
             /// </summary>
             /// <returns>publication record</returns>
             public PublicationRecord GetLatestPublication()
             {
                 PublicationRecord latest = null;
-                for (int i = 0; i < _publicationRecordList.Count; i++)
+
+                foreach (PublicationRecord publicationRecord in _publicationRecordList)
                 {
                     if (latest == null)
                     {
-                        latest = _publicationRecordList[i];
+                        latest = publicationRecord;
                         continue;
                     }
 
-                    if (
-                        _publicationRecordList[i].PublicationData.PublicationTime.CompareTo(
-                            latest.PublicationData.PublicationTime) > 0)
+                    if (publicationRecord.PublicationData.PublicationTime.CompareTo(latest.PublicationData.PublicationTime) > 0)
                     {
-                        latest = _publicationRecordList[i];
+                        latest = publicationRecord;
                     }
                 }
 
@@ -128,25 +114,29 @@ namespace Guardtime.KSI.Publication
             }
 
             /// <summary>
-            ///     Get neared publication record to time.
+            ///     Get nearest publication record subsequent to given time.
             /// </summary>
-            /// <param name="time">publication time</param>
+            /// <param name="time">time</param>
             /// <returns>publication record closest to time</returns>
             public PublicationRecord GetNearestPublicationRecord(ulong time)
             {
                 PublicationRecord nearestPublicationRecord = null;
-                for (int i = 0; i < _publicationRecordList.Count; i++)
+
+                foreach (PublicationRecord publicationRecord in _publicationRecordList)
                 {
-                    ulong publicationTime = _publicationRecordList[i].PublicationData.PublicationTime;
-                    if (publicationTime != time && publicationTime <= time) continue;
+                    ulong publicationTime = publicationRecord.PublicationData.PublicationTime;
+                    if (publicationTime < time)
+                    {
+                        continue;
+                    }
 
                     if (nearestPublicationRecord == null)
                     {
-                        nearestPublicationRecord = _publicationRecordList[i];
+                        nearestPublicationRecord = publicationRecord;
                     }
                     else if (publicationTime < nearestPublicationRecord.PublicationData.PublicationTime)
                     {
-                        nearestPublicationRecord = _publicationRecordList[i];
+                        nearestPublicationRecord = publicationRecord;
                     }
                 }
 
@@ -165,12 +155,10 @@ namespace Guardtime.KSI.Publication
                     return false;
                 }
 
-                for (int i = 0; i < _publicationRecordList.Count; i++)
+                foreach (PublicationRecord record in _publicationRecordList)
                 {
-                    if (_publicationRecordList[i].PublicationData.PublicationTime ==
-                        publicationRecord.PublicationData.PublicationTime &&
-                        _publicationRecordList[i].PublicationData.PublicationHash ==
-                        publicationRecord.PublicationData.PublicationHash)
+                    if (record.PublicationData.PublicationTime == publicationRecord.PublicationData.PublicationTime &&
+                        record.PublicationData.PublicationHash == publicationRecord.PublicationData.PublicationHash)
                     {
                         return true;
                     }
@@ -184,56 +172,44 @@ namespace Guardtime.KSI.Publication
             /// </summary>
             /// <param name="certificateId">certificate id</param>
             /// <returns>X509 certificate</returns>
-            public X509Certificate2 FindCertificateById(byte[] certificateId)
+            public byte[] FindCertificateById(byte[] certificateId)
             {
-                for (int i = 0; i < _certificateRecordList.Count; i++)
+                foreach (CertificateRecord certificateRecord in _certificateRecordList)
                 {
-                    if (Util.IsArrayEqual(_certificateRecordList[i].CertificateId.EncodeValue(),
-                        certificateId))
+                    if (Util.IsArrayEqual(certificateRecord.CertificateId.EncodeValue(), certificateId))
                     {
-                        return new X509Certificate2(_certificateRecordList[i].X509Certificate.EncodeValue());
+                        return certificateRecord.X509Certificate.EncodeValue();
                     }
                 }
+
                 return null;
+            }
+
+            /// <summary>
+            ///     Get signature
+            /// </summary>
+            /// <returns>signature bytes</returns>
+            public byte[] GetSignatureValue()
+            {
+                return _cmsSignature.EncodeValue();
             }
 
             /// <summary>
             ///     Get signed bytes.
             /// </summary>
             /// <returns>signed bytes</returns>
-            public byte[] GetSignatureBytes()
-            {
-                return _cmsSignature.EncodeValue();
-            }
-
-            /// <summary>
-            ///     Get signature bytes.
-            /// </summary>
-            /// <returns>signature bytes</returns>
             public byte[] GetSignedBytes()
             {
-                MemoryStream stream = null;
-                try
+                using (TlvWriter writer = new TlvWriter(new MemoryStream()))
                 {
-                    stream = new MemoryStream();
-                    using (TlvWriter writer = new TlvWriter(stream))
-                    {
-                        stream = null;
+                    writer.Write(FileBeginningMagicBytes);
 
-                        writer.Write(FileBeginningMagicBytes);
-                        for (int i = 0; i < Count - 1; i++)
-                        {
-                            writer.WriteTag(this[i]);
-                        }
-                        return ((MemoryStream) writer.BaseStream).ToArray();
-                    }
-                }
-                finally
-                {
-                    if (stream != null)
+                    // get all but last tag
+                    for (int i = 0; i < Count - 1; i++)
                     {
-                        stream.Dispose();
+                        writer.WriteTag(this[i]);
                     }
+                    return ((MemoryStream)writer.BaseStream).ToArray();
                 }
             }
 
@@ -254,9 +230,9 @@ namespace Guardtime.KSI.Publication
                     builder.Append(", last publication: ").Append(latestPublication.PublicationData.PublicationTime);
                 }
 
-                if (_publicationsHeader.RepUri != null)
+                if (_publicationsHeader.RepositoryUri != null)
                 {
-                    builder.Append(", published at: ").Append(_publicationsHeader.RepUri);
+                    builder.Append(", published at: ").Append(_publicationsHeader.RepositoryUri);
                 }
 
                 return builder.ToString();

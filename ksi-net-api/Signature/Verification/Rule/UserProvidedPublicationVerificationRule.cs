@@ -1,4 +1,7 @@
-﻿using Guardtime.KSI.Exceptions;
+﻿using System;
+using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Publication;
+using NLog;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
@@ -7,39 +10,35 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class UserProvidedPublicationVerificationRule : VerificationRule
     {
-        /// <summary>
-        ///     Rule name.
-        /// </summary>
-        public const string RuleName = "UserProvidedPublicationVerificationRule";
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         /// <see cref="VerificationRule.Verify" />
-        /// <exception cref="KsiException">thrown if verification context is missing</exception>
-        /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
-            if (context == null)
-            {
-                throw new KsiException("Invalid verification context: null.");
-            }
+            IKsiSignature signature = GetSignature(context);
 
-            if (context.Signature == null)
-            {
-                throw new KsiVerificationException("Invalid KSI signature in context: null.");
-            }
-
-            if (context.UserPublication == null)
-            {
-                throw new KsiVerificationException("Invalid user publication in context: null.");
-            }
-
-            if (context.Signature.PublicationRecord == null)
+            if (signature.PublicationRecord == null)
             {
                 throw new KsiVerificationException("Invalid publication record in KSI signature: null.");
             }
 
-            return context.UserPublication == context.Signature.PublicationRecord.PublicationData
-                ? new VerificationResult(RuleName, VerificationResultCode.Ok)
-                : new VerificationResult(RuleName, VerificationResultCode.Na, VerificationError.Gen02);
+            PublicationData userPublication = GetUserPublication(context);
+            PublicationData signaturePublication = GetPublicationRecord(signature).PublicationData;
+
+            if (userPublication == signaturePublication)
+            {
+                return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
+            }
+
+            Logger.Debug("User provided publication does not equal to signature publication.{0}User provided publication:{1}{2}{3}Signature publication:{4}{5}",
+                Environment.NewLine,
+                Environment.NewLine,
+                userPublication,
+                Environment.NewLine,
+                Environment.NewLine,
+                signaturePublication);
+
+            return new VerificationResult(GetRuleName(), VerificationResultCode.Na, VerificationError.Gen02);
         }
     }
 }

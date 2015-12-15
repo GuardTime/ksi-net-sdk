@@ -53,7 +53,6 @@ namespace Guardtime.KSI.Utils
         /// <param name="alphabet">base alphabet</param>
         /// <param name="caseSensitive">is base conversion case sensitive</param>
         /// <param name="padding">padding</param>
-        /// <exception cref="ArgumentException">thrown when alphabet or padding does not match</exception>
         public BaseX(string alphabet, bool caseSensitive, char padding)
         {
             // the bit and byte counts
@@ -64,10 +63,10 @@ namespace Guardtime.KSI.Utils
             }
             if ((1 << _bits) != alphabet.Length)
             {
-                throw new ArgumentException("The size of the encoding alphabet is not a power of 2", "alphabet");
+                throw new ArgumentException("The size of the encoding alphabet is not a power of 2", nameof(alphabet));
             }
 
-            _block = 8/Util.GCD(8, _bits);
+            _block = 8 / Util.GetGreatestCommonDivisor(8, _bits);
 
             // the encoding lookup table
             _chars = alphabet.ToCharArray();
@@ -95,7 +94,7 @@ namespace Guardtime.KSI.Utils
             // the padding
             if (padding >= _min && padding <= _max && _values[padding - _min] != -1)
             {
-                throw new ArgumentException("The padding character appears in the encoding alphabet", "padding");
+                throw new ArgumentException("The padding character appears in the encoding alphabet", nameof(padding));
             }
 
             _pad = padding;
@@ -105,7 +104,7 @@ namespace Guardtime.KSI.Utils
         {
             if (chars == null)
             {
-                throw new ArgumentNullException("chars");
+                throw new ArgumentNullException(nameof(chars));
             }
 
             for (int i = 0; i < chars.Length; i++)
@@ -126,7 +125,7 @@ namespace Guardtime.KSI.Utils
         {
             if (chars == null)
             {
-                throw new ArgumentNullException("chars");
+                throw new ArgumentNullException(nameof(chars));
             }
 
             for (int i = 0; i < chars.Length; i++)
@@ -134,7 +133,7 @@ namespace Guardtime.KSI.Utils
                 int c = chars[i] - _min;
                 if (_values[c] != -1 && _values[c] != i)
                 {
-                    throw new ArgumentException("Duplicate characters in the encoding alphapbet", "chars");
+                    throw new ArgumentException("Duplicate characters in the encoding alphapbet", nameof(chars));
                 }
                 _values[c] = i;
             }
@@ -166,7 +165,7 @@ namespace Guardtime.KSI.Utils
             // sanitize the parameters
             if (bytes == null)
             {
-                throw new ArgumentNullException("bytes");
+                throw new ArgumentNullException(nameof(bytes));
             }
 
             if (off < 0 || len < 0 || off + len < 0 || off + len > bytes.Length)
@@ -191,13 +190,13 @@ namespace Guardtime.KSI.Utils
             }
 
             // create the output buffer
-            int outLen = (8*len + _bits - 1)/_bits;
-            outLen = (outLen + _block - 1)/_block*_block;
+            int outLen = (8 * len + _bits - 1) / _bits;
+            outLen = (outLen + _block - 1) / _block * _block;
             if (freq > 0)
             {
                 if (sep != null)
                 {
-                    outLen += (outLen - 1)/freq*sep.Length;
+                    outLen += (outLen - 1) / freq * sep.Length;
                 }
             }
 
@@ -209,19 +208,16 @@ namespace Guardtime.KSI.Utils
             int buf = 0; // buffer of input bits not yet sent to output
             int bufBits = 0; // number of bits in the bit buffer
             int bufMask = (1 << _bits) - 1;
-            while (_bits*outCount < 8*len)
+            while (_bits * outCount < 8 * len)
             {
-                if (freq > 0 && outCount > 0 && outCount%freq == 0)
+                if (freq > 0 && outCount > 0 && outCount % freq == 0)
                 {
                     builder.Append(sep);
                 }
                 // fetch the next byte(s), padding with zero bits as needed
                 while (bufBits < _bits)
                 {
-                    int next = (inCount < len
-                        ? bytes[off + inCount]
-                        : 0)
-                        ;
+                    int next = inCount < len ? bytes[off + inCount] : 0;
                     inCount++;
                     buf = (buf << 8) | (next & 0xff); // we want unsigned bytes
                     bufBits += 8;
@@ -234,9 +230,9 @@ namespace Guardtime.KSI.Utils
             }
 
             // pad
-            while (outCount%_block != 0)
+            while (outCount % _block != 0)
             {
-                if (freq > 0 && outCount > 0 && outCount%freq == 0)
+                if (freq > 0 && outCount > 0 && outCount % freq == 0)
                 {
                     builder.Append(sep);
                 }
@@ -257,11 +253,11 @@ namespace Guardtime.KSI.Utils
             // sanitize the parameters
             if (s == null)
             {
-                throw new ArgumentNullException("s");
+                throw new ArgumentNullException(nameof(s));
             }
 
             // create the result buffer
-            byte[] outputBytes = new byte[s.Length*_bits/8];
+            byte[] outputBytes = new byte[s.Length * _bits / 8];
 
             // decode
             int outCount = 0; // number of output bytes produced
@@ -286,20 +282,14 @@ namespace Guardtime.KSI.Utils
                 bufBits += _bits;
                 while (bufBits >= 8)
                 {
-                    outputBytes[outCount] = (byte) ((buf >> (bufBits - 8)) & 0xff);
+                    outputBytes[outCount] = (byte)((buf >> (bufBits - 8)) & 0xff);
                     bufBits -= 8;
                     outCount++;
                 }
             }
 
             // trim the result if there were any skipped characters
-            if (outCount >= outputBytes.Length) return outputBytes;
-
-            byte[] tmp = outputBytes;
-            outputBytes = new byte[outCount];
-            Array.Copy(tmp, 0, outputBytes, 0, outCount);
-
-            return outputBytes;
+            return outCount >= outputBytes.Length ? outputBytes : Util.Clone(outputBytes, 0, outCount);
         }
     }
 }

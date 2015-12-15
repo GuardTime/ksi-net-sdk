@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using Guardtime.KSI.Exceptions;
+﻿using System.Collections.ObjectModel;
+using NLog;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
@@ -10,54 +9,31 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class AggregationHashChainConsistencyRule : VerificationRule
     {
-        /// <summary>
-        ///     Rule name
-        /// </summary>
-        public const string RuleName = "AggregationHashChainConsistencyRule";
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         /// <see cref="VerificationRule.Verify" />
-        /// <exception cref="KsiException">thrown if verification context is missing</exception>
-        /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
-            if (context == null)
-            {
-                throw new KsiException("Invalid verification context: null.");
-            }
+            ReadOnlyCollection<AggregationHashChain> aggregationHashChains = GetAggregationHashChains(GetSignature(context), true);
+            AggregationHashChainResult chainResult = null;
 
-            if (context.Signature == null)
-            {
-                throw new KsiVerificationException("Invalid KSI signature in context: null.");
-            }
-
-            ReadOnlyCollection<AggregationHashChain> aggregationHashChainCollection =
-                context.Signature.GetAggregationHashChains();
-            if (aggregationHashChainCollection == null)
-            {
-                throw new KsiVerificationException("Aggregation hash chains are missing from KSI signature.");
-            }
-
-            AggregationHashChain.ChainResult chainResult = null;
-            for (int i = 0; i < aggregationHashChainCollection.Count; i++)
+            foreach (AggregationHashChain aggregationHashChain in aggregationHashChains)
             {
                 if (chainResult == null)
                 {
-                    chainResult = new AggregationHashChain.ChainResult(0, aggregationHashChainCollection[0].InputHash);
+                    chainResult = new AggregationHashChainResult(0, aggregationHashChains[0].InputHash);
                 }
 
-                if (aggregationHashChainCollection[i].InputHash != chainResult.Hash)
+                if (aggregationHashChain.InputHash != chainResult.Hash)
                 {
-                    // TODO: Correct logging
-                    Console.WriteLine(
-                        "Previous aggregation hash chain output hash {0} does not match current input hash {1}",
-                        chainResult.Hash, aggregationHashChainCollection[i].InputHash);
-                    return new VerificationResult(RuleName, VerificationResultCode.Fail, VerificationError.Int01);
+                    Logger.Warn("Previous aggregation hash chain output hash {0} does not match current input hash {1}.", chainResult.Hash, aggregationHashChain.InputHash);
+                    return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int01);
                 }
 
-                chainResult = aggregationHashChainCollection[i].GetOutputHash(chainResult);
+                chainResult = aggregationHashChain.GetOutputHash(chainResult);
             }
 
-            return new VerificationResult(RuleName, VerificationResultCode.Ok);
+            return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }
     }
 }

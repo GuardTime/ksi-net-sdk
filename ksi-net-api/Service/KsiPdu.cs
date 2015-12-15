@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Security.Cryptography;
+﻿using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
-using HashAlgorithm = Guardtime.KSI.Hashing.HashAlgorithm;
 
 namespace Guardtime.KSI.Service
 {
@@ -13,31 +10,29 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public abstract class KsiPdu : CompositeTag
     {
-        /// <summary>
-        ///     Mac TLV type.
-        /// </summary>
-        protected const uint MacTagType = 0x1f;
-
         private readonly KsiPduHeader _header;
-        private ImprintTag _mac;
+        private readonly ImprintTag _mac;
+
+        /// <summary>
+        ///     Get PDU payload.
+        /// </summary>
+        public abstract KsiPduPayload Payload { get; }
 
         /// <summary>
         ///     Create KSI PDU from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        protected KsiPdu(TlvTag tag) : base(tag)
+        protected KsiPdu(ITlvTag tag) : base(tag)
         {
-            for (int i = 0; i < Count; i++)
+            foreach (ITlvTag childTag in this)
             {
-                switch (this[i].Type)
+                switch (childTag.Type)
                 {
-                    case KsiPduHeader.TagType:
-                        _header = new KsiPduHeader(this[i]);
-                        this[i] = _header;
+                    case Constants.KsiPduHeader.TagType:
+                        _header = new KsiPduHeader(childTag);
                         break;
-                    case MacTagType:
-                        _mac = new ImprintTag(this[i]);
-                        this[i] = _mac;
+                    case Constants.KsiPdu.MacTagType:
+                        _mac = new ImprintTag(childTag);
                         break;
                 }
             }
@@ -47,12 +42,12 @@ namespace Guardtime.KSI.Service
         ///     Create KSI PDU from PDU header and data.
         /// </summary>
         /// <param name="header">KSI PDU header</param>
+        /// <param name="mac">KSI pdu hmac</param>
         /// <param name="type">TLV type</param>
         /// <param name="nonCritical">Is TLV element non critical</param>
         /// <param name="forward">Is TLV element forwarded</param>
         /// <param name="value">TLV element list</param>
-        /// <exception cref="TlvException">thrown when TLV header is null</exception>
-        protected KsiPdu(KsiPduHeader header, uint type, bool nonCritical, bool forward, IList<TlvTag> value)
+        protected KsiPdu(KsiPduHeader header, ImprintTag mac, uint type, bool nonCritical, bool forward, ITlvTag[] value)
             : base(type, nonCritical, forward, value)
         {
             if (header == null)
@@ -60,43 +55,28 @@ namespace Guardtime.KSI.Service
                 throw new TlvException("Invalid TLV header: null.");
             }
 
-            _header = header;
-            AddTag(_header);
-        }
+            if (mac == null)
+            {
+                throw new TlvException("Invalid hashmac hash: null");
+            }
 
-        /// <summary>
-        ///     Get KSI PDU payload.
-        /// </summary>
-        public abstract KsiPduPayload Payload { get; }
+            _header = header;
+            _mac = mac;
+        }
 
         /// <summary>
         ///     Calculate MAC and attach it to PDU.
         /// </summary>
         /// <param name="key">hmac key</param>
-        public void SetMac(byte[] key)
+        /// <param name="header">KSI header</param>
+        /// <param name="payload">KSI payload</param>
+        public static ImprintTag GetHashMacTag(byte[] key, KsiPduHeader header, KsiPduPayload payload)
         {
-            MemoryStream stream = null;
-            try
+            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
             {
-                stream = new MemoryStream();
-                using (TlvWriter writer = new TlvWriter(stream))
-                {
-                    stream = null;
-
-                    writer.WriteTag(_header);
-                    writer.WriteTag(Payload);
-
-                    ImprintTag mac = new ImprintTag(MacTagType, false, false,
-                        CalculateMac(key, ((MemoryStream) writer.BaseStream).ToArray()));
-                    _mac = PutTag(mac, _mac);
-                }
-            }
-            finally
-            {
-                if (stream != null)
-                {
-                    stream.Dispose();
-                }
+                writer.WriteTag(header);
+                writer.WriteTag(payload);
+                return new ImprintTag(Constants.KsiPdu.MacTagType, false, false, CalculateMac(key, ((MemoryStream)writer.BaseStream).ToArray()));
             }
         }
 
@@ -108,8 +88,8 @@ namespace Guardtime.KSI.Service
         /// <returns>hmac data hash</returns>
         private static DataHash CalculateMac(byte[] key, byte[] data)
         {
-            HMACSHA256 hmac = new HMACSHA256(key);
-            return new DataHash(HashAlgorithm.Sha2256, hmac.ComputeHash(data));
+            IHmacHasher hmac = KsiProvider.GetHmacHasher();
+            return hmac.GetHash(key, data);
         }
 
         /// <summary>
@@ -124,27 +104,13 @@ namespace Guardtime.KSI.Service
                 return false;
             }
 
-            MemoryStream stream = null;
-            try
+            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
             {
-                stream = new MemoryStream();
-                using (TlvWriter writer = new TlvWriter(stream))
-                {
-                    stream = null;
+                writer.WriteTag(_header);
+                writer.WriteTag(Payload);
 
-                    writer.WriteTag(_header);
-                    writer.WriteTag(Payload);
-
-                    DataHash hash = CalculateMac(key, ((MemoryStream) writer.BaseStream).ToArray());
-                    return hash.Equals(_mac.Value);
-                }
-            }
-            finally
-            {
-                if (stream != null)
-                {
-                    stream.Dispose();
-                }
+                DataHash hash = CalculateMac(key, ((MemoryStream)writer.BaseStream).ToArray());
+                return hash.Equals(_mac.Value);
             }
         }
     }

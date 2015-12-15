@@ -3,6 +3,7 @@ using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Trust;
 using Guardtime.KSI.Utils;
+using NLog;
 
 namespace Guardtime.KSI.Publication
 {
@@ -12,12 +13,13 @@ namespace Guardtime.KSI.Publication
     public partial class PublicationsFileFactory
     {
         private readonly IPkiTrustProvider _pkiTrustProvider;
+        private const int DefaultBufferSize = 8092;
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         ///     Create new publications file factory with PKI trust provider.
         /// </summary>
         /// <param name="pkiTrustProvider">pki trust provider</param>
-        /// <exception cref="KsiException">thrown when PKI trust provider is null</exception>
         public PublicationsFileFactory(IPkiTrustProvider pkiTrustProvider)
         {
             if (pkiTrustProvider == null)
@@ -34,8 +36,6 @@ namespace Guardtime.KSI.Publication
         /// <param name="stream">publications file stream</param>
         /// <param name="bufferSize">buffer size</param>
         /// <returns>publications file</returns>
-        /// <exception cref="KsiException">thrown when stream is null</exception>
-        /// <exception cref="PublicationsFileException">thrown when publications file data is invalid</exception>
         public IPublicationsFile Create(Stream stream, int bufferSize)
         {
             if (stream == null)
@@ -43,13 +43,14 @@ namespace Guardtime.KSI.Publication
                 throw new KsiException("Invalid input stream: null.");
             }
 
+            Logger.Debug("Creating publications file.");
+
             byte[] data = new byte[PublicationsFile.FileBeginningMagicBytes.Length];
             int bytesRead = stream.Read(data, 0, data.Length);
 
-            if (bytesRead != PublicationsFile.FileBeginningMagicBytes.Length ||
-                !Util.IsArrayEqual(data, PublicationsFile.FileBeginningMagicBytes))
+            if (bytesRead != PublicationsFile.FileBeginningMagicBytes.Length || !Util.IsArrayEqual(data, PublicationsFile.FileBeginningMagicBytes))
             {
-                throw new PublicationsFileException("Publications file header is incorrect.");
+                throw new PublicationsFileException("Publications file header is incorrect. Invalid publications file magic bytes.");
             }
 
             using (MemoryStream memoryStream = new MemoryStream())
@@ -60,8 +61,7 @@ namespace Guardtime.KSI.Publication
                     memoryStream.Write(buffer, 0, bytesRead);
                 }
 
-                PublicationsFile publicationsFile =
-                    new PublicationsFile(new RawTag(0x0, false, false, memoryStream.ToArray()));
+                PublicationsFile publicationsFile = new PublicationsFile(new RawTag(0x0, false, false, memoryStream.ToArray()));
 
                 try
                 {
@@ -69,8 +69,11 @@ namespace Guardtime.KSI.Publication
                 }
                 catch (PkiVerificationException e)
                 {
+                    Logger.Warn("Publications file verification failed. {0}", e);
                     throw new PublicationsFileException("Publications file verification failed.", e);
                 }
+
+                Logger.Debug("Publications file created.");
 
                 return publicationsFile;
             }
@@ -81,8 +84,6 @@ namespace Guardtime.KSI.Publication
         /// </summary>
         /// <param name="stream">publications file stream</param>
         /// <returns>publications file</returns>
-        /// <exception cref="KsiException">thrown when stream is null</exception>
-        /// <exception cref="PublicationsFileException">thrown when publications file data is invalid</exception>
         public IPublicationsFile Create(Stream stream)
         {
             if (stream == null)
@@ -90,7 +91,7 @@ namespace Guardtime.KSI.Publication
                 throw new KsiException("Invalid input stream: null.");
             }
 
-            return Create(stream, 8092);
+            return Create(stream, DefaultBufferSize);
         }
 
         /// <summary>
@@ -98,8 +99,6 @@ namespace Guardtime.KSI.Publication
         /// </summary>
         /// <param name="bytes">publications file bytes</param>
         /// <returns>publications file</returns>
-        /// <exception cref="KsiException">thrown when bytes is null</exception>
-        /// <exception cref="PublicationsFileException">thrown when publications file data is invalid</exception>
         public IPublicationsFile Create(byte[] bytes)
         {
             if (bytes == null)
@@ -115,7 +114,7 @@ namespace Guardtime.KSI.Publication
 
         private void Verify(PublicationsFile publicationsFile)
         {
-            _pkiTrustProvider.Verify(publicationsFile.GetSignedBytes(), publicationsFile.GetSignatureBytes());
+            _pkiTrustProvider.Verify(publicationsFile.GetSignedBytes(), publicationsFile.GetSignatureValue());
         }
     }
 }

@@ -8,15 +8,6 @@ namespace Guardtime.KSI.Signature
     /// </summary>
     public sealed class SignatureData : CompositeTag
     {
-        /// <summary>
-        ///     Signature data tag type
-        /// </summary>
-        public const uint TagType = 0xb;
-
-        private const uint SignatureTypeTagType = 0x1;
-        private const uint SignatureValueTagType = 0x2;
-        private const uint CertificateIdTagType = 0x3;
-        private const uint CertificateRepositoryUriTagType = 0x4;
         private readonly RawTag _certificateId;
         private readonly StringTag _certificateRepositoryUri;
 
@@ -27,10 +18,9 @@ namespace Guardtime.KSI.Signature
         ///     Create new signature data TLV element from TLV element
         /// </summary>
         /// <param name="tag">TLV element</param>
-        /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
-        public SignatureData(TlvTag tag) : base(tag)
+        public SignatureData(ITlvTag tag) : base(tag)
         {
-            if (Type != TagType)
+            if (Type != Constants.SignatureData.TagType)
             {
                 throw new TlvException("Invalid signature data type(" + Type + ").");
             }
@@ -40,36 +30,31 @@ namespace Guardtime.KSI.Signature
             int certificateIdCount = 0;
             int certificateRepositoryUriCount = 0;
 
-            for (int i = 0; i < Count; i++)
+            foreach (ITlvTag childTag in this)
             {
-                switch (this[i].Type)
+                switch (childTag.Type)
                 {
-                    case SignatureTypeTagType:
-                        _signatureType = new StringTag(this[i]);
-                        this[i] = _signatureType;
+                    case Constants.SignatureData.SignatureTypeTagType:
+                        _signatureType = new StringTag(childTag);
                         signatureTypeCount++;
                         break;
-                    case SignatureValueTagType:
-                        _signatureValue = new RawTag(this[i]);
-                        this[i] = _signatureValue;
+                    case Constants.SignatureData.SignatureValueTagType:
+                        _signatureValue = new RawTag(childTag);
                         signatureValueCount++;
                         break;
-                    case CertificateIdTagType:
-                        _certificateId = new RawTag(this[i]);
-                        this[i] = _certificateId;
+                    case Constants.SignatureData.CertificateIdTagType:
+                        _certificateId = new RawTag(childTag);
                         certificateIdCount++;
                         break;
-                    case CertificateRepositoryUriTagType:
-                        _certificateRepositoryUri = new StringTag(this[i]);
-                        this[i] = _certificateRepositoryUri;
+                    case Constants.SignatureData.CertificateRepositoryUriTagType:
+                        _certificateRepositoryUri = new StringTag(childTag);
                         certificateRepositoryUriCount++;
                         break;
                     default:
-                        VerifyCriticalFlag(this[i]);
+                        VerifyUnknownTag(childTag);
                         break;
                 }
             }
-
 
             if (signatureTypeCount != 1)
             {
@@ -96,33 +81,27 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         ///     Get certificate ID.
         /// </summary>
-        public byte[] CertificateId
+        public byte[] GetCertificateId()
         {
-            get { return _certificateId.Value; }
+            return _certificateId.Value;
         }
 
         /// <summary>
         ///     Get signature value.
         /// </summary>
-        public byte[] SignatureValue
+        public byte[] GetSignatureValue()
         {
-            get { return _signatureValue.Value; }
+            return _signatureValue.Value;
         }
 
         /// <summary>
         ///     Get signature type.
         /// </summary>
-        public string SignatureType
-        {
-            get { return _signatureType.Value; }
-        }
+        public string SignatureType => _signatureType.Value;
 
         /// <summary>
         ///     Get certificate repository URI if it exists.
         /// </summary>
-        public string CertificateRepositoryUri
-        {
-            get { return _certificateRepositoryUri == null ? null : _certificateRepositoryUri.Value; }
-        }
+        public string CertificateRepositoryUri => _certificateRepositoryUri?.Value;
     }
 }

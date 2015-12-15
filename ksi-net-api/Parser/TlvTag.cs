@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Utils;
@@ -8,12 +9,8 @@ namespace Guardtime.KSI.Parser
     /// <summary>
     ///     TLV objects base class.
     /// </summary>
-    public abstract class TlvTag : ITlvTag
+    public abstract class TlvTag : ITlvTag, IEquatable<TlvTag>
     {
-        private readonly bool _forward;
-        private readonly bool _nonCritical;
-        private readonly uint _type;
-
         /// <summary>
         ///     Create new TLV element from data.
         /// </summary>
@@ -22,16 +19,15 @@ namespace Guardtime.KSI.Parser
         /// <param name="forward">Is TLV element forwarded</param>
         protected TlvTag(uint type, bool nonCritical, bool forward)
         {
-            _type = type;
-            _nonCritical = nonCritical;
-            _forward = forward;
+            Type = type;
+            NonCritical = nonCritical;
+            Forward = forward;
         }
 
         /// <summary>
         ///     Create new TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        /// <exception cref="TlvException">thrown when input TLV tag is invalid.</exception>
         protected TlvTag(ITlvTag tag)
         {
             if (tag == null)
@@ -39,34 +35,25 @@ namespace Guardtime.KSI.Parser
                 throw new TlvException("Invalid TLV tag: null.");
             }
 
-            _type = tag.Type;
-            _nonCritical = tag.NonCritical;
-            _forward = tag.Forward;
+            Type = tag.Type;
+            NonCritical = tag.NonCritical;
+            Forward = tag.Forward;
         }
 
         /// <summary>
         ///     Tlv tag type.
         /// </summary>
-        public uint Type
-        {
-            get { return _type; }
-        }
+        public uint Type { get; }
 
         /// <summary>
         ///     Is tlv tag non critical.
         /// </summary>
-        public bool NonCritical
-        {
-            get { return _nonCritical; }
-        }
+        public bool NonCritical { get; }
 
         /// <summary>
         ///     Is tlv forwarded.
         /// </summary>
-        public bool Forward
-        {
-            get { return _forward; }
-        }
+        public bool Forward { get; }
 
         /// <summary>
         ///     Encode TLV object value.
@@ -74,30 +61,86 @@ namespace Guardtime.KSI.Parser
         /// <returns>TLV object value as bytes</returns>
         public abstract byte[] EncodeValue();
 
+        public abstract override int GetHashCode();
+
         /// <summary>
         ///     Encode TLV object.
         /// </summary>
         /// <returns>TLV object as bytes</returns>
         public byte[] Encode()
         {
-            MemoryStream stream = null;
-            try
+            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
             {
-                stream = new MemoryStream();
-                using (TlvWriter writer = new TlvWriter(stream))
-                {
-                    stream = null;
-                    writer.WriteTag(this);
-                    return ((MemoryStream) writer.BaseStream).ToArray();
-                }
+                writer.WriteTag(this);
+                return ((MemoryStream)writer.BaseStream).ToArray();
             }
-            finally
+        }
+
+        /// <summary>
+        ///     Compare tlv element to tlv element
+        /// </summary>
+        /// <param name="tag">composite element</param>
+        /// <returns>true if objects are equal</returns>
+        public bool Equals(TlvTag tag)
+        {
+            // If parameter is null, return false. 
+            if (ReferenceEquals(tag, null))
             {
-                if (stream != null)
-                {
-                    stream.Dispose();
-                }
+                return false;
             }
+
+            if (ReferenceEquals(this, tag))
+            {
+                return true;
+            }
+
+            // If run-time types are not exactly the same, return false. 
+            if (GetType() != tag.GetType())
+            {
+                return false;
+            }
+
+            if (Type != tag.Type || Forward != tag.Forward || NonCritical != tag.NonCritical)
+            {
+                return false;
+            }
+
+            byte[] valueBytes = EncodeValue();
+            byte[] tagValueBytes = tag.EncodeValue();
+
+            return Util.IsArrayEqual(valueBytes, tagValueBytes);
+        }
+
+        /// <summary>
+        ///     Compare TLV element to object.
+        /// </summary>
+        /// <param name="obj">Comparable object.</param>
+        /// <returns>Is given object equal</returns>
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as TlvTag);
+        }
+
+        /// <summary>
+        ///     Compare two composite element objects.
+        /// </summary>
+        /// <param name="a">composite element</param>
+        /// <param name="b">composite element</param>
+        /// <returns>true if objects are equal</returns>
+        public static bool operator ==(TlvTag a, TlvTag b)
+        {
+            return ReferenceEquals(a, null) ? ReferenceEquals(b, null) : a.Equals(b);
+        }
+
+        /// <summary>
+        ///     Compare two composite elements non equality.
+        /// </summary>
+        /// <param name="a">composite element</param>
+        /// <param name="b">composite element</param>
+        /// <returns>true if objects are not equal</returns>
+        public static bool operator !=(TlvTag a, TlvTag b)
+        {
+            return !(a == b);
         }
 
         /// <summary>

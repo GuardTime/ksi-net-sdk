@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Crypto
@@ -9,34 +9,23 @@ namespace Guardtime.KSI.Crypto
     public static class CryptoSignatureVerifierFactory
     {
         /// <summary>
-        ///     RSA signature verifier.
-        /// </summary>
-        public static readonly RsaCryptoSignatureVerifier RsaSignatureVerifier = new RsaCryptoSignatureVerifier();
-
-        /// <summary>
-        ///     PKCS#7 signature verifier.
-        /// </summary>
-        public static readonly Pkcs7CryptoSignatureVerifier Pkcs7SignatureVerifier = new Pkcs7CryptoSignatureVerifier();
-
-        /// <summary>
         ///     Get crypto signature verifier by oid.
         /// </summary>
         /// <param name="oid">signature oid</param>
-        /// <param name="digestAlgorithm">algorithm used for given signature</param>
+        /// <param name="trustAnchors">trust anchor collection</param>
+        /// <param name="certificateRdnSelector"></param>
         /// <returns>signature verifier</returns>
-        /// <exception cref="InvalidOperationException">thrown when signature oid is not supported</exception>
-        public static ICryptoSignatureVerifier GetCryptoSignatureVerifierByOid(string oid, out string digestAlgorithm)
+        public static ICryptoSignatureVerifier GetCryptoSignatureVerifierByOid(string oid, X509Certificate2Collection trustAnchors,
+                                                                               ICertificateSubjectRdnSelector certificateRdnSelector)
         {
             switch (oid)
             {
                 case "1.2.840.113549.1.1.11":
-                    digestAlgorithm = "SHA256";
-                    return RsaSignatureVerifier;
+                    return KsiProvider.GetRsaCryptoSignatureVerifier("SHA256");
                 case "1.2.840.113549.1.7.2":
-                    digestAlgorithm = null;
-                    return Pkcs7SignatureVerifier;
+                    return KsiProvider.GetPkcs7CryptoSignatureVerifier(trustAnchors, certificateRdnSelector);
                 default:
-                    throw new PkiVerificationException("Cryptographic signature not supported.");
+                    throw new PkiVerificationErrorException("Cryptographic signature not supported.");
             }
         }
     }

@@ -1,17 +1,15 @@
-﻿using System;
-using System.IO;
-using NUnit.Framework;
-using Guardtime.KSI.Parser;
+﻿using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
+using Guardtime.KSI.Parser;
 using Guardtime.KSI.Utils;
+using NUnit.Framework;
 
 namespace Guardtime.KSI.Signature
 {
     [TestFixture]
     public class Rfc3161RecordTests
     {
-
         [Test]
         public void TestRfc3161RecordOk()
         {
@@ -23,7 +21,8 @@ namespace Guardtime.KSI.Signature
                 rfc3161Record.GetOutputHash(null);
             }, "Output hash calculation should throw exception when inputhash is null");
 
-            Assert.AreEqual(rfc3161Record.GetOutputHash(rfc3161Record.InputHash), new DataHash(HashAlgorithm.Sha2256, Base16.Decode("C96682043DB0474031CEF1AE12941523E59BDC64E62CDAAE817CE46370918648")), "Output hash should be correctly calculated");
+            Assert.AreEqual(rfc3161Record.GetOutputHash(rfc3161Record.InputHash),
+                new DataHash(HashAlgorithm.Sha2256, Base16.Decode("C96682043DB0474031CEF1AE12941523E59BDC64E62CDAAE817CE46370918648")), "Output hash should be correctly calculated");
         }
 
         [Test]
@@ -150,7 +149,6 @@ namespace Guardtime.KSI.Signature
             {
                 GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Multiple_Signed_Attributes_Algorithm);
             }, "Only one signed attributes algorithm must exist in RFC 3161 record");
-            
         }
 
         [Test]
@@ -198,10 +196,9 @@ namespace Guardtime.KSI.Signature
             }, "Only one tstInfo suffix must exist in RFC 3161 record");
         }
 
-        private Rfc3161Record GetRfc3161RecordFromFile(string file)
+        private static Rfc3161Record GetRfc3161RecordFromFile(string file)
         {
-            using (var stream = new FileStream(file, FileMode.Open))
-            using (var reader = new TlvReader(stream))
+            using (TlvReader reader = new TlvReader(new FileStream(file, FileMode.Open)))
             {
                 Rfc3161Record rfc3161Record = new Rfc3161Record(reader.ReadTag());
 

@@ -1,5 +1,4 @@
-﻿using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Publication;
+﻿using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
@@ -8,41 +7,15 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class UserProvidedPublicationHashMatchesExtendedResponseRule : VerificationRule
     {
-        /// <summary>
-        ///     Rule name.
-        /// </summary>
-        public const string RuleName = "UserProvidedPublicationHashMatchesExtendedResponseRule";
-
         /// <see cref="VerificationRule.Verify" />
-        /// <exception cref="KsiException">thrown if verification context is missing</exception>
-        /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
-            if (context == null)
-            {
-                throw new KsiException("Invalid verification context: null.");
-            }
+            PublicationData userPublication = GetUserPublication(context);
+            CalendarHashChain extendedCalendarHashChain = GetExtendedTimeCalendarHashChain(context, userPublication.PublicationTime);
 
-            PublicationData userPublication = context.UserPublication;
-            if (userPublication == null)
-            {
-                throw new KsiVerificationException("Invalid user publication in context: null.");
-            }
-
-            CalendarHashChain extendedCalendarHashChain =
-                context.GetExtendedTimeCalendarHashChain(userPublication.PublicationTime);
-            if (extendedCalendarHashChain == null)
-            {
-                throw new KsiVerificationException(
-                    "Received invalid extended calendar hash chain from context extension function: null.");
-            }
-
-            if (extendedCalendarHashChain.PublicationData.PublicationHash != userPublication.PublicationHash)
-            {
-                return new VerificationResult(RuleName, VerificationResultCode.Fail, VerificationError.Pub01);
-            }
-
-            return new VerificationResult(RuleName, VerificationResultCode.Ok);
+            return extendedCalendarHashChain.PublicationData.PublicationHash != userPublication.PublicationHash
+                ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Pub01)
+                : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }
     }
 }

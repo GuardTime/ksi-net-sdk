@@ -1,5 +1,4 @@
-﻿using System;
-using Guardtime.KSI.Exceptions;
+﻿using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
@@ -11,19 +10,10 @@ namespace Guardtime.KSI.Signature.Verification
     /// </summary>
     public class VerificationContext : IVerificationContext
     {
-        private readonly IKsiSignature _signature;
-        private DataHash _documentHash;
-
-        private bool _extendingAllowed;
-        private IKsiService _ksiService;
-        private IPublicationsFile _publicationsFile;
-        private PublicationData _userPublication;
-
         /// <summary>
         ///     Create new verification context instance.
         /// </summary>
         /// <param name="signature">KSI signature</param>
-        /// <exception cref="ArgumentNullException">thrown when signature is null</exception>
         public VerificationContext(IKsiSignature signature)
         {
             if (signature == null)
@@ -31,62 +21,38 @@ namespace Guardtime.KSI.Signature.Verification
                 throw new KsiException("Invalid KSI signature: null.");
             }
 
-            _signature = signature;
+            Signature = signature;
         }
 
         /// <summary>
         ///     Get or set document hash.
         /// </summary>
-        public DataHash DocumentHash
-        {
-            get { return _documentHash; }
-
-            set { _documentHash = value; }
-        }
+        public DataHash DocumentHash { get; set; }
 
         /// <summary>
         ///     Get KSI signature.
         /// </summary>
-        public IKsiSignature Signature
-        {
-            get { return _signature; }
-        }
+        public IKsiSignature Signature { get; }
 
         /// <summary>
         ///     Get or set user publication.
         /// </summary>
-        public PublicationData UserPublication
-        {
-            get { return _userPublication; }
-            set { _userPublication = value; }
-        }
+        public PublicationData UserPublication { get; set; }
 
         /// <summary>
         ///     Get or set KSI service.
         /// </summary>
-        public IKsiService KsiService
-        {
-            get { return _ksiService; }
-            set { _ksiService = value; }
-        }
+        public IKsiService KsiService { get; set; }
 
         /// <summary>
         ///     Get or set if extending is allowed.
         /// </summary>
-        public bool IsExtendingAllowed
-        {
-            get { return _extendingAllowed; }
-            set { _extendingAllowed = value; }
-        }
+        public bool IsExtendingAllowed { get; set; }
 
         /// <summary>
         ///     Get or set publications file.
         /// </summary>
-        public IPublicationsFile PublicationsFile
-        {
-            get { return _publicationsFile; }
-            set { _publicationsFile = value; }
-        }
+        public IPublicationsFile PublicationsFile { get; set; }
 
         /// <summary>
         ///     Get extended latest calendar hash chain.
@@ -105,14 +71,14 @@ namespace Guardtime.KSI.Signature.Verification
         /// <returns>extended calendar hash chain</returns>
         public CalendarHashChain GetExtendedTimeCalendarHashChain(ulong? publicationTime)
         {
-            if (_ksiService == null)
+            if (KsiService == null)
             {
                 throw new KsiException("Invalid KSI service: null.");
             }
 
             return publicationTime == null
-                ? _ksiService.Extend(_signature.AggregationTime)
-                : _ksiService.Extend(_signature.AggregationTime, publicationTime.Value);
+                ? KsiService.Extend(Signature.AggregationTime)
+                : KsiService.Extend(Signature.AggregationTime, publicationTime.Value);
         }
     }
 }

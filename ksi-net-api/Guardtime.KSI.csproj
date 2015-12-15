@@ -70,30 +70,36 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NLog, Version=2.1.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.2.1.0\lib\net20\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Security" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
+    <Compile Include="Crypto\CryptoSignatureVerificationData.cs" />
     <Compile Include="Crypto\CryptoSignatureVerifierFactory.cs" />
+    <Compile Include="Crypto\ICertificateSubjectRdnSelector.cs" />
     <Compile Include="Crypto\ICryptoSignatureVerifier.cs" />
-    <Compile Include="Crypto\Pkcs7CryptoSignatureVerifier.cs" />
-    <Compile Include="Crypto\RsaCryptoSignatureVerifier.cs" />
-    <Compile Include="Exceptions\KsiServiceException.cs" />
-    <Compile Include="Exceptions\TlvException.cs" />
-    <Compile Include="Exceptions\PublicationsFileException.cs" />
-    <Compile Include="Exceptions\KsiServiceProtocolException.cs" />
-    <Compile Include="Exceptions\KsiException.cs" />
-    <Compile Include="Exceptions\PkiVerificationException.cs" />
-    <Compile Include="Exceptions\KsiVerificationException.cs" />
-    <Compile Include="Hashing\DataHash.cs" />
-    <Compile Include="Hashing\DataHasher.cs" />
-    <Compile Include="Hashing\HashAlgorithm.cs" />
+    <Compile Include="Crypto\CertificateSubjectRdn.cs" />
     <Compile Include="Exceptions\HashingException.cs" />
+    <Compile Include="Exceptions\KsiException.cs" />
+    <Compile Include="Exceptions\KsiServiceException.cs" />
+    <Compile Include="Exceptions\KsiServiceProtocolException.cs" />
+    <Compile Include="Exceptions\KsiVerificationException.cs" />
+    <Compile Include="Exceptions\PkiVerificationErrorException.cs" />
+    <Compile Include="Exceptions\PkiVerificationException.cs" />
+    <Compile Include="Exceptions\PkiVerificationFailedException.cs" />
+    <Compile Include="Exceptions\PublicationsFileException.cs" />
+    <Compile Include="Exceptions\TlvException.cs" />
+    <Compile Include="Hashing\DataHash.cs" />
+    <Compile Include="Hashing\HashAlgorithm.Constants.cs" />
+    <Compile Include="Hashing\HashAlgorithm.cs" />
+    <Compile Include="Hashing\IDataHasher.cs" />
+    <Compile Include="Hashing\IHmacHasher.cs" />
     <Compile Include="IKsi.cs" />
     <Compile Include="Ksi.cs" />
-    <Compile Include="KSIDoc.cs" />
     <Compile Include="Parser\ImprintTag.cs" />
     <Compile Include="Parser\IntegerTag.cs" />
     <Compile Include="Parser\RawTag.cs" />
@@ -115,18 +121,29 @@
     <Compile Include="Publication\PublicationsFileHeader.cs" />
     <Compile Include="Publication\PublicationsFile.cs" />
     <Compile Include="Publication\PublicationData.cs" />
+    <Compile Include="Utils\Base16.cs" />
+    <Compile Include="Utils\Base32.cs" />
+    <Compile Include="Utils\BaseX.cs" />
+    <Compile Include="Utils\Crc32.cs" />
+    <Compile Include="Utils\Util.cs" />
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
     <None Include="README" />
+    <Compile Include="Service\ErrorPayload.cs" />
     <Compile Include="Service\ExtendRequestPayload.cs" />
-    <Compile Include="Service\ExtendError.cs" />
-    <Compile Include="Service\AggregationError.cs" />
+    <Compile Include="Service\ExtendErrorPayload.cs" />
+    <Compile Include="Service\AggregationErrorPayload.cs" />
     <Compile Include="Service\AggregationResponsePayload.cs" />
     <Compile Include="Service\AggregationRequestPayload.cs" />
     <Compile Include="Service\AggregationPdu.cs" />
-    <Compile Include="Service\AggregationPduPayload.cs" />
     <Compile Include="Service\ExtendPdu.cs" />
-    <Compile Include="Service\ExtendPduPayload.cs" />
     <Compile Include="Service\ExtendResponsePayload.cs" />
-    <Compile Include="Service\HttpServiceProtocol.cs" />
+    <Compile Include="Service\HttpKsiServiceProtocol.cs" />
     <Compile Include="Service\IKsiService.cs" />
     <Compile Include="Service\IKsiPublicationsFileServiceProtocol.cs" />
     <Compile Include="Service\IKsiSigningServiceProtocol.cs" />
@@ -139,8 +156,11 @@
     <Compile Include="Service\ServiceCredentials.cs" />
     <Compile Include="Signature\AggregationAuthenticationRecord.cs" />
     <Compile Include="Signature\AggregationHashChain.cs" />
+    <Compile Include="Signature\AggregationHashChainResult.cs" />
     <Compile Include="Signature\CalendarAuthenticationRecord.cs" />
     <Compile Include="Signature\CalendarHashChain.cs" />
+    <Compile Include="KsiProvider.cs" />
+    <Compile Include="ICryptoProvider.cs" />
     <Compile Include="Signature\IKsiSignature.cs" />
     <Compile Include="Signature\KsiSignature.cs" />
     <Compile Include="Signature\KsiSignatureFactory.cs" />
@@ -179,7 +199,6 @@
     <Compile Include="Signature\Verification\Rule\UserProvidedPublicationCreationTimeVerificationRule.cs" />
     <Compile Include="Signature\Verification\Rule\SignaturePublicationRecordPublicationHashRule.cs" />
     <Compile Include="Signature\Verification\Rule\SignaturePublicationRecordPublicationTimeRule.cs" />
-    <Compile Include="Signature\Verification\Policy\IPolicy.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainTimeConsistencyRule.cs" />
     <Compile Include="Signature\Verification\Rule\CalendarHashChainRegistrationTimeRule.cs" />
     <Compile Include="Signature\Verification\Rule\CalendarHashChainAggregationTimeRule.cs" />
@@ -195,11 +214,6 @@
     <Compile Include="Trust\IKsiTrustProvider.cs" />
     <Compile Include="Trust\IPkiTrustProvider.cs" />
     <Compile Include="Trust\PkiTrustStoreProvider.cs" />
-    <Compile Include="Utils\Base16.cs" />
-    <Compile Include="Utils\Base32.cs" />
-    <Compile Include="Utils\BaseX.cs" />
-    <Compile Include="Utils\Crc32.cs" />
-    <Compile Include="Utils\Util.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

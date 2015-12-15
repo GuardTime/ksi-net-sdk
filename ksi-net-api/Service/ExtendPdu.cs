@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Guardtime.KSI.Exceptions;
+﻿using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Service
@@ -10,20 +9,17 @@ namespace Guardtime.KSI.Service
     public sealed class ExtendPdu : KsiPdu
     {
         /// <summary>
-        ///     Extension PDU TLV type.
+        ///     Get PDU payload.
         /// </summary>
-        public const uint TagType = 0x300;
-
-        private readonly ExtendPduPayload _payload;
+        public override KsiPduPayload Payload { get; }
 
         /// <summary>
         ///     Create extend PDU from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
-        public ExtendPdu(TlvTag tag) : base(tag)
+        public ExtendPdu(ITlvTag tag) : base(tag)
         {
-            if (Type != TagType)
+            if (Type != Constants.ExtendPdu.TagType)
             {
                 throw new TlvException("Invalid extend PDU type(" + Type + ").");
             }
@@ -32,33 +28,30 @@ namespace Guardtime.KSI.Service
             int payloadCount = 0;
             int macCount = 0;
 
-            for (int i = 0; i < Count; i++)
+            foreach (ITlvTag childTag in this)
             {
-                switch (this[i].Type)
+                switch (childTag.Type)
                 {
-                    case ExtendRequestPayload.TagType:
-                        _payload = new ExtendRequestPayload(this[i]);
-                        this[i] = _payload;
+                    case Constants.ExtendRequestPayload.TagType:
+                        Payload = new ExtendRequestPayload(childTag);
                         payloadCount++;
                         break;
-                    case ExtendResponsePayload.TagType:
-                        _payload = new ExtendResponsePayload(this[i]);
-                        this[i] = _payload;
+                    case Constants.ExtendResponsePayload.TagType:
+                        Payload = new ExtendResponsePayload(childTag);
                         payloadCount++;
                         break;
-                    case ExtendError.TagType:
-                        _payload = new ExtendError(this[i]);
-                        this[i] = _payload;
+                    case Constants.ExtendErrorPayload.TagType:
+                        Payload = new ExtendErrorPayload(childTag);
                         payloadCount++;
                         break;
-                    case KsiPduHeader.TagType:
+                    case Constants.KsiPduHeader.TagType:
                         headerCount++;
                         break;
-                    case MacTagType:
+                    case Constants.KsiPdu.MacTagType:
                         macCount++;
                         break;
                     default:
-                        VerifyCriticalFlag(this[i]);
+                        VerifyUnknownTag(childTag);
                         break;
                 }
             }
@@ -68,12 +61,12 @@ namespace Guardtime.KSI.Service
                 throw new TlvException("Only one payload must exist in KSI PDU.");
             }
 
-            if (_payload.Type != ExtendError.TagType && headerCount != 1)
+            if (Payload.Type != Constants.ExtendErrorPayload.TagType && headerCount != 1)
             {
                 throw new TlvException("Only one header must exist in KSI PDU.");
             }
 
-            if (_payload.Type != ExtendError.TagType && macCount != 1)
+            if (Payload.Type != Constants.ExtendErrorPayload.TagType && macCount != 1)
             {
                 throw new TlvException("Only one mac must exist in KSI PDU.");
             }
@@ -84,24 +77,11 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="header">KSI header</param>
         /// <param name="payload">Extend pdu payload</param>
-        /// <exception cref="TlvException">thrown when payload is null</exception>
-        public ExtendPdu(KsiPduHeader header, ExtendPduPayload payload)
-            : base(header, TagType, false, false, new List<TlvTag>())
+        /// <param name="mac">Extend pdu hmac</param>
+        public ExtendPdu(KsiPduHeader header, KsiPduPayload payload, ImprintTag mac)
+            : base(header, mac, Constants.ExtendPdu.TagType, false, false, new ITlvTag[] { header, payload, mac })
         {
-            if (payload == null)
-            {
-                throw new TlvException("Invalid extending payload: null.");
-            }
-
-            _payload = AddTag(payload);
-        }
-
-        /// <summary>
-        ///     Get extension PDU payload.
-        /// </summary>
-        public override KsiPduPayload Payload
-        {
-            get { return _payload; }
+            Payload = payload;
         }
     }
 }

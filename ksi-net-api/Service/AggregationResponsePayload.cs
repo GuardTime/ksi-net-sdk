@@ -1,24 +1,13 @@
 ﻿using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
-using Guardtime.KSI.Publication;
-using Guardtime.KSI.Signature;
 
 namespace Guardtime.KSI.Service
 {
     /// <summary>
     ///     Aggregation response payload.
     /// </summary>
-    public sealed class AggregationResponsePayload : AggregationPduPayload
+    public sealed class AggregationResponsePayload : KsiPduPayload
     {
-        /// <summary>
-        ///     Aggregation response payload TLV type.
-        /// </summary>
-        public const uint TagType = 0x202;
-
-        private const uint RequestIdTagType = 0x1;
-        private const uint ConfigTagType = 0x10;
-        private const uint RequestAcknowledgmentTagType = 0x11;
-
         // TODO: Create config
         private readonly RawTag _config;
         private readonly StringTag _errorMessage;
@@ -31,10 +20,9 @@ namespace Guardtime.KSI.Service
         ///     Create aggregation response payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
-        public AggregationResponsePayload(TlvTag tag) : base(tag)
+        public AggregationResponsePayload(ITlvTag tag) : base(tag)
         {
-            if (Type != TagType)
+            if (Type != Constants.AggregationResponsePayload.TagType)
             {
                 throw new TlvException("Invalid aggregation response payload type(" + Type + ").");
             }
@@ -45,43 +33,38 @@ namespace Guardtime.KSI.Service
             int configCount = 0;
             int requestAcknowledgmentCount = 0;
 
-            for (int i = 0; i < Count; i++)
+            foreach (ITlvTag childTag in this)
             {
-                switch (this[i].Type)
+                switch (childTag.Type)
                 {
-                    case RequestIdTagType:
-                        _requestId = new IntegerTag(this[i]);
-                        this[i] = _requestId;
+                    case Constants.AggregationResponsePayload.RequestIdTagType:
+                        _requestId = new IntegerTag(childTag);
                         requestIdCount++;
                         break;
-                    case StatusTagType:
-                        _status = new IntegerTag(this[i]);
-                        this[i] = _status;
+                    case Constants.KsiPduPayload.StatusTagType:
+                        _status = new IntegerTag(childTag);
                         statusCount++;
                         break;
-                    case ErrorMessageTagType:
-                        _errorMessage = new StringTag(this[i]);
-                        this[i] = _errorMessage;
+                    case Constants.KsiPduPayload.ErrorMessageTagType:
+                        _errorMessage = new StringTag(childTag);
                         errorMessageCount++;
                         break;
-                    case ConfigTagType:
-                        _config = new RawTag(this[i]);
-                        this[i] = _config;
+                    case Constants.AggregationResponsePayload.ConfigTagType:
+                        _config = new RawTag(childTag);
                         configCount++;
                         break;
-                    case RequestAcknowledgmentTagType:
-                        _requestAcknowledgment = new RawTag(this[i]);
-                        this[i] = _requestAcknowledgment;
+                    case Constants.AggregationResponsePayload.RequestAcknowledgmentTagType:
+                        _requestAcknowledgment = new RawTag(childTag);
                         requestAcknowledgmentCount++;
                         break;
-                    case AggregationHashChain.TagType:
-                    case CalendarHashChain.TagType:
-                    case PublicationRecord.TagTypeSignature:
-                    case AggregationAuthenticationRecord.TagType:
-                    case CalendarAuthenticationRecord.TagType:
+                    case Constants.AggregationHashChain.TagType:
+                    case Constants.CalendarHashChain.TagType:
+                    case Constants.PublicationRecord.TagTypeSignature:
+                    case Constants.AggregationAuthenticationRecord.TagType:
+                    case Constants.CalendarAuthenticationRecord.TagType:
                         break;
                     default:
-                        VerifyCriticalFlag(this[i]);
+                        VerifyUnknownTag(childTag);
                         break;
                 }
             }
@@ -118,25 +101,16 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Get error message if it exists.
         /// </summary>
-        public string ErrorMessage
-        {
-            get { return _errorMessage == null ? null : _errorMessage.Value; }
-        }
+        public string ErrorMessage => _errorMessage?.Value;
 
         /// <summary>
         ///     Get request ID.
         /// </summary>
-        public ulong RequestId
-        {
-            get { return _requestId.Value; }
-        }
+        public ulong RequestId => _requestId.Value;
 
         /// <summary>
         ///     Get status code.
         /// </summary>
-        public ulong Status
-        {
-            get { return _status == null ? 0 : _status.Value; }
-        }
+        public ulong Status => _status?.Value ?? 0;
     }
 }

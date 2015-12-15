@@ -7,17 +7,8 @@ namespace Guardtime.KSI.Service
     /// <summary>
     ///     Extension response payload.
     /// </summary>
-    public sealed class ExtendResponsePayload : ExtendPduPayload
+    public sealed class ExtendResponsePayload : KsiPduPayload
     {
-        /// <summary>
-        ///     Extension response payload TLV type.
-        /// </summary>
-        public const uint TagType = 0x302;
-
-        private const uint RequestIdTagType = 0x1;
-        private const uint LastTimeTagType = 0x10;
-
-        private readonly CalendarHashChain _calendarHashChain;
         private readonly StringTag _errorMessage;
         private readonly IntegerTag _lastTime;
         private readonly IntegerTag _requestId;
@@ -27,10 +18,9 @@ namespace Guardtime.KSI.Service
         ///     Create extend response payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
-        public ExtendResponsePayload(TlvTag tag) : base(tag)
+        public ExtendResponsePayload(ITlvTag tag) : base(tag)
         {
-            if (Type != TagType)
+            if (Type != Constants.ExtendResponsePayload.TagType)
             {
                 throw new TlvException("Invalid extend response payload type(" + Type + ").");
             }
@@ -41,37 +31,32 @@ namespace Guardtime.KSI.Service
             int lastTimeCount = 0;
             int calendarHashChainCount = 0;
 
-            for (int i = 0; i < Count; i++)
+            foreach (ITlvTag childTag in this)
             {
-                switch (this[i].Type)
+                switch (childTag.Type)
                 {
-                    case RequestIdTagType:
-                        _requestId = new IntegerTag(this[i]);
-                        this[i] = _requestId;
+                    case Constants.ExtendResponsePayload.RequestIdTagType:
+                        _requestId = new IntegerTag(childTag);
                         requestIdCount++;
                         break;
-                    case StatusTagType:
-                        _status = new IntegerTag(this[i]);
-                        this[i] = _status;
+                    case Constants.KsiPduPayload.StatusTagType:
+                        _status = new IntegerTag(childTag);
                         statusCount++;
                         break;
-                    case ErrorMessageTagType:
-                        _errorMessage = new StringTag(this[i]);
-                        this[i] = _errorMessage;
+                    case Constants.KsiPduPayload.ErrorMessageTagType:
+                        _errorMessage = new StringTag(childTag);
                         errorMessageCount++;
                         break;
-                    case LastTimeTagType:
-                        _lastTime = new IntegerTag(this[i]);
-                        this[i] = _lastTime;
+                    case Constants.ExtendResponsePayload.LastTimeTagType:
+                        _lastTime = new IntegerTag(childTag);
                         lastTimeCount++;
                         break;
-                    case CalendarHashChain.TagType:
-                        _calendarHashChain = new CalendarHashChain(this[i]);
-                        this[i] = _calendarHashChain;
+                    case Constants.CalendarHashChain.TagType:
+                        CalendarHashChain = new CalendarHashChain(childTag);
                         calendarHashChainCount++;
                         break;
                     default:
-                        VerifyCriticalFlag(this[i]);
+                        VerifyUnknownTag(childTag);
                         break;
                 }
             }
@@ -112,41 +97,26 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Get calendar hash chain.
         /// </summary>
-        public CalendarHashChain CalendarHashChain
-        {
-            get { return _calendarHashChain; }
-        }
+        public CalendarHashChain CalendarHashChain { get; }
 
         /// <summary>
         ///     Get error message if it exists.
         /// </summary>
-        public string ErrorMessage
-        {
-            get { return _errorMessage == null ? null : _errorMessage.Value; }
-        }
+        public string ErrorMessage => _errorMessage?.Value;
 
         /// <summary>
         ///     Get last time if it exists.
         /// </summary>
-        public ulong? LastTime
-        {
-            get { return _lastTime == null ? (ulong?) null : _lastTime.Value; }
-        }
+        public ulong? LastTime => _lastTime?.Value;
 
         /// <summary>
         ///     Get request ID.
         /// </summary>
-        public ulong RequestId
-        {
-            get { return _requestId.Value; }
-        }
+        public ulong RequestId => _requestId.Value;
 
         /// <summary>
         ///     Get status code.
         /// </summary>
-        public ulong Status
-        {
-            get { return _status.Value; }
-        }
+        public ulong Status => _status.Value;
     }
 }

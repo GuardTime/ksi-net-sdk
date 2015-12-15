@@ -10,21 +10,6 @@ namespace Guardtime.KSI.Signature
     /// </summary>
     public sealed class Rfc3161Record : CompositeTag
     {
-        /// <summary>
-        ///     RFC3161 record tag type
-        /// </summary>
-        public const uint TagType = 0x806;
-
-        private const uint AggregationTimeTagType = 0x2;
-        private const uint ChainIndexTagType = 0x3;
-        private const uint InputHashTagType = 0x5;
-        private const uint TstInfoPrefixTagType = 0x10;
-        private const uint TstInfoSuffixTagType = 0x11;
-        private const uint TstInfoAlgorithmTagType = 0x12;
-        private const uint SignedAttributesPrefixTagType = 0x13;
-        private const uint SignedAttributesSuffixTagType = 0x14;
-        private const uint SignedAttributesAlgorithmTagType = 0x15;
-
         private readonly IntegerTag _aggregationTime;
         private readonly List<IntegerTag> _chainIndex = new List<IntegerTag>();
         private readonly ImprintTag _inputHash;
@@ -41,10 +26,9 @@ namespace Guardtime.KSI.Signature
         ///     Create new RFC3161 record TLV element from TLV element
         /// </summary>
         /// <param name="tag">TLV element</param>
-        /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
-        public Rfc3161Record(TlvTag tag) : base(tag)
+        public Rfc3161Record(ITlvTag tag) : base(tag)
         {
-            if (Type != TagType)
+            if (Type != Constants.Rfc3161Record.TagType)
             {
                 throw new TlvException("Invalid RFC#3161 record type(" + Type + ").");
             }
@@ -58,57 +42,48 @@ namespace Guardtime.KSI.Signature
             int signedAttributesSuffixCount = 0;
             int signedAttributesAlgorithmCount = 0;
 
-            for (int i = 0; i < Count; i++)
+            foreach (ITlvTag childTag in this)
             {
-                switch (this[i].Type)
+                switch (childTag.Type)
                 {
-                    case AggregationTimeTagType:
-                        _aggregationTime = new IntegerTag(this[i]);
-                        this[i] = _aggregationTime;
+                    case Constants.Rfc3161Record.AggregationTimeTagType:
+                        _aggregationTime = new IntegerTag(childTag);
                         aggregationTimeCount++;
                         break;
-                    case ChainIndexTagType:
-                        IntegerTag chainTag = new IntegerTag(this[i]);
+                    case Constants.Rfc3161Record.ChainIndexTagType:
+                        IntegerTag chainTag = new IntegerTag(childTag);
                         _chainIndex.Add(chainTag);
-                        this[i] = chainTag;
                         break;
-                    case InputHashTagType:
-                        _inputHash = new ImprintTag(this[i]);
-                        this[i] = _inputHash;
+                    case Constants.Rfc3161Record.InputHashTagType:
+                        _inputHash = new ImprintTag(childTag);
                         inputHashCount++;
                         break;
-                    case TstInfoPrefixTagType:
-                        _tstInfoPrefix = new RawTag(this[i]);
-                        this[i] = _tstInfoPrefix;
+                    case Constants.Rfc3161Record.TstInfoPrefixTagType:
+                        _tstInfoPrefix = new RawTag(childTag);
                         tstInfoPrefixCount++;
                         break;
-                    case TstInfoSuffixTagType:
-                        _tstInfoSuffix = new RawTag(this[i]);
-                        this[i] = _tstInfoSuffix;
+                    case Constants.Rfc3161Record.TstInfoSuffixTagType:
+                        _tstInfoSuffix = new RawTag(childTag);
                         tstInfoSuffixCount++;
                         break;
-                    case TstInfoAlgorithmTagType:
-                        _tstInfoAlgorithm = new IntegerTag(this[i]);
-                        this[i] = _tstInfoAlgorithm;
+                    case Constants.Rfc3161Record.TstInfoAlgorithmTagType:
+                        _tstInfoAlgorithm = new IntegerTag(childTag);
                         tstInfoAlgorithmCount++;
                         break;
-                    case SignedAttributesPrefixTagType:
-                        _signedAttributesPrefix = new RawTag(this[i]);
-                        this[i] = _signedAttributesPrefix;
+                    case Constants.Rfc3161Record.SignedAttributesPrefixTagType:
+                        _signedAttributesPrefix = new RawTag(childTag);
                         signedAttributesPrefixCount++;
                         break;
-                    case SignedAttributesSuffixTagType:
-                        _signedAttributesSuffix = new RawTag(this[i]);
-                        this[i] = _signedAttributesSuffix;
+                    case Constants.Rfc3161Record.SignedAttributesSuffixTagType:
+                        _signedAttributesSuffix = new RawTag(childTag);
                         signedAttributesSuffixCount++;
                         break;
-                    case SignedAttributesAlgorithmTagType:
-                        _signedAttributesAlgorithm = new IntegerTag(this[i]);
-                        this[i] = _signedAttributesAlgorithm;
+                    case Constants.Rfc3161Record.SignedAttributesAlgorithmTagType:
+                        _signedAttributesAlgorithm = new IntegerTag(childTag);
                         signedAttributesAlgorithmCount++;
                         break;
                     default:
-                        VerifyCriticalFlag(this[i]);
+                        VerifyUnknownTag(childTag);
                         break;
                 }
             }
@@ -163,25 +138,18 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         ///     Get aggregation time.
         /// </summary>
-        public ulong AggregationTime
-        {
-            get { return _aggregationTime.Value; }
-        }
+        public ulong AggregationTime => _aggregationTime.Value;
 
         /// <summary>
         ///     Get RFC3161 input hash
         /// </summary>
-        public DataHash InputHash
-        {
-            get { return _inputHash.Value; }
-        }
+        public DataHash InputHash => _inputHash.Value;
 
         /// <summary>
         ///     Get output hash for RFC 3161 from document hash
         /// </summary>
         /// <param name="inputHash">document hash</param>
         /// <returns>aggregation input hash</returns>
-        /// <exception cref="KsiException">thrown when input hash is null</exception>
         public DataHash GetOutputHash(DataHash inputHash)
         {
             if (inputHash == null)
@@ -189,14 +157,14 @@ namespace Guardtime.KSI.Signature
                 throw new KsiException("Invalid input hash: null.");
             }
 
-            DataHasher hasher = new DataHasher(HashAlgorithm.GetById((byte) _tstInfoAlgorithm.Value));
+            IDataHasher hasher = KsiProvider.GetDataHasher(HashAlgorithm.GetById((byte)_tstInfoAlgorithm.Value));
             hasher.AddData(_tstInfoPrefix.Value);
             hasher.AddData(inputHash.Value);
             hasher.AddData(_tstInfoSuffix.Value);
 
             inputHash = hasher.GetHash();
 
-            hasher = new DataHasher(HashAlgorithm.GetById((byte) _signedAttributesAlgorithm.Value));
+            hasher = KsiProvider.GetDataHasher(HashAlgorithm.GetById((byte)_signedAttributesAlgorithm.Value));
             hasher.AddData(_signedAttributesPrefix.Value);
             hasher.AddData(inputHash.Value);
             hasher.AddData(_signedAttributesSuffix.Value);

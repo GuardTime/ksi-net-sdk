@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Guardtime.KSI.Exceptions;
+﻿using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Service
@@ -9,15 +8,6 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public sealed class KsiPduHeader : CompositeTag
     {
-        /// <summary>
-        ///     KSI PDU header TLV type.
-        /// </summary>
-        public const uint TagType = 0x1;
-
-        private const uint LoginIdTagType = 0x1;
-        private const uint InstanceIdTagType = 0x2;
-        private const uint MessageIdTagType = 0x3;
-
         private readonly IntegerTag _instanceId;
         private readonly StringTag _loginId;
         private readonly IntegerTag _messageId;
@@ -26,10 +16,9 @@ namespace Guardtime.KSI.Service
         ///     Create KSI PDU header from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
-        public KsiPduHeader(TlvTag tag) : base(tag)
+        public KsiPduHeader(ITlvTag tag) : base(tag)
         {
-            if (Type != TagType)
+            if (Type != Constants.KsiPduHeader.TagType)
             {
                 throw new TlvException("Invalid KSI PDU header type(" + Type + ").");
             }
@@ -38,27 +27,24 @@ namespace Guardtime.KSI.Service
             int instanceIdCount = 0;
             int messageIdCount = 0;
 
-            for (int i = 0; i < Count; i++)
+            foreach (ITlvTag childTag in this)
             {
-                switch (this[i].Type)
+                switch (childTag.Type)
                 {
-                    case LoginIdTagType:
-                        _loginId = new StringTag(this[i]);
-                        this[i] = _loginId;
+                    case Constants.KsiPduHeader.LoginIdTagType:
+                        _loginId = new StringTag(childTag);
                         loginIdCount++;
                         break;
-                    case InstanceIdTagType:
-                        _instanceId = new IntegerTag(this[i]);
-                        this[i] = _instanceId;
+                    case Constants.KsiPduHeader.InstanceIdTagType:
+                        _instanceId = new IntegerTag(childTag);
                         instanceIdCount++;
                         break;
-                    case MessageIdTagType:
-                        _messageId = new IntegerTag(this[i]);
-                        this[i] = _messageId;
+                    case Constants.KsiPduHeader.MessageIdTagType:
+                        _messageId = new IntegerTag(childTag);
                         messageIdCount++;
                         break;
                     default:
-                        VerifyCriticalFlag(this[i]);
+                        VerifyUnknownTag(childTag);
                         break;
                 }
             }
@@ -94,40 +80,31 @@ namespace Guardtime.KSI.Service
         /// <param name="instanceId">instance ID</param>
         /// <param name="messageId">message ID</param>
         public KsiPduHeader(string loginId, ulong instanceId, ulong messageId)
-            : base(TagType, false, false, new List<TlvTag>())
+            : base(Constants.KsiPduHeader.TagType, false, false, new ITlvTag[]
+            {
+                new StringTag(Constants.KsiPduHeader.LoginIdTagType, false, false, loginId),
+                new IntegerTag(Constants.KsiPduHeader.InstanceIdTagType, false, false, instanceId),
+                new IntegerTag(Constants.KsiPduHeader.MessageIdTagType, false, false, messageId)
+            })
         {
-            _loginId = new StringTag(LoginIdTagType, false, false, loginId);
-            AddTag(_loginId);
-
-            _instanceId = new IntegerTag(InstanceIdTagType, false, false, instanceId);
-            AddTag(_instanceId);
-
-            _messageId = new IntegerTag(MessageIdTagType, false, false, messageId);
-            AddTag(_messageId);
+            _loginId = (StringTag)this[0];
+            _instanceId = (IntegerTag)this[1];
+            _messageId = (IntegerTag)this[2];
         }
 
         /// <summary>
         ///     Get login ID.
         /// </summary>
-        public string LoginId
-        {
-            get { return _loginId.Value; }
-        }
+        public string LoginId => _loginId.Value;
 
         /// <summary>
         ///     Get instance ID if it exists.
         /// </summary>
-        public ulong? InstanceId
-        {
-            get { return _instanceId == null ? (ulong?) null : _instanceId.Value; }
-        }
+        public ulong? InstanceId => _instanceId?.Value;
 
         /// <summary>
         ///     Get message ID if it exists.
         /// </summary>
-        public ulong? MessageId
-        {
-            get { return _messageId == null ? (ulong?) null : _messageId.Value; }
-        }
+        public ulong? MessageId => _messageId?.Value;
     }
 }

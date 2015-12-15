@@ -1,14 +1,13 @@
 ﻿using System.IO;
-using NUnit.Framework;
-using Guardtime.KSI.Parser;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Parser;
+using NUnit.Framework;
 
 namespace Guardtime.KSI.Signature
 {
     [TestFixture]
     public class AggregationAuthenticationRecordTests
     {
-
         [Test]
         public void TestAggregationAuthenticationRecordOk()
         {
@@ -50,7 +49,6 @@ namespace Guardtime.KSI.Signature
             {
                 GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Missing_Input_Hash);
             }, "Only one input hash must exist in aggregation authentication record");
-            
         }
 
         [Test]
@@ -60,7 +58,6 @@ namespace Guardtime.KSI.Signature
             {
                 GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Missing_Signature_Data);
             }, "Only one signature data must exist in aggregation authentication record");
-            
         }
 
         [Test]
@@ -70,7 +67,6 @@ namespace Guardtime.KSI.Signature
             {
                 GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Multiple_Aggregation_Time);
             }, "Only one aggregation time must exist in aggregation authentication record");
-            
         }
 
         [Test]
@@ -80,7 +76,6 @@ namespace Guardtime.KSI.Signature
             {
                 GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Multiple_Input_Hash);
             }, "Only one input hash must exist in aggregation authentication record");
-            
         }
 
         [Test]
@@ -90,7 +85,6 @@ namespace Guardtime.KSI.Signature
             {
                 GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Multiple_Signature_Data);
             }, "Only one signature data must exist in aggregation authentication record");
-            
         }
 
         [Test]
@@ -102,18 +96,14 @@ namespace Guardtime.KSI.Signature
             }, "Invalid aggregation authentication record type: 2053");
         }
 
-        private AggregationAuthenticationRecord GetAggregationAuthenticationRecordFromFile(string file)
+        private static AggregationAuthenticationRecord GetAggregationAuthenticationRecordFromFile(string file)
         {
-            using (var stream = new FileStream(file, FileMode.Open))
-            using (var reader = new TlvReader(stream))
+            using (TlvReader reader = new TlvReader(new FileStream(file, FileMode.Open)))
             {
                 AggregationAuthenticationRecord aggregationAuthenticationRecord = new AggregationAuthenticationRecord(reader.ReadTag());
 
                 return aggregationAuthenticationRecord;
             }
         }
-
-
-
     }
 }

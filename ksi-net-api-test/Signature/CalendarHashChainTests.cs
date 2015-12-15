@@ -1,14 +1,13 @@
 ﻿using System.IO;
-using NUnit.Framework;
-using Guardtime.KSI.Parser;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Parser;
+using NUnit.Framework;
 
 namespace Guardtime.KSI.Signature
 {
     [TestFixture]
     public class CalendarHashChainTests
     {
-
         [Test]
         public void TestCalendarHashChainOk()
         {
@@ -30,7 +29,6 @@ namespace Guardtime.KSI.Signature
             {
                 GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Type);
             }, "Invalid calendar hash chain type: 2051");
-            
         }
 
         [Test]
@@ -40,7 +38,6 @@ namespace Guardtime.KSI.Signature
             {
                 GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Extra_Tag);
             }, "Invalid tag");
-            
         }
 
         [Test]
@@ -50,7 +47,6 @@ namespace Guardtime.KSI.Signature
             {
                 GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Missing_Input_Hash);
             }, "Only one input hash must exist in calendar hash chain");
-            
         }
 
         [Test]
@@ -60,7 +56,6 @@ namespace Guardtime.KSI.Signature
             {
                 GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Missing_Links);
             }, "Links are missing in calendar hash chain");
-            
         }
 
         [Test]
@@ -70,7 +65,6 @@ namespace Guardtime.KSI.Signature
             {
                 GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Missing_Publication_Time);
             }, "Only one publication time must exist in calendar hash chain");
-            
         }
 
         [Test]
@@ -80,7 +74,6 @@ namespace Guardtime.KSI.Signature
             {
                 GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Multiple_Aggregation_Time);
             }, "Only one aggregation time is allowed in calendar hash chain");
-            
         }
 
         [Test]
@@ -90,7 +83,6 @@ namespace Guardtime.KSI.Signature
             {
                 GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Multiple_Input_Hash);
             }, "Only one input hash must exist in calendar hash chain");
-            
         }
 
         [Test]
@@ -100,13 +92,11 @@ namespace Guardtime.KSI.Signature
             {
                 GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Multiple_Publication_Time);
             }, "Only one publication time must exist in calendar hash chain");
-            
         }
 
-        private CalendarHashChain GetCalendarHashChainFromFile(string file)
+        private static CalendarHashChain GetCalendarHashChainFromFile(string file)
         {
-            using (var stream = new FileStream(file, FileMode.Open))
-            using (var reader = new TlvReader(stream))
+            using (TlvReader reader = new TlvReader(new FileStream(file, FileMode.Open)))
             {
                 CalendarHashChain calendarHashChain = new CalendarHashChain(reader.ReadTag());
 

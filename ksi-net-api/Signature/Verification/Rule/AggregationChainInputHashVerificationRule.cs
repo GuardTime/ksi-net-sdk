@@ -10,38 +10,18 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class AggregationChainInputHashVerificationRule : VerificationRule
     {
-        /// <summary>
-        ///     Rule name
-        /// </summary>
-        public const string RuleName = "AggregationChainInputHashVerificationRule";
-
         /// <see cref="VerificationRule.Verify" />
-        /// <exception cref="KsiException">thrown if verification context is missing</exception>
-        /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
-            if (context == null)
-            {
-                throw new KsiException("Invalid verification context: null.");
-            }
-
-            IKsiSignature signature = context.Signature;
+            IKsiSignature signature = GetSignature(context);
             DataHash inputHash = context.DocumentHash;
-            if (signature == null)
-            {
-                throw new KsiVerificationException("Invalid KSI signature in context: null.");
-            }
-
-            ReadOnlyCollection<AggregationHashChain> aggregationHashChains = signature.GetAggregationHashChains();
-            if (aggregationHashChains == null || aggregationHashChains.Count == 0)
-            {
-                throw new KsiVerificationException("Aggregation hash chains missing in KSI signature.");
-            }
-
+            ReadOnlyCollection<AggregationHashChain> aggregationHashChains = GetAggregationHashChains(signature, false);
             DataHash aggregationHashChainInputHash = aggregationHashChains[0].InputHash;
+
             if (signature.IsRfc3161Signature)
             {
-                DataHasher hasher = new DataHasher(aggregationHashChainInputHash.Algorithm);
+                IDataHasher hasher = KsiProvider.GetDataHasher(aggregationHashChainInputHash.Algorithm);
+
                 if (signature.Rfc3161Record == null)
                 {
                     throw new KsiVerificationException("No RFC 3161 record in KSI signature.");
@@ -51,18 +31,18 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 inputHash = hasher.GetHash();
 
                 return inputHash != aggregationHashChainInputHash
-                    ? new VerificationResult(RuleName, VerificationResultCode.Fail, VerificationError.Int01)
-                    : new VerificationResult(RuleName, VerificationResultCode.Ok);
+                    ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int01)
+                    : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
             }
 
             if (inputHash == null)
             {
-                return new VerificationResult(RuleName, VerificationResultCode.Ok);
+                return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
             }
 
             return inputHash != aggregationHashChainInputHash
-                ? new VerificationResult(RuleName, VerificationResultCode.Fail, VerificationError.Gen01)
-                : new VerificationResult(RuleName, VerificationResultCode.Ok);
+                ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Gen01)
+                : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Guardtime.KSI.Parser;
+﻿using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Service
 {
@@ -9,20 +8,10 @@ namespace Guardtime.KSI.Service
     public abstract class KsiPduPayload : CompositeTag
     {
         /// <summary>
-        ///     Status TLV element type.
-        /// </summary>
-        protected const uint StatusTagType = 0x4;
-
-        /// <summary>
-        ///     Error message TLV element type.
-        /// </summary>
-        protected const uint ErrorMessageTagType = 0x5;
-
-        /// <summary>
         ///     Create KSI PDU payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        protected KsiPduPayload(TlvTag tag) : base(tag)
+        protected KsiPduPayload(ITlvTag tag) : base(tag)
         {
         }
 
@@ -33,7 +22,7 @@ namespace Guardtime.KSI.Service
         /// <param name="nonCritical">is TLV non critical</param>
         /// <param name="forward">is TLV forwarded</param>
         /// <param name="value">TLV element list</param>
-        protected KsiPduPayload(uint type, bool nonCritical, bool forward, List<TlvTag> value)
+        protected KsiPduPayload(uint type, bool nonCritical, bool forward, ITlvTag[] value)
             : base(type, nonCritical, forward, value)
         {
         }

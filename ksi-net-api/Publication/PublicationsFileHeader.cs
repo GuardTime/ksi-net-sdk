@@ -9,57 +9,44 @@ namespace Guardtime.KSI.Publication
     /// </summary>
     public sealed class PublicationsFileHeader : CompositeTag
     {
-        /// <summary>
-        ///     Publications file header TLV type.
-        /// </summary>
-        public const uint TagType = 0x701;
-
-        private const uint VersionTagType = 0x1;
-        private const uint CreationTimeTagType = 0x2;
-        private const uint RepUriTagType = 0x3;
-
         private readonly IntegerTag _creationTime;
-        private readonly StringTag _repUri;
+        private readonly StringTag _repositoryUri;
         private readonly IntegerTag _version;
 
         /// <summary>
         ///     Create publications file header TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
-        public PublicationsFileHeader(TlvTag tag) : base(tag)
+        public PublicationsFileHeader(ITlvTag tag) : base(tag)
         {
-            if (Type != TagType)
+            if (Type != Constants.PublicationsFileHeader.TagType)
             {
                 throw new TlvException("Invalid certificate record type(" + Type + ").");
             }
 
             int versionCount = 0;
             int creationTimeCount = 0;
-            int repUriCount = 0;
+            int repositoryUriCount = 0;
 
-            for (int i = 0; i < Count; i++)
+            foreach (ITlvTag childTag in this)
             {
-                switch (this[i].Type)
+                switch (childTag.Type)
                 {
-                    case VersionTagType:
-                        _version = new IntegerTag(this[i]);
-                        this[i] = _version;
+                    case Constants.PublicationsFileHeader.VersionTagType:
+                        _version = new IntegerTag(childTag);
                         versionCount++;
                         break;
-                    case CreationTimeTagType:
-                        _creationTime = new IntegerTag(this[i].Type, this[i].NonCritical, this[i].Forward,
-                            Util.DecodeUnsignedLong(this[i].EncodeValue(), 0, this[i].EncodeValue().Length));
-                        this[i] = _creationTime;
+                    case Constants.PublicationsFileHeader.CreationTimeTagType:
+                        _creationTime = new IntegerTag(childTag.Type, childTag.NonCritical, childTag.Forward,
+                            Util.DecodeUnsignedLong(childTag.EncodeValue(), 0, childTag.EncodeValue().Length));
                         creationTimeCount++;
                         break;
-                    case RepUriTagType:
-                        _repUri = new StringTag(this[i]);
-                        this[i] = _repUri;
-                        repUriCount++;
+                    case Constants.PublicationsFileHeader.RepositoryUriTagType:
+                        _repositoryUri = new StringTag(childTag);
+                        repositoryUriCount++;
                         break;
                     default:
-                        VerifyCriticalFlag(this[i]);
+                        VerifyUnknownTag(childTag);
                         break;
                 }
             }
@@ -74,7 +61,7 @@ namespace Guardtime.KSI.Publication
                 throw new TlvException("Only one creation time must exist in publications file header.");
             }
 
-            if (repUriCount > 1)
+            if (repositoryUriCount > 1)
             {
                 throw new TlvException("Only one repository uri is allowed in publications file header.");
             }
@@ -83,25 +70,16 @@ namespace Guardtime.KSI.Publication
         /// <summary>
         ///     Get publications file creation time.
         /// </summary>
-        public ulong CreationTime
-        {
-            get { return _creationTime.Value; }
-        }
+        public ulong CreationTime => _creationTime.Value;
 
         /// <summary>
         ///     Get publications file repository uri if it exists.
         /// </summary>
-        public string RepUri
-        {
-            get { return _repUri != null ? _repUri.Value : null; }
-        }
+        public string RepositoryUri => _repositoryUri?.Value;
 
         /// <summary>
         ///     Get publications file version.
         /// </summary>
-        public ulong Version
-        {
-            get { return _version.Value; }
-        }
+        public ulong Version => _version.Value;
     }
 }

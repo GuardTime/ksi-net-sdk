@@ -10,21 +10,12 @@ namespace Guardtime.KSI.Signature
     public sealed class CalendarAuthenticationRecord : CompositeTag
     {
         /// <summary>
-        ///     Calendar authentication record TLV type
-        /// </summary>
-        public const uint TagType = 0x805;
-
-        private readonly PublicationData _publicationData;
-        private readonly SignatureData _signatureData;
-
-        /// <summary>
         ///     Create new calendar authentication record TLV element from TLV element
         /// </summary>
         /// <param name="tag">TLV element</param>
-        /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
-        public CalendarAuthenticationRecord(TlvTag tag) : base(tag)
+        public CalendarAuthenticationRecord(ITlvTag tag) : base(tag)
         {
-            if (Type != TagType)
+            if (Type != Constants.CalendarAuthenticationRecord.TagType)
             {
                 throw new TlvException("Invalid calendar authentication record type(" + Type + ").");
             }
@@ -32,22 +23,20 @@ namespace Guardtime.KSI.Signature
             int publicationDataCount = 0;
             int signatureDataCount = 0;
 
-            for (int i = 0; i < Count; i++)
+            foreach (ITlvTag childTag in this)
             {
-                switch (this[i].Type)
+                switch (childTag.Type)
                 {
-                    case PublicationData.TagType:
-                        _publicationData = new PublicationData(this[i]);
-                        this[i] = _publicationData;
+                    case Constants.PublicationData.TagType:
+                        PublicationData = new PublicationData(childTag);
                         publicationDataCount++;
                         break;
-                    case SignatureData.TagType:
-                        _signatureData = new SignatureData(this[i]);
-                        this[i] = _signatureData;
+                    case Constants.SignatureData.TagType:
+                        SignatureData = new SignatureData(childTag);
                         signatureDataCount++;
                         break;
                     default:
-                        VerifyCriticalFlag(this[i]);
+                        VerifyUnknownTag(childTag);
                         break;
                 }
             }
@@ -68,17 +57,11 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         ///     Get publication data.
         /// </summary>
-        public PublicationData PublicationData
-        {
-            get { return _publicationData; }
-        }
+        public PublicationData PublicationData { get; }
 
         /// <summary>
         ///     Get signature data.
         /// </summary>
-        public SignatureData SignatureData
-        {
-            get { return _signatureData; }
-        }
+        public SignatureData SignatureData { get; }
     }
 }

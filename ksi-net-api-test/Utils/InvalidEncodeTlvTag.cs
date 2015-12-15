@@ -8,13 +8,18 @@ namespace Guardtime.KSI.Utils
         {
         }
 
-        public InvalidEncodeTlvTag(TlvTag tag) : base(tag)
+        public InvalidEncodeTlvTag(ITlvTag tag) : base(tag)
         {
         }
 
         public override byte[] EncodeValue()
         {
             return null;
+        }
+
+        public override int GetHashCode()
+        {
+            return 0;
         }
     }
 }

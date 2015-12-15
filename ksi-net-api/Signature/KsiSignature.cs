@@ -1,304 +1,247 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
+using NLog;
 
 namespace Guardtime.KSI.Signature
 {
     /// <summary>
-    ///     KSI signature factory.
+    ///     KSI Signature implementation.
     /// </summary>
-    public partial class KsiSignatureFactory
+    public sealed class KsiSignature : CompositeTag, IKsiSignature
     {
+        private readonly List<AggregationHashChain> _aggregationHashChains = new List<AggregationHashChain>();
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         /// <summary>
-        ///     KSI Signature implementation.
+        ///     Create new KSI signature TLV element from TLV element.
         /// </summary>
-        private sealed class KsiSignature : CompositeTag, IKsiSignature
+        /// <param name="tag">TLV element</param>
+        public KsiSignature(ITlvTag tag) : base(tag)
         {
-            /// <summary>
-            ///     KSI signature tag type
-            /// </summary>
-            public const uint TagType = 0x800;
-
-            private readonly AggregationAuthenticationRecord _aggregationAuthenticationRecord;
-
-            private readonly List<AggregationHashChain> _aggregationHashChainCollection =
-                new List<AggregationHashChain>();
-
-            private readonly CalendarAuthenticationRecord _calendarAuthenticationRecord;
-            private readonly CalendarHashChain _calendarChain;
-            private readonly PublicationRecord _publicationRecord;
-            private readonly Rfc3161Record _rfc3161Record;
-
-            /// <summary>
-            ///     Create new KSI signature TLV element from TLV element.
-            /// </summary>
-            /// <param name="tag">TLV element</param>
-            /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
-            public KsiSignature(TlvTag tag) : base(tag)
+            if (Type != Constants.KsiSignature.TagType)
             {
-                if (Type != TagType)
+                throw new TlvException("Invalid KSI signature type(" + Type + ").");
+            }
+
+            int calendarChainCount = 0;
+            int publicationRecordCount = 0;
+            int aggregationAuthenticationRecordCount = 0;
+            int calendarAuthenticationRecordCount = 0;
+            int rfc3161RecordCount = 0;
+
+            foreach (ITlvTag childTag in this)
+            {
+                switch (childTag.Type)
                 {
-                    throw new TlvException("Invalid KSI signature type(" + Type + ").");
+                    case Constants.AggregationHashChain.TagType:
+                        AggregationHashChain aggregationChainTag = new AggregationHashChain(childTag);
+                        _aggregationHashChains.Add(aggregationChainTag);
+                        break;
+                    case Constants.CalendarHashChain.TagType:
+                        CalendarHashChain = new CalendarHashChain(childTag);
+                        calendarChainCount++;
+                        break;
+                    case Constants.PublicationRecord.TagTypeSignature:
+                        PublicationRecord = new PublicationRecord(childTag);
+                        publicationRecordCount++;
+                        break;
+                    case Constants.AggregationAuthenticationRecord.TagType:
+                        AggregationAuthenticationRecord = new AggregationAuthenticationRecord(childTag);
+                        aggregationAuthenticationRecordCount++;
+                        break;
+                    case Constants.CalendarAuthenticationRecord.TagType:
+                        CalendarAuthenticationRecord = new CalendarAuthenticationRecord(childTag);
+                        calendarAuthenticationRecordCount++;
+                        break;
+                    case Constants.Rfc3161Record.TagType:
+                        Rfc3161Record = new Rfc3161Record(childTag);
+                        rfc3161RecordCount++;
+                        break;
+                    default:
+                        VerifyUnknownTag(childTag);
+                        break;
                 }
+            }
 
-                int calendarChainCount = 0;
-                int publicationRecordCount = 0;
-                int aggregationAuthenticationRecordCount = 0;
-                int calendarAuthenticationRecordCount = 0;
-                int rfc3161RecordCount = 0;
+            if (_aggregationHashChains.Count == 0)
+            {
+                throw new TlvException("Aggregation hash chains must exist in KSI signature.");
+            }
 
-                for (int i = 0; i < Count; i++)
+            if (calendarChainCount > 1)
+            {
+                throw new TlvException("Only one calendar hash chain is allowed in KSI signature.");
+            }
+
+            if (calendarChainCount == 0 && (publicationRecordCount != 0 || calendarAuthenticationRecordCount != 0))
+            {
+                throw new TlvException("No publication record or calendar authentication record is allowed in KSI signature if there is no calendar hash chain.");
+            }
+
+            if ((publicationRecordCount == 1 && calendarAuthenticationRecordCount == 1) ||
+                publicationRecordCount > 1 ||
+                calendarAuthenticationRecordCount > 1)
+            {
+                throw new TlvException("Only one from publication record or calendar authentication record is allowed in KSI signature.");
+            }
+
+            if (aggregationAuthenticationRecordCount > 1)
+            {
+                throw new TlvException("Only one aggregation authentication record is allowed in KSI signature.");
+            }
+
+            if (rfc3161RecordCount > 1)
+            {
+                throw new TlvException("Only one RFC 3161 record is allowed in KSI signature.");
+            }
+
+            _aggregationHashChains.Sort(new AggregationHashChain.ChainIndexOrdering());
+        }
+
+        /// <summary>
+        ///     Get aggregation authentication record if it exists.
+        /// </summary>
+        public AggregationAuthenticationRecord AggregationAuthenticationRecord { get; }
+
+        /// <summary>
+        ///     Get RFC 3161 record
+        /// </summary>
+        public Rfc3161Record Rfc3161Record { get; }
+
+        /// <summary>
+        ///     Is signature RFC 3161 format
+        /// </summary>
+        public bool IsRfc3161Signature => Rfc3161Record != null;
+
+        /// <summary>
+        ///     Get calendar hash chain.
+        /// </summary>
+        public CalendarHashChain CalendarHashChain { get; }
+
+        /// <summary>
+        ///     Get calendar authentication record.
+        /// </summary>
+        public CalendarAuthenticationRecord CalendarAuthenticationRecord { get; }
+
+        /// <summary>
+        ///     Get publication record.
+        /// </summary>
+        public PublicationRecord PublicationRecord { get; }
+
+        /// <summary>
+        ///     Get aggregation hash chains list.
+        /// </summary>
+        /// <returns>aggregations hash chains list</returns>
+        public ReadOnlyCollection<AggregationHashChain> GetAggregationHashChains()
+        {
+            return _aggregationHashChains.AsReadOnly();
+        }
+
+        /// <summary>
+        ///     Get aggregation hash chain output hash.
+        /// </summary>
+        /// <returns>output hash</returns>
+        public DataHash GetAggregationHashChainRootHash()
+        {
+            // Store result
+            AggregationHashChainResult lastResult = new AggregationHashChainResult(0, _aggregationHashChains[0].InputHash);
+
+            foreach (AggregationHashChain chain in _aggregationHashChains)
+            {
+                lastResult = chain.GetOutputHash(lastResult);
+            }
+
+            return lastResult.Hash;
+        }
+
+        /// <summary>
+        ///     Get aggregation time.
+        /// </summary>
+        public ulong AggregationTime => _aggregationHashChains[0].AggregationTime;
+
+        /// <summary>
+        ///     Extend KSI signature with given calendar hash chain.
+        /// </summary>
+        /// <param name="calendarHashChain">calendar hash chain</param>
+        /// <returns>extended KSI signature</returns>
+        public IKsiSignature Extend(CalendarHashChain calendarHashChain)
+        {
+            return Extend(calendarHashChain, null);
+        }
+
+        /// <summary>
+        ///     Extend signature to publication.
+        /// </summary>
+        /// <param name="calendarHashChain">extended calendar hash chain</param>
+        /// <param name="publicationRecord">extended publication record</param>
+        /// <returns>extended KSI signature</returns>
+        public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecord publicationRecord)
+        {
+            if (calendarHashChain == null)
+            {
+                throw new KsiException("Invalid calendar hash chain: null.");
+            }
+
+            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
+            {
+                foreach (ITlvTag childTag in this)
                 {
-                    switch (this[i].Type)
+                    switch (childTag.Type)
                     {
-                        case AggregationHashChain.TagType:
-                            AggregationHashChain aggregationChainTag = new AggregationHashChain(this[i]);
-                            _aggregationHashChainCollection.Add(aggregationChainTag);
-                            this[i] = aggregationChainTag;
+                        case Constants.CalendarHashChain.TagType:
+                            writer.WriteTag(calendarHashChain);
                             break;
-                        case CalendarHashChain.TagType:
-                            _calendarChain = new CalendarHashChain(this[i]);
-                            this[i] = _calendarChain;
-                            calendarChainCount++;
-                            break;
-                        case PublicationRecord.TagTypeSignature:
-                            _publicationRecord = new PublicationRecord(this[i]);
-                            this[i] = _publicationRecord;
-                            publicationRecordCount++;
-                            break;
-                        case AggregationAuthenticationRecord.TagType:
-                            _aggregationAuthenticationRecord = new AggregationAuthenticationRecord(this[i]);
-                            this[i] = _aggregationAuthenticationRecord;
-                            aggregationAuthenticationRecordCount++;
-                            break;
-                        case CalendarAuthenticationRecord.TagType:
-                            _calendarAuthenticationRecord = new CalendarAuthenticationRecord(this[i]);
-                            this[i] = _calendarAuthenticationRecord;
-                            calendarAuthenticationRecordCount++;
-                            break;
-                        case Rfc3161Record.TagType:
-                            _rfc3161Record = new Rfc3161Record(this[i]);
-                            this[i] = _rfc3161Record;
-                            rfc3161RecordCount++;
-                            break;
-                        default:
-                            VerifyCriticalFlag(this[i]);
-                            break;
-                    }
-                }
-
-                if (_aggregationHashChainCollection.Count == 0)
-                {
-                    throw new TlvException("Aggregation hash chains must exist in KSI signature.");
-                }
-
-                if (calendarChainCount > 1)
-                {
-                    throw new TlvException(
-                        "Only one calendar hash chain is allowed in KSI signature.");
-                }
-
-                if (calendarChainCount == 0 && (publicationRecordCount != 0 || calendarAuthenticationRecordCount != 0))
-                {
-                    throw new TlvException(
-                        "No publication record or calendar authentication record is allowed in KSI signature if there is no calendar hash chain.");
-                }
-
-                if ((publicationRecordCount == 1 && calendarAuthenticationRecordCount == 1) ||
-                    publicationRecordCount > 1 ||
-                    calendarAuthenticationRecordCount > 1)
-                {
-                    throw new TlvException(
-                        "Only one from publication record or calendar authentication record is allowed in KSI signature.");
-                }
-
-                if (aggregationAuthenticationRecordCount > 1)
-                {
-                    throw new TlvException(
-                        "Only one aggregation authentication record is allowed in KSI signature.");
-                }
-
-                if (rfc3161RecordCount > 1)
-                {
-                    throw new TlvException(
-                        "Only one RFC 3161 record is allowed in KSI signature.");
-                }
-
-                _aggregationHashChainCollection.Sort(new AggregationHashChain.ChainIndexOrdering());
-            }
-
-            /// <summary>
-            ///     Get aggregation authentication record if it exists.
-            /// </summary>
-            public AggregationAuthenticationRecord AggregationAuthenticationRecord
-            {
-                get { return _aggregationAuthenticationRecord; }
-            }
-
-            /// <summary>
-            ///     Get RFC 3161 record
-            /// </summary>
-            public Rfc3161Record Rfc3161Record
-            {
-                get { return _rfc3161Record; }
-            }
-
-            /// <summary>
-            ///     Is signature RFC 3161 format
-            /// </summary>
-            public bool IsRfc3161Signature
-            {
-                get { return _rfc3161Record != null; }
-            }
-
-            /// <summary>
-            ///     Get calendar hash chain.
-            /// </summary>
-            public CalendarHashChain CalendarHashChain
-            {
-                get { return _calendarChain; }
-            }
-
-            /// <summary>
-            ///     Get calendar authentication record.
-            /// </summary>
-            public CalendarAuthenticationRecord CalendarAuthenticationRecord
-            {
-                get { return _calendarAuthenticationRecord; }
-            }
-
-            /// <summary>
-            ///     Get publication record.
-            /// </summary>
-            public PublicationRecord PublicationRecord
-            {
-                get { return _publicationRecord; }
-            }
-
-            /// <summary>
-            ///     Get aggregation hash chains list.
-            /// </summary>
-            /// <returns>aggregations hash chains list</returns>
-            public ReadOnlyCollection<AggregationHashChain> GetAggregationHashChains()
-            {
-                return _aggregationHashChainCollection.AsReadOnly();
-            }
-
-            /// <summary>
-            ///     Get aggregation hash chain output hash.
-            /// </summary>
-            /// <returns>output hash</returns>
-            public DataHash GetAggregationHashChainRootHash()
-            {
-                // Store result
-                AggregationHashChain.ChainResult lastResult = new AggregationHashChain.ChainResult(0,
-                    _aggregationHashChainCollection[0].InputHash);
-                for (int i = 0; i < _aggregationHashChainCollection.Count; i++)
-                {
-                    lastResult = _aggregationHashChainCollection[i].GetOutputHash(lastResult);
-                }
-
-                return lastResult.Hash;
-            }
-
-            /// <summary>
-            ///     Get aggregation time.
-            /// </summary>
-            public ulong AggregationTime
-            {
-                get { return _aggregationHashChainCollection[0].AggregationTime; }
-            }
-
-            /// <summary>
-            ///     Extend KSI signature with given calendar hash chain.
-            /// </summary>
-            /// <param name="calendarHashChain">calendar hash chain</param>
-            /// <returns>extended KSI signature</returns>
-            /// <exception cref="ArgumentNullException">thrown if calendar hash chain is null</exception>
-            public IKsiSignature Extend(CalendarHashChain calendarHashChain)
-            {
-                return Extend(calendarHashChain, null);
-            }
-
-            /// <summary>
-            ///     Extend signature to publication.
-            /// </summary>
-            /// <param name="calendarHashChain">extended calendar hash chain</param>
-            /// <param name="publicationRecord">extended publication record</param>
-            /// <returns>extended KSI signature</returns>
-            /// <exception cref="KsiException">thrown if calendar hash chain is null</exception>
-            public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecord publicationRecord)
-            {
-                if (calendarHashChain == null)
-                {
-                    throw new KsiException("Invalid calendar hash chain: null.");
-                }
-
-                MemoryStream stream = null;
-                try
-                {
-                    stream = new MemoryStream();
-                    using (TlvWriter writer = new TlvWriter(stream))
-                    {
-                        stream = null;
-
-                        for (int i = 0; i < Count; i++)
-                        {
-                            if (this[i].Type == CalendarHashChain.TagType)
-                            {
-                                writer.WriteTag(calendarHashChain);
-                                continue;
-                            }
-
-                            // TODO: Remove if extend without record?
-                            if (publicationRecord != null && this[i].Type == PublicationRecord.TagTypeSignature)
+                        case Constants.PublicationRecord.TagTypeSignature:
+                            if (publicationRecord != null)
                             {
                                 writer.WriteTag(publicationRecord);
-                                continue;
                             }
-
-                            writer.WriteTag(this[i]);
-                        }
-
-                        return
-                            new KsiSignature(new RawTag(TagType, false, false,
-                                ((MemoryStream) writer.BaseStream).ToArray()));
+                            break;
+                        default:
+                            writer.WriteTag(childTag);
+                            break;
                     }
                 }
-                finally
+
+                try
                 {
-                    if (stream != null)
-                    {
-                        stream.Dispose();
-                    }
+                    Logger.Debug("Extending KSI signature.");
+                    KsiSignature signature = new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false, ((MemoryStream)writer.BaseStream).ToArray()));
+                    Logger.Debug("Extending KSI signature successful.");
+                    return signature;
+                }
+                catch (TlvException e)
+                {
+                    Logger.Warn("Extending KSI signature failed: {0}", e);
+                    throw;
                 }
             }
+        }
 
-            /// <summary>
-            ///     Write KSI signature to stream.
-            /// </summary>
-            /// <param name="outputStream">output stream</param>
-            public void WriteTo(Stream outputStream)
+        /// <summary>
+        ///     Write KSI signature to stream.
+        /// </summary>
+        /// <param name="outputStream">output stream</param>
+        public void WriteTo(Stream outputStream)
+        {
+            if (outputStream == null)
             {
-                if (outputStream == null)
-                {
-                    throw new KsiException("Invalid output stream: null.");
-                }
+                throw new KsiException("Invalid output stream: null.");
+            }
 
-                if (!outputStream.CanWrite)
-                {
-                    throw new KsiException("Output stream is not writable.");
-                }
+            if (!outputStream.CanWrite)
+            {
+                throw new KsiException("Output stream is not writable.");
+            }
 
-                using (TlvWriter writer = new TlvWriter(outputStream))
-                {
-                    writer.WriteTag(this);
-                }
+            using (TlvWriter writer = new TlvWriter(outputStream))
+            {
+                writer.WriteTag(this);
             }
         }
     }

@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
@@ -9,49 +8,24 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class CalendarHashChainAggregationTimeRule : VerificationRule
     {
-        /// <summary>
-        ///     Rule name.
-        /// </summary>
-        public const string RuleName = "CalendarHashChainAggregationTimeRule";
-
         /// <see cref="VerificationRule.Verify" />
-        /// <exception cref="KsiException">thrown if verification context is missing</exception>
-        /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
-            if (context == null)
-            {
-                throw new KsiException("Invalid verification context: null.");
-            }
-
-            if (context.Signature == null)
-            {
-                throw new KsiVerificationException("Invalid KSI signature in context: null.");
-            }
+            IKsiSignature signature = GetSignature(context);
+            CalendarHashChain calendarHashChain = GetCalendarHashChain(signature, true);
 
             // If calendar hash chain is missing, verification successful
-            CalendarHashChain calendarHashChain = context.Signature.CalendarHashChain;
             if (calendarHashChain == null)
             {
-                return new VerificationResult(RuleName, VerificationResultCode.Ok);
+                return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
             }
 
-            ReadOnlyCollection<AggregationHashChain> aggregationHashChainCollection =
-                context.Signature.GetAggregationHashChains();
-            if (aggregationHashChainCollection == null || aggregationHashChainCollection.Count == 0)
-            {
-                throw new KsiVerificationException("Aggregation hash chains are missing from KSI signature.");
-            }
+            ReadOnlyCollection<AggregationHashChain> aggregationHashChains = GetAggregationHashChains(signature, false);
+            ulong aggregationTime = aggregationHashChains[aggregationHashChains.Count - 1].AggregationTime;
 
-            ulong aggregationTime =
-                aggregationHashChainCollection[aggregationHashChainCollection.Count - 1].AggregationTime;
-
-            if (aggregationTime != calendarHashChain.AggregationTime)
-            {
-                return new VerificationResult(RuleName, VerificationResultCode.Fail, VerificationError.Int04);
-            }
-
-            return new VerificationResult(RuleName, VerificationResultCode.Ok);
+            return aggregationTime != calendarHashChain.AggregationTime
+                ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int04)
+                : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }
     }
 }

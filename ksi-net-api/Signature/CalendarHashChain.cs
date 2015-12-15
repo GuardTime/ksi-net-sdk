@@ -11,32 +11,18 @@ namespace Guardtime.KSI.Signature
     /// </summary>
     public sealed class CalendarHashChain : CompositeTag
     {
-        /// <summary>
-        ///     Calendar hash chain tag type
-        /// </summary>
-        public const uint TagType = 0x802;
-
-        private const uint PublicationTimeTagType = 0x1;
-        private const uint AggregationTimeTagType = 0x2;
-        private const uint InputHashTagType = 0x5;
         private readonly IntegerTag _aggregationTime;
         private readonly List<Link> _chain = new List<Link>();
         private readonly ImprintTag _inputHash;
-        private readonly DataHash _outputHash;
-        private readonly PublicationData _publicationData;
-
         private readonly IntegerTag _publicationTime;
-
-        private readonly ulong _registrationTime;
 
         /// <summary>
         ///     Create new calendar hash chain TLV element from TLV element
         /// </summary>
         /// <param name="tag">TLV element</param>
-        /// <exception cref="TlvException">thrown when TLV parsing fails</exception>
-        public CalendarHashChain(TlvTag tag) : base(tag)
+        public CalendarHashChain(ITlvTag tag) : base(tag)
         {
-            if (Type != TagType)
+            if (Type != Constants.CalendarHashChain.TagType)
             {
                 throw new TlvException("Invalid calendar hash chain type(" + Type + ").");
             }
@@ -45,33 +31,29 @@ namespace Guardtime.KSI.Signature
             int aggregationTimeCount = 0;
             int inputHashCount = 0;
 
-            for (int i = 0; i < Count; i++)
+            foreach (ITlvTag childTag in this)
             {
-                switch (this[i].Type)
+                switch (childTag.Type)
                 {
-                    case PublicationTimeTagType:
-                        _publicationTime = new IntegerTag(this[i]);
-                        this[i] = _publicationTime;
+                    case Constants.CalendarHashChain.PublicationTimeTagType:
+                        _publicationTime = new IntegerTag(childTag);
                         publicationTimeCount++;
                         break;
-                    case AggregationTimeTagType:
-                        _aggregationTime = new IntegerTag(this[i]);
-                        this[i] = _aggregationTime;
+                    case Constants.CalendarHashChain.AggregationTimeTagType:
+                        _aggregationTime = new IntegerTag(childTag);
                         aggregationTimeCount++;
                         break;
-                    case InputHashTagType:
-                        _inputHash = new ImprintTag(this[i]);
-                        this[i] = _inputHash;
+                    case Constants.CalendarHashChain.InputHashTagType:
+                        _inputHash = new ImprintTag(childTag);
                         inputHashCount++;
                         break;
-                    case (uint) LinkDirection.Left:
-                    case (uint) LinkDirection.Right:
-                        Link chainTag = new Link(this[i]);
+                    case (uint)LinkDirection.Left:
+                    case (uint)LinkDirection.Right:
+                        Link chainTag = new Link(childTag);
                         _chain.Add(chainTag);
-                        this[i] = chainTag;
                         break;
                     default:
-                        VerifyCriticalFlag(this[i]);
+                        VerifyUnknownTag(childTag);
                         break;
                 }
             }
@@ -96,58 +78,40 @@ namespace Guardtime.KSI.Signature
                 throw new TlvException("Links are missing in calendar hash chain.");
             }
 
-            _registrationTime = CalculateRegistrationTime();
-            _outputHash = CalculateOutputHash();
-            _publicationData = new PublicationData(_publicationTime.Value, _outputHash);
+            RegistrationTime = CalculateRegistrationTime();
+            OutputHash = CalculateOutputHash();
+            PublicationData = new PublicationData(_publicationTime.Value, OutputHash);
         }
 
         /// <summary>
         ///     Get aggregation time
         /// </summary>
-        public ulong AggregationTime
-        {
-            get { return _aggregationTime == null ? _publicationTime.Value : _aggregationTime.Value; }
-        }
+        public ulong AggregationTime => _aggregationTime == null ? _publicationTime.Value : _aggregationTime.Value;
 
         /// <summary>
         ///     Get publication time.
         /// </summary>
-        public ulong PublicationTime
-        {
-            get { return _publicationTime.Value; }
-        }
+        public ulong PublicationTime => _publicationTime.Value;
 
         /// <summary>
         ///     Get registration time.
         /// </summary>
-        public ulong RegistrationTime
-        {
-            get { return _registrationTime; }
-        }
+        public ulong RegistrationTime { get; }
 
         /// <summary>
         ///     Get input hash.
         /// </summary>
-        public DataHash InputHash
-        {
-            get { return _inputHash.Value; }
-        }
+        public DataHash InputHash => _inputHash.Value;
 
         /// <summary>
         ///     Get output hash.
         /// </summary>
-        public DataHash OutputHash
-        {
-            get { return _outputHash; }
-        }
+        public DataHash OutputHash { get; }
 
         /// <summary>
         ///     Get publication data.
         /// </summary>
-        public PublicationData PublicationData
-        {
-            get { return _publicationData; }
-        }
+        public PublicationData PublicationData { get; }
 
         /// <summary>
         ///     Compare right links if they are equal.
@@ -156,19 +120,17 @@ namespace Guardtime.KSI.Signature
         /// <returns>true if right links are equal and on same position</returns>
         public bool AreRightLinksEqual(CalendarHashChain calendarHashChain)
         {
-            if (calendarHashChain == null)
-            {
-                return false;
-            }
-
-            if (_chain.Count != calendarHashChain._chain.Count)
+            if (_chain.Count != calendarHashChain?._chain.Count)
             {
                 return false;
             }
 
             for (int i = 0; i < _chain.Count; i++)
             {
-                if (calendarHashChain._chain[i].Direction != LinkDirection.Right) continue;
+                if (calendarHashChain._chain[i].Direction != LinkDirection.Right)
+                {
+                    continue;
+                }
 
                 if (_chain[i] != calendarHashChain._chain[i])
                 {
@@ -186,17 +148,18 @@ namespace Guardtime.KSI.Signature
         private DataHash CalculateOutputHash()
         {
             DataHash inputHash = InputHash;
-            for (int i = 0; i < _chain.Count; i++)
+            foreach (Link link in _chain)
             {
-                DataHash siblingHash = _chain[i].Value;
-                if (_chain[i].Direction == LinkDirection.Left)
-                {
-                    inputHash = HashTogether(siblingHash.Algorithm, inputHash.Imprint, siblingHash.Imprint);
-                }
+                DataHash siblingHash = link.Value;
 
-                if (_chain[i].Direction == LinkDirection.Right)
+                switch (link.Direction)
                 {
-                    inputHash = HashTogether(inputHash.Algorithm, siblingHash.Imprint, inputHash.Imprint);
+                    case LinkDirection.Left:
+                        inputHash = GetStepHash(siblingHash.Algorithm, inputHash.Imprint, siblingHash.Imprint);
+                        break;
+                    case LinkDirection.Right:
+                        inputHash = GetStepHash(inputHash.Algorithm, siblingHash.Imprint, inputHash.Imprint);
+                        break;
                 }
             }
 
@@ -210,12 +173,12 @@ namespace Guardtime.KSI.Signature
         /// <param name="hashA">hash a</param>
         /// <param name="hashB">hash b</param>
         /// <returns>result hash</returns>
-        private DataHash HashTogether(HashAlgorithm algorithm, ICollection<byte> hashA, ICollection<byte> hashB)
+        private static DataHash GetStepHash(HashAlgorithm algorithm, byte[] hashA, byte[] hashB)
         {
-            DataHasher hasher = new DataHasher(algorithm);
+            IDataHasher hasher = KsiProvider.GetDataHasher(algorithm);
             hasher.AddData(hashA);
             hasher.AddData(hashB);
-            hasher.AddData(new byte[] {0xFF});
+            hasher.AddData(new byte[] { 0xFF });
             return hasher.GetHash();
         }
 
@@ -223,7 +186,6 @@ namespace Guardtime.KSI.Signature
         ///     Calculate registration time.
         /// </summary>
         /// <returns>registration time</returns>
-        /// <exception cref="TlvException">thrown when registration time calculation fails.</exception>
         private ulong CalculateRegistrationTime()
         {
             ulong r = _publicationTime.Value;
@@ -277,30 +239,22 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         private class Link : ImprintTag
         {
-            private readonly LinkDirection _direction;
-
-            public Link(TlvTag tag) : base(tag)
+            public Link(ITlvTag tag) : base(tag)
             {
-                if (tag.Type == (int) LinkDirection.Left)
+                switch (tag.Type)
                 {
-                    _direction = LinkDirection.Left;
-                }
-
-                if (tag.Type == (int) LinkDirection.Right)
-                {
-                    _direction = LinkDirection.Right;
-                }
-
-                if (_direction == 0)
-                {
-                    throw new TlvException("Invalid calendar hash chain link type(" + Type + ").");
+                    case (int)LinkDirection.Left:
+                        Direction = LinkDirection.Left;
+                        break;
+                    case (int)LinkDirection.Right:
+                        Direction = LinkDirection.Right;
+                        break;
+                    default:
+                        throw new TlvException("Invalid calendar hash chain link type(" + Type + ").");
                 }
             }
 
-            public LinkDirection Direction
-            {
-                get { return _direction; }
-            }
+            public LinkDirection Direction { get; }
         }
     }
 }

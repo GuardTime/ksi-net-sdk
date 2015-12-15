@@ -11,7 +11,7 @@ namespace Guardtime.KSI
     /// <summary>
     ///     Simple implementation of KSI services.
     /// </summary>
-    public class Ksi
+    public class Ksi : IKsi
     {
         private readonly IKsiService _ksiService;
 
@@ -19,7 +19,6 @@ namespace Guardtime.KSI
         ///     Create new KSI instance.
         /// </summary>
         /// <param name="ksiService">KSI service</param>
-        /// <exception cref="KsiException">thrown when KSI service is null</exception>
         public Ksi(IKsiService ksiService)
         {
             if (ksiService == null)
@@ -69,7 +68,6 @@ namespace Guardtime.KSI
         /// </summary>
         /// <param name="signature">KSI signature</param>
         /// <returns>extended KSI signature</returns>
-        /// <exception cref="KsiException">thrown when invalid data is supplied</exception>
         public IKsiSignature ExtendToHead(IKsiSignature signature)
         {
             return Extend(signature, GetPublicationsFile().GetLatestPublication());
@@ -92,7 +90,6 @@ namespace Guardtime.KSI
         /// <param name="signature">KSI signature</param>
         /// <param name="publicationRecord">publication</param>
         /// <returns>extended KSI signature</returns>
-        /// <exception cref="KsiException">thrown when invalid data is supplied</exception>
         public IKsiSignature Extend(IKsiSignature signature, PublicationRecord publicationRecord)
         {
             if (signature == null)
@@ -122,7 +119,6 @@ namespace Guardtime.KSI
         ///     </example>
         /// </summary>
         /// <returns>publications file</returns>
-        /// <exception cref="KsiException">thrown when null is returned from KSI service</exception>
         public IPublicationsFile GetPublicationsFile()
         {
             IPublicationsFile publicationsFile = _ksiService.GetPublicationsFile();
@@ -140,7 +136,6 @@ namespace Guardtime.KSI
         /// <param name="context">verification context</param>
         /// <param name="policy">verification rule</param>
         /// <returns>verification result</returns>
-        /// <exception cref="KsiException">thrown when verification policy is null</exception>
         public VerificationResult Verify(IVerificationContext context, VerificationRule policy)
         {
             if (policy == null)

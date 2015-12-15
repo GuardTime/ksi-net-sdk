@@ -10,10 +10,7 @@ namespace Guardtime.KSI.Signature.Verification
     /// </summary>
     public class VerificationResult
     {
-        private readonly IList<VerificationResult> _childResults = new List<VerificationResult>();
-        private readonly VerificationError _error;
-        private readonly VerificationResultCode _resultCode;
-        private readonly string _ruleName;
+        private readonly List<VerificationResult> _childResults = new List<VerificationResult>();
 
         /// <summary>
         ///     Create new rule verification result from list.
@@ -23,10 +20,7 @@ namespace Guardtime.KSI.Signature.Verification
         public VerificationResult(string ruleName, IList<VerificationResult> resultList)
             : this(ruleName, GetVerificationResultCodeFromList(resultList))
         {
-            for (int i = 0; i < resultList.Count; i++)
-            {
-                _childResults.Add(resultList[i]);
-            }
+            _childResults.AddRange(resultList);
         }
 
         /// <summary>
@@ -46,26 +40,25 @@ namespace Guardtime.KSI.Signature.Verification
         /// <param name="error">verification error</param>
         public VerificationResult(string ruleName, VerificationResultCode resultCode, VerificationError error)
         {
-            _resultCode = resultCode;
-            _ruleName = ruleName;
-            _error = error;
+            ResultCode = resultCode;
+            RuleName = ruleName;
+            VerificationError = error;
         }
+
+        /// <summary>
+        ///     Get verification rule name.
+        /// </summary>
+        public string RuleName { get; }
 
         /// <summary>
         ///     Get verification result code.
         /// </summary>
-        public VerificationResultCode ResultCode
-        {
-            get { return _resultCode; }
-        }
+        public VerificationResultCode ResultCode { get; }
 
         /// <summary>
         ///     Get verification error if exists, otherwise null.
         /// </summary>
-        public VerificationError VerificationError
-        {
-            get { return _error; }
-        }
+        public VerificationError VerificationError { get; }
 
         private static VerificationResultCode GetVerificationResultCodeFromList(IList<VerificationResult> resultList)
         {
@@ -77,7 +70,6 @@ namespace Guardtime.KSI.Signature.Verification
             return resultList[resultList.Count - 1].ResultCode;
         }
 
-
         /// <summary>
         ///     Returns a string that represents the current object.
         /// </summary>
@@ -87,17 +79,17 @@ namespace Guardtime.KSI.Signature.Verification
         public override string ToString()
         {
             StringBuilder builder = new StringBuilder();
-            builder.Append(_ruleName).Append(": ");
-            builder.Append(_resultCode);
+            builder.Append(RuleName).Append(": ");
+            builder.Append(ResultCode);
 
             if (_childResults.Count > 0)
             {
                 builder.AppendLine();
             }
 
-            for (int i = 0; i < _childResults.Count; i++)
+            foreach (VerificationResult childResult in _childResults)
             {
-                builder.AppendLine(Util.TabPrefixString(_childResults[i].ToString()));
+                builder.AppendLine(Util.TabPrefixString(childResult.ToString()));
             }
             return builder.ToString();
         }

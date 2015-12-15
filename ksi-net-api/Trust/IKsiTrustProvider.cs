@@ -1,5 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using Guardtime.KSI.Publication;
+﻿using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Trust
 {
@@ -8,11 +7,6 @@ namespace Guardtime.KSI.Trust
     /// </summary>
     public interface IKsiTrustProvider
     {
-        /// <summary>
-        ///     Get KSI trust provider name.
-        /// </summary>
-        string Name { get; }
-
         /// <summary>
         ///     KSI trust provider contains given publication record.
         /// </summary>
@@ -25,6 +19,6 @@ namespace Guardtime.KSI.Trust
         /// </summary>
         /// <param name="certificateId">certificate ID</param>
         /// <returns>x509 certificate contained in trust provider</returns>
-        X509Certificate2 FindCertificateById(byte[] certificateId);
+        byte[] FindCertificateById(byte[] certificateId);
     }
 }

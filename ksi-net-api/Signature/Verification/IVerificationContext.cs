@@ -45,7 +45,6 @@ namespace Guardtime.KSI.Signature.Verification
         /// <returns>extended calendar hash chain</returns>
         CalendarHashChain GetExtendedLatestCalendarHashChain();
 
-        // TODO: Cache result and make signature mandatory and unchangeable
         /// <summary>
         ///     Get extended calendar hash chain from given publication time.
         /// </summary>

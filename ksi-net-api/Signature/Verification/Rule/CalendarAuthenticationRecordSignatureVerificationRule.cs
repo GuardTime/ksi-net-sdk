@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Utils;
+using NLog;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
@@ -14,67 +14,52 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class CalendarAuthenticationRecordSignatureVerificationRule : VerificationRule
     {
-        /// <summary>
-        ///     Rule name.
-        /// </summary>
-        public const string RuleName = "CalendarAuthenticationRecordSignatureVerificationRule";
+        private readonly X509Certificate2Collection _trustAnchors;
+        private readonly ICertificateSubjectRdnSelector _certificateRdnSelector;
+
+        public CalendarAuthenticationRecordSignatureVerificationRule(X509Certificate2Collection trustAnchors, ICertificateSubjectRdnSelector certificateRdnSelector)
+        {
+            if (trustAnchors == null)
+            {
+                throw new ArgumentNullException(nameof(trustAnchors));
+            }
+
+            if (certificateRdnSelector == null)
+            {
+                throw new ArgumentNullException(nameof(certificateRdnSelector));
+            }
+
+            _trustAnchors = trustAnchors;
+            _certificateRdnSelector = certificateRdnSelector;
+        }
 
         /// <see cref="VerificationRule.Verify" />
-        /// <exception cref="KsiException">thrown if verification context is missing</exception>
-        /// <exception cref="KsiVerificationException">thrown if verification cannot occur</exception>
         public override VerificationResult Verify(IVerificationContext context)
         {
-            if (context == null)
-            {
-                throw new KsiException("Invalid verification context: null.");
-            }
-
-            if (context.Signature == null)
-            {
-                throw new KsiVerificationException("Invalid KSI signature in context: null.");
-            }
-
-            if (context.PublicationsFile == null)
-            {
-                throw new KsiVerificationException("Invalid publications file in context: null.");
-            }
-
-            CalendarAuthenticationRecord calendarAuthenticationRecord = context.Signature.CalendarAuthenticationRecord;
-            if (calendarAuthenticationRecord == null)
-            {
-                throw new KsiVerificationException("Invalid calendar authentication record in signature: null.");
-            }
-
+            CalendarAuthenticationRecord calendarAuthenticationRecord = GetCalendarAuthenticationRecord(GetSignature(context));
             SignatureData signatureData = calendarAuthenticationRecord.SignatureData;
-            X509Certificate2 certificate = context.PublicationsFile.FindCertificateById(signatureData.CertificateId);
-            if (certificate == null)
+            byte[] certificateBytes = GetPublicationsFile(context).FindCertificateById(signatureData.GetCertificateId());
+
+            if (certificateBytes == null)
             {
-                throw new KsiVerificationException("No certificate found in publications file with id: " +
-                                                   Base16.Encode(signatureData.CertificateId) + ".");
+                throw new KsiVerificationException("No certificate found in publications file with id: " + Base16.Encode(signatureData.GetCertificateId()) + ".");
             }
 
             byte[] signedBytes = calendarAuthenticationRecord.PublicationData.Encode();
-            string digestAlgorithm;
-            ICryptoSignatureVerifier cryptoSignatureVerifier =
-                CryptoSignatureVerifierFactory.GetCryptoSignatureVerifierByOid(signatureData.SignatureType,
-                    out digestAlgorithm);
-
-            Dictionary<string, object> data = new Dictionary<string, object>();
-            data.Add("certificate", certificate);
-            data.Add("digestAlgorithm", digestAlgorithm);
+            ICryptoSignatureVerifier cryptoSignatureVerifier = CryptoSignatureVerifierFactory.GetCryptoSignatureVerifierByOid(signatureData.SignatureType, _trustAnchors,
+                _certificateRdnSelector);
+            CryptoSignatureVerificationData data = new CryptoSignatureVerificationData(certificateBytes);
 
             try
             {
-                cryptoSignatureVerifier.Verify(signedBytes, signatureData.SignatureValue, data);
+                cryptoSignatureVerifier.Verify(signedBytes, signatureData.GetSignatureValue(), data);
             }
-            catch (Exception e)
+            catch (PkiVerificationFailedException)
             {
-                // TODO: Log exception
-                return new VerificationResult(RuleName, VerificationResultCode.Fail, VerificationError.Key02);
+                return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Key02);
             }
 
-
-            return new VerificationResult(RuleName, VerificationResultCode.Ok);
+            return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }
     }
 }
