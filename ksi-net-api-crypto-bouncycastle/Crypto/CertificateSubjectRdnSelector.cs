@@ -7,10 +7,17 @@ using Org.BouncyCastle.X509;
 
 namespace Guardtime.KSI.Crypto
 {
+    /// <summary>
+    /// Certificate subject rdn selector.
+    /// </summary>
     public class CertificateSubjectRdnSelector : ICertificateSubjectRdnSelector
     {
         private readonly X509Name _subjectDn;
 
+        /// <summary>
+        /// Create certificate subject rdn selector instance.
+        /// </summary>
+        /// <param name="rdnList">Certificate subject rdn list. Special chars must be escaped in rdn value.</param>
         public CertificateSubjectRdnSelector(IList<CertificateSubjectRdn> rdnList)
         {
             if (rdnList == null)
@@ -35,6 +42,10 @@ namespace Guardtime.KSI.Crypto
             _subjectDn = new X509Name(oidList, valueList);
         }
 
+        /// <summary>
+        /// Create certificate subject rdn selector instance.
+        /// </summary>
+        /// <param name="subjectDn">Certificate subject DN.</param>
         public CertificateSubjectRdnSelector(string subjectDn)
         {
             if (string.IsNullOrEmpty(subjectDn))
@@ -45,11 +56,21 @@ namespace Guardtime.KSI.Crypto
             _subjectDn = new X509Name(subjectDn);
         }
 
-        public bool Match(object obj)
+        /// <summary>
+        /// Checks if certificate contains rdn selectors
+        /// </summary>
+        /// <param name="certificate">certificate to check</param>
+        /// <returns></returns>
+        public bool IsMatch(object certificate)
         {
-            return Match(obj as X509Certificate);
+            return Match(certificate as X509Certificate);
         }
 
+        /// <summary>
+        /// Checks if certificate contains rdn selectors
+        /// </summary>
+        /// <param name="certificate">certificate to check</param>
+        /// <returns></returns>
         public bool Match(X509Certificate certificate)
         {
             if (certificate == null)

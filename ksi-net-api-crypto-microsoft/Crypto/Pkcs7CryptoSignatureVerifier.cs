@@ -13,6 +13,11 @@ namespace Guardtime.KSI.Crypto
         private readonly X509Certificate2Collection _trustAnchors;
         private readonly ICertificateSubjectRdnSelector _certificateRdnSelector;
 
+        /// <summary>
+        /// Create PKCS#7 signature verifier instance.
+        /// </summary>
+        /// <param name="trustAnchors">Trust anchors</param>
+        /// <param name="certificateRdnSelector">Certificate subject rdn selector</param>
         public Pkcs7CryptoSignatureVerifier(X509Certificate2Collection trustAnchors, ICertificateSubjectRdnSelector certificateRdnSelector)
         {
             if (trustAnchors == null)
@@ -75,7 +80,7 @@ namespace Guardtime.KSI.Crypto
             try
             {
                 // Verify certificate with rdn selector
-                if (!_certificateRdnSelector.Match(certificate))
+                if (!_certificateRdnSelector.IsMatch(certificate))
                 {
                     throw new PkiVerificationFailedException("Certificate did not match with certificate subject rdn selector.");
                 }

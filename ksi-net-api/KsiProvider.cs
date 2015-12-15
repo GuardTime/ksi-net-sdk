@@ -1,16 +1,20 @@
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 
 namespace Guardtime.KSI
 {
+    /// <summary>
+    /// KSI provider.
+    /// </summary>
     public class KsiProvider
     {
-        static ICryptoProvider _provider;
+        private static ICryptoProvider _cryptoProvider;
 
         public static void SetCryptoProvider(ICryptoProvider provider)
         {
-            _provider = provider;
+            _cryptoProvider = provider;
         }
 
         /// <summary>
@@ -19,7 +23,8 @@ namespace Guardtime.KSI
         /// <returns>PKCS#7 verifier</returns>
         public static ICryptoSignatureVerifier GetPkcs7CryptoSignatureVerifier(X509Certificate2Collection trustAnchors, ICertificateSubjectRdnSelector certificateRdnSelector)
         {
-            return _provider.GetPkcs7CryptoSignatureVerifier(trustAnchors, certificateRdnSelector);
+            CheckCryptoProvider();
+            return _cryptoProvider.GetPkcs7CryptoSignatureVerifier(trustAnchors, certificateRdnSelector);
         }
 
         /// <summary>
@@ -29,17 +34,40 @@ namespace Guardtime.KSI
         /// <returns>RSA signature verifier</returns>
         public static ICryptoSignatureVerifier GetRsaCryptoSignatureVerifier(string algorithm)
         {
-            return _provider.GetRsaCryptoSignatureVerifier(algorithm);
+            CheckCryptoProvider();
+            return _cryptoProvider.GetRsaCryptoSignatureVerifier(algorithm);
         }
 
+        /// <summary>
+        /// Get Hmac hasher.
+        /// </summary>
+        /// <returns></returns>
         public static IHmacHasher GetHmacHasher()
         {
-            return _provider.GetHmacHasher();
+            CheckCryptoProvider();
+            return _cryptoProvider.GetHmacHasher();
         }
 
+        /// <summary>
+        /// Get data hasher.
+        /// </summary>
+        /// <param name="algorithm"></param>
+        /// <returns></returns>
         public static IDataHasher GetDataHasher(HashAlgorithm algorithm)
         {
-            return _provider.GetDataHasher(algorithm);
+            CheckCryptoProvider();
+            return _cryptoProvider.GetDataHasher(algorithm);
+        }
+
+        /// <summary>
+        /// Check if crypto provider exists
+        /// </summary>
+        private static void CheckCryptoProvider()
+        {
+            if (_cryptoProvider == null)
+            {
+                throw new KsiException("Crypto provider not set. Please use SetCryptoProvider.");
+            }
         }
     }
 }

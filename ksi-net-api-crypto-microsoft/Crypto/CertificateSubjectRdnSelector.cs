@@ -62,6 +62,10 @@ namespace Guardtime.KSI.Crypto
             }
         }
 
+        /// <summary>
+        /// Create certificate subject rdn selector instance.
+        /// </summary>
+        /// <param name="subjectDn">Certificate subject DN.</param>
         public CertificateSubjectRdnSelector(string subjectDn)
         {
             if (string.IsNullOrEmpty(subjectDn))
@@ -79,16 +83,21 @@ namespace Guardtime.KSI.Crypto
             }
         }
 
-        private static List<string> GetRdnList(X500DistinguishedName dname)
+        /// <summary>
+        /// Checks if certificate contains rdn selectors
+        /// </summary>
+        /// <param name="certificate">certificate to check</param>
+        /// <returns></returns>
+        public bool IsMatch(object certificate)
         {
-            return new List<string>(dname.Format(true).Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries));
+            return Match(certificate as X509Certificate2);
         }
 
-        public bool Match(object obj)
-        {
-            return Match(obj as X509Certificate2);
-        }
-
+        /// <summary>
+        /// Checks if certificate contains rdn selectors
+        /// </summary>
+        /// <param name="certificate">certificate to check</param>
+        /// <returns></returns>
         public bool Match(X509Certificate2 certificate)
         {
             if (certificate == null)
@@ -107,6 +116,11 @@ namespace Guardtime.KSI.Crypto
             }
 
             return true;
+        }
+
+        private static List<string> GetRdnList(X500DistinguishedName dname)
+        {
+            return new List<string>(dname.Format(true).Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries));
         }
     }
 }

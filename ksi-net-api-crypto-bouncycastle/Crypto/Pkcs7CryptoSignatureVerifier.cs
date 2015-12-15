@@ -19,6 +19,11 @@ namespace Guardtime.KSI.Crypto
         private readonly ISet _trustAnchors = new HashSet();
         private readonly ICertificateSubjectRdnSelector _certificateRdnSelector;
 
+        /// <summary>
+        /// Create PKCS#7 signature verifier instance.
+        /// </summary>
+        /// <param name="trustAnchors">Trust anchors</param>
+        /// <param name="certificateRdnSelector">Certificate subject rdn selector</param>
         public Pkcs7CryptoSignatureVerifier(X509Certificate2Collection trustAnchors, ICertificateSubjectRdnSelector certificateRdnSelector)
         {
             if (trustAnchors == null)
@@ -95,7 +100,7 @@ namespace Guardtime.KSI.Crypto
                 }
 
                 // Verify certificate with selector
-                if (!_certificateRdnSelector.Match(certificate))
+                if (!_certificateRdnSelector.IsMatch(certificate))
                 {
                     throw new PkiVerificationFailedException("Certificate did not match with certificate subject rdn selector.");
                 }
@@ -112,6 +117,11 @@ namespace Guardtime.KSI.Crypto
             }
         }
 
+        /// <summary>
+        /// Validate certificate path.
+        /// </summary>
+        /// <param name="certificate">certificate</param>
+        /// <param name="x509Store">x509 store</param>
         protected virtual void ValidateCertPath(X509Certificate certificate, IX509Store x509Store)
         {
             // Cert path checker
@@ -123,7 +133,7 @@ namespace Guardtime.KSI.Crypto
             // Build cert path
             PkixBuilderParameters pkixBuilderParameters = new PkixBuilderParameters(_trustAnchors, x509CertStoreSelector);
             pkixBuilderParameters.AddStore(x509Store);
-            //pkixBuilderParameters.AddCertPathChecker(certPathChecker);
+            pkixBuilderParameters.AddCertPathChecker(certPathChecker);
             pkixBuilderParameters.IsRevocationEnabled = false;
 
             PkixCertPathBuilderResult pkixCertPathBuilderResult = new PkixCertPathBuilder().Build(pkixBuilderParameters);
@@ -131,7 +141,7 @@ namespace Guardtime.KSI.Crypto
 
             // Create pkix parameteres
             PkixParameters pkixParameters = new PkixParameters(_trustAnchors);
-            //pkixParameters.AddCertPathChecker(certPathChecker);
+            pkixParameters.AddCertPathChecker(certPathChecker);
             pkixParameters.IsRevocationEnabled = false;
 
             try
@@ -145,6 +155,9 @@ namespace Guardtime.KSI.Crypto
             }
         }
 
+        /// <summary>
+        /// Certificate path checker.
+        /// </summary>
         private class CertPathChecker : PkixCertPathChecker
         {
             public override void Init(bool forward)
