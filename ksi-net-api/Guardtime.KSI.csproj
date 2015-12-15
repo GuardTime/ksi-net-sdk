@@ -98,7 +98,6 @@
     <Compile Include="Hashing\HashAlgorithm.cs" />
     <Compile Include="Hashing\IDataHasher.cs" />
     <Compile Include="Hashing\IHmacHasher.cs" />
-    <Compile Include="IKsi.cs" />
     <Compile Include="Ksi.cs" />
     <Compile Include="Parser\ImprintTag.cs" />
     <Compile Include="Parser\IntegerTag.cs" />
