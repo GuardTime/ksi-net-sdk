@@ -33,6 +33,7 @@ namespace Guardtime.KSI
         ///     <example>
         ///         Equals to following code
         ///         <code>
+        /// KsiProvider.SetCryptoProvider(new MicrosoftCryptoProvider()); 
         /// DataHash hash;
         /// KsiService ksiService;
         /// 
@@ -57,6 +58,7 @@ namespace Guardtime.KSI
         ///     <example>
         ///         Equals to following code
         ///         <code>
+        /// KsiProvider.SetCryptoProvider(new MicrosoftCryptoProvider()); 
         /// KsiService ksiService;
         /// IKsiSignature signature;
         /// IPublicationsFile publicationsFile.
@@ -78,6 +80,7 @@ namespace Guardtime.KSI
         ///     <example>
         ///         Equals to following code
         ///         <code>
+        /// KsiProvider.SetCryptoProvider(new MicrosoftCryptoProvider()); 
         /// KsiService ksiService;
         /// IKsiSignature signature;
         /// PublicationRecord publicationRecord;
@@ -112,6 +115,7 @@ namespace Guardtime.KSI
         ///     <example>
         ///         Equals to following code
         ///         <code>
+        /// KsiProvider.SetCryptoProvider(new MicrosoftCryptoProvider()); 
         /// KsiService ksiService;
         /// 
         /// IPublicationsFile publicationsFile = ksiService.GetPublicationsFile();
