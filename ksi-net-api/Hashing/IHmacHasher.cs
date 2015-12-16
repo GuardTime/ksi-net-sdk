@@ -1,16 +1,16 @@
 ﻿namespace Guardtime.KSI.Hashing
 {
     /// <summary>
-    /// Hmac hasher
+    /// HMAC hasher
     /// </summary>
     public interface IHmacHasher
     {
         /// <summary>
         ///     Calculate HMAC for data with given key.
         /// </summary>
-        /// <param name="key">hmac key</param>
-        /// <param name="data">hmac calculation data</param>
-        /// <returns>hmac data hash</returns>
+        /// <param name="key">HMAC key</param>
+        /// <param name="data">HMAC calculation data</param>
+        /// <returns>HMAC data hash</returns>
         DataHash GetHash(byte[] key, byte[] data);
     }
 }

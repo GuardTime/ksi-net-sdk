@@ -12,6 +12,10 @@ namespace Guardtime.KSI
     {
         private static ICryptoProvider _cryptoProvider;
 
+        /// <summary>
+        /// Set crypto provider.
+        /// </summary>
+        /// <param name="provider"></param>
         public static void SetCryptoProvider(ICryptoProvider provider)
         {
             _cryptoProvider = provider;
@@ -39,7 +43,7 @@ namespace Guardtime.KSI
         }
 
         /// <summary>
-        /// Get Hmac hasher.
+        /// Get HMAC hasher.
         /// </summary>
         /// <returns></returns>
         public static IHmacHasher GetHmacHasher()

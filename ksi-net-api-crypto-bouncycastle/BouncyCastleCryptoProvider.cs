@@ -4,8 +4,16 @@ using Guardtime.KSI.Hashing;
 
 namespace Guardtime.KSI
 {
+    /// <summary>
+    /// Crypto provider.
+    /// </summary>
     public class BouncyCastleCryptoProvider : ICryptoProvider
     {
+        /// <summary>
+        /// Get data hasher.
+        /// </summary>
+        /// <param name="algorithm"></param>
+        /// <returns></returns>
         public IDataHasher GetDataHasher(HashAlgorithm algorithm)
         {
             return new DataHasher(algorithm);
@@ -30,6 +38,10 @@ namespace Guardtime.KSI
             return new RsaCryptoSignatureVerifier(algorithm);
         }
 
+        /// <summary>
+        /// Get HMAC hasher.
+        /// </summary>
+        /// <returns></returns>
         public IHmacHasher GetHmacHasher()
         {
             return new HmacHasher();

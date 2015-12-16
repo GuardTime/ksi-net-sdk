@@ -9,6 +9,11 @@ namespace Guardtime.KSI
     /// </summary>
     public interface ICryptoProvider
     {
+        /// <summary>
+        /// Get data hasher.
+        /// </summary>
+        /// <param name="algorithm"></param>
+        /// <returns></returns>
         IDataHasher GetDataHasher(HashAlgorithm algorithm);
 
         /// <summary>
@@ -24,6 +29,10 @@ namespace Guardtime.KSI
         /// <returns>RSA signature verifier</returns>
         ICryptoSignatureVerifier GetRsaCryptoSignatureVerifier(string algorithm);
 
+        /// <summary>
+        /// Get HMAC hasher.
+        /// </summary>
+        /// <returns></returns>
         IHmacHasher GetHmacHasher();
     }
 }

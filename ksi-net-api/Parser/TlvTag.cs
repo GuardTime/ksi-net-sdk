@@ -61,6 +61,10 @@ namespace Guardtime.KSI.Parser
         /// <returns>TLV object value as bytes</returns>
         public abstract byte[] EncodeValue();
 
+        /// <summary>
+        ///     Get TLV element hash code.
+        /// </summary>
+        /// <returns>Hash code</returns>
         public abstract override int GetHashCode();
 
         /// <summary>
