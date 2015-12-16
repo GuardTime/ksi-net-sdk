@@ -271,6 +271,13 @@ namespace Guardtime.KSI.Utils
             return builder.ToString();
         }
 
+        /// <summary>
+        /// Checks is exactly one value is equal to given/expected value.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="expectedValue">value to compare against</param>
+        /// <param name="values"></param>
+        /// <returns></returns>
         public static bool IsOneValueEqualTo<T>(T expectedValue, params T[] values)
         {
             int count = 0;

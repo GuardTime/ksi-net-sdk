@@ -17,6 +17,9 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         private readonly X509Certificate2Collection _trustAnchors;
         private readonly ICertificateSubjectRdnSelector _certificateRdnSelector;
 
+        /// <summary>
+        /// Create calendar authentication record signature validation rule instance.
+        /// </summary>
         public CalendarAuthenticationRecordSignatureVerificationRule(X509Certificate2Collection trustAnchors, ICertificateSubjectRdnSelector certificateRdnSelector)
         {
             if (trustAnchors == null)

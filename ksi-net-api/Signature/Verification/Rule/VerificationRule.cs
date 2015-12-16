@@ -14,6 +14,10 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         private VerificationRule _onNa;
         private VerificationRule _onSuccess;
 
+        /// <summary>
+        /// Get rule name.
+        /// </summary>
+        /// <returns></returns>
         public string GetRuleName()
         {
             return GetType().Name;
@@ -79,6 +83,10 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         /// <returns>verification result</returns>
         public abstract VerificationResult Verify(IVerificationContext context);
 
+        /// <summary>
+        /// Check if verification context is valid.
+        /// </summary>
+        /// <param name="context">verification context</param>
         public static void CheckVerificationContext(IVerificationContext context)
         {
             if (context == null)

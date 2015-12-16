@@ -5,12 +5,12 @@ using System.Text;
 namespace Guardtime.KSI.Crypto
 {
     /// <summary>
-    /// Certificate subject rdn
+    /// Certificate subject rdn component
     /// </summary>
     public class CertificateSubjectRdn
     {
         /// <summary>
-        /// Create Certificate subject rdn instance
+        /// Create Certificate subject rdn component instance
         /// </summary>
         /// <param name="oid"></param>
         /// <param name="value"></param>
@@ -20,7 +20,14 @@ namespace Guardtime.KSI.Crypto
             Value = value;
         }
 
+        /// <summary>
+        /// Oid representing an RDN.
+        /// </summary>
         public string Oid { get; set; }
+
+        /// <summary>
+        /// RDN component value.
+        /// </summary>
         public string Value { get; set; }
     }
 }
