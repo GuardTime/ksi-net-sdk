@@ -27,7 +27,9 @@ namespace Guardtime.KSI.Crypto
             _algorithm = algorithm;
         }
 
-        /// <see cref="ICryptoSignatureVerifier" />
+        /// <summary>
+        ///     Verify signed bytes and signature.
+        /// </summary>
         /// <param name="signedBytes">signed bytes</param>
         /// <param name="signatureBytes">signature bytes</param>
         /// <param name="data">must consist of 2 parameters, "certificate" => X509Certificate2, "digestAlgorithm" => string</param>
