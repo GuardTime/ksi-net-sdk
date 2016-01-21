@@ -12,10 +12,10 @@ namespace Guardtime.KSI.Crypto
         ///     Get crypto signature verifier by oid.
         /// </summary>
         /// <param name="oid">signature oid</param>
-        /// <param name="trustAnchors">trust anchor collection</param>
+        /// <param name="trustStore">trust store</param>
         /// <param name="certificateRdnSelector">sertificate subject rdn selector</param>
         /// <returns>signature verifier</returns>
-        public static ICryptoSignatureVerifier GetCryptoSignatureVerifierByOid(string oid, X509Certificate2Collection trustAnchors,
+        public static ICryptoSignatureVerifier GetCryptoSignatureVerifierByOid(string oid, X509Store trustStore,
                                                                                ICertificateSubjectRdnSelector certificateRdnSelector)
         {
             switch (oid)
@@ -23,7 +23,7 @@ namespace Guardtime.KSI.Crypto
                 case "1.2.840.113549.1.1.11":
                     return KsiProvider.GetRsaCryptoSignatureVerifier("SHA256");
                 case "1.2.840.113549.1.7.2":
-                    return KsiProvider.GetPkcs7CryptoSignatureVerifier(trustAnchors, certificateRdnSelector);
+                    return KsiProvider.GetPkcs7CryptoSignatureVerifier(trustStore, certificateRdnSelector);
                 default:
                     throw new PkiVerificationErrorException("Cryptographic signature not supported.");
             }

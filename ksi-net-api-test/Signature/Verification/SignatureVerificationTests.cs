@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
@@ -24,7 +25,7 @@ namespace Guardtime.KSI.Signature.Verification
                     "http://verify.guardtime.com/ksi-publications.bin");
 
                 KsiService ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"),
-                    new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(),
+                    new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                         new CertificateSubjectRdnSelector("E=publications@guardtime.com"))), new KsiSignatureFactory());
                 VerificationContext context = new VerificationContext(new KsiSignatureFactory().Create(stream))
                 {
@@ -40,7 +41,7 @@ namespace Guardtime.KSI.Signature.Verification
                     IsExtendingAllowed = true,
                     KsiService = ksiService,
                     PublicationsFile =
-                        new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(),
+                        new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                             new CertificateSubjectRdnSelector(new List<CertificateSubjectRdn> { new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com") })))
                             .Create(
                                 new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
@@ -55,7 +56,7 @@ namespace Guardtime.KSI.Signature.Verification
                 Console.WriteLine(policy.Verify(context));
 
                 Console.WriteLine(@"// Key based");
-                policy = new KeyBasedVerificationPolicy(TrustStoreUtilities.GetTrustAnchorCollection(),
+                policy = new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
                     new CertificateSubjectRdnSelector(new List<CertificateSubjectRdn> { new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com") }));
                 ;
                 Console.WriteLine(policy.Verify(context));

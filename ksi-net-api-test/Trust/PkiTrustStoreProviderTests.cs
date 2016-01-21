@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
 using NUnit.Framework;
@@ -25,7 +26,7 @@ namespace Guardtime.KSI.Trust
                 stream.Read(sigBytes, 0, (int)stream.Length);
             }
 
-            PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(),
+            PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                 new CertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
             trustStoreProvider.Verify(data, sigBytes);
