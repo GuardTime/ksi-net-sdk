@@ -10,7 +10,7 @@ namespace Guardtime.KSI.Crypto
     /// </summary>
     public class Pkcs7CryptoSignatureVerifier : ICryptoSignatureVerifier
     {
-        private readonly X509Certificate2Collection _trustAnchors;
+        private readonly X509Certificate2Collection _trustAnchors = new X509Certificate2Collection();
         private readonly ICertificateSubjectRdnSelector _certificateRdnSelector;
 
         /// <summary>

@@ -26,7 +26,7 @@ namespace Guardtime.KSI.Trust
                 stream.Read(sigBytes, 0, (int)stream.Length);
             }
 
-            PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(new X509Store(StoreName.Root),
+            PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(null,
                 new CertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
             trustStoreProvider.Verify(data, sigBytes);
