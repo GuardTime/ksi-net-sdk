@@ -46,7 +46,7 @@ namespace Guardtime.KSI.Signature
                         CalendarHashChain = new CalendarHashChain(childTag);
                         calendarChainCount++;
                         break;
-                    case Constants.PublicationRecord.TagTypeSignature:
+                    case Constants.PublicationRecord.TagTypeInSignature:
                         PublicationRecord = new PublicationRecord(childTag);
                         publicationRecordCount++;
                         break;
@@ -196,10 +196,10 @@ namespace Guardtime.KSI.Signature
                         case Constants.CalendarHashChain.TagType:
                             writer.WriteTag(calendarHashChain);
                             break;
-                        case Constants.PublicationRecord.TagTypeSignature:
+                        case Constants.PublicationRecord.TagTypeInSignature:
                             if (publicationRecord != null)
                             {
-                                writer.WriteTag(publicationRecord);
+                                writer.WriteTag(publicationRecord, Constants.PublicationRecord.TagTypeInSignature);
                             }
                             break;
                         default:

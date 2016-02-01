@@ -55,7 +55,7 @@ namespace Guardtime.KSI.Publication
                                 "Certificate records should be before publication records.");
                         }
                         break;
-                    case Constants.PublicationRecord.TagTypePublication:
+                    case Constants.PublicationRecord.TagTypeInPublicationsFile:
                         PublicationRecord publicationRecordTag = new PublicationRecord(childTag);
                         _publicationRecordList.Add(publicationRecordTag);
                         break;

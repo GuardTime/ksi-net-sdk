@@ -15,7 +15,7 @@ namespace Guardtime.KSI.Publication
         /// <param name="tag">TLV element</param>
         public PublicationRecord(ITlvTag tag) : base(tag)
         {
-            if (Type != Constants.PublicationRecord.TagTypeSignature && Type != Constants.PublicationRecord.TagTypePublication)
+            if (Type != Constants.PublicationRecord.TagTypeInSignature && Type != Constants.PublicationRecord.TagTypeInPublicationsFile)
             {
                 throw new TlvException("Invalid publication record type(" + Type + ").");
             }

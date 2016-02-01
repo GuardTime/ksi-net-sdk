@@ -62,7 +62,7 @@ namespace Guardtime.KSI.Publication
         /// <param name="publicationTime">publication time</param>
         /// <param name="publicationHash">publication hash</param>
         public PublicationData(ulong publicationTime, DataHash publicationHash)
-            : base(Constants.PublicationData.TagType, false, true, new ITlvTag[]
+            : base(Constants.PublicationData.TagType, false, false, new ITlvTag[]
             {
                 new IntegerTag(Constants.PublicationData.PublicationTimeTagType, false, false, publicationTime),
                 new ImprintTag(Constants.PublicationData.PublicationHashTagType, false, false, publicationHash)
@@ -76,7 +76,7 @@ namespace Guardtime.KSI.Publication
         ///     Create new publication data TLV element from publication string.
         /// </summary>
         /// <param name="publicationString">publication string</param>
-        public PublicationData(string publicationString) : base(Constants.PublicationData.TagType, false, true, DecodePublicationString(publicationString))
+        public PublicationData(string publicationString) : base(Constants.PublicationData.TagType, false, false, DecodePublicationString(publicationString))
         {
             _publicationTime = (IntegerTag)this[0];
             _publicationHash = (ImprintTag)this[1];

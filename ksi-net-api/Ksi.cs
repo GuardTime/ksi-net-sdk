@@ -110,6 +110,22 @@ namespace Guardtime.KSI
             return signature.Extend(calendarHashChain, publicationRecord);
         }
 
+        public IKsiSignature Extend(IKsiSignature signature, PublicationData publicationData)
+        {
+            if (signature == null)
+            {
+                throw new KsiException("KSI signature cannot be null.");
+            }
+
+            if (publicationData == null)
+            {
+                throw new KsiException("Publication data cannot be null.");
+            }
+
+            PublicationRecord publicationRecord = GetPublicationsFile().GetNearestPublicationRecord(publicationData.PublicationTime);
+            return Extend(signature, publicationRecord);
+        }
+
         /// <summary>
         ///     Get publications file.
         ///     <example>
@@ -125,6 +141,7 @@ namespace Guardtime.KSI
         /// <returns>publications file</returns>
         public IPublicationsFile GetPublicationsFile()
         {
+            // TODO: cache result?
             IPublicationsFile publicationsFile = _ksiService.GetPublicationsFile();
             if (publicationsFile == null)
             {

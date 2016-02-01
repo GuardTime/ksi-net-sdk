@@ -104,7 +104,8 @@ namespace Guardtime.KSI.Parser
                 return false;
             }
 
-            if (Type != tag.Type || Forward != tag.Forward || NonCritical != tag.NonCritical)
+            if (Type != tag.Type || NonCritical != tag.NonCritical
+                || (NonCritical && Forward != tag.Forward)) // The F-flag has no meaning and defines no action if the data is critical (N=0)
             {
                 return false;
             }
