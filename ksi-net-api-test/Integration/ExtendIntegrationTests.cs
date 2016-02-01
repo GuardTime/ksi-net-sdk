@@ -17,35 +17,16 @@ namespace Guardtime.KSI.Integration
     public class ExtendIntegrationTests : IntegrationTests
     {
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(TestCases))]
-        public void ExtendTest(Ksi ksi)
+        public void ExtendToHeadAndVerifyUserProvidedPublicationTest(Ksi ksi)
         {
             UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
 
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))
             {
-                IKsiSignature extendedSignature = ksi.ExtendToHead(new KsiSignatureFactory().Create(stream));
+                PublicationData publicationData = ksi.GetPublicationsFile().GetLatestPublication().PublicationData;
 
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = extendedSignature,
-                    UserPublication = ksi.GetPublicationsFile().GetLatestPublication().PublicationData
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
-        }
-
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(TestCases))]
-        public void InvalidExtendTest(Ksi ksi)
-        {
-            UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
-
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))
-            {
-                PublicationData publicationData = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K");
-
-                IKsiSignature extendedSignature = ksi.Extend(new KsiSignatureFactory().Create(stream), publicationData);
+                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+                IKsiSignature extendedSignature = ksi.ExtendToHead(ksiSignature);
 
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -55,6 +36,53 @@ namespace Guardtime.KSI.Integration
 
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            }
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(TestCases))]
+        public void ExtendAndVerifyToUserProvidedPublicationTest(Ksi ksi)
+        {
+            UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
+
+            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))
+            {
+                PublicationData publicationData = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K");
+
+                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+                IKsiSignature extendedSignature = ksi.Extend(ksiSignature, publicationData);
+
+                TestVerificationContext context = new TestVerificationContext()
+                {
+                    Signature = extendedSignature,
+                    UserPublication = publicationData
+                };
+
+                VerificationResult verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            }
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(TestCases))]
+        public void InvalidExtendToUserProvidedPublicationTest(Ksi ksi)
+        {
+            UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
+
+            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))
+            {
+                // publication data with modified hash
+                PublicationData publicationData = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUBD7-OE44VA");
+
+                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+                IKsiSignature extendedSignature = ksi.Extend(ksiSignature, publicationData);
+
+                TestVerificationContext context = new TestVerificationContext()
+                {
+                    Signature = extendedSignature,
+                    UserPublication = publicationData
+                };
+
+                VerificationResult verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
             }
         }
     }
