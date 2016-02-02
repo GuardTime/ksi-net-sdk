@@ -110,6 +110,12 @@ namespace Guardtime.KSI
             return signature.Extend(calendarHashChain, publicationRecord);
         }
 
+        /// <summary>
+        ///     Extend signature to publication.
+        /// </summary>
+        /// <param name="signature">KSI signature</param>
+        /// <param name="publicationData">publication data</param>
+        /// <returns>extended KSI signature</returns>
         public IKsiSignature Extend(IKsiSignature signature, PublicationData publicationData)
         {
             if (signature == null)
