@@ -14,25 +14,22 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class CalendarAuthenticationRecordSignatureVerificationRule : VerificationRule
     {
-        private readonly X509Certificate2Collection _trustAnchors;
+        private readonly X509Store _trustStore;
         private readonly ICertificateSubjectRdnSelector _certificateRdnSelector;
 
         /// <summary>
-        /// Create calendar authentication record signature validation rule instance.
+        /// Create calendar authentication record signature verification rule.
         /// </summary>
-        public CalendarAuthenticationRecordSignatureVerificationRule(X509Certificate2Collection trustAnchors, ICertificateSubjectRdnSelector certificateRdnSelector)
+        /// <param name="trustStore">trust store</param>
+        /// <param name="certificateRdnSelector">certificate rdn selector</param>
+        public CalendarAuthenticationRecordSignatureVerificationRule(X509Store trustStore, ICertificateSubjectRdnSelector certificateRdnSelector)
         {
-            if (trustAnchors == null)
-            {
-                throw new ArgumentNullException(nameof(trustAnchors));
-            }
-
             if (certificateRdnSelector == null)
             {
                 throw new ArgumentNullException(nameof(certificateRdnSelector));
             }
 
-            _trustAnchors = trustAnchors;
+            _trustStore = trustStore;
             _certificateRdnSelector = certificateRdnSelector;
         }
 
@@ -49,7 +46,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             }
 
             byte[] signedBytes = calendarAuthenticationRecord.PublicationData.Encode();
-            ICryptoSignatureVerifier cryptoSignatureVerifier = CryptoSignatureVerifierFactory.GetCryptoSignatureVerifierByOid(signatureData.SignatureType, _trustAnchors,
+            ICryptoSignatureVerifier cryptoSignatureVerifier = CryptoSignatureVerifierFactory.GetCryptoSignatureVerifierByOid(signatureData.SignatureType, _trustStore,
                 _certificateRdnSelector);
             CryptoSignatureVerificationData data = new CryptoSignatureVerificationData(certificateBytes);
 

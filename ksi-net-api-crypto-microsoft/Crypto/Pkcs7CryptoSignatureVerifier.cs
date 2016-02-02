@@ -10,19 +10,21 @@ namespace Guardtime.KSI.Crypto
     /// </summary>
     public class Pkcs7CryptoSignatureVerifier : ICryptoSignatureVerifier
     {
-        private readonly X509Certificate2Collection _trustAnchors;
+        private readonly X509Certificate2Collection _trustAnchors = new X509Certificate2Collection();
         private readonly ICertificateSubjectRdnSelector _certificateRdnSelector;
 
         /// <summary>
         /// Create PKCS#7 signature verifier instance.
         /// </summary>
-        /// <param name="trustAnchors">Trust anchors</param>
+        /// <param name="trustStore">Trust store</param>
         /// <param name="certificateRdnSelector">Certificate subject rdn selector</param>
-        public Pkcs7CryptoSignatureVerifier(X509Certificate2Collection trustAnchors, ICertificateSubjectRdnSelector certificateRdnSelector)
+        public Pkcs7CryptoSignatureVerifier(X509Store trustStore, ICertificateSubjectRdnSelector certificateRdnSelector)
         {
-            if (trustAnchors == null)
+            if (trustStore != null)
             {
-                throw new ArgumentNullException(nameof(trustAnchors));
+                trustStore.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
+                _trustAnchors = trustStore.Certificates;
+                trustStore.Close();
             }
 
             if (certificateRdnSelector == null)
@@ -30,7 +32,6 @@ namespace Guardtime.KSI.Crypto
                 throw new ArgumentNullException(nameof(certificateRdnSelector));
             }
 
-            _trustAnchors = trustAnchors;
             _certificateRdnSelector = certificateRdnSelector;
         }
 

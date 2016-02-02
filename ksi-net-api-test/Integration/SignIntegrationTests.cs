@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Hashing;
@@ -25,7 +26,7 @@ namespace Guardtime.KSI.Integration
                 PublicationsFile = ksi.GetPublicationsFile()
             };
             VerificationResult verificationResult = ksi.Verify(verificationContext,
-                new KeyBasedVerificationPolicy(TrustStoreUtilities.GetTrustAnchorCollection(), new CertificateSubjectRdnSelector("E=publications@guardtime.com")));
+                new KeyBasedVerificationPolicy(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com")));
             Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode, "Signature should verify with key based policy");
         }
 
@@ -45,7 +46,7 @@ namespace Guardtime.KSI.Integration
                     PublicationsFile = ksi.GetPublicationsFile()
                 };
                 VerificationResult verificationResult = ksi.Verify(verificationContext,
-                    new KeyBasedVerificationPolicy(TrustStoreUtilities.GetTrustAnchorCollection(), new CertificateSubjectRdnSelector("E=publications@guardtime.com")));
+                    new KeyBasedVerificationPolicy(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com")));
                 Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode, "Signature should verify with key based policy");
             }
         }
