@@ -11,10 +11,11 @@ namespace Guardtime.KSI.Service
         ///     Async begin extend signature.
         /// </summary>
         /// <param name="data">extension request bytes</param>
+        /// <param name="requestId">request id</param>
         /// <param name="callback">callback when response is ready</param>
         /// <param name="asyncState">async state object</param>
         /// <returns>async result</returns>
-        IAsyncResult BeginExtend(byte[] data, AsyncCallback callback, object asyncState);
+        IAsyncResult BeginExtend(byte[] data, ulong requestId, AsyncCallback callback, object asyncState);
 
         /// <summary>
         ///     Async end extend signature.

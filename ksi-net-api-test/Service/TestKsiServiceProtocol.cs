@@ -10,7 +10,7 @@ namespace Guardtime.KSI.Service
     {
         public bool FailNext { get; set; }
 
-        public IAsyncResult BeginSign(byte[] data, AsyncCallback callback, object asyncState)
+        public IAsyncResult BeginSign(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
             return new AsyncResult(data);
         }
@@ -29,7 +29,7 @@ namespace Guardtime.KSI.Service
             return null;
         }
 
-        public IAsyncResult BeginExtend(byte[] data, AsyncCallback callback, object asyncState)
+        public IAsyncResult BeginExtend(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
             return new AsyncResult(data);
         }

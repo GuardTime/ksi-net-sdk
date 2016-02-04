@@ -305,5 +305,43 @@ namespace Guardtime.KSI.Utils
 
             return count == 1;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="headerBytes"></param>
+        /// <returns></returns>
+        public static ushort GetTlvLength(byte[] headerBytes)
+        {
+            if (headerBytes == null)
+            {
+                throw new KsiException("Input array cannot be null.");
+            }
+
+            if (headerBytes.Length == 0)
+            {
+                throw new KsiException("Input array cannot be empty.");
+            }
+
+            bool tlv16 = (headerBytes[0] & Constants.Tlv.Tlv16Flag) != 0;
+
+            if (tlv16)
+            {
+                if (headerBytes.Length < 4)
+                {
+                    throw new KsiException("It is 16-bit TLV and input array must contain at least 4 bytes. headerBytes.Length: " + headerBytes.Length);
+                }
+
+                int variableLength = (headerBytes[2] << Constants.BitsInByte) | headerBytes[3];
+                return (ushort)(variableLength + 4);
+            }
+
+            if (headerBytes.Length < 2)
+            {
+                throw new KsiException("It is 8-bit TLV and input array must contain at least 2 bytes. headerBytes.Length: " + headerBytes.Length);
+            }
+
+            return (ushort)(headerBytes[1] + 2);
+        }
     }
 }
