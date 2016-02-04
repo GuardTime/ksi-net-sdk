@@ -183,9 +183,9 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         /// </summary>
         /// <param name="signature">KSI signature</param>
         /// <returns>publication record</returns>
-        public static PublicationRecord GetPublicationRecord(IKsiSignature signature)
+        public static PublicationRecordInSignature GetPublicationRecord(IKsiSignature signature)
         {
-            PublicationRecord publicationRecord = signature.PublicationRecord;
+            PublicationRecordInSignature publicationRecord = signature.PublicationRecord;
 
             if (publicationRecord == null)
             {
@@ -237,9 +237,9 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         /// <param name="publicationsFile">publications file</param>
         /// <param name="time">time</param>
         /// <returns></returns>
-        public static PublicationRecord GetNearestPublicationRecord(IPublicationsFile publicationsFile, ulong time)
+        public static PublicationRecordInPublicationFile GetNearestPublicationRecord(IPublicationsFile publicationsFile, ulong time)
         {
-            PublicationRecord publicationRecord = publicationsFile.GetNearestPublicationRecord(time);
+            PublicationRecordInPublicationFile publicationRecord = publicationsFile.GetNearestPublicationRecord(time);
 
             if (publicationRecord == null)
             {

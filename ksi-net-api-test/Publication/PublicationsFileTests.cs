@@ -130,7 +130,7 @@ namespace Guardtime.KSI.Publication
                             new CertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
                     Assert.IsFalse(publicationsFile.Contains(null), "Should not crash when null object is used");
 
-                    Assert.IsTrue(publicationsFile.Contains(new PublicationRecord(reader.ReadTag())), "Should contain given publication record");
+                    Assert.IsTrue(publicationsFile.Contains(new PublicationRecordInPublicationFile(reader.ReadTag())), "Should contain given publication record");
                 }
             }
         }
@@ -145,7 +145,7 @@ namespace Guardtime.KSI.Publication
                     IPublicationsFile publicationsFile =
                         new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(),
                             new CertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
-                    Assert.IsFalse(publicationsFile.Contains(new PublicationRecord(reader.ReadTag())), "Should contain given publication record");
+                    Assert.IsFalse(publicationsFile.Contains(new PublicationRecordInPublicationFile(reader.ReadTag())), "Should not contain given publication record");
                 }
             }
         }
@@ -158,7 +158,7 @@ namespace Guardtime.KSI.Publication
                 IPublicationsFile publicationsFile =
                     new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(),
                         new CertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
-                PublicationRecord publicationRecord = publicationsFile.GetLatestPublication();
+                PublicationRecordInPublicationFile publicationRecord = publicationsFile.GetLatestPublication();
 
                 Assert.AreEqual(1442275200, publicationRecord.PublicationData.PublicationTime, "Should be correct publication time for latest publication");
                 // TODO: Test more from latest publication

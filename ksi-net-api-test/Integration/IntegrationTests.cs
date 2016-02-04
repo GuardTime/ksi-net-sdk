@@ -34,14 +34,14 @@ namespace Guardtime.KSI.Integration
         {
             IPublicationsFile publicationsFile = ksi.GetPublicationsFile();
 
-            PublicationRecord latest = publicationsFile.GetLatestPublication();
+            PublicationRecordInPublicationFile latest = publicationsFile.GetLatestPublication();
             if (latest == null)
             {
                 Assert.True(true);
                 return;
             }
 
-            PublicationRecord prev = publicationsFile.GetNearestPublicationRecord(latest.PublicationData.PublicationTime - 35 * 24 * 3600);
+            PublicationRecordInPublicationFile prev = publicationsFile.GetNearestPublicationRecord(latest.PublicationData.PublicationTime - 35 * 24 * 3600);
 
             if (prev == null)
             {

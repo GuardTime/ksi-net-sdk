@@ -47,7 +47,7 @@ namespace Guardtime.KSI.Signature
                         calendarChainCount++;
                         break;
                     case Constants.PublicationRecord.TagTypeInSignature:
-                        PublicationRecord = new PublicationRecord(childTag);
+                        PublicationRecord = new PublicationRecordInSignature(childTag);
                         publicationRecordCount++;
                         break;
                     case Constants.AggregationAuthenticationRecord.TagType:
@@ -131,7 +131,7 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         ///     Get publication record.
         /// </summary>
-        public PublicationRecord PublicationRecord { get; }
+        public PublicationRecordInSignature PublicationRecord { get; }
 
         /// <summary>
         ///     Get aggregation hash chains list.
@@ -171,7 +171,7 @@ namespace Guardtime.KSI.Signature
         /// <returns>extended KSI signature</returns>
         public IKsiSignature Extend(CalendarHashChain calendarHashChain)
         {
-            return Extend(calendarHashChain, null);
+            return Extend(calendarHashChain, (PublicationRecordInSignature)null);
         }
 
         /// <summary>
@@ -180,7 +180,18 @@ namespace Guardtime.KSI.Signature
         /// <param name="calendarHashChain">extended calendar hash chain</param>
         /// <param name="publicationRecord">extended publication record</param>
         /// <returns>extended KSI signature</returns>
-        public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecord publicationRecord)
+        public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInPublicationFile publicationRecord)
+        {
+            return Extend(calendarHashChain, publicationRecord?.ConvertToPublicationRecordInSignature());
+        }
+
+        /// <summary>
+        ///     Extend signature to publication.
+        /// </summary>
+        /// <param name="calendarHashChain">extended calendar hash chain</param>
+        /// <param name="publicationRecord">extended publication record</param>
+        /// <returns>extended KSI signature</returns>
+        public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInSignature publicationRecord)
         {
             if (calendarHashChain == null)
             {
@@ -199,7 +210,7 @@ namespace Guardtime.KSI.Signature
                         case Constants.PublicationRecord.TagTypeInSignature:
                             if (publicationRecord != null)
                             {
-                                writer.WriteTag(publicationRecord, Constants.PublicationRecord.TagTypeInSignature);
+                                writer.WriteTag(publicationRecord);
                             }
                             break;
                         default:

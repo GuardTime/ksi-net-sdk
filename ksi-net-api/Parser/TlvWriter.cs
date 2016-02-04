@@ -27,28 +27,13 @@ namespace Guardtime.KSI.Parser
                 return;
             }
 
-            WriteTag(tag, tag.Type);
-        }
-
-        /// <summary>
-        ///     Write TLV object to given stream.
-        /// </summary>
-        /// <param name="tag">TLV object</param>
-        /// <param name="tagType">TLV object type</param>
-        public void WriteTag(ITlvTag tag, uint tagType)
-        {
-            if (tag == null)
-            {
-                return;
-            }
-
-            if (tagType > Constants.Tlv.MaxType)
+            if (tag.Type > Constants.Tlv.MaxType)
             {
                 throw new ArgumentOutOfRangeException(nameof(tag));
             }
 
             byte[] data = tag.EncodeValue();
-            bool tlv16 = tagType > Constants.Tlv.TypeMask
+            bool tlv16 = tag.Type > Constants.Tlv.TypeMask
                          || (data != null && data.Length > byte.MaxValue);
             byte firstByte = (byte)((tlv16 ? Constants.Tlv.Tlv16Flag : 0)
                                     + (tag.NonCritical ? Constants.Tlv.NonCriticalFlag : 0)
@@ -57,9 +42,9 @@ namespace Guardtime.KSI.Parser
             if (tlv16)
             {
                 firstByte = (byte)(firstByte
-                                   | (tagType >> Constants.BitsInByte) & Constants.Tlv.TypeMask);
+                                   | (tag.Type >> Constants.BitsInByte) & Constants.Tlv.TypeMask);
                 Write(firstByte);
-                Write((byte)tagType);
+                Write((byte)tag.Type);
                 if (data == null)
                 {
                     Write((byte)0);
@@ -77,7 +62,7 @@ namespace Guardtime.KSI.Parser
             }
             else
             {
-                firstByte = (byte)(firstByte | tagType & Constants.Tlv.TypeMask);
+                firstByte = (byte)(firstByte | tag.Type & Constants.Tlv.TypeMask);
                 Write(firstByte);
                 if (data == null)
                 {

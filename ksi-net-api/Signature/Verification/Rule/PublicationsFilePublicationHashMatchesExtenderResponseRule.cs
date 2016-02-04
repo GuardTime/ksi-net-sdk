@@ -12,7 +12,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         {
             IPublicationsFile publicationsFile = GetPublicationsFile(context);
             ulong registrationTime = GetCalendarHashChain(GetSignature(context)).RegistrationTime;
-            PublicationRecord publicationRecord = GetNearestPublicationRecord(publicationsFile, registrationTime);
+            PublicationRecordInPublicationFile publicationRecord = GetNearestPublicationRecord(publicationsFile, registrationTime);
             CalendarHashChain extendedTimeCalendarHashChain = GetExtendedTimeCalendarHashChain(context, publicationRecord.PublicationData.PublicationTime);
 
             return extendedTimeCalendarHashChain.OutputHash != publicationRecord.PublicationData.PublicationHash

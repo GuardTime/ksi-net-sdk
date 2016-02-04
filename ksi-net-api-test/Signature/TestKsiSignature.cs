@@ -14,7 +14,7 @@ namespace Guardtime.KSI.Signature
 
         public CalendarHashChain CalendarHashChain { get; set; }
         public CalendarAuthenticationRecord CalendarAuthenticationRecord { get; set; }
-        public PublicationRecord PublicationRecord { get; set; }
+        public PublicationRecordInSignature PublicationRecord { get; set; }
         public ulong AggregationTime { get; set; }
 
         public ReadOnlyCollection<AggregationHashChain> AggregationHashChains;
@@ -36,7 +36,12 @@ namespace Guardtime.KSI.Signature
             return ExtendedKsiSignature;
         }
 
-        public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecord publicationRecord)
+        public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInPublicationFile publicationRecord)
+        {
+            return ExtendedKsiSignature;
+        }
+
+        public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInSignature publicationRecord)
         {
             return ExtendedKsiSignature;
         }
