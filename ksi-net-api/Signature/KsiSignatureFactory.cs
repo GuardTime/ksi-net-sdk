@@ -66,14 +66,14 @@ namespace Guardtime.KSI.Signature
 
                 try
                 {
-                    Logger.Debug("Creating KSI signature from aggregation response.");
+                    Logger.Debug("Creating KSI signature from aggregation response. (request id: {0})", payload.RequestId);
                     KsiSignature signature = new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false, ((MemoryStream)writer.BaseStream).ToArray()));
-                    Logger.Debug("Creating KSI signature from aggregation response successful.");
+                    Logger.Debug("Creating KSI signature from aggregation response successful. (request id: {0})", payload.RequestId);
                     return signature;
                 }
                 catch (TlvException e)
                 {
-                    Logger.Warn("Creating KSI signature from aggregation response failed: {0}", e);
+                    Logger.Warn("Creating KSI signature from aggregation response failed: {0} (request id: {1})", e, payload.RequestId);
                     throw;
                 }
             }

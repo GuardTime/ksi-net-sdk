@@ -16,7 +16,7 @@ namespace Guardtime.KSI.Integration
     [TestFixture]
     public class ExtendIntegrationTests : IntegrationTests
     {
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(TestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void ExtendToHeadAndVerifyUserProvidedPublicationTest(Ksi ksi)
         {
             UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
@@ -39,7 +39,7 @@ namespace Guardtime.KSI.Integration
             }
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(TestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void ExtendAndVerifyToUserProvidedPublicationTest(Ksi ksi)
         {
             UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
@@ -62,7 +62,7 @@ namespace Guardtime.KSI.Integration
             }
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(TestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void InvalidExtendToUserProvidedPublicationTest(Ksi ksi)
         {
             UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();

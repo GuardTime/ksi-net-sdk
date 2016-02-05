@@ -92,7 +92,7 @@ namespace Guardtime.KSI.Service
             AggregationPdu pdu = new AggregationPdu(header, payload, KsiPdu.GetHashMacTag(_serviceSettings.LoginKey, header, payload));
 
             Logger.Debug("Begin sign (request id: {0}){1}{2}", payload.RequestId, Environment.NewLine, pdu);
-            IAsyncResult serviceProtocolAsyncResult = _sigingServiceProtocol.BeginSign(pdu.Encode(), callback, asyncState);
+            IAsyncResult serviceProtocolAsyncResult = _sigingServiceProtocol.BeginSign(pdu.Encode(), payload.RequestId, callback, asyncState);
 
             return new CreateSignatureKsiServiceAsyncResult(payload.RequestId, serviceProtocolAsyncResult, asyncState);
         }
@@ -147,7 +147,7 @@ namespace Guardtime.KSI.Service
                     if (payload == null || payload.Status != 0)
                     {
                         string errorMessage = payload == null ? errorPayload.ErrorMessage : payload.ErrorMessage;
-                        throw new KsiException("Error occured during aggregation: " + errorMessage + ".");
+                        throw new KsiServiceException("Error occured during aggregation: " + errorMessage + ".");
                     }
 
                     if (!pdu.ValidateMac(_serviceSettings.LoginKey))
@@ -379,7 +379,7 @@ namespace Guardtime.KSI.Service
             ExtendPdu pdu = new ExtendPdu(header, payload, KsiPdu.GetHashMacTag(_serviceSettings.LoginKey, header, payload));
 
             Logger.Debug("Begin extend. (request id: {0}){1}{2}", payload.RequestId, Environment.NewLine, pdu);
-            IAsyncResult serviceProtocolAsyncResult = _extendingServiceProtocol.BeginExtend(pdu.Encode(), callback, asyncState);
+            IAsyncResult serviceProtocolAsyncResult = _extendingServiceProtocol.BeginExtend(pdu.Encode(), payload.RequestId, callback, asyncState);
 
             return new ExtendSignatureKsiServiceAsyncResult(payload.RequestId, serviceProtocolAsyncResult, asyncState);
         }
