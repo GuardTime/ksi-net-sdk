@@ -10,27 +10,22 @@ namespace Guardtime.KSI.Trust
     /// </summary>
     public class PkiTrustStoreProvider : IPkiTrustProvider
     {
-        private readonly X509Certificate2Collection _trustAnchors;
+        private readonly X509Store _trustStore;
         private readonly ICertificateSubjectRdnSelector _certificateRdnSelector;
 
         /// <summary>
         /// Create PKI trust store provider instance.
         /// </summary>
-        /// <param name="trustAnchors">trust anchors</param>
+        /// <param name="trustStore">trust anchors</param>
         /// <param name="certificateRdnSelector">certificate subject rdn selector</param>
-        public PkiTrustStoreProvider(X509Certificate2Collection trustAnchors, ICertificateSubjectRdnSelector certificateRdnSelector)
+        public PkiTrustStoreProvider(X509Store trustStore, ICertificateSubjectRdnSelector certificateRdnSelector)
         {
-            if (trustAnchors == null)
-            {
-                throw new ArgumentNullException(nameof(trustAnchors));
-            }
-
             if (certificateRdnSelector == null)
             {
                 throw new ArgumentNullException(nameof(certificateRdnSelector));
             }
 
-            _trustAnchors = trustAnchors;
+            _trustStore = trustStore;
             _certificateRdnSelector = certificateRdnSelector;
         }
 
@@ -51,7 +46,7 @@ namespace Guardtime.KSI.Trust
                 throw new PkiVerificationErrorException("Invalid signature bytes: null.");
             }
 
-            ICryptoSignatureVerifier verifier = KsiProvider.GetPkcs7CryptoSignatureVerifier(_trustAnchors, _certificateRdnSelector);
+            ICryptoSignatureVerifier verifier = KsiProvider.GetPkcs7CryptoSignatureVerifier(_trustStore, _certificateRdnSelector);
             verifier.Verify(signedBytes, signatureBytes, null);
         }
     }

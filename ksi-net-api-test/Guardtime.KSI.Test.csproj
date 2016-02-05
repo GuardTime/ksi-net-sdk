@@ -140,6 +140,7 @@
     <Compile Include="Hashing\DataHashTests.cs" />
     <Compile Include="Hashing\HashAlgorithmTests.cs" />
     <Compile Include="Integration\IntegrationTests.cs" />
+    <Compile Include="Integration\ExtendIntegrationTests.cs" />
     <Compile Include="Integration\SignIntegrationTests.cs" />
     <Compile Include="Parser\CompositeTagTests.cs" />
     <Compile Include="Parser\IntegerTagTests.cs" />
@@ -201,7 +202,6 @@
     <Compile Include="Signature\Verification\Rule\UserProvidedPublicationVerificationRuleTests.cs" />
     <Compile Include="Signature\Verification\SignatureVerificationTests.cs" />
     <Compile Include="Trust\PkiTrustStoreProviderTests.cs" />
-    <Compile Include="Trust\TrustStoreUtilities.cs" />
     <Compile Include="Utils\InvalidEncodeTlvTag.cs" />
     <Compile Include="Utils\UtilTests.cs" />
   </ItemGroup>

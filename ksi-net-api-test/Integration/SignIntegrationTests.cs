@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
@@ -98,7 +99,7 @@ namespace Guardtime.KSI.Integration
                 PublicationsFile = ksi.GetPublicationsFile()
             };
             return ksi.Verify(verificationContext,
-                new KeyBasedVerificationPolicy(TrustStoreUtilities.GetTrustAnchorCollection(), new CertificateSubjectRdnSelector("E=publications@guardtime.com")));
+                new KeyBasedVerificationPolicy(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com")));
         }
 
         public VerificationResult SignedHashVerifyWithInvalidHashTest(Ksi ksi)
@@ -116,7 +117,7 @@ namespace Guardtime.KSI.Integration
                     PublicationsFile = ksi.GetPublicationsFile()
                 };
                 return ksi.Verify(verificationContext,
-                    new KeyBasedVerificationPolicy(TrustStoreUtilities.GetTrustAnchorCollection(), new CertificateSubjectRdnSelector("E=publications@guardtime.com")));
+                    new KeyBasedVerificationPolicy(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com")));
             }
         }
     }

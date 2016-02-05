@@ -13,12 +13,12 @@ namespace Guardtime.KSI.Publication
         /// </summary>
         /// <param name="time">time</param>
         /// <returns>publication record closest to time</returns>
-        PublicationRecord GetNearestPublicationRecord(ulong time);
+        PublicationRecordInPublicationFile GetNearestPublicationRecord(ulong time);
 
         /// <summary>
         ///     Get latest publication record.
         /// </summary>
         /// <returns>publication record</returns>
-        PublicationRecord GetLatestPublication();
+        PublicationRecordInPublicationFile GetLatestPublication();
     }
 }

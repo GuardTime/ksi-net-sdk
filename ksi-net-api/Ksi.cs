@@ -75,6 +75,7 @@ namespace Guardtime.KSI
             return Extend(signature, GetPublicationsFile().GetLatestPublication());
         }
 
+
         /// <summary>
         ///     Extend signature to publication.
         ///     <example>
@@ -93,7 +94,7 @@ namespace Guardtime.KSI
         /// <param name="signature">KSI signature</param>
         /// <param name="publicationRecord">publication</param>
         /// <returns>extended KSI signature</returns>
-        public IKsiSignature Extend(IKsiSignature signature, PublicationRecord publicationRecord)
+        public IKsiSignature Extend(IKsiSignature signature, PublicationRecordInPublicationFile publicationRecord)
         {
             if (signature == null)
             {
@@ -105,9 +106,64 @@ namespace Guardtime.KSI
                 throw new KsiException("Publication record cannot be null.");
             }
 
-            CalendarHashChain calendarHashChain = _ksiService.Extend(signature.AggregationTime,
-                publicationRecord.PublicationData.PublicationTime);
+            CalendarHashChain calendarHashChain = _ksiService.Extend(signature.AggregationTime, publicationRecord.PublicationData.PublicationTime);
             return signature.Extend(calendarHashChain, publicationRecord);
+        }
+
+        /// <summary>
+        ///     Extend signature to publication.
+        ///     <example>
+        ///         Equals to following code
+        ///         <code>
+        /// KsiProvider.SetCryptoProvider(new MicrosoftCryptoProvider()); 
+        /// KsiService ksiService;
+        /// IKsiSignature signature;
+        /// PublicationRecord publicationRecord;
+        /// 
+        /// CalendarHashChain calendarHashChain = ksiService.Extend(signature.AggregationTime, publicationRecord.PublicationData.PublicationTime);
+        /// IKsiSignature extendedSignature = signature.Extend(calendarHashChain, publicationRecord);
+        /// </code>
+        ///     </example>
+        /// </summary>
+        /// <param name="signature">KSI signature</param>
+        /// <param name="publicationRecord">publication</param>
+        /// <returns>extended KSI signature</returns>
+        public IKsiSignature Extend(IKsiSignature signature, PublicationRecordInSignature publicationRecord)
+        {
+            if (signature == null)
+            {
+                throw new KsiException("KSI signature cannot be null.");
+            }
+
+            if (publicationRecord == null)
+            {
+                throw new KsiException("Publication record cannot be null.");
+            }
+
+            CalendarHashChain calendarHashChain = _ksiService.Extend(signature.AggregationTime, publicationRecord.PublicationData.PublicationTime);
+            return signature.Extend(calendarHashChain, publicationRecord);
+        }
+
+        /// <summary>
+        ///     Extend signature to publication.
+        /// </summary>
+        /// <param name="signature">KSI signature</param>
+        /// <param name="publicationData">publication data</param>
+        /// <returns>extended KSI signature</returns>
+        public IKsiSignature Extend(IKsiSignature signature, PublicationData publicationData)
+        {
+            if (signature == null)
+            {
+                throw new KsiException("KSI signature cannot be null.");
+            }
+
+            if (publicationData == null)
+            {
+                throw new KsiException("Publication data cannot be null.");
+            }
+
+            PublicationRecordInPublicationFile publicationRecord = GetPublicationsFile().GetNearestPublicationRecord(publicationData.PublicationTime);
+            return Extend(signature, publicationRecord);
         }
 
         /// <summary>
@@ -125,6 +181,7 @@ namespace Guardtime.KSI
         /// <returns>publications file</returns>
         public IPublicationsFile GetPublicationsFile()
         {
+            // TODO: cache result?
             IPublicationsFile publicationsFile = _ksiService.GetPublicationsFile();
             if (publicationsFile == null)
             {
