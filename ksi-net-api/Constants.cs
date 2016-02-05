@@ -69,14 +69,14 @@
         public static class PublicationRecord
         {
             /// <summary>
-            ///     Signature publication record TLV type.
+            ///     Publication record TLV type in Signature.
             /// </summary>
-            public const uint TagTypeSignature = 0x803;
+            public const uint TagTypeInSignature = 0x803;
 
             /// <summary>
-            ///     Publication publication record TLV type.
+            ///     Publication record TLV type in Publications file.
             /// </summary>
-            public const uint TagTypePublication = 0x703;
+            public const uint TagTypeInPublicationsFile = 0x703;
 
             public const uint PublicationReferencesTagType = 0x9;
             public const uint PublicationRepositoryUriTagType = 0xa;

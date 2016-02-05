@@ -59,7 +59,7 @@ namespace Guardtime.KSI.Service
                         break;
                     case Constants.AggregationHashChain.TagType:
                     case Constants.CalendarHashChain.TagType:
-                    case Constants.PublicationRecord.TagTypeSignature:
+                    case Constants.PublicationRecord.TagTypeInSignature:
                     case Constants.AggregationAuthenticationRecord.TagType:
                     case Constants.CalendarAuthenticationRecord.TagType:
                         break;

@@ -12,7 +12,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         public override VerificationResult Verify(IVerificationContext context)
         {
             IKsiTrustProvider publicationsFile = GetPublicationsFile(context);
-            PublicationRecord publicationRecord = GetPublicationRecord(GetSignature(context));
+            PublicationRecordInSignature publicationRecord = GetPublicationRecord(GetSignature(context));
 
             return !publicationsFile.Contains(publicationRecord)
                 ? new VerificationResult(GetRuleName(), VerificationResultCode.Na, VerificationError.Gen02)

@@ -104,7 +104,7 @@ namespace Guardtime.KSI.Parser
                 return false;
             }
 
-            if (Type != tag.Type || Forward != tag.Forward || NonCritical != tag.NonCritical)
+            if (Type != tag.Type || NonCritical != tag.NonCritical || Forward != tag.Forward)
             {
                 return false;
             }

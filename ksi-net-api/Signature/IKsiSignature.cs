@@ -34,7 +34,7 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         ///     Get publication record.
         /// </summary>
-        PublicationRecord PublicationRecord { get; }
+        PublicationRecordInSignature PublicationRecord { get; }
 
         /// <summary>
         ///     Get aggregation time.
@@ -66,7 +66,15 @@ namespace Guardtime.KSI.Signature
         /// <param name="calendarHashChain">extended calendar hash chain</param>
         /// <param name="publicationRecord">extended publication record</param>
         /// <returns>extended KSI signature</returns>
-        IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecord publicationRecord);
+        IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInPublicationFile publicationRecord);
+
+        /// <summary>
+        ///     Extend signature to publication.
+        /// </summary>
+        /// <param name="calendarHashChain">extended calendar hash chain</param>
+        /// <param name="publicationRecord">extended publication record</param>
+        /// <returns>extended KSI signature</returns>
+        IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInSignature publicationRecord);
 
         /// <summary>
         ///     Write KSI signature to stream.

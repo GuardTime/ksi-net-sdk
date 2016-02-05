@@ -7,19 +7,14 @@ namespace Guardtime.KSI.Publication
     /// <summary>
     ///     Publication record TLV element.
     /// </summary>
-    public sealed class PublicationRecord : CompositeTag
+    public abstract class PublicationRecord : CompositeTag
     {
         /// <summary>
         ///     Create new publication record TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        public PublicationRecord(ITlvTag tag) : base(tag)
+        protected PublicationRecord(ITlvTag tag) : base(tag)
         {
-            if (Type != Constants.PublicationRecord.TagTypeSignature && Type != Constants.PublicationRecord.TagTypePublication)
-            {
-                throw new TlvException("Invalid publication record type(" + Type + ").");
-            }
-
             int publicationDataCount = 0;
 
             foreach (ITlvTag childTag in this)
@@ -46,6 +41,10 @@ namespace Guardtime.KSI.Publication
             {
                 throw new TlvException("Only one publication data is allowed in publication record.");
             }
+        }
+
+        protected PublicationRecord(uint type, bool nonCritical, bool forward, ITlvTag[] value) : base(type, nonCritical, forward, value)
+        {
         }
 
         /// <summary>

@@ -19,7 +19,7 @@ namespace Guardtime.KSI.Publication
 
         private readonly List<CertificateRecord> _certificateRecordList = new List<CertificateRecord>();
         private readonly RawTag _cmsSignature;
-        private readonly List<PublicationRecord> _publicationRecordList = new List<PublicationRecord>();
+        private readonly List<PublicationRecordInPublicationFile> _publicationRecordList = new List<PublicationRecordInPublicationFile>();
         private readonly PublicationsFileHeader _publicationsHeader;
 
         /// <summary>
@@ -42,30 +42,25 @@ namespace Guardtime.KSI.Publication
                         publicationsHeaderCount++;
                         if (i != 0)
                         {
-                            throw new PublicationsFileException(
-                                "Publications file header should be the first element in publications file.");
+                            throw new PublicationsFileException("Publications file header should be the first element in publications file.");
                         }
                         break;
                     case Constants.CertificateRecord.TagType:
-                        CertificateRecord certificateRecordTag = new CertificateRecord(childTag);
-                        _certificateRecordList.Add(certificateRecordTag);
+                        _certificateRecordList.Add(new CertificateRecord(childTag));
                         if (_publicationRecordList.Count != 0)
                         {
-                            throw new PublicationsFileException(
-                                "Certificate records should be before publication records.");
+                            throw new PublicationsFileException("Certificate records should be before publication records.");
                         }
                         break;
-                    case Constants.PublicationRecord.TagTypePublication:
-                        PublicationRecord publicationRecordTag = new PublicationRecord(childTag);
-                        _publicationRecordList.Add(publicationRecordTag);
+                    case Constants.PublicationRecord.TagTypeInPublicationsFile:
+                        _publicationRecordList.Add(new PublicationRecordInPublicationFile(childTag));
                         break;
                     case Constants.PublicationsFile.CmsSignatureTagType:
                         _cmsSignature = new RawTag(childTag);
                         cmsSignatureCount++;
                         if (i != Count - 1)
                         {
-                            throw new PublicationsFileException(
-                                "Cms signature should be last element in publications file.");
+                            throw new PublicationsFileException("Cms signature should be last element in publications file.");
                         }
                         break;
                     default:
@@ -90,11 +85,11 @@ namespace Guardtime.KSI.Publication
         ///     Get latest publication record.
         /// </summary>
         /// <returns>publication record</returns>
-        public PublicationRecord GetLatestPublication()
+        public PublicationRecordInPublicationFile GetLatestPublication()
         {
-            PublicationRecord latest = null;
+            PublicationRecordInPublicationFile latest = null;
 
-            foreach (PublicationRecord publicationRecord in _publicationRecordList)
+            foreach (PublicationRecordInPublicationFile publicationRecord in _publicationRecordList)
             {
                 if (latest == null)
                 {
@@ -116,11 +111,11 @@ namespace Guardtime.KSI.Publication
         /// </summary>
         /// <param name="time">time</param>
         /// <returns>publication record closest to time</returns>
-        public PublicationRecord GetNearestPublicationRecord(ulong time)
+        public PublicationRecordInPublicationFile GetNearestPublicationRecord(ulong time)
         {
-            PublicationRecord nearestPublicationRecord = null;
+            PublicationRecordInPublicationFile nearestPublicationRecord = null;
 
-            foreach (PublicationRecord publicationRecord in _publicationRecordList)
+            foreach (PublicationRecordInPublicationFile publicationRecord in _publicationRecordList)
             {
                 ulong publicationTime = publicationRecord.PublicationData.PublicationTime;
                 if (publicationTime < time)
@@ -153,7 +148,7 @@ namespace Guardtime.KSI.Publication
                 return false;
             }
 
-            foreach (PublicationRecord record in _publicationRecordList)
+            foreach (PublicationRecordInPublicationFile record in _publicationRecordList)
             {
                 if (record.PublicationData.PublicationTime == publicationRecord.PublicationData.PublicationTime &&
                     record.PublicationData.PublicationHash == publicationRecord.PublicationData.PublicationHash)
@@ -222,7 +217,7 @@ namespace Guardtime.KSI.Publication
 
             builder.Append(", created: ").Append(_publicationsHeader.CreationTime);
 
-            PublicationRecord latestPublication = GetLatestPublication();
+            PublicationRecordInPublicationFile latestPublication = GetLatestPublication();
             if (latestPublication != null)
             {
                 builder.Append(", last publication: ").Append(latestPublication.PublicationData.PublicationTime);

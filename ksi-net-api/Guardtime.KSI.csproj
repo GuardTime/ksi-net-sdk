@@ -121,6 +121,8 @@
     </Compile>
     <Compile Include="Publication\CertificateRecord.cs" />
     <Compile Include="Publication\IPublicationsFile.cs" />
+    <Compile Include="Publication\PublicationRecordInSignature.cs" />
+    <Compile Include="Publication\PublicationRecordInPublicationFile.cs" />
     <Compile Include="Publication\PublicationsFileFactory.cs" />
     <Compile Include="Publication\PublicationsFileHeader.cs" />
     <Compile Include="Publication\PublicationsFile.cs" />

@@ -25,7 +25,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             PublicationData userPublication = GetUserPublication(context);
             PublicationData signaturePublication = GetPublicationRecord(signature).PublicationData;
 
-            if (userPublication == signaturePublication)
+            if (userPublication.PublicationTime == signaturePublication.PublicationTime && userPublication.PublicationHash == signaturePublication.PublicationHash)
             {
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
             }
