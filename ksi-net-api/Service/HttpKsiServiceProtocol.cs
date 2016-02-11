@@ -18,6 +18,8 @@ namespace Guardtime.KSI.Service
         private readonly string _publicationsFileUrl;
         private readonly int _requestTimeOut = 2000;
         private readonly string _signingUrl;
+        private readonly string _proxyUrl;
+        private readonly NetworkCredential _proxyCredential;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
@@ -31,6 +33,21 @@ namespace Guardtime.KSI.Service
             _signingUrl = signingUrl;
             _extendingUrl = extendingUrl;
             _publicationsFileUrl = publicationsFileUrl;
+        }
+
+        /// <summary>
+        ///     Create HTTP KSI service protocol with given url-s
+        /// </summary>
+        /// <param name="signingUrl">signing url</param>
+        /// <param name="extendingUrl">extending url</param>
+        /// <param name="publicationsFileUrl">publications file url</param>
+        /// <param name="proxyUrl">proxy url</param>
+        /// <param name="proxyCredential">credentials for proxy</param>
+        public HttpKsiServiceProtocol(string signingUrl, string extendingUrl, string publicationsFileUrl, string proxyUrl, NetworkCredential proxyCredential)
+            : this(signingUrl, extendingUrl, publicationsFileUrl)
+        {
+            _proxyUrl = proxyUrl;
+            _proxyCredential = proxyCredential;
         }
 
         /// <summary>
@@ -51,6 +68,22 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
+        ///     Create HTTP KSI service protocol with given url-s and request timeout
+        /// </summary>
+        /// <param name="signingUrl">signing url</param>
+        /// <param name="extendingUrl">extending url</param>
+        /// <param name="publicationsFileUrl">publications file url</param>
+        /// <param name="requestTimeout">request timeout</param>
+        /// <param name="proxyUrl">proxy url</param>
+        /// <param name="proxyCredential">credentials for proxy</param>
+        public HttpKsiServiceProtocol(string signingUrl, string extendingUrl, string publicationsFileUrl,
+                                      int requestTimeout, string proxyUrl, NetworkCredential proxyCredential) : this(signingUrl, extendingUrl, publicationsFileUrl, requestTimeout)
+        {
+            _proxyUrl = proxyUrl;
+            _proxyCredential = proxyCredential;
+        }
+
+        /// <summary>
         ///     Create HTTP KSI service protocol with given url-s, request timeout and buffer size
         /// </summary>
         /// <param name="signingUrl">signing url</param>
@@ -66,6 +99,24 @@ namespace Guardtime.KSI.Service
                 throw new KsiServiceProtocolException("Buffer size should be in positive integer, but was (" + bufferSize + ").");
             }
             _bufferSize = bufferSize;
+        }
+
+        /// <summary>
+        ///     Create HTTP KSI service protocol with given url-s, request timeout and buffer size
+        /// </summary>
+        /// <param name="signingUrl">signing url</param>
+        /// <param name="extendingUrl">extending url</param>
+        /// <param name="publicationsFileUrl">publications file url</param>
+        /// <param name="requestTimeout">request timeout</param>
+        /// <param name="bufferSize">buffer size</param>
+        /// <param name="proxyUrl">proxy url</param>
+        /// <param name="proxyCredential">credentials for proxy</param>
+        public HttpKsiServiceProtocol(string signingUrl, string extendingUrl, string publicationsFileUrl,
+                                      int requestTimeout, int bufferSize, string proxyUrl, NetworkCredential proxyCredential)
+            : this(signingUrl, extendingUrl, publicationsFileUrl, requestTimeout, bufferSize)
+        {
+            _proxyUrl = proxyUrl;
+            _proxyCredential = proxyCredential;
         }
 
         /// <summary>
@@ -89,6 +140,7 @@ namespace Guardtime.KSI.Service
             try
             {
                 request = WebRequest.Create(_extendingUrl) as HttpWebRequest;
+                InitProxySettings(request);
             }
             catch (Exception e)
             {
@@ -115,6 +167,23 @@ namespace Guardtime.KSI.Service
             return httpAsyncResult;
         }
 
+        private void InitProxySettings(HttpWebRequest request)
+        {
+            if (string.IsNullOrEmpty(_proxyUrl))
+            {
+                return;
+            }
+
+            WebProxy proxy = new WebProxy();
+            Uri uri = new Uri(_proxyUrl);
+            proxy.Address = uri;
+            if (_proxyCredential != null)
+            {
+                proxy.Credentials = _proxyCredential;
+            }
+            request.Proxy = proxy;
+        }
+
         /// <summary>
         ///     End extend signature.
         /// </summary>
@@ -139,6 +208,7 @@ namespace Guardtime.KSI.Service
             try
             {
                 request = WebRequest.Create(_publicationsFileUrl) as HttpWebRequest;
+                InitProxySettings(request);
             }
             catch (Exception e)
             {
@@ -236,6 +306,7 @@ namespace Guardtime.KSI.Service
             try
             {
                 request = WebRequest.Create(_signingUrl) as HttpWebRequest;
+                InitProxySettings(request);
             }
             catch (Exception e)
             {

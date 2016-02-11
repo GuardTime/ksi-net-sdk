@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
@@ -13,6 +14,10 @@ namespace Guardtime.KSI.Integration
         private static readonly HttpKsiServiceProtocol HttpKsiServiceProtocol =
             new HttpKsiServiceProtocol("http://ksigw.test.guardtime.com:3333/gt-signingservice", "http://ksigw.test.guardtime.com:8010/gt-extendingservice",
                 "http://verify.guardtime.com/ksi-publications.bin", 100000);
+
+        //private static readonly HttpKsiServiceProtocol HttpKsiServiceProtocol =
+        //    new HttpKsiServiceProtocol("http://ksigw.test.guardtime.com:3333/gt-signingservice", "http://ksigw.test.guardtime.com:8010/gt-extendingservice",
+        //        "http://verify.guardtime.com/ksi-publications.bin", 100000, "http://127.0.0.1:8888", new NetworkCredential("1a", "1"));
 
         private static readonly HttpKsiServiceProtocol HttpKsiServiceProtocolInvalidUrls =
             new HttpKsiServiceProtocol("http://ksigw.test.guardtime.comx:3333/gt-signingservice", "http://ksigw.test.guardtime.comx:8010/gt-extendingservice",
