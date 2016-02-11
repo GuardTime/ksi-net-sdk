@@ -7,7 +7,6 @@ using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
-using Guardtime.KSI.Trust;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
