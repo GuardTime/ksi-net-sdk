@@ -18,7 +18,7 @@ In your .NET project add reference to KSI .NET SDK and crypto provider to be use
 
 In order to get trial access to the KSI platform, go to [https://guardtime.com/blockchain-developers](https://guardtime.com/blockchain-developers).
 
-A simple usage example:
+Creating ksiService:
 
 ```java
 // Set crypto provider to bouncycastle or microsoft 
@@ -29,7 +29,13 @@ KsiProvider.SetCryptoProvider(new MicrosoftCryptoProvider());
 var httpKsiServiceProtocol = new HttpKsiServiceProtocol("http://signingservice_url", "http://extendingservice_url", "http://publicationsfile_url");
 // Create new KSI service
 var ksiService = new KsiService(httpKsiServiceProtocol, httpKsiServiceProtocol, httpKsiServiceProtocol, new ServiceCredentials("anon", "anon"), new PublicationsFileFactory(new PkiTrustStoreProvider()), new KsiSignatureFactory());
+```
 
+There are 2 ways to use KSI service, with and without simple API wrapper.
+
+Example using simple wrapper:
+
+```java
 // Create new simple wrapper
 var ksi = new Ksi(ksiService);
 
@@ -39,19 +45,22 @@ var ksiSignature = ksi.Sign(new DataHash(Base16.Decode("010000000000000000000000
 // Load some older signature and to extend it to head use following command
 ksiSignature = ksi.ExtendToHead(ksiSignature);
 
-// For getting publications file
+// Getting publications file
 var publicationsFile = ksi.GetPublicationsFile();
+```
 
+Example without simple wrapper
 
-// Signing without simple wrapper
+```java
+// Signing 
 signature = ksiService.Sign(new DataHash(Base16.Decode("010000000000000000000000000000000000000000000000000000000000000000")));
 
-// Getting publications file without simple wrapper
-publicationsFile = _ksiService.GetPublicationsFile();
+// Getting publications file 
+publicationsFile = ksiService.GetPublicationsFile();
 
-// Extending without simple wrapper
+// Extending 
 var publicationRecord = publicationsFile.GetLatestPublication();
-CalendarHashChain calendarHashChain = _ksiService.Extend(signature.AggregationTime, publicationRecord.PublicationData.PublicationTime);
+CalendarHashChain calendarHashChain = _siService.Extend(signature.AggregationTime, publicationRecord.PublicationData.PublicationTime);
 var extendedSignature = signature.Extend(calendarHashChain, publicationRecord);
 ```
 The API full reference is available here [http://guardtime.github.io/ksi-net-sdk/](http://guardtime.github.io/ksi-net-sdk/).
