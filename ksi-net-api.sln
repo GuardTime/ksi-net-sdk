@@ -14,6 +14,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E924C5E6-8740-4AC7-8BEF-46611DF66E7F}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ksi-net-api-crypto-microsoft", "ksi-net-api-crypto-microsoft\ksi-net-api-crypto-microsoft.csproj", "{9225DFDA-A9BD-469A-A36E-900227A205D5}"

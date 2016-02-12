@@ -1,16 +1,8 @@
-﻿How to use this software:
+﻿Usage: 
 
-First we have to link the KSI .NET API to our software.
-To do that, it is necessary to right click on the solution. Select add and then reference.
-From the bottom of the popup window, click browse and then search the KSI .NET API library. 
-Then we are set up with the library and start coding.
-
-Now to start using KSI technology we have 2 possibilities, we can use the simple API wrapper or we write
-it directly. 
-
-// First thing always is to set crypto provider to bouncycastle or microsoft 
-KsiProvider.SetCryptoProvider(new BouncyCastleCryptoProvider()); 
-//KsiProvider.SetCryptoProvider(new MicrosoftCryptoProvider()); 
+// Set crypto provider to bouncycastle or microsoft 
+KsiProvider.SetCryptoProvider(new MicrosoftCryptoProvider()); 
+//KsiProvider.SetCryptoProvider(new BouncyCastleCryptoProvider()); 
 
 // Create HTTP KSI service protocol
 var httpKsiServiceProtocol = new HttpKsiServiceProtocol("http://signingservice_url", "http://extendingservice_url", "http://publicationsfile_url");
@@ -19,8 +11,6 @@ var ksiService = new KsiService(httpKsiServiceProtocol, httpKsiServiceProtocol, 
 
 // Create new simple wrapper
 var ksi = new Ksi(ksiService);
-
-
 
 // Create new signature by signing given hash
 var ksiSignature = ksi.Sign(new DataHash(Base16.Decode("010000000000000000000000000000000000000000000000000000000000000000")));

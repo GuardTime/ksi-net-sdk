@@ -14,7 +14,7 @@
     <Name>Documentation</Name>
     <!-- SHFB properties -->
     <FrameworkVersion>.NET Framework 4.5.1</FrameworkVersion>
-    <OutputPath>.\Help\</OutputPath>
+    <OutputPath>doc\</OutputPath>
     <HtmlHelpName>ksi-net-api</HtmlHelpName>
     <Language>en-US</Language>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
@@ -36,11 +36,12 @@
     <ContentPlacement>AboveNamespaces</ContentPlacement>
     <DocumentationSources>
       <DocumentationSource sourceFile="ksi-net-api-crypto-microsoft\bin\Debug\ksi-net-api-crypto-microsoft.dll" />
-<DocumentationSource sourceFile="ksi-net-api-crypto-microsoft\bin\Debug\ksi-net-api-crypto-microsoft.xml" />
-<DocumentationSource sourceFile="ksi-net-api-crypto-bouncycastle\bin\Debug\ksi-net-api-crypto-bouncycastle.dll" />
-<DocumentationSource sourceFile="ksi-net-api-crypto-bouncycastle\bin\Debug\ksi-net-api-crypto-bouncycastle.xml" />
-<DocumentationSource sourceFile="ksi-net-api\bin\Debug\ksi-net-api.dll" />
-<DocumentationSource sourceFile="ksi-net-api\bin\Debug\ksi-net-api.xml" /></DocumentationSources>
+      <DocumentationSource sourceFile="ksi-net-api-crypto-microsoft\bin\Debug\ksi-net-api-crypto-microsoft.xml" />
+      <DocumentationSource sourceFile="ksi-net-api-crypto-bouncycastle\bin\Debug\ksi-net-api-crypto-bouncycastle.dll" />
+      <DocumentationSource sourceFile="ksi-net-api-crypto-bouncycastle\bin\Debug\ksi-net-api-crypto-bouncycastle.xml" />
+      <DocumentationSource sourceFile="ksi-net-api\bin\Debug\ksi-net-api.dll" />
+      <DocumentationSource sourceFile="ksi-net-api\bin\Debug\ksi-net-api.xml" />
+    </DocumentationSources>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="Guardtime.KSI.Crypto" isDocumented="True" />
     </NamespaceSummaries>
