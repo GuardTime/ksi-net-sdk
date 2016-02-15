@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Publication;
@@ -53,9 +54,10 @@ namespace Guardtime.KSI.Integration
                 new Ksi(
                     new KsiService(
                         HttpKsiServiceProtocol,
-                        HttpKsiServiceProtocol,
+                        new ServiceCredentials("anon", "anon"),
                         HttpKsiServiceProtocol,
                         new ServiceCredentials("anon", "anon"),
+                        HttpKsiServiceProtocol,
                         new PublicationsFileFactory(
                             new PkiTrustStoreProvider(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com"))),
                         new KsiSignatureFactory()))
@@ -69,9 +71,10 @@ namespace Guardtime.KSI.Integration
                 new Ksi(
                     new KsiService(
                         HttpKsiServiceProtocol,
-                        HttpKsiServiceProtocol,
+                        new ServiceCredentials("anon", "anonx"),
                         HttpKsiServiceProtocol,
                         new ServiceCredentials("anon", "anonx"),
+                        HttpKsiServiceProtocol,
                         new PublicationsFileFactory(
                             new PkiTrustStoreProvider(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com"))),
                         new KsiSignatureFactory()))
@@ -85,9 +88,10 @@ namespace Guardtime.KSI.Integration
                 new Ksi(
                     new KsiService(
                         HttpKsiServiceProtocolInvalidUrls,
-                        HttpKsiServiceProtocolInvalidUrls,
+                        new ServiceCredentials("anon", "anon"),
                         HttpKsiServiceProtocolInvalidUrls,
                         new ServiceCredentials("anon", "anon"),
+                        HttpKsiServiceProtocolInvalidUrls,
                         new PublicationsFileFactory(
                             new PkiTrustStoreProvider(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com"))),
                         new KsiSignatureFactory()))
@@ -101,9 +105,10 @@ namespace Guardtime.KSI.Integration
                 new Ksi(
                     new KsiService(
                         TcpKsiServiceProtocol,
-                        HttpKsiServiceProtocol,
+                        new ServiceCredentials("anon", "anon"),
                         HttpKsiServiceProtocol,
                         new ServiceCredentials("anon", "anon"),
+                        HttpKsiServiceProtocol,
                         new PublicationsFileFactory(
                             new PkiTrustStoreProvider(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com"))),
                         new KsiSignatureFactory()))
@@ -117,9 +122,10 @@ namespace Guardtime.KSI.Integration
                 new Ksi(
                     new KsiService(
                         TcpKsiServiceProtocol,
-                        HttpKsiServiceProtocol,
+                        new ServiceCredentials("anon", "anonx"),
                         HttpKsiServiceProtocol,
                         new ServiceCredentials("anon", "anonx"),
+                        HttpKsiServiceProtocol,
                         new PublicationsFileFactory(
                             new PkiTrustStoreProvider(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com"))),
                         new KsiSignatureFactory()))
@@ -133,9 +139,10 @@ namespace Guardtime.KSI.Integration
                 new Ksi(
                     new KsiService(
                         TcpKsiServiceProtocolInvalidUrl,
-                        HttpKsiServiceProtocolInvalidUrls,
+                        new ServiceCredentials("anon", "anon"),
                         HttpKsiServiceProtocolInvalidUrls,
                         new ServiceCredentials("anon", "anon"),
+                        HttpKsiServiceProtocolInvalidUrls,
                         new PublicationsFileFactory(
                             new PkiTrustStoreProvider(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com"))),
                         new KsiSignatureFactory()))
@@ -149,9 +156,10 @@ namespace Guardtime.KSI.Integration
                 new Ksi(
                     new KsiService(
                         TcpKsiServiceProtocolInvalidPort,
-                        HttpKsiServiceProtocolInvalidUrls,
+                        new ServiceCredentials("anon", "anon"),
                         HttpKsiServiceProtocolInvalidUrls,
                         new ServiceCredentials("anon", "anon"),
+                        HttpKsiServiceProtocolInvalidUrls,
                         new PublicationsFileFactory(
                             new PkiTrustStoreProvider(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com"))),
                         new KsiSignatureFactory()))
