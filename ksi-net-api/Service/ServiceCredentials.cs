@@ -23,7 +23,7 @@ namespace Guardtime.KSI.Service
     /// <summary>
     ///     Service credentials.
     /// </summary>
-    public class ServiceCredentials : IKsiServiceSettings
+    public class ServiceCredentials : IServiceCredentials
     {
         /// <summary>
         ///     Create service credentials object from login ID and login key as bytes.
@@ -57,14 +57,5 @@ namespace Guardtime.KSI.Service
         /// </summary>
         public byte[] LoginKey { get; }
 
-        /// <summary>
-        ///     Get instance ID.
-        /// </summary>
-        public ulong InstanceId => 0;
-
-        /// <summary>
-        ///     Get message ID.
-        /// </summary>
-        public ulong MessageId => 0;
     }
 }

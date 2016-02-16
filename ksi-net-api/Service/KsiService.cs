@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System;
 using System.IO;
 using System.Threading;
@@ -34,35 +35,33 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public class KsiService : IKsiService
     {
+        private readonly IKsiSigningServiceProtocol _sigingServiceProtocol;
         private readonly IKsiExtendingServiceProtocol _extendingServiceProtocol;
         private readonly KsiSignatureFactory _ksiSignatureFactory;
         private readonly PublicationsFileFactory _publicationsFileFactory;
         private readonly IKsiPublicationsFileServiceProtocol _publicationsFileServiceProtocol;
-        private readonly IKsiServiceSettings _serviceSettings;
-        private readonly IKsiSigningServiceProtocol _sigingServiceProtocol;
+        private readonly IServiceCredentials _signingServiceCredentials;
+        private readonly IServiceCredentials _extendingServiceCredentials;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         ///     Create KSI service with service protocol and service settings.
         /// </summary>
         /// <param name="signingServiceProtocol">signing service protocol</param>
+        /// <param name="signingServiceCredentials">signing service credentials</param>
         /// <param name="extendingServiceProtocol">extending service protocol</param>
+        /// <param name="extendingServiceCredentials">extending service credentials</param>
         /// <param name="publicationsFileServiceProtocol">publications file protocol</param>
-        /// <param name="serviceSettings">service settings</param>
         /// <param name="publicationsFileFactory">publications file factory</param>
         /// <param name="ksiSignatureFactory">ksi signature factory</param>
         public KsiService(IKsiSigningServiceProtocol signingServiceProtocol,
+                          IServiceCredentials signingServiceCredentials,
                           IKsiExtendingServiceProtocol extendingServiceProtocol,
+                          IServiceCredentials extendingServiceCredentials,
                           IKsiPublicationsFileServiceProtocol publicationsFileServiceProtocol,
-                          IKsiServiceSettings serviceSettings,
                           PublicationsFileFactory publicationsFileFactory,
                           KsiSignatureFactory ksiSignatureFactory)
         {
-            if (serviceSettings == null)
-            {
-                throw new KsiException("Invalid service settings: null.");
-            }
-
             if (publicationsFileFactory == null)
             {
                 throw new KsiException("Invalid publications file factory: null.");
@@ -74,9 +73,10 @@ namespace Guardtime.KSI.Service
             }
 
             _sigingServiceProtocol = signingServiceProtocol;
+            _signingServiceCredentials = signingServiceCredentials;
             _extendingServiceProtocol = extendingServiceProtocol;
+            _extendingServiceCredentials = extendingServiceCredentials;
             _publicationsFileServiceProtocol = publicationsFileServiceProtocol;
-            _serviceSettings = serviceSettings;
             _publicationsFileFactory = publicationsFileFactory;
             _ksiSignatureFactory = ksiSignatureFactory;
         }
@@ -105,9 +105,14 @@ namespace Guardtime.KSI.Service
                 throw new KsiServiceException("Signing service protocol is missing from service.");
             }
 
-            KsiPduHeader header = new KsiPduHeader(_serviceSettings.LoginId);
+            if (_signingServiceCredentials == null)
+            {
+                throw new KsiException("Signing service credentials are missing.");
+            }
+
+            KsiPduHeader header = new KsiPduHeader(_signingServiceCredentials.LoginId);
             AggregationRequestPayload payload = new AggregationRequestPayload(hash);
-            AggregationPdu pdu = new AggregationPdu(header, payload, KsiPdu.GetHashMacTag(_serviceSettings.LoginKey, header, payload));
+            AggregationPdu pdu = new AggregationPdu(header, payload, KsiPdu.GetHashMacTag(_signingServiceCredentials.LoginKey, header, payload));
 
             Logger.Debug("Begin sign (request id: {0}){1}{2}", payload.RequestId, Environment.NewLine, pdu);
             IAsyncResult serviceProtocolAsyncResult = _sigingServiceProtocol.BeginSign(pdu.Encode(), payload.RequestId, callback, asyncState);
@@ -168,7 +173,7 @@ namespace Guardtime.KSI.Service
                         throw new KsiServiceException("Error occured during aggregation: " + errorMessage + ".");
                     }
 
-                    if (!pdu.ValidateMac(_serviceSettings.LoginKey))
+                    if (!pdu.ValidateMac(_extendingServiceCredentials.LoginKey))
                     {
                         throw new KsiServiceException("Invalid HMAC in aggregation response payload");
                     }
@@ -292,7 +297,7 @@ namespace Guardtime.KSI.Service
                         throw new KsiException("Error occured during extending: " + errorMessage + ".");
                     }
 
-                    if (!pdu.ValidateMac(_serviceSettings.LoginKey))
+                    if (!pdu.ValidateMac(_extendingServiceCredentials.LoginKey))
                     {
                         throw new KsiServiceException("Invalid HMAC in aggregation response payload");
                     }
@@ -393,8 +398,13 @@ namespace Guardtime.KSI.Service
                 throw new KsiServiceException("Extending service protocol is missing from service.");
             }
 
-            KsiPduHeader header = new KsiPduHeader(_serviceSettings.LoginId);
-            ExtendPdu pdu = new ExtendPdu(header, payload, KsiPdu.GetHashMacTag(_serviceSettings.LoginKey, header, payload));
+            if (_extendingServiceCredentials == null)
+            {
+                throw new KsiException("Extending service credentials are missing.");
+            }
+
+            KsiPduHeader header = new KsiPduHeader(_extendingServiceCredentials.LoginId);
+            ExtendPdu pdu = new ExtendPdu(header, payload, KsiPdu.GetHashMacTag(_extendingServiceCredentials.LoginKey, header, payload));
 
             Logger.Debug("Begin extend. (request id: {0}){1}{2}", payload.RequestId, Environment.NewLine, pdu);
             IAsyncResult serviceProtocolAsyncResult = _extendingServiceProtocol.BeginExtend(pdu.Encode(), payload.RequestId, callback, asyncState);

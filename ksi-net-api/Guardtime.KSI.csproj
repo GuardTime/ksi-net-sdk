@@ -156,7 +156,7 @@
     <Compile Include="Service\IKsiPublicationsFileServiceProtocol.cs" />
     <Compile Include="Service\IKsiSigningServiceProtocol.cs" />
     <Compile Include="Service\IKsiExtendingServiceProtocol.cs" />
-    <Compile Include="Service\IKsiServiceSettings.cs" />
+    <Compile Include="Service\IServiceCredentials.cs" />
     <Compile Include="Service\KsiPduPayload.cs" />
     <Compile Include="Service\KsiPdu.cs" />
     <Compile Include="Service\KsiService.cs" />

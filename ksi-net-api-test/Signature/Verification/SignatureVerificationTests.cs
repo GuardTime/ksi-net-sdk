@@ -43,7 +43,8 @@ namespace Guardtime.KSI.Signature.Verification
                     "http://172.20.20.100:8081",
                     "http://verify.guardtime.com/ksi-publications.bin");
 
-                KsiService ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"),
+                KsiService ksiService = new KsiService(serviceProtocol, new ServiceCredentials("anon", "anon"), serviceProtocol, new ServiceCredentials("anon", "anon"),
+                    serviceProtocol,
                     new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                         new CertificateSubjectRdnSelector("E=publications@guardtime.com"))), new KsiSignatureFactory());
                 VerificationContext context = new VerificationContext(new KsiSignatureFactory().Create(stream))
