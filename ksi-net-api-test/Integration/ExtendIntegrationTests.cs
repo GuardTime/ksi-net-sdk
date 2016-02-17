@@ -23,6 +23,7 @@ using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
 using NUnit.Framework;
+using System;
 
 namespace Guardtime.KSI.Integration
 {
@@ -98,5 +99,24 @@ namespace Guardtime.KSI.Integration
                 Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
             }
         }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void ExtendToOtherExtendedSignatureAndVerifyWithUserProvidedPublication(Ksi ksi)
+        {
+            UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
+
+            using (FileStream signatureToExtend = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open),
+                signatureToGetPubRecord = new FileStream(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))
+            {
+                PublicationData publicationData = ksi.GetPublicationsFile().GetLatestPublication().PublicationData;
+
+                IKsiSignature ksiSignatureToExtend = new KsiSignatureFactory().Create(signatureToExtend);
+                IKsiSignature ksiSignatureForPublicationRecord = new KsiSignatureFactory().Create(signatureToGetPubRecord);
+                IKsiSignature extendedSignature = ksi.Extend(ksiSignatureToExtend, ksiSignatureForPublicationRecord.PublicationRecord);
+
+                Assert.AreEqual(ksiSignatureForPublicationRecord.PublicationRecord.PublicationData.PublicationHash, extendedSignature.PublicationRecord.PublicationData.PublicationHash);
+            }
+        }
+
     }
 }
