@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -225,16 +226,18 @@ namespace Guardtime.KSI.Signature
                         case Constants.CalendarHashChain.TagType:
                             writer.WriteTag(calendarHashChain);
                             break;
+                        case Constants.CalendarAuthenticationRecord.TagType:
                         case Constants.PublicationRecord.TagTypeInSignature:
-                            if (publicationRecord != null)
-                            {
-                                writer.WriteTag(publicationRecord);
-                            }
                             break;
                         default:
                             writer.WriteTag(childTag);
                             break;
                     }
+                }
+
+                if (publicationRecord != null)
+                {
+                    writer.WriteTag(publicationRecord);
                 }
 
                 try

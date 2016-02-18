@@ -23,7 +23,6 @@ using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
 using NUnit.Framework;
-using System;
 
 namespace Guardtime.KSI.Integration
 {
@@ -35,7 +34,7 @@ namespace Guardtime.KSI.Integration
         {
             UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
 
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))
+            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
             {
                 PublicationData publicationData = ksi.GetPublicationsFile().GetLatestPublication().PublicationData;
 
@@ -58,7 +57,7 @@ namespace Guardtime.KSI.Integration
         {
             UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
 
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))
+            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
             {
                 PublicationData publicationData = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K");
 
@@ -81,7 +80,7 @@ namespace Guardtime.KSI.Integration
         {
             UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
 
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))
+            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
             {
                 // publication data with modified hash
                 PublicationData publicationData = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUBD7-OE44VA");
@@ -103,20 +102,16 @@ namespace Guardtime.KSI.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void ExtendToOtherExtendedSignatureAndVerifyWithUserProvidedPublication(Ksi ksi)
         {
-            UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
-
             using (FileStream signatureToExtend = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open),
-                signatureToGetPubRecord = new FileStream(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))
+                              signatureToGetPubRecord = new FileStream(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))
             {
-                PublicationData publicationData = ksi.GetPublicationsFile().GetLatestPublication().PublicationData;
-
                 IKsiSignature ksiSignatureToExtend = new KsiSignatureFactory().Create(signatureToExtend);
                 IKsiSignature ksiSignatureForPublicationRecord = new KsiSignatureFactory().Create(signatureToGetPubRecord);
                 IKsiSignature extendedSignature = ksi.Extend(ksiSignatureToExtend, ksiSignatureForPublicationRecord.PublicationRecord);
 
-                Assert.AreEqual(ksiSignatureForPublicationRecord.PublicationRecord.PublicationData.PublicationHash, extendedSignature.PublicationRecord.PublicationData.PublicationHash);
+                Assert.AreEqual(ksiSignatureForPublicationRecord.PublicationRecord.PublicationData.PublicationHash,
+                    extendedSignature.PublicationRecord.PublicationData.PublicationHash);
             }
         }
-
     }
 }
