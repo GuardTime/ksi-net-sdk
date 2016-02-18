@@ -141,7 +141,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
-    <None Include="README" />
     <Compile Include="Service\ErrorPayload.cs" />
     <Compile Include="Service\ExtendRequestPayload.cs" />
     <Compile Include="Service\ExtendErrorPayload.cs" />
@@ -224,7 +223,9 @@
     <Compile Include="Trust\PkiTrustStoreProvider.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
