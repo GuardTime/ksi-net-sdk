@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -53,8 +54,15 @@ namespace Guardtime.KSI.Crypto
 
             foreach (CertificateSubjectRdn rdn in rdnList)
             {
-                oidList.Add(new DerObjectIdentifier(rdn.Oid));
-                valueList.Add(rdn.Value);
+                try
+                {
+                    oidList.Add(new DerObjectIdentifier(rdn.Oid));
+                    valueList.Add(rdn.Value);
+                }
+                catch (Exception ex)
+                {
+                    throw new ArgumentException(string.Format("Rdn contains invalid Oid or Value. Oid: {0} Value: {1}", rdn.Oid, rdn.Value), ex);
+                }
             }
 
             _subjectDn = new X509Name(oidList, valueList);

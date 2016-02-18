@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -45,10 +46,21 @@ namespace Guardtime.KSI.Publication
         [Test]
         public void TestCreatePublicationsFileFromFile2()
         {
-            using (FileStream stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+            if (typeof(CertificateSubjectRdnSelector).Assembly.FullName.Contains("ksi-net-api-crypto-bouncycastle"))
             {
-                new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                    new CertificateSubjectRdnSelector("EMail=publications@guardtime.com"))).Create(stream);
+                using (FileStream stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+                {
+                    new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
+                        new CertificateSubjectRdnSelector("EmailAddress=publications@guardtime.com"))).Create(stream);
+                }
+            }
+            else if (typeof(CertificateSubjectRdnSelector).Assembly.FullName.Contains("ksi-net-api-crypto-microsoft"))
+            {
+                using (FileStream stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+                {
+                    new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
+                        new CertificateSubjectRdnSelector("EMail=publications@guardtime.com"))).Create(stream);
+                }
             }
         }
 
@@ -73,7 +85,7 @@ namespace Guardtime.KSI.Publication
                         new CertificateSubjectRdnSelector("EEE=publications@guardtime.com"))).Create(stream);
                 });
 
-                Assert.That(ex.Message, Is.StringContaining("is invalid."));
+                Assert.That(ex.Message, Is.StringContaining("is invalid.") | Is.StringContaining("Unknown object id"));
             }
         }
 
