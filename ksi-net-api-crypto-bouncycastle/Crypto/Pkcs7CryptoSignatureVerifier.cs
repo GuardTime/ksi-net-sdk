@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System;
 using System.Collections;
 using System.Security.Cryptography.X509Certificates;
@@ -44,9 +45,16 @@ namespace Guardtime.KSI.Crypto
         /// <param name="certificateRdnSelector">Certificate subject rdn selector</param>
         public Pkcs7CryptoSignatureVerifier(X509Store trustStore, ICertificateSubjectRdnSelector certificateRdnSelector)
         {
-            if (trustStore == null)
+            if (trustStore != null)
             {
-                throw new ArgumentNullException(nameof(trustStore));
+                trustStore.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
+                X509Certificate2Collection x509CertificateCollection = trustStore.Certificates;
+                trustStore.Close();
+
+                foreach (X509Certificate2 certificate in x509CertificateCollection)
+                {
+                    _trustAnchors.Add(new TrustAnchor(DotNetUtilities.FromX509Certificate(certificate), null));
+                }
             }
 
             if (certificateRdnSelector == null)
@@ -55,15 +63,6 @@ namespace Guardtime.KSI.Crypto
             }
 
             _certificateRdnSelector = certificateRdnSelector;
-
-            trustStore.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
-            X509Certificate2Collection x509CertificateCollection = trustStore.Certificates;
-            trustStore.Close();
-
-            foreach (X509Certificate2 certificate in x509CertificateCollection)
-            {
-                _trustAnchors.Add(new TrustAnchor(DotNetUtilities.FromX509Certificate(certificate), null));
-            }
         }
 
         /// <summary>
@@ -204,7 +203,7 @@ namespace Guardtime.KSI.Crypto
                 }
 
                 // TODO: is this correct behavior?
-                unresolvedCritExts.Remove(Org.BouncyCastle.Asn1.X509.X509Extensions.ExtendedKeyUsage);
+                unresolvedCritExts.Remove(Org.BouncyCastle.Asn1.X509.X509Extensions.ExtendedKeyUsage.Id);
             }
         }
     }

@@ -19,6 +19,7 @@
 
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
+using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature;
@@ -60,7 +61,8 @@ namespace Guardtime.KSI.Integration
                         HttpKsiServiceProtocol,
                         new PublicationsFileFactory(
                             new PkiTrustStoreProvider(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com"))),
-                        new KsiSignatureFactory()))
+                        new KsiSignatureFactory(),
+                        HashAlgorithm.Sha2256))
             }
         };
 

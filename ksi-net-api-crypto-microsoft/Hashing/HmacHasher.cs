@@ -16,8 +16,10 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System;
 using System.Security.Cryptography;
+using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Hashing
 {
@@ -29,10 +31,11 @@ namespace Guardtime.KSI.Hashing
         /// <summary>
         ///     Calculate HMAC for data with given key.
         /// </summary>
+        /// <param name="hmacAlgorithm">HMAC algorithm</param>
         /// <param name="key">HMAC key</param>
         /// <param name="data">HMAC calculation data</param>
         /// <returns>HMAC data hash</returns>
-        public DataHash GetHash(byte[] key, byte[] data)
+        public DataHash GetHash(HashAlgorithm hmacAlgorithm, byte[] key, byte[] data)
         {
             if (data == null)
             {
@@ -44,8 +47,36 @@ namespace Guardtime.KSI.Hashing
                 throw new ArgumentNullException(nameof(key));
             }
 
-            HMACSHA256 hMac = new HMACSHA256(key);
-            return new DataHash(HashAlgorithm.Sha2256, hMac.ComputeHash(data));
+            return new DataHash(hmacAlgorithm, GetHasher(hmacAlgorithm, key).ComputeHash(data));
+        }
+
+        private static HMAC GetHasher(HashAlgorithm hmacAlgorithm, byte[] key)
+        {
+            if (hmacAlgorithm == HashAlgorithm.Sha1)
+            {
+                return new HMACSHA1(key);
+            }
+            if (hmacAlgorithm == HashAlgorithm.Sha2256)
+            {
+                return new HMACSHA256(key);
+            }
+            if (hmacAlgorithm == HashAlgorithm.Ripemd160)
+            {
+                return new HMACRIPEMD160(key);
+            }
+                //if (hmacAlgorithm == HashAlgorithm.Sha2224)
+                //{
+                //    return new HMACSHA(key);
+                //}
+            if (hmacAlgorithm == HashAlgorithm.Sha2384)
+            {
+                return new HMACSHA384(key);
+            }
+            if (hmacAlgorithm == HashAlgorithm.Sha2512)
+            {
+                return new HMACSHA512(key);
+            }
+            throw new HashingException("Hash algorithm(" + hmacAlgorithm.Name + ") is not supported.");
         }
     }
 }

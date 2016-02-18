@@ -17,48 +17,47 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
 using Guardtime.KSI.Exceptions;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Digests;
-using Org.BouncyCastle.Crypto.Macs;
-using Org.BouncyCastle.Crypto.Parameters;
-using Org.BouncyCastle.Security;
 
 namespace Guardtime.KSI.Hashing
 {
-    /// <summary>
-    /// HMAC hasher
-    /// </summary>
-    public class HmacHasher : IHmacHasher
+    public static class DigestProvider
     {
         /// <summary>
-        ///     Calculate HMAC for data with given key.
+        /// Returns digest
         /// </summary>
-        /// <param name="hmacAlgorithm">HMAC algorithm</param>
-        /// <param name="key">HMAC key</param>
-        /// <param name="data">HMAC calculation data</param>
-        /// <returns>HMAC data hash</returns>
-        public DataHash GetHash(HashAlgorithm hmacAlgorithm, byte[] key, byte[] data)
+        /// <param name="algorithm"></param>
+        /// <returns></returns>
+        /// <exception cref="HashingException"></exception>
+        public static IDigest GetDigest(HashAlgorithm algorithm)
         {
-            if (data == null)
+            if (algorithm == HashAlgorithm.Sha1)
             {
-                throw new ArgumentNullException(nameof(data));
+                return new Sha1Digest();
             }
-
-            if (key == null)
+            if (algorithm == HashAlgorithm.Sha2256)
             {
-                throw new ArgumentNullException(nameof(key));
+                return new Sha256Digest();
             }
-
-            HMac hMac = new HMac(DigestProvider.GetDigest(hmacAlgorithm));
-
-            hMac.Init(new KeyParameter(key));
-            hMac.BlockUpdate(data, 0, data.Length);
-
-            byte[] value = new byte[hmacAlgorithm.Length];
-            hMac.DoFinal(value, 0);
-            return new DataHash(hmacAlgorithm, value);
+            if (algorithm == HashAlgorithm.Ripemd160)
+            {
+                return new RipeMD160Digest();
+            }
+            if (algorithm == HashAlgorithm.Sha2224)
+            {
+                return new Sha224Digest();
+            }
+            if (algorithm == HashAlgorithm.Sha2384)
+            {
+                return new Sha384Digest();
+            }
+            if (algorithm == HashAlgorithm.Sha2512)
+            {
+                return new Sha512Digest();
+            }
+            throw new HashingException("Hash algorithm(" + algorithm.Name + ") is not supported.");
         }
     }
 }
