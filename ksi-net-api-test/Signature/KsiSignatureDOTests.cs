@@ -41,10 +41,20 @@ namespace Guardtime.KSI.Signature
         }
 
         [Test]
+        public void TestKsiSignatureIsExtended()
+        {
+            IKsiSignature signature1 = GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Ok_With_Mixed_Aggregation_Chains);
+            Assert.False(signature1.IsExtended, "IsExtended should be false.");
+
+            IKsiSignature signature2 = GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record);
+            Assert.True(signature2.IsExtended, "IsExtended should be true.");
+        }
+
+        [Test]
         public void TestKsiSignatureIdentity()
         {
             IKsiSignature signature = GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Ok_With_Mixed_Aggregation_Chains);
-            Assert.True(!string.IsNullOrEmpty(signature.Identity), "Identity should not be null");
+            Assert.True(signature.Identity == "anon.taavi-test.testA.GT", "Identity has invalid value.");
         }
 
         [Test]
