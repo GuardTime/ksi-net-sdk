@@ -103,7 +103,7 @@ namespace Guardtime.KSI.Integration
         public void ExtendToOtherExtendedSignatureAndVerifyWithUserProvidedPublication(Ksi ksi)
         {
             using (FileStream signatureToExtend = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open),
-                              signatureToGetPubRecord = new FileStream(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))
+                              signatureToGetPubRecord = new FileStream(Properties.Resources.KsiSignatureDo_Ok_Extended, FileMode.Open))
             {
                 IKsiSignature ksiSignatureToExtend = new KsiSignatureFactory().Create(signatureToExtend);
                 IKsiSignature ksiSignatureForPublicationRecord = new KsiSignatureFactory().Create(signatureToGetPubRecord);

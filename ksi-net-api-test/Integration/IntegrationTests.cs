@@ -41,9 +41,11 @@ namespace Guardtime.KSI.Integration
             new HttpKsiServiceProtocol("http://ksigw.test.QWERTYguardtime.com:3333/gt-signingservice", "http://ksigw.test.QWERTYguardtime.com:8010/gt-extendingservice",
                 "http://verify.QWERTYguardtime.com/ksi-publications.bin", 100000);
 
-        private static readonly TcpKsiServiceProtocol TcpKsiServiceProtocol = new TcpKsiServiceProtocol(Settings.Default.TcpSigningServiceUrl, Settings.Default.TcpSigningServicePort, 100000);
+        private static readonly TcpKsiServiceProtocol TcpKsiServiceProtocol = new TcpKsiServiceProtocol(Settings.Default.TcpSigningServiceUrl,
+            Settings.Default.TcpSigningServicePort, 100000);
 
-        private static readonly TcpKsiServiceProtocol TcpKsiServiceProtocolInvalidUrl = new TcpKsiServiceProtocol("ksigw.test.QWERTYguardtime.com", Settings.Default.TcpSigningServicePort, 100000);
+        private static readonly TcpKsiServiceProtocol TcpKsiServiceProtocolInvalidUrl = new TcpKsiServiceProtocol("ksigw.test.QWERTYguardtime.com",
+            Settings.Default.TcpSigningServicePort, 100000);
 
         private static readonly TcpKsiServiceProtocol TcpKsiServiceProtocolInvalidPort = new TcpKsiServiceProtocol(Settings.Default.TcpSigningServiceUrl, 1234, 100000);
 
@@ -187,7 +189,7 @@ namespace Guardtime.KSI.Integration
                 return;
             }
 
-            Assert.True(latest.PublicationData.PublicationTime > prev.PublicationData.PublicationTime, "Signature should verify with key based policy");
+            Assert.True(latest.PublicationData.PublicationTime > prev.PublicationData.PublicationTime);
         }
     }
 }

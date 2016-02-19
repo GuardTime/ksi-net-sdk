@@ -16,6 +16,9 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
+using System;
+using System.Text;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
@@ -155,6 +158,57 @@ namespace Guardtime.KSI.Publication
                 new IntegerTag(Constants.PublicationData.PublicationTimeTagType, false, false, Util.DecodeUnsignedLong(publicationTimeBytes, 0, publicationTimeBytes.Length)),
                 new ImprintTag(Constants.PublicationData.PublicationHashTagType, false, false, new DataHash(hashImprint))
             };
+        }
+
+        /// <summary>
+        /// Returns publication string of published data
+        /// </summary>
+        /// <returns></returns>
+        public string GetPublicationString()
+        {
+            byte[] imprint = PublicationHash.Imprint;
+            byte[] data = new byte[imprint.Length + 12];
+            byte[] timeBytes = Util.EncodeUnsignedLong(PublicationTime);
+
+            Array.Copy(timeBytes, 0, data, 8 - timeBytes.Length, timeBytes.Length);
+            Array.Copy(imprint, 0, data, 8, imprint.Length);
+
+            byte[] crc32 = Util.EncodeUnsignedLong(Crc32.Calculate(Util.Clone(data, 0, data.Length - 4), 0));
+            Array.Copy(crc32, 0, data, data.Length - 4, crc32.Length);
+            string code = Base32.Encode(data);
+
+            StringBuilder sb = new StringBuilder();
+
+            int index = 0;
+
+            while (true)
+            {
+                if (index > 0)
+                {
+                    sb.Append("-");
+                }
+
+                if (index + 6 < code.Length)
+                {
+                    sb.Append(code.Substring(index, 6));
+                    index += 6;
+                }
+                else
+                {
+                    int count = code.Length - index;
+                    sb.Append(code.Substring(index, count));
+                    return sb.ToString();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Returns publication date
+        /// </summary>
+        /// <returns></returns>
+        public DateTime GetPublicationDate()
+        {
+            return Util.ConvertUnixTimeToDateTime(PublicationTime);
         }
 
         /// <summary>
