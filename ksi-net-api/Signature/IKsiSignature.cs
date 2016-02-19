@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System.Collections.ObjectModel;
 using System.IO;
 using Guardtime.KSI.Hashing;
@@ -58,6 +59,18 @@ namespace Guardtime.KSI.Signature
         ///     Get aggregation time.
         /// </summary>
         ulong AggregationTime { get; }
+
+        /// <summary>
+        /// Get the identity of the signature.
+        /// </summary>
+        /// <returns></returns>
+        string Identity { get; }
+
+        /// <summary>
+        /// Returns true if signature contains signature publication record element.
+        /// </summary>
+        /// <returns></returns>
+        bool IsExtended { get; }
 
         /// <summary>
         ///     Get aggregation hash chains list.

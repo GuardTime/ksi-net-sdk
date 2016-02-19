@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using NUnit.Framework;
@@ -30,6 +31,20 @@ namespace Guardtime.KSI.Signature
         {
             IKsiSignature signature = GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Ok);
             Assert.NotNull(signature.CalendarHashChain, "Calendar hash chain cannot be null");
+        }
+
+        [Test]
+        public void TestKsiSignatureDoWithMixedAggregationChais()
+        {
+            IKsiSignature signature = GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Ok_With_Mixed_Aggregation_Chains);
+            Assert.NotNull(signature, "Signature cannot be null");
+        }
+
+        [Test]
+        public void TestKsiSignatureIdentity()
+        {
+            IKsiSignature signature = GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Ok_With_Mixed_Aggregation_Chains);
+            Assert.True(!string.IsNullOrEmpty(signature.Identity), "Identity should not be null");
         }
 
         [Test]

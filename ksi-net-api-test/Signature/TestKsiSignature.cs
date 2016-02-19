@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System.Collections.ObjectModel;
 using System.IO;
 using Guardtime.KSI.Hashing;
@@ -82,5 +83,9 @@ namespace Guardtime.KSI.Signature
         {
             return EncodedValue;
         }
+
+        public string Identity => "Test";
+
+        public bool IsExtended => PublicationRecord != null;
     }
 }
