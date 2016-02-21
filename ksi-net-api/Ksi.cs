@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Publication;
@@ -92,7 +93,6 @@ namespace Guardtime.KSI
         {
             return Extend(signature, GetPublicationsFile().GetLatestPublication());
         }
-
 
         /// <summary>
         ///     Extend signature to publication.
@@ -181,6 +181,21 @@ namespace Guardtime.KSI
             }
 
             PublicationRecordInPublicationFile publicationRecord = GetPublicationsFile().GetNearestPublicationRecord(publicationData.PublicationTime);
+            return Extend(signature, publicationRecord);
+        }
+
+        /// <summary>
+        ///     Extend signature to closest publication.
+        /// </summary>
+        /// <param name="signature">KSI signature</param>
+        /// <returns>extended KSI signature</returns>
+        public IKsiSignature Extend(IKsiSignature signature)
+        {
+            if (signature == null)
+            {
+                throw new KsiException("KSI signature cannot be null.");
+            }
+            PublicationRecordInPublicationFile publicationRecord = GetPublicationsFile().GetNearestPublicationRecord(signature.AggregationTime);
             return Extend(signature, publicationRecord);
         }
 
