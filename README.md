@@ -42,7 +42,7 @@ var ksi = new Ksi(ksiService);
 // Create new signature by signing given hash
 var ksiSignature = ksi.Sign(new DataHash(Base16.Decode("010000000000000000000000000000000000000000000000000000000000000000")));
 
-// Load some older signature and to extend it to head use following command
+// Load some older signature and extend it to head
 ksiSignature = ksi.ExtendToHead(ksiSignature);
 
 // Getting publications file
@@ -60,7 +60,7 @@ publicationsFile = ksiService.GetPublicationsFile();
 
 // Extending 
 var publicationRecord = publicationsFile.GetLatestPublication();
-CalendarHashChain calendarHashChain = _siService.Extend(signature.AggregationTime, publicationRecord.PublicationData.PublicationTime);
+CalendarHashChain calendarHashChain = _ksiService.Extend(signature.AggregationTime, publicationRecord.PublicationData.PublicationTime);
 var extendedSignature = signature.Extend(calendarHashChain, publicationRecord);
 ```
 The API full reference is available here [http://guardtime.github.io/ksi-net-sdk/](http://guardtime.github.io/ksi-net-sdk/).
