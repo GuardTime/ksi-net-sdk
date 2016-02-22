@@ -16,8 +16,8 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System;
-using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Crypto.Macs;
 using Org.BouncyCastle.Crypto.Parameters;
 
@@ -31,10 +31,11 @@ namespace Guardtime.KSI.Hashing
         /// <summary>
         ///     Calculate HMAC for data with given key.
         /// </summary>
+        /// <param name="hmacAlgorithm">HMAC algorithm</param>
         /// <param name="key">HMAC key</param>
         /// <param name="data">HMAC calculation data</param>
         /// <returns>HMAC data hash</returns>
-        public DataHash GetHash(byte[] key, byte[] data)
+        public DataHash GetHash(HashAlgorithm hmacAlgorithm, byte[] key, byte[] data)
         {
             if (data == null)
             {
@@ -46,13 +47,14 @@ namespace Guardtime.KSI.Hashing
                 throw new ArgumentNullException(nameof(key));
             }
 
-            HMac hMac = new HMac(new Sha256Digest());
+            HMac hMac = new HMac(DigestProvider.GetDigest(hmacAlgorithm));
+
             hMac.Init(new KeyParameter(key));
             hMac.BlockUpdate(data, 0, data.Length);
 
-            byte[] value = new byte[HashAlgorithm.Sha2256.Length];
+            byte[] value = new byte[hmacAlgorithm.Length];
             hMac.DoFinal(value, 0);
-            return new DataHash(HashAlgorithm.Sha2256, value);
+            return new DataHash(hmacAlgorithm, value);
         }
     }
 }

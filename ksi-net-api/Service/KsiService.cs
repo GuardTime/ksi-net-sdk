@@ -43,6 +43,7 @@ namespace Guardtime.KSI.Service
         private readonly IServiceCredentials _signingServiceCredentials;
         private readonly IServiceCredentials _extendingServiceCredentials;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly HashAlgorithm _hmacAlgorithm = HashAlgorithm.Sha2256;
 
         /// <summary>
         ///     Create KSI service with service protocol and service settings.
@@ -82,6 +83,37 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
+        ///     Create KSI service with service protocol and service settings.
+        /// </summary>
+        /// <param name="signingServiceProtocol">signing service protocol</param>
+        /// <param name="signingServiceCredentials">signing service credentials</param>
+        /// <param name="extendingServiceProtocol">extending service protocol</param>
+        /// <param name="extendingServiceCredentials">extending service credentials</param>
+        /// <param name="publicationsFileServiceProtocol">publications file protocol</param>
+        /// <param name="publicationsFileFactory">publications file factory</param>
+        /// <param name="ksiSignatureFactory">ksi signature factory</param>
+        /// <param name="hmacAlgorithm">HMAC algorithm</param>
+        public KsiService(IKsiSigningServiceProtocol signingServiceProtocol,
+                          IServiceCredentials signingServiceCredentials,
+                          IKsiExtendingServiceProtocol extendingServiceProtocol,
+                          IServiceCredentials extendingServiceCredentials,
+                          IKsiPublicationsFileServiceProtocol publicationsFileServiceProtocol,
+                          PublicationsFileFactory publicationsFileFactory,
+                          KsiSignatureFactory ksiSignatureFactory,
+                          HashAlgorithm hmacAlgorithm)
+            :
+                this(signingServiceProtocol,
+                    signingServiceCredentials,
+                    extendingServiceProtocol,
+                    extendingServiceCredentials,
+                    publicationsFileServiceProtocol,
+                    publicationsFileFactory,
+                    ksiSignatureFactory)
+        {
+            _hmacAlgorithm = hmacAlgorithm;
+        }
+
+        /// <summary>
         ///     Sync create signature with given data hash.
         /// </summary>
         /// <param name="hash">data hash</param>
@@ -112,7 +144,7 @@ namespace Guardtime.KSI.Service
 
             KsiPduHeader header = new KsiPduHeader(_signingServiceCredentials.LoginId);
             AggregationRequestPayload payload = new AggregationRequestPayload(hash);
-            AggregationPdu pdu = new AggregationPdu(header, payload, KsiPdu.GetHashMacTag(_signingServiceCredentials.LoginKey, header, payload));
+            AggregationPdu pdu = new AggregationPdu(header, payload, KsiPdu.GetHashMacTag(_hmacAlgorithm, _signingServiceCredentials.LoginKey, header, payload));
 
             Logger.Debug("Begin sign (request id: {0}){1}{2}", payload.RequestId, Environment.NewLine, pdu);
             IAsyncResult serviceProtocolAsyncResult = _sigingServiceProtocol.BeginSign(pdu.Encode(), payload.RequestId, callback, asyncState);
@@ -404,7 +436,7 @@ namespace Guardtime.KSI.Service
             }
 
             KsiPduHeader header = new KsiPduHeader(_extendingServiceCredentials.LoginId);
-            ExtendPdu pdu = new ExtendPdu(header, payload, KsiPdu.GetHashMacTag(_extendingServiceCredentials.LoginKey, header, payload));
+            ExtendPdu pdu = new ExtendPdu(header, payload, KsiPdu.GetHashMacTag(_hmacAlgorithm, _extendingServiceCredentials.LoginKey, header, payload));
 
             Logger.Debug("Begin extend. (request id: {0}){1}{2}", payload.RequestId, Environment.NewLine, pdu);
             IAsyncResult serviceProtocolAsyncResult = _extendingServiceProtocol.BeginExtend(pdu.Encode(), payload.RequestId, callback, asyncState);

@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using Org.BouncyCastle.Crypto;
@@ -58,7 +59,7 @@ namespace Guardtime.KSI.Hashing
 
             try
             {
-                _digester = DigestUtilities.GetDigest(algorithm.Name);
+                _digester = DigestProvider.GetDigest(algorithm);
             }
             catch (SecurityUtilityException e)
             {

@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
+using Guardtime.KSI.Properties;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature.Verification.Policy;
@@ -36,17 +37,20 @@ namespace Guardtime.KSI.Signature.Verification
         [Test]
         public void TestVerifySignatureOk()
         {
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Resources.KsiSignatureDo_Ok, FileMode.Open))
             {
                 HttpKsiServiceProtocol serviceProtocol = new HttpKsiServiceProtocol(
-                    "http://ksigw.test.guardtime.com:3333/gt-signingservice",
-                    "http://ksigw.test.guardtime.com:8010/gt-extendingservice",
-                    "http://verify.guardtime.com/ksi-publications.bin");
+                    Settings.Default.HttpSigningServiceUrl,
+                    Settings.Default.HttpExtendingServiceUrl,
+                    Settings.Default.HttpPublicationsFileUrl);
 
-                KsiService ksiService = new KsiService(serviceProtocol, new ServiceCredentials("anon", "anon"), serviceProtocol, new ServiceCredentials("anon", "anon"),
+                KsiService ksiService = new KsiService(
+                    serviceProtocol, new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
+                    serviceProtocol, new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
                     serviceProtocol,
                     new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                         new CertificateSubjectRdnSelector("E=publications@guardtime.com"))), new KsiSignatureFactory());
+
                 VerificationContext context = new VerificationContext(new KsiSignatureFactory().Create(stream))
                 {
                     DocumentHash =

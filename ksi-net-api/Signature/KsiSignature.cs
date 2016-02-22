@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -34,6 +35,7 @@ namespace Guardtime.KSI.Signature
     {
         private readonly List<AggregationHashChain> _aggregationHashChains = new List<AggregationHashChain>();
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private string _identity;
 
         /// <summary>
         ///     Create new KSI signature TLV element from TLV element.
@@ -152,6 +154,18 @@ namespace Guardtime.KSI.Signature
         public PublicationRecordInSignature PublicationRecord { get; }
 
         /// <summary>
+        /// Get the identity of the signature.
+        /// </summary>
+        /// <returns></returns>
+        public string Identity => _identity ?? (_identity = GetIdentity());
+
+        /// <summary>
+        /// Returns true if signature contains signature publication record element.
+        /// </summary>
+        /// <returns></returns>
+        public bool IsExtended => PublicationRecord != null;
+
+        /// <summary>
         ///     Get aggregation hash chains list.
         /// </summary>
         /// <returns>aggregations hash chains list</returns>
@@ -211,6 +225,8 @@ namespace Guardtime.KSI.Signature
         /// <returns>extended KSI signature</returns>
         public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInSignature publicationRecord)
         {
+            Logger.Debug("Extending KSI signature.");
+
             if (calendarHashChain == null)
             {
                 throw new KsiException("Invalid calendar hash chain: null.");
@@ -225,11 +241,8 @@ namespace Guardtime.KSI.Signature
                         case Constants.CalendarHashChain.TagType:
                             writer.WriteTag(calendarHashChain);
                             break;
+                        case Constants.CalendarAuthenticationRecord.TagType:
                         case Constants.PublicationRecord.TagTypeInSignature:
-                            if (publicationRecord != null)
-                            {
-                                writer.WriteTag(publicationRecord);
-                            }
                             break;
                         default:
                             writer.WriteTag(childTag);
@@ -237,9 +250,13 @@ namespace Guardtime.KSI.Signature
                     }
                 }
 
+                if (publicationRecord != null)
+                {
+                    writer.WriteTag(publicationRecord);
+                }
+
                 try
                 {
-                    Logger.Debug("Extending KSI signature.");
                     KsiSignature signature = new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false, ((MemoryStream)writer.BaseStream).ToArray()));
                     Logger.Debug("Extending KSI signature successful.");
                     return signature;
@@ -272,6 +289,26 @@ namespace Guardtime.KSI.Signature
             {
                 writer.WriteTag(this);
             }
+        }
+
+        private string GetIdentity()
+        {
+            string identity = "";
+
+            foreach (AggregationHashChain chain in _aggregationHashChains)
+            {
+                string id = chain.GetChainIdentity();
+                if (id.Length <= 0)
+                {
+                    continue;
+                }
+                if (identity.Length > 0)
+                {
+                    identity += ".";
+                }
+                identity += id;
+            }
+            return identity;
         }
     }
 }

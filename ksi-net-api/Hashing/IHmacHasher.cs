@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 namespace Guardtime.KSI.Hashing
 {
     /// <summary>
@@ -26,9 +27,10 @@ namespace Guardtime.KSI.Hashing
         /// <summary>
         ///     Calculate HMAC for data with given key.
         /// </summary>
+        /// <param name="hmacAlgorithm">HMAC algorithm</param>
         /// <param name="key">HMAC key</param>
         /// <param name="data">HMAC calculation data</param>
         /// <returns>HMAC data hash</returns>
-        DataHash GetHash(byte[] key, byte[] data);
+        DataHash GetHash(HashAlgorithm hmacAlgorithm, byte[] key, byte[] data);
     }
 }

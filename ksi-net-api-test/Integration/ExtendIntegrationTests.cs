@@ -34,7 +34,7 @@ namespace Guardtime.KSI.Integration
         {
             UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
 
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))
+            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
             {
                 PublicationData publicationData = ksi.GetPublicationsFile().GetLatestPublication().PublicationData;
 
@@ -57,7 +57,7 @@ namespace Guardtime.KSI.Integration
         {
             UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
 
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))
+            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
             {
                 PublicationData publicationData = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K");
 
@@ -80,7 +80,7 @@ namespace Guardtime.KSI.Integration
         {
             UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
 
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))
+            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
             {
                 // publication data with modified hash
                 PublicationData publicationData = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUBD7-OE44VA");
@@ -96,6 +96,37 @@ namespace Guardtime.KSI.Integration
 
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
+            }
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void ExtendToOtherExtendedSignatureAndVerifyWithUserProvidedPublication(Ksi ksi)
+        {
+            using (FileStream signatureToExtend = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open),
+                              signatureToGetPubRecord = new FileStream(Properties.Resources.KsiSignatureDo_Ok_Extended, FileMode.Open))
+            {
+                IKsiSignature ksiSignatureToExtend = new KsiSignatureFactory().Create(signatureToExtend);
+                IKsiSignature ksiSignatureForPublicationRecord = new KsiSignatureFactory().Create(signatureToGetPubRecord);
+                IKsiSignature extendedSignature = ksi.Extend(ksiSignatureToExtend, ksiSignatureForPublicationRecord.PublicationRecord);
+
+                Assert.AreEqual(ksiSignatureForPublicationRecord.PublicationRecord.PublicationData.PublicationHash,
+                    extendedSignature.PublicationRecord.PublicationData.PublicationHash);
+            }
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void ExtendToNearestPublicationTest(Ksi ksi)
+        {
+            UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
+
+            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
+            {
+                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+                IKsiSignature extendedToLatest = ksi.Extend(ksiSignature, ksi.GetPublicationsFile().GetLatestPublication());
+                IKsiSignature extendedToNearest = ksi.Extend(ksiSignature);
+
+                Assert.True(extendedToLatest.PublicationRecord.PublicationData.PublicationTime > extendedToNearest.PublicationRecord.PublicationData.PublicationTime);
+                Assert.AreEqual(extendedToNearest.PublicationRecord.PublicationData.PublicationTime, 1408060800);
             }
         }
     }

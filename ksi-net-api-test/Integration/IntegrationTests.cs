@@ -19,6 +19,8 @@
 
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
+using Guardtime.KSI.Hashing;
+using Guardtime.KSI.Properties;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature;
@@ -30,22 +32,22 @@ namespace Guardtime.KSI.Integration
     public class IntegrationTests
     {
         private static readonly HttpKsiServiceProtocol HttpKsiServiceProtocol =
-            new HttpKsiServiceProtocol("http://ksigw.test.guardtime.com:3333/gt-signingservice", "http://ksigw.test.guardtime.com:8010/gt-extendingservice",
-                "http://verify.guardtime.com/ksi-publications.bin", 100000);
+            new HttpKsiServiceProtocol(Settings.Default.HttpSigningServiceUrl, Settings.Default.HttpExtendingServiceUrl, Settings.Default.HttpPublicationsFileUrl, 100000);
 
         //private static readonly HttpKsiServiceProtocol HttpKsiServiceProtocol =
-        //    new HttpKsiServiceProtocol("http://ksigw.test.guardtime.com:3333/gt-signingservice", "http://ksigw.test.guardtime.com:8010/gt-extendingservice",
-        //        "http://verify.guardtime.com/ksi-publications.bin", 100000, "http://127.0.0.1:8888", new NetworkCredential("1a", "1"));
+        //    new HttpKsiServiceProtocol(Settings.Default.HttpSigningServiceUrl, Settings.Default.HttpExtendingServiceUrl, Settings.Default.HttpPublicationsFileUrl, 100000, "http://127.0.0.1:8888", new NetworkCredential("1", "1"));
 
         private static readonly HttpKsiServiceProtocol HttpKsiServiceProtocolInvalidUrls =
-            new HttpKsiServiceProtocol("http://ksigw.test.guardtime.comx:3333/gt-signingservice", "http://ksigw.test.guardtime.comx:8010/gt-extendingservice",
-                "http://verify.guardtime.comx/ksi-publications.bin", 100000);
+            new HttpKsiServiceProtocol("http://ksigw.test.QWERTYguardtime.com:3333/gt-signingservice", "http://ksigw.test.QWERTYguardtime.com:8010/gt-extendingservice",
+                "http://verify.QWERTYguardtime.com/ksi-publications.bin", 100000);
 
-        private static readonly TcpKsiServiceProtocol TcpKsiServiceProtocol = new TcpKsiServiceProtocol("ksigw.test.guardtime.com", 3332, 100000);
+        private static readonly TcpKsiServiceProtocol TcpKsiServiceProtocol = new TcpKsiServiceProtocol(Settings.Default.TcpSigningServiceUrl,
+            Settings.Default.TcpSigningServicePort, 100000);
 
-        private static readonly TcpKsiServiceProtocol TcpKsiServiceProtocolInvalidUrl = new TcpKsiServiceProtocol("ksigw.test.guardtime.comx", 3332, 100000);
+        private static readonly TcpKsiServiceProtocol TcpKsiServiceProtocolInvalidUrl = new TcpKsiServiceProtocol("ksigw.test.QWERTYguardtime.com",
+            Settings.Default.TcpSigningServicePort, 100000);
 
-        private static readonly TcpKsiServiceProtocol TcpKsiServiceProtocolInvalidPort = new TcpKsiServiceProtocol("ksigw.test.guardtime.com", 1234, 100000);
+        private static readonly TcpKsiServiceProtocol TcpKsiServiceProtocolInvalidPort = new TcpKsiServiceProtocol(Settings.Default.TcpSigningServiceUrl, 1234, 100000);
 
         public static object[] HttpTestCases =
         {
@@ -54,13 +56,14 @@ namespace Guardtime.KSI.Integration
                 new Ksi(
                     new KsiService(
                         HttpKsiServiceProtocol,
-                        new ServiceCredentials("anon", "anon"),
+                        new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
                         HttpKsiServiceProtocol,
-                        new ServiceCredentials("anon", "anon"),
+                        new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
                         HttpKsiServiceProtocol,
                         new PublicationsFileFactory(
                             new PkiTrustStoreProvider(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com"))),
-                        new KsiSignatureFactory()))
+                        new KsiSignatureFactory(),
+                        HashAlgorithm.Sha2256))
             }
         };
 
@@ -71,9 +74,9 @@ namespace Guardtime.KSI.Integration
                 new Ksi(
                     new KsiService(
                         HttpKsiServiceProtocol,
-                        new ServiceCredentials("anon", "anonx"),
+                        new ServiceCredentials(Settings.Default.HttpSigningServiceUser, "anonx"),
                         HttpKsiServiceProtocol,
-                        new ServiceCredentials("anon", "anonx"),
+                        new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, "anonx"),
                         HttpKsiServiceProtocol,
                         new PublicationsFileFactory(
                             new PkiTrustStoreProvider(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com"))),
@@ -88,9 +91,9 @@ namespace Guardtime.KSI.Integration
                 new Ksi(
                     new KsiService(
                         HttpKsiServiceProtocolInvalidUrls,
-                        new ServiceCredentials("anon", "anon"),
+                        new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
                         HttpKsiServiceProtocolInvalidUrls,
-                        new ServiceCredentials("anon", "anon"),
+                        new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
                         HttpKsiServiceProtocolInvalidUrls,
                         new PublicationsFileFactory(
                             new PkiTrustStoreProvider(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com"))),
@@ -105,9 +108,9 @@ namespace Guardtime.KSI.Integration
                 new Ksi(
                     new KsiService(
                         TcpKsiServiceProtocol,
-                        new ServiceCredentials("anon", "anon"),
+                        new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
                         HttpKsiServiceProtocol,
-                        new ServiceCredentials("anon", "anon"),
+                        new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
                         HttpKsiServiceProtocol,
                         new PublicationsFileFactory(
                             new PkiTrustStoreProvider(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com"))),
@@ -122,9 +125,9 @@ namespace Guardtime.KSI.Integration
                 new Ksi(
                     new KsiService(
                         TcpKsiServiceProtocol,
-                        new ServiceCredentials("anon", "anonx"),
+                        new ServiceCredentials(Settings.Default.HttpSigningServiceUser, "anonx"),
                         HttpKsiServiceProtocol,
-                        new ServiceCredentials("anon", "anonx"),
+                        new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, "anonx"),
                         HttpKsiServiceProtocol,
                         new PublicationsFileFactory(
                             new PkiTrustStoreProvider(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com"))),
@@ -139,9 +142,9 @@ namespace Guardtime.KSI.Integration
                 new Ksi(
                     new KsiService(
                         TcpKsiServiceProtocolInvalidUrl,
-                        new ServiceCredentials("anon", "anon"),
+                        new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
                         HttpKsiServiceProtocolInvalidUrls,
-                        new ServiceCredentials("anon", "anon"),
+                        new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
                         HttpKsiServiceProtocolInvalidUrls,
                         new PublicationsFileFactory(
                             new PkiTrustStoreProvider(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com"))),
@@ -156,9 +159,9 @@ namespace Guardtime.KSI.Integration
                 new Ksi(
                     new KsiService(
                         TcpKsiServiceProtocolInvalidPort,
-                        new ServiceCredentials("anon", "anon"),
+                        new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
                         HttpKsiServiceProtocolInvalidUrls,
-                        new ServiceCredentials("anon", "anon"),
+                        new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
                         HttpKsiServiceProtocolInvalidUrls,
                         new PublicationsFileFactory(
                             new PkiTrustStoreProvider(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com"))),
@@ -198,7 +201,7 @@ namespace Guardtime.KSI.Integration
                 return;
             }
 
-            Assert.True(latest.PublicationData.PublicationTime > prev.PublicationData.PublicationTime, "Signature should verify with key based policy");
+            Assert.True(latest.PublicationData.PublicationTime > prev.PublicationData.PublicationTime);
         }
     }
 }

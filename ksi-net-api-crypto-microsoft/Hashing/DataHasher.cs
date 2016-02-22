@@ -16,7 +16,9 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System.IO;
+using System.Security.Cryptography;
 using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Hashing
@@ -54,7 +56,8 @@ namespace Guardtime.KSI.Hashing
 
             _algorithm = algorithm;
 
-            _messageHasher = System.Security.Cryptography.HashAlgorithm.Create(algorithm.Name);
+            _messageHasher = GetHasher(algorithm);
+
             if (_messageHasher == null)
             {
                 throw new HashingException("Hash algorithm(" + algorithm.Name + ") is not supported.");
@@ -68,6 +71,35 @@ namespace Guardtime.KSI.Hashing
         /// </summary>
         public DataHasher() : this(HashAlgorithm.GetByName("DEFAULT"))
         {
+        }
+
+        private static System.Security.Cryptography.HashAlgorithm GetHasher(HashAlgorithm algorithm)
+        {
+            if (algorithm == HashAlgorithm.Sha1)
+            {
+                return new SHA1CryptoServiceProvider();
+            }
+            if (algorithm == HashAlgorithm.Sha2256)
+            {
+                return new SHA256Managed();
+            }
+            if (algorithm == HashAlgorithm.Ripemd160)
+            {
+                return new RIPEMD160Managed();
+            }
+            //if (algorithm == HashAlgorithm.Sha2224)
+            //{
+            //     return new SHA(key);
+            //}
+            if (algorithm == HashAlgorithm.Sha2384)
+            {
+                return new SHA384Managed();
+            }
+            if (algorithm == HashAlgorithm.Sha2512)
+            {
+                return new SHA512Managed();
+            }
+            throw new HashingException("Hash algorithm(" + algorithm.Name + ") is not supported.");
         }
 
         /// <summary>
@@ -171,7 +203,7 @@ namespace Guardtime.KSI.Hashing
         {
             _outputHash = null;
             _messageHasher.Clear();
-            _messageHasher = System.Security.Cryptography.HashAlgorithm.Create(_algorithm.Name);
+            _messageHasher = GetHasher(_algorithm);
 
             return this;
         }

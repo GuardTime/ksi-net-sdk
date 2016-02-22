@@ -110,10 +110,6 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BouncyCastle.Crypto, Version=1.7.4114.6375, Culture=neutral, PublicKeyToken=0e99375e54769942">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\BouncyCastle.1.8\BouncyCastle.Crypto.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <Private>False</Private>
     </Reference>
@@ -173,6 +169,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Publication\PublicationDataTests.cs" />
     <Compile Include="Publication\PublicationsFileTests.cs" />
     <Compile Include="Service\TestKsiServiceProtocol.cs" />
@@ -225,7 +226,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ksi-net-api-crypto-microsoft\ksi-net-api-crypto-microsoft.csproj">
-      <Project>{9225dfda-a9bd-469a-a36e-900227a205d5}</Project>
+      <Project>{9225DFDA-A9BD-469A-A36E-900227A205D5}</Project>
       <Name>ksi-net-api-crypto-microsoft</Name>
     </ProjectReference>
     <ProjectReference Include="..\ksi-net-api\Guardtime.KSI.csproj">
@@ -248,6 +249,10 @@
     <None Include="App.config" />
     <None Include="ksi-net-api-test.licenseheader" />
     <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="resources\publication\publicationdata\missingtag.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -779,6 +784,9 @@
     <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-with-invalid-publication-record.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="resources\signature\ksi-signature-do\ksi-signature-ok-extended.tlv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="resources\signature\ksi-signature-do\ksi-signature-ok-invalid-calendar-chain-invalid-aggregation-time.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -810,6 +818,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\ksi-signature-do\ksi-signature-ok.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\ksi-signature-do\ksi-signature-ok-with-mixed-aggregation-chains.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\ksi-signature-do\legacy-ksi-signature-ok-with-publication-record.tlv">

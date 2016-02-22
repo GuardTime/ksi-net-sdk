@@ -45,10 +45,12 @@ namespace Guardtime.KSI.Publication
                         publicationDataCount++;
                         break;
                     case Constants.PublicationRecord.PublicationReferencesTagType:
-                        PublicationReferences.Add(new StringTag(childTag));
+                        StringTag refTag = new StringTag(childTag);
+                        PublicationReferences.Add(refTag.Value);
                         break;
                     case Constants.PublicationRecord.PublicationRepositoryUriTagType:
-                        RepositoryUri.Add(new StringTag(childTag));
+                        StringTag uriTag = new StringTag(childTag);
+                        RepositoryUri.Add(uriTag.Value);
                         break;
                     default:
                         VerifyUnknownTag(childTag);
@@ -81,11 +83,11 @@ namespace Guardtime.KSI.Publication
         /// <summary>
         ///     Get publication references.
         /// </summary>
-        public IList<StringTag> PublicationReferences { get; } = new List<StringTag>();
+        public IList<string> PublicationReferences { get; } = new List<string>();
 
         /// <summary>
         ///     Get publication repository uri.
         /// </summary>
-        public IList<StringTag> RepositoryUri { get; } = new List<StringTag>();
+        public IList<string> RepositoryUri { get; } = new List<string>();
     }
 }
