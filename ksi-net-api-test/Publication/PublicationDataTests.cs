@@ -16,7 +16,10 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
+using System;
 using System.IO;
+using Guardtime.KSI.Signature;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Publication
@@ -24,37 +27,36 @@ namespace Guardtime.KSI.Publication
     [TestFixture]
     public class PublicationDataTest
     {
+        //    [Test]
+        //    public void TestPublicationDataFromTag()
+        //    {
+        //        using (
+        //            FileStream stream = new FileStream("resources/publication/publicationdata/publicationdata.tlv", FileMode.Open))
+        //        {
+        //            byte[] data = new byte[stream.Length];
+        //            stream.Read(data, 0, (int)stream.Length);
+        //            //                new PublicationData(data);
+        //        }
+        //    }
+
         [Test]
-        public void TestPublicationDataFromTag()
+        public void PublicationDataContentTest()
         {
-            using (
-                FileStream stream = new FileStream("resources/publication/publicationdata/publicationdata.tlv", FileMode.Open))
+            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_Extended, FileMode.Open))
             {
-                byte[] data = new byte[stream.Length];
-                stream.Read(data, 0, (int)stream.Length);
-                //                new PublicationData(data);
+                IKsiSignature signature = new KsiSignatureFactory().Create(stream);
+                PublicationRecordInSignature publicationRecord = signature.PublicationRecord;
+
+                string code = publicationRecord.PublicationData.GetPublicationString();
+                DateTime date = publicationRecord.PublicationData.GetPublicationDate();
+
+                Assert.AreEqual("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K", code, "Publication string is invalid.");
+                Assert.AreEqual(new DateTime(2015, 8, 15), date, "Publication date is invalid.");
+                Assert.AreEqual(3, publicationRecord.PublicationReferences.Count, "Invalid publication reference count.");
+                Assert.AreEqual("Äripäev, ISSN: 1406-2585, 19.08.2015", publicationRecord.PublicationReferences[0], "Invalid first publication reference.");
+                Assert.AreEqual("Financial Times, ISSN: 0307-1766, 2015-08-19", publicationRecord.PublicationReferences[1], "Invalid second publication reference.");
+                Assert.AreEqual("https://twitter.com/Guardtime/status/634126754823700480", publicationRecord.PublicationReferences[2], "Invalid third publication reference.");
             }
         }
-
-        //        [Test]
-        //        public void TestPublicationDataCreate()
-        //        {
-        //            Stream stream = new MemoryStream();
-        //            var writer = new TlvWriter(stream);
-        //
-        //            writer.WriteTag(new RawTag(0x2, false, false, new byte[] {0x0, 0x1}));
-        //            writer.WriteTag(new RawTag(0x3, false, false, new byte[] {0x0, 0x1, 0x2, 0x5}));
-        //            writer.WriteTag(new RawTag(0x4, false, false, new DataHash(HashAlgorithm.Sha2256, new byte[] { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }).Imprint));
-        //
-        //            var data = ((MemoryStream)stream).ToArray();
-        //            stream.SetLength(0);
-        //
-        //            stream = new FileStream("resources/publication/publicationData/missingtag.tlv", FileMode.CreateNew);
-        //            writer = new TlvWriter(stream);
-        //
-        //            writer.WriteTag(new RawTag(0x10, false, false, data));
-        //
-        //
-        //        }
     }
 }
