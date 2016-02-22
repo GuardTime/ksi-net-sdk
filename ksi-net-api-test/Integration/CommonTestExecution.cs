@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using Guardtime.KSI.Publication;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
+using Guardtime.KSI.Service;
 using Guardtime.KSI.Trust;
 using NUnit.Framework;
 using Guardtime.KSI.Signature;
@@ -23,10 +23,13 @@ namespace Guardtime.KSI.Integration
             using (FileStream stream = new FileStream(testData.GetTestFile(), FileMode.Open)) { 
                 try
                 {
-                    VerificationPolicy policy = null;
-                    IPublicationsFile publicationFile = null;
-                    PublicationData publicationData = null;
-                    bool isExtendingAllowed = false;
+
+                    IKsiSignature signature = new KsiSignatureFactory().Create(stream);
+                    Assert.IsFalse(testData.GetSigantureReadInFails(), testData.GetTestFile() + " supposed to fail with class " + testData.GetExpectedExceptionClass() + " exception.");
+
+                    VerificationContext context = new VerificationContext(signature);
+
+                    VerificationPolicy policy;
 
                     switch (policyName)
                     {
@@ -34,7 +37,7 @@ namespace Guardtime.KSI.Integration
                             using (Stream publicationFileInStream = new FileStream("resources/publication/publicationsfile/newest-ksi-publications.bin", FileMode.Open))
                             {
                                 policy = new PublicationBasedVerificationPolicy();
-                                publicationFile = new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
+                                context.PublicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                                     new CertificateSubjectRdnSelector(new List<CertificateSubjectRdn>
                                     {
                                         new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com")
@@ -53,12 +56,13 @@ namespace Guardtime.KSI.Integration
 
                         case "PublicationStringBasedVerificationPolicy":
                             policy = new PublicationBasedVerificationPolicy();
-                            publicationData = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUBD7-OE44VA");
+                            context.UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUBD7-OE44VA");
                             break;
 
                         case "CalendarBasedVerificationPolicy":
                             policy = new CalendarBasedVerificationPolicy();
-                            isExtendingAllowed = true;
+                            context.IsExtendingAllowed = true;
+                            context.KsiService = IntegrationTests.GetHttpKsiService();
                             break;
 
                         default:
@@ -69,7 +73,7 @@ namespace Guardtime.KSI.Integration
                                 {
                                     new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com")
                                 }));
-                                publicationFile = new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
+                                context.PublicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                                         new CertificateSubjectRdnSelector(new List<CertificateSubjectRdn>
                                         {
                                         new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com")
@@ -78,17 +82,6 @@ namespace Guardtime.KSI.Integration
                                 break;
                             }
                     }
-
-                    IKsiSignature extendedSignature = new KsiSignatureFactory().Create(stream);
-                    Assert.IsFalse(testData.GetSigantureReadInFails(), testData.GetTestFile() + " supposed to fail with class " + testData.GetExpectedExceptionClass() + " exception.");
-
-                    TestVerificationContext context = new TestVerificationContext()
-                    {
-                        Signature = extendedSignature,
-                        PublicationsFile = publicationFile,
-                        UserPublication = publicationData,
-                        IsExtendingAllowed = isExtendingAllowed
-                    };
 
                     VerificationResult verificationResult = policy.Verify(context);
                     Console.WriteLine(string.Format("Result start:"));

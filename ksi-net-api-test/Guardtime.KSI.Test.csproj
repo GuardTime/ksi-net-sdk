@@ -242,7 +242,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="resources\service\" />
-    <Folder Include="resources\signature\ksi-signature\" />
+    <Folder Include="resources\signature\rfc3161-record\ksi-signature\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

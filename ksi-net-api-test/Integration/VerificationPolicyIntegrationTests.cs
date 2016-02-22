@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Net;
-using System.Security.Cryptography.X509Certificates;
-using Guardtime.KSI.Crypto;
-using Guardtime.KSI.Signature.Verification.Policy;
+﻿using System.Net;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Integration
