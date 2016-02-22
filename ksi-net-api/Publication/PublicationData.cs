@@ -18,7 +18,6 @@
  */
 
 using System;
-using System.Text;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
@@ -177,29 +176,14 @@ namespace Guardtime.KSI.Publication
             Array.Copy(crc32, 0, data, data.Length - 4, crc32.Length);
             string code = Base32.Encode(data);
 
-            StringBuilder sb = new StringBuilder();
+            int hyphenStep = 6;
 
-            int index = 0;
-
-            while (true)
+            for (int i = hyphenStep; i < code.Length; i = i + hyphenStep + 1)
             {
-                if (index > 0)
-                {
-                    sb.Append("-");
-                }
-
-                if (index + 6 < code.Length)
-                {
-                    sb.Append(code.Substring(index, 6));
-                    index += 6;
-                }
-                else
-                {
-                    int count = code.Length - index;
-                    sb.Append(code.Substring(index, count));
-                    return sb.ToString();
-                }
+                code = code.Insert(i, "-");
             }
+
+            return code;
         }
 
         /// <summary>
