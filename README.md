@@ -31,7 +31,7 @@ var httpKsiServiceProtocol = new HttpKsiServiceProtocol("http://signingservice_u
 var ksiService = new KsiService(
 	httpKsiServiceProtocol, new ServiceCredentials("anon", "anon"), 
 	httpKsiServiceProtocol, new ServiceCredentials("anon", "anon"), 
-	httpKsiServiceProtocol, new ServiceCredentials("anon", "anon"), 
+	httpKsiServiceProtocol,
 	new PublicationsFileFactory(new PkiTrustStoreProvider()), 
 	new KsiSignatureFactory());
 ```
