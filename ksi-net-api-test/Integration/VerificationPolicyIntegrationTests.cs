@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace Guardtime.KSI.Integration
 {
     [TestFixture]
-    public class InternalVerificationTests : IntegrationTests
+    public class VerificationPolicyIntegrationTests : IntegrationTests
     {
 
         [Test, TestCaseSource(typeof(CommonGetTestFilesAndResults), nameof(CommonGetTestFilesAndResults.GetKeyBasedVerificationData))]
