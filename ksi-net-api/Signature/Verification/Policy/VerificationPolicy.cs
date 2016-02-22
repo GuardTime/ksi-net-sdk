@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System;
 using System.Collections.Generic;
 using Guardtime.KSI.Exceptions;
@@ -66,6 +67,7 @@ namespace Guardtime.KSI.Signature.Verification.Policy
             {
                 Logger.Warn("Error occured on rule {0}: {1}", verificationRule?.GetRuleName(), e);
                 verificationResults.Add(new VerificationResult(verificationRule?.GetRuleName(), VerificationResultCode.Na));
+                throw;
             }
             finally
             {
