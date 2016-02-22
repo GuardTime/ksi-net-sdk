@@ -37,7 +37,7 @@ namespace Guardtime.KSI.Signature.Verification
         [Test]
         public void TestVerifySignatureOk()
         {
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Resources.KsiSignatureDo_Ok, FileMode.Open))
             {
                 HttpKsiServiceProtocol serviceProtocol = new HttpKsiServiceProtocol(
                     Settings.Default.HttpSigningServiceUrl,

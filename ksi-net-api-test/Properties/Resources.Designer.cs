@@ -809,6 +809,15 @@ namespace Guardtime.KSI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-ok-extended.tlv.
+        /// </summary>
+        internal static string KsiSignatureDo_Ok_Extended {
+            get {
+                return ResourceManager.GetString("KsiSignatureDo_Ok_Extended", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-ok-missing-calendar-hash-chain.tlv.
         /// </summary>
         internal static string KsiSignatureDo_Ok_Missing_Calendar_Hash_Chain {
