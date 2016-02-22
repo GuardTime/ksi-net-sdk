@@ -24,7 +24,4 @@ resources/signature/key-based-verification/signature-with-invalid-pki-signature.
 resources/signature/key-based-verification/NewSignature-CalAuth-WrongSigningValue.ksig:false:Fail: : :CalendarAuthenticationRecordSignatureVerificationRule
 resources/signature/key-based-verification/NewSignature-CalAuth-NoSigningValue.ksig:false:Fail: : :CalendarAuthenticationRecordSignatureVerificationRule
 resources/signature/key-based-verification/NewSignature-CalAuth-NoCertID.ksig:false:Fail: : :CertificateExistenceRule
-#
-# Na
-#
-resources/signature/internal-verification-authentication-records/NewSignature-CalAuth-WrongSigType.ksig:false:Na: : :CalendarAuthenticationRecordSignatureVerificationRule
+resources/signature/internal-verification-authentication-records/NewSignature-CalAuth-WrongSigType.ksig:false:Fail:PkiVerificationErrorException:Cryptographic signature not supported: 

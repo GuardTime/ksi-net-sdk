@@ -22,7 +22,7 @@ namespace Guardtime.KSI.Integration
             }
             this._testFile = inputData[0];
 
-            this._sigantureReadInFails = inputData[1].Equals("true");
+            this._sigantureReadInFails = inputData[1].ToLower().Equals("true");
 
             if (inputData[2] == null)
             {

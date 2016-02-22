@@ -2,10 +2,9 @@
 # key based ver: Resutl is Na
 resources/signature/key-based-verification/ExtendedSignature-MissingCalChainAndPubRec.ksig:false:Ok: : : 
 resources/signature/internal-verification-calendar-chain/NewSignature-CalHash-MissingCalHashAndAuthReq.ksig:false:Ok: : : 
-resources/signature/internal-verification-aggr-chain/NewSignature-AggrHashGW-WrongAggrAlgo2.ksig:false:Fail: : :AggregationHashChainConsistencyRule
 resources/signature/key-based-verification/signature-without-calendar-elements.ksig:false:Fail: : :CalendarHashChainExistenceRule
 #
-resources/signature/ksi-signature-do/ksi-signature-ok.tlv:false:Ok: : :x
+resources/signature/ksi-signature-do/ksi-signature-ok.tlv:false:Ok: : : 
 resources/signature/tlv-parsing-signatures/ok-sig-2014-06-2-extra-element-in-aggregation.ksig:false:Ok: : : 
 resources/signature/tlv-parsing-signatures/ok-sig-2014-06-2-extra-element-in-aggregation-lvl2.ksig:false:Ok: : : 
 resources/signature/tlv-parsing-signatures/ok-sig-2014-06-2-extra-element-in-calendar-authentication-lvl1.ksig:false:Ok: : : 
@@ -65,4 +64,4 @@ resources/signature/internal-verification-aggr-chain/NewSignature-AggrHashCore-N
 resources/signature/publication-based-verification/all-wrong-hash-chains-in-signature.ksig:false:Fail: : :ExtendedSignatureCalendarChainInputHashRule
 resources/signature/key-based-verification/ExtendedSignature-MissingPubRecWrongCalChainFirstRightLink.ksig:false:Fail: : :ExtendedSignatureAggregationChainRightLinksMatchesRule
 resources/signature/key-based-verification/ExtendedSignature-MissingPubRecWrongCalChainLastRightLink.ksig:false:Fail: : :ExtendedSignatureAggregationChainRightLinksMatchesRule
-#
+resources/signature/internal-verification-aggr-chain/NewSignature-AggrHashGW-WrongAggrAlgo2.ksig:false:Fail:HashingException:Hash algorithm is not implemented: 

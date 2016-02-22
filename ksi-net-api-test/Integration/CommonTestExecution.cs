@@ -123,10 +123,29 @@ namespace Guardtime.KSI.Integration
                     Console.WriteLine(string.Format("E start:"));
                     Console.WriteLine(e);
                     Console.WriteLine(string.Format("E end"));
+                    //Signature read in did not fail while it should have.
                     if (testData.GetSigantureReadInFails() &&
-                        e.ToString().Contains(" supposed to fail with class ") ||
-                        !testData.GetSigantureReadInFails()
+                        e.ToString().Contains(" supposed to fail with class "))
+                    {
+                        throw;
+                    }
+                    //
+                    if (e.ToString().Contains(", but found: ") ||
+                        e.ToString().Contains(" was not found from verification results:") ||
+                        e.ToString().Contains("Verification codes do not match. Actual ")
                         )
+                    {
+                        throw;
+                    }
+
+                    if (!testData.GetSigantureReadInFails() &&
+                        (!e.ToString().Contains(testData.GetExpectedExceptionMessage()) ||
+                        !e.ToString().Contains(testData.GetExpectedExceptionClass()) ||
+                        !e.ToString().Contains(testData.GetExpectedRule())))
+                    {
+                        throw;
+                    }
+                    if (testData.GetExpectedVerificationResultCode().ToLower().Equals("ok"))
                     {
                         throw;
                     }
