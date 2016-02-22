@@ -113,5 +113,21 @@ namespace Guardtime.KSI.Integration
                     extendedSignature.PublicationRecord.PublicationData.PublicationHash);
             }
         }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void ExtendToNearestPublicationTest(Ksi ksi)
+        {
+            UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
+
+            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
+            {
+                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+                IKsiSignature extendedToLatest = ksi.Extend(ksiSignature, ksi.GetPublicationsFile().GetLatestPublication());
+                IKsiSignature extendedToNearest = ksi.Extend(ksiSignature);
+
+                Assert.True(extendedToLatest.PublicationRecord.PublicationData.PublicationTime > extendedToNearest.PublicationRecord.PublicationData.PublicationTime);
+                Assert.AreEqual(extendedToNearest.PublicationRecord.PublicationData.PublicationTime, 1408060800);
+            }
+        }
     }
 }

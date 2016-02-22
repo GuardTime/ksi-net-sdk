@@ -471,6 +471,9 @@
   <data name="KsiSignatureDo_Invalid_Aggregation_Time_With_Publication_Record" xml:space="preserve">
     <value>resources/signature/ksi-signature-do/ksi-signature-invalid-aggregation-time-with-publication-record.tlv</value>
   </data>
+  <data name="KsiSignatureDo_Ok_With_Mixed_Aggregation_Chains" xml:space="preserve">
+    <value>resources/signature/ksi-signature-do/ksi-signature-ok-with-mixed-aggregation-chains.tlv</value>
+  </data>
   <data name="KsiSignatureDo_Ok_Extended" xml:space="preserve">
     <value>resources/signature/ksi-signature-do/ksi-signature-ok-extended.tlv</value>
   </data>

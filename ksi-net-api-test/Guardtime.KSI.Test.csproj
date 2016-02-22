@@ -508,6 +508,9 @@
     <None Include="resources\signature\ksi-signature-do\ksi-signature-ok.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="resources\signature\ksi-signature-do\ksi-signature-ok-with-mixed-aggregation-chains.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="resources\signature\ksi-signature-do\legacy-ksi-signature-ok-with-publication-record.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

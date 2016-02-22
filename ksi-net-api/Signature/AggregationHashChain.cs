@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System.Collections.Generic;
 using System.Text;
 using Guardtime.KSI.Exceptions;
@@ -141,6 +142,25 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
+        /// Get the (partial) signer identity from the current hash chain.
+        /// </summary>
+        /// <returns></returns>
+        public string GetChainIdentity()
+        {
+            StringBuilder identity = new StringBuilder();
+            foreach (Link aggregationChainLink in _chain)
+            {
+                string id = aggregationChainLink.GetIdentity();
+                if (identity.Length > 0 && id.Length > 0)
+                {
+                    identity.Append(".");
+                }
+                identity.Append(id);
+            }
+            return identity.ToString();
+        }
+
+        /// <summary>
         ///     Get output hash.
         /// </summary>
         /// <param name="result">last hashing result</param>
@@ -246,13 +266,7 @@ namespace Guardtime.KSI.Signature
                 }
 
                 Direction = direction;
-                Idendity = CalculateIdendity();
             }
-
-            /// <summary>
-            ///     Get link idendity.
-            /// </summary>
-            public string Idendity { get; }
 
             /// <summary>
             ///     Get level correction
@@ -264,17 +278,21 @@ namespace Guardtime.KSI.Signature
             /// </summary>
             public LinkDirection Direction { get; }
 
-            private string CalculateIdendity()
+            /// <summary>
+            /// Get link identity
+            /// </summary>
+            /// <returns></returns>
+            public string GetIdentity()
             {
                 if (_metaHash != null)
                 {
-                    return CalculateIdendityFromMetaHash();
+                    return CalculateIdentityFromMetaHash();
                 }
 
                 return _metaData != null ? _metaData.ClientId : "";
             }
 
-            private string CalculateIdendityFromMetaHash()
+            private string CalculateIdentityFromMetaHash()
             {
                 byte[] bytes = _metaHash.Value.Imprint;
 
@@ -284,7 +302,7 @@ namespace Guardtime.KSI.Signature
                     return "";
                 }
 
-                int length = bytes[1] << 8 + bytes[2];
+                int length = (bytes[1] << 8) + bytes[2];
                 return Encoding.UTF8.GetString(bytes, 3, length);
             }
 

@@ -845,6 +845,15 @@ namespace Guardtime.KSI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-ok-with-mixed-aggregation-chains.tlv.
+        /// </summary>
+        internal static string KsiSignatureDo_Ok_With_Mixed_Aggregation_Chains {
+            get {
+                return ResourceManager.GetString("KsiSignatureDo_Ok_With_Mixed_Aggregation_Chains", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-ok-with-publication-record.tlv.
         /// </summary>
         internal static string KsiSignatureDo_Ok_With_Publication_Record {
