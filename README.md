@@ -28,7 +28,12 @@ KsiProvider.SetCryptoProvider(new MicrosoftCryptoProvider());
 // Create HTTP KSI service protocol
 var httpKsiServiceProtocol = new HttpKsiServiceProtocol("http://signingservice_url", "http://extendingservice_url", "http://publicationsfile_url");
 // Create new KSI service
-var ksiService = new KsiService(httpKsiServiceProtocol, httpKsiServiceProtocol, httpKsiServiceProtocol, new ServiceCredentials("anon", "anon"), new PublicationsFileFactory(new PkiTrustStoreProvider()), new KsiSignatureFactory());
+var ksiService = new KsiService(
+	httpKsiServiceProtocol, new ServiceCredentials("anon", "anon"), 
+	httpKsiServiceProtocol, new ServiceCredentials("anon", "anon"), 
+	httpKsiServiceProtocol, new ServiceCredentials("anon", "anon"), 
+	new PublicationsFileFactory(new PkiTrustStoreProvider()), 
+	new KsiSignatureFactory());
 ```
 
 There are 2 ways to use KSI service, with and without simple API wrapper.
@@ -42,8 +47,8 @@ var ksi = new Ksi(ksiService);
 // Create new signature by signing given hash
 var ksiSignature = ksi.Sign(new DataHash(Base16.Decode("010000000000000000000000000000000000000000000000000000000000000000")));
 
-// Load some older signature and extend it to head
-ksiSignature = ksi.ExtendToHead(ksiSignature);
+// Load some older signature and extend it to closest publication
+ksiSignature = ksi.Extend(ksiSignature);
 
 // Getting publications file
 var publicationsFile = ksi.GetPublicationsFile();
@@ -59,9 +64,10 @@ signature = ksiService.Sign(new DataHash(Base16.Decode("010000000000000000000000
 publicationsFile = ksiService.GetPublicationsFile();
 
 // Extending 
-var publicationRecord = publicationsFile.GetLatestPublication();
+var publicationRecord = publicationsFile.GetNearestPublicationRecord(signature.AggregationTime);
 CalendarHashChain calendarHashChain = _ksiService.Extend(signature.AggregationTime, publicationRecord.PublicationData.PublicationTime);
 var extendedSignature = signature.Extend(calendarHashChain, publicationRecord);
+
 ```
 The API full reference is available here [http://guardtime.github.io/ksi-net-sdk/](http://guardtime.github.io/ksi-net-sdk/).
 
