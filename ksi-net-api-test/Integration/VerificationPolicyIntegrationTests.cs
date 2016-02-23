@@ -30,7 +30,7 @@ namespace Guardtime.KSI.Integration
         [Test, TestCaseSource(typeof(CommonGetTestFilesAndResults), nameof(CommonGetTestFilesAndResults.GetPublicationFileBasedVerificationNoExtendingData))]
         public void PublicationFileBasedVerificationNoExtendingTest(DataHolderForIntegrationTests data)
         {
-            new WebClient().DownloadFile("http://verify.guardtime.com/ksi-publications.bin", "resources/publication/publicationsfile/ksi-publications.bin");
+            new WebClient().DownloadFile("http://verify.guardtime.com/ksi-publications.bin", "resources/publication/publicationsfile/newest-ksi-publications.bin");
             new CommonTestExecution().TestExecution(data, "PublicationFileBasedVerificationNoExtendingPolicy");
         }
 
