@@ -1,67 +1,64 @@
 #signature file location with full path:signature read-in fails(true / false):expected verification result code(ok, fail, na):expected exception class (" " if none):expected excpetion message (" " if none):expected rule that fails (" " if none)
-# key based ver: Resutl is Na
-resources/signature/key-based-verification/ExtendedSignature-MissingCalChainAndPubRec.ksig:false:Ok: : : 
-resources/signature/internal-verification-calendar-chain/NewSignature-CalHash-MissingCalHashAndAuthReq.ksig:false:Ok: : : 
-resources/signature/key-based-verification/signature-without-calendar-elements.ksig:false:Fail: : :CalendarHashChainExistenceRule
+#
+# Missing calendar chain
+#
+resources/signature/integration-test-signatures/ExtendedSignature-MissingCalChainAndPubRec.ksig:false:Ok: : : 
+resources/signature/integration-test-signatures/NewSignature-CalHash-MissingCalHashAndAuthReq.ksig:false:Ok: : : 
+resources/signature/integration-test-signatures/signature-without-calendar-elements.ksig:false:Fail: : :CalendarHashChainExistenceRule
+#
+# Ok Results with Ok signatures.
 #
 resources/signature/ksi-signature-do/ksi-signature-ok.tlv:false:Ok: : : 
-resources/signature/tlv-parsing-signatures/ok-sig-2014-06-2-extra-element-in-aggregation.ksig:false:Ok: : : 
-resources/signature/tlv-parsing-signatures/ok-sig-2014-06-2-extra-element-in-aggregation-lvl2.ksig:false:Ok: : : 
-resources/signature/tlv-parsing-signatures/ok-sig-2014-06-2-extra-element-in-calendar-authentication-lvl1.ksig:false:Ok: : : 
-resources/signature/tlv-parsing-signatures/ok-sig-2014-06-2-extra-element-in-calendar-authentication-lvl2.ksig:false:Ok: : : 
-resources/signature/tlv-parsing-signatures/ok-sig-2014-06-2-extra-element-in-calendar-chain.ksig:false:Ok: : : 
-resources/signature/tlv-parsing-signatures/ok-sig-2014-06-2-extra-nested-tlv-in-main.ksig:false:Ok: : : 
-resources/signature/tlv-parsing-signatures/ok-sig-2014-06-2-extra-nested-tlv-in-main-with-critical-elements.ksig:false:Ok: : : 
-resources/signature/tlv-parsing-signatures/ok-sig-2014-06-2-extra-main-nested-tlv-block.ksig:false:Ok: : : 
-resources/signature/tlv-parsing-signatures/ok-sig-2014-06-2-extra-critical-main-nested-tlv-block-with-non-critical-tlvs.ksig:false:Ok: : : 
-resources/signature/tlv-parsing-signatures/ok-sig-2014-06-2-extra-main-nested-tlv-block-with-critical-tlvs.ksig:false:Ok: : : 
-resources/signature/tlv-parsing-signatures/ok-sig-2014-06-2-extra-critical-main-nested-tlv-block-with-critical-tlvs.ksig:false:Ok: : : 
-resources/signature/tlv-parsing-signatures/ok-sig-2014-06-2-extra-element-in-aggregation-lvl1.ksig:false:Ok: : : 
+resources/signature/integration-test-signatures/ok-sig-2014-06-2-extra-element-in-aggregation.ksig:false:Ok: : : 
+resources/signature/integration-test-signatures/ok-sig-2014-06-2-extra-element-in-aggregation-lvl2.ksig:false:Ok: : : 
+resources/signature/integration-test-signatures/ok-sig-2014-06-2-extra-element-in-calendar-authentication-lvl1.ksig:false:Ok: : : 
+resources/signature/integration-test-signatures/ok-sig-2014-06-2-extra-element-in-calendar-authentication-lvl2.ksig:false:Ok: : : 
+resources/signature/integration-test-signatures/ok-sig-2014-06-2-extra-element-in-calendar-chain.ksig:false:Ok: : : 
+resources/signature/integration-test-signatures/ok-sig-2014-06-2-extra-nested-tlv-in-main.ksig:false:Ok: : : 
+resources/signature/integration-test-signatures/ok-sig-2014-06-2-extra-nested-tlv-in-main-with-critical-elements.ksig:false:Ok: : : 
+resources/signature/integration-test-signatures/ok-sig-2014-06-2-extra-main-nested-tlv-block.ksig:false:Ok: : : 
+resources/signature/integration-test-signatures/ok-sig-2014-06-2-extra-critical-main-nested-tlv-block-with-non-critical-tlvs.ksig:false:Ok: : : 
+resources/signature/integration-test-signatures/ok-sig-2014-06-2-extra-main-nested-tlv-block-with-critical-tlvs.ksig:false:Ok: : : 
+resources/signature/integration-test-signatures/ok-sig-2014-06-2-extra-critical-main-nested-tlv-block-with-critical-tlvs.ksig:false:Ok: : : 
+resources/signature/integration-test-signatures/ok-sig-2014-06-2-extra-element-in-aggregation-lvl1.ksig:false:Ok: : : 
 #
 # Ok but there are errors that calendar based verification does not check
 #
-resources/signature/key-based-verification/signature-with-invalid-certificate-id.ksig:false:Ok: : : 
-resources/signature/key-based-verification/signature-with-invalid-pki-signature.ksig:false:Ok: : : 
-resources/signature/key-based-verification/NewSignature-CalAuth-WrongSigningValue.ksig:false:Ok: : : 
-resources/signature/key-based-verification/NewSignature-CalAuth-NoSigningValue.ksig:false:Ok: : : 
-resources/signature/key-based-verification/NewSignature-CalAuth-NoCertID.ksig:false:Ok: : : 
-resources/signature/publication-based-verification/ok-sig-2014-06-2-extended-wrong-publication-reference.ksig:false:Ok: : : 
-resources/signature/publication-based-verification/ok-sig-2014-06-2-extended-no-publication-reference.ksig:false:Ok: : : 
-resources/signature/internal-verification-authentication-records/NewSignature-CalAuth-WrongSigType.ksig:false:Ok: : : 
-resources/signature/key-based-verification/signature-without-calendar-authentication-record.ksig:false:Ok: : : 
-resources/signature/tlv-parsing-signatures/ok-sig-2014-06-2-extended-extra-elements-in-publication-record-lvl1.ksig:false:Ok: : : 
-resources/signature/tlv-parsing-signatures/ok-sig-2014-06-2-extended-extra-elements-in-publication-record-lvl2.ksig:false:Ok: : : 
-resources/signature/key-based-verification/ExtendedSignature-MissingPubRecWrongCalChainFirstLeftLink.ksig:false:Ok: : : 
+resources/signature/integration-test-signatures/signature-with-invalid-certificate-id.ksig:false:Ok: : : 
+resources/signature/integration-test-signatures/signature-with-invalid-pki-signature.ksig:false:Ok: : : 
+resources/signature/integration-test-signatures/NewSignature-CalAuth-WrongSigningValue.ksig:false:Ok: : : 
+resources/signature/integration-test-signatures/NewSignature-CalAuth-NoSigningValue.ksig:false:Ok: : : 
+resources/signature/integration-test-signatures/NewSignature-CalAuth-NoCertID.ksig:false:Ok: : : 
+resources/signature/integration-test-signatures/ok-sig-2014-06-2-extended-wrong-publication-reference.ksig:false:Ok: : : 
+resources/signature/integration-test-signatures/ok-sig-2014-06-2-extended-no-publication-reference.ksig:false:Ok: : : 
+resources/signature/integration-test-signatures/NewSignature-CalAuth-WrongSigType.ksig:false:Ok: : : 
+resources/signature/integration-test-signatures/signature-without-calendar-authentication-record.ksig:false:Ok: : : 
+resources/signature/integration-test-signatures/ok-sig-2014-06-2-extended-extra-elements-in-publication-record-lvl1.ksig:false:Ok: : : 
+resources/signature/integration-test-signatures/ok-sig-2014-06-2-extended-extra-elements-in-publication-record-lvl2.ksig:false:Ok: : : 
+resources/signature/integration-test-signatures/ExtendedSignature-MissingPubRecWrongCalChainFirstLeftLink.ksig:false:Ok: : : 
 #
 # Failed.
 #
-resources/signature/publication-based-verification/ok-sig-2014-06-2-extended-empty-publication-time.ksig:false:Fail: : :SignaturePublicationRecordPublicationTimeRule
-resources/signature/internal-verification-calendar-chain/ExtendedSignature-WrongPubTime.ksig:false:Fail: : :SignaturePublicationRecordPublicationTimeRule
-resources/signature/internal-verification-calendar-chain/ExtendedSignature_WithNewerPublicationTime.ksig:false:Fail: : :SignaturePublicationRecordPublicationHashRule
-resources/signature/internal-verification-calendar-chain/ExtendedSignature_WithOlderPublicationTime.ksig:false:Fail: : :SignaturePublicationRecordPublicationHashRule
-resources/signature/internal-verification-aggr-chain/timesMissing.ksig:false:Fail: : :CalendarHashChainRegistrationTimeRule
-resources/signature/internal-verification-aggr-chain/wrongTimes.ksig:false:Fail: : :CalendarHashChainRegistrationTimeRule
-resources/signature/internal-verification-aggr-chain/ExtendedSignature-WrongAllTimes.ksig:false:Fail: : :CalendarHashChainRegistrationTimeRule
-resources/signature/internal-verification-authentication-records/NewSignature-CalAuth-WrongPubTime.ksig:false:Fail: : :CalendarAuthenticationRecordAggregationTimeRule
-resources/signature/internal-verification-authentication-records/NewSignature-CalAuth-NoPubTime.ksig:false:Fail: : :CalendarAuthenticationRecordAggregationTimeRule
-resources/signature/internal-verification-authentication-records/NewSignature-CalAuth-WrongPubHash.ksig:false:Fail: : :CalendarAuthenticationRecordAggregationHashRule
-resources/signature/internal-verification-calendar-chain/NewSignature-CalHash-WrongLeftLinkLast.ksig:false:Fail: : :CalendarAuthenticationRecordAggregationHashRule
-resources/signature/internal-verification-calendar-chain/NewSignature-CalHash-WrongRightLink1.ksig:false:Fail: : :CalendarAuthenticationRecordAggregationHashRule
-resources/signature/key-based-verification/signature-with-invalid-calendar-authentication-record-hash.ksig:false:Fail: : :CalendarAuthenticationRecordAggregationHashRule
-resources/signature/internal-verification-calendar-chain/NewSignature-CalHash-WrongAggrTime.ksig:false:Fail: : :CalendarHashChainAggregationTimeRule
-resources/signature/internal-verification-calendar-chain/NewSignature-CalHash-NoAggrTime.ksig:false:Fail: : :CalendarHashChainAggregationTimeRule
-resources/signature/internal-verification-calendar-chain/NewSignature-CalHash-MissingAggrTime.ksig:false:Fail: : :CalendarHashChainAggregationTimeRule
-resources/signature/internal-verification-calendar-chain/NewSignature-CalHash-WrongInputHash.ksig:false:Fail: : :CalendarHashChainInputHashVerificationRule
-resources/signature/internal-verification-aggr-chain/NewSignature-AggrHashCore-WrongLeftLink1.ksig:false:Fail: : :CalendarHashChainInputHashVerificationRule
-resources/signature/internal-verification-aggr-chain/NewSignature-AggrHashCore-WrongLeftLink2.ksig:false:Fail: : :CalendarHashChainInputHashVerificationRule
-resources/signature/internal-verification-aggr-chain/NewSignature-AggrHashCore-NoLeftLink1.ksig:false:Fail: : :CalendarHashChainInputHashVerificationRule
-resources/signature/internal-verification-aggr-chain/NewSignature-AggrHashCore-WrongRightLink.ksig:false:Fail: : :CalendarHashChainInputHashVerificationRule
-resources/signature/internal-verification-aggr-chain/NewSignature-AggrHashCore-WrongAggrAlg.ksig:false:Fail: : :CalendarHashChainInputHashVerificationRule
-resources/signature/internal-verification-aggr-chain/NewSignature-AggrHashCore-MissingLeftLink.ksig:false:Fail: : :CalendarHashChainInputHashVerificationRule
-resources/signature/internal-verification-aggr-chain/NewSignature-AggrHashCore-MissingRightLink.ksig:false:Fail: : :CalendarHashChainInputHashVerificationRule
-resources/signature/internal-verification-aggr-chain/NewSignature-AggrHashCore-MissingCoreAggr.ksig:false:Fail: : :CalendarHashChainInputHashVerificationRule
-resources/signature/internal-verification-aggr-chain/NewSignature-AggrHashCore-NoAggrAlg.ksig:false:Fail: : :CalendarHashChainInputHashVerificationRule
-resources/signature/publication-based-verification/all-wrong-hash-chains-in-signature.ksig:false:Fail: : :ExtendedSignatureCalendarChainInputHashRule
-resources/signature/key-based-verification/ExtendedSignature-MissingPubRecWrongCalChainFirstRightLink.ksig:false:Fail: : :ExtendedSignatureAggregationChainRightLinksMatchesRule
-resources/signature/key-based-verification/ExtendedSignature-MissingPubRecWrongCalChainLastRightLink.ksig:false:Fail: : :ExtendedSignatureAggregationChainRightLinksMatchesRule
-resources/signature/internal-verification-aggr-chain/NewSignature-AggrHashGW-WrongAggrAlgo2.ksig:false:Fail:HashingException:Hash algorithm is not implemented: 
+resources/signature/integration-test-signatures/ok-sig-2014-06-2-extended-empty-publication-time.ksig:false:Fail: : :SignaturePublicationRecordPublicationTimeRule
+resources/signature/integration-test-signatures/ExtendedSignature-WrongPubTime.ksig:false:Fail: : :SignaturePublicationRecordPublicationTimeRule
+resources/signature/integration-test-signatures/ExtendedSignature_WithNewerPublicationTime.ksig:false:Fail: : :SignaturePublicationRecordPublicationHashRule
+resources/signature/integration-test-signatures/ExtendedSignature_WithOlderPublicationTime.ksig:false:Fail: : :SignaturePublicationRecordPublicationHashRule
+resources/signature/integration-test-signatures/timesMissing.ksig:false:Fail: : :CalendarHashChainRegistrationTimeRule
+resources/signature/integration-test-signatures/wrongTimes.ksig:false:Fail: : :CalendarHashChainRegistrationTimeRule
+resources/signature/integration-test-signatures/ExtendedSignature-WrongAllTimes.ksig:false:Fail: : :CalendarHashChainRegistrationTimeRule
+resources/signature/integration-test-signatures/NewSignature-CalHash-WrongAggrTime.ksig:false:Fail: : :CalendarHashChainAggregationTimeRule
+resources/signature/integration-test-signatures/NewSignature-CalHash-NoAggrTime.ksig:false:Fail: : :CalendarHashChainAggregationTimeRule
+resources/signature/integration-test-signatures/NewSignature-CalHash-MissingAggrTime.ksig:false:Fail: : :CalendarHashChainAggregationTimeRule
+resources/signature/integration-test-signatures/NewSignature-CalHash-WrongInputHash.ksig:false:Fail: : :CalendarHashChainInputHashVerificationRule
+resources/signature/integration-test-signatures/NewSignature-AggrHashCore-WrongLeftLink1.ksig:false:Fail: : :CalendarHashChainInputHashVerificationRule
+resources/signature/integration-test-signatures/NewSignature-AggrHashCore-WrongLeftLink2.ksig:false:Fail: : :CalendarHashChainInputHashVerificationRule
+resources/signature/integration-test-signatures/NewSignature-AggrHashCore-NoLeftLink1.ksig:false:Fail: : :CalendarHashChainInputHashVerificationRule
+resources/signature/integration-test-signatures/NewSignature-AggrHashCore-WrongRightLink.ksig:false:Fail: : :CalendarHashChainInputHashVerificationRule
+resources/signature/integration-test-signatures/NewSignature-AggrHashCore-WrongAggrAlg.ksig:false:Fail: : :CalendarHashChainInputHashVerificationRule
+resources/signature/integration-test-signatures/NewSignature-AggrHashCore-MissingLeftLink.ksig:false:Fail: : :CalendarHashChainInputHashVerificationRule
+resources/signature/integration-test-signatures/NewSignature-AggrHashCore-MissingRightLink.ksig:false:Fail: : :CalendarHashChainInputHashVerificationRule
+resources/signature/integration-test-signatures/NewSignature-AggrHashCore-MissingCoreAggr.ksig:false:Fail: : :CalendarHashChainInputHashVerificationRule
+resources/signature/integration-test-signatures/NewSignature-AggrHashCore-NoAggrAlg.ksig:false:Fail: : :CalendarHashChainInputHashVerificationRule
+resources/signature/integration-test-signatures/all-wrong-hash-chains-in-signature.ksig:false:Fail: : :ExtendedSignatureCalendarChainInputHashRule
+resources/signature/integration-test-signatures/ExtendedSignature-MissingPubRecWrongCalChainFirstRightLink.ksig:false:Fail: : :ExtendedSignatureAggregationChainRightLinksMatchesRule
+resources/signature/integration-test-signatures/ExtendedSignature-MissingPubRecWrongCalChainLastRightLink.ksig:false:Fail: : :ExtendedSignatureAggregationChainRightLinksMatchesRule

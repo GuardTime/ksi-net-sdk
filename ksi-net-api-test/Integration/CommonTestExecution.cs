@@ -43,6 +43,22 @@ namespace Guardtime.KSI.Integration
                                         new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com")
                                     })))
                                     .Create(publicationFileInStream);
+                                context.IsExtendingAllowed = true;
+                                context.KsiService = IntegrationTests.GetHttpKsiService();
+                                break;
+                            }
+
+                        case "PublicationFileBasedVerificationNoExtendingPolicy":
+                            using (Stream publicationFileInStream = new FileStream("resources/publication/publicationsfile/newest-ksi-publications.bin", FileMode.Open))
+                            {
+                                policy = new PublicationBasedVerificationPolicy();
+                                context.PublicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
+                                    new CertificateSubjectRdnSelector(new List<CertificateSubjectRdn>
+                                    {
+                                        new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com")
+                                    })))
+                                    .Create(publicationFileInStream);
+                                context.IsExtendingAllowed = false;
                                 break;
                             }
 
@@ -56,7 +72,15 @@ namespace Guardtime.KSI.Integration
 
                         case "PublicationStringBasedVerificationPolicy":
                             policy = new PublicationBasedVerificationPolicy();
-                            context.UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUBD7-OE44VA");
+                            context.UserPublication = new PublicationData("AAAAAA-CWYEKQ-AAIYPA-UJ4GRT-HXMFBE-OTB4AB-XH3PT3-KNIKGV-PYCJXU-HL2TN4-RG6SCC-3ZGSBM");
+                            context.IsExtendingAllowed = true;
+                            context.KsiService = IntegrationTests.GetHttpKsiService();
+                            break;
+
+                        case "PublicationStringBasedVerificationNoExtendingPolicy":
+                            policy = new PublicationBasedVerificationPolicy();
+                            context.UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K");
+                            context.KsiService = IntegrationTests.GetHttpKsiService();
                             break;
 
                         case "CalendarBasedVerificationPolicy":

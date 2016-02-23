@@ -23,9 +23,19 @@ namespace Guardtime.KSI.Integration
             return GetTestFilesAndResults("resources/Integration/PublicationFileBasedVerificationData.txt").Cast<object>().Cast<DataHolderForIntegrationTests>();
         }
 
+        public static IEnumerable<DataHolderForIntegrationTests> GetPublicationFileBasedVerificationNoExtendingData()
+        {
+            return GetTestFilesAndResults("resources/Integration/PublicationFileBasedVerificationDataNoExtending.txt").Cast<object>().Cast<DataHolderForIntegrationTests>();
+        }
+
         public static IEnumerable<DataHolderForIntegrationTests> GetPublicationStringVerificationData()
         {
             return GetTestFilesAndResults("resources/Integration/PublicationStringVerificationData.txt").Cast<object>().Cast<DataHolderForIntegrationTests>();
+        }
+
+        public static IEnumerable<DataHolderForIntegrationTests> GetPublicationStringVerificationNoExtendingData()
+        {
+            return GetTestFilesAndResults("resources/Integration/PublicationStringVerificationNoExtendingData.txt").Cast<object>().Cast<DataHolderForIntegrationTests>();
         }
 
         public static IEnumerable<DataHolderForIntegrationTests> GetCalendarBasedVerificationData()

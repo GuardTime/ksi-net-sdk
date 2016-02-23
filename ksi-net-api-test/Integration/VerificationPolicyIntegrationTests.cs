@@ -27,10 +27,23 @@ namespace Guardtime.KSI.Integration
             new CommonTestExecution().TestExecution(data, "PublicationFileBasedVerificationPolicy");
         }
 
+        [Test, TestCaseSource(typeof(CommonGetTestFilesAndResults), nameof(CommonGetTestFilesAndResults.GetPublicationFileBasedVerificationNoExtendingData))]
+        public void PublicationFileBasedVerificationNoExtendingTest(DataHolderForIntegrationTests data)
+        {
+            new WebClient().DownloadFile("http://verify.guardtime.com/ksi-publications.bin", "resources/publication/publicationsfile/ksi-publications.bin");
+            new CommonTestExecution().TestExecution(data, "PublicationFileBasedVerificationNoExtendingPolicy");
+        }
+
         [Test, TestCaseSource(typeof(CommonGetTestFilesAndResults), nameof(CommonGetTestFilesAndResults.GetPublicationStringVerificationData))]
         public void PublicationStringBasedVerificationTest(DataHolderForIntegrationTests data)
         {
             new CommonTestExecution().TestExecution(data, "PublicationStringBasedVerificationPolicy");
+        }
+
+        [Test, TestCaseSource(typeof(CommonGetTestFilesAndResults), nameof(CommonGetTestFilesAndResults.GetPublicationStringVerificationNoExtendingData))]
+        public void PublicationStringBasedVerificationNoExtendingTest(DataHolderForIntegrationTests data)
+        {
+            new CommonTestExecution().TestExecution(data, "PublicationStringBasedVerificationNoExtendingPolicy");
         }
 
         [Test, TestCaseSource(typeof(CommonGetTestFilesAndResults), nameof(CommonGetTestFilesAndResults.GetCalendarBasedVerificationData))]

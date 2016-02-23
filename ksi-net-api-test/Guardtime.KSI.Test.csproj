@@ -448,298 +448,406 @@
     <None Include="resources\signature\calendar-hash-chain\calendar-hash-chain-ok.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ExtendedSignature-EmptyPubRec.ksig">
+    <None Include="resources\signature\integration-test-signatures\all-wrong-hash-chains-in-signature.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ExtendedSignature-MissingPubRecWrongCalChainFirstRightLink.ksig">
+    <None Include="resources\signature\integration-test-signatures\ExtendedSignature-EmptyPubRec.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\ExtendedSignature-MissingCalChainEmptyPubRecHash.ksig">
+    <None Include="resources\signature\integration-test-signatures\ExtendedSignature-MissingCalChain.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\ExtendedSignature-MissingCalChainMissingPubRecHash.ksig">
+    <None Include="resources\signature\integration-test-signatures\ExtendedSignature-MissingCalChainAndPubRec.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\ExtendedSignature-WrongAllTimes.ksig">
+    <None Include="resources\signature\integration-test-signatures\ExtendedSignature-MissingCalChainEmptyPubRecHash.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHash-WrongLeftLinkLevelCorrector.ksig">
+    <None Include="resources\signature\integration-test-signatures\ExtendedSignature-MissingCalChainMissingPubRecHash.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashCore-MissingAggrAlg.ksig">
+    <None Include="resources\signature\integration-test-signatures\ExtendedSignature-MissingPubRecWrongCalChainFirstLeftLink.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashCore-MissingAggrTime.ksig">
+    <None Include="resources\signature\integration-test-signatures\ExtendedSignature-MissingPubRecWrongCalChainFirstRightLink.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashCore-MissingChainIndex.ksig">
+    <None Include="resources\signature\integration-test-signatures\ExtendedSignature-MissingPubRecWrongCalChainLastRightLink.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashCore-MissingCoreAggr.ksig">
+    <None Include="resources\signature\integration-test-signatures\ExtendedSignature-WrongAllTimes.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashCore-MissingInputHash.ksig">
+    <None Include="resources\signature\integration-test-signatures\ExtendedSignature-WrongPubTime.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashCore-MissingLeftLink.ksig">
+    <None Include="resources\signature\integration-test-signatures\ExtendedSignature_WithNewerPublicationTime.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashCore-MissingRightLink.ksig">
+    <None Include="resources\signature\integration-test-signatures\ExtendedSignature_WithOlderPublicationTime.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashCore-NoAggrAlg.ksig">
+    <None Include="resources\signature\integration-test-signatures\extension-response-for-ok-sig-2014-06-2-extra-critical-element.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashCore-NoAggrTime.ksig">
+    <None Include="resources\signature\integration-test-signatures\extension-response-for-ok-sig-2014-06-2-extra-critical-main-with-critical-tlv.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashCore-NoChainIndex.ksig">
+    <None Include="resources\signature\integration-test-signatures\extension-response-for-ok-sig-2014-06-2-extra-critical-main-with-non-critical-tlv.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashCore-NoCoreAggr.ksig">
+    <None Include="resources\signature\integration-test-signatures\extension-response-for-ok-sig-2014-06-2-extra-element.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashCore-NoInputHash.ksig">
+    <None Include="resources\signature\integration-test-signatures\extension-response-for-ok-sig-2014-06-2-extra-main-with-critical-tlv.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashCore-NoLeftLink.ksig">
+    <None Include="resources\signature\integration-test-signatures\extension-response-for-ok-sig-2014-06-2-extra-main-with-non-critical-tlv.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashCore-NoLeftLink1.ksig">
+    <None Include="resources\signature\integration-test-signatures\extension-response-from-538C3A47-to-54162C00-for-ok-sig-2014-06-2-extended-wrong-aggregation-time.tlv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashCore-NoLeftLink2.ksig">
+    <None Include="resources\signature\integration-test-signatures\extension-response-from-538C3A47-to-54162C00-for-ok-sig-2014-06-2-extended-wrong-input-hash.tlv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashCore-NoRightLink.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHash-WrongLeftLinkLevelCorrector.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashCore-NoRightLink1.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-MissingAggrAlg.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashCore-WrongAggrAlg.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-MissingAggrTime.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashCore-WrongAggrTime.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-MissingChainIndex.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashCore-WrongChainIndex.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-MissingCoreAggr.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashCore-WrongInputHash.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-MissingInputHash.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashCore-WrongLeftLink1.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-MissingLeftLink.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashCore-WrongLeftLink2.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-MissingRightLink.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashCore-WrongRightLink.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-NoAggrAlg.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashGW-MissingLeftLinkClientId.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-NoAggrTime.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashGW-MissingReqTime.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-NoChainIndex.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashGW-NoInputHash.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-NoCoreAggr.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashGW-NoLeftLinkClientId.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-NoInputHash.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashGW-NoReqTime.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-NoLeftLink.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashGW-WrongAggrAlgo2.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-NoLeftLink1.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashGW-WrongAggrTime.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-NoLeftLink2.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashGW-WrongChainID2.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-NoRightLink.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashGW-WrongInputHash.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-NoRightLink1.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashGW-WrongLeftLinkClientId.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-WrongAggrAlg.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashGW-WrongReqTimeFuture.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-WrongAggrTime.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\NewSignature-AggrHashGW-WrongReqTimePast.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-WrongChainIndex.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\timesMissing.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-WrongInputHash.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-aggr-chain\wrongTimes.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-WrongLeftLink1.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-authentication-records\NewSignature-CalAuth-MissingCertID.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-WrongLeftLink2.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-authentication-records\NewSignature-CalAuth-MissingPubHash.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-WrongRightLink.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-authentication-records\NewSignature-CalAuth-MissingPubTime.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashGW-MissingLeftLinkClientId.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-authentication-records\NewSignature-CalAuth-MissingSigningValue.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashGW-MissingReqTime.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-authentication-records\NewSignature-CalAuth-MissingSigType.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashGW-NoInputHash.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-authentication-records\NewSignature-CalAuth-NoCertID.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashGW-NoLeftLinkClientId.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-authentication-records\NewSignature-CalAuth-NoPubHash.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashGW-NoReqTime.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-authentication-records\NewSignature-CalAuth-NoPubTime.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashGW-WrongAggrAlgo2.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-authentication-records\NewSignature-CalAuth-NoSigningValue.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashGW-WrongAggrTime.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-authentication-records\NewSignature-CalAuth-NoSigType.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashGW-WrongChainID2.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-authentication-records\NewSignature-CalAuth-NullSigType.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashGW-WrongInputHash.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-authentication-records\NewSignature-CalAuth-WrongCertID.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashGW-WrongLeftLinkClientId.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-authentication-records\NewSignature-CalAuth-WrongPubHash.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashGW-WrongReqTimeFuture.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-authentication-records\NewSignature-CalAuth-WrongPubTime.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashGW-WrongReqTimePast.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-authentication-records\NewSignature-CalAuth-WrongSigningValue.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalAuth-MissingCertID.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-authentication-records\NewSignature-CalAuth-WrongSigType.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalAuth-MissingPubHash.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-calendar-chain\ExtendedSignature-MissingCalChain.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalAuth-MissingPubTime.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-calendar-chain\ExtendedSignature-WrongPubTime.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalAuth-MissingSigningValue.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-calendar-chain\ExtendedSignature_WithNewerPublicationTime.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalAuth-MissingSigType.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-calendar-chain\ExtendedSignature_WithOlderPublicationTime.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalAuth-NoCertID.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-calendar-chain\NewSignature-CalHash-MissingAggrTime.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalAuth-NoPubHash.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-calendar-chain\NewSignature-CalHash-MissingCalHash.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalAuth-NoPubTime.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-calendar-chain\NewSignature-CalHash-MissingCalHashAndAuthReq.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalAuth-NoSigningValue.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-calendar-chain\NewSignature-CalHash-MissingInputHash.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalAuth-NoSigType.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-calendar-chain\NewSignature-CalHash-MissingLeftLinkLast.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalAuth-WrongPubHash.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-calendar-chain\NewSignature-CalHash-MissingPubTime.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalAuth-WrongPubTime.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-calendar-chain\NewSignature-CalHash-MissingRightLink1.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalAuth-WrongSigningValue.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-calendar-chain\NewSignature-CalHash-NoAggrTime.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalAuth-WrongSigType.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-calendar-chain\NewSignature-CalHash-NoCalHash.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-MissingAggrTime.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-calendar-chain\NewSignature-CalHash-NoInputHash.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-MissingCalHashAndAuthReq.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-calendar-chain\NewSignature-CalHash-NoLeftLink1.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-MissingInputHash.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-calendar-chain\NewSignature-CalHash-NoPubTime.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-MissingLeftLinkLast.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-calendar-chain\NewSignature-CalHash-NoRightLinkLast.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-MissingPubTime.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-calendar-chain\NewSignature-CalHash-WrongAggrTime.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-MissingRightLink1.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-calendar-chain\NewSignature-CalHash-WrongInputHash.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-NoAggrTime.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-calendar-chain\NewSignature-CalHash-WrongLeftLinkLast.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-NoCalHash.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-calendar-chain\NewSignature-CalHash-WrongPubTime.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-NoInputHash.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\internal-verification-calendar-chain\NewSignature-CalHash-WrongRightLink1.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-NoLeftLink1.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\key-based-verification\ExtendedSignature-MissingCalChainAndPubRec.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-NoPubTime.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\key-based-verification\ExtendedSignature-MissingPubRecWrongCalChainFirstLeftLink.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-NoRightLinkLast.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\key-based-verification\ExtendedSignature-MissingPubRecWrongCalChainFirstRightLink.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-WrongAggrTime.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\key-based-verification\ExtendedSignature-MissingPubRecWrongCalChainLastRightLink.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-WrongInputHash.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\key-based-verification\extension-response-from-538C3A47-to-54162C00-for-ok-sig-2014-06-2-extended-wrong-aggregation-time.tlv">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-WrongLeftLinkLast.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\key-based-verification\extension-response-from-538C3A47-to-54162C00-for-ok-sig-2014-06-2-extended-wrong-input-hash.tlv">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-WrongPubTime.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\key-based-verification\NewSignature-CalAuth-NoCertID.ksig">
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-WrongRightLink1.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\key-based-verification\NewSignature-CalAuth-NoSigningValue.ksig">
+    <None Include="resources\signature\integration-test-signatures\non-signature-file.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\key-based-verification\NewSignature-CalAuth-WrongSigningValue.ksig">
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extended-empty-publication-hash.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\key-based-verification\ok-sig-2014-06-2-extended-no-publication-time.ksig">
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extended-empty-publication-reference.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\key-based-verification\ok-sig-2014-06-2-extended-wrong-publication-reference.ksig">
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extended-empty-publication-time.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\key-based-verification\signature-with-invalid-calendar-authentication-record-hash.ksig">
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extended-empty-publication-url.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\key-based-verification\signature-with-invalid-certificate-id.ksig">
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extended-extra-critical-elements-in-publication-record-lvl1.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\key-based-verification\signature-with-invalid-pki-signature.ksig">
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extended-extra-critical-elements-in-publication-record-lvl2.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\key-based-verification\signature-without-calendar-authentication-record.ksig">
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extended-extra-elements-in-publication-record-lvl1.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\key-based-verification\signature-without-calendar-elements.ksig">
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extended-extra-elements-in-publication-record-lvl2.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extended-no-publication-hash.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extended-no-publication-reference.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extended-no-publication-time.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extended-one-empty-publication-reference.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extended-wrong-publication-reference.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-critical-element-in-aggregation-lvl1.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-critical-element-in-aggregation-lvl2.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-critical-element-in-aggregation-lvl3.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-critical-element-in-aggregation.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-critical-element-in-calendar-authentication-lvl1.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-critical-element-in-calendar-authentication-lvl2.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-critical-element-in-calendar-chain.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-critical-main-nested-tlv-block-with-critical-tlvs.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-critical-main-nested-tlv-block-with-non-critical-tlvs.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-element-in-aggregation-lvl1.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-element-in-aggregation-lvl2.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-element-in-aggregation-lvl3.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-element-in-aggregation.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-element-in-calendar-authentication-lvl1.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-element-in-calendar-authentication-lvl2.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-element-in-calendar-chain.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-main-nested-tlv-block-with-critical-tlvs.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-main-nested-tlv-block.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-nested-critical-tlv-in-main.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-nested-tlv-in-main-with-critical-elements.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-nested-tlv-in-main.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\signature-with-invalid-calendar-authentication-record-hash.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\signature-with-invalid-certificate-id.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\signature-with-invalid-pki-signature.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\signature-without-calendar-authentication-record.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\signature-without-calendar-elements.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\timesMissing.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\wrongTimes.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalAuth-NullSigType.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalAuth-WrongCertID.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-MissingCalHash.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-aggregation-chain-aggregation-time-mismatch.tlv">
@@ -829,55 +937,13 @@
     <None Include="resources\signature\ksi-signature-do\legacy-ksi-signature-ok.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\non-signature-file.ksig">
+    <None Include="resources\signature\integration-test-signatures\another-core-response-with-only-cal-chain.tlv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\publication-based-verification\all-wrong-hash-chains-in-signature.ksig">
+    <None Include="resources\signature\integration-test-signatures\ok-sig-extended-2014-05-15.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\publication-based-verification\another-core-response-with-only-cal-chain.tlv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\publication-based-verification\correct-core-signature_2015-09-13_21-34-00.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\publication-based-verification\ExtendedSignature-NoPubRec.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\publication-based-verification\extension-response-for-ok-sig-2014-06-2-wrong-input-hash.tlv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\publication-based-verification\extension-response-for-ok-sig-2014-06-2-wrong-publication-time.tlv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\publication-based-verification\ok-sig-2014-06-2-extended-empty-publication-hash.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\publication-based-verification\ok-sig-2014-06-2-extended-empty-publication-reference.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\publication-based-verification\ok-sig-2014-06-2-extended-empty-publication-time.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\publication-based-verification\ok-sig-2014-06-2-extended-empty-publication-url.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\publication-based-verification\ok-sig-2014-06-2-extended-no-publication-hash.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\publication-based-verification\ok-sig-2014-06-2-extended-no-publication-reference.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\publication-based-verification\ok-sig-2014-06-2-extended-no-publication-time.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\publication-based-verification\ok-sig-2014-06-2-extended-one-empty-publication-reference.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\publication-based-verification\ok-sig-2014-06-2-extended-wrong-publication-reference.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\publication-based-verification\old-publications.tlv">
+    <None Include="resources\signature\NotUsed\old-publications.tlv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\rfc3161-record\rfc3161-record-invalid-extra-tag.tlv">
@@ -976,99 +1042,6 @@
     <None Include="resources\signature\signaturedata\signature-data-ok.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\tlv-parsing-signatures\extension-response-for-ok-sig-2014-06-2-extra-critical-element.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\tlv-parsing-signatures\extension-response-for-ok-sig-2014-06-2-extra-critical-main-with-critical-tlv.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\tlv-parsing-signatures\extension-response-for-ok-sig-2014-06-2-extra-critical-main-with-non-critical-tlv.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\tlv-parsing-signatures\extension-response-for-ok-sig-2014-06-2-extra-element.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\tlv-parsing-signatures\extension-response-for-ok-sig-2014-06-2-extra-main-with-critical-tlv.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\tlv-parsing-signatures\extension-response-for-ok-sig-2014-06-2-extra-main-with-non-critical-tlv.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\tlv-parsing-signatures\ok-sig-2014-06-2-extended-extra-critical-elements-in-publication-record-lvl1.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\tlv-parsing-signatures\ok-sig-2014-06-2-extended-extra-critical-elements-in-publication-record-lvl2.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\tlv-parsing-signatures\ok-sig-2014-06-2-extended-extra-elements-in-publication-record-lvl1.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\tlv-parsing-signatures\ok-sig-2014-06-2-extended-extra-elements-in-publication-record-lvl2.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\tlv-parsing-signatures\ok-sig-2014-06-2-extra-critical-element-in-aggregation-lvl1.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\tlv-parsing-signatures\ok-sig-2014-06-2-extra-critical-element-in-aggregation-lvl2.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\tlv-parsing-signatures\ok-sig-2014-06-2-extra-critical-element-in-aggregation-lvl3.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\tlv-parsing-signatures\ok-sig-2014-06-2-extra-critical-element-in-aggregation.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\tlv-parsing-signatures\ok-sig-2014-06-2-extra-critical-element-in-calendar-authentication-lvl1.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\tlv-parsing-signatures\ok-sig-2014-06-2-extra-critical-element-in-calendar-authentication-lvl2.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\tlv-parsing-signatures\ok-sig-2014-06-2-extra-critical-element-in-calendar-chain.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\tlv-parsing-signatures\ok-sig-2014-06-2-extra-critical-main-nested-tlv-block-with-critical-tlvs.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\tlv-parsing-signatures\ok-sig-2014-06-2-extra-critical-main-nested-tlv-block-with-non-critical-tlvs.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\tlv-parsing-signatures\ok-sig-2014-06-2-extra-element-in-aggregation-lvl1.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\tlv-parsing-signatures\ok-sig-2014-06-2-extra-element-in-aggregation-lvl2.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\tlv-parsing-signatures\ok-sig-2014-06-2-extra-element-in-aggregation-lvl3.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\tlv-parsing-signatures\ok-sig-2014-06-2-extra-element-in-aggregation.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\tlv-parsing-signatures\ok-sig-2014-06-2-extra-element-in-calendar-authentication-lvl1.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\tlv-parsing-signatures\ok-sig-2014-06-2-extra-element-in-calendar-authentication-lvl2.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\tlv-parsing-signatures\ok-sig-2014-06-2-extra-element-in-calendar-chain.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\tlv-parsing-signatures\ok-sig-2014-06-2-extra-main-nested-tlv-block-with-critical-tlvs.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\tlv-parsing-signatures\ok-sig-2014-06-2-extra-main-nested-tlv-block.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\tlv-parsing-signatures\ok-sig-2014-06-2-extra-nested-critical-tlv-in-main.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\tlv-parsing-signatures\ok-sig-2014-06-2-extra-nested-tlv-in-main-with-critical-elements.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\tlv-parsing-signatures\ok-sig-2014-06-2-extra-nested-tlv-in-main.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="resources\testdata.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -1086,31 +1059,22 @@
     <Content Include="resources\Integration\CalendarBasedVerificationData.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\Integration\CalendarBasedVerificationPolicy.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Integration\InternalVerificationPolicy.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="resources\Integration\KeyBasedVerificationData.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\Integration\KeyBasedVerificationDataWithNoPublication.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\Integration\KeyBasedVerificationPolicy.txt">
+    <Content Include="resources\Integration\PublicationFileBasedVerificationData.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\Integration\PublicationFileBasedVerificationData.txt">
+    <Content Include="resources\Integration\PublicationFileBasedVerificationDataNoExtending.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\Integration\PublicationStringVerificationData.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\Integration\tlv_parser_verification_test_extender_responses_and_expected_results.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Integration\tlv_parser_verification_test_files_and_expected_results.txt">
+    <Content Include="resources\Integration\PublicationStringVerificationNoExtendingData.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
