@@ -143,6 +143,7 @@ namespace Guardtime.KSI.Publication
                 IPublicationsFile publicationsFile =
                     new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                         new CertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
+
                 Assert.AreEqual("O=Guardtime, CN=H5", new X509Certificate2(publicationsFile.FindCertificateById(new byte[] { 0x9a, 0x65, 0x82, 0x94 })).Subject,
                     "Certificate should be correct");
             }
@@ -190,7 +191,7 @@ namespace Guardtime.KSI.Publication
                         new CertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
                 PublicationRecordInPublicationFile publicationRecord = publicationsFile.GetLatestPublication();
 
-                Assert.AreEqual(1442275200, publicationRecord.PublicationData.PublicationTime, "Should be correct publication time for latest publication");
+                Assert.AreEqual(1455494400, publicationRecord.PublicationData.PublicationTime, "Should be correct publication time for latest publication");
                 // TODO: Test more from latest publication
             }
         }

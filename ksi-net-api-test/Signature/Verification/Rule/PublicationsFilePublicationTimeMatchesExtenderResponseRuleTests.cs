@@ -16,13 +16,11 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System.IO;
-using System.Security.Cryptography.X509Certificates;
-using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
-using Guardtime.KSI.Trust;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
@@ -32,7 +30,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public class PublicationsFilePublicationTimeMatchesExtenderResponseRuleTests
     {
         [Test]
-        public void TestVerify()
+        public void TestMissingContext()
         {
             PublicationsFilePublicationTimeMatchesExtenderResponseRule rule = new PublicationsFilePublicationTimeMatchesExtenderResponseRule();
 
@@ -41,6 +39,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 rule.Verify(null);
             });
+        }
+
+        [Test]
+        public void TestContextMissingSignature()
+        {
+            PublicationsFilePublicationTimeMatchesExtenderResponseRule rule = new PublicationsFilePublicationTimeMatchesExtenderResponseRule();
 
             // Verification exception on missing KSI signature 
             Assert.Throws<KsiVerificationException>(delegate
@@ -49,6 +53,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
                 rule.Verify(context);
             });
+        }
+
+        [Test]
+        public void TestMissingPublicationsFile()
+        {
+            PublicationsFilePublicationTimeMatchesExtenderResponseRule rule = new PublicationsFilePublicationTimeMatchesExtenderResponseRule();
 
             // Invalid publications file in context: null
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
@@ -63,22 +73,22 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     rule.Verify(context);
                 });
             }
+        }
 
-            IPublicationsFile publicationsFile;
-            using (FileStream stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
-            {
-                publicationsFile =
-                    new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                        new CertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
-            }
+        [Test]
+        public void TestSignatureMissingCalendarHashChain()
+        {
+            PublicationsFilePublicationTimeMatchesExtenderResponseRule rule = new PublicationsFilePublicationTimeMatchesExtenderResponseRule();
 
             // Check invalid calendar hash chain in signature: null
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_Missing_Calendar_Hash_Chain, FileMode.Open))
             {
+                TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
+
                 TestVerificationContextFaultyFunctions context = new TestVerificationContextFaultyFunctions()
                 {
                     Signature = new KsiSignatureFactory().Create(stream),
-                    PublicationsFile = publicationsFile
+                    PublicationsFile = testPublicationsFile
                 };
 
                 Assert.Throws<KsiVerificationException>(delegate
@@ -86,14 +96,22 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     rule.Verify(context);
                 });
             }
+        }
+
+        [Test]
+        public void TestSignatureWithInvalidContextExtendFunctions()
+        {
+            PublicationsFilePublicationTimeMatchesExtenderResponseRule rule = new PublicationsFilePublicationTimeMatchesExtenderResponseRule();
 
             // Check invalid extended calendar chain
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
             {
+                TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
+
                 TestVerificationContextFaultyFunctions context = new TestVerificationContextFaultyFunctions()
                 {
                     Signature = new KsiSignatureFactory().Create(stream),
-                    PublicationsFile = publicationsFile
+                    PublicationsFile = testPublicationsFile
                 };
 
                 Assert.Throws<KsiVerificationException>(delegate
@@ -101,14 +119,22 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     rule.Verify(context);
                 });
             }
+        }
+
+        [Test]
+        public void TestSignatureExtendMissingNewerPublication()
+        {
+            PublicationsFilePublicationTimeMatchesExtenderResponseRule rule = new PublicationsFilePublicationTimeMatchesExtenderResponseRule();
 
             // Check no publication found after current signature
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_New, FileMode.Open))
             {
+                TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
+
                 TestVerificationContext context = new TestVerificationContext()
                 {
                     Signature = new KsiSignatureFactory().Create(stream),
-                    PublicationsFile = publicationsFile,
+                    PublicationsFile = testPublicationsFile,
                     ExtendedCalendarHashChain =
                         new CalendarHashChain(new RawTag(Constants.CalendarHashChain.TagType, false, false,
                             Base16.Decode(
@@ -120,14 +146,25 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     rule.Verify(context);
                 });
             }
+        }
+
+        [Test]
+        public void TestRfc3161SignatureWithPublicationFilePublicationTimeMatchesExtenderResponseTime()
+        {
+            PublicationsFilePublicationTimeMatchesExtenderResponseRule rule = new PublicationsFilePublicationTimeMatchesExtenderResponseRule();
 
             // Check legacy signature
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok_With_Publication_Record, FileMode.Open))
             {
+                TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
+                testPublicationsFile.NearestPublications.Add(1401915603,
+                    new PublicationRecordInPublicationFile(new RawTag(0x703, false, false,
+                        new PublicationData("AAAAAA-CT5VGY-AAPUCF-L3EKCC-NRSX56-AXIDFL-VZJQK4-WDCPOE-3KIWGB-XGPPM3-O5BIMW-REOVR4").Encode())));
+
                 TestVerificationContext context = new TestVerificationContext()
                 {
                     Signature = new KsiSignatureFactory().Create(stream),
-                    PublicationsFile = publicationsFile,
+                    PublicationsFile = testPublicationsFile,
                     ExtendedCalendarHashChain =
                         new CalendarHashChain(new RawTag(Constants.CalendarHashChain.TagType, false, false,
                             Base16.Decode(
@@ -137,14 +174,25 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
+
+        [Test]
+        public void TestSignatureWithPublicationFilePublicationTimeMatchesExtenderResponseTime()
+        {
+            PublicationsFilePublicationTimeMatchesExtenderResponseRule rule = new PublicationsFilePublicationTimeMatchesExtenderResponseRule();
 
             // Check signature
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))
             {
+                TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
+                testPublicationsFile.NearestPublications.Add(1404215325,
+                    new PublicationRecordInPublicationFile(new RawTag(0x703, false, false,
+                        new PublicationData("AAAAAA-CT5VGY-AAPUCF-L3EKCC-NRSX56-AXIDFL-VZJQK4-WDCPOE-3KIWGB-XGPPM3-O5BIMW-REOVR4").Encode())));
+
                 TestVerificationContext context = new TestVerificationContext()
                 {
                     Signature = new KsiSignatureFactory().Create(stream),
-                    PublicationsFile = publicationsFile,
+                    PublicationsFile = testPublicationsFile,
                     ExtendedCalendarHashChain =
                         new CalendarHashChain(new RawTag(Constants.CalendarHashChain.TagType, false, false,
                             Base16.Decode(
@@ -154,14 +202,25 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
+
+        [Test]
+        public void TestSignatureWithPublicationFilePublicationTimeMatchesExtenderResponseTimeMismatch()
+        {
+            PublicationsFilePublicationTimeMatchesExtenderResponseRule rule = new PublicationsFilePublicationTimeMatchesExtenderResponseRule();
 
             // Check publication record publication time with invalid extended calendar publication time
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))
             {
+                TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
+                testPublicationsFile.NearestPublications.Add(1404215325,
+                    new PublicationRecordInPublicationFile(new RawTag(0x703, false, false,
+                        new PublicationData("AAAAAA-CT5VGY-AAPUCF-L3EKCC-NRSX56-AXIDFL-VZJQK4-WDCPOE-3KIWGB-XGPPM3-O5BIMW-REOVR4").Encode())));
+
                 TestVerificationContext context = new TestVerificationContext()
                 {
                     Signature = new KsiSignatureFactory().Create(stream),
-                    PublicationsFile = publicationsFile,
+                    PublicationsFile = testPublicationsFile,
                     ExtendedCalendarHashChain =
                         new CalendarHashChain(new RawTag(Constants.CalendarHashChain.TagType, false, false,
                             Base16.Decode(
@@ -171,14 +230,25 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
             }
+        }
+
+        [Test]
+        public void TestSignatureAggregationTimeWithExtendedCalendarHashChainRegistrationTime()
+        {
+            PublicationsFilePublicationTimeMatchesExtenderResponseRule rule = new PublicationsFilePublicationTimeMatchesExtenderResponseRule();
 
             // Check signature aggregation time with invalid extended calendar registration time
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))
             {
+                TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
+                testPublicationsFile.NearestPublications.Add(1404215325,
+                    new PublicationRecordInPublicationFile(new RawTag(0x703, false, false,
+                        new PublicationData("AAAAAA-CT5VGY-AAPUCF-L3EKCC-NRSX56-AXIDFL-VZJQK4-WDCPOE-3KIWGB-XGPPM3-O5BIMW-REOVR4").Encode())));
+
                 TestVerificationContext context = new TestVerificationContext()
                 {
                     Signature = new KsiSignatureFactory().Create(stream),
-                    PublicationsFile = publicationsFile,
+                    PublicationsFile = testPublicationsFile,
                     ExtendedCalendarHashChain =
                         new CalendarHashChain(new RawTag(Constants.CalendarHashChain.TagType, false, false,
                             Base16.Decode(

@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
 using NUnit.Framework;
@@ -26,7 +27,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public class UserProvidedPublicationExistenceRuleTests
     {
         [Test]
-        public void TestVerify()
+        public void TestMissingContext()
         {
             UserProvidedPublicationExistenceRule rule = new UserProvidedPublicationExistenceRule();
 
@@ -35,17 +36,29 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 rule.Verify(null);
             });
+        }
+
+        [Test]
+        public void TestMissingContextUserPublication()
+        {
+            UserProvidedPublicationExistenceRule rule = new UserProvidedPublicationExistenceRule();
 
             TestVerificationContext context = new TestVerificationContext();
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
+            Assert.AreEqual(VerificationResultCode.Na, rule.Verify(context).ResultCode);
+        }
 
-            // Publication is set in context
-            context.UserPublication =
-                new PublicationData(
-                    "AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K");
-            verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+        [Test]
+        public void TestContextUserPublicationIsSet()
+        {
+            UserProvidedPublicationExistenceRule rule = new UserProvidedPublicationExistenceRule();
+
+            TestVerificationContext context = new TestVerificationContext()
+            {
+                UserPublication = new PublicationData(
+                    "AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K")
+            };
+
+            Assert.AreEqual(VerificationResultCode.Ok, rule.Verify(context).ResultCode);
         }
     }
 }
