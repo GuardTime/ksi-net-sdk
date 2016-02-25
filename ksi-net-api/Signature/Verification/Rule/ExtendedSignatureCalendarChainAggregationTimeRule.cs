@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System.Collections.ObjectModel;
 using Guardtime.KSI.Exceptions;
 
@@ -30,8 +31,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         public override VerificationResult Verify(IVerificationContext context)
         {
             IKsiSignature signature = GetSignature(context);
-            CalendarHashChain calendarHashChain = GetCalendarHashChain(signature);
-            CalendarHashChain extendedCalendarHashChain = calendarHashChain.PublicationData == null
+            CalendarHashChain calendarHashChain = GetCalendarHashChain(signature, true);
+            CalendarHashChain extendedCalendarHashChain = calendarHashChain?.PublicationData == null
                 ? context.GetExtendedLatestCalendarHashChain()
                 : context.GetExtendedTimeCalendarHashChain(calendarHashChain.PublicationData.PublicationTime);
 
