@@ -7,7 +7,7 @@ namespace Guardtime.KSI.Integration
 {
     public class DataHolderForIntegrationTests
     {
-        private string _testFile;
+        private readonly string _testFile;
         private readonly bool _sigantureReadInFails;
         private readonly string _expectedVerificationResultCode;
         private readonly string _expectedExceptionClass;
@@ -20,9 +20,9 @@ namespace Guardtime.KSI.Integration
             {
                 throw new ArgumentNullException(string.Format("Test file is null"));
             }
-            this._testFile = inputData[0];
+            _testFile = inputData[0];
 
-            this._sigantureReadInFails = inputData[1].ToLower().Equals("true");
+            _sigantureReadInFails = inputData[1].ToLower().Equals("true");
 
             if (inputData[2] == null)
             {
@@ -32,7 +32,7 @@ namespace Guardtime.KSI.Integration
             string[] expectedValues = { "ok", "fail", "na" };
             if (Array.IndexOf(expectedValues, inputData[2].ToLower()) > -1)
             { 
-                this._expectedVerificationResultCode = inputData[2];
+                _expectedVerificationResultCode = inputData[2];
             }
             else
             {
@@ -43,19 +43,19 @@ namespace Guardtime.KSI.Integration
             {
                 throw new ArgumentNullException(string.Format("Expected exception is null"));
             }
-            this._expectedExceptionClass = inputData[3];
+            _expectedExceptionClass = inputData[3];
 
             if (inputData[4] == null)
             {
                 throw new ArgumentNullException(string.Format("Expected exception message is null"));
             }
-            this._exceptionMessage = inputData[4];
+            _exceptionMessage = inputData[4];
 
             if (inputData[5] == null)
             {
                 throw new ArgumentNullException(string.Format("Expected failed rule is null"));
             }
-            this._expectedRule = inputData[5];
+            _expectedRule = inputData[5];
         }
 
         public string GetTestFile()
@@ -86,11 +86,6 @@ namespace Guardtime.KSI.Integration
         public string GetExpectedRule()
         {
             return _expectedRule;
-        }
-
-        public void SetTestFile(string testFile)
-        {
-            this._testFile = testFile;
         }
 
         public string GetTestDataInformation()

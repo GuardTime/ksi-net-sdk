@@ -5,13 +5,13 @@ using System.Linq;
 using Guardtime.KSI.Publication;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
-using Guardtime.KSI.Service;
+
 using Guardtime.KSI.Trust;
 using NUnit.Framework;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
-using Guardtime.KSI.Signature.Verification.Rule;
+
 
 namespace Guardtime.KSI.Integration
 {
@@ -144,16 +144,13 @@ namespace Guardtime.KSI.Integration
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(string.Format("E start:"));
-                    Console.WriteLine(e);
-                    Console.WriteLine(string.Format("E end"));
                     //Signature read in did not fail while it should have.
                     if (testData.GetSigantureReadInFails() &&
                         e.ToString().Contains(" supposed to fail with class "))
                     {
                         throw;
                     }
-                    //
+                    //Errors that were found duing executiong and evaluation.
                     if (e.ToString().Contains(", but found: ") ||
                         e.ToString().Contains(" was not found from verification results:") ||
                         e.ToString().Contains("Verification codes do not match. Actual ")
@@ -161,7 +158,8 @@ namespace Guardtime.KSI.Integration
                     {
                         throw;
                     }
-
+                    //No failure during readin AND exception does not contain expected (message OR exception class OR rule)
+                    //which means taht not expected error has occurred.
                     if (!testData.GetSigantureReadInFails() &&
                         (!e.ToString().Contains(testData.GetExpectedExceptionMessage()) ||
                         !e.ToString().Contains(testData.GetExpectedExceptionClass()) ||
@@ -169,6 +167,7 @@ namespace Guardtime.KSI.Integration
                     {
                         throw;
                     }
+                    //If failure occurs with test that should not fail at all.
                     if (testData.GetExpectedVerificationResultCode().ToLower().Equals("ok"))
                     {
                         throw;
