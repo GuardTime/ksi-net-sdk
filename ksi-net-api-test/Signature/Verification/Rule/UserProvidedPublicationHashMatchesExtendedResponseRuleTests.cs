@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
@@ -29,7 +30,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public class UserProvidedPublicationHashMatchesExtendedResponseRuleTests
     {
         [Test]
-        public void TestVerify()
+        public void TestMissingContext()
         {
             UserProvidedPublicationHashMatchesExtendedResponseRule rule = new UserProvidedPublicationHashMatchesExtendedResponseRule();
 
@@ -38,6 +39,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 rule.Verify(null);
             });
+        }
+
+        [Test]
+        public void TestMissingContextSignature()
+        {
+            UserProvidedPublicationHashMatchesExtendedResponseRule rule = new UserProvidedPublicationHashMatchesExtendedResponseRule();
 
             // Verification exception on missing KSI signature 
             Assert.Throws<KsiVerificationException>(delegate
@@ -46,6 +53,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
                 rule.Verify(context);
             });
+        }
+
+        [Test]
+        public void TestSignatureWithoutContextUserPublication()
+        {
+            UserProvidedPublicationHashMatchesExtendedResponseRule rule = new UserProvidedPublicationHashMatchesExtendedResponseRule();
 
             // Check signature without user publication
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
@@ -60,6 +73,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     rule.Verify(context);
                 });
             }
+        }
+
+        [Test]
+        public void TestSignatureWithInvalidContextExtendFunctions()
+        {
+            UserProvidedPublicationHashMatchesExtendedResponseRule rule = new UserProvidedPublicationHashMatchesExtendedResponseRule();
 
             // Check invalid extended calendar chain from context extension function
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
@@ -75,6 +94,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     rule.Verify(context);
                 });
             }
+        }
+
+        [Test]
+        public void TestRfc3161SignatureExtendedCalendarHashWithContextUserPublication()
+        {
+            UserProvidedPublicationHashMatchesExtendedResponseRule rule = new UserProvidedPublicationHashMatchesExtendedResponseRule();
 
             // Check legacy signature with publication record
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok_With_Publication_Record, FileMode.Open))
@@ -92,6 +117,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
+
+        [Test]
+        public void TestSignatureExtendedCalendarHashWithContextUserPublication()
+        {
+            UserProvidedPublicationHashMatchesExtendedResponseRule rule = new UserProvidedPublicationHashMatchesExtendedResponseRule();
 
             // Check signature with publication record
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))
@@ -109,8 +140,13 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
 
-            // Check invalid signature
+        [Test]
+        public void TestSignatureInvalidExtendedCalendarHashWithUserPublication()
+        {
+            UserProvidedPublicationHashMatchesExtendedResponseRule rule = new UserProvidedPublicationHashMatchesExtendedResponseRule();
+
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()

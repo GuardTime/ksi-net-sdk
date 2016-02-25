@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
@@ -28,7 +29,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public class ExtendedSignatureAggregationChainRightLinksMatchesRuleTests
     {
         [Test]
-        public void TestVerify()
+        public void TestMissingContext()
         {
             ExtendedSignatureAggregationChainRightLinksMatchesRule rule = new ExtendedSignatureAggregationChainRightLinksMatchesRule();
 
@@ -37,6 +38,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 rule.Verify(null);
             });
+        }
+
+        [Test]
+        public void TestContextMissingSignature()
+        {
+            ExtendedSignatureAggregationChainRightLinksMatchesRule rule = new ExtendedSignatureAggregationChainRightLinksMatchesRule();
 
             // Verification exception on missing KSI signature 
             Assert.Throws<KsiVerificationException>(delegate
@@ -45,6 +52,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
                 rule.Verify(context);
             });
+        }
+
+        [Test]
+        public void TestSignatureMissingCalendarHashChain()
+        {
+            ExtendedSignatureAggregationChainRightLinksMatchesRule rule = new ExtendedSignatureAggregationChainRightLinksMatchesRule();
 
             // Check signature without calendar chain
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_Missing_Calendar_Hash_Chain, FileMode.Open))
@@ -63,6 +76,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     rule.Verify(context);
                 });
             }
+        }
+
+        [Test]
+        public void TestSignatureWithInvalidContextExtendFunctions()
+        {
+            ExtendedSignatureAggregationChainRightLinksMatchesRule rule = new ExtendedSignatureAggregationChainRightLinksMatchesRule();
 
             // Check invalid extended calendar chain when service returns null
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
@@ -77,8 +96,14 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     rule.Verify(context);
                 });
             }
+        }
 
-            // Check legacy signature right links to same time extended chain. To prevent zeros problem in chain which fill after extending
+        [Test]
+        public void TestRfc3161SignatureRightLinks()
+        {
+            ExtendedSignatureAggregationChainRightLinksMatchesRule rule = new ExtendedSignatureAggregationChainRightLinksMatchesRule();
+
+            // Check legacy signature right links with extended chain. It is to prevent zeros problem in chain which fill after extending
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok, FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
@@ -93,8 +118,14 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
 
-            // Check signature right links to same time extended chain. To prevent zeros problem in chain which fill after extending
+        [Test]
+        public void TestSignatureRightLinks()
+        {
+            ExtendedSignatureAggregationChainRightLinksMatchesRule rule = new ExtendedSignatureAggregationChainRightLinksMatchesRule();
+
+            // Check signature right links with extended chain. It is to prevent zeros problem in chain which fill after extending
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
@@ -109,6 +140,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
+
+        [Test]
+        public void TestSignatureExtendedCalendarHashChainDiffers()
+        {
+            ExtendedSignatureAggregationChainRightLinksMatchesRule rule = new ExtendedSignatureAggregationChainRightLinksMatchesRule();
 
             // Check invalid signature extended signature at same time gives different result
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Invalid_Calendar_Chain_Publication_Time, FileMode.Open))
