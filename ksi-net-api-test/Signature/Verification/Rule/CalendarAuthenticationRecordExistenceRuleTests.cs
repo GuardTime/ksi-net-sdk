@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using NUnit.Framework;
@@ -26,7 +27,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public class CalendarAuthenticationRecordExistenceRuleTests
     {
         [Test]
-        public void TestVerify()
+        public void TestMissingContext()
         {
             CalendarAuthenticationRecordExistenceRule rule = new CalendarAuthenticationRecordExistenceRule();
 
@@ -35,6 +36,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 rule.Verify(null);
             });
+        }
+
+        [Test]
+        public void TestContextMissingSignature()
+        {
+            CalendarAuthenticationRecordExistenceRule rule = new CalendarAuthenticationRecordExistenceRule();
 
             // Verification exception on missing KSI signature 
             Assert.Throws<KsiVerificationException>(delegate
@@ -43,6 +50,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
                 rule.Verify(context);
             });
+        }
+
+        [Test]
+        public void TestRfc3161SignatureAggregationAuthenticationRecord()
+        {
+            CalendarAuthenticationRecordExistenceRule rule = new CalendarAuthenticationRecordExistenceRule();
 
             // Check legacy signature for aggregation authentication record existence
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok, FileMode.Open))
@@ -55,8 +68,14 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
 
-            // Check legacy signature for aggregation authentication record existence
+        [Test]
+        public void TestSignatureAggregationAuthenticationRecord()
+        {
+            CalendarAuthenticationRecordExistenceRule rule = new CalendarAuthenticationRecordExistenceRule();
+
+            // Check signature for aggregation authentication record existence
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
@@ -67,6 +86,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
+
+        [Test]
+        public void TestSignatureMissingAggregationAuthenticationRecord()
+        {
+            CalendarAuthenticationRecordExistenceRule rule = new CalendarAuthenticationRecordExistenceRule();
 
             // Check signature without calendar authentication record
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record, FileMode.Open))

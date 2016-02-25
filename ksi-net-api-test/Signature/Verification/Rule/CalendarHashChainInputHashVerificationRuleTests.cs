@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using NUnit.Framework;
@@ -26,7 +27,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public class CalendarHashChainInputHashVerificationRuleTests
     {
         [Test]
-        public void TestVerify()
+        public void TestMissingContext()
         {
             CalendarHashChainInputHashVerificationRule rule = new CalendarHashChainInputHashVerificationRule();
 
@@ -35,6 +36,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 rule.Verify(null);
             });
+        }
+
+        [Test]
+        public void TestContextMissingSignature()
+        {
+            CalendarHashChainInputHashVerificationRule rule = new CalendarHashChainInputHashVerificationRule();
 
             // Verification exception on missing KSI signature 
             Assert.Throws<KsiVerificationException>(delegate
@@ -43,6 +50,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
                 rule.Verify(context);
             });
+        }
+
+        [Test]
+        public void TestRfc3161SignatureCalendarHashChainInputHash()
+        {
+            CalendarHashChainInputHashVerificationRule rule = new CalendarHashChainInputHashVerificationRule();
 
             // Check legacy signature calendar hash chain input hash
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok, FileMode.Open))
@@ -55,6 +68,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
+
+        [Test]
+        public void TestSignatureCalendarHashChainInputHash()
+        {
+            CalendarHashChainInputHashVerificationRule rule = new CalendarHashChainInputHashVerificationRule();
 
             // Check signature calendar hash chain input hash
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
@@ -67,6 +86,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
+
+        [Test]
+        public void TestSignatureMissingCalendarHashChain()
+        {
+            CalendarHashChainInputHashVerificationRule rule = new CalendarHashChainInputHashVerificationRule();
 
             // Check signature without calendar chain
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_Missing_Calendar_Hash_Chain, FileMode.Open))
@@ -79,6 +104,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
+
+        [Test]
+        public void TestSignatureCalendarHashChainInvalidInputHash()
+        {
+            CalendarHashChainInputHashVerificationRule rule = new CalendarHashChainInputHashVerificationRule();
 
             // Check invalid signature with invalid calendar chain input hash
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Invalid_Calendar_Chain_Input_Hash, FileMode.Open))

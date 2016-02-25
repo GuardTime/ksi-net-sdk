@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
@@ -28,7 +29,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public class ExtendedSignatureCalendarChainAggregationTimeRuleTests
     {
         [Test]
-        public void TestVerify()
+        public void TestMissingContext()
         {
             ExtendedSignatureCalendarChainAggregationTimeRule rule = new ExtendedSignatureCalendarChainAggregationTimeRule();
 
@@ -37,6 +38,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 rule.Verify(null);
             });
+        }
+
+        [Test]
+        public void TestContextMissingSignature()
+        {
+            ExtendedSignatureCalendarChainAggregationTimeRule rule = new ExtendedSignatureCalendarChainAggregationTimeRule();
 
             // Verification exception on missing KSI signature 
             Assert.Throws<KsiVerificationException>(delegate
@@ -45,6 +52,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
                 rule.Verify(context);
             });
+        }
+
+        [Test]
+        public void TestSignatureMissingCalendarHashChain()
+        {
+            ExtendedSignatureCalendarChainAggregationTimeRule rule = new ExtendedSignatureCalendarChainAggregationTimeRule();
 
             // Check signature without calendar chain which will fail
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_Missing_Calendar_Hash_Chain, FileMode.Open))
@@ -59,6 +72,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     rule.Verify(context);
                 });
             }
+        }
+
+        [Test]
+        public void TestSignatureWithInvalidContextExtendFunctions()
+        {
+            ExtendedSignatureCalendarChainAggregationTimeRule rule = new ExtendedSignatureCalendarChainAggregationTimeRule();
 
             // Check invalid extended calendar chain with invalid context functions
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
@@ -73,6 +92,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     rule.Verify(context);
                 });
             }
+        }
+
+        [Test]
+        public void TestRfc3161SignatureCalendarHashChainAggregationTime()
+        {
+            ExtendedSignatureCalendarChainAggregationTimeRule rule = new ExtendedSignatureCalendarChainAggregationTimeRule();
 
             // Check legacy signature calendar hash chain aggregation time
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok, FileMode.Open))
@@ -89,6 +114,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
+
+        [Test]
+        public void TestSignatureCalendarHashChainAggregationTime()
+        {
+            ExtendedSignatureCalendarChainAggregationTimeRule rule = new ExtendedSignatureCalendarChainAggregationTimeRule();
 
             // Check signature calendar hash chain aggregation time
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
@@ -105,6 +136,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
+
+        [Test]
+        public void TestSignatureExtendedCalendarHashChainAggregationTimeDiffers()
+        {
+            ExtendedSignatureCalendarChainAggregationTimeRule rule = new ExtendedSignatureCalendarChainAggregationTimeRule();
 
             // Check invalid signature with invalid aggregation time
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))

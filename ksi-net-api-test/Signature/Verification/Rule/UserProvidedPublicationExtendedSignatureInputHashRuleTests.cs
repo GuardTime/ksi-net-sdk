@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
@@ -29,7 +30,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public class UserProvidedPublicationExtendedSignatureInputHashRuleTests
     {
         [Test]
-        public void TestVerify()
+        public void TestMissingContext()
         {
             UserProvidedPublicationExtendedSignatureInputHashRule rule = new UserProvidedPublicationExtendedSignatureInputHashRule();
 
@@ -38,6 +39,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 rule.Verify(null);
             });
+        }
+
+        [Test]
+        public void TestContextMissingSignature()
+        {
+            UserProvidedPublicationExtendedSignatureInputHashRule rule = new UserProvidedPublicationExtendedSignatureInputHashRule();
 
             // Verification exception on missing KSI signature 
             Assert.Throws<KsiVerificationException>(delegate
@@ -46,6 +53,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
                 rule.Verify(context);
             });
+        }
+
+        [Test]
+        public void TestSignatureWithoutContextUserPublication()
+        {
+            UserProvidedPublicationExtendedSignatureInputHashRule rule = new UserProvidedPublicationExtendedSignatureInputHashRule();
 
             // Check signature without user publication
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
@@ -60,6 +73,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     rule.Verify(context);
                 });
             }
+        }
+
+        [Test]
+        public void TestSignatureWithInvalidContextExtendFunctions()
+        {
+            UserProvidedPublicationExtendedSignatureInputHashRule rule = new UserProvidedPublicationExtendedSignatureInputHashRule();
 
             // Check invalid extended calendar chain from context extension function
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
@@ -75,6 +94,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     rule.Verify(context);
                 });
             }
+        }
+
+        [Test]
+        public void TestRfc3161SignatureUserPublicationHash()
+        {
+            UserProvidedPublicationExtendedSignatureInputHashRule rule = new UserProvidedPublicationExtendedSignatureInputHashRule();
 
             // Check legacy signature with publication record
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok_With_Publication_Record, FileMode.Open))
@@ -92,6 +117,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
+
+        [Test]
+        public void TestSignatureUserPublicationHash()
+        {
+            UserProvidedPublicationExtendedSignatureInputHashRule rule = new UserProvidedPublicationExtendedSignatureInputHashRule();
 
             // Check signature with publication record
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))
@@ -109,6 +140,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
+
+        [Test]
+        public void TestSignatureInvalidAggregationRootHash()
+        {
+            UserProvidedPublicationExtendedSignatureInputHashRule rule = new UserProvidedPublicationExtendedSignatureInputHashRule();
 
             // Check invalid signature with invalid root hash
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Invalid_With_Invalid_Aggregation_Root_Hash, FileMode.Open))

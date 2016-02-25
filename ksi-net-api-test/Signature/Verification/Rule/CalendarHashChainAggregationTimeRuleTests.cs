@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
@@ -28,7 +29,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public class CalendarHashChainAggregationTimeRuleTests
     {
         [Test]
-        public void TestVerify()
+        public void TestMissingContext()
         {
             CalendarHashChainAggregationTimeRule rule = new CalendarHashChainAggregationTimeRule();
 
@@ -37,6 +38,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 rule.Verify(null);
             });
+        }
+
+        [Test]
+        public void TestContextMissingSignature()
+        {
+            CalendarHashChainAggregationTimeRule rule = new CalendarHashChainAggregationTimeRule();
 
             // Verification exception on missing KSI signature 
             Assert.Throws<KsiVerificationException>(delegate
@@ -45,6 +52,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
                 rule.Verify(context);
             });
+        }
+
+        [Test]
+        public void TestSignatureMissingAggregationHashChain()
+        {
+            CalendarHashChainAggregationTimeRule rule = new CalendarHashChainAggregationTimeRule();
 
             // Verification exception on missing KSI signature aggregation hash chain 
             Assert.Throws<KsiVerificationException>(delegate
@@ -62,6 +75,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
                 rule.Verify(context);
             });
+        }
+
+        [Test]
+        public void TestSignatureMissingCalendarHashChain()
+        {
+            CalendarHashChainAggregationTimeRule rule = new CalendarHashChainAggregationTimeRule();
 
             // Check signature with no calendar hash chain
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_Missing_Calendar_Hash_Chain, FileMode.Open))
@@ -74,6 +93,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
+
+        [Test]
+        public void TestRfc3161SignatureAggregationTime()
+        {
+            CalendarHashChainAggregationTimeRule rule = new CalendarHashChainAggregationTimeRule();
 
             // Check legacy signature calendar hash chain aggregation time
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok, FileMode.Open))
@@ -86,6 +111,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
+
+        [Test]
+        public void TestSignatureAggregationTime()
+        {
+            CalendarHashChainAggregationTimeRule rule = new CalendarHashChainAggregationTimeRule();
 
             // Check signature calendar hash chain aggregation time
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
@@ -98,6 +129,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
+
+        [Test]
+        public void TestSignatureCalendarHashChainInvalidAggregationTime()
+        {
+            CalendarHashChainAggregationTimeRule rule = new CalendarHashChainAggregationTimeRule();
 
             // Check invalid signature calendar hash chain with invalid aggregation time
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Invalid_Calendar_Chain_Publication_Time, FileMode.Open))

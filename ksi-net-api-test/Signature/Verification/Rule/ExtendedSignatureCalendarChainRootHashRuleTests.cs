@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
@@ -28,7 +29,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public class ExtendedSignatureCalendarChainRootHashRuleTests
     {
         [Test]
-        public void TestVerify()
+        public void TestMissingContext()
         {
             ExtendedSignatureCalendarChainRootHashRule rule = new ExtendedSignatureCalendarChainRootHashRule();
 
@@ -37,6 +38,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 rule.Verify(null);
             });
+        }
+
+        [Test]
+        public void TestContextMissingSignature()
+        {
+            ExtendedSignatureCalendarChainRootHashRule rule = new ExtendedSignatureCalendarChainRootHashRule();
 
             // Verification exception on missing KSI signature 
             Assert.Throws<KsiVerificationException>(delegate
@@ -45,6 +52,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
                 rule.Verify(context);
             });
+        }
+
+        [Test]
+        public void TestRfc3161SignatureMissingCalendarHashChainAndWithPublicationRecord()
+        {
+            ExtendedSignatureCalendarChainRootHashRule rule = new ExtendedSignatureCalendarChainRootHashRule();
 
             // Check legacy signature for missing calendar hash chain and existing publication record
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))
@@ -63,6 +76,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     rule.Verify(context);
                 });
             }
+        }
+
+        [Test]
+        public void TestSignatureMissingCalendarHashChain()
+        {
+            ExtendedSignatureCalendarChainRootHashRule rule = new ExtendedSignatureCalendarChainRootHashRule();
 
             // Check signature without calendar chain
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_Missing_Calendar_Hash_Chain, FileMode.Open))
@@ -77,6 +96,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     rule.Verify(context);
                 });
             }
+        }
+
+        [Test]
+        public void TestSignatureWithInvalidContextExtendFunctions()
+        {
+            ExtendedSignatureCalendarChainRootHashRule rule = new ExtendedSignatureCalendarChainRootHashRule();
 
             // Check invalid extended calendar chain which comes from invalid verification context functions
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))
@@ -91,6 +116,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     rule.Verify(context);
                 });
             }
+        }
+
+        [Test]
+        public void TestSignatureMissingPublicationsRecord()
+        {
+            ExtendedSignatureCalendarChainRootHashRule rule = new ExtendedSignatureCalendarChainRootHashRule();
 
             // Check invalid publications record missing from signature
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
@@ -105,6 +136,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     rule.Verify(context);
                 });
             }
+        }
+
+        [Test]
+        public void TestRfc3161SignatureExtendedCalendarHashChainRootHash()
+        {
+            ExtendedSignatureCalendarChainRootHashRule rule = new ExtendedSignatureCalendarChainRootHashRule();
 
             // Check legacy signature
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok_With_Publication_Record, FileMode.Open))
@@ -121,6 +158,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
+
+        [Test]
+        public void TestSignatureExtendedCalendarHashChainRootHash()
+        {
+            ExtendedSignatureCalendarChainRootHashRule rule = new ExtendedSignatureCalendarChainRootHashRule();
 
             // Check signature
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))
@@ -137,6 +180,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
+
+        [Test]
+        public void TestSignatureExtendedCalendarHashChainInvalidRootHash()
+        {
+            ExtendedSignatureCalendarChainRootHashRule rule = new ExtendedSignatureCalendarChainRootHashRule();
 
             // Check invalid signature output hash
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))

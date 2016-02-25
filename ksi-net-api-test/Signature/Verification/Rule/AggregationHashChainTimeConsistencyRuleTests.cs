@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using NUnit.Framework;
@@ -26,7 +27,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public class AggregationHashChainTimeConsistencyRuleTests
     {
         [Test]
-        public void TestVerify()
+        public void TestMissingContext()
         {
             AggregationHashChainTimeConsistencyRule rule = new AggregationHashChainTimeConsistencyRule();
 
@@ -35,6 +36,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 rule.Verify(null);
             });
+        }
+
+        [Test]
+        public void TestContextMissingSignature()
+        {
+            AggregationHashChainTimeConsistencyRule rule = new AggregationHashChainTimeConsistencyRule();
 
             // Verification exception on missing KSI signature 
             Assert.Throws<KsiVerificationException>(delegate
@@ -43,6 +50,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
                 rule.Verify(context);
             });
+        }
+
+        [Test]
+        public void TestSignatureWithoutAggregationHashChain()
+        {
+            AggregationHashChainTimeConsistencyRule rule = new AggregationHashChainTimeConsistencyRule();
 
             // Verification exception on missing KSI signature aggregation hash chain 
             Assert.Throws<KsiVerificationException>(delegate
@@ -54,6 +67,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
                 rule.Verify(context);
             });
+        }
+
+        [Test]
+        public void TestRfc3161SignatureAggregationHashChainTimeConsistency()
+        {
+            AggregationHashChainTimeConsistencyRule rule = new AggregationHashChainTimeConsistencyRule();
 
             // Check legacy signature for aggregation hash chain time consistency
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok, FileMode.Open))
@@ -66,6 +85,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
+
+        [Test]
+        public void TestSignatureAggregationHashChainTimeConsistency()
+        {
+            AggregationHashChainTimeConsistencyRule rule = new AggregationHashChainTimeConsistencyRule();
 
             // Check signature for aggregation hash chain time consistency
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
@@ -78,6 +103,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
+
+        [Test]
+        public void TestInvalidSignatureAggregationHashChainTimeConsistency()
+        {
+            AggregationHashChainTimeConsistencyRule rule = new AggregationHashChainTimeConsistencyRule();
 
             // Check invalid signature for aggregation hash chain incosistency in time
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Invalid_Aggregation_Chain_Aggregation_Time_Mismatch, FileMode.Open))

@@ -6,7 +6,6 @@ namespace Guardtime.KSI.Integration
     [TestFixture]
     public class VerificationPolicyIntegrationTests : IntegrationTests
     {
-
         [Test, TestCaseSource(typeof(CommonGetTestFilesAndResults), nameof(CommonGetTestFilesAndResults.GetKeyBasedVerificationData))]
         public void KeyBasedVerificationTest(DataHolderForIntegrationTests data)
         {

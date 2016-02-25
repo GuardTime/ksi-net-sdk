@@ -16,12 +16,12 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System.IO;
-using System.Security.Cryptography.X509Certificates;
-using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
-using Guardtime.KSI.Trust;
+using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
@@ -30,7 +30,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public class PublicationsFileContainsSignaturePublicationRuleTests
     {
         [Test]
-        public void TestVerify()
+        public void TestMissingContext()
         {
             PublicationsFileContainsSignaturePublicationRule rule = new PublicationsFileContainsSignaturePublicationRule();
 
@@ -39,6 +39,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 rule.Verify(null);
             });
+        }
+
+        [Test]
+        public void TestContextMissingSignature()
+        {
+            PublicationsFileContainsSignaturePublicationRule rule = new PublicationsFileContainsSignaturePublicationRule();
 
             // Verification exception on missing KSI signature
             Assert.Throws<KsiVerificationException>(delegate
@@ -47,6 +53,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
                 rule.Verify(context);
             });
+        }
+
+        [Test]
+        public void TestMissingPublicationsFile()
+        {
+            PublicationsFileContainsSignaturePublicationRule rule = new PublicationsFileContainsSignaturePublicationRule();
 
             // No publications file defined
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
@@ -61,14 +73,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     rule.Verify(context);
                 });
             }
+        }
 
-            IPublicationsFile publicationsFile;
-            using (FileStream stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
-            {
-                publicationsFile =
-                    new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                        new CertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
-            }
+        [Test]
+        public void TestSignatureWithPublicationsFileMissingPublicationsRecord()
+        {
+            PublicationsFileContainsSignaturePublicationRule rule = new PublicationsFileContainsSignaturePublicationRule();
 
             // Check signature with not publications record
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
@@ -76,7 +86,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 TestVerificationContextFaultyFunctions context = new TestVerificationContextFaultyFunctions()
                 {
                     Signature = new KsiSignatureFactory().Create(stream),
-                    PublicationsFile = publicationsFile
+                    PublicationsFile = new TestPublicationsFile()
                 };
 
                 Assert.Throws<KsiVerificationException>(delegate
@@ -84,32 +94,60 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     rule.Verify(context);
                 });
             }
+        }
+
+        [Test]
+        public void TestRfc3161SignatureWithPublicationsFilePublication()
+        {
+            PublicationsFileContainsSignaturePublicationRule rule = new PublicationsFileContainsSignaturePublicationRule();
 
             // Check legacy signature
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok_With_Publication_Record, FileMode.Open))
             {
+                TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
+                testPublicationsFile.PublicationRecords.Add(
+                    new PublicationRecordInPublicationFile(new RawTag(0x703, false, false,
+                        Base16.Decode("3029020455CE810004210115BA5EB48C064B198A09D37E8C022C281C1CA1E36216EA43E811DF51A7268013"))));
+
                 TestVerificationContext context = new TestVerificationContext()
                 {
                     Signature = new KsiSignatureFactory().Create(stream),
-                    PublicationsFile = publicationsFile
+                    PublicationsFile = testPublicationsFile
                 };
 
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
+
+        [Test]
+        public void TestSignatureWithPublicationsFilePublication()
+        {
+            PublicationsFileContainsSignaturePublicationRule rule = new PublicationsFileContainsSignaturePublicationRule();
 
             // Check signature
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))
             {
+                TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
+                testPublicationsFile.PublicationRecords.Add(
+                    new PublicationRecordInPublicationFile(new RawTag(0x703, false, false,
+                        Base16.Decode("3029020455CE810004210115BA5EB48C064B198A09D37E8C022C281C1CA1E36216EA43E811DF51A7268013"))));
+
                 TestVerificationContext context = new TestVerificationContext()
                 {
                     Signature = new KsiSignatureFactory().Create(stream),
-                    PublicationsFile = publicationsFile
+                    PublicationsFile = testPublicationsFile
                 };
 
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
+
+        [Test]
+        public void TestVerify()
+        {
+            PublicationsFileContainsSignaturePublicationRule rule = new PublicationsFileContainsSignaturePublicationRule();
 
             // Check invalid signature with publication record missing from publications file
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Invalid_With_Invalid_Publication_Record, FileMode.Open))
@@ -117,7 +155,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 TestVerificationContext context = new TestVerificationContext()
                 {
                     Signature = new KsiSignatureFactory().Create(stream),
-                    PublicationsFile = publicationsFile
+                    PublicationsFile = new TestPublicationsFile()
                 };
 
                 VerificationResult verificationResult = rule.Verify(context);

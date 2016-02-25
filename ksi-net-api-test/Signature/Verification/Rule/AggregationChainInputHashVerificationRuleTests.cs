@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
@@ -29,7 +30,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public class AggregationChainInputHashVerificationRuleTests
     {
         [Test]
-        public void TestVerify()
+        public void TestMissingContext()
         {
             AggregationChainInputHashVerificationRule rule = new AggregationChainInputHashVerificationRule();
 
@@ -38,6 +39,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 rule.Verify(null);
             });
+        }
+
+        [Test]
+        public void TestContextMissingSignature()
+        {
+            AggregationChainInputHashVerificationRule rule = new AggregationChainInputHashVerificationRule();
 
             // Verification exception on missing KSI signature 
             Assert.Throws<KsiVerificationException>(delegate
@@ -46,6 +53,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
                 rule.Verify(context);
             });
+        }
+
+        [Test]
+        public void TestRfc3161SignatureWithoutDocumentHash()
+        {
+            AggregationChainInputHashVerificationRule rule = new AggregationChainInputHashVerificationRule();
 
             // Check legacy signature without document hash
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok, FileMode.Open))
@@ -60,6 +73,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     rule.Verify(context);
                 });
             }
+        }
+
+        [Test]
+        public void TestSignatureWithoutAggregationHashChains()
+        {
+            AggregationChainInputHashVerificationRule rule = new AggregationChainInputHashVerificationRule();
 
             // Check signature without aggregation hash chains
             Assert.Throws<KsiVerificationException>(delegate
@@ -73,6 +92,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
                 rule.Verify(context);
             });
+        }
+
+        [Test]
+        public void TestRfc3161SignatureInputHash()
+        {
+            AggregationChainInputHashVerificationRule rule = new AggregationChainInputHashVerificationRule();
 
             // Check legacy signature input hash
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok, FileMode.Open))
@@ -87,6 +112,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
+
+        [Test]
+        public void TestSignatureInputHash()
+        {
+            AggregationChainInputHashVerificationRule rule = new AggregationChainInputHashVerificationRule();
 
             // Check signature input hash
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
@@ -101,6 +132,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
+
+        [Test]
+        public void TestSignatureWithInvalidInputHash()
+        {
+            AggregationChainInputHashVerificationRule rule = new AggregationChainInputHashVerificationRule();
 
             // Check signature invalid input hash
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
