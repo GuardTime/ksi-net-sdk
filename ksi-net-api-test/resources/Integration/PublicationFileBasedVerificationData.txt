@@ -31,7 +31,7 @@ resources/signature/integration-test-signatures/NewSignature-CalAuth-NoSigningVa
 resources/signature/integration-test-signatures/NewSignature-CalAuth-NullSigType.ksig:false:Ok: : : 
 resources/signature/integration-test-signatures/NewSignature-CalAuth-WrongCertID.ksig:false:Ok: : : 
 resources/signature/integration-test-signatures/NewSignature-CalAuth-WrongSigningValue.ksig:false:Ok: : : 
-resources/signature/integration-test-signatures/NewSignature-CalAuth-WrongSigType.ksig:false:Fail: : :CertificateExistenceRule
+resources/signature/integration-test-signatures/NewSignature-CalAuth-WrongSigType.ksig:false:Ok: : : 
 #
 # Na because signature's publication is not in publications file.
 #
