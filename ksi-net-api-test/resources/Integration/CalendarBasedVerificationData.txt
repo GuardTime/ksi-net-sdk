@@ -4,7 +4,6 @@
 #
 resources/signature/integration-test-signatures/ExtendedSignature-MissingCalChainAndPubRec.ksig:false:Ok: : : 
 resources/signature/integration-test-signatures/NewSignature-CalHash-MissingCalHashAndAuthReq.ksig:false:Ok: : : 
-resources/signature/integration-test-signatures/signature-without-calendar-elements.ksig:false:Fail: : :CalendarHashChainExistenceRule
 #
 # Ok Results with Ok signatures.
 #
