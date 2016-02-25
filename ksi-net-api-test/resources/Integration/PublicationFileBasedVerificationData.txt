@@ -19,24 +19,19 @@ resources/signature/integration-test-signatures/ok-sig-2014-06-2-extended-extra-
 #
 # There are errors but publication based verification does not check those areas.
 #
-resources/signature/integration-test-signatures/signature-with-invalid-certificate-id.ksig:false:Ok: : : 
-resources/signature/integration-test-signatures/signature-with-invalid-pki-signature.ksig:false:Ok: : : 
-resources/signature/integration-test-signatures/NewSignature-CalAuth-WrongSigningValue.ksig:false:Ok: : : 
-resources/signature/integration-test-signatures/NewSignature-CalAuth-NoSigningValue.ksig:false:Ok: : : 
-resources/signature/integration-test-signatures/NewSignature-CalAuth-NoCertID.ksig:false:Ok: : : 
+resources/signature/integration-test-signatures/signature-without-calendar-elements.ksig:false:Ok: :This should be OK because Cal hash Chain is not mandatory: 
+resources/signature/integration-test-signatures/signature-without-calendar-authentication-record.ksig:false:Ok: : : 
 resources/signature/integration-test-signatures/ExtendedSignature-MissingCalChainAndPubRec.ksig:false:Ok: :This should be OK because Cal hash Chain is not mandatory: 
 resources/signature/integration-test-signatures/ExtendedSignature-MissingPubRecWrongCalChainFirstLeftLink.ksig:false:Ok: : : 
 resources/signature/integration-test-signatures/ExtendedSignature-MissingPubRecWrongCalChainFirstRightLink.ksig:false:Ok: : : 
 resources/signature/integration-test-signatures/ExtendedSignature-MissingPubRecWrongCalChainLastRightLink.ksig:false:Ok: : : 
 resources/signature/integration-test-signatures/NewSignature-CalHash-MissingCalHashAndAuthReq.ksig:false:Ok: :This should be OK because Cal hash Chain is not mandatory: 
-resources/signature/integration-test-signatures/NewSignature-CalAuth-WrongSigType.ksig:false:Ok: : : 
-resources/signature/integration-test-signatures/signature-without-calendar-elements.ksig:false:Ok: :This should be OK because Cal hash Chain is not mandatory: 
-resources/signature/integration-test-signatures/signature-without-calendar-authentication-record.ksig:false:Ok: : : 
 resources/signature/integration-test-signatures/NewSignature-CalAuth-NoCertID.ksig:false:Ok: : : 
 resources/signature/integration-test-signatures/NewSignature-CalAuth-NoSigningValue.ksig:false:Ok: : : 
 resources/signature/integration-test-signatures/NewSignature-CalAuth-NullSigType.ksig:false:Ok: : : 
 resources/signature/integration-test-signatures/NewSignature-CalAuth-WrongCertID.ksig:false:Ok: : : 
 resources/signature/integration-test-signatures/NewSignature-CalAuth-WrongSigningValue.ksig:false:Ok: : : 
+resources/signature/integration-test-signatures/NewSignature-CalAuth-WrongSigType.ksig:false:Ok: : : 
 #
 # Na because signature's publication is not in publications file.
 #
@@ -44,6 +39,8 @@ resources/signature/integration-test-signatures/ok-sig-extended-2014-05-15.ksig:
 #
 # Failed.
 #
+resources/signature/integration-test-signatures/signature-with-invalid-certificate-id.ksig:false:Fail: : :CertificateExistenceRule
+resources/signature/integration-test-signatures/signature-with-invalid-pki-signature.ksig:false:Fail: : :CertificateExistenceRule
 resources/signature/integration-test-signatures/ok-sig-2014-06-2-extended-empty-publication-time.ksig:false:Fail: : :SignaturePublicationRecordPublicationTimeRule
 resources/signature/integration-test-signatures/ExtendedSignature-WrongPubTime.ksig:false:Fail: : :SignaturePublicationRecordPublicationTimeRule
 resources/signature/integration-test-signatures/ExtendedSignature_WithNewerPublicationTime.ksig:false:Fail: : :SignaturePublicationRecordPublicationHashRule
