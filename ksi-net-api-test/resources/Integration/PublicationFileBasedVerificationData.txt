@@ -19,13 +19,13 @@ resources/signature/integration-test-signatures/ok-sig-2014-06-2-extended-extra-
 #
 # There are errors but publication based verification does not check those areas.
 #
-resources/signature/integration-test-signatures/signature-without-calendar-elements.ksig:false:Ok: :This should be OK because Cal hash Chain is not mandatory: 
+resources/signature/integration-test-signatures/signature-without-calendar-elements.ksig:false:Ok: : : 
 resources/signature/integration-test-signatures/signature-without-calendar-authentication-record.ksig:false:Ok: : : 
-resources/signature/integration-test-signatures/ExtendedSignature-MissingCalChainAndPubRec.ksig:false:Ok: :This should be OK because Cal hash Chain is not mandatory: 
+resources/signature/integration-test-signatures/ExtendedSignature-MissingCalChainAndPubRec.ksig:false:Ok: : : 
 resources/signature/integration-test-signatures/ExtendedSignature-MissingPubRecWrongCalChainFirstLeftLink.ksig:false:Ok: : : 
 resources/signature/integration-test-signatures/ExtendedSignature-MissingPubRecWrongCalChainFirstRightLink.ksig:false:Ok: : : 
 resources/signature/integration-test-signatures/ExtendedSignature-MissingPubRecWrongCalChainLastRightLink.ksig:false:Ok: : : 
-resources/signature/integration-test-signatures/NewSignature-CalHash-MissingCalHashAndAuthReq.ksig:false:Ok: :This should be OK because Cal hash Chain is not mandatory: 
+resources/signature/integration-test-signatures/NewSignature-CalHash-MissingCalHashAndAuthReq.ksig:false:Ok: : : 
 resources/signature/integration-test-signatures/NewSignature-CalAuth-NoCertID.ksig:false:Ok: : : 
 resources/signature/integration-test-signatures/NewSignature-CalAuth-NoSigningValue.ksig:false:Ok: : : 
 resources/signature/integration-test-signatures/NewSignature-CalAuth-NullSigType.ksig:false:Ok: : : 
