@@ -26,7 +26,6 @@ namespace Guardtime.KSI.Integration
 
                     IKsiSignature signature = new KsiSignatureFactory().Create(stream);
                     Assert.IsFalse(testData.GetSigantureReadInFails(), testData.GetTestFile() + " supposed to fail with class " + testData.GetExpectedExceptionClass() + " exception.");
-
                     VerificationContext context = new VerificationContext(signature);
 
                     VerificationPolicy policy;
@@ -34,7 +33,7 @@ namespace Guardtime.KSI.Integration
                     switch (policyName)
                     {
                         case "PublicationFileBasedVerificationPolicy":
-                            using (Stream publicationFileInStream = new FileStream("resources/publication/publicationsfile/newest-ksi-publications.bin", FileMode.Open))
+                            using (Stream publicationFileInStream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
                             {
                                 policy = new PublicationBasedVerificationPolicy();
                                 context.PublicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
@@ -49,7 +48,7 @@ namespace Guardtime.KSI.Integration
                             }
 
                         case "PublicationFileBasedVerificationNoExtendingPolicy":
-                            using (Stream publicationFileInStream = new FileStream("resources/publication/publicationsfile/newest-ksi-publications.bin", FileMode.Open))
+                            using (Stream publicationFileInStream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
                             {
                                 policy = new PublicationBasedVerificationPolicy();
                                 context.PublicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
@@ -83,6 +82,13 @@ namespace Guardtime.KSI.Integration
                             context.KsiService = IntegrationTests.GetHttpKsiService();
                             break;
 
+                        case "PublicationStringBasedVerificationUsingOldStringPolicy":
+                            policy = new PublicationBasedVerificationPolicy();
+                            context.UserPublication = new PublicationData("AAAAAA-CTTTRA-AANDMF-EVTKRS-GMNEFG-D3JNKX-W4XIUC-WCBIJL-Z2U2DM-KAOG35-6ZYLBD-XKK5G4");
+                            context.IsExtendingAllowed = true;
+                            context.KsiService = IntegrationTests.GetHttpKsiService();
+                            break;
+
                         case "CalendarBasedVerificationPolicy":
                             policy = new CalendarBasedVerificationPolicy();
                             context.IsExtendingAllowed = true;
@@ -90,7 +96,7 @@ namespace Guardtime.KSI.Integration
                             break;
 
                         default:
-                            using (Stream publicationFileInStream = new FileStream("resources/publication/publicationsfile/newest-ksi-publications.bin", FileMode.Open))
+                            using (Stream publicationFileInStream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
                             {
                                 policy = new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
                                 new CertificateSubjectRdnSelector(new List<CertificateSubjectRdn>
@@ -108,9 +114,6 @@ namespace Guardtime.KSI.Integration
                     }
 
                     VerificationResult verificationResult = policy.Verify(context);
-                    Console.WriteLine(string.Format("Result start:"));
-                    Console.WriteLine(verificationResult);
-                    Console.WriteLine(string.Format("Result end"));
 
                     string expectedResults = testData.GetExpectedVerificationResultCode().ToLower();
                     if (expectedResults.Equals(verificationResult.ResultCode.ToString().ToLower()))

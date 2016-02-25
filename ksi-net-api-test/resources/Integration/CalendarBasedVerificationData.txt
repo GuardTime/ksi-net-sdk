@@ -21,7 +21,7 @@ resources/signature/integration-test-signatures/ok-sig-2014-06-2-extra-main-nest
 resources/signature/integration-test-signatures/ok-sig-2014-06-2-extra-critical-main-nested-tlv-block-with-critical-tlvs.ksig:false:Ok: : : 
 resources/signature/integration-test-signatures/ok-sig-2014-06-2-extra-element-in-aggregation-lvl1.ksig:false:Ok: : : 
 #
-# Ok but there are errors that calendar based verification does not check
+# Ok but there are errors that calendar based verification does not check	
 #
 resources/signature/integration-test-signatures/signature-with-invalid-certificate-id.ksig:false:Ok: : : 
 resources/signature/integration-test-signatures/signature-with-invalid-pki-signature.ksig:false:Ok: : : 

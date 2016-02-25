@@ -487,30 +487,6 @@
     <None Include="resources\signature\integration-test-signatures\ExtendedSignature_WithOlderPublicationTime.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\integration-test-signatures\extension-response-for-ok-sig-2014-06-2-extra-critical-element.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\extension-response-for-ok-sig-2014-06-2-extra-critical-main-with-critical-tlv.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\extension-response-for-ok-sig-2014-06-2-extra-critical-main-with-non-critical-tlv.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\extension-response-for-ok-sig-2014-06-2-extra-element.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\extension-response-for-ok-sig-2014-06-2-extra-main-with-critical-tlv.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\extension-response-for-ok-sig-2014-06-2-extra-main-with-non-critical-tlv.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\extension-response-from-538C3A47-to-54162C00-for-ok-sig-2014-06-2-extended-wrong-aggregation-time.tlv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\extension-response-from-538C3A47-to-54162C00-for-ok-sig-2014-06-2-extended-wrong-input-hash.tlv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHash-WrongLeftLinkLevelCorrector.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
