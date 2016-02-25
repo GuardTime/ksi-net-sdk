@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using NUnit.Framework;
@@ -26,7 +27,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public class SignaturePublicationRecordPublicationTimeRuleTests
     {
         [Test]
-        public void TestVerify()
+        public void TestMissingContext()
         {
             SignaturePublicationRecordPublicationTimeRule rule = new SignaturePublicationRecordPublicationTimeRule();
 
@@ -35,6 +36,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 rule.Verify(null);
             });
+        }
+
+        [Test]
+        public void TestContextMissingSignature()
+        {
+            SignaturePublicationRecordPublicationTimeRule rule = new SignaturePublicationRecordPublicationTimeRule();
 
             // Verification exception on missing KSI signature 
             Assert.Throws<KsiVerificationException>(delegate
@@ -43,6 +50,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
                 rule.Verify(context);
             });
+        }
+
+        [Test]
+        public void TestSignaturePublicationRecordAndMissingCalendarHashChain()
+        {
+            SignaturePublicationRecordPublicationTimeRule rule = new SignaturePublicationRecordPublicationTimeRule();
 
             // Check signature with publication record and calendar hash chain is missing
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))
@@ -61,6 +74,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     rule.Verify(context);
                 });
             }
+        }
+
+        [Test]
+        public void TestSignatureMissingPublicationRecord()
+        {
+            SignaturePublicationRecordPublicationTimeRule rule = new SignaturePublicationRecordPublicationTimeRule();
 
             // Check signature without publication record
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
@@ -73,6 +92,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
+
+        [Test]
+        public void TestRfc3161SignaturePublicationRecordTime()
+        {
+            SignaturePublicationRecordPublicationTimeRule rule = new SignaturePublicationRecordPublicationTimeRule();
 
             // Check legacy signature with publication record
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok_With_Publication_Record, FileMode.Open))
@@ -85,6 +110,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
+
+        [Test]
+        public void TestSignaturePublicationRecordTime()
+        {
+            SignaturePublicationRecordPublicationTimeRule rule = new SignaturePublicationRecordPublicationTimeRule();
 
             // Check signature with publication record
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))
@@ -97,6 +128,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
+
+        [Test]
+        public void TestSignatureInvalidPublicationRecordTime()
+        {
+            SignaturePublicationRecordPublicationTimeRule rule = new SignaturePublicationRecordPublicationTimeRule();
 
             // Check invalid signature with invalid publications record
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Invalid_With_Invalid_Publication_Record, FileMode.Open))

@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using NUnit.Framework;
@@ -26,7 +27,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public class CalendarAuthenticationRecordAggregationHashRuleTests
     {
         [Test]
-        public void TestVerify()
+        public void TestMissingContext()
         {
             CalendarAuthenticationRecordAggregationHashRule rule = new CalendarAuthenticationRecordAggregationHashRule();
 
@@ -35,6 +36,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 rule.Verify(null);
             });
+        }
+
+        [Test]
+        public void TestContextMissingSignature()
+        {
+            CalendarAuthenticationRecordAggregationHashRule rule = new CalendarAuthenticationRecordAggregationHashRule();
 
             // Verification exception on missing KSI signature 
             Assert.Throws<KsiVerificationException>(delegate
@@ -43,6 +50,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
                 rule.Verify(context);
             });
+        }
+
+        [Test]
+        public void TestRfc3161SignatureMissingCalendarHashChain()
+        {
+            CalendarAuthenticationRecordAggregationHashRule rule = new CalendarAuthenticationRecordAggregationHashRule();
 
             // Check legacy signature for missing calendar hash chain and existing calendar authentication record
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok, FileMode.Open))
@@ -61,6 +74,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     rule.Verify(context);
                 });
             }
+        }
+
+        [Test]
+        public void TestRfc3161SignatureCalendarAuthenticationRecord()
+        {
+            CalendarAuthenticationRecordAggregationHashRule rule = new CalendarAuthenticationRecordAggregationHashRule();
 
             // Check legacy signature for calendar authentication record hash
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok, FileMode.Open))
@@ -73,6 +92,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
+
+        [Test]
+        public void TestSignatureCalendarAuthenticationRecord()
+        {
+            CalendarAuthenticationRecordAggregationHashRule rule = new CalendarAuthenticationRecordAggregationHashRule();
 
             // Check signature for calendar authentication record hash
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
@@ -85,6 +110,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
+
+        [Test]
+        public void TestSignatureMissingCalendarAuthenticationRecord()
+        {
+            CalendarAuthenticationRecordAggregationHashRule rule = new CalendarAuthenticationRecordAggregationHashRule();
 
             // Check signature with no calendar authentication record
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record, FileMode.Open))
@@ -97,6 +128,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
+
+        [Test]
+        public void TestSignatureWithInvalidPublicationHashInCalendarAuthenticationRecord()
+        {
+            CalendarAuthenticationRecordAggregationHashRule rule = new CalendarAuthenticationRecordAggregationHashRule();
 
             // Check invalid signature with invalid publication hash in calendar authentication record
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Publication_Hash, FileMode.Open))

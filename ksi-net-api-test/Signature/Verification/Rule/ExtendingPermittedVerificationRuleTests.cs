@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using Guardtime.KSI.Exceptions;
 using NUnit.Framework;
 
@@ -25,7 +26,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public class ExtendingPermittedVerificationRuleTests
     {
         [Test]
-        public void TestVerify()
+        public void TestMissingContext()
         {
             ExtendingPermittedVerificationRule rule = new ExtendingPermittedVerificationRule();
 
@@ -34,13 +35,25 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 rule.Verify(null);
             });
+        }
+
+        [Test]
+        public void TestExtendingPermitted()
+        {
+            ExtendingPermittedVerificationRule rule = new ExtendingPermittedVerificationRule();
 
             TestVerificationContext context = new TestVerificationContext { IsExtendingAllowed = true };
             VerificationResult verificationResult = rule.Verify(context);
             Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+        }
 
-            context.IsExtendingAllowed = false;
-            verificationResult = rule.Verify(context);
+        [Test]
+        public void TestExtendingNotPermitted()
+        {
+            ExtendingPermittedVerificationRule rule = new ExtendingPermittedVerificationRule();
+
+            TestVerificationContext context = new TestVerificationContext { IsExtendingAllowed = false };
+            VerificationResult verificationResult = rule.Verify(context);
             Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
         }
     }

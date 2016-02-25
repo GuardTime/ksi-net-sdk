@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Properties;
@@ -27,7 +28,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     public class SignaturePublicationRecordExistenceRuleTests
     {
         [Test]
-        public void TestVerify()
+        public void TestMissingContext()
         {
             SignaturePublicationRecordExistenceRule rule = new SignaturePublicationRecordExistenceRule();
 
@@ -36,6 +37,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 rule.Verify(null);
             });
+        }
+
+        [Test]
+        public void TestContextMissingSignature()
+        {
+            SignaturePublicationRecordExistenceRule rule = new SignaturePublicationRecordExistenceRule();
 
             // Verification exception on missing KSI signature
             Assert.Throws<KsiVerificationException>(delegate
@@ -44,6 +51,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
                 rule.Verify(context);
             });
+        }
+
+        [Test]
+        public void TestRfc3161SignaturePublicationRecord()
+        {
+            SignaturePublicationRecordExistenceRule rule = new SignaturePublicationRecordExistenceRule();
 
             // Check legacy signature
             using (FileStream stream = new FileStream(Resources.KsiSignatureDo_Legacy_Ok_With_Publication_Record, FileMode.Open))
@@ -56,6 +69,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
+
+        [Test]
+        public void TestSignaturePublicationRecord()
+        {
+            SignaturePublicationRecordExistenceRule rule = new SignaturePublicationRecordExistenceRule();
 
             // Check signature
             using (FileStream stream = new FileStream(Resources.KsiSignatureDo_Ok_With_Publication_Record, FileMode.Open))
@@ -68,6 +87,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
+
+        [Test]
+        public void TestSignatureMissingPublicationRecord()
+        {
+            SignaturePublicationRecordExistenceRule rule = new SignaturePublicationRecordExistenceRule();
 
             // Check invalid signature without publication record
             using (FileStream stream = new FileStream(Resources.KsiSignatureDo_Ok, FileMode.Open))

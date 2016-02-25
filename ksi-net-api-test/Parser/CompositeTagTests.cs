@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System;
 using Guardtime.KSI.Exceptions;
 using NUnit.Framework;
@@ -112,11 +113,12 @@ namespace Guardtime.KSI.Parser
                 {
                     new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }),
                     new RawTag(0x2, false, false, new byte[] { 0x3, 0x4 }),
-                    new CompositeTestTag(0x5, false, false, new ITlvTag[] { new RawTag(0x1, false, false, new byte[] { }) })
+                    new CompositeTestTag(0x5, false, false, new ITlvTag[] { new RawTag(0x1, false, false, new byte[] { 8, 9 }) })
                 });
+
             Assert.AreEqual(
                 "TLV[0x1,N,F]:" + Environment.NewLine + "  TLV[0x1]:0x0102" + Environment.NewLine + "  TLV[0x2]:0x0304" + Environment.NewLine + "  TLV[0x5]:" + Environment.NewLine +
-                "    TLV[0x1]:0x", tag.ToString(), "Tag string representation should be correct");
+                "    TLV[0x1]:0x0809", tag.ToString(), "Tag string representation should be correct");
         }
 
         [Test]

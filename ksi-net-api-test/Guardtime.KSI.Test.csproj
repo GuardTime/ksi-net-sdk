@@ -158,6 +158,7 @@
     </Compile>
     <Compile Include="Publication\PublicationDataTests.cs" />
     <Compile Include="Publication\PublicationsFileTests.cs" />
+    <Compile Include="Publication\TestPublicationsfile.cs" />
     <Compile Include="Service\TestKsiServiceProtocol.cs" />
     <Compile Include="TestSetup.cs" />
     <Compile Include="Signature\CalendarAuthenticationRecordTests.cs" />
