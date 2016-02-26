@@ -67,7 +67,7 @@ namespace Guardtime.KSI.Integration
             }
         };
 
-        protected static object[] HttpTestCasesInvalidPass =
+        protected static object[] HttpTestCasesInvalidSigningPass =
         {
             new object[]
             {
@@ -75,6 +75,23 @@ namespace Guardtime.KSI.Integration
                     new KsiService(
                         HttpKsiServiceProtocol,
                         new ServiceCredentials(Settings.Default.HttpSigningServiceUser, "anonx"),
+                        HttpKsiServiceProtocol,
+                        new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, "anon"),
+                        HttpKsiServiceProtocol,
+                        new PublicationsFileFactory(
+                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com"))),
+                        new KsiSignatureFactory()))
+            }
+        };
+
+        protected static object[] HttpTestCasesInvalidExtendingPass =
+        {
+            new object[]
+            {
+                new Ksi(
+                    new KsiService(
+                        HttpKsiServiceProtocol,
+                        new ServiceCredentials(Settings.Default.HttpSigningServiceUser, "anon"),
                         HttpKsiServiceProtocol,
                         new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, "anonx"),
                         HttpKsiServiceProtocol,
@@ -84,7 +101,7 @@ namespace Guardtime.KSI.Integration
             }
         };
 
-        protected static object[] HttpTestCasesInvalidUrl =
+        protected static object[] HttpTestCasesInvalidSigningUrl =
         {
             new object[]
             {
@@ -92,7 +109,41 @@ namespace Guardtime.KSI.Integration
                     new KsiService(
                         HttpKsiServiceProtocolInvalidUrls,
                         new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
+                        HttpKsiServiceProtocol,
+                        new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
+                        HttpKsiServiceProtocol,
+                        new PublicationsFileFactory(
+                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com"))),
+                        new KsiSignatureFactory()))
+            }
+        };
+
+        protected static object[] HttpTestCasesInvalidExtendingUrl =
+        {
+            new object[]
+            {
+                new Ksi(
+                    new KsiService(
+                        HttpKsiServiceProtocol,
+                        new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
                         HttpKsiServiceProtocolInvalidUrls,
+                        new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
+                        HttpKsiServiceProtocol,
+                        new PublicationsFileFactory(
+                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com"))),
+                        new KsiSignatureFactory()))
+            }
+        };
+
+        protected static object[] HttpTestCasesInvalidPublicationsFilegUrl =
+        {
+            new object[]
+            {
+                new Ksi(
+                    new KsiService(
+                        HttpKsiServiceProtocol,
+                        new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
+                        HttpKsiServiceProtocol,
                         new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
                         HttpKsiServiceProtocolInvalidUrls,
                         new PublicationsFileFactory(

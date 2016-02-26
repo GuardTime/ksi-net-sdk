@@ -181,6 +181,8 @@ namespace Guardtime.KSI.Service
             }
 
             byte[] data = _sigingServiceProtocol.EndSign(serviceAsyncResult.ServiceProtocolAsyncResult);
+            AggregationPdu pdu = null;
+
             try
             {
                 if (data == null)
@@ -190,7 +192,7 @@ namespace Guardtime.KSI.Service
 
                 using (TlvReader reader = new TlvReader(new MemoryStream(data)))
                 {
-                    AggregationPdu pdu = new AggregationPdu(reader.ReadTag());
+                    pdu = new AggregationPdu(reader.ReadTag());
                     AggregationResponsePayload payload = pdu.Payload as AggregationResponsePayload;
                     AggregationErrorPayload errorPayload = pdu.Payload as AggregationErrorPayload;
 
@@ -205,7 +207,7 @@ namespace Guardtime.KSI.Service
                         throw new KsiServiceException("Error occured during aggregation: " + errorMessage + ".");
                     }
 
-                    if (!pdu.ValidateMac(_extendingServiceCredentials.LoginKey))
+                    if (!pdu.ValidateMac(_signingServiceCredentials.LoginKey))
                     {
                         throw new KsiServiceException("Invalid HMAC in aggregation response payload");
                     }
@@ -223,7 +225,7 @@ namespace Guardtime.KSI.Service
             }
             catch (KsiException e)
             {
-                Logger.Warn("End sign request failed (request id: {0}): {1}", serviceAsyncResult.RequestId, e);
+                Logger.Warn("End sign request failed (request id: {0}): {1}{2}{3}", serviceAsyncResult.RequestId, e, Environment.NewLine, pdu);
                 throw;
             }
         }
@@ -305,6 +307,8 @@ namespace Guardtime.KSI.Service
             }
 
             byte[] data = _extendingServiceProtocol.EndExtend(serviceAsyncResult.ServiceProtocolAsyncResult);
+            ExtendPdu pdu = null;
+
             try
             {
                 if (data == null)
@@ -314,7 +318,7 @@ namespace Guardtime.KSI.Service
 
                 using (TlvReader reader = new TlvReader(new MemoryStream(data)))
                 {
-                    ExtendPdu pdu = new ExtendPdu(reader.ReadTag());
+                    pdu = new ExtendPdu(reader.ReadTag());
                     ExtendResponsePayload payload = pdu.Payload as ExtendResponsePayload;
                     ExtendErrorPayload errorPayload = pdu.Payload as ExtendErrorPayload;
 
@@ -352,7 +356,7 @@ namespace Guardtime.KSI.Service
             }
             catch (KsiException e)
             {
-                Logger.Warn("End extend request failed (request id: {0}): {1}", serviceAsyncResult.RequestId, e);
+                Logger.Warn("End extend request failed (request id: {0}): {1}{2}{3}", serviceAsyncResult.RequestId, e, Environment.NewLine, pdu);
                 throw;
             }
         }

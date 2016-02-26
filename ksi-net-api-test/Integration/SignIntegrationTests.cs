@@ -41,7 +41,7 @@ namespace Guardtime.KSI.Integration
             Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode, "Signature should verify with key based policy");
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidPass))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidSigningPass))]
         public void HttpSignHashInvalidPassTest(Ksi ksi)
         {
             Assert.Throws<KsiServiceException>(delegate
@@ -50,12 +50,30 @@ namespace Guardtime.KSI.Integration
             });
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidUrl))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidSigningUrl))]
         public void HttpSignHashInvalidUrlTest(Ksi ksi)
         {
             Assert.Throws<KsiServiceProtocolException>(delegate
             {
                 SignHashTest(ksi);
+            });
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidExtendingUrl))]
+        public void HttpSignHashWithInvalidExtendingUrlTest(Ksi ksi)
+        {
+            Assert.DoesNotThrow(delegate
+            {
+                VerificationResult verificationResult = SignHashTest(ksi);
+            });
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidExtendingPass))]
+        public void HttpSignHashWithInvalidExtendingPassTest(Ksi ksi)
+        {
+            Assert.DoesNotThrow(delegate
+            {
+                VerificationResult verificationResult = SignHashTest(ksi);
             });
         }
 
