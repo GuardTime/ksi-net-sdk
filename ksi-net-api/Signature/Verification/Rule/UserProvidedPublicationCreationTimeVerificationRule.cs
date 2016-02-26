@@ -26,10 +26,10 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         /// <see cref="VerificationRule.Verify" />
         public override VerificationResult Verify(IVerificationContext context)
         {
-            ulong registrationTime = GetCalendarHashChain(GetSignature(context)).RegistrationTime;
+            ulong aggregationTime = GetSignature(context).AggregationTime;
             ulong userPublicationTime = GetUserPublication(context).PublicationTime;
 
-            return registrationTime >= userPublicationTime
+            return aggregationTime >= userPublicationTime
                 ? new VerificationResult(GetRuleName(), VerificationResultCode.Na, VerificationError.Gen02)
                 : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }

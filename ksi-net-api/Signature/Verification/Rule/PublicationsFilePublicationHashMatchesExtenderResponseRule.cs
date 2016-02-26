@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
@@ -29,8 +30,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         public override VerificationResult Verify(IVerificationContext context)
         {
             IPublicationsFile publicationsFile = GetPublicationsFile(context);
-            ulong registrationTime = GetCalendarHashChain(GetSignature(context)).RegistrationTime;
-            PublicationRecordInPublicationFile publicationRecord = GetNearestPublicationRecord(publicationsFile, registrationTime);
+            ulong aggregationTime = GetSignature(context).AggregationTime;
+            PublicationRecordInPublicationFile publicationRecord = GetNearestPublicationRecord(publicationsFile, aggregationTime);
             CalendarHashChain extendedTimeCalendarHashChain = GetExtendedTimeCalendarHashChain(context, publicationRecord.PublicationData.PublicationTime);
 
             return extendedTimeCalendarHashChain.OutputHash != publicationRecord.PublicationData.PublicationHash

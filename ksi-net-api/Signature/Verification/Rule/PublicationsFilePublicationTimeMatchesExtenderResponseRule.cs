@@ -16,13 +16,13 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using Guardtime.KSI.Publication;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
     /// <summary>
-    ///     Rule checks that publications file publication time matches with extender response calendar hash chain registration
-    ///     time.
+    ///     Rule checks that publications file publication time matches with extender response calendar hash chain shape.
     /// </summary>
     public sealed class PublicationsFilePublicationTimeMatchesExtenderResponseRule : VerificationRule
     {
@@ -31,8 +31,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         {
             IKsiSignature signature = GetSignature(context);
 
-            ulong registrationTime = GetCalendarHashChain(signature).RegistrationTime;
-            PublicationRecordInPublicationFile publicationRecord = GetNearestPublicationRecord(GetPublicationsFile(context), registrationTime);
+            ulong aggregationTime = signature.AggregationTime;
+            PublicationRecordInPublicationFile publicationRecord = GetNearestPublicationRecord(GetPublicationsFile(context), aggregationTime);
             CalendarHashChain extendedTimeCalendarHashChain = GetExtendedTimeCalendarHashChain(context, publicationRecord.PublicationData.PublicationTime);
 
             if (publicationRecord.PublicationData.PublicationTime != extendedTimeCalendarHashChain.PublicationTime)
