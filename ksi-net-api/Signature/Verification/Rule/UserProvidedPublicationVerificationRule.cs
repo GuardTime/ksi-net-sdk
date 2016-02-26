@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
@@ -34,11 +35,6 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         public override VerificationResult Verify(IVerificationContext context)
         {
             IKsiSignature signature = GetSignature(context);
-
-            if (signature.PublicationRecord == null)
-            {
-                throw new KsiVerificationException("Invalid publication record in KSI signature: null.");
-            }
 
             PublicationData userPublication = GetUserPublication(context);
             PublicationData signaturePublication = GetPublicationRecord(signature).PublicationData;

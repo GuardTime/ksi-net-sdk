@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using Guardtime.KSI.Signature.Verification.Rule;
 
 namespace Guardtime.KSI.Signature.Verification.Policy
@@ -39,9 +40,10 @@ namespace Guardtime.KSI.Signature.Verification.Policy
 
                 FirstRule = new UserProvidedPublicationExistenceRule()
                     .OnSuccess(new SignaturePublicationRecordExistenceRule()
-                        .OnSuccess(new UserProvidedPublicationVerificationRule())
-                        .OnNa(new UserProvidedPublicationCreationTimeVerificationRule()
-                            .OnSuccess(verificationRule)));
+                        .OnSuccess(new UserProvidedPublicationVerificationRule()
+                            .OnNa(new UserProvidedPublicationCreationTimeVerificationRule()
+                                .OnSuccess(verificationRule)))
+                        .OnNa(verificationRule));
             }
         }
     }
