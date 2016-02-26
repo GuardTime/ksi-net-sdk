@@ -18,6 +18,7 @@
  */
 
 using System.IO;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
@@ -29,6 +30,62 @@ namespace Guardtime.KSI.Integration
     [TestFixture]
     public class ExtendIntegrationTests : IntegrationTests
     {
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidExtendingPass))]
+        public void ExtendInvalidPassTest(Ksi ksi)
+        {
+            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
+            {
+                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+
+                Assert.Throws<KsiException>(delegate
+                {
+                    ksi.ExtendToHead(ksiSignature);
+                });
+            }
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidExtendingUrl))]
+        public void ExtendInvalidUrlTest(Ksi ksi)
+        {
+            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
+            {
+                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+
+                Assert.Throws<KsiServiceProtocolException>(delegate
+                {
+                    ksi.ExtendToHead(ksiSignature);
+                });
+            }
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidSigningUrl))]
+        public void ExtendSuccessWithInvalidSigningUrlTest(Ksi ksi)
+        {
+            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
+            {
+                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+
+                Assert.DoesNotThrow(delegate
+                {
+                    ksi.ExtendToHead(ksiSignature);
+                });
+            }
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidSigningPass))]
+        public void ExtendSuccessWithInvalidSigningPassTest(Ksi ksi)
+        {
+            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
+            {
+                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+
+                Assert.DoesNotThrow(delegate
+                {
+                    ksi.ExtendToHead(ksiSignature);
+                });
+            }
+        }
+
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void ExtendToHeadAndVerifyUserProvidedPublicationTest(Ksi ksi)
         {
