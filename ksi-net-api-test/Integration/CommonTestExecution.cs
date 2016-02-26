@@ -11,7 +11,7 @@ using NUnit.Framework;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
-
+using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Integration
 {
@@ -84,7 +84,7 @@ namespace Guardtime.KSI.Integration
 
                         case "PublicationStringBasedVerificationUsingOldStringPolicy":
                             policy = new PublicationBasedVerificationPolicy();
-                            context.UserPublication = new PublicationData("AAAAAA-CTTTRA-AANDMF-EVTKRS-GMNEFG-D3JNKX-W4XIUC-WCBIJL-Z2U2DM-KAOG35-6ZYLBD-XKK5G4");
+                            context.UserPublication = new PublicationData("AAAAAA-CS2XHY-AAJCBE-DDAFMR-R3RKMY-GMAQDZ-FSAE7B-ZO64CT-QPNC3B-RQ6UGY-67QORK-6STDTS");
                             context.IsExtendingAllowed = true;
                             context.KsiService = IntegrationTests.GetHttpKsiService();
                             break;
