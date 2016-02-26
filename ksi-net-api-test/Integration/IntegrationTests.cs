@@ -49,7 +49,7 @@ namespace Guardtime.KSI.Integration
 
         private static readonly TcpKsiServiceProtocol TcpKsiServiceProtocolInvalidPort = new TcpKsiServiceProtocol(Settings.Default.TcpSigningServiceUrl, 1234, 100000);
 
-        protected static object[] HttpTestCases =
+        public static object[] HttpTestCases =
         {
             new object[]
             {
@@ -168,6 +168,18 @@ namespace Guardtime.KSI.Integration
                         new KsiSignatureFactory()))
             }
         };
+
+        public static KsiService GetHttpKsiService()
+        {
+            return new KsiService(
+                HttpKsiServiceProtocol,
+                new ServiceCredentials("anon", "anon"),
+                HttpKsiServiceProtocol,
+                new ServiceCredentials("anon", "anon"),
+                HttpKsiServiceProtocol,
+                new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com"))),
+                new KsiSignatureFactory());
+        }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void GetPublicationsFileTest(Ksi ksi)
