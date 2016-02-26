@@ -16,6 +16,7 @@
  * Guardtime, Inc., and no license to trademarks is granted; Guardtime
  * reserves and retains all trademark rights.
  */
+
 using System.Collections.ObjectModel;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;

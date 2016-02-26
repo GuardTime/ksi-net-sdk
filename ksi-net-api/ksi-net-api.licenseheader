@@ -1,4 +1,5 @@
-﻿extensions: .cs .cpp .h
+﻿extensions: .designer.cs
+extensions: .cs .cpp .h
 /*
  * Copyright 2013-2016 Guardtime, Inc.
  *
