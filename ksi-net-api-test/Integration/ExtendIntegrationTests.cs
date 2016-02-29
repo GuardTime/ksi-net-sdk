@@ -39,7 +39,7 @@ namespace Guardtime.KSI.Integration
 
                 Assert.Throws<KsiException>(delegate
                 {
-                    ksi.ExtendToHead(ksiSignature);
+                    ksi.Extend(ksiSignature);
                 });
             }
         }
@@ -53,7 +53,7 @@ namespace Guardtime.KSI.Integration
 
                 Assert.Throws<KsiServiceProtocolException>(delegate
                 {
-                    ksi.ExtendToHead(ksiSignature);
+                    ksi.Extend(ksiSignature);
                 });
             }
         }
@@ -67,7 +67,7 @@ namespace Guardtime.KSI.Integration
 
                 Assert.DoesNotThrow(delegate
                 {
-                    ksi.ExtendToHead(ksiSignature);
+                    ksi.Extend(ksiSignature);
                 });
             }
         }
@@ -81,22 +81,21 @@ namespace Guardtime.KSI.Integration
 
                 Assert.DoesNotThrow(delegate
                 {
-                    ksi.ExtendToHead(ksiSignature);
+                    ksi.Extend(ksiSignature);
                 });
             }
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
-        public void ExtendToHeadAndVerifyUserProvidedPublicationTest(Ksi ksi)
+        public void ExtendAndVerifyTest(Ksi ksi)
         {
             UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
 
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
             {
-                PublicationData publicationData = ksi.GetPublicationsFile().GetLatestPublication().PublicationData;
-
                 IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
-                IKsiSignature extendedSignature = ksi.ExtendToHead(ksiSignature);
+                IKsiSignature extendedSignature = ksi.Extend(ksiSignature);
+                PublicationData publicationData = ksi.GetPublicationsFile().GetNearestPublicationRecord(ksiSignature.AggregationTime).PublicationData;
 
                 TestVerificationContext context = new TestVerificationContext()
                 {

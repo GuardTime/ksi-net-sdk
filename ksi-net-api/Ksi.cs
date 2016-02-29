@@ -73,28 +73,6 @@ namespace Guardtime.KSI
         }
 
         /// <summary>
-        ///     Extend signature to calendar head.
-        ///     <example>
-        ///         Equals to following code
-        ///         <code>
-        /// KsiProvider.SetCryptoProvider(new MicrosoftCryptoProvider()); 
-        /// KsiService ksiService;
-        /// IKsiSignature signature;
-        /// IPublicationsFile publicationsFile.
-        /// 
-        /// CalendarHashChain calendarHashChain = ksiService.Extend(signature.AggregationTime, publicationsFile.GetLatestPublication().PublicationData.PublicationTime);
-        /// IKsiSignature extendedSignature = signature.Extend(calendarHashChain, publicationRecord);
-        /// </code>
-        ///     </example>
-        /// </summary>
-        /// <param name="signature">KSI signature</param>
-        /// <returns>extended KSI signature</returns>
-        public IKsiSignature ExtendToHead(IKsiSignature signature)
-        {
-            return Extend(signature, GetPublicationsFile().GetLatestPublication());
-        }
-
-        /// <summary>
         ///     Extend signature to publication.
         ///     <example>
         ///         Equals to following code
