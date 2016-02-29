@@ -67,12 +67,12 @@ namespace Guardtime.KSI.Publication
 
             if (publicationTimeCount != 1)
             {
-                throw new TlvException("Only one publication time must exist in publication data.");
+                throw new TlvException("Exactly one publication time must exist in publication data.");
             }
 
             if (publicationHashCount != 1)
             {
-                throw new TlvException("Only one publication hash must exist in publication data.");
+                throw new TlvException("Exactly one publication hash must exist in publication data.");
             }
         }
 

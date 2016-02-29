@@ -77,17 +77,17 @@ namespace Guardtime.KSI.Service
 
             if (payloadCount != 1)
             {
-                throw new TlvException("Only one payload must exist in KSI PDU.");
+                throw new TlvException("Exactly one payload must exist in KSI PDU.");
             }
 
             if (Payload.Type != Constants.AggregationErrorPayload.TagType && headerCount != 1)
             {
-                throw new TlvException("Only one header must exist in KSI PDU.");
+                throw new TlvException("Exactly one header must exist in KSI PDU.");
             }
 
             if (Payload.Type != Constants.AggregationErrorPayload.TagType && macCount != 1)
             {
-                throw new TlvException("Only one mac must exist in KSI PDU");
+                throw new TlvException("Exactly one mac must exist in KSI PDU");
             }
         }
 

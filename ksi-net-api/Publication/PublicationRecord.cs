@@ -60,7 +60,7 @@ namespace Guardtime.KSI.Publication
 
             if (publicationDataCount != 1)
             {
-                throw new TlvException("Only one publication data is allowed in publication record.");
+                throw new TlvException("Exactly one publication data must exist in publication record.");
             }
         }
 

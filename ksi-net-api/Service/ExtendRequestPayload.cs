@@ -71,12 +71,12 @@ namespace Guardtime.KSI.Service
 
             if (requestIdCount != 1)
             {
-                throw new TlvException("Only one request id must exist in extend request payload.");
+                throw new TlvException("Exactly one request id must exist in extend request payload.");
             }
 
             if (aggregationTimeCount != 1)
             {
-                throw new TlvException("Only one aggregation time must exist in extend request payload.");
+                throw new TlvException("Exactly one aggregation time must exist in extend request payload.");
             }
 
             if (publicationTimeCount > 1)

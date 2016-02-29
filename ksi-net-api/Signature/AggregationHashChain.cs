@@ -93,7 +93,7 @@ namespace Guardtime.KSI.Signature
 
             if (aggregationTimeCount != 1)
             {
-                throw new TlvException("Only one aggregation time must exist in aggregation hash chain.");
+                throw new TlvException("Exactly one aggregation time must exist in aggregation hash chain.");
             }
 
             if (_chainIndex.Count == 0)
@@ -108,12 +108,12 @@ namespace Guardtime.KSI.Signature
 
             if (inputHashCount != 1)
             {
-                throw new TlvException("Only one input hash must exist in aggregation hash chain.");
+                throw new TlvException("Exactly one input hash must exist in aggregation hash chain.");
             }
 
             if (aggrAlgorithmIdCount != 1)
             {
-                throw new TlvException("Only one algorithm must exist in aggregation hash chain.");
+                throw new TlvException("Exactly one algorithm must exist in aggregation hash chain.");
             }
 
             if (_chain.Count == 0)
@@ -255,14 +255,12 @@ namespace Guardtime.KSI.Signature
 
                 if (levelCorrectionCount > 1)
                 {
-                    throw new TlvException(
-                        "Only one levelcorrection value is allowed in aggregation hash chain link.");
+                    throw new TlvException("Only one levelcorrection value is allowed in aggregation hash chain link.");
                 }
 
                 if (!Util.IsOneValueEqualTo(1, siblingHashCount, metaHashCount, metaDataCount))
                 {
-                    throw new TlvException(
-                        "Only one of three from siblinghash, metahash or metadata must exist in aggregation hash chain link.");
+                    throw new TlvException("Exactly one of three from siblinghash, metahash or metadata must exist in aggregation hash chain link.");
                 }
 
                 Direction = direction;
@@ -369,26 +367,22 @@ namespace Guardtime.KSI.Signature
 
                 if (clientIdCount != 1)
                 {
-                    throw new TlvException(
-                        "Only one client id must exist in aggregation hash chain link metadata.");
+                    throw new TlvException("Exactly one client id must exist in aggregation hash chain link metadata.");
                 }
 
                 if (machineIdCount > 1)
                 {
-                    throw new TlvException(
-                        "Only one machine id is allowed in aggregation hash chain link metadata.");
+                    throw new TlvException("Only one machine id is allowed in aggregation hash chain link metadata.");
                 }
 
                 if (sequenceNumberCount > 1)
                 {
-                    throw new TlvException(
-                        "Only one sequence number is allowed in aggregation hash chain link metadata.");
+                    throw new TlvException("Only one sequence number is allowed in aggregation hash chain link metadata.");
                 }
 
                 if (requestTimeCount > 1)
                 {
-                    throw new TlvException(
-                        "Only one request time is allowed in aggregation hash chain link metadata.");
+                    throw new TlvException("Only one request time is allowed in aggregation hash chain link metadata.");
                 }
             }
 

@@ -90,19 +90,18 @@ namespace Guardtime.KSI.Service
 
             if (requestIdCount != 1)
             {
-                throw new TlvException("Only one request id must exist in aggregation response payload.");
+                throw new TlvException("Exactly one request id must exist in aggregation response payload.");
             }
 
             // TODO: Should be mandatory element, but server side is broken.
             if (statusCount > 1)
             {
-                throw new TlvException("Only one status code must exist in aggregation response payload.");
+                throw new TlvException("Exactly one status code must exist in aggregation response payload.");
             }
 
             if (errorMessageCount > 1)
             {
-                throw new TlvException(
-                    "Only one error message is allowed in aggregation response payload.");
+                throw new TlvException("Only one error message is allowed in aggregation response payload.");
             }
 
             if (configCount > 1)
@@ -112,8 +111,7 @@ namespace Guardtime.KSI.Service
 
             if (requestAcknowledgmentCount > 1)
             {
-                throw new TlvException(
-                    "Only one request acknowledgment is allowed in aggregation response payload.");
+                throw new TlvException("Only one request acknowledgment is allowed in aggregation response payload.");
             }
         }
 

@@ -61,12 +61,12 @@ namespace Guardtime.KSI.Publication
 
             if (certificateIdCount != 1)
             {
-                throw new TlvException("Only one certificate id must exist in certificate record.");
+                throw new TlvException("Exactly one certificate id must exist in certificate record.");
             }
 
             if (x509CertificateCount != 1)
             {
-                throw new TlvException("Only one certificate must exist in certificate record.");
+                throw new TlvException("Exactly one certificate must exist in certificate record.");
             }
         }
 

@@ -64,7 +64,7 @@ namespace Guardtime.KSI.Service
 
             if (statusCount != 1)
             {
-                throw new TlvException("Only one status code must exist in aggregation error.");
+                throw new TlvException("Exactly one status code must exist in aggregation error.");
             }
 
             if (errorMessageCount > 1)

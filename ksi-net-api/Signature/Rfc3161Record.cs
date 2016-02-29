@@ -109,7 +109,7 @@ namespace Guardtime.KSI.Signature
 
             if (aggregationTimeCount != 1)
             {
-                throw new TlvException("Only one aggregation time must exist in RFC#3161 record.");
+                throw new TlvException("Exactly one aggregation time must exist in RFC#3161 record.");
             }
 
             if (_chainIndex.Count == 0)
@@ -119,38 +119,37 @@ namespace Guardtime.KSI.Signature
 
             if (inputHashCount != 1)
             {
-                throw new TlvException("Only one input hash must exist in RFC#3161 record.");
+                throw new TlvException("Exactly one input hash must exist in RFC#3161 record.");
             }
 
             if (tstInfoPrefixCount != 1)
             {
-                throw new TlvException("Only one tstInfo prefix must exist in RFC#3161 record.");
+                throw new TlvException("Exactly one tstInfo prefix must exist in RFC#3161 record.");
             }
 
             if (tstInfoSuffixCount != 1)
             {
-                throw new TlvException("Only one tstInfo suffix must exist in RFC#3161 record.");
+                throw new TlvException("Exactly one tstInfo suffix must exist in RFC#3161 record.");
             }
 
             if (tstInfoAlgorithmCount != 1)
             {
-                throw new TlvException("Only one tstInfo algorithm must exist in RFC#3161 record.");
+                throw new TlvException("Exactly one tstInfo algorithm must exist in RFC#3161 record.");
             }
 
             if (signedAttributesPrefixCount != 1)
             {
-                throw new TlvException("Only one signed attributes prefix must exist in RFC#3161 record.");
+                throw new TlvException("Exactly one signed attributes prefix must exist in RFC#3161 record.");
             }
 
             if (signedAttributesSuffixCount != 1)
             {
-                throw new TlvException("Only one signed attributes suffix must exist in RFC#3161 record.");
+                throw new TlvException("Exactly one signed attributes suffix must exist in RFC#3161 record.");
             }
 
             if (signedAttributesAlgorithmCount != 1)
             {
-                throw new TlvException(
-                    "Only one signed attributes algorithm must exist in RFC#3161 record.");
+                throw new TlvException("Exactly one signed attributes algorithm must exist in RFC#3161 record.");
             }
         }
 

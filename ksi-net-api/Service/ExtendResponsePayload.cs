@@ -82,12 +82,12 @@ namespace Guardtime.KSI.Service
 
             if (requestIdCount != 1)
             {
-                throw new TlvException("Only one request id must exist in extend response payload.");
+                throw new TlvException("Exactly one request id must exist in extend response payload.");
             }
 
             if (statusCount != 1)
             {
-                throw new TlvException("Only one status code must exist in extend response payload.");
+                throw new TlvException("Exactly one status code must exist in extend response payload.");
             }
 
             if (errorMessageCount > 1)
@@ -102,14 +102,12 @@ namespace Guardtime.KSI.Service
 
             if (_status.Value == 0 && calendarHashChainCount != 1)
             {
-                throw new TlvException(
-                    "Only one calendar hash chain must exist in extend response payload.");
+                throw new TlvException("Exactly one calendar hash chain must exist in extend response payload.");
             }
 
             if (_status.Value != 0 && calendarHashChainCount != 0)
             {
-                throw new TlvException(
-                    "Calendar hash chain should be missing when error occurs in extend response payload.");
+                throw new TlvException("Calendar hash chain should be missing when error occurs in extend response payload.");
             }
         }
 

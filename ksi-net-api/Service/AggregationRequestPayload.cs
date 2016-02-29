@@ -78,18 +78,17 @@ namespace Guardtime.KSI.Service
 
             if (requestIdCount != 1)
             {
-                throw new TlvException("Only one request id must exist in aggregation request payload.");
+                throw new TlvException("Exactly one request id must exist in aggregation request payload.");
             }
 
             if (requestHashCount != 1)
             {
-                throw new TlvException("Only one request hash must exist in aggregation request payload.");
+                throw new TlvException("Exactly one request hash must exist in aggregation request payload.");
             }
 
             if (requestLevelCount > 1)
             {
-                throw new TlvException(
-                    "Only one request level is allowed in aggregation request payload.");
+                throw new TlvException("Only one request level is allowed in aggregation request payload.");
             }
 
             if (configCount > 1)

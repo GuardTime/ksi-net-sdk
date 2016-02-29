@@ -62,14 +62,12 @@ namespace Guardtime.KSI.Signature
 
             if (publicationDataCount != 1)
             {
-                throw new TlvException(
-                    "Only one publication data must exist in calendar authentication record.");
+                throw new TlvException("Exactly one publication data must exist in calendar authentication record.");
             }
 
             if (signatureDataCount != 1)
             {
-                throw new TlvException(
-                    "Only one signature data must exist in calendar authentication record.");
+                throw new TlvException("Exactly one signature data must exist in calendar authentication record.");
             }
         }
 

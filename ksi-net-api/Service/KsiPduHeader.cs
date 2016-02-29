@@ -70,7 +70,7 @@ namespace Guardtime.KSI.Service
 
             if (loginIdCount != 1)
             {
-                throw new TlvException("Only one login id must exist in KSI PDU header.");
+                throw new TlvException("Exactly one login id must exist in KSI PDU header.");
             }
 
             if (instanceIdCount > 1)

@@ -76,8 +76,7 @@ namespace Guardtime.KSI.Signature
 
             if (aggregationTimeCount != 1)
             {
-                throw new TlvException(
-                    "Only one aggregation time must exist in aggregation authentication record.");
+                throw new TlvException("Exactly one aggregation time must exist in aggregation authentication record.");
             }
 
             if (_chainIndex.Count == 0)
@@ -87,14 +86,12 @@ namespace Guardtime.KSI.Signature
 
             if (inputHashCount != 1)
             {
-                throw new TlvException(
-                    "Only one input hash must exist in aggregation authentication record.");
+                throw new TlvException("Exactly one input hash must exist in aggregation authentication record.");
             }
 
             if (signatureDataCount != 1)
             {
-                throw new TlvException(
-                    "Only one signature data must exist in aggregation authentication record.");
+                throw new TlvException("Exactly one signature data must exist in aggregation authentication record.");
             }
         }
 

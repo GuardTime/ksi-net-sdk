@@ -72,12 +72,12 @@ namespace Guardtime.KSI.Publication
 
             if (versionCount != 1)
             {
-                throw new TlvException("Only one version must exist in publications file header.");
+                throw new TlvException("Exactly one version must exist in publications file header.");
             }
 
             if (creationTimeCount != 1)
             {
-                throw new TlvException("Only one creation time must exist in publications file header.");
+                throw new TlvException("Exactly one creation time must exist in publications file header.");
             }
 
             if (repositoryUriCount > 1)

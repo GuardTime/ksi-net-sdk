@@ -77,23 +77,22 @@ namespace Guardtime.KSI.Signature
 
             if (signatureTypeCount != 1)
             {
-                throw new TlvException("Only one signature type must exist in signature data.");
+                throw new TlvException("Exactly one signature type must exist in signature data.");
             }
 
             if (signatureValueCount != 1)
             {
-                throw new TlvException("Only one signature value must exist in signature data.");
+                throw new TlvException("Exactly one signature value must exist in signature data.");
             }
 
             if (certificateIdCount != 1)
             {
-                throw new TlvException("Only one certificate id must exist in signature data.");
+                throw new TlvException("Exactly one certificate id must exist in signature data.");
             }
 
             if (certificateRepositoryUriCount > 1)
             {
-                throw new TlvException(
-                    "Only one certificate repository uri is allowed in signature data.");
+                throw new TlvException("Only one certificate repository uri is allowed in signature data.");
             }
         }
 

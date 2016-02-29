@@ -90,13 +90,12 @@ namespace Guardtime.KSI.Publication
 
             if (publicationsHeaderCount != 1)
             {
-                throw new PublicationsFileException(
-                    "Only one publications file header must exist in publications file.");
+                throw new PublicationsFileException("Exactly one publications file header must exist in publications file.");
             }
 
             if (cmsSignatureCount != 1)
             {
-                throw new PublicationsFileException("Only one signature must exist in publications file.");
+                throw new PublicationsFileException("Exactly one signature must exist in publications file.");
             }
         }
 

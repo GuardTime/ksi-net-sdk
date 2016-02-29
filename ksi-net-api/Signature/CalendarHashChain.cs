@@ -79,7 +79,7 @@ namespace Guardtime.KSI.Signature
 
             if (publicationTimeCount != 1)
             {
-                throw new TlvException("Only one publication time must exist in calendar hash chain.");
+                throw new TlvException("Exactly one publication time must exist in calendar hash chain.");
             }
 
             if (aggregationTimeCount > 1)
@@ -89,7 +89,7 @@ namespace Guardtime.KSI.Signature
 
             if (inputHashCount != 1)
             {
-                throw new TlvException("Only one input hash must exist in calendar hash chain.");
+                throw new TlvException("Exactly one input hash must exist in calendar hash chain.");
             }
 
             if (_chain.Count == 0)
