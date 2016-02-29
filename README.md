@@ -20,7 +20,7 @@ In order to get trial access to the KSI platform, go to [https://guardtime.com/b
 
 Creating ksiService:
 
-```java
+```cs
 // Set crypto provider to bouncycastle or microsoft 
 KsiProvider.SetCryptoProvider(new MicrosoftCryptoProvider()); 
 //KsiProvider.SetCryptoProvider(new BouncyCastleCryptoProvider()); 
@@ -40,7 +40,7 @@ There are 2 ways to use KSI service, with and without simple API wrapper.
 
 Example using simple wrapper:
 
-```java
+```cs
 // Create new simple wrapper
 var ksi = new Ksi(ksiService);
 
@@ -56,7 +56,7 @@ var publicationsFile = ksi.GetPublicationsFile();
 
 Example without simple wrapper
 
-```java
+```cs
 // Signing 
 signature = ksiService.Sign(new DataHash(Base16.Decode("010000000000000000000000000000000000000000000000000000000000000000")));
 
