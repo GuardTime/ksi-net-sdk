@@ -19,10 +19,11 @@
 
 using System.IO;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Hashing;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Security;
 
-namespace Guardtime.KSI.Hashing
+namespace Guardtime.KSI.Crypto.BouncyCastle.Hashing
 {
     /// <summary>
     ///     This class provides functionality for hashing data.

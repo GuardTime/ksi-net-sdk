@@ -23,7 +23,7 @@ using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.X509;
 
-namespace Guardtime.KSI.Crypto
+namespace Guardtime.KSI.Crypto.BouncyCastle.Crypto
 {
     /// <summary>
     ///     RSA signature verifier.

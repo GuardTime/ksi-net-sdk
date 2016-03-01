@@ -28,7 +28,7 @@ using Org.BouncyCastle.Utilities.Collections;
 using Org.BouncyCastle.X509.Store;
 using X509Certificate = Org.BouncyCastle.X509.X509Certificate;
 
-namespace Guardtime.KSI.Crypto
+namespace Guardtime.KSI.Crypto.BouncyCastle.Crypto
 {
     /// <summary>
     ///     PKCS#7 signature verifier.
@@ -45,6 +45,11 @@ namespace Guardtime.KSI.Crypto
         /// <param name="certificateRdnSelector">Certificate subject rdn selector</param>
         public Pkcs7CryptoSignatureVerifier(X509Store trustStore, ICertificateSubjectRdnSelector certificateRdnSelector)
         {
+            if (!(certificateRdnSelector is CertificateSubjectRdnSelector))
+            {
+                throw new ArgumentException("Expected type: " + typeof(CertificateSubjectRdnSelector), nameof(certificateRdnSelector));
+            }
+
             if (trustStore != null)
             {
                 trustStore.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);

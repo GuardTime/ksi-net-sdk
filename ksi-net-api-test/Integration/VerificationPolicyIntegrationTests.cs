@@ -17,7 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using System.Net;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Integration

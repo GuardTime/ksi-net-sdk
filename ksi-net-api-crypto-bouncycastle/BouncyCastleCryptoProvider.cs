@@ -18,10 +18,11 @@
  */
 
 using System.Security.Cryptography.X509Certificates;
-using Guardtime.KSI.Crypto;
+using Guardtime.KSI.Crypto.BouncyCastle.Crypto;
+using Guardtime.KSI.Crypto.BouncyCastle.Hashing;
 using Guardtime.KSI.Hashing;
 
-namespace Guardtime.KSI
+namespace Guardtime.KSI.Crypto.BouncyCastle
 {
     /// <summary>
     /// Crypto provider.

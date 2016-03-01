@@ -18,12 +18,12 @@
  */
 
 using System.Security.Cryptography.X509Certificates;
-using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Properties;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature;
+using Guardtime.KSI.Test.Crypto;
 using Guardtime.KSI.Trust;
 using NUnit.Framework;
 
@@ -61,7 +61,7 @@ namespace Guardtime.KSI.Integration
                         new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
                         HttpKsiServiceProtocol,
                         new PublicationsFileFactory(
-                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com"))),
+                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
                         new KsiSignatureFactory(),
                         HashAlgorithm.Sha2256))
             }
@@ -79,7 +79,7 @@ namespace Guardtime.KSI.Integration
                         new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, "anon"),
                         HttpKsiServiceProtocol,
                         new PublicationsFileFactory(
-                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com"))),
+                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
                         new KsiSignatureFactory()))
             }
         };
@@ -96,7 +96,7 @@ namespace Guardtime.KSI.Integration
                         new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, "anonx"),
                         HttpKsiServiceProtocol,
                         new PublicationsFileFactory(
-                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com"))),
+                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
                         new KsiSignatureFactory()))
             }
         };
@@ -113,7 +113,7 @@ namespace Guardtime.KSI.Integration
                         new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
                         HttpKsiServiceProtocol,
                         new PublicationsFileFactory(
-                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com"))),
+                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
                         new KsiSignatureFactory()))
             }
         };
@@ -130,7 +130,7 @@ namespace Guardtime.KSI.Integration
                         new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
                         HttpKsiServiceProtocol,
                         new PublicationsFileFactory(
-                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com"))),
+                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
                         new KsiSignatureFactory()))
             }
         };
@@ -147,7 +147,7 @@ namespace Guardtime.KSI.Integration
                         new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
                         HttpKsiServiceProtocolInvalidUrls,
                         new PublicationsFileFactory(
-                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com"))),
+                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
                         new KsiSignatureFactory()))
             }
         };
@@ -164,7 +164,7 @@ namespace Guardtime.KSI.Integration
                         new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
                         HttpKsiServiceProtocol,
                         new PublicationsFileFactory(
-                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com"))),
+                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
                         new KsiSignatureFactory()))
             }
         };
@@ -181,7 +181,7 @@ namespace Guardtime.KSI.Integration
                         new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, "anonx"),
                         HttpKsiServiceProtocol,
                         new PublicationsFileFactory(
-                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com"))),
+                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
                         new KsiSignatureFactory()))
             }
         };
@@ -198,7 +198,7 @@ namespace Guardtime.KSI.Integration
                         new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
                         HttpKsiServiceProtocolInvalidUrls,
                         new PublicationsFileFactory(
-                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com"))),
+                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
                         new KsiSignatureFactory()))
             }
         };
@@ -215,7 +215,7 @@ namespace Guardtime.KSI.Integration
                         new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
                         HttpKsiServiceProtocolInvalidUrls,
                         new PublicationsFileFactory(
-                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com"))),
+                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
                         new KsiSignatureFactory()))
             }
         };
@@ -228,7 +228,8 @@ namespace Guardtime.KSI.Integration
                 HttpKsiServiceProtocol,
                 new ServiceCredentials("anon", "anon"),
                 HttpKsiServiceProtocol,
-                new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com"))),
+                new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
+                    CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
                 new KsiSignatureFactory());
         }
 

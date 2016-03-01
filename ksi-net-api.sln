@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ksi-net-api-crypto-microsof
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ksi-net-api-crypto-bouncycastle", "ksi-net-api-crypto-bouncycastle\ksi-net-api-crypto-bouncycastle.csproj", "{CC9C4947-E275-4381-A93A-C80498B450B4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Guardtime.KSI.Test.Crypto", "Guardtime.KSI.Test.Crypto\Guardtime.KSI.Test.Crypto.csproj", "{35D2C2BB-B2E3-4AFD-967A-02E86DAB895B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,18 @@ Global
 		{CC9C4947-E275-4381-A93A-C80498B450B4}.Release|x64.Build.0 = Release|Any CPU
 		{CC9C4947-E275-4381-A93A-C80498B450B4}.Release|x86.ActiveCfg = Release|Any CPU
 		{CC9C4947-E275-4381-A93A-C80498B450B4}.Release|x86.Build.0 = Release|Any CPU
+		{35D2C2BB-B2E3-4AFD-967A-02E86DAB895B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35D2C2BB-B2E3-4AFD-967A-02E86DAB895B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35D2C2BB-B2E3-4AFD-967A-02E86DAB895B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{35D2C2BB-B2E3-4AFD-967A-02E86DAB895B}.Debug|x64.Build.0 = Debug|Any CPU
+		{35D2C2BB-B2E3-4AFD-967A-02E86DAB895B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{35D2C2BB-B2E3-4AFD-967A-02E86DAB895B}.Debug|x86.Build.0 = Debug|Any CPU
+		{35D2C2BB-B2E3-4AFD-967A-02E86DAB895B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35D2C2BB-B2E3-4AFD-967A-02E86DAB895B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35D2C2BB-B2E3-4AFD-967A-02E86DAB895B}.Release|x64.ActiveCfg = Release|Any CPU
+		{35D2C2BB-B2E3-4AFD-967A-02E86DAB895B}.Release|x64.Build.0 = Release|Any CPU
+		{35D2C2BB-B2E3-4AFD-967A-02E86DAB895B}.Release|x86.ActiveCfg = Release|Any CPU
+		{35D2C2BB-B2E3-4AFD-967A-02E86DAB895B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

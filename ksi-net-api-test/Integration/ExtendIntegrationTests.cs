@@ -173,8 +173,6 @@ namespace Guardtime.KSI.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void ExtendToNearestPublicationTest(Ksi ksi)
         {
-            UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
-
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
             {
                 IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);

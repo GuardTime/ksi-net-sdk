@@ -19,10 +19,10 @@
 
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
-using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
+using Guardtime.KSI.Test.Crypto;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
@@ -35,7 +35,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         public void TestMissingContext()
         {
             CalendarAuthenticationRecordSignatureVerificationRule rule = new CalendarAuthenticationRecordSignatureVerificationRule(new X509Store(StoreName.Root),
-                new CertificateSubjectRdnSelector("E=publications@guardtime.com"));
+                CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
             // Argument null exception when no context
             Assert.Throws<KsiException>(delegate
@@ -48,7 +48,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         public void TestContextMissingSignature()
         {
             CalendarAuthenticationRecordSignatureVerificationRule rule = new CalendarAuthenticationRecordSignatureVerificationRule(new X509Store(StoreName.Root),
-                new CertificateSubjectRdnSelector("E=publications@guardtime.com"));
+                CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
             // Verification exception on missing KSI signature
             Assert.Throws<KsiVerificationException>(delegate
@@ -62,7 +62,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         public void TestSignatureMissingCalendarAuthenticationRecord()
         {
             CalendarAuthenticationRecordSignatureVerificationRule rule = new CalendarAuthenticationRecordSignatureVerificationRule(new X509Store(StoreName.Root),
-                new CertificateSubjectRdnSelector("E=publications@guardtime.com"));
+                CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
             // Check signature with no calendar authentication record
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record, FileMode.Open))
@@ -84,7 +84,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         public void TestSignatureWithInvalidCertificateId()
         {
             CalendarAuthenticationRecordSignatureVerificationRule rule = new CalendarAuthenticationRecordSignatureVerificationRule(new X509Store(StoreName.Root),
-                new CertificateSubjectRdnSelector("E=publications@guardtime.com"));
+                CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
             // Check signature with invalid certificate id
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Certificate_Id, FileMode.Open))
@@ -106,7 +106,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         public void TestRfc3161SignatureWithoutPublicationFile()
         {
             CalendarAuthenticationRecordSignatureVerificationRule rule = new CalendarAuthenticationRecordSignatureVerificationRule(new X509Store(StoreName.Root),
-                new CertificateSubjectRdnSelector("E=publications@guardtime.com"));
+                CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
             // Check legacy signature to verify calendar authentication record with and without publications file. With publications file should succeed.
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok, FileMode.Open))
@@ -127,7 +127,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         public void TestRfc3161SignatureWithPublicationFile()
         {
             CalendarAuthenticationRecordSignatureVerificationRule rule = new CalendarAuthenticationRecordSignatureVerificationRule(new X509Store(StoreName.Root),
-                new CertificateSubjectRdnSelector("E=publications@guardtime.com"));
+                CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
             // Check legacy signature to verify calendar authentication record with and without publications file. With publications file should succeed.
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok, FileMode.Open))
@@ -153,7 +153,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         public void TestSignatureWithPublicationFile()
         {
             CalendarAuthenticationRecordSignatureVerificationRule rule = new CalendarAuthenticationRecordSignatureVerificationRule(new X509Store(StoreName.Root),
-                new CertificateSubjectRdnSelector("E=publications@guardtime.com"));
+                CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
             // Check signature and verify calendar authentication record
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
@@ -179,7 +179,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         public void TestSignatureWithInvalidCalendarAuthenticationRecordSignature()
         {
             CalendarAuthenticationRecordSignatureVerificationRule rule = new CalendarAuthenticationRecordSignatureVerificationRule(new X509Store(StoreName.Root),
-                new CertificateSubjectRdnSelector("E=publications@guardtime.com"));
+                CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
             // Check invalid signature with invalid calendar authentication record signature
             using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Signature, FileMode.Open))

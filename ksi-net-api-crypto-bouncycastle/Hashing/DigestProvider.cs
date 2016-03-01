@@ -18,11 +18,15 @@
  */
 
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Hashing;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Digests;
 
-namespace Guardtime.KSI.Hashing
+namespace Guardtime.KSI.Crypto.BouncyCastle.Hashing
 {
+    /// <summary>
+    /// Digest provider
+    /// </summary>
     public static class DigestProvider
     {
         /// <summary>

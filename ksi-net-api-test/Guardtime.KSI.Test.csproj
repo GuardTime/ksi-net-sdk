@@ -226,9 +226,9 @@
     <Compile Include="Utils\UtilTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ksi-net-api-crypto-microsoft\ksi-net-api-crypto-microsoft.csproj">
-      <Project>{9225DFDA-A9BD-469A-A36E-900227A205D5}</Project>
-      <Name>ksi-net-api-crypto-microsoft</Name>
+    <ProjectReference Include="..\Guardtime.KSI.Test.Crypto\Guardtime.KSI.Test.Crypto.csproj">
+      <Project>{35d2c2bb-b2e3-4afd-967a-02e86dab895b}</Project>
+      <Name>Guardtime.KSI.Test.Crypto</Name>
     </ProjectReference>
     <ProjectReference Include="..\ksi-net-api\Guardtime.KSI.csproj">
       <Project>{f38b227f-db4e-4c5a-8c1d-a543c82d2311}</Project>

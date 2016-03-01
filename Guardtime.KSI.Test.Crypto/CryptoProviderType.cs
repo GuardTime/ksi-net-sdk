@@ -17,21 +17,12 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
-using Guardtime.KSI.Test.Crypto;
-using NUnit.Framework;
-
-namespace Guardtime.KSI
+namespace Guardtime.KSI.Test.Crypto
 {
-    [SetUpFixture]
-    public class TestSetup
+    public enum CryptoProviderType
     {
-        [SetUp]
-        public void RunBeforeAnyTests()
-        {
-            Console.WriteLine("Selected crypto provider: " + CryptoTestFactory.ProviderType);
-
-            KsiProvider.SetCryptoProvider(CryptoTestFactory.CreateProvider());
-        }
+        None,
+        Microsoft,
+        BouncyCastle
     }
 }
