@@ -36,7 +36,7 @@ namespace Guardtime.KSI.Publication
         [Test]
         public void TestCreatePublicationsFileFromFile1()
         {
-            using (FileStream stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
             {
                 new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                     new CertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
@@ -48,7 +48,7 @@ namespace Guardtime.KSI.Publication
         {
             if (typeof(CertificateSubjectRdnSelector).Assembly.FullName.Contains("ksi-net-api-crypto-bouncycastle"))
             {
-                using (FileStream stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+                using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
                 {
                     new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                         new CertificateSubjectRdnSelector("EmailAddress=publications@guardtime.com"))).Create(stream);
@@ -56,7 +56,7 @@ namespace Guardtime.KSI.Publication
             }
             else if (typeof(CertificateSubjectRdnSelector).Assembly.FullName.Contains("ksi-net-api-crypto-microsoft"))
             {
-                using (FileStream stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+                using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
                 {
                     new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                         new CertificateSubjectRdnSelector("EMail=publications@guardtime.com"))).Create(stream);
@@ -67,7 +67,7 @@ namespace Guardtime.KSI.Publication
         [Test]
         public void TestCreatePublicationsFileFromFile3()
         {
-            using (FileStream stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
             {
                 new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                     new CertificateSubjectRdnSelector("1.2.840.113549.1.9.1=publications@guardtime.com"))).Create(stream);
@@ -77,7 +77,7 @@ namespace Guardtime.KSI.Publication
         [Test]
         public void TestCreatePublicationsFileFromFile4()
         {
-            using (FileStream stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
             {
                 ArgumentException ex = Assert.Throws<ArgumentException>(delegate
                 {
@@ -92,7 +92,7 @@ namespace Guardtime.KSI.Publication
         [Test]
         public void TestCreatePublicationsFileFromFile5()
         {
-            using (FileStream stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
             {
                 PublicationsFileException ex = Assert.Throws<PublicationsFileException>(delegate
                 {
@@ -107,7 +107,7 @@ namespace Guardtime.KSI.Publication
         [Test]
         public void TestCreatePublicationsFileFromFile6()
         {
-            using (FileStream stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
             {
                 PublicationsFileException ex = Assert.Throws<PublicationsFileException>(delegate
                 {
@@ -122,7 +122,7 @@ namespace Guardtime.KSI.Publication
         [Test]
         public void TestCreatePublicationsFileFromFile7()
         {
-            using (FileStream stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
             {
                 ArgumentException ex = Assert.Throws<ArgumentException>(delegate
                 {
@@ -138,7 +138,7 @@ namespace Guardtime.KSI.Publication
         [Test]
         public void TestFindCertificateById()
         {
-            using (FileStream stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
             {
                 IPublicationsFile publicationsFile =
                     new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
@@ -152,9 +152,11 @@ namespace Guardtime.KSI.Publication
         [Test]
         public void TestContainsPublicationRecord()
         {
-            using (FileStream stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
             {
-                using (TlvReader reader = new TlvReader(new FileStream("resources/publication/publicationrecord/pub-record-18-09-2014.bin", FileMode.Open)))
+                using (
+                    TlvReader reader =
+                        new TlvReader(new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationrecord/pub-record-18-09-2014.bin"), FileMode.Open)))
                 {
                     IPublicationsFile publicationsFile =
                         new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
@@ -169,9 +171,12 @@ namespace Guardtime.KSI.Publication
         [Test]
         public void TestDoesNotContainPublicationRecord()
         {
-            using (FileStream stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
             {
-                using (TlvReader reader = new TlvReader(new FileStream("resources/publication/publicationrecord/pub-record-invalid-hash-18-09-2014.bin", FileMode.Open)))
+                using (
+                    TlvReader reader =
+                        new TlvReader(new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationrecord/pub-record-invalid-hash-18-09-2014.bin"),
+                            FileMode.Open)))
                 {
                     IPublicationsFile publicationsFile =
                         new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
@@ -184,7 +189,7 @@ namespace Guardtime.KSI.Publication
         [Test]
         public void TestGetLatestPublication()
         {
-            using (FileStream stream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
             {
                 IPublicationsFile publicationsFile =
                     new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),

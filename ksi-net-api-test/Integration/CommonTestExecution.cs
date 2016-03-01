@@ -21,16 +21,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Guardtime.KSI.Publication;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
-
-using Guardtime.KSI.Trust;
-using NUnit.Framework;
+using Guardtime.KSI.Publication;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
-using Guardtime.KSI.Utils;
+using Guardtime.KSI.Trust;
+using NUnit.Framework;
 
 namespace Guardtime.KSI.Integration
 {
@@ -39,12 +37,16 @@ namespace Guardtime.KSI.Integration
         public void TestExecution(DataHolderForIntegrationTests testData, string policyName)
         {
             Console.WriteLine(string.Format("Running test with the following data: " + testData.GetTestDataInformation() + "; Policy: " + policyName));
-            using (FileStream stream = new FileStream(testData.GetTestFile(), FileMode.Open)) { 
+
+            string filePath = Path.Combine(TestSetup.LocalPath, testData.GetTestFile());
+
+            using (FileStream stream = new FileStream(filePath, FileMode.Open))
+            {
                 try
                 {
-
                     IKsiSignature signature = new KsiSignatureFactory().Create(stream);
-                    Assert.IsFalse(testData.GetSigantureReadInFails(), testData.GetTestFile() + " supposed to fail with class " + testData.GetExpectedExceptionClass() + " exception.");
+                    Assert.IsFalse(testData.GetSigantureReadInFails(),
+                        testData.GetTestFile() + " supposed to fail with class " + testData.GetExpectedExceptionClass() + " exception.");
                     VerificationContext context = new VerificationContext(signature);
 
                     VerificationPolicy policy;
@@ -52,7 +54,7 @@ namespace Guardtime.KSI.Integration
                     switch (policyName)
                     {
                         case "PublicationFileBasedVerificationPolicy":
-                            using (Stream publicationFileInStream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+                            using (Stream publicationFileInStream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
                             {
                                 policy = new PublicationBasedVerificationPolicy();
                                 context.PublicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
@@ -67,7 +69,7 @@ namespace Guardtime.KSI.Integration
                             }
 
                         case "PublicationFileBasedVerificationNoExtendingPolicy":
-                            using (Stream publicationFileInStream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+                            using (Stream publicationFileInStream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
                             {
                                 policy = new PublicationBasedVerificationPolicy();
                                 context.PublicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
@@ -115,19 +117,19 @@ namespace Guardtime.KSI.Integration
                             break;
 
                         default:
-                            using (Stream publicationFileInStream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+                            using (Stream publicationFileInStream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
                             {
                                 policy = new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
-                                new CertificateSubjectRdnSelector(new List<CertificateSubjectRdn>
-                                {
-                                    new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com")
-                                }));
-                                context.PublicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                                        new CertificateSubjectRdnSelector(new List<CertificateSubjectRdn>
-                                        {
+                                    new CertificateSubjectRdnSelector(new List<CertificateSubjectRdn>
+                                    {
                                         new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com")
-                                        })))
-                                        .Create(publicationFileInStream);
+                                    }));
+                                context.PublicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
+                                    new CertificateSubjectRdnSelector(new List<CertificateSubjectRdn>
+                                    {
+                                        new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com")
+                                    })))
+                                    .Create(publicationFileInStream);
                                 break;
                             }
                     }
@@ -142,13 +144,16 @@ namespace Guardtime.KSI.Integration
                             return;
                         }
                         bool ruleFound = false;
-                        foreach (string rule in verificationResult.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.None).Where(rule => rule.ToLower().Contains(testData.GetExpectedRule().ToLower())))
+                        foreach (
+                            string rule in
+                                verificationResult.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.None).Where(
+                                    rule => rule.ToLower().Contains(testData.GetExpectedRule().ToLower())))
                         {
                             if (!(rule.Split(':')[1].ToLower().Contains(expectedResults.ToLower())))
                             {
                                 throw new Exception(
                                     string.Format("Expected rule '" + testData.GetExpectedRule() + "' results to be '" + testData.GetExpectedVerificationResultCode() +
-                                                    "', but found: " + rule));
+                                                  "', but found: " + rule));
                             }
                             ruleFound = true;
                         }
@@ -159,9 +164,10 @@ namespace Guardtime.KSI.Integration
                     }
                     else
                     {
-                        Assert.IsTrue(verificationResult.ResultCode.ToString().ToLower() == testData.GetExpectedVerificationResultCode().ToLower(), "Verification codes do not match. Actual '" +
-                        verificationResult.ResultCode + "' and expected '" +
-                        testData.GetExpectedVerificationResultCode() + "'.");
+                        Assert.IsTrue(verificationResult.ResultCode.ToString().ToLower() == testData.GetExpectedVerificationResultCode().ToLower(),
+                            "Verification codes do not match. Actual '" +
+                            verificationResult.ResultCode + "' and expected '" +
+                            testData.GetExpectedVerificationResultCode() + "'.");
                     }
                 }
                 catch (Exception e)
@@ -172,7 +178,7 @@ namespace Guardtime.KSI.Integration
                         throw;
                     }
                     //Errors that were found duing executiong and evaluation.
-                    if (e.ToString().Contains(" supposed to fail with class ") || 
+                    if (e.ToString().Contains(" supposed to fail with class ") ||
                         e.ToString().Contains(", but found: ") ||
                         e.ToString().Contains(" was not found from verification results:") ||
                         e.ToString().Contains("Verification codes do not match. Actual ")
@@ -185,7 +191,7 @@ namespace Guardtime.KSI.Integration
                     //No failure during readin AND exception does not contain expected (message OR exception class OR rule)
                     //which means that not expected error has occurred.
                     string exceptionString = e.ToString().ToLower();
-                    if ( testData.GetExpectedExceptionMessage() != " " && !exceptionString.Contains(testData.GetExpectedExceptionMessage().ToLower()) ||
+                    if (testData.GetExpectedExceptionMessage() != " " && !exceptionString.Contains(testData.GetExpectedExceptionMessage().ToLower()) ||
                         testData.GetExpectedExceptionClass() != " " && !exceptionString.Contains(testData.GetExpectedExceptionClass().ToLower()) ||
                         testData.GetExpectedRule() != " " && !exceptionString.Contains(testData.GetExpectedRule().ToLower()))
                     {

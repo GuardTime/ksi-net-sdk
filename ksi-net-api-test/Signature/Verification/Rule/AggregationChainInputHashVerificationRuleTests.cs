@@ -61,7 +61,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             AggregationChainInputHashVerificationRule rule = new AggregationChainInputHashVerificationRule();
 
             // Check legacy signature without document hash
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Legacy_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -100,7 +100,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             AggregationChainInputHashVerificationRule rule = new AggregationChainInputHashVerificationRule();
 
             // Check legacy signature input hash
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Legacy_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -120,7 +120,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             AggregationChainInputHashVerificationRule rule = new AggregationChainInputHashVerificationRule();
 
             // Check signature input hash
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -140,7 +140,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             AggregationChainInputHashVerificationRule rule = new AggregationChainInputHashVerificationRule();
 
             // Check signature invalid input hash
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {

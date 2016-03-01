@@ -83,7 +83,7 @@ namespace Guardtime.KSI.Service
 
         private static byte[] ReadFile(string file)
         {
-            using (FileStream stream = new FileStream(file, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, file), FileMode.Open))
             {
                 byte[] data = new byte[stream.Length];
                 stream.Read(data, 0, (int)stream.Length);

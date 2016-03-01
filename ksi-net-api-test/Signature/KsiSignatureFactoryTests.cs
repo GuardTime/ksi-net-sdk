@@ -41,7 +41,7 @@ namespace Guardtime.KSI.Signature
                 signatureFactory.Create((Stream)null);
             });
 
-            using (FileStream stream = new FileStream(Resources.KsiSignatureDo_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok), FileMode.Open))
             {
                 signatureFactory.Create(stream);
             }
