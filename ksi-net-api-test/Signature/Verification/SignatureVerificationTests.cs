@@ -37,7 +37,7 @@ namespace Guardtime.KSI.Signature.Verification
         [Test]
         public void TestVerifySignatureOk()
         {
-            using (FileStream stream = new FileStream(Resources.KsiSignatureDo_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok), FileMode.Open))
             {
                 HttpKsiServiceProtocol serviceProtocol = new HttpKsiServiceProtocol(
                     Settings.Default.HttpSigningServiceUrl,
@@ -68,7 +68,7 @@ namespace Guardtime.KSI.Signature.Verification
                         new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                             new CertificateSubjectRdnSelector(new List<CertificateSubjectRdn> { new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com") })))
                             .Create(
-                                new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+                                new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
                 };
 
                 Console.WriteLine(@"// Internal verification policy");

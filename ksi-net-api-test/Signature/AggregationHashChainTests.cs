@@ -298,7 +298,7 @@ namespace Guardtime.KSI.Signature
 
         private static AggregationHashChain GetAggregationHashChainFromFile(string file)
         {
-            using (TlvReader reader = new TlvReader(new FileStream(file, FileMode.Open)))
+            using (TlvReader reader = new TlvReader(new FileStream(Path.Combine(TestSetup.LocalPath, file), FileMode.Open)))
             {
                 AggregationHashChain aggregationHashChain = new AggregationHashChain(reader.ReadTag());
 

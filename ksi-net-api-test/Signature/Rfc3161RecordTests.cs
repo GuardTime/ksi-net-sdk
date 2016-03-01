@@ -217,7 +217,7 @@ namespace Guardtime.KSI.Signature
 
         private static Rfc3161Record GetRfc3161RecordFromFile(string file)
         {
-            using (TlvReader reader = new TlvReader(new FileStream(file, FileMode.Open)))
+            using (TlvReader reader = new TlvReader(new FileStream(Path.Combine(TestSetup.LocalPath, file), FileMode.Open)))
             {
                 Rfc3161Record rfc3161Record = new Rfc3161Record(reader.ReadTag());
 

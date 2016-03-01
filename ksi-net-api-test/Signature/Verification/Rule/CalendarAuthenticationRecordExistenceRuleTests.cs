@@ -58,7 +58,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             CalendarAuthenticationRecordExistenceRule rule = new CalendarAuthenticationRecordExistenceRule();
 
             // Check legacy signature for aggregation authentication record existence
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Legacy_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -76,7 +76,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             CalendarAuthenticationRecordExistenceRule rule = new CalendarAuthenticationRecordExistenceRule();
 
             // Check signature for aggregation authentication record existence
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -94,7 +94,10 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             CalendarAuthenticationRecordExistenceRule rule = new CalendarAuthenticationRecordExistenceRule();
 
             // Check signature without calendar authentication record
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record, FileMode.Open))
+            using (
+                FileStream stream =
+                    new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record),
+                        FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {

@@ -116,7 +116,7 @@ namespace Guardtime.KSI.Hashing
         public void TestDataHasherWithDefaultAlgorithmAndFileStream()
         {
             DataHasher hasher = new DataHasher();
-            FileStream stream = new FileStream(Resources.DataHasher_TestFile, FileMode.Open);
+            FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.DataHasher_TestFile), FileMode.Open);
             hasher.AddData(stream);
             Assert.AreEqual(HashAlgorithm.Sha2256.Length, hasher.GetHash().Value.Length, "Hash length should be correct");
             byte[] bytes = new byte[hasher.GetHash().Value.Length];
@@ -130,7 +130,7 @@ namespace Guardtime.KSI.Hashing
         public void TestDataHasherWithDefaultAlgorithmAndFileStreamLimitedBuffer()
         {
             DataHasher hasher = new DataHasher();
-            FileStream stream = new FileStream(Resources.DataHasher_TestFile, FileMode.Open);
+            FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.DataHasher_TestFile), FileMode.Open);
             hasher.AddData(stream, 1);
             Assert.AreEqual(HashAlgorithm.Sha2256.Length, hasher.GetHash().Value.Length, "Hash length should be correct");
             byte[] bytes = new byte[hasher.GetHash().Value.Length];

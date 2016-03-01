@@ -58,7 +58,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             CalendarHashChainRegistrationTimeRule rule = new CalendarHashChainRegistrationTimeRule();
 
             // Check legacy signature aggregation and registration time
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Legacy_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -76,7 +76,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             CalendarHashChainRegistrationTimeRule rule = new CalendarHashChainRegistrationTimeRule();
 
             // Check signature aggregation and registration time
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -94,7 +94,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             CalendarHashChainRegistrationTimeRule rule = new CalendarHashChainRegistrationTimeRule();
 
             // Check signature without calendar chain
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_Missing_Calendar_Hash_Chain, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_Missing_Calendar_Hash_Chain), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -112,7 +112,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             CalendarHashChainRegistrationTimeRule rule = new CalendarHashChainRegistrationTimeRule();
 
             // Check invalid signature calendar hash chain with invalid aggregation time
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Invalid_Calendar_Chain_Publication_Time, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Invalid_Calendar_Chain_Publication_Time), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {

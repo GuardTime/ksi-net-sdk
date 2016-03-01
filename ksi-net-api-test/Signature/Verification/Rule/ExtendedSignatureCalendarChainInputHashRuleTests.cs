@@ -60,7 +60,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             ExtendedSignatureCalendarChainInputHashRule rule = new ExtendedSignatureCalendarChainInputHashRule();
 
             // Check signature without calendar chain
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_Missing_Calendar_Hash_Chain, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_Missing_Calendar_Hash_Chain), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -81,7 +81,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             ExtendedSignatureCalendarChainInputHashRule rule = new ExtendedSignatureCalendarChainInputHashRule();
 
             // Check invalid extended calendar chain with faulty context functions
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
             {
                 TestVerificationContextFaultyFunctions context = new TestVerificationContextFaultyFunctions()
                 {
@@ -101,7 +101,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             ExtendedSignatureCalendarChainInputHashRule rule = new ExtendedSignatureCalendarChainInputHashRule();
 
             // Check legacy signature
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Legacy_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -123,7 +123,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             ExtendedSignatureCalendarChainInputHashRule rule = new ExtendedSignatureCalendarChainInputHashRule();
 
             // Check signature
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -145,7 +145,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             ExtendedSignatureCalendarChainInputHashRule rule = new ExtendedSignatureCalendarChainInputHashRule();
 
             // Check invalid signature extended calendar hash chain input hash
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Invalid_With_Invalid_Aggregation_Root_Hash, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Invalid_With_Invalid_Aggregation_Root_Hash), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {

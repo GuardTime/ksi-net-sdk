@@ -60,7 +60,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             ExtendedSignatureAggregationChainRightLinksMatchesRule rule = new ExtendedSignatureAggregationChainRightLinksMatchesRule();
 
             // Check signature without calendar chain
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_Missing_Calendar_Hash_Chain, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_Missing_Calendar_Hash_Chain), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -84,7 +84,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             ExtendedSignatureAggregationChainRightLinksMatchesRule rule = new ExtendedSignatureAggregationChainRightLinksMatchesRule();
 
             // Check invalid extended calendar chain when service returns null
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
             {
                 TestVerificationContextFaultyFunctions context = new TestVerificationContextFaultyFunctions()
                 {
@@ -104,7 +104,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             ExtendedSignatureAggregationChainRightLinksMatchesRule rule = new ExtendedSignatureAggregationChainRightLinksMatchesRule();
 
             // Check legacy signature right links with extended chain. It is to prevent zeros problem in chain which fill after extending
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Legacy_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -126,7 +126,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             ExtendedSignatureAggregationChainRightLinksMatchesRule rule = new ExtendedSignatureAggregationChainRightLinksMatchesRule();
 
             // Check signature right links with extended chain. It is to prevent zeros problem in chain which fill after extending
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -148,7 +148,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             ExtendedSignatureAggregationChainRightLinksMatchesRule rule = new ExtendedSignatureAggregationChainRightLinksMatchesRule();
 
             // Check invalid signature extended signature at same time gives different result
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Invalid_Calendar_Chain_Publication_Time, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Invalid_Calendar_Chain_Publication_Time), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {

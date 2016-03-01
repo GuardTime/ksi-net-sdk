@@ -75,7 +75,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             AggregationHashChainTimeConsistencyRule rule = new AggregationHashChainTimeConsistencyRule();
 
             // Check legacy signature for aggregation hash chain time consistency
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Legacy_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -93,7 +93,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             AggregationHashChainTimeConsistencyRule rule = new AggregationHashChainTimeConsistencyRule();
 
             // Check signature for aggregation hash chain time consistency
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -111,7 +111,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             AggregationHashChainTimeConsistencyRule rule = new AggregationHashChainTimeConsistencyRule();
 
             // Check invalid signature for aggregation hash chain incosistency in time
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Invalid_Aggregation_Chain_Aggregation_Time_Mismatch, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Invalid_Aggregation_Chain_Aggregation_Time_Mismatch), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
