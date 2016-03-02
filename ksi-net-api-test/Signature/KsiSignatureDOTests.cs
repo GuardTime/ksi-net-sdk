@@ -164,7 +164,7 @@ namespace Guardtime.KSI.Signature
 
         private static IKsiSignature GetKsiSignatureDoFromFile(string file)
         {
-            using (FileStream stream = new FileStream(file, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, file), FileMode.Open))
             {
                 return new KsiSignatureFactory().Create(stream);
             }

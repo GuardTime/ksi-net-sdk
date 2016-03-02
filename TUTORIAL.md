@@ -16,6 +16,7 @@ The SDK can be used with a simple wrapper KSI, where all functionality is predef
 First thing we must do is select crypto provider. At the moment there are 2 crypto providers available, Microsoft and
 Bouncy Castle. Also it is possible to define your own. To set up a crypto provider, following command has to be used.
 
+```cs
     using Guardtime.KSI;
 
     public class KsiSdkDemo
@@ -25,12 +26,14 @@ Bouncy Castle. Also it is possible to define your own. To set up a crypto provid
             KsiProvider.SetCryptoProvider(new MicrosoftCryptoProvider());
         }
     }
+```
 
 ## Data Hashing ##
 The signing mechanism does not sign the documents directly but instead signs the calculated imprint of the document.
 Imprint is a binary hash value preceded with a single byte for a hash algorithm id. The first example will be simple
 program, which hashes a message and outputs it in hex. The hash object will be an input for the actual signing.
 
+```cs
     using Guardtime.KSI;
     using Guardtime.KSI.Hashing;
     using System.Text;
@@ -52,6 +55,7 @@ program, which hashes a message and outputs it in hex. The hash object will be a
             Console.WriteLine(hash);
         }
     }
+```
 
 ## Signing the hash ##
 In this part it is assumed that document is hashed and DataHash object already exists. Before hash can be signed, it is
@@ -60,6 +64,7 @@ gateway (or aggregator). It can send signing and extending request and receive r
 publications file. In following tutorial the HTTP client is used. Result is KSI signature object. First example is using the
 simplified wrapper.
 
+```cs
     using Guardtime.KSI;
     using Guardtime.KSI.Hashing;
     using System.Text;
@@ -110,15 +115,19 @@ simplified wrapper.
             IKsiSignature signature = ksi.Sign(hash);
         }
     }
+```
 
 To sign without simple wrapper is actually even easier. KSI class must be omitted and replaced with following code.
 
+```cs
     IKsiSignature signature = ksiService.Sign(hash);
+```
 
 ## Loading KSI Signature from binary stream ##
 Before it is possible to verify or extend the signature, it is necessary to read it to instance. Since usually the signature is stored into database or file, we need to open
 stream for given file or database entry. Following example shows how to read the signature from file.
 
+```cs
     using Guardtime.KSI;
     using Guardtime.KSI.Signature;
     using System.IO;
@@ -140,22 +149,35 @@ stream for given file or database entry. Following example shows how to read the
             }
         }
     }
+```
 
 ## Verifying KSI signature ##
 Next logical step would be to verify the signature which was stored somewhere. There are 4 policies to verify the signature.
 * Calendar based - signature is verified against online calendar
- * Usage for policy
-        CalendarBasedVerificationPolicy policy = new CalendarBasedVerificationPolicy();
+ * Usage for policy:
+
+```cs
+		CalendarBasedVerificationPolicy policy = new CalendarBasedVerificationPolicy();
+```
+
 * Key based - signature is verified against PKI signature
- * Usage for policy, for bouncycastle full truststore has to be included in parameter, for windows built-in trust store is used
+ * Usage for policy: for bouncycastle full truststore has to be included in parameter, for windows built-in trust store is used
+
+```cs
         KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy(new X509Store(), 
             new CertificateSubjectRdnSelector("E=publications@guardtime.com"));
+```
+
 * Publications based - signature is verified against publications file or user provided publication
- * Usage for policy
+ * Usage for policy:
+
+```cs
         PublicationBasedVerificationPolicy policy = new PublicationBasedVerificationPolicy();
+```
 
 Following code represents the verification against publications file and will print out the result.
 
+```cs
     using Guardtime.KSI;
     using Guardtime.KSI.Crypto;
     using Guardtime.KSI.Publication;
@@ -212,17 +234,20 @@ Following code represents the verification against publications file and will pr
             Console.WriteLine(result.ResultCode);
         }
     }
+```
 
 To verify the signature without simple wrapper, KSI part should be replaced with following.
 
+```cs
     VerificationResult result = new PublicationBasedVerificationPolicy().Verify(context);
-
+```
 
 ## Extending KSI signature ##
 
-In following part, the KSI signature is loaded from bytes. Then it should be verified like it was done in previous chapter and after that it would be wise
-to extend it to head. Following code will try to extend the publication to head.
+In following part, the KSI signature is loaded from bytes. Then it is verified like it was done in previous chapter and after that 
+it is extended to closest publication.
 
+```cs
     using Guardtime.KSI;
     using Guardtime.KSI.Crypto;
     using Guardtime.KSI.Publication;
@@ -269,29 +294,36 @@ to extend it to head. Following code will try to extend the publication to head.
 
             Ksi ksi = new Ksi(ksiService);
 
-            // Extend signature to latest publication.
-            IKsiSignature extendedSignature = ksi.ExtendToHead(signature);
+            // Extend signature to closest publication.
+            IKsiSignature extendedSignature = ksi.Extend(signature);
         }
     }
+```
 
 Without simple wrapper you should use following commands instead of it.
 
-    // Get latest publication from publications file.
-    PublicationRecordInPublicationFile publicationRecord = ksiService.GetPublicationsFile().GetLatestPublication();
+```cs
+    // Get closest publication from publications file.
+	PublicationRecordInPublicationFile publicationRecord = ksiService.GetPublicationsFile().GetNearestPublicationRecord(signature.AggregationTime);
     // Get calendar hash chain representing given publication.
     CalendarHashChain calendarHashChain = ksiService.Extend(signature.AggregationTime,
         publicationRecord.PublicationData.PublicationTime);
 
     // Extend signature to publication.
     IKsiSignature extendedSignature = signature.Extend(calendarHashChain, publicationRecord);
+```
 
 Also its possible to extend to specific publication record from publications file.
 
+```cs
     IKsiSignature extendedSignature = ksi.Extend(signature, publicationRecord);
+```
 
 Or publications data object generated from publication string.
 
+```cs
     // Create publication from string.
     PublicationData publicationData =
         new PublicationData("AAAAAA-CWTA3I-AALWDF-55VD5Q-5HEUDE-5BFSXT-HVUZRO-POHGX7-NU5IND-ARFYHR-4JGX6K-GQURVZ");
     IKsiSignature extendedSignature = ksi.Extend(signature, publicationData);
+```

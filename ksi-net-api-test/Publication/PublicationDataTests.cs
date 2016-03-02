@@ -27,22 +27,12 @@ namespace Guardtime.KSI.Publication
     [TestFixture]
     public class PublicationDataTest
     {
-        //    [Test]
-        //    public void TestPublicationDataFromTag()
-        //    {
-        //        using (
-        //            FileStream stream = new FileStream("resources/publication/publicationdata/publicationdata.tlv", FileMode.Open))
-        //        {
-        //            byte[] data = new byte[stream.Length];
-        //            stream.Read(data, 0, (int)stream.Length);
-        //            //                new PublicationData(data);
-        //        }
-        //    }
+
 
         [Test]
         public void PublicationDataContentTest()
         {
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_Extended, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_Extended), FileMode.Open))
             {
                 IKsiSignature signature = new KsiSignatureFactory().Create(stream);
                 PublicationRecordInSignature publicationRecord = signature.PublicationRecord;

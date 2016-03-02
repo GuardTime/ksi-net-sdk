@@ -61,7 +61,10 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             CertificateExistenceRule rule = new CertificateExistenceRule();
 
             // Check signature with no calendar authentication record
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record, FileMode.Open))
+            using (
+                FileStream stream =
+                    new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record),
+                        FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -82,7 +85,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             CertificateExistenceRule rule = new CertificateExistenceRule();
 
             // Check legacy signature with and without publications file. With publications file succeeds.
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Legacy_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -102,7 +105,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             CertificateExistenceRule rule = new CertificateExistenceRule();
 
             // Check legacy signature with and without publications file. With publications file succeeds.
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Legacy_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Legacy_Ok), FileMode.Open))
             {
                 TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
                 testPublicationsFile.CertificateRecords.Add(
@@ -127,7 +130,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             CertificateExistenceRule rule = new CertificateExistenceRule();
 
             // Check signature for certificate existence in publications file with given id in calendar authentication record
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
             {
                 TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
                 testPublicationsFile.CertificateRecords.Add(
@@ -152,7 +155,10 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             CertificateExistenceRule rule = new CertificateExistenceRule();
 
             // Check invalid signature with invalid certificate id
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Certificate_Id, FileMode.Open))
+            using (
+                FileStream stream =
+                    new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Certificate_Id),
+                        FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {

@@ -58,7 +58,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             CalendarHashChainExistenceRule rule = new CalendarHashChainExistenceRule();
 
             // check signature for calendar hash chain
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -76,7 +76,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             CalendarHashChainExistenceRule rule = new CalendarHashChainExistenceRule();
 
             // Check signature which has not calendar hash chain
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok_Missing_Calendar_Hash_Chain, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_Missing_Calendar_Hash_Chain), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {

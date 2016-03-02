@@ -64,7 +64,11 @@ namespace Guardtime.KSI.Integration
 
         private static IEnumerable GetTestFilesAndResults(string inFile)
         {
-            using (StreamReader fileReader = new StreamReader(inFile))
+            string filePath = Path.Combine(TestSetup.LocalPath, inFile);
+
+            Console.WriteLine("Loading test data from file: " + filePath);
+
+            using (StreamReader fileReader = new StreamReader(filePath))
             {
                 string line;
                 while ((line = fileReader.ReadLine()) != null)

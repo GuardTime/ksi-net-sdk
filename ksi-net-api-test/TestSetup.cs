@@ -19,6 +19,8 @@
 
 using System;
 using Guardtime.KSI.Test.Crypto;
+using System.IO;
+using System.Reflection;
 using NUnit.Framework;
 
 namespace Guardtime.KSI
@@ -26,7 +28,22 @@ namespace Guardtime.KSI
     [SetUpFixture]
     public class TestSetup
     {
-        [SetUp]
+        private static string _localPath;
+
+        public static string LocalPath
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_localPath))
+                {
+                    _localPath = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
+                }
+
+                return _localPath;
+            }
+        }
+
+        [OneTimeSetUp]
         public void RunBeforeAnyTests()
         {
             Console.WriteLine("Selected crypto provider: " + CryptoTestFactory.ProviderType);

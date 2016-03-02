@@ -21,11 +21,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Guardtime.KSI.Publication;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Trust;
 using NUnit.Framework;
+using Guardtime.KSI.Publication;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
@@ -38,7 +38,10 @@ namespace Guardtime.KSI.Integration
         public void TestExecution(DataHolderForIntegrationTests testData, string policyName)
         {
             Console.WriteLine(string.Format("Running test with the following data: " + testData + "; Policy: " + policyName));
-            using (FileStream stream = new FileStream(testData.GetTestFile(), FileMode.Open))
+
+            string filePath = Path.Combine(TestSetup.LocalPath, testData.GetTestFile());
+
+            using (FileStream stream = new FileStream(filePath, FileMode.Open))
             {
                 try
                 {
@@ -52,7 +55,9 @@ namespace Guardtime.KSI.Integration
                     switch (policyName)
                     {
                         case "PublicationFileBasedVerificationPolicy":
-                            using (Stream publicationFileInStream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+                            using (
+                                Stream publicationFileInStream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"),
+                                    FileMode.Open))
                             {
                                 policy = new PublicationBasedVerificationPolicy();
                                 context.PublicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
@@ -67,7 +72,9 @@ namespace Guardtime.KSI.Integration
                             }
 
                         case "PublicationFileBasedVerificationNoExtendingPolicy":
-                            using (Stream publicationFileInStream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+                            using (
+                                Stream publicationFileInStream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"),
+                                    FileMode.Open))
                             {
                                 policy = new PublicationBasedVerificationPolicy();
                                 context.PublicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
@@ -115,7 +122,9 @@ namespace Guardtime.KSI.Integration
                             break;
 
                         default:
-                            using (Stream publicationFileInStream = new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+                            using (
+                                Stream publicationFileInStream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"),
+                                    FileMode.Open))
                             {
                                 policy = new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
                                     CryptoTestFactory.CreateCertificateSubjectRdnSelector(new List<CertificateSubjectRdn>
@@ -170,31 +179,28 @@ namespace Guardtime.KSI.Integration
                 }
                 catch (Exception e)
                 {
-                    //Signature read in did not fail while it should have.
-                    if (testData.GetSigantureReadInFails() &&
-                        e.ToString().Contains(" supposed to fail with class "))
+                    //If failure occurs with test that should not fail at all.
+                    if (testData.GetExpectedVerificationResultCode().ToLower().Equals("ok"))
                     {
                         throw;
                     }
                     //Errors that were found duing executiong and evaluation.
-                    if (e.ToString().Contains(", but found: ") ||
+                    if (e.ToString().Contains(" supposed to fail with class ") ||
+                        e.ToString().Contains(", but found: ") ||
                         e.ToString().Contains(" was not found from verification results:") ||
                         e.ToString().Contains("Verification codes do not match. Actual ")
                         )
                     {
                         throw;
                     }
+
+                    //Signature read in did not fail while it should have.
                     //No failure during readin AND exception does not contain expected (message OR exception class OR rule)
-                    //which means taht not expected error has occurred.
-                    if (!testData.GetSigantureReadInFails() &&
-                        (!e.ToString().Contains(testData.GetExpectedExceptionMessage()) ||
-                         !e.ToString().Contains(testData.GetExpectedExceptionClass()) ||
-                         !e.ToString().Contains(testData.GetExpectedRule())))
-                    {
-                        throw;
-                    }
-                    //If failure occurs with test that should not fail at all.
-                    if (testData.GetExpectedVerificationResultCode().ToLower().Equals("ok"))
+                    //which means that not expected error has occurred.
+                    string exceptionString = e.ToString().ToLower();
+                    if (testData.GetExpectedExceptionMessage() != " " && !exceptionString.Contains(testData.GetExpectedExceptionMessage().ToLower()) ||
+                        testData.GetExpectedExceptionClass() != " " && !exceptionString.Contains(testData.GetExpectedExceptionClass().ToLower()) ||
+                        testData.GetExpectedRule() != " " && !exceptionString.Contains(testData.GetExpectedRule().ToLower()))
                     {
                         throw;
                     }

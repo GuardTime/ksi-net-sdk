@@ -64,7 +64,7 @@ namespace Guardtime.KSI.Integration
         public void PublicationStringBasedVerificationUsingOldStringTest()
         {
             DataHolderForIntegrationTests data = new DataHolderForIntegrationTests(
-                "resources/signature/integration-test-signatures/ok-sig-extended-2014-05-15.ksig:false:Na: : :UserProvidedPublicationVerificationRule".Split(':'));
+                "resources/signature/integration-test-signatures/ok-sig-extended-2014-05-15.ksig:false:Na: : :UserProvidedPublicationCreationTimeVerificationRule".Split(':'));
             new CommonTestExecution().TestExecution(data, "PublicationStringBasedVerificationUsingOldStringPolicy");
         }
 
