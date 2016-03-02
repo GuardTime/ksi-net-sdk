@@ -20,12 +20,12 @@
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
+using Guardtime.KSI.Test.Crypto;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
@@ -64,7 +64,7 @@ namespace Guardtime.KSI.Integration
         {
             Assert.DoesNotThrow(delegate
             {
-                VerificationResult verificationResult = SignHashTest(ksi);
+                SignHashTest(ksi);
             });
         }
 
@@ -73,7 +73,7 @@ namespace Guardtime.KSI.Integration
         {
             Assert.DoesNotThrow(delegate
             {
-                VerificationResult verificationResult = SignHashTest(ksi);
+                SignHashTest(ksi);
             });
         }
 
@@ -135,14 +135,14 @@ namespace Guardtime.KSI.Integration
                 PublicationsFile = ksi.GetPublicationsFile()
             };
             return ksi.Verify(verificationContext,
-                new KeyBasedVerificationPolicy(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com")));
+                new KeyBasedVerificationPolicy(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com")));
         }
 
         public VerificationResult SignedHashVerifyWithInvalidHashTest(Ksi ksi)
         {
             using (MemoryStream memoryStream = new MemoryStream(Encoding.UTF8.GetBytes("test")))
             {
-                DataHasher dataHasher = new DataHasher(HashAlgorithm.Sha2256);
+                IDataHasher dataHasher = CryptoTestFactory.CreateDataHasher(HashAlgorithm.Sha2256);
                 dataHasher.AddData(memoryStream);
                 IKsiSignature signature = ksi.Sign(dataHasher.GetHash());
 
@@ -153,7 +153,7 @@ namespace Guardtime.KSI.Integration
                     PublicationsFile = ksi.GetPublicationsFile()
                 };
                 return ksi.Verify(verificationContext,
-                    new KeyBasedVerificationPolicy(new X509Store(StoreName.Root), new CertificateSubjectRdnSelector("E=publications@guardtime.com")));
+                    new KeyBasedVerificationPolicy(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com")));
             }
         }
     }

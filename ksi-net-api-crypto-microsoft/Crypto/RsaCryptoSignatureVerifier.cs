@@ -22,7 +22,7 @@ using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Exceptions;
 
-namespace Guardtime.KSI.Crypto
+namespace Guardtime.KSI.Crypto.Microsoft.Crypto
 {
     /// <summary>
     ///     RSA signature verifier.

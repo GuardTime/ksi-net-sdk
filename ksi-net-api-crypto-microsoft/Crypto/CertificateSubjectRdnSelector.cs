@@ -21,7 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 
-namespace Guardtime.KSI.Crypto
+namespace Guardtime.KSI.Crypto.Microsoft.Crypto
 {
     /// <summary>
     /// Certificate subject rdn selector.

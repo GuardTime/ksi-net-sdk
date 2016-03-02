@@ -17,36 +17,12 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
-using Guardtime.KSI.Test.Crypto;
-using System.IO;
-using System.Reflection;
-using NUnit.Framework;
-
-namespace Guardtime.KSI
+namespace Guardtime.KSI.Test.Crypto
 {
-    [SetUpFixture]
-    public class TestSetup
+    public enum CryptoProviderType
     {
-        private static string _localPath;
-
-        public static string LocalPath
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(_localPath))
-                {
-                    _localPath = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
-                }
-
-                return _localPath;
-            }
-        }
-
-        [OneTimeSetUp]
-        public void RunBeforeAnyTests()
-        {
-            KsiProvider.SetCryptoProvider(CryptoTestFactory.CreateProvider());
-        }
+        None,
+        Microsoft,
+        BouncyCastle
     }
 }

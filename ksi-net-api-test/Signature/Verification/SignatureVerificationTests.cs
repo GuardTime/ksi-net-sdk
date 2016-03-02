@@ -26,6 +26,7 @@ using Guardtime.KSI.Properties;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature.Verification.Policy;
+using Guardtime.KSI.Test.Crypto;
 using Guardtime.KSI.Trust;
 using NUnit.Framework;
 
@@ -49,7 +50,7 @@ namespace Guardtime.KSI.Signature.Verification
                     serviceProtocol, new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
                     serviceProtocol,
                     new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                        new CertificateSubjectRdnSelector("E=publications@guardtime.com"))), new KsiSignatureFactory());
+                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))), new KsiSignatureFactory());
 
                 VerificationContext context = new VerificationContext(new KsiSignatureFactory().Create(stream))
                 {
@@ -66,7 +67,10 @@ namespace Guardtime.KSI.Signature.Verification
                     KsiService = ksiService,
                     PublicationsFile =
                         new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                            new CertificateSubjectRdnSelector(new List<CertificateSubjectRdn> { new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com") })))
+                            CryptoTestFactory.CreateCertificateSubjectRdnSelector(new List<CertificateSubjectRdn>
+                            {
+                                new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com")
+                            })))
                             .Create(
                                 new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
                 };
@@ -81,7 +85,10 @@ namespace Guardtime.KSI.Signature.Verification
 
                 Console.WriteLine(@"// Key based");
                 policy = new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
-                    new CertificateSubjectRdnSelector(new List<CertificateSubjectRdn> { new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com") }));
+                    CryptoTestFactory.CreateCertificateSubjectRdnSelector(new List<CertificateSubjectRdn>
+                    {
+                        new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com")
+                    }));
 
                 Console.WriteLine(policy.Verify(context));
 

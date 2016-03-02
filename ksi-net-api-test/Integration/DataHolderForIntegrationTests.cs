@@ -35,7 +35,7 @@ namespace Guardtime.KSI.Integration
         {
             if (inputData[0] == null)
             {
-                throw new ArgumentNullException(string.Format("Test file is null"));
+                throw new ArgumentException("Test file is null");
             }
             _testFile = inputData[0];
 
@@ -43,34 +43,34 @@ namespace Guardtime.KSI.Integration
 
             if (inputData[2] == null)
             {
-                throw new ArgumentNullException(string.Format("Failure code is null"));
+                throw new ArgumentException("Failure code is null");
             }
 
             string[] expectedValues = { "ok", "fail", "na" };
             if (Array.IndexOf(expectedValues, inputData[2].ToLower()) > -1)
-            { 
+            {
                 _expectedVerificationResultCode = inputData[2];
             }
             else
             {
-                throw new ArgumentException(string.Format("Invalid argument value for expected verification result." + inputData[2]));
+                throw new ArgumentException("Invalid argument value for expected verification result." + inputData[2]);
             }
 
             if (inputData[3] == null)
             {
-                throw new ArgumentNullException(string.Format("Expected exception is null"));
+                throw new ArgumentException("Expected exception is null");
             }
             _expectedExceptionClass = inputData[3];
 
             if (inputData[4] == null)
             {
-                throw new ArgumentNullException(string.Format("Expected exception message is null"));
+                throw new ArgumentException("Expected exception message is null");
             }
             _exceptionMessage = inputData[4];
 
             if (inputData[5] == null)
             {
-                throw new ArgumentNullException(string.Format("Expected failed rule is null"));
+                throw new ArgumentException("Expected failed rule is null");
             }
             _expectedRule = inputData[5];
         }
@@ -105,12 +105,12 @@ namespace Guardtime.KSI.Integration
             return _expectedRule;
         }
 
-        public string GetTestDataInformation()
+        public override string ToString()
         {
-            return "Signature File: " + _testFile + "; Fail at siganture loading: " + _sigantureReadInFails + 
-                "; Expected verification result code: " + _expectedVerificationResultCode +
-                "; Expected Exception: " + _expectedExceptionClass + "; Expected Exception Message: " + _exceptionMessage +
-                "; Expected rule that fails: " + _expectedRule;
+            return "Signature File: " + _testFile + "; Fail at siganture loading: " + _sigantureReadInFails +
+                   "; Expected verification result code: " + _expectedVerificationResultCode +
+                   "; Expected Exception: " + _expectedExceptionClass + "; Expected Exception Message: " + _exceptionMessage +
+                   "; Expected rule that fails: " + _expectedRule;
         }
     }
 }

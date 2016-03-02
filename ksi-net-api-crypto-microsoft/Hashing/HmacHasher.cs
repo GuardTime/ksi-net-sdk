@@ -20,8 +20,10 @@
 using System;
 using System.Security.Cryptography;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Hashing;
+using HashAlgorithm = Guardtime.KSI.Hashing.HashAlgorithm;
 
-namespace Guardtime.KSI.Hashing
+namespace Guardtime.KSI.Crypto.Microsoft.Hashing
 {
     /// <summary>
     /// HMAC hasher
@@ -64,10 +66,10 @@ namespace Guardtime.KSI.Hashing
             {
                 return new HMACRIPEMD160(key);
             }
-                //if (hmacAlgorithm == HashAlgorithm.Sha2224)
-                //{
-                //    return new HMACSHA(key);
-                //}
+            //if (hmacAlgorithm == HashAlgorithm.Sha2224)
+            //{
+            //    return new HMACSHA(key);
+            //}
             if (hmacAlgorithm == HashAlgorithm.Sha2384)
             {
                 return new HMACSHA384(key);

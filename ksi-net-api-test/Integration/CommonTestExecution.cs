@@ -23,12 +23,13 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
+using Guardtime.KSI.Trust;
+using NUnit.Framework;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
-using Guardtime.KSI.Trust;
-using NUnit.Framework;
+using Guardtime.KSI.Test.Crypto;
 
 namespace Guardtime.KSI.Integration
 {
@@ -36,7 +37,7 @@ namespace Guardtime.KSI.Integration
     {
         public void TestExecution(DataHolderForIntegrationTests testData, string policyName)
         {
-            Console.WriteLine(string.Format("Running test with the following data: " + testData.GetTestDataInformation() + "; Policy: " + policyName));
+            Console.WriteLine(string.Format("Running test with the following data: " + testData + "; Policy: " + policyName));
 
             string filePath = Path.Combine(TestSetup.LocalPath, testData.GetTestFile());
 
@@ -54,11 +55,13 @@ namespace Guardtime.KSI.Integration
                     switch (policyName)
                     {
                         case "PublicationFileBasedVerificationPolicy":
-                            using (Stream publicationFileInStream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
+                            using (
+                                Stream publicationFileInStream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"),
+                                    FileMode.Open))
                             {
                                 policy = new PublicationBasedVerificationPolicy();
                                 context.PublicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                                    new CertificateSubjectRdnSelector(new List<CertificateSubjectRdn>
+                                    CryptoTestFactory.CreateCertificateSubjectRdnSelector(new List<CertificateSubjectRdn>
                                     {
                                         new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com")
                                     })))
@@ -69,11 +72,13 @@ namespace Guardtime.KSI.Integration
                             }
 
                         case "PublicationFileBasedVerificationNoExtendingPolicy":
-                            using (Stream publicationFileInStream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
+                            using (
+                                Stream publicationFileInStream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"),
+                                    FileMode.Open))
                             {
                                 policy = new PublicationBasedVerificationPolicy();
                                 context.PublicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                                    new CertificateSubjectRdnSelector(new List<CertificateSubjectRdn>
+                                    CryptoTestFactory.CreateCertificateSubjectRdnSelector(new List<CertificateSubjectRdn>
                                     {
                                         new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com")
                                     })))
@@ -84,7 +89,7 @@ namespace Guardtime.KSI.Integration
 
                         case "KeyBasedVerificationPolicyWithNoPublication":
                             policy = new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
-                                new CertificateSubjectRdnSelector(new List<CertificateSubjectRdn>
+                                CryptoTestFactory.CreateCertificateSubjectRdnSelector(new List<CertificateSubjectRdn>
                                 {
                                     new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com")
                                 }));
@@ -117,15 +122,17 @@ namespace Guardtime.KSI.Integration
                             break;
 
                         default:
-                            using (Stream publicationFileInStream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
+                            using (
+                                Stream publicationFileInStream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"),
+                                    FileMode.Open))
                             {
                                 policy = new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
-                                    new CertificateSubjectRdnSelector(new List<CertificateSubjectRdn>
+                                    CryptoTestFactory.CreateCertificateSubjectRdnSelector(new List<CertificateSubjectRdn>
                                     {
                                         new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com")
                                     }));
                                 context.PublicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                                    new CertificateSubjectRdnSelector(new List<CertificateSubjectRdn>
+                                    CryptoTestFactory.CreateCertificateSubjectRdnSelector(new List<CertificateSubjectRdn>
                                     {
                                         new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com")
                                     })))

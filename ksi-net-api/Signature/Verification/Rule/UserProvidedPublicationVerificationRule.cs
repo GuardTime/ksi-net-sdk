@@ -18,7 +18,6 @@
  */
 
 using System;
-using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
 using NLog;
 

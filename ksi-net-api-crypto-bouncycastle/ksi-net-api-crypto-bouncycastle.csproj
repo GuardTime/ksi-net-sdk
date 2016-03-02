@@ -7,7 +7,7 @@
     <ProjectGuid>{CC9C4947-E275-4381-A93A-C80498B450B4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Guardtime.KSI</RootNamespace>
+    <RootNamespace>Guardtime.KSI.Crypto.BouncyCastle</RootNamespace>
     <AssemblyName>ksi-net-api-crypto-bouncycastle</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

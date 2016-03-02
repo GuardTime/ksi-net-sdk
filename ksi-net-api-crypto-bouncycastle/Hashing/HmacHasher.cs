@@ -18,10 +18,11 @@
  */
 
 using System;
+using Guardtime.KSI.Hashing;
 using Org.BouncyCastle.Crypto.Macs;
 using Org.BouncyCastle.Crypto.Parameters;
 
-namespace Guardtime.KSI.Hashing
+namespace Guardtime.KSI.Crypto.BouncyCastle.Hashing
 {
     /// <summary>
     /// HMAC hasher

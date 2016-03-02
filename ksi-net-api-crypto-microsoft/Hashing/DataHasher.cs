@@ -20,8 +20,10 @@
 using System.IO;
 using System.Security.Cryptography;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Hashing;
+using HashAlgorithm = Guardtime.KSI.Hashing.HashAlgorithm;
 
-namespace Guardtime.KSI.Hashing
+namespace Guardtime.KSI.Crypto.Microsoft.Hashing
 {
     /// <summary>
     ///     This class provides functionality for hashing data.

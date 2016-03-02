@@ -24,7 +24,7 @@ using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.X509;
 
-namespace Guardtime.KSI.Crypto
+namespace Guardtime.KSI.Crypto.BouncyCastle.Crypto
 {
     /// <summary>
     /// Certificate subject rdn selector.

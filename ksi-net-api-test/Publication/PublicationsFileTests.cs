@@ -24,6 +24,7 @@ using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
+using Guardtime.KSI.Test.Crypto;
 using Guardtime.KSI.Trust;
 using NUnit.Framework;
 
@@ -39,27 +40,27 @@ namespace Guardtime.KSI.Publication
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
             {
                 new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                    new CertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
+                    CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
             }
         }
 
         [Test]
         public void TestCreatePublicationsFileFromFile2()
         {
-            if (typeof(CertificateSubjectRdnSelector).Assembly.FullName.Contains("ksi-net-api-crypto-bouncycastle"))
+            if (CryptoTestFactory.ProviderType == CryptoProviderType.BouncyCastle)
             {
                 using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
                 {
                     new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                        new CertificateSubjectRdnSelector("EmailAddress=publications@guardtime.com"))).Create(stream);
+                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("EmailAddress=publications@guardtime.com"))).Create(stream);
                 }
             }
-            else if (typeof(CertificateSubjectRdnSelector).Assembly.FullName.Contains("ksi-net-api-crypto-microsoft"))
+            else if (CryptoTestFactory.ProviderType == CryptoProviderType.Microsoft)
             {
                 using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
                 {
                     new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                        new CertificateSubjectRdnSelector("EMail=publications@guardtime.com"))).Create(stream);
+                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("EMail=publications@guardtime.com"))).Create(stream);
                 }
             }
         }
@@ -70,7 +71,7 @@ namespace Guardtime.KSI.Publication
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
             {
                 new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                    new CertificateSubjectRdnSelector("1.2.840.113549.1.9.1=publications@guardtime.com"))).Create(stream);
+                    CryptoTestFactory.CreateCertificateSubjectRdnSelector("1.2.840.113549.1.9.1=publications@guardtime.com"))).Create(stream);
             }
         }
 
@@ -82,7 +83,7 @@ namespace Guardtime.KSI.Publication
                 ArgumentException ex = Assert.Throws<ArgumentException>(delegate
                 {
                     new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                        new CertificateSubjectRdnSelector("EEE=publications@guardtime.com"))).Create(stream);
+                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("EEE=publications@guardtime.com"))).Create(stream);
                 });
 
                 Assert.That(ex.Message, Is.StringContaining("is invalid.") | Is.StringContaining("Unknown object id"));
@@ -97,7 +98,7 @@ namespace Guardtime.KSI.Publication
                 PublicationsFileException ex = Assert.Throws<PublicationsFileException>(delegate
                 {
                     new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                        new CertificateSubjectRdnSelector("E=Xpublications@guardtime.com"))).Create(stream);
+                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=Xpublications@guardtime.com"))).Create(stream);
                 });
 
                 Assert.That(ex.Message, Is.StringStarting("Publications file verification failed."));
@@ -112,7 +113,7 @@ namespace Guardtime.KSI.Publication
                 PublicationsFileException ex = Assert.Throws<PublicationsFileException>(delegate
                 {
                     new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                        new CertificateSubjectRdnSelector("1.2.840.113549.1.9.1=Xpublications@guardtime.com"))).Create(stream);
+                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("1.2.840.113549.1.9.1=Xpublications@guardtime.com"))).Create(stream);
                 });
 
                 Assert.That(ex.Message, Is.StringStarting("Publications file verification failed."));
@@ -127,7 +128,10 @@ namespace Guardtime.KSI.Publication
                 ArgumentException ex = Assert.Throws<ArgumentException>(delegate
                 {
                     new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                        new CertificateSubjectRdnSelector(new List<CertificateSubjectRdn> { new CertificateSubjectRdn("1.2.840.113549.1.9.1X", "publications@guardtime.com") })))
+                        CryptoTestFactory.CreateCertificateSubjectRdnSelector(new List<CertificateSubjectRdn>
+                        {
+                            new CertificateSubjectRdn("1.2.840.113549.1.9.1X", "publications@guardtime.com")
+                        })))
                         .Create(stream);
                 });
 
@@ -142,7 +146,7 @@ namespace Guardtime.KSI.Publication
             {
                 IPublicationsFile publicationsFile =
                     new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                        new CertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
+                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
 
                 Assert.AreEqual("O=Guardtime, CN=H5", new X509Certificate2(publicationsFile.FindCertificateById(new byte[] { 0x9a, 0x65, 0x82, 0x94 })).Subject,
                     "Certificate should be correct");
@@ -160,7 +164,7 @@ namespace Guardtime.KSI.Publication
                 {
                     IPublicationsFile publicationsFile =
                         new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                            new CertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
+                            CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
                     Assert.IsFalse(publicationsFile.Contains(null), "Should not crash when null object is used");
 
                     Assert.IsTrue(publicationsFile.Contains(new PublicationRecordInPublicationFile(reader.ReadTag())), "Should contain given publication record");
@@ -180,7 +184,7 @@ namespace Guardtime.KSI.Publication
                 {
                     IPublicationsFile publicationsFile =
                         new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                            new CertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
+                            CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
                     Assert.IsFalse(publicationsFile.Contains(new PublicationRecordInPublicationFile(reader.ReadTag())), "Should not contain given publication record");
                 }
             }
@@ -193,7 +197,7 @@ namespace Guardtime.KSI.Publication
             {
                 IPublicationsFile publicationsFile =
                     new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                        new CertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
+                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
                 PublicationRecordInPublicationFile publicationRecord = publicationsFile.GetLatestPublication();
 
                 Assert.AreEqual(1455494400, publicationRecord.PublicationData.PublicationTime, "Should be correct publication time for latest publication");
