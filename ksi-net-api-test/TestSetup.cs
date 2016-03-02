@@ -46,8 +46,6 @@ namespace Guardtime.KSI
         [OneTimeSetUp]
         public void RunBeforeAnyTests()
         {
-            Console.WriteLine("Selected crypto provider: " + CryptoTestFactory.ProviderType);
-
             KsiProvider.SetCryptoProvider(CryptoTestFactory.CreateProvider());
         }
     }
