@@ -76,7 +76,7 @@ namespace Guardtime.KSI.Parser
         public ITlvTag this[int i]
         {
             get { return _value[i]; }
-            set { _value[i] = value; }
+            protected set { _value[i] = value; }
         }
 
         /// <summary>
