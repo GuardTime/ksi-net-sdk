@@ -42,19 +42,23 @@ namespace Guardtime.KSI.Service
             int statusCount = 0;
             int errorMessageCount = 0;
 
-            foreach (ITlvTag childTag in this)
+            for (int i = 0; i < Count; i++)
             {
+                ITlvTag childTag = this[i];
+
                 switch (childTag.Type)
                 {
                     case Constants.KsiPduPayload.StatusTagType:
                         IntegerTag statusTag = new IntegerTag(childTag);
                         Status = statusTag.Value;
                         statusCount++;
+                        this[i] = statusTag;
                         break;
                     case Constants.KsiPduPayload.ErrorMessageTagType:
                         StringTag errorMessageTag = new StringTag(childTag);
                         ErrorMessage = errorMessageTag.Value;
                         errorMessageCount++;
+                        this[i] = errorMessageTag;
                         break;
                     default:
                         VerifyUnknownTag(childTag);

@@ -56,34 +56,38 @@ namespace Guardtime.KSI.Signature
             int inputHashCount = 0;
             int aggrAlgorithmIdCount = 0;
 
-            foreach (ITlvTag childTag in this)
+            for (int i = 0; i < Count; i++)
             {
+                ITlvTag childTag = this[i];
+
                 switch (childTag.Type)
                 {
                     case Constants.AggregationHashChain.AggregationTimeTagType:
-                        _aggregationTime = new IntegerTag(childTag);
+                        this[i] = _aggregationTime = new IntegerTag(childTag);
                         aggregationTimeCount++;
                         break;
                     case Constants.AggregationHashChain.ChainIndexTagType:
                         IntegerTag chainIndexTag = new IntegerTag(childTag);
                         _chainIndex.Add(chainIndexTag);
+                        this[i] = chainIndexTag;
                         break;
                     case Constants.AggregationHashChain.InputDataTagType:
-                        _inputData = new RawTag(childTag);
+                        this[i] = _inputData = new RawTag(childTag);
                         inputDataCount++;
                         break;
                     case Constants.AggregationHashChain.InputHashTagType:
-                        _inputHash = new ImprintTag(childTag);
+                        this[i] = _inputHash = new ImprintTag(childTag);
                         inputHashCount++;
                         break;
                     case Constants.AggregationHashChain.AggregationAlgorithmIdTagType:
-                        _aggrAlgorithmId = new IntegerTag(childTag);
+                        this[i] = _aggrAlgorithmId = new IntegerTag(childTag);
                         aggrAlgorithmIdCount++;
                         break;
                     case (uint)LinkDirection.Left:
                     case (uint)LinkDirection.Right:
                         Link linkTag = new Link(childTag, (LinkDirection)childTag.Type);
                         _chain.Add(linkTag);
+                        this[i] = linkTag;
                         break;
                     default:
                         VerifyUnknownTag(childTag);
@@ -227,24 +231,26 @@ namespace Guardtime.KSI.Signature
                 int metaHashCount = 0;
                 int metaDataCount = 0;
 
-                foreach (ITlvTag childTag in this)
+                for (int i = 0; i < Count; i++)
                 {
+                    ITlvTag childTag = this[i];
+
                     switch (childTag.Type)
                     {
                         case Constants.AggregationHashChain.Link.LevelCorrectionTagType:
-                            _levelCorrection = new IntegerTag(childTag);
+                            this[i] = _levelCorrection = new IntegerTag(childTag);
                             levelCorrectionCount++;
                             break;
                         case Constants.AggregationHashChain.Link.SiblingHashTagType:
-                            _siblingHash = new ImprintTag(childTag);
+                            this[i] = _siblingHash = new ImprintTag(childTag);
                             siblingHashCount++;
                             break;
                         case Constants.AggregationHashChain.Link.MetaHashTagType:
-                            _metaHash = new ImprintTag(childTag);
+                            this[i] = _metaHash = new ImprintTag(childTag);
                             metaHashCount++;
                             break;
                         case Constants.AggregationHashChain.MetaData.TagType:
-                            _metaData = new MetaData(childTag);
+                            this[i] = _metaData = new MetaData(childTag);
                             metaDataCount++;
                             break;
                         default:
@@ -339,24 +345,26 @@ namespace Guardtime.KSI.Signature
                 int sequenceNumberCount = 0;
                 int requestTimeCount = 0;
 
-                foreach (ITlvTag childTag in this)
+                for (int i = 0; i < Count; i++)
                 {
+                    ITlvTag childTag = this[i];
+
                     switch (childTag.Type)
                     {
                         case Constants.AggregationHashChain.MetaData.ClientIdTagType:
-                            _clientId = new StringTag(childTag);
+                            this[i] = _clientId = new StringTag(childTag);
                             clientIdCount++;
                             break;
                         case Constants.AggregationHashChain.MetaData.MachineIdTagType:
-                            _machineId = new StringTag(childTag);
+                            this[i] = _machineId = new StringTag(childTag);
                             machineIdCount++;
                             break;
                         case Constants.AggregationHashChain.MetaData.SequenceNumberTagType:
-                            _sequenceNumber = new IntegerTag(childTag);
+                            this[i] = _sequenceNumber = new IntegerTag(childTag);
                             sequenceNumberCount++;
                             break;
                         case Constants.AggregationHashChain.MetaData.RequestTimeTagType:
-                            _requestTime = new IntegerTag(childTag);
+                            this[i] = _requestTime = new IntegerTag(childTag);
                             requestTimeCount++;
                             break;
                         default:

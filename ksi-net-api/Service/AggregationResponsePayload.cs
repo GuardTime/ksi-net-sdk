@@ -52,28 +52,30 @@ namespace Guardtime.KSI.Service
             int configCount = 0;
             int requestAcknowledgmentCount = 0;
 
-            foreach (ITlvTag childTag in this)
+            for (int i = 0; i < Count; i++)
             {
+                ITlvTag childTag = this[i];
+
                 switch (childTag.Type)
                 {
                     case Constants.AggregationResponsePayload.RequestIdTagType:
-                        _requestId = new IntegerTag(childTag);
+                        this[i] = _requestId = new IntegerTag(childTag);
                         requestIdCount++;
                         break;
                     case Constants.KsiPduPayload.StatusTagType:
-                        _status = new IntegerTag(childTag);
+                        this[i] = _status = new IntegerTag(childTag);
                         statusCount++;
                         break;
                     case Constants.KsiPduPayload.ErrorMessageTagType:
-                        _errorMessage = new StringTag(childTag);
+                        this[i] = _errorMessage = new StringTag(childTag);
                         errorMessageCount++;
                         break;
                     case Constants.AggregationResponsePayload.ConfigTagType:
-                        _config = new RawTag(childTag);
+                        this[i] = _config = new RawTag(childTag);
                         configCount++;
                         break;
                     case Constants.AggregationResponsePayload.RequestAcknowledgmentTagType:
-                        _requestAcknowledgment = new RawTag(childTag);
+                        this[i] = _requestAcknowledgment = new RawTag(childTag);
                         requestAcknowledgmentCount++;
                         break;
                     case Constants.AggregationHashChain.TagType:

@@ -175,9 +175,21 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Publication\PublicationsFileHeaderTests.cs" />
+    <Compile Include="Publication\PublicationRecordTests.cs" />
+    <Compile Include="Publication\CertificateRecordTests.cs" />
     <Compile Include="Publication\PublicationDataTests.cs" />
     <Compile Include="Publication\PublicationsFileTests.cs" />
     <Compile Include="Publication\TestPublicationsfile.cs" />
+    <Compile Include="Service\ExtendErrorPayloadTests.cs" />
+    <Compile Include="Service\ExtendPduTests.cs" />
+    <Compile Include="Service\ExtendRequestPayloadTests.cs" />
+    <Compile Include="Service\ExtendResponsePayloadTests.cs" />
+    <Compile Include="Service\AggregationResponsePayloadTests.cs" />
+    <Compile Include="Service\AggregationErrorPayloadTests.cs" />
+    <Compile Include="Service\AggregationRequestPayloadTests.cs" />
+    <Compile Include="Service\AggregationPduTests.cs" />
+    <Compile Include="Service\KsiPduHeaderTests.cs" />
     <Compile Include="Service\TestKsiServiceProtocol.cs" />
     <Compile Include="TestSetup.cs" />
     <Compile Include="Signature\CalendarAuthenticationRecordTests.cs" />
@@ -224,6 +236,7 @@
     <Compile Include="Signature\Verification\SignatureVerificationTests.cs" />
     <Compile Include="Trust\PkiTrustStoreProviderTests.cs" />
     <Compile Include="CryptoTestFactoryTests.cs" />
+    <Compile Include="TestUtil.cs" />
     <Compile Include="Utils\InvalidEncodeTlvTag.cs" />
     <Compile Include="Utils\UtilTests.cs" />
   </ItemGroup>

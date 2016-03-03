@@ -263,7 +263,7 @@ namespace Guardtime.KSI.Utils
         /// <returns>The least common multiple</returns>
         public static int GetLeastCommonMultiple(int a, int b)
         {
-            return (a * b) / GetGreatestCommonDivisor(a, b);
+            return a * b / GetGreatestCommonDivisor(a, b);
         }
 
         /// <summary>

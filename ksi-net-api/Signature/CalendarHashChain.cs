@@ -50,26 +50,29 @@ namespace Guardtime.KSI.Signature
             int aggregationTimeCount = 0;
             int inputHashCount = 0;
 
-            foreach (ITlvTag childTag in this)
+            for (int i = 0; i < Count; i++)
             {
+                ITlvTag childTag = this[i];
+
                 switch (childTag.Type)
                 {
                     case Constants.CalendarHashChain.PublicationTimeTagType:
-                        _publicationTime = new IntegerTag(childTag);
+                        this[i] = _publicationTime = new IntegerTag(childTag);
                         publicationTimeCount++;
                         break;
                     case Constants.CalendarHashChain.AggregationTimeTagType:
-                        _aggregationTime = new IntegerTag(childTag);
+                        this[i] = _aggregationTime = new IntegerTag(childTag);
                         aggregationTimeCount++;
                         break;
                     case Constants.CalendarHashChain.InputHashTagType:
-                        _inputHash = new ImprintTag(childTag);
+                        this[i] = _inputHash = new ImprintTag(childTag);
                         inputHashCount++;
                         break;
                     case (uint)LinkDirection.Left:
                     case (uint)LinkDirection.Right:
                         Link chainTag = new Link(childTag);
                         _chain.Add(chainTag);
+                        this[i] = chainTag;
                         break;
                     default:
                         VerifyUnknownTag(childTag);

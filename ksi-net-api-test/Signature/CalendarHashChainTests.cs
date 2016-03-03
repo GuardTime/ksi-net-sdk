@@ -17,8 +17,11 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.IO;
+using System.Reflection;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using NUnit.Framework;
 
@@ -111,6 +114,31 @@ namespace Guardtime.KSI.Signature
             {
                 GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Multiple_Publication_Time);
             }, "Only one publication time must exist in calendar hash chain");
+        }
+
+        [Test]
+        public void ToStringTest()
+        {
+            Assembly assembly = typeof(AggregationHashChain).Assembly;
+            Type linkType = assembly.GetType("Guardtime.KSI.Signature.CalendarHashChain+Link");
+
+            CalendarHashChain tag = TestUtil.GetCompositeTag<CalendarHashChain>(Constants.CalendarHashChain.TagType,
+                new ITlvTag[]
+                {
+                    new IntegerTag(Constants.CalendarHashChain.PublicationTimeTagType, false, false, 1),
+                    new IntegerTag(Constants.CalendarHashChain.AggregationTimeTagType, false, false, 0),
+                    new ImprintTag(Constants.CalendarHashChain.InputHashTagType, false, false,
+                        new DataHash(HashAlgorithm.Sha2256,
+                            new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
+                    // add links
+                    (ITlvTag)Activator.CreateInstance(linkType, new ImprintTag((uint)LinkDirection.Left, false, false,
+                        new DataHash(HashAlgorithm.Sha2256,
+                            new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })))
+                });
+
+            CalendarHashChain tag2 = new CalendarHashChain(tag);
+
+            Assert.AreEqual(tag.ToString(), tag2.ToString());
         }
 
         private static CalendarHashChain GetCalendarHashChainFromFile(string file)

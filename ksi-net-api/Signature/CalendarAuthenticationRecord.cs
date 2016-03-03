@@ -42,16 +42,18 @@ namespace Guardtime.KSI.Signature
             int publicationDataCount = 0;
             int signatureDataCount = 0;
 
-            foreach (ITlvTag childTag in this)
+            for (int i = 0; i < Count; i++)
             {
+                ITlvTag childTag = this[i];
+
                 switch (childTag.Type)
                 {
                     case Constants.PublicationData.TagType:
-                        PublicationData = new PublicationData(childTag);
+                        this[i] = PublicationData = new PublicationData(childTag);
                         publicationDataCount++;
                         break;
                     case Constants.SignatureData.TagType:
-                        SignatureData = new SignatureData(childTag);
+                        this[i] = SignatureData = new SignatureData(childTag);
                         signatureDataCount++;
                         break;
                     default:

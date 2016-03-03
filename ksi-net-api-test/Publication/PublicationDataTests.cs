@@ -19,6 +19,8 @@
 
 using System;
 using System.IO;
+using Guardtime.KSI.Hashing;
+using Guardtime.KSI.Parser;
 using Guardtime.KSI.Signature;
 using NUnit.Framework;
 
@@ -27,8 +29,6 @@ namespace Guardtime.KSI.Publication
     [TestFixture]
     public class PublicationDataTest
     {
-
-
         [Test]
         public void PublicationDataContentTest()
         {
@@ -47,6 +47,24 @@ namespace Guardtime.KSI.Publication
                 Assert.AreEqual("Financial Times, ISSN: 0307-1766, 2015-08-19", publicationRecord.PublicationReferences[1], "Invalid second publication reference.");
                 Assert.AreEqual("https://twitter.com/Guardtime/status/634126754823700480", publicationRecord.PublicationReferences[2], "Invalid third publication reference.");
             }
+        }
+
+        [Test]
+        public void ToStringTest()
+        {
+            PublicationData tag =
+                TestUtil.GetCompositeTag<PublicationData>(Constants.PublicationData.TagType,
+                    new ITlvTag[]
+                    {
+                        new IntegerTag(Constants.PublicationData.PublicationTimeTagType, false, false, 1),
+                        new ImprintTag(Constants.PublicationData.PublicationHashTagType, false, false,
+                            new DataHash(HashAlgorithm.Sha2256,
+                                new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
+                    });
+
+            PublicationData tag2 = new PublicationData(tag);
+
+            Assert.AreEqual(tag.ToString(), tag2.ToString());
         }
     }
 }

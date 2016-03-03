@@ -47,20 +47,22 @@ namespace Guardtime.KSI.Service
             int payloadCount = 0;
             int macCount = 0;
 
-            foreach (ITlvTag childTag in this)
+            for (int i = 0; i < Count; i++)
             {
+                ITlvTag childTag = this[i];
+
                 switch (childTag.Type)
                 {
                     case Constants.AggregationRequestPayload.TagType:
-                        Payload = new AggregationRequestPayload(childTag);
+                        this[i] = Payload = new AggregationRequestPayload(childTag);
                         payloadCount++;
                         break;
                     case Constants.AggregationResponsePayload.TagType:
-                        Payload = new AggregationResponsePayload(childTag);
+                        this[i] = Payload = new AggregationResponsePayload(childTag);
                         payloadCount++;
                         break;
                     case Constants.AggregationErrorPayload.TagType:
-                        Payload = new AggregationErrorPayload(childTag);
+                        this[i] = Payload = new AggregationErrorPayload(childTag);
                         payloadCount++;
                         break;
                     case Constants.KsiPduHeader.TagType:

@@ -61,44 +61,47 @@ namespace Guardtime.KSI.Signature
             int signedAttributesSuffixCount = 0;
             int signedAttributesAlgorithmCount = 0;
 
-            foreach (ITlvTag childTag in this)
+            for (int i = 0; i < Count; i++)
             {
+                ITlvTag childTag = this[i];
+
                 switch (childTag.Type)
                 {
                     case Constants.Rfc3161Record.AggregationTimeTagType:
-                        _aggregationTime = new IntegerTag(childTag);
+                        this[i] = _aggregationTime = new IntegerTag(childTag);
                         aggregationTimeCount++;
                         break;
                     case Constants.Rfc3161Record.ChainIndexTagType:
                         IntegerTag chainTag = new IntegerTag(childTag);
                         _chainIndex.Add(chainTag);
+                        this[i] = chainTag;
                         break;
                     case Constants.Rfc3161Record.InputHashTagType:
-                        _inputHash = new ImprintTag(childTag);
+                        this[i] = _inputHash = new ImprintTag(childTag);
                         inputHashCount++;
                         break;
                     case Constants.Rfc3161Record.TstInfoPrefixTagType:
-                        _tstInfoPrefix = new RawTag(childTag);
+                        this[i] = _tstInfoPrefix = new RawTag(childTag);
                         tstInfoPrefixCount++;
                         break;
                     case Constants.Rfc3161Record.TstInfoSuffixTagType:
-                        _tstInfoSuffix = new RawTag(childTag);
+                        this[i] = _tstInfoSuffix = new RawTag(childTag);
                         tstInfoSuffixCount++;
                         break;
                     case Constants.Rfc3161Record.TstInfoAlgorithmTagType:
-                        _tstInfoAlgorithm = new IntegerTag(childTag);
+                        this[i] = _tstInfoAlgorithm = new IntegerTag(childTag);
                         tstInfoAlgorithmCount++;
                         break;
                     case Constants.Rfc3161Record.SignedAttributesPrefixTagType:
-                        _signedAttributesPrefix = new RawTag(childTag);
+                        this[i] = _signedAttributesPrefix = new RawTag(childTag);
                         signedAttributesPrefixCount++;
                         break;
                     case Constants.Rfc3161Record.SignedAttributesSuffixTagType:
-                        _signedAttributesSuffix = new RawTag(childTag);
+                        this[i] = _signedAttributesSuffix = new RawTag(childTag);
                         signedAttributesSuffixCount++;
                         break;
                     case Constants.Rfc3161Record.SignedAttributesAlgorithmTagType:
-                        _signedAttributesAlgorithm = new IntegerTag(childTag);
+                        this[i] = _signedAttributesAlgorithm = new IntegerTag(childTag);
                         signedAttributesAlgorithmCount++;
                         break;
                     default:

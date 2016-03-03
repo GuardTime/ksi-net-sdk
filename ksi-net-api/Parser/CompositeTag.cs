@@ -73,7 +73,11 @@ namespace Guardtime.KSI.Parser
         /// </summary>
         /// <param name="i">tlv element position</param>
         /// <returns>TLV element at given position</returns>
-        public ITlvTag this[int i] => _value[i];
+        public ITlvTag this[int i]
+        {
+            get { return _value[i]; }
+            protected set { _value[i] = value; }
+        }
 
         /// <summary>
         ///     Get TLV element list size

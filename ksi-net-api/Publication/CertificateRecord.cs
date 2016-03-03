@@ -41,16 +41,18 @@ namespace Guardtime.KSI.Publication
             int certificateIdCount = 0;
             int x509CertificateCount = 0;
 
-            foreach (ITlvTag childTag in this)
+            for (int i = 0; i < Count; i++)
             {
+                ITlvTag childTag = this[i];
+
                 switch (childTag.Type)
                 {
                     case Constants.CertificateRecord.CertificateIdTagType:
-                        CertificateId = new RawTag(childTag);
+                        this[i] = CertificateId = new RawTag(childTag);
                         certificateIdCount++;
                         break;
                     case Constants.CertificateRecord.X509CertificateTagType:
-                        X509Certificate = new RawTag(childTag);
+                        this[i] = X509Certificate = new RawTag(childTag);
                         x509CertificateCount++;
                         break;
                     default:

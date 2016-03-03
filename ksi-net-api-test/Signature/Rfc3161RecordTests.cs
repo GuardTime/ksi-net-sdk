@@ -215,6 +215,30 @@ namespace Guardtime.KSI.Signature
             }, "Only one tstInfo suffix must exist in RFC 3161 record");
         }
 
+        [Test]
+        public void ToStringTest()
+        {
+            Rfc3161Record tag = TestUtil.GetCompositeTag<Rfc3161Record>(Constants.Rfc3161Record.TagType,
+                new ITlvTag[]
+                {
+                    new IntegerTag(Constants.Rfc3161Record.AggregationTimeTagType, false, false, 1),
+                    new IntegerTag(Constants.Rfc3161Record.ChainIndexTagType, false, false, 1),
+                    new ImprintTag(Constants.Rfc3161Record.InputHashTagType, false, false,
+                        new DataHash(HashAlgorithm.Sha2256,
+                            new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
+                    new RawTag(Constants.Rfc3161Record.TstInfoPrefixTagType, false, false, new byte[] { 0x2 }),
+                    new RawTag(Constants.Rfc3161Record.TstInfoSuffixTagType, false, false, new byte[] { 0x3 }),
+                    new IntegerTag(Constants.Rfc3161Record.TstInfoAlgorithmTagType, false, false, 1),
+                    new RawTag(Constants.Rfc3161Record.SignedAttributesPrefixTagType, false, false, new byte[] { 0x2 }),
+                    new RawTag(Constants.Rfc3161Record.SignedAttributesSuffixTagType, false, false, new byte[] { 0x3 }),
+                    new IntegerTag(Constants.Rfc3161Record.SignedAttributesAlgorithmTagType, false, false, 1),
+                });
+
+            Rfc3161Record tag2 = new Rfc3161Record(tag);
+
+            Assert.AreEqual(tag.ToString(), tag2.ToString());
+        }
+
         private static Rfc3161Record GetRfc3161RecordFromFile(string file)
         {
             using (TlvReader reader = new TlvReader(new FileStream(Path.Combine(TestSetup.LocalPath, file), FileMode.Open)))

@@ -49,24 +49,26 @@ namespace Guardtime.KSI.Signature
             int certificateIdCount = 0;
             int certificateRepositoryUriCount = 0;
 
-            foreach (ITlvTag childTag in this)
+            for (int i = 0; i < Count; i++)
             {
+                ITlvTag childTag = this[i];
+
                 switch (childTag.Type)
                 {
                     case Constants.SignatureData.SignatureTypeTagType:
-                        _signatureType = new StringTag(childTag);
+                        this[i] = _signatureType = new StringTag(childTag);
                         signatureTypeCount++;
                         break;
                     case Constants.SignatureData.SignatureValueTagType:
-                        _signatureValue = new RawTag(childTag);
+                        this[i] = _signatureValue = new RawTag(childTag);
                         signatureValueCount++;
                         break;
                     case Constants.SignatureData.CertificateIdTagType:
-                        _certificateId = new RawTag(childTag);
+                        this[i] = _certificateId = new RawTag(childTag);
                         certificateIdCount++;
                         break;
                     case Constants.SignatureData.CertificateRepositoryUriTagType:
-                        _certificateRepositoryUri = new StringTag(childTag);
+                        this[i] = _certificateRepositoryUri = new StringTag(childTag);
                         certificateRepositoryUriCount++;
                         break;
                     default:
