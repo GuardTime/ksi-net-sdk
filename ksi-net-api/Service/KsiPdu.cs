@@ -43,15 +43,17 @@ namespace Guardtime.KSI.Service
         /// <param name="tag">TLV element</param>
         protected KsiPdu(ITlvTag tag) : base(tag)
         {
-            foreach (ITlvTag childTag in this)
+            for (int i = 0; i < Count; i++)
             {
+                ITlvTag childTag = this[i];
+
                 switch (childTag.Type)
                 {
                     case Constants.KsiPduHeader.TagType:
-                        _header = new KsiPduHeader(childTag);
+                        this[i] = _header = new KsiPduHeader(childTag);
                         break;
                     case Constants.KsiPdu.MacTagType:
-                        _mac = new ImprintTag(childTag);
+                        this[i] = _mac = new ImprintTag(childTag);
                         break;
                 }
             }

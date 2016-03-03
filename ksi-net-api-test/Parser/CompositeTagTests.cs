@@ -119,6 +119,12 @@ namespace Guardtime.KSI.Parser
             Assert.AreEqual(
                 "TLV[0x1,N,F]:" + Environment.NewLine + "  TLV[0x1]:0x0102" + Environment.NewLine + "  TLV[0x2]:0x0304" + Environment.NewLine + "  TLV[0x5]:" + Environment.NewLine +
                 "    TLV[0x1]:0x0809", tag.ToString(), "Tag string representation should be correct");
+
+            tag = new CompositeTestTag(tag);
+
+            Assert.AreEqual(
+                "TLV[0x1,N,F]:" + Environment.NewLine + "  TLV[0x1]:0x0102" + Environment.NewLine + "  TLV[0x2]:0x0304" + Environment.NewLine + "  TLV[0x5]:" + Environment.NewLine +
+                "    TLV[0x1]:0x0809", tag.ToString(), "Tag string representation should be correct");
         }
 
         [Test]
@@ -199,12 +205,14 @@ namespace Guardtime.KSI.Parser
 
             private void BuildStructure()
             {
-                foreach (ITlvTag childTag in this)
+                for (int i = 0; i < Count; i++)
                 {
+                    ITlvTag childTag = this[i];
+
                     switch (childTag.Type)
                     {
                         case 0x5:
-                            CompositeTestTagValue = new CompositeTestTag(childTag);
+                            this[i] = CompositeTestTagValue = new CompositeTestTag(childTag);
                             break;
                         case 0x2:
                         case 0x1:

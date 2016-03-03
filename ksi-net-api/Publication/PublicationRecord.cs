@@ -36,21 +36,25 @@ namespace Guardtime.KSI.Publication
         {
             int publicationDataCount = 0;
 
-            foreach (ITlvTag childTag in this)
+            for (int i = 0; i < Count; i++)
             {
+                ITlvTag childTag = this[i];
+
                 switch (childTag.Type)
                 {
                     case Constants.PublicationData.TagType:
-                        PublicationData = new PublicationData(childTag);
+                        this[i] = PublicationData = new PublicationData(childTag);
                         publicationDataCount++;
                         break;
                     case Constants.PublicationRecord.PublicationReferencesTagType:
                         StringTag refTag = new StringTag(childTag);
                         PublicationReferences.Add(refTag.Value);
+                        this[i] = refTag;
                         break;
                     case Constants.PublicationRecord.PublicationRepositoryUriTagType:
                         StringTag uriTag = new StringTag(childTag);
                         RepositoryUri.Add(uriTag.Value);
+                        this[i] = uriTag;
                         break;
                     default:
                         VerifyUnknownTag(childTag);

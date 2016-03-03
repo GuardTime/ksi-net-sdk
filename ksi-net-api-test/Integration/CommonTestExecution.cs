@@ -156,7 +156,7 @@ namespace Guardtime.KSI.Integration
                                 verificationResult.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.None).Where(
                                     rule => rule.ToLower().Contains(testData.GetExpectedRule().ToLower())))
                         {
-                            if (!(rule.Split(':')[1].ToLower().Contains(expectedResults.ToLower())))
+                            if (!rule.Split(':')[1].ToLower().Contains(expectedResults.ToLower()))
                             {
                                 throw new Exception(
                                     string.Format("Expected rule '" + testData.GetExpectedRule() + "' results to be '" + testData.GetExpectedVerificationResultCode() +

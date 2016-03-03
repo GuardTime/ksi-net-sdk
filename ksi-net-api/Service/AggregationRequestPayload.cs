@@ -50,24 +50,26 @@ namespace Guardtime.KSI.Service
             int requestLevelCount = 0;
             int configCount = 0;
 
-            foreach (ITlvTag childTag in this)
+            for (int i = 0; i < Count; i++)
             {
+                ITlvTag childTag = this[i];
+
                 switch (childTag.Type)
                 {
                     case Constants.AggregationRequestPayload.RequestIdTagType:
-                        _requestId = new IntegerTag(childTag);
+                        this[i] = _requestId = new IntegerTag(childTag);
                         requestIdCount++;
                         break;
                     case Constants.AggregationRequestPayload.RequestHashTagType:
-                        _requestHash = new ImprintTag(childTag);
+                        this[i] = _requestHash = new ImprintTag(childTag);
                         requestHashCount++;
                         break;
                     case Constants.AggregationRequestPayload.RequestLevelTagType:
-                        _requestLevel = new IntegerTag(childTag);
+                        this[i] = _requestLevel = new IntegerTag(childTag);
                         requestLevelCount++;
                         break;
                     case Constants.AggregationRequestPayload.ConfigTagType:
-                        _config = new RawTag(childTag);
+                        this[i] = _config = new RawTag(childTag);
                         configCount++;
                         break;
                     default:

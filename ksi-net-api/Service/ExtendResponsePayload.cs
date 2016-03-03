@@ -50,28 +50,30 @@ namespace Guardtime.KSI.Service
             int lastTimeCount = 0;
             int calendarHashChainCount = 0;
 
-            foreach (ITlvTag childTag in this)
+            for (int i = 0; i < Count; i++)
             {
+                ITlvTag childTag = this[i];
+
                 switch (childTag.Type)
                 {
                     case Constants.ExtendResponsePayload.RequestIdTagType:
-                        _requestId = new IntegerTag(childTag);
+                        this[i] = _requestId = new IntegerTag(childTag);
                         requestIdCount++;
                         break;
                     case Constants.KsiPduPayload.StatusTagType:
-                        _status = new IntegerTag(childTag);
+                        this[i] = _status = new IntegerTag(childTag);
                         statusCount++;
                         break;
                     case Constants.KsiPduPayload.ErrorMessageTagType:
-                        _errorMessage = new StringTag(childTag);
+                        this[i] = _errorMessage = new StringTag(childTag);
                         errorMessageCount++;
                         break;
                     case Constants.ExtendResponsePayload.LastTimeTagType:
-                        _lastTime = new IntegerTag(childTag);
+                        this[i] = _lastTime = new IntegerTag(childTag);
                         lastTimeCount++;
                         break;
                     case Constants.CalendarHashChain.TagType:
-                        CalendarHashChain = new CalendarHashChain(childTag);
+                        this[i] = CalendarHashChain = new CalendarHashChain(childTag);
                         calendarHashChainCount++;
                         break;
                     default:

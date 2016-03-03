@@ -54,32 +54,35 @@ namespace Guardtime.KSI.Signature
             int calendarAuthenticationRecordCount = 0;
             int rfc3161RecordCount = 0;
 
-            foreach (ITlvTag childTag in this)
+            for (int i = 0; i < Count; i++)
             {
+                ITlvTag childTag = this[i];
+
                 switch (childTag.Type)
                 {
                     case Constants.AggregationHashChain.TagType:
                         AggregationHashChain aggregationChainTag = new AggregationHashChain(childTag);
                         _aggregationHashChains.Add(aggregationChainTag);
+                        this[i] = aggregationChainTag;
                         break;
                     case Constants.CalendarHashChain.TagType:
-                        CalendarHashChain = new CalendarHashChain(childTag);
+                        this[i] = CalendarHashChain = new CalendarHashChain(childTag);
                         calendarChainCount++;
                         break;
                     case Constants.PublicationRecord.TagTypeInSignature:
-                        PublicationRecord = new PublicationRecordInSignature(childTag);
+                        this[i] = PublicationRecord = new PublicationRecordInSignature(childTag);
                         publicationRecordCount++;
                         break;
                     case Constants.AggregationAuthenticationRecord.TagType:
-                        AggregationAuthenticationRecord = new AggregationAuthenticationRecord(childTag);
+                        this[i] = AggregationAuthenticationRecord = new AggregationAuthenticationRecord(childTag);
                         aggregationAuthenticationRecordCount++;
                         break;
                     case Constants.CalendarAuthenticationRecord.TagType:
-                        CalendarAuthenticationRecord = new CalendarAuthenticationRecord(childTag);
+                        this[i] = CalendarAuthenticationRecord = new CalendarAuthenticationRecord(childTag);
                         calendarAuthenticationRecordCount++;
                         break;
                     case Constants.Rfc3161Record.TagType:
-                        Rfc3161Record = new Rfc3161Record(childTag);
+                        this[i] = Rfc3161Record = new Rfc3161Record(childTag);
                         rfc3161RecordCount++;
                         break;
                     default:

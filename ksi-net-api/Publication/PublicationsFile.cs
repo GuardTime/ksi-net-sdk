@@ -57,7 +57,7 @@ namespace Guardtime.KSI.Publication
                 switch (childTag.Type)
                 {
                     case Constants.PublicationsFileHeader.TagType:
-                        _publicationsHeader = new PublicationsFileHeader(childTag);
+                        this[i] = _publicationsHeader = new PublicationsFileHeader(childTag);
                         publicationsHeaderCount++;
                         if (i != 0)
                         {
@@ -65,22 +65,27 @@ namespace Guardtime.KSI.Publication
                         }
                         break;
                     case Constants.CertificateRecord.TagType:
-                        _certificateRecordList.Add(new CertificateRecord(childTag));
+                        CertificateRecord certificateRecord = new CertificateRecord(childTag);
+                        _certificateRecordList.Add(certificateRecord);
                         if (_publicationRecordList.Count != 0)
                         {
                             throw new PublicationsFileException("Certificate records should be before publication records.");
                         }
+                        this[i] = certificateRecord;
                         break;
                     case Constants.PublicationRecord.TagTypeInPublicationsFile:
-                        _publicationRecordList.Add(new PublicationRecordInPublicationFile(childTag));
+                        PublicationRecordInPublicationFile publicationRecord = new PublicationRecordInPublicationFile(childTag);
+                        _publicationRecordList.Add(publicationRecord);
+                        this[i] = publicationRecord;
                         break;
                     case Constants.PublicationsFile.CmsSignatureTagType:
-                        _cmsSignature = new RawTag(childTag);
+                        this[i] = _cmsSignature = new RawTag(childTag);
                         cmsSignatureCount++;
                         if (i != Count - 1)
                         {
                             throw new PublicationsFileException("Cms signature should be last element in publications file.");
                         }
+
                         break;
                     default:
                         VerifyUnknownTag(childTag);

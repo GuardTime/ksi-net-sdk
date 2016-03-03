@@ -100,6 +100,35 @@ namespace Guardtime.KSI.Signature
             }, "Invalid calendar authentication record type: 2054");
         }
 
+        [Test]
+        public void ToStringTest()
+        {
+            CalendarAuthenticationRecord tag = TestUtil.GetCompositeTag<CalendarAuthenticationRecord>(Constants.CalendarAuthenticationRecord.TagType,
+                new ITlvTag[]
+                {
+                    TestUtil.GetCompositeTag<PublicationData>(Constants.PublicationData.TagType,
+                        new ITlvTag[]
+                        {
+                            new IntegerTag(Constants.PublicationData.PublicationTimeTagType, false, false, 1),
+                            new ImprintTag(Constants.PublicationData.PublicationHashTagType, false, false,
+                                new DataHash(HashAlgorithm.Sha2256,
+                                    new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
+                        }),
+                    TestUtil.GetCompositeTag<SignatureData>(Constants.SignatureData.TagType,
+                        new ITlvTag[]
+                        {
+                            new StringTag(Constants.SignatureData.SignatureTypeTagType, false, false, "Test SignatureType"),
+                            new RawTag(Constants.SignatureData.SignatureValueTagType, false, false, new byte[] { 0x2 }),
+                            new RawTag(Constants.SignatureData.CertificateIdTagType, false, false, new byte[] { 0x3 }),
+                            new StringTag(Constants.SignatureData.CertificateRepositoryUriTagType, false, false, "Test CertificateRepositoryUri")
+                        })
+                });
+
+            CalendarAuthenticationRecord tag2 = new CalendarAuthenticationRecord(tag);
+
+            Assert.AreEqual(tag.ToString(), tag2.ToString());
+        }
+
         private static CalendarAuthenticationRecord GetCalendarAuthenticationRecordFromFile(string file)
         {
             using (TlvReader reader = new TlvReader(new FileStream(Path.Combine(TestSetup.LocalPath, file), FileMode.Open)))

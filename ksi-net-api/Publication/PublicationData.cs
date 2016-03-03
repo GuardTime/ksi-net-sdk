@@ -47,16 +47,18 @@ namespace Guardtime.KSI.Publication
             int publicationTimeCount = 0;
             int publicationHashCount = 0;
 
-            foreach (ITlvTag childTag in this)
+            for (int i = 0; i < Count; i++)
             {
+                ITlvTag childTag = this[i];
+
                 switch (childTag.Type)
                 {
                     case Constants.PublicationData.PublicationTimeTagType:
-                        _publicationTime = new IntegerTag(childTag);
+                        this[i] = _publicationTime = new IntegerTag(childTag);
                         publicationTimeCount++;
                         break;
                     case Constants.PublicationData.PublicationHashTagType:
-                        _publicationHash = new ImprintTag(childTag);
+                        this[i] = _publicationHash = new ImprintTag(childTag);
                         publicationHashCount++;
                         break;
                     default:

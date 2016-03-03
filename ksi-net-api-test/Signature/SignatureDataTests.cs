@@ -130,6 +130,23 @@ namespace Guardtime.KSI.Signature
             }, "Only one certificate repository uri is allowed in signature data");
         }
 
+        [Test]
+        public void ToStringTest()
+        {
+            SignatureData tag = TestUtil.GetCompositeTag<SignatureData>(Constants.SignatureData.TagType,
+                new ITlvTag[]
+                {
+                    new StringTag(Constants.SignatureData.SignatureTypeTagType, false, false, "Test SignatureType"),
+                    new RawTag(Constants.SignatureData.SignatureValueTagType, false, false, new byte[] { 0x2 }),
+                    new RawTag(Constants.SignatureData.CertificateIdTagType, false, false, new byte[] { 0x3 }),
+                    new StringTag(Constants.SignatureData.CertificateRepositoryUriTagType, false, false, "Test CertificateRepositoryUri")
+                });
+
+            SignatureData tag2 = new SignatureData(tag);
+
+            Assert.AreEqual(tag.ToString(), tag2.ToString());
+        }
+
         private static SignatureData GetSignatureDataFromFile(string file)
         {
             using (TlvReader reader = new TlvReader(new FileStream(Path.Combine(TestSetup.LocalPath, file), FileMode.Open)))

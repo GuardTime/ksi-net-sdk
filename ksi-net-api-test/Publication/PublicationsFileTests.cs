@@ -23,6 +23,7 @@ using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Test.Crypto;
 using Guardtime.KSI.Trust;
@@ -86,7 +87,7 @@ namespace Guardtime.KSI.Publication
                         CryptoTestFactory.CreateCertificateSubjectRdnSelector("EEE=publications@guardtime.com"))).Create(stream);
                 });
 
-                Assert.That(ex.Message, Is.StringContaining("is invalid.") | Is.StringContaining("Unknown object id"));
+                Assert.That(ex.Message, Does.Contain("is invalid.") | Does.Contain("Unknown object id"));
             }
         }
 
@@ -101,7 +102,7 @@ namespace Guardtime.KSI.Publication
                         CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=Xpublications@guardtime.com"))).Create(stream);
                 });
 
-                Assert.That(ex.Message, Is.StringStarting("Publications file verification failed."));
+                Assert.That(ex.Message, Does.StartWith("Publications file verification failed."));
             }
         }
 
@@ -116,7 +117,7 @@ namespace Guardtime.KSI.Publication
                         CryptoTestFactory.CreateCertificateSubjectRdnSelector("1.2.840.113549.1.9.1=Xpublications@guardtime.com"))).Create(stream);
                 });
 
-                Assert.That(ex.Message, Is.StringStarting("Publications file verification failed."));
+                Assert.That(ex.Message, Does.StartWith("Publications file verification failed."));
             }
         }
 
@@ -135,7 +136,7 @@ namespace Guardtime.KSI.Publication
                         .Create(stream);
                 });
 
-                Assert.That(ex.Message, Is.StringStarting("Rdn contains invalid Oid or Value."));
+                Assert.That(ex.Message, Does.StartWith("Rdn contains invalid Oid or Value."));
             }
         }
 
@@ -203,6 +204,110 @@ namespace Guardtime.KSI.Publication
                 Assert.AreEqual(1455494400, publicationRecord.PublicationData.PublicationTime, "Should be correct publication time for latest publication");
                 // TODO: Test more from latest publication
             }
+        }
+
+        [Test]
+        public void ToStringTest()
+        {
+            PublicationsFile tag =
+                TestUtil.GetCompositeTag<PublicationsFile>(0x0,
+                    new ITlvTag[]
+                    {
+                        TestUtil.GetCompositeTag<PublicationsFileHeader>(Constants.PublicationsFileHeader.TagType,
+                            new ITlvTag[]
+                            {
+                                new IntegerTag(Constants.PublicationsFileHeader.VersionTagType, false, false, 1),
+                                new IntegerTag(Constants.PublicationsFileHeader.CreationTimeTagType, false, false, 2),
+                                new StringTag(Constants.PublicationsFileHeader.RepositoryUriTagType, false, false, "Test repository uri"),
+                            }),
+                        TestUtil.GetCompositeTag<CertificateRecord>(Constants.CertificateRecord.TagType,
+                            new ITlvTag[]
+                            {
+                                new RawTag(Constants.CertificateRecord.CertificateIdTagType, false, false, new byte[] { 0x2 }),
+                                new RawTag(Constants.CertificateRecord.X509CertificateTagType, false, false, new byte[] { 0x3 }),
+                            }),
+                        TestUtil.GetCompositeTag<CertificateRecord>(Constants.CertificateRecord.TagType,
+                            new ITlvTag[]
+                            {
+                                new RawTag(Constants.CertificateRecord.CertificateIdTagType, false, false, new byte[] { 0x4 }),
+                                new RawTag(Constants.CertificateRecord.X509CertificateTagType, false, false, new byte[] { 0x5 }),
+                            }),
+                        TestUtil.GetCompositeTag<PublicationRecordInPublicationFile>(Constants.PublicationRecord.TagTypeInPublicationsFile,
+                            new ITlvTag[]
+                            {
+                                TestUtil.GetCompositeTag<PublicationData>(Constants.PublicationData.TagType,
+                                    new ITlvTag[]
+                                    {
+                                        new IntegerTag(Constants.PublicationData.PublicationTimeTagType, false, false, 1),
+                                        new ImprintTag(Constants.PublicationData.PublicationHashTagType, false, false,
+                                            new DataHash(HashAlgorithm.Sha2256,
+                                                new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
+                                    }),
+                                new StringTag(Constants.PublicationRecord.PublicationReferencesTagType, false, false, "Test publication reference 1"),
+                                new StringTag(Constants.PublicationRecord.PublicationReferencesTagType, false, false, "Test publication reference 2"),
+                                new StringTag(Constants.PublicationRecord.PublicationRepositoryUriTagType, false, false, "Test publication repository uri 1"),
+                                new StringTag(Constants.PublicationRecord.PublicationRepositoryUriTagType, false, false, "Test publication repository uri 2"),
+                            }),
+                        TestUtil.GetCompositeTag<PublicationRecordInPublicationFile>(Constants.PublicationRecord.TagTypeInPublicationsFile,
+                            new ITlvTag[]
+                            {
+                                TestUtil.GetCompositeTag<PublicationData>(Constants.PublicationData.TagType,
+                                    new ITlvTag[]
+                                    {
+                                        new IntegerTag(Constants.PublicationData.PublicationTimeTagType, false, false, 1),
+                                        new ImprintTag(Constants.PublicationData.PublicationHashTagType, false, false,
+                                            new DataHash(HashAlgorithm.Sha2256,
+                                                new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
+                                    }),
+                                new StringTag(Constants.PublicationRecord.PublicationReferencesTagType, false, false, "Test publication reference 3"),
+                                new StringTag(Constants.PublicationRecord.PublicationReferencesTagType, false, false, "Test publication reference 4"),
+                                new StringTag(Constants.PublicationRecord.PublicationRepositoryUriTagType, false, false, "Test publication repository uri 5"),
+                                new StringTag(Constants.PublicationRecord.PublicationRepositoryUriTagType, false, false, "Test publication repository uri 6"),
+                            }),
+                        new RawTag(Constants.PublicationsFile.CmsSignatureTagType, false, false, new byte[] { 0x3 }),
+                    });
+
+            PublicationsFile tag2 = new PublicationsFile(tag);
+
+            Assert.AreEqual(tag.ToString(), tag2.ToString(), "PublicationsFiles' strings should match");
+
+            for (int i = 0; i < tag.Count; i++)
+            {
+                Assert.AreEqual(tag[i].ToString(), tag2[i].ToString(), string.Format("Tags do not match. Index: {0}", i));
+            }
+
+            Assert.AreEqual(@"TLV[0x701]:
+  TLV[0x1]:i1
+  TLV[0x2]:i2
+  TLV[0x3]:""Test repository uri""", tag[0].ToString(), "Invalid string for tag. Index: 0");
+
+            Assert.AreEqual(@"TLV[0x702]:
+  TLV[0x1]:0x02
+  TLV[0x2]:0x03", tag[1].ToString(), "Invalid string for tag. Index: 1");
+
+            Assert.AreEqual(@"TLV[0x702]:
+  TLV[0x1]:0x04
+  TLV[0x2]:0x05", tag[2].ToString(), "Invalid string for tag. Index: 2");
+
+            Assert.AreEqual(@"TLV[0x703]:
+  TLV[0x10]:
+    TLV[0x2]:i1
+    TLV[0x4]:0x010102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F20
+  TLV[0x9]:""Test publication reference 1""
+  TLV[0x9]:""Test publication reference 2""
+  TLV[0xA]:""Test publication repository uri 1""
+  TLV[0xA]:""Test publication repository uri 2""", tag[3].ToString(), "Invalid string for tag. Index: 3");
+
+            Assert.AreEqual(@"TLV[0x703]:
+  TLV[0x10]:
+    TLV[0x2]:i1
+    TLV[0x4]:0x010102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F20
+  TLV[0x9]:""Test publication reference 3""
+  TLV[0x9]:""Test publication reference 4""
+  TLV[0xA]:""Test publication repository uri 5""
+  TLV[0xA]:""Test publication repository uri 6""", tag[4].ToString(), "Invalid string for tag. Index: 4");
+
+            Assert.AreEqual(@"TLV[0x704]:0x03", tag[5].ToString(), "Invalid string for tag. Index: 5");
         }
     }
 }

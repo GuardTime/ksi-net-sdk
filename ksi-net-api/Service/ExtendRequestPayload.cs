@@ -47,20 +47,22 @@ namespace Guardtime.KSI.Service
             int aggregationTimeCount = 0;
             int publicationTimeCount = 0;
 
-            foreach (ITlvTag childTag in this)
+            for (int i = 0; i < Count; i++)
             {
+                ITlvTag childTag = this[i];
+
                 switch (childTag.Type)
                 {
                     case Constants.ExtendRequestPayload.RequestIdTagType:
-                        _requestId = new IntegerTag(childTag);
+                        this[i] = _requestId = new IntegerTag(childTag);
                         requestIdCount++;
                         break;
                     case Constants.ExtendRequestPayload.AggregationTimeTagType:
-                        _aggregationTime = new IntegerTag(childTag);
+                        this[i] = _aggregationTime = new IntegerTag(childTag);
                         aggregationTimeCount++;
                         break;
                     case Constants.ExtendRequestPayload.PublicationTimeTagType:
-                        _publicationTime = new IntegerTag(childTag);
+                        this[i] = _publicationTime = new IntegerTag(childTag);
                         publicationTimeCount++;
                         break;
                     default:

@@ -46,20 +46,22 @@ namespace Guardtime.KSI.Service
             int instanceIdCount = 0;
             int messageIdCount = 0;
 
-            foreach (ITlvTag childTag in this)
+            for (int i = 0; i < Count; i++)
             {
+                ITlvTag childTag = this[i];
+
                 switch (childTag.Type)
                 {
                     case Constants.KsiPduHeader.LoginIdTagType:
-                        _loginId = new StringTag(childTag);
+                        this[i] = _loginId = new StringTag(childTag);
                         loginIdCount++;
                         break;
                     case Constants.KsiPduHeader.InstanceIdTagType:
-                        _instanceId = new IntegerTag(childTag);
+                        this[i] = _instanceId = new IntegerTag(childTag);
                         instanceIdCount++;
                         break;
                     case Constants.KsiPduHeader.MessageIdTagType:
-                        _messageId = new IntegerTag(childTag);
+                        this[i] = _messageId = new IntegerTag(childTag);
                         messageIdCount++;
                         break;
                     default:

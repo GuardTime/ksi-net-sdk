@@ -47,21 +47,23 @@ namespace Guardtime.KSI.Publication
             int creationTimeCount = 0;
             int repositoryUriCount = 0;
 
-            foreach (ITlvTag childTag in this)
+            for (int i = 0; i < Count; i++)
             {
+                ITlvTag childTag = this[i];
+
                 switch (childTag.Type)
                 {
                     case Constants.PublicationsFileHeader.VersionTagType:
-                        _version = new IntegerTag(childTag);
+                        this[i] = _version = new IntegerTag(childTag);
                         versionCount++;
                         break;
                     case Constants.PublicationsFileHeader.CreationTimeTagType:
-                        _creationTime = new IntegerTag(childTag.Type, childTag.NonCritical, childTag.Forward,
-                            Util.DecodeUnsignedLong(childTag.EncodeValue(), 0, childTag.EncodeValue().Length));
+                        this[i] = _creationTime =
+                            new IntegerTag(childTag.Type, childTag.NonCritical, childTag.Forward, Util.DecodeUnsignedLong(childTag.EncodeValue(), 0, childTag.EncodeValue().Length));
                         creationTimeCount++;
                         break;
                     case Constants.PublicationsFileHeader.RepositoryUriTagType:
-                        _repositoryUri = new StringTag(childTag);
+                        this[i] = _repositoryUri = new StringTag(childTag);
                         repositoryUriCount++;
                         break;
                     default:
