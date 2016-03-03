@@ -1,4 +1,23 @@
-﻿using System;
+﻿/*
+ * Copyright 2013-2016 Guardtime, Inc.
+ *
+ * This file is part of the Guardtime client SDK.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES, CONDITIONS, OR OTHER LICENSES OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ * "Guardtime" and "KSI" are trademarks or registered trademarks of
+ * Guardtime, Inc., and no license to trademarks is granted; Guardtime
+ * reserves and retains all trademark rights.
+ */
+
+using System;
 using System.Text;
 using Guardtime.KSI.Exceptions;
 
@@ -244,7 +263,7 @@ namespace Guardtime.KSI.Utils
         /// <returns>The least common multiple</returns>
         public static int GetLeastCommonMultiple(int a, int b)
         {
-            return (a * b) / GetGreatestCommonDivisor(a, b);
+            return a * b / GetGreatestCommonDivisor(a, b);
         }
 
         /// <summary>
@@ -271,6 +290,13 @@ namespace Guardtime.KSI.Utils
             return builder.ToString();
         }
 
+        /// <summary>
+        /// Checks is exactly one value is equal to given/expected value.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="expectedValue">value to compare against</param>
+        /// <param name="values"></param>
+        /// <returns></returns>
         public static bool IsOneValueEqualTo<T>(T expectedValue, params T[] values)
         {
             int count = 0;
@@ -297,6 +323,44 @@ namespace Guardtime.KSI.Utils
             }
 
             return count == 1;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="headerBytes"></param>
+        /// <returns></returns>
+        public static ushort GetTlvLength(byte[] headerBytes)
+        {
+            if (headerBytes == null)
+            {
+                throw new KsiException("Input array cannot be null.");
+            }
+
+            if (headerBytes.Length == 0)
+            {
+                throw new KsiException("Input array cannot be empty.");
+            }
+
+            bool tlv16 = (headerBytes[0] & Constants.Tlv.Tlv16Flag) != 0;
+
+            if (tlv16)
+            {
+                if (headerBytes.Length < 4)
+                {
+                    throw new KsiException("It is 16-bit TLV and input array must contain at least 4 bytes. headerBytes.Length: " + headerBytes.Length);
+                }
+
+                int variableLength = (headerBytes[2] << Constants.BitsInByte) | headerBytes[3];
+                return (ushort)(variableLength + 4);
+            }
+
+            if (headerBytes.Length < 2)
+            {
+                throw new KsiException("It is 8-bit TLV and input array must contain at least 2 bytes. headerBytes.Length: " + headerBytes.Length);
+            }
+
+            return (ushort)(headerBytes[1] + 2);
         }
     }
 }

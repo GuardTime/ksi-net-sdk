@@ -1,4 +1,23 @@
-﻿using Guardtime.KSI.Exceptions;
+﻿/*
+ * Copyright 2013-2016 Guardtime, Inc.
+ *
+ * This file is part of the Guardtime client SDK.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES, CONDITIONS, OR OTHER LICENSES OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ * "Guardtime" and "KSI" are trademarks or registered trademarks of
+ * Guardtime, Inc., and no license to trademarks is granted; Guardtime
+ * reserves and retains all trademark rights.
+ */
+
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Utils;
 
@@ -28,21 +47,23 @@ namespace Guardtime.KSI.Publication
             int creationTimeCount = 0;
             int repositoryUriCount = 0;
 
-            foreach (ITlvTag childTag in this)
+            for (int i = 0; i < Count; i++)
             {
+                ITlvTag childTag = this[i];
+
                 switch (childTag.Type)
                 {
                     case Constants.PublicationsFileHeader.VersionTagType:
-                        _version = new IntegerTag(childTag);
+                        this[i] = _version = new IntegerTag(childTag);
                         versionCount++;
                         break;
                     case Constants.PublicationsFileHeader.CreationTimeTagType:
-                        _creationTime = new IntegerTag(childTag.Type, childTag.NonCritical, childTag.Forward,
-                            Util.DecodeUnsignedLong(childTag.EncodeValue(), 0, childTag.EncodeValue().Length));
+                        this[i] = _creationTime =
+                            new IntegerTag(childTag.Type, childTag.NonCritical, childTag.Forward, Util.DecodeUnsignedLong(childTag.EncodeValue(), 0, childTag.EncodeValue().Length));
                         creationTimeCount++;
                         break;
                     case Constants.PublicationsFileHeader.RepositoryUriTagType:
-                        _repositoryUri = new StringTag(childTag);
+                        this[i] = _repositoryUri = new StringTag(childTag);
                         repositoryUriCount++;
                         break;
                     default:
@@ -53,12 +74,12 @@ namespace Guardtime.KSI.Publication
 
             if (versionCount != 1)
             {
-                throw new TlvException("Only one version must exist in publications file header.");
+                throw new TlvException("Exactly one version must exist in publications file header.");
             }
 
             if (creationTimeCount != 1)
             {
-                throw new TlvException("Only one creation time must exist in publications file header.");
+                throw new TlvException("Exactly one creation time must exist in publications file header.");
             }
 
             if (repositoryUriCount > 1)

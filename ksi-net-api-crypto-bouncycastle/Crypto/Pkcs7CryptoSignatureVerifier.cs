@@ -1,4 +1,23 @@
-﻿using System;
+﻿/*
+ * Copyright 2013-2016 Guardtime, Inc.
+ *
+ * This file is part of the Guardtime client SDK.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES, CONDITIONS, OR OTHER LICENSES OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ * "Guardtime" and "KSI" are trademarks or registered trademarks of
+ * Guardtime, Inc., and no license to trademarks is granted; Guardtime
+ * reserves and retains all trademark rights.
+ */
+
+using System;
 using System.Collections;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Exceptions;
@@ -9,7 +28,7 @@ using Org.BouncyCastle.Utilities.Collections;
 using Org.BouncyCastle.X509.Store;
 using X509Certificate = Org.BouncyCastle.X509.X509Certificate;
 
-namespace Guardtime.KSI.Crypto
+namespace Guardtime.KSI.Crypto.BouncyCastle.Crypto
 {
     /// <summary>
     ///     PKCS#7 signature verifier.
@@ -19,11 +38,28 @@ namespace Guardtime.KSI.Crypto
         private readonly ISet _trustAnchors = new HashSet();
         private readonly ICertificateSubjectRdnSelector _certificateRdnSelector;
 
-        public Pkcs7CryptoSignatureVerifier(X509Certificate2Collection trustAnchors, ICertificateSubjectRdnSelector certificateRdnSelector)
+        /// <summary>
+        /// Create PKCS#7 signature verifier instance.
+        /// </summary>
+        /// <param name="trustStore">Trust store</param>
+        /// <param name="certificateRdnSelector">Certificate subject rdn selector</param>
+        public Pkcs7CryptoSignatureVerifier(X509Store trustStore, ICertificateSubjectRdnSelector certificateRdnSelector)
         {
-            if (trustAnchors == null)
+            if (!(certificateRdnSelector is CertificateSubjectRdnSelector))
             {
-                throw new ArgumentNullException(nameof(trustAnchors));
+                throw new ArgumentException("Expected type: " + typeof(CertificateSubjectRdnSelector), nameof(certificateRdnSelector));
+            }
+
+            if (trustStore != null)
+            {
+                trustStore.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
+                X509Certificate2Collection x509CertificateCollection = trustStore.Certificates;
+                trustStore.Close();
+
+                foreach (X509Certificate2 certificate in x509CertificateCollection)
+                {
+                    _trustAnchors.Add(new TrustAnchor(DotNetUtilities.FromX509Certificate(certificate), null));
+                }
             }
 
             if (certificateRdnSelector == null)
@@ -32,11 +68,6 @@ namespace Guardtime.KSI.Crypto
             }
 
             _certificateRdnSelector = certificateRdnSelector;
-
-            foreach (X509Certificate2 certificate in trustAnchors)
-            {
-                _trustAnchors.Add(new TrustAnchor(DotNetUtilities.FromX509Certificate(certificate), null));
-            }
         }
 
         /// <summary>
@@ -95,7 +126,7 @@ namespace Guardtime.KSI.Crypto
                 }
 
                 // Verify certificate with selector
-                if (!_certificateRdnSelector.Match(certificate))
+                if (!_certificateRdnSelector.IsMatch(certificate))
                 {
                     throw new PkiVerificationFailedException("Certificate did not match with certificate subject rdn selector.");
                 }
@@ -112,6 +143,11 @@ namespace Guardtime.KSI.Crypto
             }
         }
 
+        /// <summary>
+        /// Validate certificate path.
+        /// </summary>
+        /// <param name="certificate">certificate</param>
+        /// <param name="x509Store">x509 store</param>
         protected virtual void ValidateCertPath(X509Certificate certificate, IX509Store x509Store)
         {
             // Cert path checker
@@ -123,7 +159,7 @@ namespace Guardtime.KSI.Crypto
             // Build cert path
             PkixBuilderParameters pkixBuilderParameters = new PkixBuilderParameters(_trustAnchors, x509CertStoreSelector);
             pkixBuilderParameters.AddStore(x509Store);
-            //pkixBuilderParameters.AddCertPathChecker(certPathChecker);
+            pkixBuilderParameters.AddCertPathChecker(certPathChecker);
             pkixBuilderParameters.IsRevocationEnabled = false;
 
             PkixCertPathBuilderResult pkixCertPathBuilderResult = new PkixCertPathBuilder().Build(pkixBuilderParameters);
@@ -131,7 +167,7 @@ namespace Guardtime.KSI.Crypto
 
             // Create pkix parameteres
             PkixParameters pkixParameters = new PkixParameters(_trustAnchors);
-            //pkixParameters.AddCertPathChecker(certPathChecker);
+            pkixParameters.AddCertPathChecker(certPathChecker);
             pkixParameters.IsRevocationEnabled = false;
 
             try
@@ -145,6 +181,9 @@ namespace Guardtime.KSI.Crypto
             }
         }
 
+        /// <summary>
+        /// Certificate path checker.
+        /// </summary>
         private class CertPathChecker : PkixCertPathChecker
         {
             public override void Init(bool forward)
@@ -169,7 +208,7 @@ namespace Guardtime.KSI.Crypto
                 }
 
                 // TODO: is this correct behavior?
-                unresolvedCritExts.Remove(Org.BouncyCastle.Asn1.X509.X509Extensions.ExtendedKeyUsage);
+                unresolvedCritExts.Remove(Org.BouncyCastle.Asn1.X509.X509Extensions.ExtendedKeyUsage.Id);
             }
         }
     }

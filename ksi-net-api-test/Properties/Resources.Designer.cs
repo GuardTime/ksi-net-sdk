@@ -809,6 +809,15 @@ namespace Guardtime.KSI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-ok-extended.tlv.
+        /// </summary>
+        internal static string KsiSignatureDo_Ok_Extended {
+            get {
+                return ResourceManager.GetString("KsiSignatureDo_Ok_Extended", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-ok-missing-calendar-hash-chain.tlv.
         /// </summary>
         internal static string KsiSignatureDo_Ok_Missing_Calendar_Hash_Chain {
@@ -832,6 +841,15 @@ namespace Guardtime.KSI.Properties {
         internal static string KsiSignatureDo_Ok_New {
             get {
                 return ResourceManager.GetString("KsiSignatureDo_Ok_New", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-ok-with-mixed-aggregation-chains.tlv.
+        /// </summary>
+        internal static string KsiSignatureDo_Ok_With_Mixed_Aggregation_Chains {
+            get {
+                return ResourceManager.GetString("KsiSignatureDo_Ok_With_Mixed_Aggregation_Chains", resourceCulture);
             }
         }
         

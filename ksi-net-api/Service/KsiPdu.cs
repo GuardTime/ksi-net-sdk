@@ -1,4 +1,23 @@
-﻿using System.IO;
+﻿/*
+ * Copyright 2013-2016 Guardtime, Inc.
+ *
+ * This file is part of the Guardtime client SDK.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES, CONDITIONS, OR OTHER LICENSES OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ * "Guardtime" and "KSI" are trademarks or registered trademarks of
+ * Guardtime, Inc., and no license to trademarks is granted; Guardtime
+ * reserves and retains all trademark rights.
+ */
+
+using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
@@ -24,15 +43,17 @@ namespace Guardtime.KSI.Service
         /// <param name="tag">TLV element</param>
         protected KsiPdu(ITlvTag tag) : base(tag)
         {
-            foreach (ITlvTag childTag in this)
+            for (int i = 0; i < Count; i++)
             {
+                ITlvTag childTag = this[i];
+
                 switch (childTag.Type)
                 {
                     case Constants.KsiPduHeader.TagType:
-                        _header = new KsiPduHeader(childTag);
+                        this[i] = _header = new KsiPduHeader(childTag);
                         break;
                     case Constants.KsiPdu.MacTagType:
-                        _mac = new ImprintTag(childTag);
+                        this[i] = _mac = new ImprintTag(childTag);
                         break;
                 }
             }
@@ -67,29 +88,31 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Calculate MAC and attach it to PDU.
         /// </summary>
+        /// <param name="hmacAlgorithm">HMAC algorithm</param>
         /// <param name="key">hmac key</param>
         /// <param name="header">KSI header</param>
         /// <param name="payload">KSI payload</param>
-        public static ImprintTag GetHashMacTag(byte[] key, KsiPduHeader header, KsiPduPayload payload)
+        public static ImprintTag GetHashMacTag(HashAlgorithm hmacAlgorithm, byte[] key, KsiPduHeader header, KsiPduPayload payload)
         {
             using (TlvWriter writer = new TlvWriter(new MemoryStream()))
             {
                 writer.WriteTag(header);
                 writer.WriteTag(payload);
-                return new ImprintTag(Constants.KsiPdu.MacTagType, false, false, CalculateMac(key, ((MemoryStream)writer.BaseStream).ToArray()));
+                return new ImprintTag(Constants.KsiPdu.MacTagType, false, false, CalculateMac(hmacAlgorithm, key, ((MemoryStream)writer.BaseStream).ToArray()));
             }
         }
 
         /// <summary>
         ///     Calculate HMAC for data with given key.
         /// </summary>
+        /// <param name="hmacAlgorithm">HMAC algorithm</param>
         /// <param name="key">hmac key</param>
         /// <param name="data">hmac calculation data</param>
         /// <returns>hmac data hash</returns>
-        private static DataHash CalculateMac(byte[] key, byte[] data)
+        private static DataHash CalculateMac(HashAlgorithm hmacAlgorithm, byte[] key, byte[] data)
         {
             IHmacHasher hmac = KsiProvider.GetHmacHasher();
-            return hmac.GetHash(key, data);
+            return hmac.GetHash(hmacAlgorithm, key, data);
         }
 
         /// <summary>
@@ -109,7 +132,7 @@ namespace Guardtime.KSI.Service
                 writer.WriteTag(_header);
                 writer.WriteTag(Payload);
 
-                DataHash hash = CalculateMac(key, ((MemoryStream)writer.BaseStream).ToArray());
+                DataHash hash = CalculateMac(_mac.Value.Algorithm, key, ((MemoryStream)writer.BaseStream).ToArray());
                 return hash.Equals(_mac.Value);
             }
         }

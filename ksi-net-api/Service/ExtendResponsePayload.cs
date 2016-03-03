@@ -1,4 +1,23 @@
-﻿using Guardtime.KSI.Exceptions;
+﻿/*
+ * Copyright 2013-2016 Guardtime, Inc.
+ *
+ * This file is part of the Guardtime client SDK.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES, CONDITIONS, OR OTHER LICENSES OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ * "Guardtime" and "KSI" are trademarks or registered trademarks of
+ * Guardtime, Inc., and no license to trademarks is granted; Guardtime
+ * reserves and retains all trademark rights.
+ */
+
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Signature;
 
@@ -31,28 +50,30 @@ namespace Guardtime.KSI.Service
             int lastTimeCount = 0;
             int calendarHashChainCount = 0;
 
-            foreach (ITlvTag childTag in this)
+            for (int i = 0; i < Count; i++)
             {
+                ITlvTag childTag = this[i];
+
                 switch (childTag.Type)
                 {
                     case Constants.ExtendResponsePayload.RequestIdTagType:
-                        _requestId = new IntegerTag(childTag);
+                        this[i] = _requestId = new IntegerTag(childTag);
                         requestIdCount++;
                         break;
                     case Constants.KsiPduPayload.StatusTagType:
-                        _status = new IntegerTag(childTag);
+                        this[i] = _status = new IntegerTag(childTag);
                         statusCount++;
                         break;
                     case Constants.KsiPduPayload.ErrorMessageTagType:
-                        _errorMessage = new StringTag(childTag);
+                        this[i] = _errorMessage = new StringTag(childTag);
                         errorMessageCount++;
                         break;
                     case Constants.ExtendResponsePayload.LastTimeTagType:
-                        _lastTime = new IntegerTag(childTag);
+                        this[i] = _lastTime = new IntegerTag(childTag);
                         lastTimeCount++;
                         break;
                     case Constants.CalendarHashChain.TagType:
-                        CalendarHashChain = new CalendarHashChain(childTag);
+                        this[i] = CalendarHashChain = new CalendarHashChain(childTag);
                         calendarHashChainCount++;
                         break;
                     default:
@@ -63,12 +84,12 @@ namespace Guardtime.KSI.Service
 
             if (requestIdCount != 1)
             {
-                throw new TlvException("Only one request id must exist in extend response payload.");
+                throw new TlvException("Exactly one request id must exist in extend response payload.");
             }
 
             if (statusCount != 1)
             {
-                throw new TlvException("Only one status code must exist in extend response payload.");
+                throw new TlvException("Exactly one status code must exist in extend response payload.");
             }
 
             if (errorMessageCount > 1)
@@ -83,14 +104,12 @@ namespace Guardtime.KSI.Service
 
             if (_status.Value == 0 && calendarHashChainCount != 1)
             {
-                throw new TlvException(
-                    "Only one calendar hash chain must exist in extend response payload.");
+                throw new TlvException("Exactly one calendar hash chain must exist in extend response payload.");
             }
 
             if (_status.Value != 0 && calendarHashChainCount != 0)
             {
-                throw new TlvException(
-                    "Calendar hash chain should be missing when error occurs in extend response payload.");
+                throw new TlvException("Calendar hash chain should be missing when error occurs in extend response payload.");
             }
         }
 

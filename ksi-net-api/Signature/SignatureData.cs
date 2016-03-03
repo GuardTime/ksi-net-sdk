@@ -1,4 +1,23 @@
-﻿using Guardtime.KSI.Exceptions;
+﻿/*
+ * Copyright 2013-2016 Guardtime, Inc.
+ *
+ * This file is part of the Guardtime client SDK.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES, CONDITIONS, OR OTHER LICENSES OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ * "Guardtime" and "KSI" are trademarks or registered trademarks of
+ * Guardtime, Inc., and no license to trademarks is granted; Guardtime
+ * reserves and retains all trademark rights.
+ */
+
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Signature
@@ -30,24 +49,26 @@ namespace Guardtime.KSI.Signature
             int certificateIdCount = 0;
             int certificateRepositoryUriCount = 0;
 
-            foreach (ITlvTag childTag in this)
+            for (int i = 0; i < Count; i++)
             {
+                ITlvTag childTag = this[i];
+
                 switch (childTag.Type)
                 {
                     case Constants.SignatureData.SignatureTypeTagType:
-                        _signatureType = new StringTag(childTag);
+                        this[i] = _signatureType = new StringTag(childTag);
                         signatureTypeCount++;
                         break;
                     case Constants.SignatureData.SignatureValueTagType:
-                        _signatureValue = new RawTag(childTag);
+                        this[i] = _signatureValue = new RawTag(childTag);
                         signatureValueCount++;
                         break;
                     case Constants.SignatureData.CertificateIdTagType:
-                        _certificateId = new RawTag(childTag);
+                        this[i] = _certificateId = new RawTag(childTag);
                         certificateIdCount++;
                         break;
                     case Constants.SignatureData.CertificateRepositoryUriTagType:
-                        _certificateRepositoryUri = new StringTag(childTag);
+                        this[i] = _certificateRepositoryUri = new StringTag(childTag);
                         certificateRepositoryUriCount++;
                         break;
                     default:
@@ -58,23 +79,22 @@ namespace Guardtime.KSI.Signature
 
             if (signatureTypeCount != 1)
             {
-                throw new TlvException("Only one signature type must exist in signature data.");
+                throw new TlvException("Exactly one signature type must exist in signature data.");
             }
 
             if (signatureValueCount != 1)
             {
-                throw new TlvException("Only one signature value must exist in signature data.");
+                throw new TlvException("Exactly one signature value must exist in signature data.");
             }
 
             if (certificateIdCount != 1)
             {
-                throw new TlvException("Only one certificate id must exist in signature data.");
+                throw new TlvException("Exactly one certificate id must exist in signature data.");
             }
 
             if (certificateRepositoryUriCount > 1)
             {
-                throw new TlvException(
-                    "Only one certificate repository uri is allowed in signature data.");
+                throw new TlvException("Only one certificate repository uri is allowed in signature data.");
             }
         }
 

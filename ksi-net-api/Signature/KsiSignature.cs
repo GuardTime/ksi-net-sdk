@@ -1,4 +1,23 @@
-﻿using System.Collections.Generic;
+﻿/*
+ * Copyright 2013-2016 Guardtime, Inc.
+ *
+ * This file is part of the Guardtime client SDK.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES, CONDITIONS, OR OTHER LICENSES OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ * "Guardtime" and "KSI" are trademarks or registered trademarks of
+ * Guardtime, Inc., and no license to trademarks is granted; Guardtime
+ * reserves and retains all trademark rights.
+ */
+
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using Guardtime.KSI.Exceptions;
@@ -16,6 +35,7 @@ namespace Guardtime.KSI.Signature
     {
         private readonly List<AggregationHashChain> _aggregationHashChains = new List<AggregationHashChain>();
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private string _identity;
 
         /// <summary>
         ///     Create new KSI signature TLV element from TLV element.
@@ -34,32 +54,35 @@ namespace Guardtime.KSI.Signature
             int calendarAuthenticationRecordCount = 0;
             int rfc3161RecordCount = 0;
 
-            foreach (ITlvTag childTag in this)
+            for (int i = 0; i < Count; i++)
             {
+                ITlvTag childTag = this[i];
+
                 switch (childTag.Type)
                 {
                     case Constants.AggregationHashChain.TagType:
                         AggregationHashChain aggregationChainTag = new AggregationHashChain(childTag);
                         _aggregationHashChains.Add(aggregationChainTag);
+                        this[i] = aggregationChainTag;
                         break;
                     case Constants.CalendarHashChain.TagType:
-                        CalendarHashChain = new CalendarHashChain(childTag);
+                        this[i] = CalendarHashChain = new CalendarHashChain(childTag);
                         calendarChainCount++;
                         break;
-                    case Constants.PublicationRecord.TagTypeSignature:
-                        PublicationRecord = new PublicationRecord(childTag);
+                    case Constants.PublicationRecord.TagTypeInSignature:
+                        this[i] = PublicationRecord = new PublicationRecordInSignature(childTag);
                         publicationRecordCount++;
                         break;
                     case Constants.AggregationAuthenticationRecord.TagType:
-                        AggregationAuthenticationRecord = new AggregationAuthenticationRecord(childTag);
+                        this[i] = AggregationAuthenticationRecord = new AggregationAuthenticationRecord(childTag);
                         aggregationAuthenticationRecordCount++;
                         break;
                     case Constants.CalendarAuthenticationRecord.TagType:
-                        CalendarAuthenticationRecord = new CalendarAuthenticationRecord(childTag);
+                        this[i] = CalendarAuthenticationRecord = new CalendarAuthenticationRecord(childTag);
                         calendarAuthenticationRecordCount++;
                         break;
                     case Constants.Rfc3161Record.TagType:
-                        Rfc3161Record = new Rfc3161Record(childTag);
+                        this[i] = Rfc3161Record = new Rfc3161Record(childTag);
                         rfc3161RecordCount++;
                         break;
                     default:
@@ -131,7 +154,19 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         ///     Get publication record.
         /// </summary>
-        public PublicationRecord PublicationRecord { get; }
+        public PublicationRecordInSignature PublicationRecord { get; }
+
+        /// <summary>
+        /// Get the identity of the signature.
+        /// </summary>
+        /// <returns></returns>
+        public string Identity => _identity ?? (_identity = GetIdentity());
+
+        /// <summary>
+        /// Returns true if signature contains signature publication record element.
+        /// </summary>
+        /// <returns></returns>
+        public bool IsExtended => PublicationRecord != null;
 
         /// <summary>
         ///     Get aggregation hash chains list.
@@ -171,7 +206,7 @@ namespace Guardtime.KSI.Signature
         /// <returns>extended KSI signature</returns>
         public IKsiSignature Extend(CalendarHashChain calendarHashChain)
         {
-            return Extend(calendarHashChain, null);
+            return Extend(calendarHashChain, (PublicationRecordInSignature)null);
         }
 
         /// <summary>
@@ -180,8 +215,21 @@ namespace Guardtime.KSI.Signature
         /// <param name="calendarHashChain">extended calendar hash chain</param>
         /// <param name="publicationRecord">extended publication record</param>
         /// <returns>extended KSI signature</returns>
-        public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecord publicationRecord)
+        public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInPublicationFile publicationRecord)
         {
+            return Extend(calendarHashChain, publicationRecord?.ConvertToPublicationRecordInSignature());
+        }
+
+        /// <summary>
+        ///     Extend signature to publication.
+        /// </summary>
+        /// <param name="calendarHashChain">extended calendar hash chain</param>
+        /// <param name="publicationRecord">extended publication record</param>
+        /// <returns>extended KSI signature</returns>
+        public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInSignature publicationRecord)
+        {
+            Logger.Debug("Extending KSI signature.");
+
             if (calendarHashChain == null)
             {
                 throw new KsiException("Invalid calendar hash chain: null.");
@@ -196,11 +244,8 @@ namespace Guardtime.KSI.Signature
                         case Constants.CalendarHashChain.TagType:
                             writer.WriteTag(calendarHashChain);
                             break;
-                        case Constants.PublicationRecord.TagTypeSignature:
-                            if (publicationRecord != null)
-                            {
-                                writer.WriteTag(publicationRecord);
-                            }
+                        case Constants.CalendarAuthenticationRecord.TagType:
+                        case Constants.PublicationRecord.TagTypeInSignature:
                             break;
                         default:
                             writer.WriteTag(childTag);
@@ -208,9 +253,13 @@ namespace Guardtime.KSI.Signature
                     }
                 }
 
+                if (publicationRecord != null)
+                {
+                    writer.WriteTag(publicationRecord);
+                }
+
                 try
                 {
-                    Logger.Debug("Extending KSI signature.");
                     KsiSignature signature = new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false, ((MemoryStream)writer.BaseStream).ToArray()));
                     Logger.Debug("Extending KSI signature successful.");
                     return signature;
@@ -243,6 +292,26 @@ namespace Guardtime.KSI.Signature
             {
                 writer.WriteTag(this);
             }
+        }
+
+        private string GetIdentity()
+        {
+            string identity = "";
+
+            foreach (AggregationHashChain chain in _aggregationHashChains)
+            {
+                string id = chain.GetChainIdentity();
+                if (id.Length <= 0)
+                {
+                    continue;
+                }
+                if (identity.Length > 0)
+                {
+                    identity += ".";
+                }
+                identity += id;
+            }
+            return identity;
         }
     }
 }

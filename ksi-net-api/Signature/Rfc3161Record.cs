@@ -1,4 +1,23 @@
-﻿using System.Collections.Generic;
+﻿/*
+ * Copyright 2013-2016 Guardtime, Inc.
+ *
+ * This file is part of the Guardtime client SDK.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES, CONDITIONS, OR OTHER LICENSES OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ * "Guardtime" and "KSI" are trademarks or registered trademarks of
+ * Guardtime, Inc., and no license to trademarks is granted; Guardtime
+ * reserves and retains all trademark rights.
+ */
+
+using System.Collections.Generic;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
@@ -42,44 +61,47 @@ namespace Guardtime.KSI.Signature
             int signedAttributesSuffixCount = 0;
             int signedAttributesAlgorithmCount = 0;
 
-            foreach (ITlvTag childTag in this)
+            for (int i = 0; i < Count; i++)
             {
+                ITlvTag childTag = this[i];
+
                 switch (childTag.Type)
                 {
                     case Constants.Rfc3161Record.AggregationTimeTagType:
-                        _aggregationTime = new IntegerTag(childTag);
+                        this[i] = _aggregationTime = new IntegerTag(childTag);
                         aggregationTimeCount++;
                         break;
                     case Constants.Rfc3161Record.ChainIndexTagType:
                         IntegerTag chainTag = new IntegerTag(childTag);
                         _chainIndex.Add(chainTag);
+                        this[i] = chainTag;
                         break;
                     case Constants.Rfc3161Record.InputHashTagType:
-                        _inputHash = new ImprintTag(childTag);
+                        this[i] = _inputHash = new ImprintTag(childTag);
                         inputHashCount++;
                         break;
                     case Constants.Rfc3161Record.TstInfoPrefixTagType:
-                        _tstInfoPrefix = new RawTag(childTag);
+                        this[i] = _tstInfoPrefix = new RawTag(childTag);
                         tstInfoPrefixCount++;
                         break;
                     case Constants.Rfc3161Record.TstInfoSuffixTagType:
-                        _tstInfoSuffix = new RawTag(childTag);
+                        this[i] = _tstInfoSuffix = new RawTag(childTag);
                         tstInfoSuffixCount++;
                         break;
                     case Constants.Rfc3161Record.TstInfoAlgorithmTagType:
-                        _tstInfoAlgorithm = new IntegerTag(childTag);
+                        this[i] = _tstInfoAlgorithm = new IntegerTag(childTag);
                         tstInfoAlgorithmCount++;
                         break;
                     case Constants.Rfc3161Record.SignedAttributesPrefixTagType:
-                        _signedAttributesPrefix = new RawTag(childTag);
+                        this[i] = _signedAttributesPrefix = new RawTag(childTag);
                         signedAttributesPrefixCount++;
                         break;
                     case Constants.Rfc3161Record.SignedAttributesSuffixTagType:
-                        _signedAttributesSuffix = new RawTag(childTag);
+                        this[i] = _signedAttributesSuffix = new RawTag(childTag);
                         signedAttributesSuffixCount++;
                         break;
                     case Constants.Rfc3161Record.SignedAttributesAlgorithmTagType:
-                        _signedAttributesAlgorithm = new IntegerTag(childTag);
+                        this[i] = _signedAttributesAlgorithm = new IntegerTag(childTag);
                         signedAttributesAlgorithmCount++;
                         break;
                     default:
@@ -90,7 +112,7 @@ namespace Guardtime.KSI.Signature
 
             if (aggregationTimeCount != 1)
             {
-                throw new TlvException("Only one aggregation time must exist in RFC#3161 record.");
+                throw new TlvException("Exactly one aggregation time must exist in RFC#3161 record.");
             }
 
             if (_chainIndex.Count == 0)
@@ -100,38 +122,37 @@ namespace Guardtime.KSI.Signature
 
             if (inputHashCount != 1)
             {
-                throw new TlvException("Only one input hash must exist in RFC#3161 record.");
+                throw new TlvException("Exactly one input hash must exist in RFC#3161 record.");
             }
 
             if (tstInfoPrefixCount != 1)
             {
-                throw new TlvException("Only one tstInfo prefix must exist in RFC#3161 record.");
+                throw new TlvException("Exactly one tstInfo prefix must exist in RFC#3161 record.");
             }
 
             if (tstInfoSuffixCount != 1)
             {
-                throw new TlvException("Only one tstInfo suffix must exist in RFC#3161 record.");
+                throw new TlvException("Exactly one tstInfo suffix must exist in RFC#3161 record.");
             }
 
             if (tstInfoAlgorithmCount != 1)
             {
-                throw new TlvException("Only one tstInfo algorithm must exist in RFC#3161 record.");
+                throw new TlvException("Exactly one tstInfo algorithm must exist in RFC#3161 record.");
             }
 
             if (signedAttributesPrefixCount != 1)
             {
-                throw new TlvException("Only one signed attributes prefix must exist in RFC#3161 record.");
+                throw new TlvException("Exactly one signed attributes prefix must exist in RFC#3161 record.");
             }
 
             if (signedAttributesSuffixCount != 1)
             {
-                throw new TlvException("Only one signed attributes suffix must exist in RFC#3161 record.");
+                throw new TlvException("Exactly one signed attributes suffix must exist in RFC#3161 record.");
             }
 
             if (signedAttributesAlgorithmCount != 1)
             {
-                throw new TlvException(
-                    "Only one signed attributes algorithm must exist in RFC#3161 record.");
+                throw new TlvException("Exactly one signed attributes algorithm must exist in RFC#3161 record.");
             }
         }
 

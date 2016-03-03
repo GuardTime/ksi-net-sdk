@@ -1,4 +1,23 @@
-﻿using Guardtime.KSI.Exceptions;
+﻿/*
+ * Copyright 2013-2016 Guardtime, Inc.
+ *
+ * This file is part of the Guardtime client SDK.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES, CONDITIONS, OR OTHER LICENSES OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ * "Guardtime" and "KSI" are trademarks or registered trademarks of
+ * Guardtime, Inc., and no license to trademarks is granted; Guardtime
+ * reserves and retains all trademark rights.
+ */
+
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Publication
@@ -22,16 +41,18 @@ namespace Guardtime.KSI.Publication
             int certificateIdCount = 0;
             int x509CertificateCount = 0;
 
-            foreach (ITlvTag childTag in this)
+            for (int i = 0; i < Count; i++)
             {
+                ITlvTag childTag = this[i];
+
                 switch (childTag.Type)
                 {
                     case Constants.CertificateRecord.CertificateIdTagType:
-                        CertificateId = new RawTag(childTag);
+                        this[i] = CertificateId = new RawTag(childTag);
                         certificateIdCount++;
                         break;
                     case Constants.CertificateRecord.X509CertificateTagType:
-                        X509Certificate = new RawTag(childTag);
+                        this[i] = X509Certificate = new RawTag(childTag);
                         x509CertificateCount++;
                         break;
                     default:
@@ -42,12 +63,12 @@ namespace Guardtime.KSI.Publication
 
             if (certificateIdCount != 1)
             {
-                throw new TlvException("Only one certificate id must exist in certificate record.");
+                throw new TlvException("Exactly one certificate id must exist in certificate record.");
             }
 
             if (x509CertificateCount != 1)
             {
-                throw new TlvException("Only one certificate must exist in certificate record.");
+                throw new TlvException("Exactly one certificate must exist in certificate record.");
             }
         }
 

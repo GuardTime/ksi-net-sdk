@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -7,7 +7,7 @@
     <ProjectGuid>{CC9C4947-E275-4381-A93A-C80498B450B4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Guardtime.KSI</RootNamespace>
+    <RootNamespace>Guardtime.KSI.Crypto.BouncyCastle</RootNamespace>
     <AssemblyName>ksi-net-api-crypto-bouncycastle</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\ksi-net-api-crypto-bouncycastle.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -40,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Crypto\CertificateSubjectRdnSelector.cs" />
     <Compile Include="Hashing\DataHasher.cs" />
+    <Compile Include="Hashing\DigestProvider.cs" />
     <Compile Include="Hashing\HmacHasher.cs" />
     <Compile Include="Crypto\Pkcs7CryptoSignatureVerifier.cs" />
     <Compile Include="BouncyCastleCryptoProvider.cs" />
@@ -51,6 +53,9 @@
       <Project>{F38B227F-DB4E-4C5A-8C1D-A543C82D2311}</Project>
       <Name>Guardtime.KSI</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ksi-net-api-crypto-bouncycastle.licenseheader" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

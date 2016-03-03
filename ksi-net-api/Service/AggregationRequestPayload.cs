@@ -1,4 +1,23 @@
-﻿using Guardtime.KSI.Exceptions;
+﻿/*
+ * Copyright 2013-2016 Guardtime, Inc.
+ *
+ * This file is part of the Guardtime client SDK.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES, CONDITIONS, OR OTHER LICENSES OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ * "Guardtime" and "KSI" are trademarks or registered trademarks of
+ * Guardtime, Inc., and no license to trademarks is granted; Guardtime
+ * reserves and retains all trademark rights.
+ */
+
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Utils;
@@ -31,24 +50,26 @@ namespace Guardtime.KSI.Service
             int requestLevelCount = 0;
             int configCount = 0;
 
-            foreach (ITlvTag childTag in this)
+            for (int i = 0; i < Count; i++)
             {
+                ITlvTag childTag = this[i];
+
                 switch (childTag.Type)
                 {
                     case Constants.AggregationRequestPayload.RequestIdTagType:
-                        _requestId = new IntegerTag(childTag);
+                        this[i] = _requestId = new IntegerTag(childTag);
                         requestIdCount++;
                         break;
                     case Constants.AggregationRequestPayload.RequestHashTagType:
-                        _requestHash = new ImprintTag(childTag);
+                        this[i] = _requestHash = new ImprintTag(childTag);
                         requestHashCount++;
                         break;
                     case Constants.AggregationRequestPayload.RequestLevelTagType:
-                        _requestLevel = new IntegerTag(childTag);
+                        this[i] = _requestLevel = new IntegerTag(childTag);
                         requestLevelCount++;
                         break;
                     case Constants.AggregationRequestPayload.ConfigTagType:
-                        _config = new RawTag(childTag);
+                        this[i] = _config = new RawTag(childTag);
                         configCount++;
                         break;
                     default:
@@ -59,18 +80,17 @@ namespace Guardtime.KSI.Service
 
             if (requestIdCount != 1)
             {
-                throw new TlvException("Only one request id must exist in aggregation request payload.");
+                throw new TlvException("Exactly one request id must exist in aggregation request payload.");
             }
 
             if (requestHashCount != 1)
             {
-                throw new TlvException("Only one request hash must exist in aggregation request payload.");
+                throw new TlvException("Exactly one request hash must exist in aggregation request payload.");
             }
 
             if (requestLevelCount > 1)
             {
-                throw new TlvException(
-                    "Only one request level is allowed in aggregation request payload.");
+                throw new TlvException("Only one request level is allowed in aggregation request payload.");
             }
 
             if (configCount > 1)

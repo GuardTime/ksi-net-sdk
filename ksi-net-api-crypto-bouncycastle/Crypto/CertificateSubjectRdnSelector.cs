@@ -1,16 +1,42 @@
-﻿using System;
+﻿/*
+ * Copyright 2013-2016 Guardtime, Inc.
+ *
+ * This file is part of the Guardtime client SDK.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES, CONDITIONS, OR OTHER LICENSES OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ * "Guardtime" and "KSI" are trademarks or registered trademarks of
+ * Guardtime, Inc., and no license to trademarks is granted; Guardtime
+ * reserves and retains all trademark rights.
+ */
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.X509;
 
-namespace Guardtime.KSI.Crypto
+namespace Guardtime.KSI.Crypto.BouncyCastle.Crypto
 {
+    /// <summary>
+    /// Certificate subject rdn selector.
+    /// </summary>
     public class CertificateSubjectRdnSelector : ICertificateSubjectRdnSelector
     {
         private readonly X509Name _subjectDn;
 
+        /// <summary>
+        /// Create certificate subject rdn selector instance.
+        /// </summary>
+        /// <param name="rdnList">Certificate subject rdn list. Special chars must be escaped in rdn value.</param>
         public CertificateSubjectRdnSelector(IList<CertificateSubjectRdn> rdnList)
         {
             if (rdnList == null)
@@ -28,13 +54,24 @@ namespace Guardtime.KSI.Crypto
 
             foreach (CertificateSubjectRdn rdn in rdnList)
             {
-                oidList.Add(new DerObjectIdentifier(rdn.Oid));
-                valueList.Add(rdn.Value);
+                try
+                {
+                    oidList.Add(new DerObjectIdentifier(rdn.Oid));
+                    valueList.Add(rdn.Value);
+                }
+                catch (Exception ex)
+                {
+                    throw new ArgumentException(string.Format("Rdn contains invalid Oid or Value. Oid: {0} Value: {1}", rdn.Oid, rdn.Value), ex);
+                }
             }
 
             _subjectDn = new X509Name(oidList, valueList);
         }
 
+        /// <summary>
+        /// Create certificate subject rdn selector instance.
+        /// </summary>
+        /// <param name="subjectDn">Certificate subject DN.</param>
         public CertificateSubjectRdnSelector(string subjectDn)
         {
             if (string.IsNullOrEmpty(subjectDn))
@@ -45,11 +82,21 @@ namespace Guardtime.KSI.Crypto
             _subjectDn = new X509Name(subjectDn);
         }
 
-        public bool Match(object obj)
+        /// <summary>
+        /// Checks if certificate contains rdn selectors
+        /// </summary>
+        /// <param name="certificate">certificate to check</param>
+        /// <returns></returns>
+        public bool IsMatch(object certificate)
         {
-            return Match(obj as X509Certificate);
+            return Match(certificate as X509Certificate);
         }
 
+        /// <summary>
+        /// Checks if certificate contains rdn selectors
+        /// </summary>
+        /// <param name="certificate">certificate to check</param>
+        /// <returns></returns>
         public bool Match(X509Certificate certificate)
         {
             if (certificate == null)

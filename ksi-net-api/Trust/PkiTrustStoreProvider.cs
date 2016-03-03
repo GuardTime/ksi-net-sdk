@@ -1,4 +1,23 @@
-﻿using System;
+﻿/*
+ * Copyright 2013-2016 Guardtime, Inc.
+ *
+ * This file is part of the Guardtime client SDK.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES, CONDITIONS, OR OTHER LICENSES OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ * "Guardtime" and "KSI" are trademarks or registered trademarks of
+ * Guardtime, Inc., and no license to trademarks is granted; Guardtime
+ * reserves and retains all trademark rights.
+ */
+
+using System;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
@@ -10,22 +29,22 @@ namespace Guardtime.KSI.Trust
     /// </summary>
     public class PkiTrustStoreProvider : IPkiTrustProvider
     {
-        private readonly X509Certificate2Collection _trustAnchors;
+        private readonly X509Store _trustStore;
         private readonly ICertificateSubjectRdnSelector _certificateRdnSelector;
 
-        public PkiTrustStoreProvider(X509Certificate2Collection trustAnchors, ICertificateSubjectRdnSelector certificateRdnSelector)
+        /// <summary>
+        /// Create PKI trust store provider instance.
+        /// </summary>
+        /// <param name="trustStore">trust anchors</param>
+        /// <param name="certificateRdnSelector">certificate subject rdn selector</param>
+        public PkiTrustStoreProvider(X509Store trustStore, ICertificateSubjectRdnSelector certificateRdnSelector)
         {
-            if (trustAnchors == null)
-            {
-                throw new ArgumentNullException(nameof(trustAnchors));
-            }
-
             if (certificateRdnSelector == null)
             {
                 throw new ArgumentNullException(nameof(certificateRdnSelector));
             }
 
-            _trustAnchors = trustAnchors;
+            _trustStore = trustStore;
             _certificateRdnSelector = certificateRdnSelector;
         }
 
@@ -46,7 +65,7 @@ namespace Guardtime.KSI.Trust
                 throw new PkiVerificationErrorException("Invalid signature bytes: null.");
             }
 
-            ICryptoSignatureVerifier verifier = KsiProvider.GetPkcs7CryptoSignatureVerifier(_trustAnchors, _certificateRdnSelector);
+            ICryptoSignatureVerifier verifier = KsiProvider.GetPkcs7CryptoSignatureVerifier(_trustStore, _certificateRdnSelector);
             verifier.Verify(signedBytes, signatureBytes, null);
         }
     }

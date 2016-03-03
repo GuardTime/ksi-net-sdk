@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -59,6 +59,8 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>bin\Debug\ksi-net-api.XML</DocumentationFile>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <OutputPath>bin\Release\</OutputPath>
@@ -68,6 +70,9 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NLog, Version=2.1.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
@@ -98,7 +103,6 @@
     <Compile Include="Hashing\HashAlgorithm.cs" />
     <Compile Include="Hashing\IDataHasher.cs" />
     <Compile Include="Hashing\IHmacHasher.cs" />
-    <Compile Include="IKsi.cs" />
     <Compile Include="Ksi.cs" />
     <Compile Include="Parser\ImprintTag.cs" />
     <Compile Include="Parser\IntegerTag.cs" />
@@ -117,10 +121,13 @@
     </Compile>
     <Compile Include="Publication\CertificateRecord.cs" />
     <Compile Include="Publication\IPublicationsFile.cs" />
+    <Compile Include="Publication\PublicationRecordInSignature.cs" />
+    <Compile Include="Publication\PublicationRecordInPublicationFile.cs" />
     <Compile Include="Publication\PublicationsFileFactory.cs" />
     <Compile Include="Publication\PublicationsFileHeader.cs" />
     <Compile Include="Publication\PublicationsFile.cs" />
     <Compile Include="Publication\PublicationData.cs" />
+    <Compile Include="Service\TcpKsiServiceProtocol.cs" />
     <Compile Include="Utils\Base16.cs" />
     <Compile Include="Utils\Base32.cs" />
     <Compile Include="Utils\BaseX.cs" />
@@ -129,11 +136,11 @@
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="ksi-net-api.licenseheader" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
-    <None Include="README" />
     <Compile Include="Service\ErrorPayload.cs" />
     <Compile Include="Service\ExtendRequestPayload.cs" />
     <Compile Include="Service\ExtendErrorPayload.cs" />
@@ -148,7 +155,7 @@
     <Compile Include="Service\IKsiPublicationsFileServiceProtocol.cs" />
     <Compile Include="Service\IKsiSigningServiceProtocol.cs" />
     <Compile Include="Service\IKsiExtendingServiceProtocol.cs" />
-    <Compile Include="Service\IKsiServiceSettings.cs" />
+    <Compile Include="Service\IServiceCredentials.cs" />
     <Compile Include="Service\KsiPduPayload.cs" />
     <Compile Include="Service\KsiPdu.cs" />
     <Compile Include="Service\KsiService.cs" />
@@ -216,7 +223,9 @@
     <Compile Include="Trust\PkiTrustStoreProvider.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

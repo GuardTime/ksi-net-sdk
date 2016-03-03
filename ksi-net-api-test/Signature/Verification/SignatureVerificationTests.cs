@@ -1,10 +1,32 @@
-﻿using System;
+﻿/*
+ * Copyright 2013-2016 Guardtime, Inc.
+ *
+ * This file is part of the Guardtime client SDK.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES, CONDITIONS, OR OTHER LICENSES OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ * "Guardtime" and "KSI" are trademarks or registered trademarks of
+ * Guardtime, Inc., and no license to trademarks is granted; Guardtime
+ * reserves and retains all trademark rights.
+ */
+
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
+using Guardtime.KSI.Properties;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature.Verification.Policy;
+using Guardtime.KSI.Test.Crypto;
 using Guardtime.KSI.Trust;
 using NUnit.Framework;
 
@@ -16,16 +38,20 @@ namespace Guardtime.KSI.Signature.Verification
         [Test]
         public void TestVerifySignatureOk()
         {
-            using (FileStream stream = new FileStream(Properties.Resources.KsiSignatureDo_Ok, FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok), FileMode.Open))
             {
                 HttpKsiServiceProtocol serviceProtocol = new HttpKsiServiceProtocol(
-                    "http://ksigw.test.guardtime.com:3333/gt-signingservice",
-                    "http://172.20.20.100:8081",
-                    "http://verify.guardtime.com/ksi-publications.bin");
+                    Settings.Default.HttpSigningServiceUrl,
+                    Settings.Default.HttpExtendingServiceUrl,
+                    Settings.Default.HttpPublicationsFileUrl);
 
-                KsiService ksiService = new KsiService(serviceProtocol, serviceProtocol, serviceProtocol, new ServiceCredentials("anon", "anon"),
-                    new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(),
-                        new CertificateSubjectRdnSelector("E=publications@guardtime.com"))), new KsiSignatureFactory());
+                KsiService ksiService = new KsiService(
+                    serviceProtocol, new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
+                    serviceProtocol, new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
+                    serviceProtocol,
+                    new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
+                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))), new KsiSignatureFactory());
+
                 VerificationContext context = new VerificationContext(new KsiSignatureFactory().Create(stream))
                 {
                     DocumentHash =
@@ -40,10 +66,13 @@ namespace Guardtime.KSI.Signature.Verification
                     IsExtendingAllowed = true,
                     KsiService = ksiService,
                     PublicationsFile =
-                        new PublicationsFileFactory(new PkiTrustStoreProvider(TrustStoreUtilities.GetTrustAnchorCollection(),
-                            new CertificateSubjectRdnSelector(new List<CertificateSubjectRdn> { new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com") })))
+                        new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
+                            CryptoTestFactory.CreateCertificateSubjectRdnSelector(new List<CertificateSubjectRdn>
+                            {
+                                new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com")
+                            })))
                             .Create(
-                                new FileStream("resources/publication/publicationsfile/ksi-publications.bin", FileMode.Open))
+                                new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
                 };
 
                 Console.WriteLine(@"// Internal verification policy");
@@ -55,9 +84,12 @@ namespace Guardtime.KSI.Signature.Verification
                 Console.WriteLine(policy.Verify(context));
 
                 Console.WriteLine(@"// Key based");
-                policy = new KeyBasedVerificationPolicy(TrustStoreUtilities.GetTrustAnchorCollection(),
-                    new CertificateSubjectRdnSelector(new List<CertificateSubjectRdn> { new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com") }));
-                ;
+                policy = new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
+                    CryptoTestFactory.CreateCertificateSubjectRdnSelector(new List<CertificateSubjectRdn>
+                    {
+                        new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com")
+                    }));
+
                 Console.WriteLine(policy.Verify(context));
 
                 Console.WriteLine(@"// Calendar based verification");

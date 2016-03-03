@@ -1,23 +1,49 @@
-﻿using System;
+﻿/*
+ * Copyright 2013-2016 Guardtime, Inc.
+ *
+ * This file is part of the Guardtime client SDK.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES, CONDITIONS, OR OTHER LICENSES OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ * "Guardtime" and "KSI" are trademarks or registered trademarks of
+ * Guardtime, Inc., and no license to trademarks is granted; Guardtime
+ * reserves and retains all trademark rights.
+ */
+
+using System;
 using System.Security.Cryptography.Pkcs;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Exceptions;
 
-namespace Guardtime.KSI.Crypto
+namespace Guardtime.KSI.Crypto.Microsoft.Crypto
 {
     /// <summary>
     ///     PKCS#7 signature verifier.
     /// </summary>
     public class Pkcs7CryptoSignatureVerifier : ICryptoSignatureVerifier
     {
-        private readonly X509Certificate2Collection _trustAnchors;
+        private readonly X509Certificate2Collection _trustAnchors = new X509Certificate2Collection();
         private readonly ICertificateSubjectRdnSelector _certificateRdnSelector;
 
-        public Pkcs7CryptoSignatureVerifier(X509Certificate2Collection trustAnchors, ICertificateSubjectRdnSelector certificateRdnSelector)
+        /// <summary>
+        /// Create PKCS#7 signature verifier instance.
+        /// </summary>
+        /// <param name="trustStore">Trust store</param>
+        /// <param name="certificateRdnSelector">Certificate subject rdn selector</param>
+        public Pkcs7CryptoSignatureVerifier(X509Store trustStore, ICertificateSubjectRdnSelector certificateRdnSelector)
         {
-            if (trustAnchors == null)
+            if (trustStore != null)
             {
-                throw new ArgumentNullException(nameof(trustAnchors));
+                trustStore.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
+                _trustAnchors = trustStore.Certificates;
+                trustStore.Close();
             }
 
             if (certificateRdnSelector == null)
@@ -25,7 +51,6 @@ namespace Guardtime.KSI.Crypto
                 throw new ArgumentNullException(nameof(certificateRdnSelector));
             }
 
-            _trustAnchors = trustAnchors;
             _certificateRdnSelector = certificateRdnSelector;
         }
 
@@ -75,7 +100,7 @@ namespace Guardtime.KSI.Crypto
             try
             {
                 // Verify certificate with rdn selector
-                if (!_certificateRdnSelector.Match(certificate))
+                if (!_certificateRdnSelector.IsMatch(certificate))
                 {
                     throw new PkiVerificationFailedException("Certificate did not match with certificate subject rdn selector.");
                 }

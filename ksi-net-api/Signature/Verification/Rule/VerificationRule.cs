@@ -1,7 +1,25 @@
-﻿using System.Collections.ObjectModel;
+﻿/*
+ * Copyright 2013-2016 Guardtime, Inc.
+ *
+ * This file is part of the Guardtime client SDK.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES, CONDITIONS, OR OTHER LICENSES OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ * "Guardtime" and "KSI" are trademarks or registered trademarks of
+ * Guardtime, Inc., and no license to trademarks is granted; Guardtime
+ * reserves and retains all trademark rights.
+ */
+
+using System.Collections.ObjectModel;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
-using NLog;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
@@ -14,6 +32,10 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         private VerificationRule _onNa;
         private VerificationRule _onSuccess;
 
+        /// <summary>
+        /// Get rule name.
+        /// </summary>
+        /// <returns></returns>
         public string GetRuleName()
         {
             return GetType().Name;
@@ -79,6 +101,10 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         /// <returns>verification result</returns>
         public abstract VerificationResult Verify(IVerificationContext context);
 
+        /// <summary>
+        /// Check if verification context is valid.
+        /// </summary>
+        /// <param name="context">verification context</param>
         public static void CheckVerificationContext(IVerificationContext context)
         {
             if (context == null)
@@ -175,9 +201,9 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         /// </summary>
         /// <param name="signature">KSI signature</param>
         /// <returns>publication record</returns>
-        public static PublicationRecord GetPublicationRecord(IKsiSignature signature)
+        public static PublicationRecordInSignature GetPublicationRecord(IKsiSignature signature)
         {
-            PublicationRecord publicationRecord = signature.PublicationRecord;
+            PublicationRecordInSignature publicationRecord = signature.PublicationRecord;
 
             if (publicationRecord == null)
             {
@@ -229,9 +255,9 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         /// <param name="publicationsFile">publications file</param>
         /// <param name="time">time</param>
         /// <returns></returns>
-        public static PublicationRecord GetNearestPublicationRecord(IPublicationsFile publicationsFile, ulong time)
+        public static PublicationRecordInPublicationFile GetNearestPublicationRecord(IPublicationsFile publicationsFile, ulong time)
         {
-            PublicationRecord publicationRecord = publicationsFile.GetNearestPublicationRecord(time);
+            PublicationRecordInPublicationFile publicationRecord = publicationsFile.GetNearestPublicationRecord(time);
 
             if (publicationRecord == null)
             {

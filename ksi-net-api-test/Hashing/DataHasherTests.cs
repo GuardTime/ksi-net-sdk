@@ -1,7 +1,27 @@
-﻿using System;
+﻿/*
+ * Copyright 2013-2016 Guardtime, Inc.
+ *
+ * This file is part of the Guardtime client SDK.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES, CONDITIONS, OR OTHER LICENSES OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ * "Guardtime" and "KSI" are trademarks or registered trademarks of
+ * Guardtime, Inc., and no license to trademarks is granted; Guardtime
+ * reserves and retains all trademark rights.
+ */
+
+using System;
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Properties;
+using Guardtime.KSI.Test.Crypto;
 using NUnit.Framework;
 
 // ReSharper disable ObjectCreationAsStatement
@@ -14,7 +34,7 @@ namespace Guardtime.KSI.Hashing
         [Test]
         public void TestDataHasherWithDefaultAlgorithmAndEmptyData()
         {
-            DataHasher hasher = new DataHasher();
+            IDataHasher hasher = CryptoTestFactory.CreateDataHasher();
             Assert.AreEqual(HashAlgorithm.Sha2256.Length, hasher.GetHash().Value.Length, "Hash length should be correct");
             byte[] bytes = new byte[hasher.GetHash().Value.Length];
             hasher.GetHash().Value.CopyTo(bytes, 0);
@@ -25,7 +45,7 @@ namespace Guardtime.KSI.Hashing
         [Test]
         public void TestDataHasherWithDefaultAlgorithm()
         {
-            DataHasher hasher = new DataHasher();
+            IDataHasher hasher = CryptoTestFactory.CreateDataHasher();
             byte[] data = System.Text.Encoding.UTF8.GetBytes(Resources.DataHasher_TestString);
             hasher.AddData(data);
             Assert.AreEqual(HashAlgorithm.Sha2256.Length, hasher.GetHash().Value.Length, "Hash length should be correct");
@@ -38,7 +58,7 @@ namespace Guardtime.KSI.Hashing
         [Test]
         public void TestDataHasherWithAlternativeName()
         {
-            DataHasher hasher = new DataHasher(HashAlgorithm.GetByName("sha-2"));
+            IDataHasher hasher = CryptoTestFactory.CreateDataHasher(HashAlgorithm.GetByName("sha-2"));
             byte[] data = System.Text.Encoding.UTF8.GetBytes(Resources.DataHasher_TestString);
             hasher.AddData(data);
             Assert.AreEqual(HashAlgorithm.Sha2256.Length, hasher.GetHash().Value.Length, "Hash length should be correct");
@@ -51,7 +71,7 @@ namespace Guardtime.KSI.Hashing
         [Test]
         public void TestDataHasherWithDefaultAlgorithmAndByteLength()
         {
-            DataHasher hasher = new DataHasher();
+            IDataHasher hasher = CryptoTestFactory.CreateDataHasher();
             byte[] data = System.Text.Encoding.UTF8.GetBytes(Resources.DataHasher_TestString);
             hasher.AddData(data, 0, data.Length);
             Assert.AreEqual(HashAlgorithm.Sha2256.Length, hasher.GetHash().Value.Length, "Hash length should be correct");
@@ -64,7 +84,7 @@ namespace Guardtime.KSI.Hashing
         [Test]
         public void TestDataHasherReset()
         {
-            DataHasher hasher = new DataHasher();
+            IDataHasher hasher = CryptoTestFactory.CreateDataHasher();
             byte[] data = System.Text.Encoding.UTF8.GetBytes(Resources.DataHasher_TestString);
             hasher.AddData(data, 0, data.Length);
             Assert.AreEqual(HashAlgorithm.Sha2256.Length, hasher.GetHash().Value.Length, "Hash length should be correct");
@@ -86,7 +106,7 @@ namespace Guardtime.KSI.Hashing
         [Test]
         public void TestDataHasherWithRipemd160Algorithm()
         {
-            DataHasher hasher = new DataHasher(HashAlgorithm.Ripemd160);
+            IDataHasher hasher = CryptoTestFactory.CreateDataHasher(HashAlgorithm.Ripemd160);
             Assert.AreEqual(HashAlgorithm.Ripemd160.Length, hasher.GetHash().Value.Length, "Hash length should be correct");
             byte[] bytes = new byte[hasher.GetHash().Value.Length];
             hasher.GetHash().Value.CopyTo(bytes, 0);
@@ -96,8 +116,8 @@ namespace Guardtime.KSI.Hashing
         [Test]
         public void TestDataHasherWithDefaultAlgorithmAndFileStream()
         {
-            DataHasher hasher = new DataHasher();
-            FileStream stream = new FileStream(Resources.DataHasher_TestFile, FileMode.Open);
+            IDataHasher hasher = CryptoTestFactory.CreateDataHasher();
+            FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.DataHasher_TestFile), FileMode.Open);
             hasher.AddData(stream);
             Assert.AreEqual(HashAlgorithm.Sha2256.Length, hasher.GetHash().Value.Length, "Hash length should be correct");
             byte[] bytes = new byte[hasher.GetHash().Value.Length];
@@ -110,8 +130,8 @@ namespace Guardtime.KSI.Hashing
         [Test]
         public void TestDataHasherWithDefaultAlgorithmAndFileStreamLimitedBuffer()
         {
-            DataHasher hasher = new DataHasher();
-            FileStream stream = new FileStream(Resources.DataHasher_TestFile, FileMode.Open);
+            IDataHasher hasher = CryptoTestFactory.CreateDataHasher();
+            FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.DataHasher_TestFile), FileMode.Open);
             hasher.AddData(stream, 1);
             Assert.AreEqual(HashAlgorithm.Sha2256.Length, hasher.GetHash().Value.Length, "Hash length should be correct");
             byte[] bytes = new byte[hasher.GetHash().Value.Length];
@@ -126,7 +146,7 @@ namespace Guardtime.KSI.Hashing
         {
             Assert.Throws<HashingException>(delegate
             {
-                new DataHasher(null);
+                CryptoTestFactory.CreateDataHasher(null);
             });
         }
 
@@ -135,14 +155,14 @@ namespace Guardtime.KSI.Hashing
         {
             Assert.Throws<HashingException>(delegate
             {
-                new DataHasher(HashAlgorithm.Sha3256);
+                CryptoTestFactory.CreateDataHasher(HashAlgorithm.Sha3256);
             });
         }
 
         [Test]
         public void TestDataHasherWithNullBytes()
         {
-            DataHasher hasher = new DataHasher();
+            IDataHasher hasher = CryptoTestFactory.CreateDataHasher();
             Assert.Throws<HashingException>(delegate
             {
                 hasher.AddData((byte[])null);
@@ -152,7 +172,7 @@ namespace Guardtime.KSI.Hashing
         [Test]
         public void TestDataHasherWithNullICollection()
         {
-            DataHasher hasher = new DataHasher();
+            IDataHasher hasher = CryptoTestFactory.CreateDataHasher();
             Assert.Throws<HashingException>(delegate
             {
                 hasher.AddData((byte[])null);
@@ -162,7 +182,7 @@ namespace Guardtime.KSI.Hashing
         [Test]
         public void TestDataHasherWithNullBytesAndNoLength()
         {
-            DataHasher hasher = new DataHasher();
+            IDataHasher hasher = CryptoTestFactory.CreateDataHasher();
             Assert.Throws<HashingException>(delegate
             {
                 hasher.AddData(null, 0, 0);
@@ -172,7 +192,7 @@ namespace Guardtime.KSI.Hashing
         [Test]
         public void TestDataHasherWithNullStream()
         {
-            DataHasher hasher = new DataHasher();
+            IDataHasher hasher = CryptoTestFactory.CreateDataHasher();
             Assert.Throws<HashingException>(delegate
             {
                 hasher.AddData((Stream)null);
@@ -182,7 +202,7 @@ namespace Guardtime.KSI.Hashing
         [Test]
         public void TestDataHasherWithAddingDataAfterHashHasBeenCalculated()
         {
-            DataHasher hasher = new DataHasher();
+            IDataHasher hasher = CryptoTestFactory.CreateDataHasher();
             byte[] data = System.Text.Encoding.UTF8.GetBytes(Resources.DataHasher_TestString);
             hasher.AddData(data);
             hasher.GetHash();

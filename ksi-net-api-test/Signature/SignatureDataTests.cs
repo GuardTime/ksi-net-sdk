@@ -1,4 +1,23 @@
-﻿using System.IO;
+﻿/*
+ * Copyright 2013-2016 Guardtime, Inc.
+ *
+ * This file is part of the Guardtime client SDK.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES, CONDITIONS, OR OTHER LICENSES OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ * "Guardtime" and "KSI" are trademarks or registered trademarks of
+ * Guardtime, Inc., and no license to trademarks is granted; Guardtime
+ * reserves and retains all trademark rights.
+ */
+
+using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Utils;
@@ -111,9 +130,26 @@ namespace Guardtime.KSI.Signature
             }, "Only one certificate repository uri is allowed in signature data");
         }
 
+        [Test]
+        public void ToStringTest()
+        {
+            SignatureData tag = TestUtil.GetCompositeTag<SignatureData>(Constants.SignatureData.TagType,
+                new ITlvTag[]
+                {
+                    new StringTag(Constants.SignatureData.SignatureTypeTagType, false, false, "Test SignatureType"),
+                    new RawTag(Constants.SignatureData.SignatureValueTagType, false, false, new byte[] { 0x2 }),
+                    new RawTag(Constants.SignatureData.CertificateIdTagType, false, false, new byte[] { 0x3 }),
+                    new StringTag(Constants.SignatureData.CertificateRepositoryUriTagType, false, false, "Test CertificateRepositoryUri")
+                });
+
+            SignatureData tag2 = new SignatureData(tag);
+
+            Assert.AreEqual(tag.ToString(), tag2.ToString());
+        }
+
         private static SignatureData GetSignatureDataFromFile(string file)
         {
-            using (TlvReader reader = new TlvReader(new FileStream(file, FileMode.Open)))
+            using (TlvReader reader = new TlvReader(new FileStream(Path.Combine(TestSetup.LocalPath, file), FileMode.Open)))
             {
                 SignatureData signatureData = new SignatureData(reader.ReadTag());
 

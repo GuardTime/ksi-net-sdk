@@ -1,8 +1,27 @@
-﻿using System;
+﻿/*
+ * Copyright 2013-2016 Guardtime, Inc.
+ *
+ * This file is part of the Guardtime client SDK.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES, CONDITIONS, OR OTHER LICENSES OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ * "Guardtime" and "KSI" are trademarks or registered trademarks of
+ * Guardtime, Inc., and no license to trademarks is granted; Guardtime
+ * reserves and retains all trademark rights.
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 
-namespace Guardtime.KSI.Crypto
+namespace Guardtime.KSI.Crypto.Microsoft.Crypto
 {
     /// <summary>
     /// Certificate subject rdn selector.
@@ -62,6 +81,10 @@ namespace Guardtime.KSI.Crypto
             }
         }
 
+        /// <summary>
+        /// Create certificate subject rdn selector instance.
+        /// </summary>
+        /// <param name="subjectDn">Certificate subject DN.</param>
         public CertificateSubjectRdnSelector(string subjectDn)
         {
             if (string.IsNullOrEmpty(subjectDn))
@@ -79,16 +102,21 @@ namespace Guardtime.KSI.Crypto
             }
         }
 
-        private static List<string> GetRdnList(X500DistinguishedName dname)
+        /// <summary>
+        /// Checks if certificate contains rdn selectors
+        /// </summary>
+        /// <param name="certificate">certificate to check</param>
+        /// <returns></returns>
+        public bool IsMatch(object certificate)
         {
-            return new List<string>(dname.Format(true).Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries));
+            return Match(certificate as X509Certificate2);
         }
 
-        public bool Match(object obj)
-        {
-            return Match(obj as X509Certificate2);
-        }
-
+        /// <summary>
+        /// Checks if certificate contains rdn selectors
+        /// </summary>
+        /// <param name="certificate">certificate to check</param>
+        /// <returns></returns>
         public bool Match(X509Certificate2 certificate)
         {
             if (certificate == null)
@@ -107,6 +135,11 @@ namespace Guardtime.KSI.Crypto
             }
 
             return true;
+        }
+
+        private static List<string> GetRdnList(X500DistinguishedName dname)
+        {
+            return new List<string>(dname.Format(true).Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries));
         }
     }
 }
