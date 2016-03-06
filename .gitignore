@@ -1,0 +1,12 @@
+ksi-net-api.v12.suo
+bin/
+obj/
+TestResults/
+ksi-net-api/bin/
+ksi-net-api/obj/
+ksi-net-api-test/bin/
+ksi-net-api-test/obj/
+ksi-net-api-test/Guardtime.KSI.Test.v12.suo
+.vs
+ksi-net-api.sln.DotSettings.user
+/Help

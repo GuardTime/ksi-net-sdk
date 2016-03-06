@@ -1,0 +1,243 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{F38B227F-DB4E-4C5A-8C1D-A543C82D2311}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Guardtime.KSI</RootNamespace>
+    <AssemblyName>ksi-net-api</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>bin\x86\Debug\ksi-net-api.XML</DocumentationFile>
+    <LangVersion>ISO-2</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>bin\Debug\ksi-net-api.XML</DocumentationFile>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="NLog, Version=2.1.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.2.1.0\lib\net20\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Constants.cs" />
+    <Compile Include="Crypto\CryptoSignatureVerificationData.cs" />
+    <Compile Include="Crypto\CryptoSignatureVerifierFactory.cs" />
+    <Compile Include="Crypto\ICertificateSubjectRdnSelector.cs" />
+    <Compile Include="Crypto\ICryptoSignatureVerifier.cs" />
+    <Compile Include="Crypto\CertificateSubjectRdn.cs" />
+    <Compile Include="Exceptions\HashingException.cs" />
+    <Compile Include="Exceptions\KsiException.cs" />
+    <Compile Include="Exceptions\KsiServiceException.cs" />
+    <Compile Include="Exceptions\KsiServiceProtocolException.cs" />
+    <Compile Include="Exceptions\KsiVerificationException.cs" />
+    <Compile Include="Exceptions\PkiVerificationErrorException.cs" />
+    <Compile Include="Exceptions\PkiVerificationException.cs" />
+    <Compile Include="Exceptions\PkiVerificationFailedException.cs" />
+    <Compile Include="Exceptions\PublicationsFileException.cs" />
+    <Compile Include="Exceptions\TlvException.cs" />
+    <Compile Include="Hashing\DataHash.cs" />
+    <Compile Include="Hashing\HashAlgorithm.Constants.cs" />
+    <Compile Include="Hashing\HashAlgorithm.cs" />
+    <Compile Include="Hashing\IDataHasher.cs" />
+    <Compile Include="Hashing\IHmacHasher.cs" />
+    <Compile Include="Ksi.cs" />
+    <Compile Include="Parser\ImprintTag.cs" />
+    <Compile Include="Parser\IntegerTag.cs" />
+    <Compile Include="Parser\RawTag.cs" />
+    <Compile Include="Parser\StringTag.cs" />
+    <Compile Include="Parser\CompositeTag.cs" />
+    <Compile Include="Parser\ITlvTag.cs" />
+    <Compile Include="Parser\TlvTag.cs" />
+    <Compile Include="Parser\TlvReader.cs" />
+    <Compile Include="Parser\TlvWriter.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Publication\CertificateRecord.cs" />
+    <Compile Include="Publication\IPublicationsFile.cs" />
+    <Compile Include="Publication\PublicationRecordInSignature.cs" />
+    <Compile Include="Publication\PublicationRecordInPublicationFile.cs" />
+    <Compile Include="Publication\PublicationsFileFactory.cs" />
+    <Compile Include="Publication\PublicationsFileHeader.cs" />
+    <Compile Include="Publication\PublicationsFile.cs" />
+    <Compile Include="Publication\PublicationData.cs" />
+    <Compile Include="Service\TcpKsiServiceProtocol.cs" />
+    <Compile Include="Utils\Base16.cs" />
+    <Compile Include="Utils\Base32.cs" />
+    <Compile Include="Utils\BaseX.cs" />
+    <Compile Include="Utils\Crc32.cs" />
+    <Compile Include="Utils\Util.cs" />
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="ksi-net-api.licenseheader" />
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+    <Compile Include="Service\ErrorPayload.cs" />
+    <Compile Include="Service\ExtendRequestPayload.cs" />
+    <Compile Include="Service\ExtendErrorPayload.cs" />
+    <Compile Include="Service\AggregationErrorPayload.cs" />
+    <Compile Include="Service\AggregationResponsePayload.cs" />
+    <Compile Include="Service\AggregationRequestPayload.cs" />
+    <Compile Include="Service\AggregationPdu.cs" />
+    <Compile Include="Service\ExtendPdu.cs" />
+    <Compile Include="Service\ExtendResponsePayload.cs" />
+    <Compile Include="Service\HttpKsiServiceProtocol.cs" />
+    <Compile Include="Service\IKsiService.cs" />
+    <Compile Include="Service\IKsiPublicationsFileServiceProtocol.cs" />
+    <Compile Include="Service\IKsiSigningServiceProtocol.cs" />
+    <Compile Include="Service\IKsiExtendingServiceProtocol.cs" />
+    <Compile Include="Service\IServiceCredentials.cs" />
+    <Compile Include="Service\KsiPduPayload.cs" />
+    <Compile Include="Service\KsiPdu.cs" />
+    <Compile Include="Service\KsiService.cs" />
+    <Compile Include="Service\KsiPduHeader.cs" />
+    <Compile Include="Service\ServiceCredentials.cs" />
+    <Compile Include="Signature\AggregationAuthenticationRecord.cs" />
+    <Compile Include="Signature\AggregationHashChain.cs" />
+    <Compile Include="Signature\AggregationHashChainResult.cs" />
+    <Compile Include="Signature\CalendarAuthenticationRecord.cs" />
+    <Compile Include="Signature\CalendarHashChain.cs" />
+    <Compile Include="KsiProvider.cs" />
+    <Compile Include="ICryptoProvider.cs" />
+    <Compile Include="Signature\IKsiSignature.cs" />
+    <Compile Include="Signature\KsiSignature.cs" />
+    <Compile Include="Signature\KsiSignatureFactory.cs" />
+    <Compile Include="Signature\LinkDirection.cs" />
+    <Compile Include="Publication\PublicationRecord.cs" />
+    <Compile Include="Signature\Rfc3161Record.cs" />
+    <Compile Include="Signature\SignatureData.cs" />
+    <Compile Include="Signature\Verification\Policy\CalendarBasedVerificationPolicy.cs" />
+    <Compile Include="Signature\Verification\Policy\PublicationBasedVerificationPolicy.cs" />
+    <Compile Include="Signature\Verification\Policy\KeyBasedVerificationPolicy.cs" />
+    <Compile Include="Signature\Verification\Policy\PublicationsFileVerificationPolicy.cs" />
+    <Compile Include="Signature\Verification\Policy\UserProvidedPublicationBasedVerificationPolicy.cs" />
+    <Compile Include="Signature\Verification\Policy\VerificationPolicy.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarAuthenticationRecordAggregationTimeRule.cs" />
+    <Compile Include="Signature\Verification\Rule\ExtendedSignatureAggregationChainRightLinksMatchesRule.cs" />
+    <Compile Include="Signature\Verification\Rule\ExtendedSignatureCalendarChainAggregationTimeRule.cs" />
+    <Compile Include="Signature\Verification\Rule\ExtendedSignatureCalendarChainRootHashRule.cs" />
+    <Compile Include="Signature\Verification\Rule\ExtendedSignatureCalendarChainInputHashRule.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarAuthenticationRecordAggregationHashRule.cs" />
+    <Compile Include="Signature\Verification\Rule\SignaturePublicationRecordExistenceRule.cs" />
+    <Compile Include="Signature\Verification\Rule\VerificationRule.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarAuthenticationRecordExistenceRule.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarAuthenticationRecordSignatureVerificationRule.cs" />
+    <Compile Include="Signature\Verification\Rule\CertificateExistenceRule.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarHashChainExistenceRule.cs" />
+    <Compile Include="Signature\Verification\Rule\UserProvidedPublicationVerificationRule.cs" />
+    <Compile Include="Signature\Verification\Rule\ExtendingPermittedVerificationRule.cs" />
+    <Compile Include="Signature\Verification\Rule\PublicationsFileContainsSignaturePublicationRule.cs" />
+    <Compile Include="Signature\Verification\Rule\PublicationsFileExtendedSignatureInputHashRule.cs" />
+    <Compile Include="Signature\Verification\Rule\PublicationsFilePublicationHashMatchesExtenderResponseRule.cs" />
+    <Compile Include="Signature\Verification\Rule\UserProvidedPublicationHashMatchesExtendedResponseRule.cs" />
+    <Compile Include="Signature\Verification\Rule\UserProvidedPublicationExtendedSignatureInputHashRule.cs" />
+    <Compile Include="Signature\Verification\Rule\PublicationsFilePublicationTimeMatchesExtenderResponseRule.cs" />
+    <Compile Include="Signature\Verification\Rule\UserProvidedPublicationExistenceRule.cs" />
+    <Compile Include="Signature\Verification\Rule\UserProvidedPublicationTimeMatchesExtendedResponseRule.cs" />
+    <Compile Include="Signature\Verification\Rule\UserProvidedPublicationCreationTimeVerificationRule.cs" />
+    <Compile Include="Signature\Verification\Rule\SignaturePublicationRecordPublicationHashRule.cs" />
+    <Compile Include="Signature\Verification\Rule\SignaturePublicationRecordPublicationTimeRule.cs" />
+    <Compile Include="Signature\Verification\Rule\AggregationHashChainTimeConsistencyRule.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarHashChainRegistrationTimeRule.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarHashChainAggregationTimeRule.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarHashChainInputHashVerificationRule.cs" />
+    <Compile Include="Signature\Verification\Policy\InternalVerificationPolicy.cs" />
+    <Compile Include="Signature\Verification\Rule\AggregationHashChainConsistencyRule.cs" />
+    <Compile Include="Signature\Verification\Rule\AggregationChainInputHashVerificationRule.cs" />
+    <Compile Include="Signature\Verification\IVerificationContext.cs" />
+    <Compile Include="Signature\Verification\VerificationContext.cs" />
+    <Compile Include="Signature\Verification\VerificationError.cs" />
+    <Compile Include="Signature\Verification\VerificationResult.cs" />
+    <Compile Include="Signature\Verification\VerificationResultCode.cs" />
+    <Compile Include="Trust\IKsiTrustProvider.cs" />
+    <Compile Include="Trust\IPkiTrustProvider.cs" />
+    <Compile Include="Trust\PkiTrustStoreProvider.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
