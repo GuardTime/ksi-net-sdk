@@ -1,0 +1,212 @@
+﻿<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="shortcut icon" href="../icons/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="../styles/branding.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/branding-en-US.css" />
+    <script type="text/javascript" src="../scripts/branding.js"> </script>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>IKsiService Methods</title>
+    <meta name="Language" content="en-us" />
+    <meta name="System.Keywords" content="IKsiService interface, methods" />
+    <meta name="Microsoft.Help.Id" content="Methods.T:Guardtime.KSI.Service.IKsiService" />
+    <meta name="Microsoft.Help.ContentType" content="Reference" />
+    <meta name="BrandingAware" content="true" />
+    
+    <meta name="container" content="Guardtime.KSI.Service" />
+    <meta name="file" content="710b99b0-2a9c-06f2-18ce-4a8755b86391" />
+    <meta name="guid" content="710b99b0-2a9c-06f2-18ce-4a8755b86391" />
+    
+    <link rel="stylesheet" type="text/css" href="../styles/branding-Website.css" />
+    <script type="text/javascript" src="../scripts/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../scripts/branding-Website.js"></script>
+  </head>
+  <body onload="OnLoad('cs')">
+    <input type="hidden" id="userDataCache" class="userDataStyle" />
+    <div class="pageHeader" id="PageHeader">KSI .Net API<form id="SearchForm" method="get" action="#" onsubmit="javascript:TransferToSearchPage(); return false;"><input id="SearchTextBox" type="text" maxlength="200" /><button id="SearchButton" type="submit"></button></form></div>
+    <div class="pageBody">
+      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .Net API" tocid="roottoc">KSI .Net API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="6c3d4a3a-c200-4dd2-34fe-54591d3059fb.htm" title="Guardtime.KSI.Service" tocid="6c3d4a3a-c200-4dd2-34fe-54591d3059fb">Guardtime.KSI.Service</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="d33e394f-31b6-e477-a12b-d9c2c317251f.htm" title="IKsiService Interface" tocid="d33e394f-31b6-e477-a12b-d9c2c317251f">IKsiService Interface</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="710b99b0-2a9c-06f2-18ce-4a8755b86391.htm" title="IKsiService Methods" tocid="710b99b0-2a9c-06f2-18ce-4a8755b86391">IKsiService Methods</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="7db751c9-e3ec-c43e-4a14-77ccc48a94fe.htm" title="BeginExtend Method " tocid="7db751c9-e3ec-c43e-4a14-77ccc48a94fe">BeginExtend Method </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="6a2a322e-48fb-5cb4-89ec-1f77111a5491.htm" title="BeginGetPublicationsFile Method " tocid="6a2a322e-48fb-5cb4-89ec-1f77111a5491">BeginGetPublicationsFile Method </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="a9c4a0a7-3b74-ad87-3bd8-08bf4d52fa5a.htm" title="BeginSign Method " tocid="a9c4a0a7-3b74-ad87-3bd8-08bf4d52fa5a">BeginSign Method </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="4bdeaff1-99b5-cc17-71d8-80da482ba44d.htm" title="EndExtend Method " tocid="4bdeaff1-99b5-cc17-71d8-80da482ba44d">EndExtend Method </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="e3792440-4d2f-641a-e255-41241ca8dd1c.htm" title="EndGetPublicationsFile Method " tocid="e3792440-4d2f-641a-e255-41241ca8dd1c">EndGetPublicationsFile Method </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="29be0343-22e7-20b4-544b-af720eb8c762.htm" title="EndSign Method " tocid="29be0343-22e7-20b4-544b-af720eb8c762">EndSign Method </a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="d942179b-c807-010e-e9ef-3b3a25424abd.htm" title="Extend Method " tocid="d942179b-c807-010e-e9ef-3b3a25424abd">Extend Method </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="16db2c1c-bcd7-27cb-6f70-e4bf79263cb1.htm" title="GetPublicationsFile Method " tocid="16db2c1c-bcd7-27cb-6f70-e4bf79263cb1">GetPublicationsFile Method </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="9955457f-767b-a632-b604-277b845dec87.htm" title="Sign Method " tocid="9955457f-767b-a632-b604-277b845dec87">Sign Method </a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
+        <table class="titleTable">
+          <tr>
+            <td class="titleColumn">IKsiService Methods</td>
+          </tr>
+        </table>
+        <span class="introStyle"></span>
+        <p>The <a href="d33e394f-31b6-e477-a12b-d9c2c317251f.htm">IKsiService</a> type exposes the following members.</p>
+        <div class="collapsibleAreaRegion">
+          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0">
+            <img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Methods</span>
+        </div>
+        <div id="ID0RBSection" class="collapsibleSection">
+          <table id="memberList" class="members">
+            <tr>
+              <th class="iconColumn">
+								 
+							</th>
+              <th>Name</th>
+              <th>Description</th>
+            </tr>
+            <tr data="public;declared;notNetfw;">
+              <td>
+                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
+              </td>
+              <td>
+                <a href="f2ceccc9-9d71-66ae-dea8-f542e3712e95.htm">BeginExtend(UInt64, AsyncCallback, Object)</a>
+              </td>
+              <td>
+                <div class="summary">
+                Async begin extend signature to latest publication.
+            </div>
+              </td>
+            </tr>
+            <tr data="public;declared;notNetfw;">
+              <td>
+                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
+              </td>
+              <td>
+                <a href="768c9a7e-0792-709a-bf39-ba874943a8cf.htm">BeginExtend(UInt64, UInt64, AsyncCallback, Object)</a>
+              </td>
+              <td>
+                <div class="summary">
+                Async begin extend signature to given publication.
+            </div>
+              </td>
+            </tr>
+            <tr data="public;declared;notNetfw;">
+              <td>
+                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
+              </td>
+              <td>
+                <a href="6a2a322e-48fb-5cb4-89ec-1f77111a5491.htm">BeginGetPublicationsFile</a>
+              </td>
+              <td>
+                <div class="summary">
+                Async begin get publications file.
+            </div>
+              </td>
+            </tr>
+            <tr data="public;declared;notNetfw;">
+              <td>
+                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
+              </td>
+              <td>
+                <a href="a9c4a0a7-3b74-ad87-3bd8-08bf4d52fa5a.htm">BeginSign</a>
+              </td>
+              <td>
+                <div class="summary">
+                Async begin create signature with given data hash.
+            </div>
+              </td>
+            </tr>
+            <tr data="public;declared;notNetfw;">
+              <td>
+                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
+              </td>
+              <td>
+                <a href="4bdeaff1-99b5-cc17-71d8-80da482ba44d.htm">EndExtend</a>
+              </td>
+              <td>
+                <div class="summary">
+                Async end extend signature.
+            </div>
+              </td>
+            </tr>
+            <tr data="public;declared;notNetfw;">
+              <td>
+                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
+              </td>
+              <td>
+                <a href="e3792440-4d2f-641a-e255-41241ca8dd1c.htm">EndGetPublicationsFile</a>
+              </td>
+              <td>
+                <div class="summary">
+                Async end get publications file.
+            </div>
+              </td>
+            </tr>
+            <tr data="public;declared;notNetfw;">
+              <td>
+                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
+              </td>
+              <td>
+                <a href="29be0343-22e7-20b4-544b-af720eb8c762.htm">EndSign</a>
+              </td>
+              <td>
+                <div class="summary">
+                Async end create signature.
+            </div>
+              </td>
+            </tr>
+            <tr data="public;declared;notNetfw;">
+              <td>
+                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
+              </td>
+              <td>
+                <a href="efa85abd-5e96-d33b-ea0d-75a56fdba0f2.htm">Extend(UInt64)</a>
+              </td>
+              <td>
+                <div class="summary">
+                Sync extend signature to latest publication.
+            </div>
+              </td>
+            </tr>
+            <tr data="public;declared;notNetfw;">
+              <td>
+                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
+              </td>
+              <td>
+                <a href="82554eb3-ef04-2aba-ef29-375d393da75d.htm">Extend(UInt64, UInt64)</a>
+              </td>
+              <td>
+                <div class="summary">
+                Sync extend signature to given publication.
+            </div>
+              </td>
+            </tr>
+            <tr data="public;declared;notNetfw;">
+              <td>
+                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
+              </td>
+              <td>
+                <a href="16db2c1c-bcd7-27cb-6f70-e4bf79263cb1.htm">GetPublicationsFile</a>
+              </td>
+              <td>
+                <div class="summary">
+                Sync get publications file.
+            </div>
+              </td>
+            </tr>
+            <tr data="public;declared;notNetfw;">
+              <td>
+                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
+              </td>
+              <td>
+                <a href="9955457f-767b-a632-b604-277b845dec87.htm">Sign</a>
+              </td>
+              <td>
+                <div class="summary">
+                Sync create signature with given data hash.
+            </div>
+              </td>
+            </tr>
+          </table>
+          <a href="#PageHeader">Top</a>
+        </div>
+        <div class="collapsibleAreaRegion" id="seeAlsoSection">
+          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0">
+            <img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span>
+        </div>
+        <div id="ID1RBSection" class="collapsibleSection">
+          <h4 class="subHeading">Reference</h4>
+          <div class="seeAlsoStyle">
+            <a href="d33e394f-31b6-e477-a12b-d9c2c317251f.htm">IKsiService Interface</a>
+          </div>
+          <div class="seeAlsoStyle">
+            <a href="6c3d4a3a-c200-4dd2-34fe-54591d3059fb.htm">Guardtime.KSI.Service Namespace</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="pageFooter" class="pageFooter"> </div>
+  </body>
+</html>
