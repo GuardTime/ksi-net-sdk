@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Publication;
@@ -33,6 +34,8 @@ namespace Guardtime.KSI
     public class Ksi
     {
         private readonly IKsiService _ksiService;
+        private IPublicationsFile _publicationsFile;
+        private DateTime _publicationsFileLoadTime;
 
         /// <summary>
         ///     Create new KSI instance.
@@ -192,14 +195,21 @@ namespace Guardtime.KSI
         /// <returns>publications file</returns>
         public IPublicationsFile GetPublicationsFile()
         {
-            // TODO: cache result?
-            IPublicationsFile publicationsFile = _ksiService.GetPublicationsFile();
-            if (publicationsFile == null)
+            if (_publicationsFileLoadTime > DateTime.Now.AddHours(-1) && _publicationsFile != null)
             {
-                throw new KsiException("Publications file cannot be null.");
+                return _publicationsFile;
             }
 
-            return publicationsFile;
+            _publicationsFile = _ksiService.GetPublicationsFile();
+
+            if (_publicationsFile == null)
+            {
+                throw new KsiException("Invalid publications file: null");
+            }
+
+            _publicationsFileLoadTime = DateTime.Now;
+
+            return _publicationsFile;
         }
 
         /// <summary>
