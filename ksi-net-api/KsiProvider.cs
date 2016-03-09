@@ -18,6 +18,7 @@
  */
 
 using System.Security.Cryptography.X509Certificates;
+using System.Threading;
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
@@ -30,6 +31,7 @@ namespace Guardtime.KSI
     public class KsiProvider
     {
         private static ICryptoProvider _cryptoProvider;
+        private static Mutex mut = new Mutex();
 
         /// <summary>
         /// Set crypto provider.
@@ -47,7 +49,27 @@ namespace Guardtime.KSI
         public static ICryptoSignatureVerifier GetPkcs7CryptoSignatureVerifier(X509Store trustStore, ICertificateSubjectRdnSelector certificateRdnSelector)
         {
             CheckCryptoProvider();
-            return _cryptoProvider.GetPkcs7CryptoSignatureVerifier(trustStore, certificateRdnSelector);
+
+            X509Certificate2Collection trustAnchors = new X509Certificate2Collection();
+
+            try
+            {
+                // make certificates loading thread-safe
+                mut.WaitOne();
+
+                if (trustStore != null)
+                {
+                    trustStore.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
+                    trustAnchors = trustStore.Certificates;
+                    trustStore.Close();
+                }
+            }
+            finally
+            {
+                mut.ReleaseMutex();
+            }
+
+            return _cryptoProvider.GetPkcs7CryptoSignatureVerifier(trustAnchors, certificateRdnSelector);
         }
 
         /// <summary>

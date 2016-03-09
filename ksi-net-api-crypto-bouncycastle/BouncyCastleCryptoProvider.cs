@@ -43,9 +43,9 @@ namespace Guardtime.KSI.Crypto.BouncyCastle
         /// Get PKCS#7 crypto signature verifier.
         /// </summary>
         /// <returns>PKCS#7 verifier</returns>
-        public ICryptoSignatureVerifier GetPkcs7CryptoSignatureVerifier(X509Store trustStore, ICertificateSubjectRdnSelector certificateRdnSelector)
+        public ICryptoSignatureVerifier GetPkcs7CryptoSignatureVerifier(X509Certificate2Collection trustStoreCertificates, ICertificateSubjectRdnSelector certificateRdnSelector)
         {
-            return new Pkcs7CryptoSignatureVerifier(trustStore, certificateRdnSelector);
+            return new Pkcs7CryptoSignatureVerifier(trustStoreCertificates, certificateRdnSelector);
         }
 
         /// <summary>
