@@ -31,7 +31,7 @@ namespace Guardtime.KSI
     public class KsiProvider
     {
         private static ICryptoProvider _cryptoProvider;
-        private static Mutex mut = new Mutex();
+        private static readonly Mutex Mut = new Mutex();
 
         /// <summary>
         /// Set crypto provider.
@@ -52,21 +52,21 @@ namespace Guardtime.KSI
 
             X509Certificate2Collection trustAnchors = new X509Certificate2Collection();
 
-            try
+            if (trustStore != null)
             {
-                // make certificates loading thread-safe
-                mut.WaitOne();
-
-                if (trustStore != null)
+                try
                 {
+                    // make certificates loading thread-safe
+                    Mut.WaitOne();
+
                     trustStore.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
                     trustAnchors = trustStore.Certificates;
                     trustStore.Close();
                 }
-            }
-            finally
-            {
-                mut.ReleaseMutex();
+                finally
+                {
+                    Mut.ReleaseMutex();
+                }
             }
 
             return _cryptoProvider.GetPkcs7CryptoSignatureVerifier(trustAnchors, certificateRdnSelector);
