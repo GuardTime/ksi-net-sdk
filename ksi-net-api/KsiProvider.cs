@@ -31,7 +31,7 @@ namespace Guardtime.KSI
     public class KsiProvider
     {
         private static ICryptoProvider _cryptoProvider;
-        private static readonly Mutex Mut = new Mutex();
+        private static readonly object _lock = new object();
 
         /// <summary>
         /// Set crypto provider.
@@ -54,18 +54,12 @@ namespace Guardtime.KSI
 
             if (trustStore != null)
             {
-                try
+                // make certificates loading thread-safe
+                lock (_lock)
                 {
-                    // make certificates loading thread-safe
-                    Mut.WaitOne();
-
                     trustStore.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
                     trustAnchors = trustStore.Certificates;
                     trustStore.Close();
-                }
-                finally
-                {
-                    Mut.ReleaseMutex();
                 }
             }
 
