@@ -173,8 +173,6 @@ namespace Guardtime.KSI.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void ParallelSigningTest(Ksi ksi)
         {
-            System.Net.ServicePointManager.Expect100Continue = false;
-
             ManualResetEvent waitHandle = new ManualResetEvent(false);
             int doneCount = 0;
             int runCount = 10;
