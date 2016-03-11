@@ -41,30 +41,23 @@ namespace Guardtime.KSI.Crypto.BouncyCastle.Crypto
         /// <summary>
         /// Create PKCS#7 signature verifier instance.
         /// </summary>
-        /// <param name="trustStore">Trust store</param>
+        /// <param name="trustAnchors">Trust anchors</param>
         /// <param name="certificateRdnSelector">Certificate subject rdn selector</param>
-        public Pkcs7CryptoSignatureVerifier(X509Store trustStore, ICertificateSubjectRdnSelector certificateRdnSelector)
+        public Pkcs7CryptoSignatureVerifier(X509Certificate2Collection trustAnchors, ICertificateSubjectRdnSelector certificateRdnSelector)
         {
+            if (certificateRdnSelector == null)
+            {
+                throw new ArgumentNullException(nameof(certificateRdnSelector));
+            }
+
             if (!(certificateRdnSelector is CertificateSubjectRdnSelector))
             {
                 throw new ArgumentException("Expected type: " + typeof(CertificateSubjectRdnSelector), nameof(certificateRdnSelector));
             }
 
-            if (trustStore != null)
+            foreach (X509Certificate2 certificate in trustAnchors)
             {
-                trustStore.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
-                X509Certificate2Collection x509CertificateCollection = trustStore.Certificates;
-                trustStore.Close();
-
-                foreach (X509Certificate2 certificate in x509CertificateCollection)
-                {
-                    _trustAnchors.Add(new TrustAnchor(DotNetUtilities.FromX509Certificate(certificate), null));
-                }
-            }
-
-            if (certificateRdnSelector == null)
-            {
-                throw new ArgumentNullException(nameof(certificateRdnSelector));
+                _trustAnchors.Add(new TrustAnchor(DotNetUtilities.FromX509Certificate(certificate), null));
             }
 
             _certificateRdnSelector = certificateRdnSelector;
