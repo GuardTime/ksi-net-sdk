@@ -47,7 +47,7 @@ namespace Guardtime.KSI.Test.Integration
         private static readonly TcpKsiServiceProtocol TcpKsiServiceProtocolInvalidUrl = new TcpKsiServiceProtocol("ksigw.test.QWERTYguardtime.com",
             Settings.Default.TcpSigningServicePort, 100000);
 
-        private static readonly TcpKsiServiceProtocol TcpKsiServiceProtocolInvalidPort = new TcpKsiServiceProtocol(Settings.Default.TcpSigningServiceUrl, 1234, 100000);
+        private static readonly TcpKsiServiceProtocol TcpKsiServiceProtocolInvalidPort = new TcpKsiServiceProtocol(Settings.Default.TcpSigningServiceUrl, 2847, 100000);
 
         public static object[] HttpTestCases =
         {
