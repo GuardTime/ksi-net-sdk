@@ -79,8 +79,7 @@ namespace Guardtime.KSI.Test.Integration
                         HttpKsiServiceProtocol,
                         new PublicationsFileFactory(
                             new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
-                        new KsiSignatureFactory(),
-                        HashAlgorithm.Sha2256))
+                        new KsiSignatureFactory()))
             }
         };
 
@@ -96,7 +95,9 @@ namespace Guardtime.KSI.Test.Integration
                         new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, "anonx"),
                         HttpKsiServiceProtocol,
                         new PublicationsFileFactory(
-                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com")))))
+                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
+                        new KsiSignatureFactory(),
+                        HashAlgorithm.Sha2256))
             }
         };
 

@@ -83,6 +83,35 @@ namespace Guardtime.KSI.Service
         /// <param name="extendingServiceCredentials">extending service credentials</param>
         /// <param name="publicationsFileServiceProtocol">publications file protocol</param>
         /// <param name="publicationsFileFactory">publications file factory</param>
+        /// <param name="ksiSignatureFactory">ksi signature factory</param>
+        public KsiService(IKsiSigningServiceProtocol signingServiceProtocol,
+                          IServiceCredentials signingServiceCredentials,
+                          IKsiExtendingServiceProtocol extendingServiceProtocol,
+                          IServiceCredentials extendingServiceCredentials,
+                          IKsiPublicationsFileServiceProtocol publicationsFileServiceProtocol,
+                          IPublicationsFileFactory publicationsFileFactory,
+                          IKsiSignatureFactory ksiSignatureFactory)
+            :
+                this(signingServiceProtocol,
+                    signingServiceCredentials,
+                    extendingServiceProtocol,
+                    extendingServiceCredentials,
+                    publicationsFileServiceProtocol,
+                    publicationsFileFactory,
+                    ksiSignatureFactory,
+                    DefaultHmacAlgorithm)
+        {
+        }
+
+        /// <summary>
+        ///     Create KSI service with service protocol and service settings.
+        /// </summary>
+        /// <param name="signingServiceProtocol">signing service protocol</param>
+        /// <param name="signingServiceCredentials">signing service credentials</param>
+        /// <param name="extendingServiceProtocol">extending service protocol</param>
+        /// <param name="extendingServiceCredentials">extending service credentials</param>
+        /// <param name="publicationsFileServiceProtocol">publications file protocol</param>
+        /// <param name="publicationsFileFactory">publications file factory</param>
         /// <param name="hmacAlgorithm">HMAC algorithm</param>
         public KsiService(IKsiSigningServiceProtocol signingServiceProtocol,
                           IServiceCredentials signingServiceCredentials,
