@@ -35,6 +35,9 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public class KsiService : IKsiService
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly HashAlgorithm DefaultHmacAlgorithm = HashAlgorithm.Sha2256;
+
         private readonly IKsiSigningServiceProtocol _sigingServiceProtocol;
         private readonly IKsiExtendingServiceProtocol _extendingServiceProtocol;
         private readonly IKsiSignatureFactory _ksiSignatureFactory;
@@ -42,7 +45,6 @@ namespace Guardtime.KSI.Service
         private readonly IKsiPublicationsFileServiceProtocol _publicationsFileServiceProtocol;
         private readonly IServiceCredentials _signingServiceCredentials;
         private readonly IServiceCredentials _extendingServiceCredentials;
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly HashAlgorithm _hmacAlgorithm;
 
         /// <summary>
@@ -68,7 +70,7 @@ namespace Guardtime.KSI.Service
                     publicationsFileServiceProtocol,
                     publicationsFileFactory,
                     new KsiSignatureFactory(),
-                    HashAlgorithm.Sha2256)
+                    DefaultHmacAlgorithm)
         {
         }
 
