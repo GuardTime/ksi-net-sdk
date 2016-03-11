@@ -33,25 +33,25 @@ namespace Guardtime.KSI
         /// </summary>
         /// <param name="algorithm"></param>
         /// <returns></returns>
-        IDataHasher GetDataHasher(HashAlgorithm algorithm);
+        IDataHasher CreateDataHasher(HashAlgorithm algorithm);
 
         /// <summary>
         /// Get PKCS#7 crypto signature verifier.
         /// </summary>
         /// <returns>PKCS#7 verifier</returns>
-        ICryptoSignatureVerifier GetPkcs7CryptoSignatureVerifier(X509Certificate2Collection trustStoreCertificates, ICertificateSubjectRdnSelector certificateRdnSelector);
+        ICryptoSignatureVerifier CreatePkcs7CryptoSignatureVerifier(X509Certificate2Collection trustStoreCertificates, ICertificateSubjectRdnSelector certificateRdnSelector);
 
         /// <summary>
         /// Get RSA signature verifier.
         /// </summary>
         /// <param name="algorithm">hash algorithm</param>
         /// <returns>RSA signature verifier</returns>
-        ICryptoSignatureVerifier GetRsaCryptoSignatureVerifier(string algorithm);
+        ICryptoSignatureVerifier CreateRsaCryptoSignatureVerifier(string algorithm);
 
         /// <summary>
         /// Get HMAC hasher.
         /// </summary>
         /// <returns></returns>
-        IHmacHasher GetHmacHasher();
+        IHmacHasher CreateHmacHasher();
     }
 }

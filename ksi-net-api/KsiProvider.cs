@@ -46,7 +46,7 @@ namespace Guardtime.KSI
         /// Get PKCS#7 crypto signature verifier.
         /// </summary>
         /// <returns>PKCS#7 verifier</returns>
-        public static ICryptoSignatureVerifier GetPkcs7CryptoSignatureVerifier(X509Store trustStore, ICertificateSubjectRdnSelector certificateRdnSelector)
+        public static ICryptoSignatureVerifier CreatePkcs7CryptoSignatureVerifier(X509Store trustStore, ICertificateSubjectRdnSelector certificateRdnSelector)
         {
             CheckCryptoProvider();
 
@@ -63,7 +63,7 @@ namespace Guardtime.KSI
                 }
             }
 
-            return _cryptoProvider.GetPkcs7CryptoSignatureVerifier(trustAnchors, certificateRdnSelector);
+            return _cryptoProvider.CreatePkcs7CryptoSignatureVerifier(trustAnchors, certificateRdnSelector);
         }
 
         /// <summary>
@@ -71,20 +71,20 @@ namespace Guardtime.KSI
         /// </summary>
         /// <param name="algorithm">hash algorithm</param>
         /// <returns>RSA signature verifier</returns>
-        public static ICryptoSignatureVerifier GetRsaCryptoSignatureVerifier(string algorithm)
+        public static ICryptoSignatureVerifier CreateRsaCryptoSignatureVerifier(string algorithm)
         {
             CheckCryptoProvider();
-            return _cryptoProvider.GetRsaCryptoSignatureVerifier(algorithm);
+            return _cryptoProvider.CreateRsaCryptoSignatureVerifier(algorithm);
         }
 
         /// <summary>
         /// Get HMAC hasher.
         /// </summary>
         /// <returns></returns>
-        public static IHmacHasher GetHmacHasher()
+        public static IHmacHasher CreateHmacHasher()
         {
             CheckCryptoProvider();
-            return _cryptoProvider.GetHmacHasher();
+            return _cryptoProvider.CreateHmacHasher();
         }
 
         /// <summary>
@@ -92,10 +92,10 @@ namespace Guardtime.KSI
         /// </summary>
         /// <param name="algorithm"></param>
         /// <returns></returns>
-        public static IDataHasher GetDataHasher(HashAlgorithm algorithm)
+        public static IDataHasher CreateDataHasher(HashAlgorithm algorithm)
         {
             CheckCryptoProvider();
-            return _cryptoProvider.GetDataHasher(algorithm);
+            return _cryptoProvider.CreateDataHasher(algorithm);
         }
 
         /// <summary>

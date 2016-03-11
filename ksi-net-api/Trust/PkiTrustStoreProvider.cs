@@ -65,7 +65,7 @@ namespace Guardtime.KSI.Trust
                 throw new PkiVerificationErrorException("Invalid signature bytes: null.");
             }
 
-            ICryptoSignatureVerifier verifier = KsiProvider.GetPkcs7CryptoSignatureVerifier(_trustStore, _certificateRdnSelector);
+            ICryptoSignatureVerifier verifier = KsiProvider.CreatePkcs7CryptoSignatureVerifier(_trustStore, _certificateRdnSelector);
             verifier.Verify(signedBytes, signatureBytes, null);
         }
     }

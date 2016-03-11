@@ -197,7 +197,7 @@ namespace Guardtime.KSI.Signature
         /// <returns>result hash</returns>
         private static DataHash GetStepHash(HashAlgorithm algorithm, byte[] hashA, byte[] hashB)
         {
-            IDataHasher hasher = KsiProvider.GetDataHasher(algorithm);
+            IDataHasher hasher = KsiProvider.CreateDataHasher(algorithm);
             hasher.AddData(hashA);
             hasher.AddData(hashB);
             hasher.AddData(new byte[] { 0xFF });

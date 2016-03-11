@@ -178,14 +178,14 @@ namespace Guardtime.KSI.Signature
                 throw new KsiException("Invalid input hash: null.");
             }
 
-            IDataHasher hasher = KsiProvider.GetDataHasher(HashAlgorithm.GetById((byte)_tstInfoAlgorithm.Value));
+            IDataHasher hasher = KsiProvider.CreateDataHasher(HashAlgorithm.GetById((byte)_tstInfoAlgorithm.Value));
             hasher.AddData(_tstInfoPrefix.Value);
             hasher.AddData(inputHash.Value);
             hasher.AddData(_tstInfoSuffix.Value);
 
             inputHash = hasher.GetHash();
 
-            hasher = KsiProvider.GetDataHasher(HashAlgorithm.GetById((byte)_signedAttributesAlgorithm.Value));
+            hasher = KsiProvider.CreateDataHasher(HashAlgorithm.GetById((byte)_signedAttributesAlgorithm.Value));
             hasher.AddData(_signedAttributesPrefix.Value);
             hasher.AddData(inputHash.Value);
             hasher.AddData(_signedAttributesSuffix.Value);
