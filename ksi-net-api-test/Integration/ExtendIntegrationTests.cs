@@ -23,9 +23,10 @@ using Guardtime.KSI.Publication;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
+using Guardtime.KSI.Test.Signature.Verification.Rule;
 using NUnit.Framework;
 
-namespace Guardtime.KSI.Integration
+namespace Guardtime.KSI.Test.Integration
 {
     [TestFixture]
     public class ExtendIntegrationTests : IntegrationTests

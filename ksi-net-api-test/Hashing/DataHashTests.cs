@@ -18,11 +18,12 @@
  */
 
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Hashing;
 using NUnit.Framework;
 
 // ReSharper disable ObjectCreationAsStatement
 
-namespace Guardtime.KSI.Hashing
+namespace Guardtime.KSI.Test.Hashing
 {
     [TestFixture]
     public class DataHashTests

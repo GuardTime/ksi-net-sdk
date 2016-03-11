@@ -22,7 +22,7 @@ using System.Configuration;
 using Guardtime.KSI.Test.Crypto;
 using NUnit.Framework;
 
-namespace Guardtime.KSI
+namespace Guardtime.KSI.Test
 {
     [TestFixture]
     public class CryptoTestFactoryTests

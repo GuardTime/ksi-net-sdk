@@ -19,11 +19,12 @@
 
 using System;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Parser;
 using NUnit.Framework;
 
 // ReSharper disable ObjectCreationAsStatement
 
-namespace Guardtime.KSI.Parser
+namespace Guardtime.KSI.Test.Parser
 {
     [TestFixture]
     public class CompositeTagTests

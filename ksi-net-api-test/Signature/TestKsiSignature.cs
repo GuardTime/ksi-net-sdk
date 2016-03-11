@@ -22,8 +22,9 @@ using System.IO;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
+using Guardtime.KSI.Signature;
 
-namespace Guardtime.KSI.Signature
+namespace Guardtime.KSI.Test.Signature
 {
     public class TestKsiSignature : IKsiSignature
     {

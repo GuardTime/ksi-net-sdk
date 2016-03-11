@@ -18,9 +18,10 @@
  */
 
 using System.Collections.Generic;
+using Guardtime.KSI.Publication;
 using Guardtime.KSI.Utils;
 
-namespace Guardtime.KSI.Publication
+namespace Guardtime.KSI.Test.Publication
 {
     public class TestPublicationsFile : IPublicationsFile
     {

@@ -29,7 +29,7 @@ using Guardtime.KSI.Test.Crypto;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
-namespace Guardtime.KSI.Integration
+namespace Guardtime.KSI.Test.Integration
 {
     [TestFixture]
     public class SignIntegrationTests : IntegrationTests

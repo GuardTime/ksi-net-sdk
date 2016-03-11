@@ -23,7 +23,7 @@ using System.IO;
 using System.Reflection;
 using Guardtime.KSI.Parser;
 
-namespace Guardtime.KSI
+namespace Guardtime.KSI.Test
 {
     public class TestUtil
     {

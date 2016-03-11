@@ -19,15 +19,15 @@
 
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Hashing;
-using Guardtime.KSI.Properties;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Test.Crypto;
+using Guardtime.KSI.Test.Properties;
 using Guardtime.KSI.Trust;
 using NUnit.Framework;
 
-namespace Guardtime.KSI.Integration
+namespace Guardtime.KSI.Test.Integration
 {
     public class IntegrationTests
     {

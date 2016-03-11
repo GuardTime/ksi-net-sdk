@@ -21,10 +21,11 @@ using System;
 using System.IO;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
+using Guardtime.KSI.Publication;
 using Guardtime.KSI.Signature;
 using NUnit.Framework;
 
-namespace Guardtime.KSI.Publication
+namespace Guardtime.KSI.Test.Publication
 {
     [TestFixture]
     public class PublicationDataTest

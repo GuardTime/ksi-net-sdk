@@ -19,12 +19,13 @@
 
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
-using Guardtime.KSI.Utils;
+using Guardtime.KSI.Parser;
+using Guardtime.KSI.Test.Utils;
 using NUnit.Framework;
 
 // ReSharper disable ObjectCreationAsStatement
 
-namespace Guardtime.KSI.Parser
+namespace Guardtime.KSI.Test.Parser
 {
     [TestFixture]
     public class ImprintTagTests

@@ -21,10 +21,14 @@ using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
+using Guardtime.KSI.Signature;
+using Guardtime.KSI.Signature.Verification;
+using Guardtime.KSI.Signature.Verification.Rule;
+using Guardtime.KSI.Test.Publication;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
-namespace Guardtime.KSI.Signature.Verification.Rule
+namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
     public class PublicationsFileContainsSignaturePublicationRuleTests
@@ -150,7 +154,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             PublicationsFileContainsSignaturePublicationRule rule = new PublicationsFileContainsSignaturePublicationRule();
 
             // Check invalid signature with publication record missing from publications file
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Invalid_With_Invalid_Publication_Record), FileMode.Open))
+            using (FileStream stream = 
+                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Invalid_With_Invalid_Publication_Record), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {

@@ -22,11 +22,15 @@ using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
+using Guardtime.KSI.Signature;
+using Guardtime.KSI.Signature.Verification;
+using Guardtime.KSI.Signature.Verification.Rule;
 using Guardtime.KSI.Test.Crypto;
+using Guardtime.KSI.Test.Publication;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
-namespace Guardtime.KSI.Signature.Verification.Rule
+namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
     public class CalendarAuthenticationRecordSignatureVerificationRuleTests
@@ -65,7 +69,9 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
             // Check signature with no calendar authentication record
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record), FileMode.Open))
+            using (FileStream stream =
+                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record),
+                    FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -87,7 +93,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
             // Check signature with invalid certificate id
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Certificate_Id), FileMode.Open))
+            using (FileStream stream =
+                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Certificate_Id), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -182,7 +189,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
             // Check invalid signature with invalid calendar authentication record signature
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Signature), FileMode.Open))
+            using (FileStream stream =
+                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Signature), FileMode.Open))
             {
                 TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
                 testPublicationsFile.CertificateRecords.Add(

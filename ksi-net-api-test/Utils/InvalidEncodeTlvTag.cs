@@ -19,7 +19,7 @@
 
 using Guardtime.KSI.Parser;
 
-namespace Guardtime.KSI.Utils
+namespace Guardtime.KSI.Test.Utils
 {
     public class InvalidEncodeTlvTag : TlvTag
     {

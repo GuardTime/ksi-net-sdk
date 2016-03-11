@@ -20,13 +20,14 @@
 using System;
 using System.IO;
 using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Properties;
+using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Test.Crypto;
+using Guardtime.KSI.Test.Properties;
 using NUnit.Framework;
 
 // ReSharper disable ObjectCreationAsStatement
 
-namespace Guardtime.KSI.Hashing
+namespace Guardtime.KSI.Test.Hashing
 {
     [TestFixture]
     public class DataHasherTests

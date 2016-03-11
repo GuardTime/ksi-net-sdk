@@ -19,9 +19,12 @@
 
 using System.IO;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Signature;
+using Guardtime.KSI.Signature.Verification;
+using Guardtime.KSI.Signature.Verification.Rule;
 using NUnit.Framework;
 
-namespace Guardtime.KSI.Signature.Verification.Rule
+namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
     public class AggregationHashChainTimeConsistencyRuleTests
@@ -111,7 +114,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             AggregationHashChainTimeConsistencyRule rule = new AggregationHashChainTimeConsistencyRule();
 
             // Check invalid signature for aggregation hash chain incosistency in time
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Invalid_Aggregation_Chain_Aggregation_Time_Mismatch), FileMode.Open))
+            using (FileStream stream =
+                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Invalid_Aggregation_Chain_Aggregation_Time_Mismatch), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {

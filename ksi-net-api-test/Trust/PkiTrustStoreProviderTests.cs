@@ -20,10 +20,11 @@
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Test.Crypto;
+using Guardtime.KSI.Trust;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
-namespace Guardtime.KSI.Trust
+namespace Guardtime.KSI.Test.Trust
 {
     [TestFixture]
     public class PkiTrustStoreProviderTests

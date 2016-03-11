@@ -20,10 +20,13 @@
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
+using Guardtime.KSI.Signature;
+using Guardtime.KSI.Signature.Verification;
+using Guardtime.KSI.Signature.Verification.Rule;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
-namespace Guardtime.KSI.Signature.Verification.Rule
+namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
     public class ExtendedSignatureCalendarChainInputHashRuleTests
@@ -145,7 +148,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             ExtendedSignatureCalendarChainInputHashRule rule = new ExtendedSignatureCalendarChainInputHashRule();
 
             // Check invalid signature extended calendar hash chain input hash
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Invalid_With_Invalid_Aggregation_Root_Hash), FileMode.Open))
+            using (FileStream stream =
+                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Invalid_With_Invalid_Aggregation_Root_Hash), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {

@@ -23,15 +23,15 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
-using Guardtime.KSI.Trust;
-using NUnit.Framework;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
 using Guardtime.KSI.Test.Crypto;
+using Guardtime.KSI.Trust;
+using NUnit.Framework;
 
-namespace Guardtime.KSI.Integration
+namespace Guardtime.KSI.Test.Integration
 {
     public class CommonTestExecution
     {

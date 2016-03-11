@@ -22,10 +22,11 @@ using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
+using Guardtime.KSI.Signature;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
-namespace Guardtime.KSI.Signature
+namespace Guardtime.KSI.Test.Signature
 {
     [TestFixture]
     public class CalendarAuthenticationRecordTests
