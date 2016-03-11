@@ -52,7 +52,7 @@ namespace Guardtime.KSI.Test.Signature.Verification
                     serviceProtocol, new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
                     serviceProtocol,
                     new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))), new KsiSignatureFactory());
+                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))));
 
                 VerificationContext context = new VerificationContext(new KsiSignatureFactory().Create(stream))
                 {

@@ -123,11 +123,13 @@
     <Compile Include="Publication\IPublicationsFile.cs" />
     <Compile Include="Publication\PublicationRecordInSignature.cs" />
     <Compile Include="Publication\PublicationRecordInPublicationFile.cs" />
+    <Compile Include="Publication\IPublicationsFileFactory.cs" />
     <Compile Include="Publication\PublicationsFileFactory.cs" />
     <Compile Include="Publication\PublicationsFileHeader.cs" />
     <Compile Include="Publication\PublicationsFile.cs" />
     <Compile Include="Publication\PublicationData.cs" />
     <Compile Include="Service\TcpKsiServiceProtocol.cs" />
+    <Compile Include="Signature\IKsiSignatureFactory.cs" />
     <Compile Include="Utils\Base16.cs" />
     <Compile Include="Utils\Base32.cs" />
     <Compile Include="Utils\BaseX.cs" />

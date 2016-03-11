@@ -35,15 +35,44 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public class KsiService : IKsiService
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly HashAlgorithm DefaultHmacAlgorithm = HashAlgorithm.Sha2256;
+
         private readonly IKsiSigningServiceProtocol _sigingServiceProtocol;
         private readonly IKsiExtendingServiceProtocol _extendingServiceProtocol;
-        private readonly KsiSignatureFactory _ksiSignatureFactory;
-        private readonly PublicationsFileFactory _publicationsFileFactory;
+        private readonly IKsiSignatureFactory _ksiSignatureFactory;
+        private readonly IPublicationsFileFactory _publicationsFileFactory;
         private readonly IKsiPublicationsFileServiceProtocol _publicationsFileServiceProtocol;
         private readonly IServiceCredentials _signingServiceCredentials;
         private readonly IServiceCredentials _extendingServiceCredentials;
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly HashAlgorithm _hmacAlgorithm = HashAlgorithm.Sha2256;
+        private readonly HashAlgorithm _hmacAlgorithm;
+
+        /// <summary>
+        ///     Create KSI service with service protocol and service settings.
+        /// </summary>
+        /// <param name="signingServiceProtocol">signing service protocol</param>
+        /// <param name="signingServiceCredentials">signing service credentials</param>
+        /// <param name="extendingServiceProtocol">extending service protocol</param>
+        /// <param name="extendingServiceCredentials">extending service credentials</param>
+        /// <param name="publicationsFileServiceProtocol">publications file protocol</param>
+        /// <param name="publicationsFileFactory">publications file factory</param>
+        public KsiService(IKsiSigningServiceProtocol signingServiceProtocol,
+                          IServiceCredentials signingServiceCredentials,
+                          IKsiExtendingServiceProtocol extendingServiceProtocol,
+                          IServiceCredentials extendingServiceCredentials,
+                          IKsiPublicationsFileServiceProtocol publicationsFileServiceProtocol,
+                          IPublicationsFileFactory publicationsFileFactory)
+            :
+                this(signingServiceProtocol,
+                    signingServiceCredentials,
+                    extendingServiceProtocol,
+                    extendingServiceCredentials,
+                    publicationsFileServiceProtocol,
+                    publicationsFileFactory,
+                    new KsiSignatureFactory(),
+                    DefaultHmacAlgorithm)
+        {
+        }
 
         /// <summary>
         ///     Create KSI service with service protocol and service settings.
@@ -60,26 +89,47 @@ namespace Guardtime.KSI.Service
                           IKsiExtendingServiceProtocol extendingServiceProtocol,
                           IServiceCredentials extendingServiceCredentials,
                           IKsiPublicationsFileServiceProtocol publicationsFileServiceProtocol,
-                          PublicationsFileFactory publicationsFileFactory,
-                          KsiSignatureFactory ksiSignatureFactory)
+                          IPublicationsFileFactory publicationsFileFactory,
+                          IKsiSignatureFactory ksiSignatureFactory)
+            :
+                this(signingServiceProtocol,
+                    signingServiceCredentials,
+                    extendingServiceProtocol,
+                    extendingServiceCredentials,
+                    publicationsFileServiceProtocol,
+                    publicationsFileFactory,
+                    ksiSignatureFactory,
+                    DefaultHmacAlgorithm)
         {
-            if (publicationsFileFactory == null)
-            {
-                throw new KsiException("Invalid publications file factory: null.");
-            }
+        }
 
-            if (ksiSignatureFactory == null)
-            {
-                throw new KsiException("Invalid KSI signature factory: null.");
-            }
-
-            _sigingServiceProtocol = signingServiceProtocol;
-            _signingServiceCredentials = signingServiceCredentials;
-            _extendingServiceProtocol = extendingServiceProtocol;
-            _extendingServiceCredentials = extendingServiceCredentials;
-            _publicationsFileServiceProtocol = publicationsFileServiceProtocol;
-            _publicationsFileFactory = publicationsFileFactory;
-            _ksiSignatureFactory = ksiSignatureFactory;
+        /// <summary>
+        ///     Create KSI service with service protocol and service settings.
+        /// </summary>
+        /// <param name="signingServiceProtocol">signing service protocol</param>
+        /// <param name="signingServiceCredentials">signing service credentials</param>
+        /// <param name="extendingServiceProtocol">extending service protocol</param>
+        /// <param name="extendingServiceCredentials">extending service credentials</param>
+        /// <param name="publicationsFileServiceProtocol">publications file protocol</param>
+        /// <param name="publicationsFileFactory">publications file factory</param>
+        /// <param name="hmacAlgorithm">HMAC algorithm</param>
+        public KsiService(IKsiSigningServiceProtocol signingServiceProtocol,
+                          IServiceCredentials signingServiceCredentials,
+                          IKsiExtendingServiceProtocol extendingServiceProtocol,
+                          IServiceCredentials extendingServiceCredentials,
+                          IKsiPublicationsFileServiceProtocol publicationsFileServiceProtocol,
+                          IPublicationsFileFactory publicationsFileFactory,
+                          HashAlgorithm hmacAlgorithm)
+            :
+                this(signingServiceProtocol,
+                    signingServiceCredentials,
+                    extendingServiceProtocol,
+                    extendingServiceCredentials,
+                    publicationsFileServiceProtocol,
+                    publicationsFileFactory,
+                    new KsiSignatureFactory(),
+                    hmacAlgorithm)
+        {
         }
 
         /// <summary>
@@ -98,18 +148,23 @@ namespace Guardtime.KSI.Service
                           IKsiExtendingServiceProtocol extendingServiceProtocol,
                           IServiceCredentials extendingServiceCredentials,
                           IKsiPublicationsFileServiceProtocol publicationsFileServiceProtocol,
-                          PublicationsFileFactory publicationsFileFactory,
-                          KsiSignatureFactory ksiSignatureFactory,
+                          IPublicationsFileFactory publicationsFileFactory,
+                          IKsiSignatureFactory ksiSignatureFactory,
                           HashAlgorithm hmacAlgorithm)
-            :
-                this(signingServiceProtocol,
-                    signingServiceCredentials,
-                    extendingServiceProtocol,
-                    extendingServiceCredentials,
-                    publicationsFileServiceProtocol,
-                    publicationsFileFactory,
-                    ksiSignatureFactory)
+
         {
+            if (publicationsFileFactory == null)
+            {
+                throw new KsiException("Invalid publications file factory: null.");
+            }
+
+            _sigingServiceProtocol = signingServiceProtocol;
+            _signingServiceCredentials = signingServiceCredentials;
+            _extendingServiceProtocol = extendingServiceProtocol;
+            _extendingServiceCredentials = extendingServiceCredentials;
+            _publicationsFileServiceProtocol = publicationsFileServiceProtocol;
+            _publicationsFileFactory = publicationsFileFactory;
+            _ksiSignatureFactory = ksiSignatureFactory;
             _hmacAlgorithm = hmacAlgorithm;
         }
 
