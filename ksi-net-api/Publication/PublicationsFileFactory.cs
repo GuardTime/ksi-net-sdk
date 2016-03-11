@@ -29,7 +29,7 @@ namespace Guardtime.KSI.Publication
     /// <summary>
     ///     Publications file factory for creating publications file instance.
     /// </summary>
-    public class PublicationsFileFactory
+    public class PublicationsFileFactory : IPublicationsFileFactory
     {
         private readonly IPkiTrustProvider _pkiTrustProvider;
         private const int DefaultBufferSize = 8092;
@@ -99,7 +99,7 @@ namespace Guardtime.KSI.Publication
         }
 
         /// <summary>
-        ///     Create and verify publications file from stream.
+        ///     Create and verify publications file instance from stream.
         /// </summary>
         /// <param name="stream">publications file stream</param>
         /// <returns>publications file</returns>
