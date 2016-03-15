@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Trust;
 
@@ -33,6 +34,13 @@ namespace Guardtime.KSI.Publication
         /// <param name="time">time</param>
         /// <returns>publication record closest to time</returns>
         PublicationRecordInPublicationFile GetNearestPublicationRecord(ulong time);
+
+        /// <summary>
+        ///     Get nearest publication record subsequent to given time.
+        /// </summary>
+        /// <param name="time">time</param>
+        /// <returns>publication record closest to time</returns>
+        PublicationRecordInPublicationFile GetNearestPublicationRecord(DateTime time);
 
         /// <summary>
         ///     Get latest publication record.

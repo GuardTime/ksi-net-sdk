@@ -139,5 +139,14 @@ namespace Guardtime.KSI.Signature.Verification
         ///     Get verification error message.
         /// </summary>
         public string Message { get; }
+
+        /// <summary>
+        ///  Returns a string that represents the current object.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("{0}: {1}", Code, Message);
+        }
     }
 }

@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -127,6 +128,16 @@ namespace Guardtime.KSI.Publication
             }
 
             return latest;
+        }
+
+        /// <summary>
+        ///     Get nearest publication record subsequent to given time.
+        /// </summary>
+        /// <param name="time">time</param>
+        /// <returns>publication record closest to time</returns>
+        public PublicationRecordInPublicationFile GetNearestPublicationRecord(DateTime time)
+        {
+            return GetNearestPublicationRecord(Util.ConvertDateTimeToUnixTime(time));
         }
 
         /// <summary>

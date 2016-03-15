@@ -22,6 +22,11 @@ namespace Guardtime.KSI.Hashing
     partial class HashAlgorithm
     {
         /// <summary>
+        /// Default Hash Algorithm
+        /// </summary>
+        public static HashAlgorithm Default => Sha2256;
+
+        /// <summary>
         ///     SHA1 Hash Algorithm
         /// </summary>
         public static readonly HashAlgorithm Sha1 = new HashAlgorithm("SHA1", 0x0, 20, AlgorithmStatus.NotTrusted);

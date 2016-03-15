@@ -99,6 +99,16 @@ namespace Guardtime.KSI
         }
 
         /// <summary>
+        /// Get data hasher.
+        /// </summary>
+        /// <returns></returns>
+        public static IDataHasher CreateDataHasher()
+        {
+            CheckCryptoProvider();
+            return _cryptoProvider.CreateDataHasher(HashAlgorithm.Default);
+        }
+
+        /// <summary>
         /// Check if crypto provider exists
         /// </summary>
         private static void CheckCryptoProvider()

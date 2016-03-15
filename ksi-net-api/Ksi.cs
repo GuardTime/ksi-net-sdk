@@ -18,6 +18,7 @@
  */
 
 using System;
+using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Publication;
@@ -73,6 +74,40 @@ namespace Guardtime.KSI
             }
 
             return _ksiService.Sign(hash);
+        }
+
+        /// <summary>
+        /// Sign document
+        /// </summary>
+        /// <param name="stream">Stream containing document bytes</param>
+        /// <returns></returns>
+        public IKsiSignature Sign(Stream stream)
+        {
+            if (stream == null)
+            {
+                throw new KsiException("Stream cannot be null.");
+            }
+
+            IDataHasher dataHasher = KsiProvider.CreateDataHasher();
+            dataHasher.AddData(stream);
+            return _ksiService.Sign(dataHasher.GetHash());
+        }
+
+        /// <summary>
+        /// Sign document
+        /// </summary>
+        /// <param name="documentBytes">Document bytes</param>
+        /// <returns></returns>
+        public IKsiSignature Sign(byte[] documentBytes)
+        {
+            if (documentBytes == null)
+            {
+                throw new KsiException("Dcoument bytes cannot be null.");
+            }
+
+            IDataHasher dataHasher = KsiProvider.CreateDataHasher();
+            dataHasher.AddData(documentBytes);
+            return _ksiService.Sign(dataHasher.GetHash());
         }
 
         /// <summary>
@@ -177,6 +212,12 @@ namespace Guardtime.KSI
                 throw new KsiException("KSI signature cannot be null.");
             }
             PublicationRecordInPublicationFile publicationRecord = GetPublicationsFile().GetNearestPublicationRecord(signature.AggregationTime);
+
+            if (publicationRecord == null)
+            {
+                throw new KsiException("No suitable publication yet.");
+            }
+
             return Extend(signature, publicationRecord);
         }
 
@@ -210,22 +251,6 @@ namespace Guardtime.KSI
             _publicationsFileLoadTime = DateTime.Now;
 
             return _publicationsFile;
-        }
-
-        /// <summary>
-        ///     Verify keyless signature.
-        /// </summary>
-        /// <param name="context">verification context</param>
-        /// <param name="policy">verification rule</param>
-        /// <returns>verification result</returns>
-        public VerificationResult Verify(IVerificationContext context, VerificationRule policy)
-        {
-            if (policy == null)
-            {
-                throw new KsiException("Invalid verification rule: null.");
-            }
-
-            return policy.Verify(context);
         }
     }
 }

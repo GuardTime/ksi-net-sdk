@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.Collections.Generic;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Utils;
@@ -78,6 +79,12 @@ namespace Guardtime.KSI.Test.Publication
         public PublicationRecordInPublicationFile GetNearestPublicationRecord(ulong time)
         {
             return NearestPublications.ContainsKey(time) ? NearestPublications[time] : null;
+        }
+
+        public PublicationRecordInPublicationFile GetNearestPublicationRecord(DateTime time)
+        {
+            ulong t = Util.ConvertDateTimeToUnixTime(time);
+            return NearestPublications.ContainsKey(t) ? NearestPublications[t] : null;
         }
 
         public PublicationRecordInPublicationFile GetLatestPublication()

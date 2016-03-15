@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Publication;
@@ -25,6 +26,7 @@ using Guardtime.KSI.Signature;
 using Guardtime.KSI.Test.Crypto;
 using Guardtime.KSI.Test.Properties;
 using Guardtime.KSI.Trust;
+using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Integration
@@ -239,11 +241,9 @@ namespace Guardtime.KSI.Test.Integration
 
             PublicationRecordInPublicationFile prev = publicationsFile.GetNearestPublicationRecord(latest.PublicationData.PublicationTime - 35 * 24 * 3600);
 
-            if (prev == null)
-            {
-                Assert.True(true);
-                return;
-            }
+            Assert.True(latest.PublicationData.PublicationTime > prev.PublicationData.PublicationTime);
+
+            prev = publicationsFile.GetNearestPublicationRecord(Util.ConvertUnixTimeToDateTime(latest.PublicationData.PublicationTime).AddDays(-35));
 
             Assert.True(latest.PublicationData.PublicationTime > prev.PublicationData.PublicationTime);
         }

@@ -37,8 +37,16 @@ namespace Guardtime.KSI.Signature.Verification
         /// <param name="ruleName">verification rule name</param>
         /// <param name="resultList">verification result list</param>
         public VerificationResult(string ruleName, IList<VerificationResult> resultList)
-            : this(ruleName, GetVerificationResultCodeFromList(resultList))
         {
+            if (resultList == null || resultList.Count == 0)
+            {
+                throw new KsiException("Invalid result list, no elements found.");
+            }
+
+            RuleName = ruleName;
+            VerificationResult lastResult = resultList[resultList.Count - 1];
+            ResultCode = lastResult.ResultCode;
+            VerificationError = lastResult.VerificationError;
             _childResults.AddRange(resultList);
         }
 
@@ -78,16 +86,6 @@ namespace Guardtime.KSI.Signature.Verification
         ///     Get verification error if exists, otherwise null.
         /// </summary>
         public VerificationError VerificationError { get; }
-
-        private static VerificationResultCode GetVerificationResultCodeFromList(IList<VerificationResult> resultList)
-        {
-            if (resultList == null || resultList.Count == 0)
-            {
-                throw new KsiException("Invalid result list, no elements found.");
-            }
-
-            return resultList[resultList.Count - 1].ResultCode;
-        }
 
         /// <summary>
         ///     Returns a string that represents the current object.
