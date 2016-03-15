@@ -17,6 +17,8 @@
  * reserves and retains all trademark rights.
  */
 
+using System.Collections;
+using System.Collections.Generic;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Publication;
@@ -29,6 +31,8 @@ namespace Guardtime.KSI.Signature.Verification
     /// </summary>
     public class VerificationContext : IVerificationContext
     {
+        readonly IDictionary<ulong, CalendarHashChain> _calendarHashChainCache = new Dictionary<ulong, CalendarHashChain>();
+
         /// <summary>
         ///     Create new verification context instance.
         /// </summary>
@@ -82,7 +86,6 @@ namespace Guardtime.KSI.Signature.Verification
             return GetExtendedTimeCalendarHashChain(null);
         }
 
-        // TODO: Cache result and make signature mandatory and unchangeable
         /// <summary>
         ///     Get extended calendar hash chain from given publication time.
         /// </summary>
@@ -95,7 +98,19 @@ namespace Guardtime.KSI.Signature.Verification
                 throw new KsiException("Invalid KSI service: null.");
             }
 
-            return publicationTime == null
+            if (Signature == null)
+            {
+                throw new KsiException("Invalid Signature: null.");
+            }
+
+            ulong cacheKey = publicationTime ?? 0;
+
+            if (_calendarHashChainCache.ContainsKey(cacheKey))
+            {
+                return _calendarHashChainCache[cacheKey];
+            }
+
+            return _calendarHashChainCache[cacheKey] = publicationTime == null
                 ? KsiService.Extend(Signature.AggregationTime)
                 : KsiService.Extend(Signature.AggregationTime, publicationTime.Value);
         }

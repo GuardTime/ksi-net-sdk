@@ -40,7 +40,49 @@ namespace Guardtime.KSI.Test.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void HttpSignHashTest(Ksi ksi)
         {
-            VerificationResult verificationResult = SignHashTest(ksi);
+            VerificationResult verificationResult = SignHash(ksi);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode, "Signature should verify with key based policy");
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void HttpSignByteArrayTest(Ksi ksi)
+        {
+            byte[] data = Encoding.UTF8.GetBytes("This is my document");
+            IKsiSignature signature = ksi.Sign(data);
+
+            VerificationContext verificationContext = new VerificationContext(signature)
+            {
+                DocumentHash = new DataHash(HashAlgorithm.Sha2256,
+                    Base16.Decode("D439459856BEF5ED25772646F73A70A841FC078D3CBBC24AB7F47C464683768D")),
+                PublicationsFile = ksi.GetPublicationsFile()
+            };
+            KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
+                CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
+            VerificationResult verificationResult = policy.Verify(verificationContext);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode, "Signature should verify with key based policy");
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void HttpSignWithStreamTest(Ksi ksi)
+        {
+            IKsiSignature signature;
+            using (MemoryStream stream = new MemoryStream())
+            {
+                byte[] data = Encoding.UTF8.GetBytes("This is my document");
+                stream.Write(data, 0, data.Length);
+                stream.Seek(0, SeekOrigin.Begin);
+                signature = ksi.Sign(stream);
+            }
+
+            VerificationContext verificationContext = new VerificationContext(signature)
+            {
+                DocumentHash = new DataHash(HashAlgorithm.Sha2256,
+                    Base16.Decode("D439459856BEF5ED25772646F73A70A841FC078D3CBBC24AB7F47C464683768D")),
+                PublicationsFile = ksi.GetPublicationsFile()
+            };
+            KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
+                CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
+            VerificationResult verificationResult = policy.Verify(verificationContext);
             Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode, "Signature should verify with key based policy");
         }
 
@@ -49,7 +91,7 @@ namespace Guardtime.KSI.Test.Integration
         {
             Exception ex = Assert.Throws<KsiServiceException>(delegate
             {
-                SignHashTest(ksi);
+                SignHash(ksi);
             });
 
             Assert.AreEqual("Error occured during aggregation: The request could not be authenticated.", ex.Message);
@@ -60,7 +102,7 @@ namespace Guardtime.KSI.Test.Integration
         {
             Exception ex = Assert.Throws<KsiServiceProtocolException>(delegate
             {
-                SignHashTest(ksi);
+                SignHash(ksi);
             });
 
             Assert.That(ex.Message.StartsWith("Request failed"));
@@ -72,7 +114,7 @@ namespace Guardtime.KSI.Test.Integration
         {
             Assert.DoesNotThrow(delegate
             {
-                SignHashTest(ksi);
+                SignHash(ksi);
             }, "Invalid exteding url should not prevent signing.");
         }
 
@@ -81,14 +123,14 @@ namespace Guardtime.KSI.Test.Integration
         {
             Assert.DoesNotThrow(delegate
             {
-                SignHashTest(ksi);
+                SignHash(ksi);
             }, "Invalid exteding pass should not prevent signing.");
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCases))]
         public void TcpSignHashTest(Ksi ksi)
         {
-            VerificationResult verificationResult = SignHashTest(ksi);
+            VerificationResult verificationResult = SignHash(ksi);
             Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode, "Signature should verify with key based policy");
         }
 
@@ -97,7 +139,7 @@ namespace Guardtime.KSI.Test.Integration
         {
             Exception ex = Assert.Throws<KsiServiceException>(delegate
             {
-                SignHashTest(ksi);
+                SignHash(ksi);
             });
             Assert.AreEqual("Error occured during aggregation: The request could not be authenticated.", ex.Message);
         }
@@ -107,7 +149,7 @@ namespace Guardtime.KSI.Test.Integration
         {
             Exception ex = Assert.Throws<KsiServiceProtocolException>(delegate
             {
-                SignHashTest(ksi);
+                SignHash(ksi);
             });
             Assert.That(ex.Message.StartsWith("Could not get host entry for TCP connection"));
             Assert.That(ex.InnerException.Message.StartsWith("No such host is known"));
@@ -118,7 +160,7 @@ namespace Guardtime.KSI.Test.Integration
         {
             Exception ex = Assert.Throws<KsiServiceProtocolException>(delegate
             {
-                SignHashTest(ksi);
+                SignHash(ksi);
             });
             Assert.That(ex.Message.StartsWith("Completing connection failed"));
             Assert.That(ex.InnerException.Message.StartsWith("No connection could be made because the target machine actively refused it"));
@@ -127,18 +169,18 @@ namespace Guardtime.KSI.Test.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void HttpSignedHashVerifyWithInvalidHashTest(Ksi ksi)
         {
-            VerificationResult verificationResult = SignedHashVerifyWithInvalidHashTest(ksi);
+            VerificationResult verificationResult = SignedHashVerifyWithInvalidHash(ksi);
             Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode, "Invalid hash should not verify with key based policy");
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCases))]
         public void TcpSignedHashVerifyWithInvalidHashTest(Ksi ksi)
         {
-            VerificationResult verificationResult = SignedHashVerifyWithInvalidHashTest(ksi);
+            VerificationResult verificationResult = SignedHashVerifyWithInvalidHash(ksi);
             Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode, "Invalid hash should not verify with key based policy");
         }
 
-        public VerificationResult SignHashTest(Ksi ksi)
+        public VerificationResult SignHash(Ksi ksi)
         {
             IKsiSignature signature = ksi.Sign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
             VerificationContext verificationContext = new VerificationContext(signature)
@@ -147,11 +189,12 @@ namespace Guardtime.KSI.Test.Integration
                     Base16.Decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")),
                 PublicationsFile = ksi.GetPublicationsFile()
             };
-            return ksi.Verify(verificationContext,
-                new KeyBasedVerificationPolicy(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com")));
+            KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
+                CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
+            return policy.Verify(verificationContext);
         }
 
-        public VerificationResult SignedHashVerifyWithInvalidHashTest(Ksi ksi)
+        public VerificationResult SignedHashVerifyWithInvalidHash(Ksi ksi)
         {
             using (MemoryStream memoryStream = new MemoryStream(Encoding.UTF8.GetBytes("test")))
             {
@@ -165,8 +208,10 @@ namespace Guardtime.KSI.Test.Integration
                         Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")),
                     PublicationsFile = ksi.GetPublicationsFile()
                 };
-                return ksi.Verify(verificationContext,
-                    new KeyBasedVerificationPolicy(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com")));
+                KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
+                    CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
+
+                return policy.Verify(verificationContext);
             }
         }
 
