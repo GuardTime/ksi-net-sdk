@@ -9,6 +9,19 @@ This tutorial requires at least the basic knowledge of the C# programming langua
 NLog as external library. Also if necessary it is possible to use Bouncy Castle as crypto library instead of Microsoft.
 For that Bouncy Castle library is required in addition.
 
+## Configuring ##
+
+If you will be signing serveral documents per second then consider setting max allowed http connections in your App.config file. 
+Bear in mind that one signing request takes around 1 second.
+
+```xml
+  <system.net>
+    <connectionManagement>
+      <add address="*" maxconnection="100" />
+    </connectionManagement>
+  </system.net>
+```
+
 ## KSI ##
 The SDK can be used with a simple wrapper KSI, where all functionality is predefined. Following code will cover the both ways.
 
