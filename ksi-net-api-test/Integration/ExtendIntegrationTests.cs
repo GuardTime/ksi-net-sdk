@@ -62,8 +62,8 @@ namespace Guardtime.KSI.Test.Integration
                     ksi.Extend(ksiSignature);
                 });
 
-                Assert.That(ex.Message.StartsWith("Request failed"));
-                Assert.That(ex.InnerException.Message.StartsWith("The remote name could not be resolved"));
+                Assert.That(ex.Message.StartsWith("Request failed"), "Unexpected exception message: " + ex.Message);
+                Assert.That(ex.InnerException.Message.StartsWith("The remote name could not be resolved"), "Unexpected inner exception message: " + ex.InnerException.Message);
             }
         }
 

@@ -105,8 +105,8 @@ namespace Guardtime.KSI.Test.Integration
                 SignHash(ksi);
             });
 
-            Assert.That(ex.Message.StartsWith("Request failed"));
-            Assert.That(ex.InnerException.Message.StartsWith("The remote name could not be resolved"));
+            Assert.That(ex.Message.StartsWith("Request failed"), "Unexpected exception message: " + ex.Message);
+            Assert.That(ex.InnerException.Message.StartsWith("The remote name could not be resolved"), "Unexpected inner exception message: " + ex.InnerException.Message);
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidExtendingUrl))]
@@ -151,8 +151,8 @@ namespace Guardtime.KSI.Test.Integration
             {
                 SignHash(ksi);
             });
-            Assert.That(ex.Message.StartsWith("Could not get host entry for TCP connection"));
-            Assert.That(ex.InnerException.Message.StartsWith("No such host is known"));
+            Assert.That(ex.Message.StartsWith("Could not get host entry for TCP connection"), "Unexpected exception message: " + ex.Message);
+            Assert.That(ex.InnerException.Message.StartsWith("No such host is known"), "Unexpected inner exception message: " + ex.InnerException.Message);
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCasesInvalidPort))]
@@ -162,8 +162,9 @@ namespace Guardtime.KSI.Test.Integration
             {
                 SignHash(ksi);
             });
-            Assert.That(ex.Message.StartsWith("Completing connection failed"));
-            Assert.That(ex.InnerException.Message.StartsWith("No connection could be made because the target machine actively refused it"));
+            Assert.That(ex.Message.StartsWith("Completing connection failed"), "Unexpected exception message: " + ex.Message);
+            Assert.That(ex.InnerException.Message.StartsWith("No connection could be made because the target machine actively refused it"),
+                "Unexpected inner exception message: " + ex.InnerException.Message);
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
