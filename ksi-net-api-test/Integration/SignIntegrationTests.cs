@@ -19,6 +19,7 @@
 
 using System;
 using System.IO;
+using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
@@ -152,7 +153,7 @@ namespace Guardtime.KSI.Test.Integration
                 SignHash(ksi);
             });
             Assert.That(ex.Message.StartsWith("Could not get host entry for TCP connection"), "Unexpected exception message: " + ex.Message);
-            Assert.That(ex.InnerException.Message.StartsWith("No such host is known"), "Unexpected inner exception message: " + ex.InnerException.Message);
+            Assert.That(ex.InnerException is SocketException, "Unexpected inner exception: " + ex.InnerException);
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCasesInvalidPort))]
