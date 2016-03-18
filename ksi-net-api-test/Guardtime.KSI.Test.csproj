@@ -177,6 +177,7 @@
     <Compile Include="Service\AggregationPduTests.cs" />
     <Compile Include="Service\KsiPduHeaderTests.cs" />
     <Compile Include="Service\TestKsiServiceProtocol.cs" />
+    <Compile Include="Signature\KsiSignatureUsingReflectionTests.cs" />
     <Compile Include="TestSetup.cs" />
     <Compile Include="Signature\CalendarAuthenticationRecordTests.cs" />
     <Compile Include="Signature\AggregationAuthenticationRecordTests.cs" />
