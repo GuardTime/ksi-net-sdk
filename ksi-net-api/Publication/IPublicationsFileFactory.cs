@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright 2013-2016 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
@@ -17,41 +17,35 @@
  * reserves and retains all trademark rights.
  */
 
-using System.Security.Cryptography.X509Certificates;
-using Guardtime.KSI.Crypto;
-using Guardtime.KSI.Hashing;
+using System.IO;
 
-namespace Guardtime.KSI
+namespace Guardtime.KSI.Publication
 {
     /// <summary>
-    /// Crypto provider.
+    ///     Publications file factory interface.
     /// </summary>
-    public interface ICryptoProvider
+    public interface IPublicationsFileFactory
     {
         /// <summary>
-        /// Get data hasher.
+        ///     Create and verify publications file instance from stream and with given buffer size.
         /// </summary>
-        /// <param name="algorithm"></param>
-        /// <returns></returns>
-        IDataHasher CreateDataHasher(HashAlgorithm algorithm);
+        /// <param name="stream">publications file stream</param>
+        /// <param name="bufferSize">buffer size</param>
+        /// <returns>publications file</returns>
+        IPublicationsFile Create(Stream stream, int bufferSize);
 
         /// <summary>
-        /// Get PKCS#7 crypto signature verifier.
+        ///     Create and verify publications file instance from stream.
         /// </summary>
-        /// <returns>PKCS#7 verifier</returns>
-        ICryptoSignatureVerifier CreatePkcs7CryptoSignatureVerifier(X509Certificate2Collection trustStoreCertificates, ICertificateSubjectRdnSelector certificateRdnSelector);
+        /// <param name="stream">publications file stream</param>
+        /// <returns>publications file</returns>
+        IPublicationsFile Create(Stream stream);
 
         /// <summary>
-        /// Get RSA signature verifier.
+        ///     Create and verify publications file from bytes.
         /// </summary>
-        /// <param name="algorithm">hash algorithm</param>
-        /// <returns>RSA signature verifier</returns>
-        ICryptoSignatureVerifier CreateRsaCryptoSignatureVerifier(string algorithm);
-
-        /// <summary>
-        /// Get HMAC hasher.
-        /// </summary>
-        /// <returns></returns>
-        IHmacHasher CreateHmacHasher();
+        /// <param name="bytes">publications file bytes</param>
+        /// <returns>publications file</returns>
+        IPublicationsFile Create(byte[] bytes);
     }
 }

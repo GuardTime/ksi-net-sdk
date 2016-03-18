@@ -17,28 +17,28 @@
  * reserves and retains all trademark rights.
  */
 
-using Guardtime.KSI.Parser;
+using System.IO;
 using Guardtime.KSI.Service;
-using NUnit.Framework;
 
-namespace Guardtime.KSI.Test.Service
+namespace Guardtime.KSI.Signature
 {
-    [TestFixture]
-    public class ExtendRequestPayloadTests
+    /// <summary>
+    /// KSI signature factory interface
+    /// </summary>
+    public interface IKsiSignatureFactory
     {
-        [Test]
-        public void ToStringTest()
-        {
-            ExtendRequestPayload tag = TestUtil.GetCompositeTag<ExtendRequestPayload>(Constants.ExtendRequestPayload.TagType, new ITlvTag[]
-            {
-                new IntegerTag(Constants.ExtendRequestPayload.RequestIdTagType, false, false, 1),
-                new IntegerTag(Constants.ExtendRequestPayload.AggregationTimeTagType, false, false, 2),
-                new IntegerTag(Constants.ExtendRequestPayload.PublicationTimeTagType, false, false, 3),
-            });
+        /// <summary>
+        ///     Get KSI signature instance from stream.
+        /// </summary>
+        /// <param name="stream">signature data stream</param>
+        /// <returns>KSI signature</returns>
+        IKsiSignature Create(Stream stream);
 
-            ExtendRequestPayload tag2 = new ExtendRequestPayload(tag);
-
-            Assert.AreEqual(tag.ToString(), tag2.ToString());
-        }
+        /// <summary>
+        ///     Get KSI signature instance from aggregation response payload.
+        /// </summary>
+        /// <param name="payload">aggregation response payload</param>
+        /// <returns>KSI signature</returns>
+        IKsiSignature Create(AggregationResponsePayload payload);
     }
 }

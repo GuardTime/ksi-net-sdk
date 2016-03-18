@@ -25,11 +25,12 @@ using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
+using Guardtime.KSI.Publication;
 using Guardtime.KSI.Test.Crypto;
 using Guardtime.KSI.Trust;
 using NUnit.Framework;
 
-namespace Guardtime.KSI.Publication
+namespace Guardtime.KSI.Test.Publication
 {
     // TODO: Possibility to change file easily because signature certificate expires
     [TestFixture]

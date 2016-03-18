@@ -159,7 +159,15 @@ namespace Guardtime.KSI.Service
             try
             {
                 request = WebRequest.Create(_extendingUrl) as HttpWebRequest;
+
+                if (request == null)
+                {
+                    throw new KsiException("Invalid http web request: null.");
+                }
+
                 InitProxySettings(request);
+                request.KeepAlive = false;
+                request.ServicePoint.Expect100Continue = false;
             }
             catch (Exception e)
             {
@@ -227,7 +235,15 @@ namespace Guardtime.KSI.Service
             try
             {
                 request = WebRequest.Create(_publicationsFileUrl) as HttpWebRequest;
+
+                if (request == null)
+                {
+                    throw new KsiException("Invalid http web request: null.");
+                }
+
                 InitProxySettings(request);
+                request.KeepAlive = false;
+                request.ServicePoint.Expect100Continue = false;
             }
             catch (Exception e)
             {
@@ -325,7 +341,15 @@ namespace Guardtime.KSI.Service
             try
             {
                 request = WebRequest.Create(_signingUrl) as HttpWebRequest;
+
+                if (request == null)
+                {
+                    throw new KsiException("Invalid http web request: null.");
+                }
+
                 InitProxySettings(request);
+                request.KeepAlive = false;
+                request.ServicePoint.Expect100Continue = false;
             }
             catch (Exception e)
             {
@@ -412,7 +436,9 @@ namespace Guardtime.KSI.Service
             }
             catch (WebException e)
             {
-                if (e.Response != null)
+                HttpWebResponse webResponse = e.Response as HttpWebResponse;
+
+                if (webResponse != null && webResponse.StatusCode == HttpStatusCode.BadRequest)
                 {
                     asyncResult.ResultStream = new MemoryStream();
                     HandleWebResponse(e.Response, asyncResult.ResultStream, asyncResult.RequestId);

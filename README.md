@@ -29,11 +29,13 @@ KsiProvider.SetCryptoProvider(new MicrosoftCryptoProvider());
 var httpKsiServiceProtocol = new HttpKsiServiceProtocol("http://signingservice_url", "http://extendingservice_url", "http://publicationsfile_url");
 // Create new KSI service
 var ksiService = new KsiService(
-	httpKsiServiceProtocol, new ServiceCredentials("anon", "anon"), 
-	httpKsiServiceProtocol, new ServiceCredentials("anon", "anon"), 
-	httpKsiServiceProtocol,
-	new PublicationsFileFactory(new PkiTrustStoreProvider()), 
-	new KsiSignatureFactory());
+    httpKsiServiceProtocol, new ServiceCredentials("anon", "anon"),
+    httpKsiServiceProtocol, new ServiceCredentials("anon", "anon"),
+    httpKsiServiceProtocol,
+    new PublicationsFileFactory(
+        new PkiTrustStoreProvider(
+            new X509Store(StoreName.Root), 
+            new CertificateSubjectRdnSelector("E=publications@guardtime.com"))));
 ```
 
 There are 2 ways to use KSI service, with and without simple API wrapper.

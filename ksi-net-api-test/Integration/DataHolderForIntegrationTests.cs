@@ -20,7 +20,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Guardtime.KSI.Integration
+namespace Guardtime.KSI.Test.Integration
 {
     public class DataHolderForIntegrationTests
     {

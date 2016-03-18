@@ -17,15 +17,19 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
+using Guardtime.KSI.Test.Signature.Verification.Rule;
 using NUnit.Framework;
 
-namespace Guardtime.KSI.Integration
+namespace Guardtime.KSI.Test.Integration
 {
     [TestFixture]
     public class ExtendIntegrationTests : IntegrationTests
@@ -37,10 +41,12 @@ namespace Guardtime.KSI.Integration
             {
                 IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
 
-                Assert.Throws<KsiException>(delegate
+                Exception ex = Assert.Throws<KsiException>(delegate
                 {
                     ksi.Extend(ksiSignature);
                 });
+
+                Assert.AreEqual("Error occured during extending: The request could not be authenticated.", ex.Message);
             }
         }
 
@@ -51,10 +57,13 @@ namespace Guardtime.KSI.Integration
             {
                 IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
 
-                Assert.Throws<KsiServiceProtocolException>(delegate
+                Exception ex = Assert.Throws<KsiServiceProtocolException>(delegate
                 {
                     ksi.Extend(ksiSignature);
                 });
+
+                Assert.That(ex.Message.StartsWith("Request failed"), "Unexpected exception message: " + ex.Message);
+                Assert.That(ex.InnerException.Message.StartsWith("The remote name could not be resolved"), "Unexpected inner exception message: " + ex.InnerException.Message);
             }
         }
 
@@ -68,7 +77,7 @@ namespace Guardtime.KSI.Integration
                 Assert.DoesNotThrow(delegate
                 {
                     ksi.Extend(ksiSignature);
-                });
+                }, "Invalid signing url should not prevent extending.");
             }
         }
 
@@ -82,7 +91,7 @@ namespace Guardtime.KSI.Integration
                 Assert.DoesNotThrow(delegate
                 {
                     ksi.Extend(ksiSignature);
-                });
+                }, "Invalid signing pass should not prevent extending.");
             }
         }
 
@@ -182,6 +191,78 @@ namespace Guardtime.KSI.Integration
                 Assert.True(extendedToLatest.PublicationRecord.PublicationData.PublicationTime > extendedToNearest.PublicationRecord.PublicationData.PublicationTime);
                 Assert.AreEqual(extendedToNearest.PublicationRecord.PublicationData.PublicationTime, 1408060800);
             }
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void ParallelExtendingTest(Ksi ksi)
+        {
+            ManualResetEvent waitHandle = new ManualResetEvent(false);
+            int doneCount = 0;
+            int runCount = 10;
+            string errorMessage = null;
+
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
+            {
+                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+                IKsiSignature extendedToNearest = ksi.Extend(ksiSignature);
+            }
+
+            for (int i = 0; i < runCount; i ++)
+            {
+                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " Start " + i);
+                int k = i;
+
+                MemoryStream s = new MemoryStream();
+                using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
+                {
+                    stream.CopyTo(s);
+                }
+
+                s.Seek(0, SeekOrigin.Begin);
+
+                Task.Run(() =>
+                {
+                    long start = DateTime.Now.Ticks;
+                    Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " Start extending " + k);
+                    try
+                    {
+                        IKsiSignature ksiSignature = new KsiSignatureFactory().Create(s);
+                        IKsiSignature extendedToNearest = ksi.Extend(ksiSignature);
+                        s.Close();
+
+                        Assert.AreEqual(extendedToNearest.PublicationRecord.PublicationData.PublicationTime, 1408060800);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " Error " + k + ". " + ex);
+                        if (errorMessage == null)
+                        {
+                            errorMessage = ex.ToString();
+                        }
+                    }
+                    finally
+                    {
+                        Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + "\t Done! " + k + "\t It took: " + (DateTime.Now.Ticks - start) / 10000 + " ms");
+                        doneCount++;
+
+                        if (doneCount == runCount)
+                        {
+                            waitHandle.Set();
+                        }
+                    }
+                });
+            }
+
+            Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " Waiting ...");
+
+            waitHandle.WaitOne();
+
+            if (errorMessage != null)
+            {
+                Assert.Fail("ERROR: " + errorMessage);
+            }
+
+            Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " All done.");
         }
     }
 }

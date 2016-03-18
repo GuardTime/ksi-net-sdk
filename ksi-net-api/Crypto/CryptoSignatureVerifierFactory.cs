@@ -40,9 +40,9 @@ namespace Guardtime.KSI.Crypto
             switch (oid)
             {
                 case "1.2.840.113549.1.1.11":
-                    return KsiProvider.GetRsaCryptoSignatureVerifier("SHA256");
+                    return KsiProvider.CreateRsaCryptoSignatureVerifier("SHA256");
                 case "1.2.840.113549.1.7.2":
-                    return KsiProvider.GetPkcs7CryptoSignatureVerifier(trustStore, certificateRdnSelector);
+                    return KsiProvider.CreatePkcs7CryptoSignatureVerifier(trustStore, certificateRdnSelector);
                 default:
                     throw new PkiVerificationErrorException("Cryptographic signature not supported.");
             }

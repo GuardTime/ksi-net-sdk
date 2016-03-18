@@ -19,9 +19,12 @@
 
 using System.IO;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Signature;
+using Guardtime.KSI.Signature.Verification;
+using Guardtime.KSI.Signature.Verification.Rule;
 using NUnit.Framework;
 
-namespace Guardtime.KSI.Signature.Verification.Rule
+namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
     public class SignaturePublicationRecordPublicationHashRuleTests
@@ -136,8 +139,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             SignaturePublicationRecordPublicationHashRule rule = new SignaturePublicationRecordPublicationHashRule();
 
             // Check invalid signature with invalid publication record
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Invalid_With_Invalid_Publication_Record), FileMode.Open)
-                )
+            using (FileStream stream =
+                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Invalid_With_Invalid_Publication_Record), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {

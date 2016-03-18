@@ -17,9 +17,13 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.IO;
+using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Signature;
@@ -29,7 +33,7 @@ using Guardtime.KSI.Test.Crypto;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
-namespace Guardtime.KSI.Integration
+namespace Guardtime.KSI.Test.Integration
 {
     [TestFixture]
     public class SignIntegrationTests : IntegrationTests
@@ -37,26 +41,73 @@ namespace Guardtime.KSI.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void HttpSignHashTest(Ksi ksi)
         {
-            VerificationResult verificationResult = SignHashTest(ksi);
+            VerificationResult verificationResult = SignHash(ksi);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode, "Signature should verify with key based policy");
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void HttpSignByteArrayTest(Ksi ksi)
+        {
+            byte[] data = Encoding.UTF8.GetBytes("This is my document");
+            IKsiSignature signature = ksi.Sign(data);
+
+            VerificationContext verificationContext = new VerificationContext(signature)
+            {
+                DocumentHash = new DataHash(HashAlgorithm.Sha2256,
+                    Base16.Decode("D439459856BEF5ED25772646F73A70A841FC078D3CBBC24AB7F47C464683768D")),
+                PublicationsFile = ksi.GetPublicationsFile()
+            };
+            KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
+                CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
+            VerificationResult verificationResult = policy.Verify(verificationContext);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode, "Signature should verify with key based policy");
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void HttpSignWithStreamTest(Ksi ksi)
+        {
+            IKsiSignature signature;
+            using (MemoryStream stream = new MemoryStream())
+            {
+                byte[] data = Encoding.UTF8.GetBytes("This is my document");
+                stream.Write(data, 0, data.Length);
+                stream.Seek(0, SeekOrigin.Begin);
+                signature = ksi.Sign(stream);
+            }
+
+            VerificationContext verificationContext = new VerificationContext(signature)
+            {
+                DocumentHash = new DataHash(HashAlgorithm.Sha2256,
+                    Base16.Decode("D439459856BEF5ED25772646F73A70A841FC078D3CBBC24AB7F47C464683768D")),
+                PublicationsFile = ksi.GetPublicationsFile()
+            };
+            KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
+                CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
+            VerificationResult verificationResult = policy.Verify(verificationContext);
             Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode, "Signature should verify with key based policy");
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidSigningPass))]
         public void HttpSignHashInvalidPassTest(Ksi ksi)
         {
-            Assert.Throws<KsiServiceException>(delegate
+            Exception ex = Assert.Throws<KsiServiceException>(delegate
             {
-                SignHashTest(ksi);
+                SignHash(ksi);
             });
+
+            Assert.AreEqual("Error occured during aggregation: The request could not be authenticated.", ex.Message);
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidSigningUrl))]
         public void HttpSignHashInvalidUrlTest(Ksi ksi)
         {
-            Assert.Throws<KsiServiceProtocolException>(delegate
+            Exception ex = Assert.Throws<KsiServiceProtocolException>(delegate
             {
-                SignHashTest(ksi);
+                SignHash(ksi);
             });
+
+            Assert.That(ex.Message.StartsWith("Request failed"), "Unexpected exception message: " + ex.Message);
+            Assert.That(ex.InnerException.Message.StartsWith("The remote name could not be resolved"), "Unexpected inner exception message: " + ex.InnerException.Message);
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidExtendingUrl))]
@@ -64,8 +115,8 @@ namespace Guardtime.KSI.Integration
         {
             Assert.DoesNotThrow(delegate
             {
-                SignHashTest(ksi);
-            });
+                SignHash(ksi);
+            }, "Invalid exteding url should not prevent signing.");
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidExtendingPass))]
@@ -73,59 +124,65 @@ namespace Guardtime.KSI.Integration
         {
             Assert.DoesNotThrow(delegate
             {
-                SignHashTest(ksi);
-            });
+                SignHash(ksi);
+            }, "Invalid exteding pass should not prevent signing.");
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCases))]
         public void TcpSignHashTest(Ksi ksi)
         {
-            VerificationResult verificationResult = SignHashTest(ksi);
+            VerificationResult verificationResult = SignHash(ksi);
             Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode, "Signature should verify with key based policy");
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCasesInvalidPass))]
         public void TcpSignHashInvalidPassTest(Ksi ksi)
         {
-            Assert.Throws<KsiServiceException>(delegate
+            Exception ex = Assert.Throws<KsiServiceException>(delegate
             {
-                SignHashTest(ksi);
+                SignHash(ksi);
             });
+            Assert.AreEqual("Error occured during aggregation: The request could not be authenticated.", ex.Message);
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCasesInvalidUrl))]
         public void TcpSignHashInvalidUrlTest(Ksi ksi)
         {
-            Assert.Throws<KsiServiceProtocolException>(delegate
+            Exception ex = Assert.Throws<KsiServiceProtocolException>(delegate
             {
-                SignHashTest(ksi);
+                SignHash(ksi);
             });
+            Assert.That(ex.Message.StartsWith("Could not get host entry for TCP connection"), "Unexpected exception message: " + ex.Message);
+            Assert.That(ex.InnerException is SocketException, "Unexpected inner exception: " + ex.InnerException);
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCasesInvalidPort))]
         public void TcpSignHashInvalidPortTest(Ksi ksi)
         {
-            Assert.Throws<KsiServiceProtocolException>(delegate
+            Exception ex = Assert.Throws<KsiServiceProtocolException>(delegate
             {
-                SignHashTest(ksi);
+                SignHash(ksi);
             });
+            Assert.That(ex.Message.StartsWith("Completing connection failed"), "Unexpected exception message: " + ex.Message);
+            Assert.That(ex.InnerException.Message.StartsWith("No connection could be made because the target machine actively refused it"),
+                "Unexpected inner exception message: " + ex.InnerException.Message);
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void HttpSignedHashVerifyWithInvalidHashTest(Ksi ksi)
         {
-            VerificationResult verificationResult = SignedHashVerifyWithInvalidHashTest(ksi);
+            VerificationResult verificationResult = SignedHashVerifyWithInvalidHash(ksi);
             Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode, "Invalid hash should not verify with key based policy");
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCases))]
         public void TcpSignedHashVerifyWithInvalidHashTest(Ksi ksi)
         {
-            VerificationResult verificationResult = SignedHashVerifyWithInvalidHashTest(ksi);
+            VerificationResult verificationResult = SignedHashVerifyWithInvalidHash(ksi);
             Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode, "Invalid hash should not verify with key based policy");
         }
 
-        public VerificationResult SignHashTest(Ksi ksi)
+        public VerificationResult SignHash(Ksi ksi)
         {
             IKsiSignature signature = ksi.Sign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
             VerificationContext verificationContext = new VerificationContext(signature)
@@ -134,11 +191,12 @@ namespace Guardtime.KSI.Integration
                     Base16.Decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")),
                 PublicationsFile = ksi.GetPublicationsFile()
             };
-            return ksi.Verify(verificationContext,
-                new KeyBasedVerificationPolicy(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com")));
+            KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
+                CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
+            return policy.Verify(verificationContext);
         }
 
-        public VerificationResult SignedHashVerifyWithInvalidHashTest(Ksi ksi)
+        public VerificationResult SignedHashVerifyWithInvalidHash(Ksi ksi)
         {
             using (MemoryStream memoryStream = new MemoryStream(Encoding.UTF8.GetBytes("test")))
             {
@@ -152,9 +210,65 @@ namespace Guardtime.KSI.Integration
                         Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")),
                     PublicationsFile = ksi.GetPublicationsFile()
                 };
-                return ksi.Verify(verificationContext,
-                    new KeyBasedVerificationPolicy(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com")));
+                KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
+                    CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
+
+                return policy.Verify(verificationContext);
             }
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void ParallelSigningTest(Ksi ksi)
+        {
+            ManualResetEvent waitHandle = new ManualResetEvent(false);
+            int doneCount = 0;
+            int runCount = 10;
+            string errorMessage = null;
+
+            for (int i = 0; i < runCount; i++)
+            {
+                Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " Start " + i);
+                int k = i;
+
+                Task.Run(() =>
+                {
+                    long start = DateTime.Now.Ticks;
+                    Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " Start signing " + k);
+                    try
+                    {
+                        IKsiSignature signature = ksi.Sign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " Error " + k + ". " + ex);
+                        if (errorMessage == null)
+                        {
+                            errorMessage = ex.ToString();
+                        }
+                    }
+                    finally
+                    {
+                        Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + "\t Done! " + k + "\t It took: " + (DateTime.Now.Ticks - start) / 10000 + " ms");
+                        doneCount++;
+
+                        if (doneCount == runCount)
+                        {
+                            waitHandle.Set();
+                        }
+                    }
+                });
+            }
+
+            Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " Waiting ...");
+
+            waitHandle.WaitOne();
+
+            if (errorMessage != null)
+            {
+                Assert.Fail("ERROR: " + errorMessage);
+            }
+
+            Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " All done.");
         }
     }
 }

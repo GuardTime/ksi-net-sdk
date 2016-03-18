@@ -17,9 +17,10 @@
  * reserves and retains all trademark rights.
  */
 
+using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
-namespace Guardtime.KSI.Utils
+namespace Guardtime.KSI.Test.Utils
 {
     [TestFixture]
     public class UtilTests

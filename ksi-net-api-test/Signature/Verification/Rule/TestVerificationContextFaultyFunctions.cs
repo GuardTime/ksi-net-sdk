@@ -20,8 +20,10 @@
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
+using Guardtime.KSI.Signature;
+using Guardtime.KSI.Signature.Verification;
 
-namespace Guardtime.KSI.Signature.Verification.Rule
+namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     public class TestVerificationContextFaultyFunctions : IVerificationContext
     {

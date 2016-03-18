@@ -19,7 +19,7 @@
 
 using NUnit.Framework;
 
-namespace Guardtime.KSI.Integration
+namespace Guardtime.KSI.Test.Integration
 {
     [TestFixture]
     public class VerificationPolicyIntegrationTests : IntegrationTests

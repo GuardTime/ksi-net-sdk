@@ -19,9 +19,10 @@
 
 using System;
 using System.IO;
+using Guardtime.KSI.Parser;
 using NUnit.Framework;
 
-namespace Guardtime.KSI.Parser
+namespace Guardtime.KSI.Test.Parser
 {
     [TestFixture]
     public class TlvWriterTests

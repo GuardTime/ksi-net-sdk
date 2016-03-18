@@ -96,18 +96,21 @@ namespace Guardtime.KSI.Service
                 throw new KsiException("Invalid input data: null.");
             }
 
-            IPHostEntry ipHostInfo;
+            IPAddress ipAddress;
 
             try
             {
-                ipHostInfo = Dns.GetHostEntry(_signingUrl);
+                IPHostEntry ipHostInfo = Dns.GetHostEntry(_signingUrl);
+                ipAddress = ipHostInfo.AddressList[0];
             }
             catch (Exception ex)
             {
-                throw new KsiServiceProtocolException("Could not get host entry for TCP connection. Host: " + _signingUrl, ex);
+                if (!IPAddress.TryParse(_signingUrl, out ipAddress))
+                {
+                    throw new KsiServiceProtocolException("Could not get host entry for TCP connection. Host: " + _signingUrl, ex);
+                }
             }
 
-            IPAddress ipAddress = ipHostInfo.AddressList[0];
             IPEndPoint endPoint = new IPEndPoint(ipAddress, _signingPort);
 
             Socket client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)

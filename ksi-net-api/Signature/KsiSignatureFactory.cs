@@ -28,7 +28,7 @@ namespace Guardtime.KSI.Signature
     /// <summary>
     /// KSI signature factory
     /// </summary>
-    public class KsiSignatureFactory
+    public class KsiSignatureFactory : IKsiSignatureFactory
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 

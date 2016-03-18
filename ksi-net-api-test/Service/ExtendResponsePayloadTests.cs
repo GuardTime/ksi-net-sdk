@@ -21,10 +21,11 @@ using System;
 using System.Reflection;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
+using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature;
 using NUnit.Framework;
 
-namespace Guardtime.KSI.Service
+namespace Guardtime.KSI.Test.Service
 {
     [TestFixture]
     public class ExtendResponsePayloadTests

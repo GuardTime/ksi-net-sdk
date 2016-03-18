@@ -18,6 +18,7 @@
  */
 
 using System.Security.Cryptography.X509Certificates;
+using System.Threading;
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
@@ -30,6 +31,7 @@ namespace Guardtime.KSI
     public class KsiProvider
     {
         private static ICryptoProvider _cryptoProvider;
+        private static readonly object _lock = new object();
 
         /// <summary>
         /// Set crypto provider.
@@ -44,10 +46,24 @@ namespace Guardtime.KSI
         /// Get PKCS#7 crypto signature verifier.
         /// </summary>
         /// <returns>PKCS#7 verifier</returns>
-        public static ICryptoSignatureVerifier GetPkcs7CryptoSignatureVerifier(X509Store trustStore, ICertificateSubjectRdnSelector certificateRdnSelector)
+        public static ICryptoSignatureVerifier CreatePkcs7CryptoSignatureVerifier(X509Store trustStore, ICertificateSubjectRdnSelector certificateRdnSelector)
         {
             CheckCryptoProvider();
-            return _cryptoProvider.GetPkcs7CryptoSignatureVerifier(trustStore, certificateRdnSelector);
+
+            X509Certificate2Collection trustAnchors = new X509Certificate2Collection();
+
+            if (trustStore != null)
+            {
+                // make certificates loading thread-safe
+                lock (_lock)
+                {
+                    trustStore.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
+                    trustAnchors = trustStore.Certificates;
+                    trustStore.Close();
+                }
+            }
+
+            return _cryptoProvider.CreatePkcs7CryptoSignatureVerifier(trustAnchors, certificateRdnSelector);
         }
 
         /// <summary>
@@ -55,20 +71,20 @@ namespace Guardtime.KSI
         /// </summary>
         /// <param name="algorithm">hash algorithm</param>
         /// <returns>RSA signature verifier</returns>
-        public static ICryptoSignatureVerifier GetRsaCryptoSignatureVerifier(string algorithm)
+        public static ICryptoSignatureVerifier CreateRsaCryptoSignatureVerifier(string algorithm)
         {
             CheckCryptoProvider();
-            return _cryptoProvider.GetRsaCryptoSignatureVerifier(algorithm);
+            return _cryptoProvider.CreateRsaCryptoSignatureVerifier(algorithm);
         }
 
         /// <summary>
         /// Get HMAC hasher.
         /// </summary>
         /// <returns></returns>
-        public static IHmacHasher GetHmacHasher()
+        public static IHmacHasher CreateHmacHasher()
         {
             CheckCryptoProvider();
-            return _cryptoProvider.GetHmacHasher();
+            return _cryptoProvider.CreateHmacHasher();
         }
 
         /// <summary>
@@ -76,10 +92,20 @@ namespace Guardtime.KSI
         /// </summary>
         /// <param name="algorithm"></param>
         /// <returns></returns>
-        public static IDataHasher GetDataHasher(HashAlgorithm algorithm)
+        public static IDataHasher CreateDataHasher(HashAlgorithm algorithm)
         {
             CheckCryptoProvider();
-            return _cryptoProvider.GetDataHasher(algorithm);
+            return _cryptoProvider.CreateDataHasher(algorithm);
+        }
+
+        /// <summary>
+        /// Get data hasher.
+        /// </summary>
+        /// <returns></returns>
+        public static IDataHasher CreateDataHasher()
+        {
+            CheckCryptoProvider();
+            return _cryptoProvider.CreateDataHasher(HashAlgorithm.Default);
         }
 
         /// <summary>

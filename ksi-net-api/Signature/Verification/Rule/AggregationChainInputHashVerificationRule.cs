@@ -39,7 +39,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (signature.IsRfc3161Signature)
             {
-                IDataHasher hasher = KsiProvider.GetDataHasher(aggregationHashChainInputHash.Algorithm);
+                IDataHasher hasher = KsiProvider.CreateDataHasher(aggregationHashChainInputHash.Algorithm);
 
                 if (signature.Rfc3161Record == null)
                 {

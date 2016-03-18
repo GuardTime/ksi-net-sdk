@@ -18,12 +18,12 @@
  */
 
 using System;
-using Guardtime.KSI.Test.Crypto;
 using System.IO;
 using System.Reflection;
+using Guardtime.KSI.Test.Crypto;
 using NUnit.Framework;
 
-namespace Guardtime.KSI
+namespace Guardtime.KSI.Test
 {
     [SetUpFixture]
     public class TestSetup

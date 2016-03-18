@@ -6,7 +6,7 @@
     <ProjectGuid>{0068B0BA-2F7C-44C3-B1B7-594D1299EBDC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Guardtime.KSI</RootNamespace>
+    <RootNamespace>Guardtime.KSI.Test</RootNamespace>
     <AssemblyName>Guardtime.KSI.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -136,27 +136,13 @@
     <Compile Include="Hashing\DataHasherTests.cs" />
     <Compile Include="Hashing\DataHashTests.cs" />
     <Compile Include="Hashing\HashAlgorithmTests.cs" />
-    <Compile Include="Integration\CommonGetTestFilesAndResults.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Integration\CommonTestExecution.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Integration\DataHolderForIntegrationTests.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Integration\IntegrationTests.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Integration\ExtendIntegrationTests.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Integration\VerificationPolicyIntegrationTests.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Integration\SignIntegrationTests.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
+    <Compile Include="Integration\CommonGetTestFilesAndResults.cs" />
+    <Compile Include="Integration\CommonTestExecution.cs" />
+    <Compile Include="Integration\DataHolderForIntegrationTests.cs" />
+    <Compile Include="Integration\IntegrationTests.cs" />
+    <Compile Include="Integration\ExtendIntegrationTests.cs" />
+    <Compile Include="Integration\VerificationPolicyIntegrationTests.cs" />
+    <Compile Include="Integration\SignIntegrationTests.cs" />
     <Compile Include="Parser\CompositeTagTests.cs" />
     <Compile Include="Parser\IntegerTagTests.cs" />
     <Compile Include="Parser\RawTagTests.cs" />
@@ -191,6 +177,7 @@
     <Compile Include="Service\AggregationPduTests.cs" />
     <Compile Include="Service\KsiPduHeaderTests.cs" />
     <Compile Include="Service\TestKsiServiceProtocol.cs" />
+    <Compile Include="Signature\KsiSignatureUsingReflectionTests.cs" />
     <Compile Include="TestSetup.cs" />
     <Compile Include="Signature\CalendarAuthenticationRecordTests.cs" />
     <Compile Include="Signature\AggregationAuthenticationRecordTests.cs" />

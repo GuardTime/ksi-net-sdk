@@ -19,9 +19,10 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Guardtime.KSI.Hashing;
 using NUnit.Framework;
 
-namespace Guardtime.KSI.Hashing
+namespace Guardtime.KSI.Test.Hashing
 {
     [TestFixture]
     public class HashAlgorithmTests

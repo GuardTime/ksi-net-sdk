@@ -20,12 +20,13 @@
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
-using Guardtime.KSI.Properties;
 using Guardtime.KSI.Service;
+using Guardtime.KSI.Signature;
+using Guardtime.KSI.Test.Properties;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
-namespace Guardtime.KSI.Signature
+namespace Guardtime.KSI.Test.Signature
 {
     [TestFixture]
     public class KsiSignatureFactoryTests

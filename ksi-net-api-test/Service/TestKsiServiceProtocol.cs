@@ -21,9 +21,10 @@ using System;
 using System.IO;
 using System.Threading;
 using Guardtime.KSI.Parser;
+using Guardtime.KSI.Service;
 using NUnit.Framework;
 
-namespace Guardtime.KSI.Service
+namespace Guardtime.KSI.Test.Service
 {
     public class TestKsiServiceProtocol : IKsiSigningServiceProtocol, IKsiExtendingServiceProtocol, IKsiPublicationsFileServiceProtocol
     {

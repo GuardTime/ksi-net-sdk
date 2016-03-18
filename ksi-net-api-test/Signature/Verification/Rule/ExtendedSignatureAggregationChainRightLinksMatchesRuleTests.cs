@@ -20,10 +20,13 @@
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
+using Guardtime.KSI.Signature;
+using Guardtime.KSI.Signature.Verification;
+using Guardtime.KSI.Signature.Verification.Rule;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
-namespace Guardtime.KSI.Signature.Verification.Rule
+namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
     public class ExtendedSignatureAggregationChainRightLinksMatchesRuleTests
@@ -148,7 +151,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             ExtendedSignatureAggregationChainRightLinksMatchesRule rule = new ExtendedSignatureAggregationChainRightLinksMatchesRule();
 
             // Check invalid signature extended signature at same time gives different result
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Invalid_Calendar_Chain_Publication_Time), FileMode.Open))
+            using (FileStream stream =
+                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Invalid_Calendar_Chain_Publication_Time), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {

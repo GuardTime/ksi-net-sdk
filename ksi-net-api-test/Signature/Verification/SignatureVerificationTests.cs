@@ -22,15 +22,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
-using Guardtime.KSI.Properties;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
+using Guardtime.KSI.Signature;
+using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
 using Guardtime.KSI.Test.Crypto;
+using Guardtime.KSI.Test.Properties;
 using Guardtime.KSI.Trust;
 using NUnit.Framework;
 
-namespace Guardtime.KSI.Signature.Verification
+namespace Guardtime.KSI.Test.Signature.Verification
 {
     [TestFixture]
     public class SignatureVerificationTests
@@ -50,12 +52,12 @@ namespace Guardtime.KSI.Signature.Verification
                     serviceProtocol, new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
                     serviceProtocol,
                     new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))), new KsiSignatureFactory());
+                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))));
 
                 VerificationContext context = new VerificationContext(new KsiSignatureFactory().Create(stream))
                 {
                     DocumentHash =
-                        new Hashing.DataHash(new byte[]
+                        new KSI.Hashing.DataHash(new byte[]
                         {
                             0x01, 0x11, 0xA7, 0x00, 0xB0, 0xC8, 0x06, 0x6C, 0x47, 0xEC, 0xBA, 0x05, 0xED, 0x37, 0xBC,
                             0x14,
