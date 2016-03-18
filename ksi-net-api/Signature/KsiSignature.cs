@@ -50,7 +50,6 @@ namespace Guardtime.KSI.Signature
 
             int calendarChainCount = 0;
             int publicationRecordCount = 0;
-            int aggregationAuthenticationRecordCount = 0;
             int calendarAuthenticationRecordCount = 0;
             int rfc3161RecordCount = 0;
 
@@ -75,7 +74,6 @@ namespace Guardtime.KSI.Signature
                         break;
                     case Constants.AggregationAuthenticationRecord.TagType:
                         this[i] = AggregationAuthenticationRecord = new AggregationAuthenticationRecord(childTag);
-                        aggregationAuthenticationRecordCount++;
                         break;
                     case Constants.CalendarAuthenticationRecord.TagType:
                         this[i] = CalendarAuthenticationRecord = new CalendarAuthenticationRecord(childTag);
@@ -111,11 +109,6 @@ namespace Guardtime.KSI.Signature
                 calendarAuthenticationRecordCount > 1)
             {
                 throw new TlvException("Only one from publication record or calendar authentication record is allowed in KSI signature.");
-            }
-
-            if (aggregationAuthenticationRecordCount > 1)
-            {
-                throw new TlvException("Only one aggregation authentication record is allowed in KSI signature.");
             }
 
             if (rfc3161RecordCount > 1)
