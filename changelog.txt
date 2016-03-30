@@ -1,9 +1,11 @@
 Version 3.1
 
-* IMPROVEMENT: Added some convenience methods for API users:
+2016-03-21 3.1.0
+
+* IMPROVEMENT: Added some convenience methods for API users (KSINETAPI-58):
 	- Ksi class Sign methods taking Stream or byte[] as a parameter
 	- KsiProvider class CreateDataHasher method without parameters
 	- PublicationsFile class GetNearestPublicationRecord method taking DateTime as a parameter
-* IMPROVEMENT: Made certificates loading thread-safe.
-* BUGFIX: Modified http request headres that are not supported by aggregation servers any more (removed 'Expect' header and changed 'Connection' header to 'Close').
+* IMPROVEMENT: Made certificates loading thread-safe. (KSINETAPI-57)
+* BUGFIX: Modified http request headres that are not supported by aggregation servers any more (removed 'Expect' header and changed 'Connection' header to 'Close'). (KSINETAPI-56)
 * REMARK: If you will be signing serveral documents per second then consider setting max allowed http connections in your App.config file. Bear in mind that one signing request takes around 1 second.
