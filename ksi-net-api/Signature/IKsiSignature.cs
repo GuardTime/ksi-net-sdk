@@ -28,7 +28,7 @@ namespace Guardtime.KSI.Signature
     /// <summary>
     ///     KSI signature interface.
     /// </summary>
-    public interface IKsiSignature : ITlvTag
+    public interface IKsiSignature : ICompositeTag
     {
         /// <summary>
         ///     Get RFC 3161 record

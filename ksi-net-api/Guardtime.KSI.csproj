@@ -104,6 +104,7 @@
     <Compile Include="Hashing\IDataHasher.cs" />
     <Compile Include="Hashing\IHmacHasher.cs" />
     <Compile Include="Ksi.cs" />
+    <Compile Include="Parser\ICompositeTag.cs" />
     <Compile Include="Parser\ImprintTag.cs" />
     <Compile Include="Parser\IntegerTag.cs" />
     <Compile Include="Parser\RawTag.cs" />
@@ -128,8 +129,13 @@
     <Compile Include="Publication\PublicationsFileHeader.cs" />
     <Compile Include="Publication\PublicationsFile.cs" />
     <Compile Include="Publication\PublicationData.cs" />
+    <Compile Include="Service\LocalAggregationItem.cs" />
+    <Compile Include="Service\LocalAggregator.cs" />
     <Compile Include="Service\TcpKsiServiceProtocol.cs" />
+    <Compile Include="Signature\AggregationHashChain.Metadata.cs" />
+    <Compile Include="Signature\AggregationHashChain.Link.cs" />
     <Compile Include="Signature\IKsiSignatureFactory.cs" />
+    <Compile Include="Service\LocalAggregator.TreeNode.cs" />
     <Compile Include="Utils\Base16.cs" />
     <Compile Include="Utils\Base32.cs" />
     <Compile Include="Utils\BaseX.cs" />

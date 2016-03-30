@@ -114,6 +114,23 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
+        ///     Create aggregation request payload from data hash.
+        /// </summary>
+        /// <param name="hash">data hash</param>
+        /// <param name="level">the level value of the aggregation tree node</param>
+        public AggregationRequestPayload(DataHash hash, uint level) : base(Constants.AggregationRequestPayload.TagType, false, false, new ITlvTag[]
+        {
+            new IntegerTag(Constants.AggregationRequestPayload.RequestIdTagType, false, false, Util.GetRandomUnsignedLong()),
+            new ImprintTag(Constants.AggregationRequestPayload.RequestHashTagType, false, false, hash),
+            new IntegerTag(Constants.AggregationRequestPayload.RequestLevelTagType, false, false, level)
+        })
+        {
+            _requestId = (IntegerTag)this[0];
+            _requestHash = (ImprintTag)this[1];
+            _requestLevel = (IntegerTag)this[2];
+        }
+
+        /// <summary>
         ///     Get request hash.
         /// </summary>
         public DataHash RequestHash => _requestHash.Value;
