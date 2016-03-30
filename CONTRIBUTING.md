@@ -1,7 +1,7 @@
 ## Getting Started ##
 
 * Create a [GitHub account] (https://github.com/join) if you don't have one yet
-* For the repository on GitHub
+* Fork the repository on GitHub
 * Submit an e-mail to [support@guardtime.com] (mailto:support@guardtime.com) 
  * The subject shall contain the brief summary of the issue
  * Describe the issue clearly, if it is a bug include the steps to reproduce
@@ -16,7 +16,7 @@
 * Use the following sample as guide for commit message format
 
 ```
-(KSINETAPI-XXX) add sample here
+(KSINETAPI-XXX) description of the change
 ```
 
 * The KSINETAPI-XXX is the JIRA issue key that was provided in the confirmation e-mail
