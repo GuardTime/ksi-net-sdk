@@ -38,24 +38,6 @@ namespace Guardtime.KSI.Signature
         private string _identity;
 
         /// <summary>
-        ///     Create new KSI signature TLV element from child TLV elements.
-        /// </summary>
-        /// <param name="childTags">Child TLV elements</param>
-        public KsiSignature(ITlvTag[] childTags) : this(new KsiSignature(false, false, childTags))
-        {
-        }
-
-        /// <summary>
-        /// Create new KSI signature TLV element from child TLV elements.
-        /// </summary>
-        /// <param name="nonCritical"></param>
-        /// <param name="forward"></param>
-        /// <param name="childTags"></param>
-        private KsiSignature(bool nonCritical, bool forward, ITlvTag[] childTags) : base(Constants.KsiSignature.TagType, nonCritical, forward, childTags)
-        {
-        }
-
-        /// <summary>
         ///     Create new KSI signature TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>

@@ -179,17 +179,6 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        ///     Sync create signature with given data hash.
-        /// </summary>
-        /// <param name="hash">data hash</param>
-        /// <param name="level">the level value of the aggregation tree node</param>
-        /// <returns>KSI signature</returns>
-        public IKsiSignature Sign(DataHash hash, uint level)
-        {
-            return EndSign(BeginSign(hash, level, null, null));
-        }
-
-        /// <summary>
         ///     Async begin create signature with given data hash.
         /// </summary>
         /// <param name="hash">data hash</param>
@@ -197,19 +186,6 @@ namespace Guardtime.KSI.Service
         /// <param name="asyncState">async state object</param>
         /// <returns>async result</returns>
         public IAsyncResult BeginSign(DataHash hash, AsyncCallback callback, object asyncState)
-        {
-            return BeginSign(hash, 0, callback, asyncState);
-        }
-
-        /// <summary>
-        ///     Async begin create signature with given data hash.
-        /// </summary>
-        /// <param name="hash">data hash</param>
-        /// <param name="level">the level value of the aggregation tree node</param>
-        /// <param name="callback">callback when creating signature is finished</param>
-        /// <param name="asyncState">async state object</param>
-        /// <returns>async result</returns>
-        public IAsyncResult BeginSign(DataHash hash, uint level, AsyncCallback callback, object asyncState)
         {
             if (_sigingServiceProtocol == null)
             {
@@ -222,7 +198,7 @@ namespace Guardtime.KSI.Service
             }
 
             KsiPduHeader header = new KsiPduHeader(_signingServiceCredentials.LoginId);
-            AggregationRequestPayload payload = level == 0 ? new AggregationRequestPayload(hash) : new AggregationRequestPayload(hash, level);
+            AggregationRequestPayload payload = new AggregationRequestPayload(hash);
             AggregationPdu pdu = new AggregationPdu(header, payload, KsiPdu.GetHashMacTag(_hmacAlgorithm, _signingServiceCredentials.LoginKey, header, payload));
 
             Logger.Debug("Begin sign (request id: {0}){1}{2}", payload.RequestId, Environment.NewLine, pdu);

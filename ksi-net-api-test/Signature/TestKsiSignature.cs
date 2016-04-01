@@ -17,8 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using Guardtime.KSI.Hashing;
@@ -42,29 +40,6 @@ namespace Guardtime.KSI.Test.Signature
         public ReadOnlyCollection<AggregationHashChain> AggregationHashChains;
         public DataHash AggregationHashChainRootHash;
         public IKsiSignature ExtendedKsiSignature;
-
-        public ITlvTag this[int i] => null;
-
-        public int Count => 0;
-
-        /// <summary>
-        ///     Get Enumerator for TLV composite element.
-        /// </summary>
-        /// <returns>TLV composite elemnet enumerator.</returns>
-        public IEnumerator<ITlvTag> GetEnumerator()
-        {
-            return null;
-        }
-
-        /// <summary>
-        ///     Get Enumerator for TLV composite element.
-        /// </summary>
-        /// <returns>TLV composite elemnet enumerator.</returns>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
 
         public ReadOnlyCollection<AggregationHashChain> GetAggregationHashChains()
         {

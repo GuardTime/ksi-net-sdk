@@ -37,14 +37,6 @@ namespace Guardtime.KSI.Service
         IKsiSignature Sign(DataHash hash);
 
         /// <summary>
-        ///     Sync create signature with given data hash.
-        /// </summary>
-        /// <param name="hash">data hash</param>
-        /// <param name="level">the level value of the aggregation tree node</param>
-        /// <returns>KSI signature</returns>
-        IKsiSignature Sign(DataHash hash, uint level);
-
-        /// <summary>
         ///     Async begin create signature with given data hash.
         /// </summary>
         /// <param name="hash">data hash</param>
@@ -52,16 +44,6 @@ namespace Guardtime.KSI.Service
         /// <param name="asyncState">async state object</param>
         /// <returns>async result</returns>
         IAsyncResult BeginSign(DataHash hash, AsyncCallback callback, object asyncState);
-
-        /// <summary>
-        ///     Async begin create signature with given data hash.
-        /// </summary>
-        /// <param name="hash">data hash</param>
-        /// <param name="level">the level value of the aggregation tree node</param>
-        /// <param name="callback">callback when creating signature is finished</param>
-        /// <param name="asyncState">async state object</param>
-        /// <returns>async result</returns>
-        IAsyncResult BeginSign(DataHash hash, uint level, AsyncCallback callback, object asyncState);
 
         /// <summary>
         ///     Async end create signature.
