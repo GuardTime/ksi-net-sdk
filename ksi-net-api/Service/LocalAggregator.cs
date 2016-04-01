@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Signature;
@@ -87,30 +88,9 @@ namespace Guardtime.KSI.Service
 
             AggregationHashChain existingChain = _rootSignature.GetAggregationHashChains()[0];
 
-            ITlvTag[] signatureTags = new ITlvTag[_rootSignature.Count + 1];
-
-            // Copy root node signature tags.
-            for (int i = 0; i < _rootSignature.Count; i++)
-            {
-                signatureTags[i] = _rootSignature[i];
-            }
-
-            foreach (AggregationTreeNode node in _documentNodes)
-            {
-                AggregationHashChain.Link[] chainLinks = CreateAggregationHashChainLinks(node);
-
-                ulong[] existingChainIndex = existingChain.GetChainIndex();
-                ulong[] chainIndex = new ulong[existingChainIndex.Length + 1];
-                Array.Copy(existingChainIndex, chainIndex, existingChainIndex.Length);
-                chainIndex[chainIndex.Length - 1] = AggregationHashChain.Link.GetLocationPointer(chainLinks);
-
-                // Take root node signature tags and add aggregation hash chain.
-                signatureTags[_rootSignature.Count] = new AggregationHashChain(existingChain.AggregationTime, chainIndex, node.Item.DocumentHash,
-                    node.Item.DocumentHash.Algorithm.Id, chainLinks);
-
-                // Create new signature from the signature tags.
-                node.Item.Signature = new KsiSignature(signatureTags);
-            }
+            Logger.Debug("Start creating signatures.");
+            CreateSignatures(existingChain);
+            Logger.Debug("End creating signatures.");
 
             LocalAggregationItem[] result = new LocalAggregationItem[_documentNodes.Count];
 
@@ -120,6 +100,37 @@ namespace Guardtime.KSI.Service
             }
 
             return result;
+        }
+
+        private void CreateSignatures(AggregationHashChain existingChain)
+        {
+            byte[] rootSignatureData = _rootSignature.EncodeValue();
+            ulong[] existingChainIndex = existingChain.GetChainIndex();
+            ulong[] chainIndex = new ulong[existingChainIndex.Length + 1];
+            Array.Copy(existingChainIndex, chainIndex, existingChainIndex.Length);
+
+            foreach (AggregationTreeNode node in _documentNodes)
+            {
+                AggregationHashChain.Link[] chainLinks = CreateAggregationHashChainLinks(node);
+                chainIndex[chainIndex.Length - 1] = AggregationHashChain.Link.GetLocationPointer(chainLinks);
+
+                AggregationHashChain aggregationHashChain = new AggregationHashChain(existingChain.AggregationTime, chainIndex, node.Item.DocumentHash,
+                    node.Item.DocumentHash.Algorithm.Id, chainLinks);
+
+                using (MemoryStream stream = new MemoryStream())
+
+                {
+                    aggregationHashChain.WriteTo(stream);
+
+                    // Take root node signature data and add aggregation hash chain.
+                    byte[] signatureData = new byte[rootSignatureData.Length + stream.Length];
+                    Array.Copy(rootSignatureData, signatureData, rootSignatureData.Length);
+                    Array.Copy(stream.ToArray(), 0, signatureData, rootSignatureData.Length, stream.Length);
+
+                    // Create new signature from the signature data.
+                    node.Item.Signature = new RawTag(Constants.KsiSignature.TagType, false, false, signatureData);
+                }
+            }
         }
 
         /// <summary>

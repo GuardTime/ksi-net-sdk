@@ -38,24 +38,6 @@ namespace Guardtime.KSI.Signature
         private string _identity;
 
         /// <summary>
-        ///     Create new KSI signature TLV element from child TLV elements.
-        /// </summary>
-        /// <param name="childTags">Child TLV elements</param>
-        public KsiSignature(ITlvTag[] childTags) : this(new KsiSignature(false, false, childTags))
-        {
-        }
-
-        /// <summary>
-        /// Create new KSI signature TLV element from child TLV elements.
-        /// </summary>
-        /// <param name="nonCritical"></param>
-        /// <param name="forward"></param>
-        /// <param name="childTags"></param>
-        private KsiSignature(bool nonCritical, bool forward, ITlvTag[] childTags) : base(Constants.KsiSignature.TagType, nonCritical, forward, childTags)
-        {
-        }
-
-        /// <summary>
         ///     Create new KSI signature TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
@@ -280,28 +262,6 @@ namespace Guardtime.KSI.Signature
                     Logger.Warn("Extending KSI signature failed: {0}", e);
                     throw;
                 }
-            }
-        }
-
-        /// <summary>
-        ///     Write KSI signature to stream.
-        /// </summary>
-        /// <param name="outputStream">output stream</param>
-        public void WriteTo(Stream outputStream)
-        {
-            if (outputStream == null)
-            {
-                throw new KsiException("Invalid output stream: null.");
-            }
-
-            if (!outputStream.CanWrite)
-            {
-                throw new KsiException("Output stream is not writable.");
-            }
-
-            using (TlvWriter writer = new TlvWriter(outputStream))
-            {
-                writer.WriteTag(this);
             }
         }
 

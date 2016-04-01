@@ -19,6 +19,7 @@
 
 using System;
 using Guardtime.KSI.Hashing;
+using Guardtime.KSI.Parser;
 using Guardtime.KSI.Signature;
 
 namespace Guardtime.KSI.Service
@@ -63,8 +64,8 @@ namespace Guardtime.KSI.Service
         public AggregationHashChain.MetaData MetaData { get; }
 
         /// <summary>
-        /// Created KSI signature for given document hash
+        /// KSI signature created for given document hash
         /// </summary>
-        public IKsiSignature Signature { get; set; }
+        public RawTag Signature { get; set; }
     }
 }

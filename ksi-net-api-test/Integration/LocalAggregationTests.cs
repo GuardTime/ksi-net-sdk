@@ -131,7 +131,7 @@ namespace Guardtime.KSI.Test.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void LocalAggregationTest(Ksi ksi)
         {
-            int k = 11;
+            int k = 11000;
             Random random = new Random();
             AggregationHashChain.MetaData metaData = new AggregationHashChain.MetaData("test client id", "test machine id");
             List<LocalAggregationItem> aggregationItems = new List<LocalAggregationItem>();
@@ -146,13 +146,17 @@ namespace Guardtime.KSI.Test.Integration
                 aggregationItems.Add(new LocalAggregationItem(hasher.GetHash(), metaData));
             }
 
+            Console.WriteLine(DateTime.Now + ": Start creating local aggregator.");
             LocalAggregator aggregator = new LocalAggregator(aggregationItems.ToArray(), ksi);
 
+            Console.WriteLine(DateTime.Now + ": Sign documents.");
             LocalAggregationItem[] result = aggregator.SignDocuments();
+
+            Console.WriteLine(DateTime.Now + ": Start verifying.");
 
             foreach (LocalAggregationItem aggregationItem in result)
             {
-                Verify(ksi, aggregationItem.Signature, aggregationItem.DocumentHash);
+                Verify(ksi, new KsiSignature(aggregationItem.Signature), aggregationItem.DocumentHash);
             }
         }
 
@@ -175,7 +179,7 @@ namespace Guardtime.KSI.Test.Integration
 
             foreach (LocalAggregationItem aggregationItem in result)
             {
-                Verify(ksi, aggregationItem.Signature, aggregationItem.DocumentHash);
+                Verify(ksi, new KsiSignature(aggregationItem.Signature), aggregationItem.DocumentHash);
             }
         }
 
@@ -221,7 +225,7 @@ namespace Guardtime.KSI.Test.Integration
 
                         foreach (LocalAggregationItem aggregationItem in result)
                         {
-                            Verify(ksi, aggregationItem.Signature, aggregationItem.DocumentHash);
+                            Verify(ksi, new KsiSignature(aggregationItem.Signature), aggregationItem.DocumentHash);
                         }
                     }
                     catch (Exception ex)
