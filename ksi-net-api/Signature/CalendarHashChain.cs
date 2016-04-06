@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.Collections.Generic;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
@@ -135,29 +136,40 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         public PublicationData PublicationData { get; }
 
+        private static IEnumerable<Link> GetNextRightLink(IList<Link> chain)
+        {
+            for (int i = 0; i < chain.Count; i++)
+            {
+                if (chain[i].Direction == LinkDirection.Right)
+                {
+                    yield return chain[i];
+                }
+            }
+
+            yield return null;
+        }
+
         /// <summary>
         ///     Compare right links if they are equal.
         /// </summary>
         /// <param name="calendarHashChain">calendar hash chain to compare to</param>
-        /// <returns>true if right links are equal and on same position</returns>
+        /// <returns>true if right links are equal and in same order</returns>
         public bool AreRightLinksEqual(CalendarHashChain calendarHashChain)
         {
-            if (_chain.Count != calendarHashChain?._chain.Count)
+            IEnumerator<Link> currentEnumerator = GetNextRightLink(_chain).GetEnumerator();
+            IEnumerator<Link> externalEnumerator = GetNextRightLink(calendarHashChain._chain).GetEnumerator();
+            Link currentLink = currentEnumerator.MoveNext() ? currentEnumerator.Current : null;
+            Link externalLink = externalEnumerator.MoveNext() ? externalEnumerator.Current : null;
+            
+            while (currentLink != null && externalLink != null)
             {
-                return false;
-            }
-
-            for (int i = 0; i < _chain.Count; i++)
-            {
-                if (calendarHashChain._chain[i].Direction != LinkDirection.Right)
-                {
-                    continue;
-                }
-
-                if (_chain[i] != calendarHashChain._chain[i])
+                if (currentLink != externalLink)
                 {
                     return false;
                 }
+
+                currentLink = currentEnumerator.MoveNext() ? currentEnumerator.Current : null;
+                externalLink = externalEnumerator.MoveNext() ? externalEnumerator.Current : null;
             }
 
             return true;
