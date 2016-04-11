@@ -840,12 +840,6 @@
     <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-aggregation-root-hash.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-aggregation-time-with-publication-record.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-calendar-authentication-record-invalid-certificate-id.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-calendar-authentication-record-invalid-publication-hash.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -864,22 +858,28 @@
     <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-extra-tag.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-missing-aggregation-hash-chains.tlv">
+    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-hash-algorithm.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-missing-calendar-hash-chain.tlv">
+    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-missing-aggregation-hash-chains.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-with-invalid-publication-record.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\ksi-signature-do\ksi-signature-ok-extended.tlv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-ok-invalid-calendar-chain-invalid-aggregation-time.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-ok-missing-calendar-hash-chain.tlv">
+    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-calendar-chain-invalid-aggregation-time.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-missing-calendar-auth-record.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-missing-calendar-hash-chain.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\ksi-signature-do\ksi-signature-ok-identity.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\ksi-signature-do\ksi-signature-ok-missing-publication-record-and-calendar-authentication-record.tlv">

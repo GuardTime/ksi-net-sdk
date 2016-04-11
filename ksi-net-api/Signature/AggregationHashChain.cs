@@ -23,7 +23,6 @@ using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Utils;
-using NLog;
 
 namespace Guardtime.KSI.Signature
 {
@@ -32,7 +31,6 @@ namespace Guardtime.KSI.Signature
     /// </summary>
     public sealed class AggregationHashChain : CompositeTag
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IntegerTag _aggrAlgorithmId;
         private readonly IntegerTag _aggregationTime;
         private readonly List<Link> _chain = new List<Link>();
@@ -151,17 +149,22 @@ namespace Guardtime.KSI.Signature
         /// <returns></returns>
         public string GetChainIdentity()
         {
-            StringBuilder identity = new StringBuilder();
+            string identity = "";
+
             foreach (Link aggregationChainLink in _chain)
             {
                 string id = aggregationChainLink.GetIdentity();
-                if (identity.Length > 0 && id.Length > 0)
+                if (id.Length <= 0)
                 {
-                    identity.Append(".");
+                    continue;
                 }
-                identity.Append(id);
+                if (identity.Length > 0)
+                {
+                    identity = " :: " + identity;
+                }
+                identity = id + identity;
             }
-            return identity.ToString();
+            return identity;
         }
 
         /// <summary>
@@ -217,18 +220,17 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         private class Link : CompositeTag
         {
+            private const byte LegacyIdFirstOctet = 3;
             private readonly IntegerTag _levelCorrection;
-
-            // the client ID extracted from metaHash
             private readonly MetaData _metaData;
-            private readonly ImprintTag _metaHash;
             private readonly ImprintTag _siblingHash;
+            private readonly RawTag _legacyId;
 
             public Link(ITlvTag tag, LinkDirection direction) : base(tag)
             {
                 int levelCorrectionCount = 0;
                 int siblingHashCount = 0;
-                int metaHashCount = 0;
+                int legacyIdCount = 0;
                 int metaDataCount = 0;
 
                 for (int i = 0; i < Count; i++)
@@ -245,9 +247,9 @@ namespace Guardtime.KSI.Signature
                             this[i] = _siblingHash = new ImprintTag(childTag);
                             siblingHashCount++;
                             break;
-                        case Constants.AggregationHashChain.Link.MetaHashTagType:
-                            this[i] = _metaHash = new ImprintTag(childTag);
-                            metaHashCount++;
+                        case Constants.AggregationHashChain.Link.LegacyId:
+                            this[i] = _legacyId = new RawTag(childTag);
+                            legacyIdCount++;
                             break;
                         case Constants.AggregationHashChain.MetaData.TagType:
                             this[i] = _metaData = new MetaData(childTag);
@@ -264,9 +266,9 @@ namespace Guardtime.KSI.Signature
                     throw new TlvException("Only one levelcorrection value is allowed in aggregation hash chain link.");
                 }
 
-                if (!Util.IsOneValueEqualTo(1, siblingHashCount, metaHashCount, metaDataCount))
+                if (!Util.IsOneValueEqualTo(1, siblingHashCount, legacyIdCount, metaDataCount))
                 {
-                    throw new TlvException("Exactly one of three from siblinghash, metahash or metadata must exist in aggregation hash chain link.");
+                    throw new TlvException("Exactly one of three from sibling hash, legacy id or metadata must exist in aggregation hash chain link.");
                 }
 
                 Direction = direction;
@@ -288,25 +290,35 @@ namespace Guardtime.KSI.Signature
             /// <returns></returns>
             public string GetIdentity()
             {
-                if (_metaHash != null)
+                if (_legacyId != null)
                 {
-                    return CalculateIdentityFromMetaHash();
+                    return GetLegacyIdString();
                 }
 
                 return _metaData != null ? _metaData.ClientId : "";
             }
 
-            private string CalculateIdentityFromMetaHash()
+            private string GetLegacyIdString()
             {
-                byte[] bytes = _metaHash.Value.Imprint;
+                byte[] bytes = _legacyId.Value;
+
+                if (bytes[0] != LegacyIdFirstOctet)
+                {
+                    throw new TlvException("Invalid legacy id first octet: " + bytes[0]);
+                }
 
                 if (bytes.Length < 3)
                 {
-                    Logger.Warn("Meta hash byte array too short. Length: {0}", bytes.Length);
-                    return "";
+                    throw new TlvException("Legacy id byte array too short. Length: " + bytes.Length);
                 }
 
-                int length = (bytes[1] << 8) + bytes[2];
+                int length = bytes[2];
+
+                if (bytes.Length < 3 + length)
+                {
+                    throw new TlvException("Invalid legacy id length value: " + length);
+                }
+
                 return Encoding.UTF8.GetString(bytes, 3, length);
             }
 
@@ -320,7 +332,7 @@ namespace Guardtime.KSI.Signature
                     return _siblingHash.EncodeValue();
                 }
 
-                return _metaHash != null ? _metaHash.EncodeValue() : _metaData?.EncodeValue();
+                return _legacyId != null ? _legacyId.EncodeValue() : _metaData?.EncodeValue();
             }
         }
 

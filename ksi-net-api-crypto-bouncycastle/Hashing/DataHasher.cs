@@ -47,15 +47,6 @@ namespace Guardtime.KSI.Crypto.BouncyCastle.Hashing
                 throw new HashingException("Invalid hash algorithm: null.");
             }
 
-            /*
-                If an algorithm is given which is not implemented, an illegal argument exception is thrown
-                The developer must ensure that only implemented algorithms are used.
-             */
-            if (algorithm.Status == HashAlgorithm.AlgorithmStatus.NotImplemented)
-            {
-                throw new HashingException("Hash algorithm is not implemented.");
-            }
-
             _algorithm = algorithm;
 
             try
@@ -66,13 +57,6 @@ namespace Guardtime.KSI.Crypto.BouncyCastle.Hashing
             {
                 throw new HashingException("Hash algorithm(" + algorithm.Name + ") is not supported.", e);
             }
-        }
-
-        /// <summary>
-        ///     Create new data hasher for the default algorithm.
-        /// </summary>
-        public DataHasher() : this(HashAlgorithm.GetByName("DEFAULT"))
-        {
         }
 
         /// <summary>

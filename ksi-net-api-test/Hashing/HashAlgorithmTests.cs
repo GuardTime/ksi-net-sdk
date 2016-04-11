@@ -52,7 +52,7 @@ namespace Guardtime.KSI.Test.Hashing
         [Test]
         public void TestAlgorithmGetByName()
         {
-            HashAlgorithm algorithm = HashAlgorithm.GetByName("DEFAULT");
+            HashAlgorithm algorithm = HashAlgorithm.Default;
             Assert.AreEqual(1u, algorithm.Id, "Hash algorithm id should be correct");
             Assert.AreEqual("SHA-256", algorithm.Name, "Hash algorithm name should be correct");
             Assert.AreEqual(HashAlgorithm.AlgorithmStatus.Normal, algorithm.Status, "Hash algorithm status should be correct");
@@ -63,7 +63,7 @@ namespace Guardtime.KSI.Test.Hashing
         public void TestGetNamesList()
         {
             IEnumerable<string> names = HashAlgorithm.GetNamesList();
-            Assert.AreEqual(11, names.Count());
+            Assert.AreEqual(10, names.Count());
         }
 
         [Test]

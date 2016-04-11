@@ -99,10 +99,10 @@ namespace Guardtime.KSI.Test.Parser
             RawTag rawTag = new RawTag(0x1, true, true,
                 new byte[] { 0x74, 0x65, 0x73, 0x74, 0x20, 0x6D, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65 });
 
-            Assert.Throws<KsiException>(delegate
+            Assert.That(delegate
             {
                 new StringTag(rawTag);
-            }, "String must be null terminated");
+            }, Throws.TypeOf<KsiException>().With.Message.StartWith("String must be null terminated"));
         }
 
         [Test]

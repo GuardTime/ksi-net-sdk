@@ -31,6 +31,6 @@ namespace Guardtime.KSI.Hashing
         /// <param name="key">HMAC key</param>
         /// <param name="data">HMAC calculation data</param>
         /// <returns>HMAC data hash</returns>
-        DataHash GetHash(HashAlgorithm hmacAlgorithm, byte[] key, byte[] data);
+        DataHash GetHash(byte[] key, byte[] data);
     }
 }

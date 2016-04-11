@@ -22,8 +22,7 @@ using Guardtime.KSI.Publication;
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
     /// <summary>
-    ///     Rule checks if KSI signature contains publication record. If publication record is missing,
-    ///     <see cref="VerificationResultCode.Ok" /> is returned.
+    ///    Checks if publication data hash in signature publication record equals publication data hash in calendar hash chain.
     /// </summary>
     public sealed class SignaturePublicationRecordPublicationHashRule : VerificationRule
     {

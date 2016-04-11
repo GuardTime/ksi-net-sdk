@@ -18,7 +18,6 @@
  */
 
 using System.Security.Cryptography.X509Certificates;
-using System.Threading;
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
@@ -31,7 +30,7 @@ namespace Guardtime.KSI
     public class KsiProvider
     {
         private static ICryptoProvider _cryptoProvider;
-        private static readonly object _lock = new object();
+        private static readonly object Lock = new object();
 
         /// <summary>
         /// Set crypto provider.
@@ -55,7 +54,7 @@ namespace Guardtime.KSI
             if (trustStore != null)
             {
                 // make certificates loading thread-safe
-                lock (_lock)
+                lock (Lock)
                 {
                     trustStore.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
                     trustAnchors = trustStore.Certificates;
@@ -80,11 +79,14 @@ namespace Guardtime.KSI
         /// <summary>
         /// Get HMAC hasher.
         /// </summary>
+        /// <param name="algorithm">HMAC algorithm</param>
         /// <returns></returns>
-        public static IHmacHasher CreateHmacHasher()
+        public static IHmacHasher CreateHmacHasher(HashAlgorithm algorithm)
         {
             CheckCryptoProvider();
-            return _cryptoProvider.CreateHmacHasher();
+            ValidateHashAlgorithm(algorithm);
+
+            return _cryptoProvider.CreateHmacHasher(algorithm);
         }
 
         /// <summary>
@@ -95,6 +97,8 @@ namespace Guardtime.KSI
         public static IDataHasher CreateDataHasher(HashAlgorithm algorithm)
         {
             CheckCryptoProvider();
+            ValidateHashAlgorithm(algorithm);
+
             return _cryptoProvider.CreateDataHasher(algorithm);
         }
 
@@ -105,6 +109,7 @@ namespace Guardtime.KSI
         public static IDataHasher CreateDataHasher()
         {
             CheckCryptoProvider();
+
             return _cryptoProvider.CreateDataHasher(HashAlgorithm.Default);
         }
 
@@ -116,6 +121,30 @@ namespace Guardtime.KSI
             if (_cryptoProvider == null)
             {
                 throw new KsiException("Crypto provider not set. Please use SetCryptoProvider.");
+            }
+        }
+
+        /// <summary>
+        /// Check if hash algorithm can be used for hashing.
+        /// </summary>
+        /// <param name="algorithm"></param>
+        private static void ValidateHashAlgorithm(HashAlgorithm algorithm)
+        {
+            if (algorithm == null)
+            {
+                throw new HashingException("Invalid hash algorithm: null.");
+            }
+
+            /*
+            If an algorithm is given which is not implemented or is invalid, an illegal argument exception is thrown.
+            The developer must ensure that only implemented algorithms are used.
+            */
+            switch (algorithm.Status)
+            {
+                case HashAlgorithm.AlgorithmStatus.NotImplemented:
+                    throw new HashingException("Hash algorithm is not implemented. Algorithm: " + algorithm.Name);
+                case HashAlgorithm.AlgorithmStatus.Invalid:
+                    throw new HashingException("Invalid hash algorithm. Id: " + algorithm.Id);
             }
         }
     }
