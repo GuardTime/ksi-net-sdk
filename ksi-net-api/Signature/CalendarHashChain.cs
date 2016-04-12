@@ -136,7 +136,7 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         public PublicationData PublicationData { get; }
 
-        private static IEnumerable<Link> GetNextRightLink(IList<Link> chain)
+        private static IEnumerable<Link> GetRightLinksEnumerable(IList<Link> chain)
         {
             for (int i = 0; i < chain.Count; i++)
             {
@@ -145,8 +145,6 @@ namespace Guardtime.KSI.Signature
                     yield return chain[i];
                 }
             }
-
-            yield return null;
         }
 
         /// <summary>
@@ -156,11 +154,11 @@ namespace Guardtime.KSI.Signature
         /// <returns>true if right links are equal and in same order</returns>
         public bool AreRightLinksEqual(CalendarHashChain calendarHashChain)
         {
-            IEnumerator<Link> currentEnumerator = GetNextRightLink(_chain).GetEnumerator();
-            IEnumerator<Link> externalEnumerator = GetNextRightLink(calendarHashChain._chain).GetEnumerator();
+            IEnumerator<Link> currentEnumerator = GetRightLinksEnumerable(_chain).GetEnumerator();
+            IEnumerator<Link> externalEnumerator = GetRightLinksEnumerable(calendarHashChain._chain).GetEnumerator();
             Link currentLink = currentEnumerator.MoveNext() ? currentEnumerator.Current : null;
             Link externalLink = externalEnumerator.MoveNext() ? externalEnumerator.Current : null;
-            
+
             while (currentLink != null && externalLink != null)
             {
                 if (currentLink != externalLink)
