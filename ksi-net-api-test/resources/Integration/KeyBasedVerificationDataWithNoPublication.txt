@@ -117,8 +117,8 @@ resources/signature/integration-test-signatures/NewSignature-AggrHashCore-Missin
 resources/signature/integration-test-signatures/NewSignature-AggrHashCore-MissingChainIndex.ksig:true:Fail:TlvException:Chain index is missing in aggregation hash chain: 
 resources/signature/integration-test-signatures/NewSignature-AggrHashCore-MissingInputHash.ksig:true:Fail:TlvException:Exactly one input hash must exist in aggregation hash chain: 
 resources/signature/integration-test-signatures/NewSignature-AggrHashCore-NoCoreAggr.ksig:true:Fail:TlvException:Exactly one aggregation time must exist in aggregation hash chain: 
-resources/signature/integration-test-signatures/NewSignature-AggrHashCore-NoLeftLink.ksig:true:Fail:TlvException:Exactly one of three from siblinghash, metahash or metadata must exist in aggregation hash chain link: 
-resources/signature/integration-test-signatures/NewSignature-AggrHashCore-NoRightLink1.ksig:true:Fail:TlvException:Exactly one of three from siblinghash, metahash or metadata must exist in aggregation hash chain link: 
+resources/signature/integration-test-signatures/NewSignature-AggrHashCore-NoLeftLink.ksig:true:Fail:TlvException:Exactly one of three from sibling hash, legacy id or metadata must exist in aggregation hash chain link: 
+resources/signature/integration-test-signatures/NewSignature-AggrHashCore-NoRightLink1.ksig:true:Fail:TlvException:Exactly one of three from sibling hash, legacy id or metadata must exist in aggregation hash chain link: 
 resources/signature/integration-test-signatures/NewSignature-AggrHashGW-MissingLeftLinkClientId.ksig:true:Fail:TlvException:Exactly one client id must exist in aggregation hash chain link metadata.: 
 resources/signature/integration-test-signatures/another-core-response-with-only-cal-chain.tlv:true:Fail:TlvException:Invalid KSI signature type: 
 resources/signature/integration-test-signatures/NewSignature-CalHash-MissingCalHash.ksig:true:Fail:TlvException:No publication record or calendar authentication record is allowed in KSI signature if there is no calendar hash chain: 

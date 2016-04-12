@@ -105,6 +105,7 @@ namespace Guardtime.KSI.Test.Integration
                         case "PublicationStringBasedVerificationNoExtendingPolicy":
                             policy = new PublicationBasedVerificationPolicy();
                             context.UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K");
+                            context.UserPublication = new PublicationData("AAAAAA-CWYEKQ-AAIYPA-UJ4GRT-HXMFBE-OTB4AB-XH3PT3-KNIKGV-PYCJXU-HL2TN4-RG6SCC-3ZGSBM");
                             context.KsiService = IntegrationTests.GetHttpKsiService();
                             break;
 
