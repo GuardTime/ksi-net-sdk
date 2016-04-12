@@ -801,6 +801,9 @@
     <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-nested-tlv-in-main.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="resources\signature\integration-test-signatures\ok-sig-extended-2014-05-15_invalid_methash_algorithm.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="resources\signature\integration-test-signatures\signature-with-invalid-calendar-authentication-record-hash.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
