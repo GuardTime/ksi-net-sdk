@@ -78,7 +78,7 @@ resources/signature/integration-test-signatures/NewSignature-AggrHashCore-NoRigh
 resources/signature/integration-test-signatures/NewSignature-AggrHashCore-NoLeftLink2.ksig;true;Fail;HashingException;Hash imprint is too short; 
 # Invalid hash algorithm
 #
-resources/signature/integration-test-signatures/ok-sig-extended-2014-05-15_invalid_methash_algorithm.ksig;true;Fail;HashingException;Invalid Hash algorithm. id: 3; 
+resources/signature/integration-test-signatures/ok-sig-extended-2014-05-15_invalid_sibling_hash_algorithm.ksig;true;Fail;HashingException;Invalid Hash algorithm. id: 3; 
 #
 # TLV Exception
 #
