@@ -159,7 +159,7 @@ namespace Guardtime.KSI.Signature
             Link currentLink = currentEnumerator.MoveNext() ? currentEnumerator.Current : null;
             Link externalLink = externalEnumerator.MoveNext() ? externalEnumerator.Current : null;
 
-            while (currentLink != null && externalLink != null)
+            while (currentLink != null || externalLink != null)
             {
                 if (currentLink != externalLink)
                 {
