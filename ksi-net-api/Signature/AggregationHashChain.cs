@@ -220,11 +220,14 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         private class Link : CompositeTag
         {
-            private const byte LegacyIdFirstOctet = 3;
+            private const byte LegacyIdFirstOctet = 0x3;
+            private const byte LegacyIdLength = 29;
+
             private readonly IntegerTag _levelCorrection;
             private readonly MetaData _metaData;
             private readonly ImprintTag _siblingHash;
             private readonly RawTag _legacyId;
+            private readonly string _legacyIdString;
 
             public Link(ITlvTag tag, LinkDirection direction) : base(tag)
             {
@@ -249,6 +252,7 @@ namespace Guardtime.KSI.Signature
                             break;
                         case Constants.AggregationHashChain.Link.LegacyId:
                             this[i] = _legacyId = new RawTag(childTag);
+                            _legacyIdString = GetLegacyIdString(_legacyId.Value);
                             legacyIdCount++;
                             break;
                         case Constants.AggregationHashChain.MetaData.TagType:
@@ -292,34 +296,45 @@ namespace Guardtime.KSI.Signature
             {
                 if (_legacyId != null)
                 {
-                    return GetLegacyIdString();
+                    return _legacyIdString;
                 }
 
                 return _metaData != null ? _metaData.ClientId : "";
             }
 
-            private string GetLegacyIdString()
+            private static string GetLegacyIdString(byte[] bytes)
             {
-                byte[] bytes = _legacyId.Value;
-
                 if (bytes[0] != LegacyIdFirstOctet)
                 {
-                    throw new TlvException("Invalid legacy id first octet: " + bytes[0]);
+                    throw new TlvException("Invalid first octet in legacy id tag: " + bytes[0]);
                 }
 
-                if (bytes.Length < 3)
+                if (bytes[1] != 0x0)
                 {
-                    throw new TlvException("Legacy id byte array too short. Length: " + bytes.Length);
+                    throw new TlvException("Invalid second octet in legacy id tag: " + bytes[0]);
                 }
 
-                int length = bytes[2];
-
-                if (bytes.Length < 3 + length)
+                if (bytes.Length != LegacyIdLength)
                 {
-                    throw new TlvException("Invalid legacy id length value: " + length);
+                    throw new TlvException("Invalid legacy id tag length. Length: " + bytes.Length);
                 }
 
-                return Encoding.UTF8.GetString(bytes, 3, length);
+                int idStringLength = bytes[2];
+
+                if (bytes.Length < 4 + idStringLength)
+                {
+                    throw new TlvException("Invalid legacy id length value: " + idStringLength);
+                }
+
+                for (int i = idStringLength + 3; i < bytes.Length; i++)
+                {
+                    if (bytes[i] != 0x0)
+                    {
+                        throw new TlvException("Invalid padding octet. Index: " + i);
+                    }
+                }
+
+                return new UTF8Encoding(false, true).GetString(bytes, 3, idStringLength);
             }
 
             /// <summary>

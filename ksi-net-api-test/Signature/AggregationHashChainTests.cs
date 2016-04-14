@@ -20,6 +20,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
@@ -336,6 +337,101 @@ namespace Guardtime.KSI.Test.Signature
             AggregationHashChain tag2 = new AggregationHashChain(tag);
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
+        }
+
+        [Test]
+        public void LegacyIdValidTest()
+        {
+            LegacyIdTest(new byte[] { 3, 0, 25, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 0 });
+        }
+
+        [Test]
+        public void LegacyIdInvalidFirstOctetTest()
+        {
+            Assert.That(delegate
+            {
+                LegacyIdTest(new byte[] { 2, 0, 25, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 0 });
+            }, Throws.Exception.InnerException.TypeOf<TlvException>().With.InnerException.Message.StartWith("Invalid first octet in legacy id tag"));
+        }
+
+        [Test]
+        public void LegacyIdInvalidTagLengthTooShortTest()
+        {
+            Assert.That(delegate
+            {
+                LegacyIdTest(new byte[] { 3, 0, 25, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 0 });
+            }, Throws.Exception.InnerException.TypeOf<TlvException>().With.InnerException.Message.StartWith("Invalid legacy id tag length"));
+        }
+
+        [Test]
+        public void LegacyIdInvalidTagLengthTooLongTest()
+        {
+            Assert.That(delegate
+            {
+                LegacyIdTest(new byte[] { 3, 0, 25, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 0 });
+            }, Throws.Exception.InnerException.TypeOf<TlvException>().With.InnerException.Message.StartWith("Invalid legacy id tag length"));
+        }
+
+        [Test]
+        public void LegacyIdInvalidLengthValueTest()
+        {
+            Assert.That(delegate
+            {
+                LegacyIdTest(new byte[] { 3, 0, 26, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 0 });
+            }, Throws.Exception.InnerException.TypeOf<TlvException>().With.InnerException.Message.StartWith("Invalid legacy id length value"));
+        }
+
+        [Test]
+        public void LegacyIdInvalidPaddingTest1()
+        {
+            Assert.That(delegate
+            {
+                LegacyIdTest(new byte[] { 3, 0, 24, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 0 });
+            }, Throws.Exception.InnerException.TypeOf<TlvException>().With.InnerException.Message.StartWith("Invalid padding octet."));
+        }
+
+        [Test]
+        public void LegacyIdInvalidPaddingTest2()
+        {
+            Assert.That(delegate
+            {
+                LegacyIdTest(new byte[] { 3, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
+            }, Throws.Exception.InnerException.TypeOf<TlvException>().With.InnerException.Message.StartWith("Invalid padding octet."));
+        }
+
+        [Test]
+        public void LegacyIdInvalidUtf8CodeTest()
+        {
+            Assert.That(delegate
+            {
+                LegacyIdTest(new byte[] { 3, 0, 25, 0x00, 0x80, 0x02, 0xFE, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 0 });
+            }, Throws.Exception.InnerException.TypeOf<DecoderFallbackException>());
+        }
+
+        public void LegacyIdTest(byte[] legacyIdValue)
+        {
+            Assembly assembly = typeof(AggregationHashChain).Assembly;
+            Type linkType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Link");
+
+            TestUtil.GetCompositeTag<AggregationHashChain>(Constants.AggregationHashChain.TagType,
+                new ITlvTag[]
+                {
+                    new IntegerTag(Constants.AggregationHashChain.AggregationTimeTagType, false, false, 1),
+                    new IntegerTag(Constants.AggregationHashChain.ChainIndexTagType, false, false, 0),
+                    new RawTag(Constants.AggregationHashChain.InputDataTagType, false, false, new byte[] { 0x1 }),
+                    new ImprintTag(Constants.AggregationHashChain.InputHashTagType, false, false,
+                        new DataHash(HashAlgorithm.Sha2256,
+                            new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
+                    new IntegerTag(Constants.AggregationHashChain.AggregationAlgorithmIdTagType, false, false, 1),
+                    TestUtil.GetCompositeTag(linkType, (uint)LinkDirection.Left,
+                        new ITlvTag[]
+                        {
+                            new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, 0),
+                            new RawTag(Constants.AggregationHashChain.Link.LegacyId, false, false,
+                                legacyIdValue),
+                        },
+                        LinkDirection.Left)
+                });
         }
 
         private static AggregationHashChain GetAggregationHashChainFromFile(string file)
