@@ -30,3 +30,13 @@ resources/signature/integration-test-signatures/NewSignature-CalAuth-NoSigningVa
 resources/signature/integration-test-signatures/NewSignature-CalAuth-NullSigType.ksig;false;Fail;PkiVerificationErrorException;Cryptographic signature not supported; 
 resources/signature/integration-test-signatures/NewSignature-CalAuth-WrongCertID.ksig;false;Fail; ; ;CertificateExistenceRule
 resources/signature/integration-test-signatures/NewSignature-CalAuth-WrongSigningValue.ksig;false;Fail; ; ;CalendarAuthenticationRecordSignatureVerificationRule
+resources/signature/integration-test-signatures/invalid-legacy-id-ending-byte.ksig;true;fail;TlvException;Invalid padding octet. Index; 28; 
+resources/signature/integration-test-signatures/invalid-sibling-algorithm-legacy-id-tlv-changed-to-sibling-hash.ksig;true;fail;HashingException;Invalid hash algorithm. Id; 3; 
+resources/signature/integration-test-signatures/invalid-legacy-id-prefix.ksig;true;fail;TlvException;Invalid second octet in legacy id tag; 3; 
+resources/signature/integration-test-signatures/too-long-legacy-id.ksig;true;fail;TlvException;Invalid legacy id tag length. Length; 30; 
+resources/signature/integration-test-signatures/too-short-legacy-id.ksig;true;fail;TlvException;Invalid legacy id tag length. Length; 28; 
+resources/signature/integration-test-signatures/legacy-id-algorithm.ksig;true;fail;TlvException;Invalid first octet in legacy id tag; 2; 
+resources/signature/integration-test-signatures/legacy-id-content-null.ksig;false;fail; ; ;AggregationHashChainConsistencyRule
+resources/signature/integration-test-signatures/invalid-legacy-id-content.ksig;false;fail; ; ;AggregationHashChainConsistencyRule
+resources/signature/integration-test-signatures/invalid-legacy-id-content-length.ksig;false;fail; ; ;AggregationHashChainConsistencyRule
+resources/signature/integration-test-signatures/invalid-chain-index.ksig;false;fail; ; ;AggregationHashChainConsistencyRule
