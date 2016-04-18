@@ -86,7 +86,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             CalendarHashChainAggregationTimeRule rule = new CalendarHashChainAggregationTimeRule();
 
             // Check signature with no calendar hash chain
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_Missing_Calendar_Hash_Chain), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {

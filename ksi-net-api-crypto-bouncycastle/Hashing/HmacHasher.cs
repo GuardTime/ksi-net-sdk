@@ -29,14 +29,24 @@ namespace Guardtime.KSI.Crypto.BouncyCastle.Hashing
     /// </summary>
     public class HmacHasher : IHmacHasher
     {
+        private readonly HashAlgorithm _algorithm;
+
+        /// <summary>
+        /// Create new HmacHasher with given algorithm
+        /// </summary>
+        /// <param name="algorithm">HMAC algorithm</param>
+        public HmacHasher(HashAlgorithm algorithm)
+        {
+            _algorithm = algorithm;
+        }
+
         /// <summary>
         ///     Calculate HMAC for data with given key.
         /// </summary>
-        /// <param name="hmacAlgorithm">HMAC algorithm</param>
         /// <param name="key">HMAC key</param>
         /// <param name="data">HMAC calculation data</param>
         /// <returns>HMAC data hash</returns>
-        public DataHash GetHash(HashAlgorithm hmacAlgorithm, byte[] key, byte[] data)
+        public DataHash GetHash(byte[] key, byte[] data)
         {
             if (data == null)
             {
@@ -48,14 +58,14 @@ namespace Guardtime.KSI.Crypto.BouncyCastle.Hashing
                 throw new ArgumentNullException(nameof(key));
             }
 
-            HMac hMac = new HMac(DigestProvider.GetDigest(hmacAlgorithm));
+            HMac hMac = new HMac(DigestProvider.GetDigest(_algorithm));
 
             hMac.Init(new KeyParameter(key));
             hMac.BlockUpdate(data, 0, data.Length);
 
-            byte[] value = new byte[hmacAlgorithm.Length];
+            byte[] value = new byte[_algorithm.Length];
             hMac.DoFinal(value, 0);
-            return new DataHash(hmacAlgorithm, value);
+            return new DataHash(_algorithm, value);
         }
     }
 }

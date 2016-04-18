@@ -1,3 +1,3 @@
-﻿#signature file location with full path:signature read-in fails(true / false):expected verification result code(ok, fail, na):expected exception class (" " if none):expected excpetion message (" " if none):expected rule that fails (" " if none)
-resources/signature/ksi-signature-do/ksi-signature-ok-extended.tlv:false:Ok: : : 
-resources/signature/integration-test-signatures/ok-sig-extended-2014-05-15.ksig:false:Na: : :UserProvidedPublicationVerificationRule
+﻿#signature file location with full path;signature read-in fails(true / false);expected verification result code(ok, fail, na);expected exception class (" " if none);expected excpetion message (" " if none);expected rule that fails (" " if none)
+resources/signature/ksi-signature-do/ksi-signature-ok-extended.tlv;false;Ok; ; ; 
+resources/signature/integration-test-signatures/ok-sig-extended-2014-05-15.ksig;false;Na; ; ;UserProvidedPublicationVerificationRule

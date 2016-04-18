@@ -61,10 +61,11 @@ namespace Guardtime.KSI.Crypto.Microsoft
         /// <summary>
         /// Get HMAC hasher.
         /// </summary>
+        /// <param name="algorithm">HMAC algorithm</param>
         /// <returns></returns>
-        public IHmacHasher CreateHmacHasher()
+        public IHmacHasher CreateHmacHasher(HashAlgorithm algorithm)
         {
-            return new HmacHasher();
+            return new HmacHasher(algorithm);
         }
     }
 }

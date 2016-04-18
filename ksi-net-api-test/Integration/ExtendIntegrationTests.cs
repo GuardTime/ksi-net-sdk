@@ -124,7 +124,7 @@ namespace Guardtime.KSI.Test.Integration
 
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
             {
-                PublicationData publicationData = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K");
+                PublicationData publicationData = new PublicationData("AAAAAA-CW45II-AAKWRK-F7FBNM-KB6FNV-DYYFW7-PJQN6F-JKZWBQ-3OQYZO-HCB7RA-YNYAGA-ODRL2V");
 
                 IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
                 IKsiSignature extendedSignature = ksi.Extend(ksiSignature, publicationData);
@@ -148,7 +148,7 @@ namespace Guardtime.KSI.Test.Integration
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
             {
                 // publication data with modified hash
-                PublicationData publicationData = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUBD7-OE44VA");
+                PublicationData publicationData = new PublicationData("AAAAAA-CW45II-AAIYPA-UJ4GRT-HXMFBE-OTB4AB-XH3PT3-KNIKGV-PYCJXU-HL2TN4-RG6SCA-ZP3ZLX");
 
                 IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
                 IKsiSignature extendedSignature = ksi.Extend(ksiSignature, publicationData);
@@ -189,7 +189,7 @@ namespace Guardtime.KSI.Test.Integration
                 IKsiSignature extendedToNearest = ksi.Extend(ksiSignature);
 
                 Assert.True(extendedToLatest.PublicationRecord.PublicationData.PublicationTime > extendedToNearest.PublicationRecord.PublicationData.PublicationTime);
-                Assert.AreEqual(extendedToNearest.PublicationRecord.PublicationData.PublicationTime, 1408060800);
+                Assert.AreEqual(1455494400, extendedToNearest.PublicationRecord.PublicationData.PublicationTime);
             }
         }
 
@@ -230,7 +230,7 @@ namespace Guardtime.KSI.Test.Integration
                         IKsiSignature extendedToNearest = ksi.Extend(ksiSignature);
                         s.Close();
 
-                        Assert.AreEqual(extendedToNearest.PublicationRecord.PublicationData.PublicationTime, 1408060800);
+                        Assert.AreEqual(1455494400, extendedToNearest.PublicationRecord.PublicationData.PublicationTime);
                     }
                     catch (Exception ex)
                     {

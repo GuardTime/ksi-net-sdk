@@ -33,11 +33,16 @@ namespace Guardtime.KSI.Test.Integration
 
         public DataHolderForIntegrationTests(IReadOnlyList<string> inputData)
         {
+            if (inputData.Count != 6)
+            {
+                string something = inputData[0];
+            }
             if (inputData[0] == null)
             {
                 throw new ArgumentException("Test file is null");
             }
             _testFile = inputData[0];
+            
 
             _sigantureReadInFails = inputData[1].ToLower().Equals("true");
 

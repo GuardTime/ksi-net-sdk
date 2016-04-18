@@ -619,24 +619,6 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-aggregation-time-with-publication-record.tlv.
-        /// </summary>
-        internal static string KsiSignatureDo_Invalid_Aggregation_Time_With_Publication_Record {
-            get {
-                return ResourceManager.GetString("KsiSignatureDo_Invalid_Aggregation_Time_With_Publication_Record", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-calendar-authentication-record-invalid-certificate-id.tlv.
-        /// </summary>
-        internal static string KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Certificate_Id {
-            get {
-                return ResourceManager.GetString("KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Certificate_Id", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-calendar-authentication-record-invalid-publication-hash.tlv.
         /// </summary>
         internal static string KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Publication_Hash {
@@ -701,6 +683,15 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-hash-algorithm.tlv.
+        /// </summary>
+        internal static string KsiSignatureDo_Invalid_Hash_Algorithm {
+            get {
+                return ResourceManager.GetString("KsiSignatureDo_Invalid_Hash_Algorithm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-missing-aggregation-hash-chains.tlv.
         /// </summary>
         internal static string KsiSignatureDo_Invalid_Missing_Aggregation_Hash_Chain {
@@ -710,7 +701,16 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-missing-calendar-hash-chain.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-missing-calendar-auth-record.tlv.
+        /// </summary>
+        internal static string KsiSignatureDo_Invalid_Missing_Calendar_Authentication_Record {
+            get {
+                return ResourceManager.GetString("KsiSignatureDo_Invalid_Missing_Calendar_Authentication_Record", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-Invalid-Missing-calendar-hash-chain.tlv.
         /// </summary>
         internal static string KsiSignatureDo_Invalid_Missing_Calendar_Hash_Chain {
             get {
@@ -818,16 +818,16 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-ok-missing-calendar-hash-chain.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-ok-identity.tlv.
         /// </summary>
-        internal static string KsiSignatureDo_Ok_Missing_Calendar_Hash_Chain {
+        internal static string KsiSignatureDo_Ok_Identity {
             get {
-                return ResourceManager.GetString("KsiSignatureDo_Ok_Missing_Calendar_Hash_Chain", resourceCulture);
+                return ResourceManager.GetString("KsiSignatureDo_Ok_Identity", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-ok-missing-publication-record-and-calendar-authentication-record.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-ok-Missing-publication-record-and-calendar-authentication-record.tlv.
         /// </summary>
         internal static string KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record {
             get {

@@ -50,55 +50,55 @@ namespace Guardtime.KSI.Test.Signature
         [Test]
         public void TestCalendarAuthenticationRecordInvalidExtraTag()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.That(delegate
             {
                 GetCalendarAuthenticationRecordFromFile(Properties.Resources.CalendarAuthenticationRecord_Invalid_Extra_Tag);
-            }, "Invalid tag");
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Unknown tag"));
         }
 
         [Test]
         public void TestCalendarAuthenticationRecordInvalidMissingPublicationData()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.That(delegate
             {
                 GetCalendarAuthenticationRecordFromFile(Properties.Resources.CalendarAuthenticationRecord_Invalid_Missing_Publication_Data);
-            }, "Only one publication data must exist in calendar authentication record");
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one publication data must exist in calendar authentication record"));
         }
 
         [Test]
         public void TestCalendarAuthenticationRecordInvalidMissingSignatureData()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.That(delegate
             {
                 GetCalendarAuthenticationRecordFromFile(Properties.Resources.CalendarAuthenticationRecord_Invalid_Missing_Signature_Data);
-            }, "Only one signature data must exist in calendar authentication record");
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one signature data must exist in calendar authentication record"));
         }
 
         [Test]
         public void TestCalendarAuthenticationRecordInvalidMultiplePublicationData()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.That(delegate
             {
                 GetCalendarAuthenticationRecordFromFile(Properties.Resources.CalendarAuthenticationRecord_Invalid_Multiple_Publication_Data);
-            }, "Only one publication data must exist in calendar authentication record");
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one publication data must exist in calendar authentication record"));
         }
 
         [Test]
         public void TestCalendarAuthenticationRecordInvalidMultipleSignatureData()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.That(delegate
             {
                 GetCalendarAuthenticationRecordFromFile(Properties.Resources.CalendarAuthenticationRecord_Invalid_Multiple_Signature_Data);
-            }, "Only one signature data must exist in calendar authentication record");
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one signature data must exist in calendar authentication record"));
         }
 
         [Test]
         public void TestCalendarAuthenticationRecordInvalidType()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.That(delegate
             {
                 GetCalendarAuthenticationRecordFromFile(Properties.Resources.CalendarAuthenticationRecord_Invalid_Type);
-            }, "Invalid calendar authentication record type: 2054");
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Invalid calendar authentication record type(2054)"));
         }
 
         [Test]

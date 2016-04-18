@@ -111,8 +111,8 @@ namespace Guardtime.KSI.Service
         /// <returns>hmac data hash</returns>
         private static DataHash CalculateMac(HashAlgorithm hmacAlgorithm, byte[] key, byte[] data)
         {
-            IHmacHasher hmac = KsiProvider.CreateHmacHasher();
-            return hmac.GetHash(hmacAlgorithm, key, data);
+            IHmacHasher hmac = KsiProvider.CreateHmacHasher(hmacAlgorithm);
+            return hmac.GetHash(key, data);
         }
 
         /// <summary>

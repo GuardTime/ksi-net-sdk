@@ -48,73 +48,73 @@ namespace Guardtime.KSI.Test.Signature
         [Test]
         public void TestCalendarHashChainInvalidType()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.That(delegate
             {
                 GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Type);
-            }, "Invalid calendar hash chain type: 2051");
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Invalid calendar hash chain type(2051)"));
         }
 
         [Test]
         public void TestCalendarHashChainInvalidExtraTag()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.That(delegate
             {
                 GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Extra_Tag);
-            }, "Invalid tag");
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Unknown tag"));
         }
 
         [Test]
         public void TestCalendarHashChainInvalidMissingInputHash()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.That(delegate
             {
                 GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Missing_Input_Hash);
-            }, "Only one input hash must exist in calendar hash chain");
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one input hash must exist in calendar hash chain"));
         }
 
         [Test]
         public void TestCalendarHashChainInvalidMissingLinks()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.That(delegate
             {
                 GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Missing_Links);
-            }, "Links are missing in calendar hash chain");
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Links are missing in calendar hash chain"));
         }
 
         [Test]
         public void TestCalendarHashChainInvalidMissingPublicationTime()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.That(delegate
             {
                 GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Missing_Publication_Time);
-            }, "Only one publication time must exist in calendar hash chain");
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one publication time must exist in calendar hash chain"));
         }
 
         [Test]
         public void TestCalendarHashChainInvalidMultipleAggregationTime()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.That(delegate
             {
                 GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Multiple_Aggregation_Time);
-            }, "Only one aggregation time is allowed in calendar hash chain");
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Only one aggregation time is allowed in calendar hash chain"));
         }
 
         [Test]
         public void TestCalendarHashChainInvalidMultipleInputHash()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.That(delegate
             {
                 GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Multiple_Input_Hash);
-            }, "Only one input hash must exist in calendar hash chain");
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one input hash must exist in calendar hash chain"));
         }
 
         [Test]
         public void TestCalendarHashChainInvalidMultiplePublicationTime()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.That(delegate
             {
                 GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Multiple_Publication_Time);
-            }, "Only one publication time must exist in calendar hash chain");
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one publication time must exist in calendar hash chain"));
         }
 
         [Test]
