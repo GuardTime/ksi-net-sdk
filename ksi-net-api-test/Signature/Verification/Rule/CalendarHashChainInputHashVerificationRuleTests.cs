@@ -97,7 +97,10 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             CalendarHashChainInputHashVerificationRule rule = new CalendarHashChainInputHashVerificationRule();
 
             // Check signature without calendar chain
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record), FileMode.Open))
+            using (
+                FileStream stream =
+                    new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record),
+                        FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -124,6 +127,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
 
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+                Assert.AreEqual(VerificationError.Int03, verificationResult.VerificationError);
             }
         }
     }

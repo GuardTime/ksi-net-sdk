@@ -63,7 +63,10 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             ExtendedSignatureCalendarChainAggregationTimeRule rule = new ExtendedSignatureCalendarChainAggregationTimeRule();
 
             // Check signature without calendar chain which will fail
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record), FileMode.Open))
+            using (
+                FileStream stream =
+                    new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record),
+                        FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -161,6 +164,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
 
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+                Assert.AreEqual(VerificationError.Cal03, verificationResult.VerificationError);
             }
         }
     }

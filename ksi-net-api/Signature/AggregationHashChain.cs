@@ -144,6 +144,41 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
+        /// Get chain index values
+        /// </summary>
+        /// <returns></returns>
+        public ulong[] GetChainIndex()
+        {
+            List<ulong> result = new List<ulong>();
+            foreach (IntegerTag tag in _chainIndex)
+            {
+                result.Add(tag.Value);
+            }
+            return result.ToArray();
+        }
+
+        /// <summary>
+        /// Returns location pointer based on aggregation hash chain links
+        /// </summary>
+        /// <returns></returns>
+        public ulong CalcLocationPointer()
+        {
+            ulong result = 0;
+
+            for (int i = 0; i < _chain.Count; i++)
+            {
+                if (_chain[i].Direction == LinkDirection.Left)
+                {
+                    result |= 1UL << i;
+                }
+            }
+
+            result |= 1UL << _chain.Count;
+
+            return result;
+        }
+
+        /// <summary>
         /// Get the (partial) signer identity from the current hash chain.
         /// </summary>
         /// <returns></returns>

@@ -610,6 +610,15 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-aggregation-chain-index-mismatch.tlv.
+        /// </summary>
+        internal static string KsiSignatureDo_Invalid_Aggregation_Chain_Index_Mismatch {
+            get {
+                return ResourceManager.GetString("KsiSignatureDo_Invalid_Aggregation_Chain_Index_Mismatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-aggregation-chain-input-hash.tlv.
         /// </summary>
         internal static string KsiSignatureDo_Invalid_Aggregation_Chain_Input_Hash {
