@@ -39,4 +39,4 @@ resources/signature/integration-test-signatures/legacy-id-algorithm.ksig;true;fa
 resources/signature/integration-test-signatures/legacy-id-content-null.ksig;false;fail; ; ;AggregationHashChainConsistencyRule
 resources/signature/integration-test-signatures/invalid-legacy-id-content.ksig;false;fail; ; ;AggregationHashChainConsistencyRule
 resources/signature/integration-test-signatures/invalid-legacy-id-content-length.ksig;false;fail; ; ;AggregationHashChainConsistencyRule
-#resources/signature/integration-test-signatures/invalid-chain-index.ksig;false;fail; ; ;AggregationHashChainConsistencyRule
+resources/signature/integration-test-signatures/invalid-chain-index.ksig;false;fail; ; ;AggregationHashChainIndexRule
