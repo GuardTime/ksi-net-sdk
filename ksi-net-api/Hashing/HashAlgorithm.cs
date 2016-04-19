@@ -66,7 +66,7 @@ namespace Guardtime.KSI.Hashing
         /// </summary>
         static HashAlgorithm()
         {
-            _values = new HashAlgorithm[] { Sha1, Sha2256, Ripemd160, Sha2224, Sha2384, Sha2512, Sha3224, Sha3256, Sha3384, Sha3512, Sm3 };
+            _values = new HashAlgorithm[] { Sha1, Sha2256, Ripemd160, Sha2384, Sha2512, Sha3224, Sha3256, Sha3384, Sha3512, Sm3 };
 
             foreach (HashAlgorithm algorithm in _values)
             {

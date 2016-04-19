@@ -47,7 +47,7 @@ namespace Guardtime.KSI.Test.Signature
         public void TestGetLocationPointer()
         {
             Assert.AreEqual(63,
-                AggregationHashChain.Link.GetLocationPointer(new List<AggregationHashChain.Link>
+                AggregationHashChain.CalcLocationPointer(new List<AggregationHashChain.Link>
                 {
                     new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.MetaData("test client", "test machine id"), 0),
                     new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE")), null, 0),
@@ -57,7 +57,7 @@ namespace Guardtime.KSI.Test.Signature
                 }.ToArray()), "Invalid location pointer.");
 
             Assert.AreEqual(51,
-                AggregationHashChain.Link.GetLocationPointer(new List<AggregationHashChain.Link>
+                AggregationHashChain.CalcLocationPointer(new List<AggregationHashChain.Link>
                 {
                     new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.MetaData("test client", "test machine id"), 0),
                     new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE")), null, 0),
@@ -66,7 +66,7 @@ namespace Guardtime.KSI.Test.Signature
                     new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01F2960B44B6846AE20FD4169D599D9F1C405A6CB1CBAA5B3179A06B3D1DB92166")), null, 0),
                 }.ToArray()), "Invalid location pointer.");
 
-            Assert.AreEqual(23, AggregationHashChain.Link.GetLocationPointer(new List<AggregationHashChain.Link>
+            Assert.AreEqual(23, AggregationHashChain.CalcLocationPointer(new List<AggregationHashChain.Link>
             {
                 new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.MetaData("test client", "test machine id"), 0),
                 new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE")), null, 0),
@@ -74,7 +74,7 @@ namespace Guardtime.KSI.Test.Signature
                 new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01F2960B44B6846AE20FD4169D599D9F1C405A6CB1CBAA5B3179A06B3D1DB92166")), null, 0),
             }.ToArray()), "Invalid location pointer.");
 
-            Assert.AreEqual(21, AggregationHashChain.Link.GetLocationPointer(new List<AggregationHashChain.Link>
+            Assert.AreEqual(21, AggregationHashChain.CalcLocationPointer(new List<AggregationHashChain.Link>
             {
                 new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.MetaData("test client", "test machine id"), 0),
                 new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE")), null, 0),
@@ -82,7 +82,7 @@ namespace Guardtime.KSI.Test.Signature
                 new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01F2960B44B6846AE20FD4169D599D9F1C405A6CB1CBAA5B3179A06B3D1DB92166")), null, 0),
             }.ToArray()), "Invalid location pointer.");
 
-            Assert.AreEqual(9, AggregationHashChain.Link.GetLocationPointer(new List<AggregationHashChain.Link>
+            Assert.AreEqual(9, AggregationHashChain.CalcLocationPointer(new List<AggregationHashChain.Link>
             {
                 new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.MetaData("test client", "test machine id"), 0),
                 new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE")), null, 0),
@@ -103,7 +103,7 @@ namespace Guardtime.KSI.Test.Signature
                 foreach (AggregationHashChain chain in hashChains)
                 {
                     ReadOnlyCollection<AggregationHashChain.Link> links = chain.GetChainLinks();
-                    Assert.AreEqual(index[i--], AggregationHashChain.Link.GetLocationPointer(links.ToArray()), "Location pointers do not match.");
+                    Assert.AreEqual(index[i--], AggregationHashChain.CalcLocationPointer(links.ToArray()), "Location pointers do not match.");
                 }
             }
         }

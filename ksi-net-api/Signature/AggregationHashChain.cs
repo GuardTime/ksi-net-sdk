@@ -221,36 +221,32 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
-        /// Get chain index values
-        /// </summary>
-        /// <returns></returns>
-        public ulong[] GetChainIndex()
-        {
-            List<ulong> result = new List<ulong>();
-            foreach (IntegerTag tag in _chainIndex)
-            {
-                result.Add(tag.Value);
-            }
-            return result.ToArray();
-        }
-
-        /// <summary>
         /// Returns location pointer based on aggregation hash chain links
         /// </summary>
         /// <returns></returns>
         public ulong CalcLocationPointer()
         {
+            return CalcLocationPointer(_links.ToArray());
+        }
+
+        /// <summary>
+        /// eturns location pointer based on aggregation hash chain links
+        /// </summary>
+        /// <param name="links">aggregation hash chain links</param>
+        /// <returns></returns>
+        public static ulong CalcLocationPointer(Link[] links)
+        {
             ulong result = 0;
 
-            for (int i = 0; i < _chain.Count; i++)
+            for (int i = 0; i < links.Length; i++)
             {
-                if (_chain[i].Direction == LinkDirection.Left)
+                if (links[i].Direction == LinkDirection.Left)
                 {
                     result |= 1UL << i;
                 }
             }
 
-            result |= 1UL << _chain.Count;
+            result |= 1UL << links.Length;
 
             return result;
         }

@@ -112,7 +112,7 @@ namespace Guardtime.KSI.Service
             foreach (AggregationTreeNode node in _documentNodes)
             {
                 AggregationHashChain.Link[] chainLinks = CreateAggregationHashChainLinks(node);
-                chainIndex[chainIndex.Length - 1] = AggregationHashChain.Link.GetLocationPointer(chainLinks);
+                chainIndex[chainIndex.Length - 1] = AggregationHashChain.CalcLocationPointer(chainLinks);
 
                 AggregationHashChain aggregationHashChain = new AggregationHashChain(existingChain.AggregationTime, chainIndex, node.Item.DocumentHash,
                     node.Item.DocumentHash.Algorithm.Id, chainLinks);

@@ -33,10 +33,14 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         public class Link : CompositeTag
         {
+            private const byte LegacyIdFirstOctet = 0x3;
+            private const byte LegacyIdLength = 29;
+
             private readonly IntegerTag _levelCorrection;
             private readonly MetaData _metaData;
-            private readonly ImprintTag _metaHash;
             private readonly ImprintTag _siblingHash;
+            private readonly RawTag _legacyId;
+            private readonly string _legacyIdString;
 
             /// <summary>
             /// Create new aggregation hash chain link TLV elment.
@@ -59,7 +63,7 @@ namespace Guardtime.KSI.Signature
             {
                 int levelCorrectionCount = 0;
                 int siblingHashCount = 0;
-                int metaHashCount = 0;
+                int legacyIdCount = 0;
                 int metaDataCount = 0;
 
                 for (int i = 0; i < Count; i++)
@@ -76,9 +80,10 @@ namespace Guardtime.KSI.Signature
                             this[i] = _siblingHash = new ImprintTag(childTag);
                             siblingHashCount++;
                             break;
-                        case Constants.AggregationHashChain.Link.MetaHashTagType:
-                            this[i] = _metaHash = new ImprintTag(childTag);
-                            metaHashCount++;
+                        case Constants.AggregationHashChain.Link.LegacyId:
+                            this[i] = _legacyId = new RawTag(childTag);
+                            _legacyIdString = GetLegacyIdString(_legacyId.Value);
+                            legacyIdCount++;
                             break;
                         case Constants.AggregationHashChain.MetaData.TagType:
                             this[i] = _metaData = new MetaData(childTag);
@@ -95,9 +100,9 @@ namespace Guardtime.KSI.Signature
                     throw new TlvException("Only one levelcorrection value is allowed in aggregation hash chain link.");
                 }
 
-                if (!Util.IsOneValueEqualTo(1, siblingHashCount, metaHashCount, metaDataCount))
+                if (!Util.IsOneValueEqualTo(1, siblingHashCount, legacyIdCount, metaDataCount))
                 {
-                    throw new TlvException("Exactly one of three from siblinghash, metahash or metadata must exist in aggregation hash chain link.");
+                    throw new TlvException("Exactly one of three from sibling hash, legacy id or metadata must exist in aggregation hash chain link.");
                 }
 
                 Direction = direction;
@@ -151,34 +156,51 @@ namespace Guardtime.KSI.Signature
             /// <returns></returns>
             public string GetIdentity()
             {
-                if (_metaHash != null)
+                if (_legacyId != null)
                 {
-                    return CalculateIdentityFromMetaHash();
+                    return _legacyIdString;
                 }
 
                 return _metaData != null ? _metaData.ClientId : "";
             }
 
-            /// <summary>
-            /// Calculate indentity value from meta hash
-            /// </summary>
-            /// <returns></returns>
-            private string CalculateIdentityFromMetaHash()
+            private static string GetLegacyIdString(byte[] bytes)
             {
-                byte[] bytes = _metaHash.Value.Imprint;
-
-                if (bytes.Length < 3)
+                if (bytes[0] != LegacyIdFirstOctet)
                 {
-                    Logger.Warn("Meta hash byte array too short. Length: {0}", bytes.Length);
-                    return "";
+                    throw new TlvException("Invalid first octet in legacy id tag: " + bytes[0]);
                 }
 
-                int length = (bytes[1] << 8) + bytes[2];
-                return Encoding.UTF8.GetString(bytes, 3, length);
+                if (bytes[1] != 0x0)
+                {
+                    throw new TlvException("Invalid second octet in legacy id tag: " + bytes[0]);
+                }
+
+                if (bytes.Length != LegacyIdLength)
+                {
+                    throw new TlvException("Invalid legacy id tag length. Length: " + bytes.Length);
+                }
+
+                int idStringLength = bytes[2];
+
+                if (bytes.Length < 4 + idStringLength)
+                {
+                    throw new TlvException("Invalid legacy id length value: " + idStringLength);
+                }
+
+                for (int i = idStringLength + 3; i < bytes.Length; i++)
+                {
+                    if (bytes[i] != 0x0)
+                    {
+                        throw new TlvException("Invalid padding octet. Index: " + i);
+                    }
+                }
+
+                return new UTF8Encoding(false, true).GetString(bytes, 3, idStringLength);
             }
 
             /// <summary>
-            ///     Get sibling data
+            ///     Get data byte array
             /// </summary>
             public byte[] GetSiblingData()
             {
@@ -187,29 +209,7 @@ namespace Guardtime.KSI.Signature
                     return _siblingHash.EncodeValue();
                 }
 
-                return _metaHash != null ? _metaHash.EncodeValue() : _metaData?.EncodeValue();
-            }
-
-            /// <summary>
-            /// Returns location pointer based on aggregation hash chain links
-            /// </summary>
-            /// <param name="links">Aggregation hash chain links</param>
-            /// <returns></returns>
-            public static ulong GetLocationPointer(Link[] links)
-            {
-                ulong result = 1;
-
-                for (int i = links.Length - 1; i >= 0; i--)
-                {
-                    result <<= 1;
-                    Link link = links[i];
-                    if (link.Direction != LinkDirection.Right)
-                    {
-                        result++;
-                    }
-                }
-
-                return result;
+                return _legacyId != null ? _legacyId.EncodeValue() : _metaData?.EncodeValue();
             }
         }
     }
