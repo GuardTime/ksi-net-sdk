@@ -19,6 +19,7 @@
 
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Hashing
 {
@@ -47,7 +48,12 @@ namespace Guardtime.KSI.Hashing
             /// <summary>
             ///     Algorithm defined in the specification, but not yet available in the implementation.
             /// </summary>
-            NotImplemented
+            NotImplemented,
+
+            /// <summary>
+            ///     Algorithm defined in the specification as "invalid" and cannot be used for hashing.
+            /// </summary>
+            Invalid
         }
 
         private static readonly Dictionary<string, HashAlgorithm> Lookup = new Dictionary<string, HashAlgorithm>();
@@ -121,6 +127,11 @@ namespace Guardtime.KSI.Hashing
         /// <returns>HashAlgorithm when a match is found, otherwise null</returns>
         public static HashAlgorithm GetById(byte id)
         {
+            if (id == Invalid.Id)
+            {
+                throw new HashingException("Invalid hash algorithm. Id: " + id);
+            }
+
             foreach (HashAlgorithm algorithm in _values)
             {
                 if (algorithm.Id == id)

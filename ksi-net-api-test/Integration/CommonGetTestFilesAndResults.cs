@@ -76,7 +76,7 @@ namespace Guardtime.KSI.Test.Integration
                     Console.WriteLine(line);
                     if (!line.StartsWith("#"))
                     {
-                        yield return new DataHolderForIntegrationTests(line.Split(':'));
+                        yield return new DataHolderForIntegrationTests(line.Split(';'));
                     }
                 }
             }

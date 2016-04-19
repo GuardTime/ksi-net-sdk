@@ -51,7 +51,8 @@ namespace Guardtime.KSI
         /// <summary>
         /// Get HMAC hasher.
         /// </summary>
+        /// <param name="algorithm">HMAC algorithm</param>
         /// <returns></returns>
-        IHmacHasher CreateHmacHasher();
+        IHmacHasher CreateHmacHasher(HashAlgorithm algorithm);
     }
 }

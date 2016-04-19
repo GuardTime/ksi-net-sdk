@@ -82,9 +82,9 @@ namespace Guardtime.KSI.Test.Crypto
             switch (ProviderType)
             {
                 case CryptoProviderType.BouncyCastle:
-                    return new KSI.Crypto.BouncyCastle.Hashing.DataHasher();
+                    return new KSI.Crypto.BouncyCastle.Hashing.DataHasher(HashAlgorithm.Default);
                 case CryptoProviderType.Microsoft:
-                    return new KSI.Crypto.Microsoft.Hashing.DataHasher();
+                    return new KSI.Crypto.Microsoft.Hashing.DataHasher(HashAlgorithm.Default);
                 default:
                     return null;
             }

@@ -24,7 +24,6 @@ using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Utils;
-using NLog;
 
 namespace Guardtime.KSI.Signature
 {
@@ -33,7 +32,6 @@ namespace Guardtime.KSI.Signature
     /// </summary>
     public sealed partial class AggregationHashChain : CompositeTag
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IntegerTag _aggrAlgorithmId;
         private readonly IntegerTag _aggregationTime;
         private readonly List<Link> _links = new List<Link>();
@@ -223,22 +221,62 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
+        /// Get chain index values
+        /// </summary>
+        /// <returns></returns>
+        public ulong[] GetChainIndex()
+        {
+            List<ulong> result = new List<ulong>();
+            foreach (IntegerTag tag in _chainIndex)
+            {
+                result.Add(tag.Value);
+            }
+            return result.ToArray();
+        }
+
+        /// <summary>
+        /// Returns location pointer based on aggregation hash chain links
+        /// </summary>
+        /// <returns></returns>
+        public ulong CalcLocationPointer()
+        {
+            ulong result = 0;
+
+            for (int i = 0; i < _chain.Count; i++)
+            {
+                if (_chain[i].Direction == LinkDirection.Left)
+                {
+                    result |= 1UL << i;
+                }
+            }
+
+            result |= 1UL << _chain.Count;
+
+            return result;
+        }
+
+        /// <summary>
         /// Get the (partial) signer identity from the current hash chain.
         /// </summary>
         /// <returns></returns>
         public string GetChainIdentity()
         {
-            StringBuilder identity = new StringBuilder();
+            string identity = "";
+
             foreach (Link aggregationChainLink in _links)
             {
                 string id = aggregationChainLink.GetIdentity();
-                if (identity.Length > 0 && id.Length > 0)
+                if (id.Length <= 0)
                 {
-                    identity.Append(".");
+                    continue;
                 }
-                identity.Append(id);
+                if (identity.Length > 0)
+                {
+                    identity = " :: " + identity;
+                }
+                identity = id + identity;
             }
-            return identity.ToString();
+            return identity;
         }
 
         /// <summary>
