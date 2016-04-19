@@ -85,7 +85,10 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             PublicationsFilePublicationHashMatchesExtenderResponseRule rule = new PublicationsFilePublicationHashMatchesExtenderResponseRule();
 
             // Check invalid extended calendar chain from context function: null
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record), FileMode.Open))
+            using (
+                FileStream stream =
+                    new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record),
+                        FileMode.Open))
             {
                 TestVerificationContextFaultyFunctions context = new TestVerificationContextFaultyFunctions()
                 {
@@ -208,6 +211,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
 
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+                Assert.AreEqual(VerificationError.Pub01, verificationResult.VerificationError);
             }
         }
     }

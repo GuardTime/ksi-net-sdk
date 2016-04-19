@@ -178,6 +178,7 @@
     <Compile Include="Service\KsiPduHeaderTests.cs" />
     <Compile Include="Service\TestKsiServiceProtocol.cs" />
     <Compile Include="Signature\KsiSignatureUsingReflectionTests.cs" />
+    <Compile Include="Signature\Verification\Rule\AggregationHashChainIndexRuleTests.cs" />
     <Compile Include="TestSetup.cs" />
     <Compile Include="Signature\CalendarAuthenticationRecordTests.cs" />
     <Compile Include="Signature\AggregationAuthenticationRecordTests.cs" />
@@ -868,6 +869,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-aggregation-chain-aggregation-time-mismatch.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-aggregation-chain-index-mismatch.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-aggregation-chain-input-hash.tlv">

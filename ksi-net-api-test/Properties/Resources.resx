@@ -348,6 +348,9 @@
   <data name="KsiSignatureDo_Invalid_Aggregation_Chain_Aggregation_Time_Mismatch" xml:space="preserve">
     <value>resources/signature/ksi-signature-do/ksi-signature-invalid-aggregation-chain-aggregation-time-mismatch.tlv</value>
   </data>
+  <data name="KsiSignatureDo_Invalid_Aggregation_Chain_Index_Mismatch" xml:space="preserve">
+    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-aggregation-chain-index-mismatch.tlv</value>
+  </data>
   <data name="KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Publication_Hash" xml:space="preserve">
     <value>resources/signature/ksi-signature-do/ksi-signature-invalid-calendar-authentication-record-invalid-publication-hash.tlv</value>
   </data>
