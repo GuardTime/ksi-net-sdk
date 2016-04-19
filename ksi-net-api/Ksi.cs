@@ -18,8 +18,6 @@
  */
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;

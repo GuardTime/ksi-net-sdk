@@ -57,7 +57,7 @@ namespace Guardtime.KSI.Hashing
         }
 
         private static readonly Dictionary<string, HashAlgorithm> Lookup = new Dictionary<string, HashAlgorithm>();
-        private static readonly HashAlgorithm[] _values;
+        private static readonly HashAlgorithm[] Values;
 
         private readonly string[] _alternatives;
 
@@ -66,9 +66,9 @@ namespace Guardtime.KSI.Hashing
         /// </summary>
         static HashAlgorithm()
         {
-            _values = new HashAlgorithm[] { Sha1, Sha2256, Ripemd160, Sha2384, Sha2512, Sha3224, Sha3256, Sha3384, Sha3512, Sm3 };
+            Values = new HashAlgorithm[] { Sha1, Sha2256, Ripemd160, Sha2384, Sha2512, Sha3224, Sha3256, Sha3384, Sha3512, Sm3 };
 
-            foreach (HashAlgorithm algorithm in _values)
+            foreach (HashAlgorithm algorithm in Values)
             {
                 Lookup.Add(NameNormalize(algorithm.Name), algorithm);
                 foreach (string alternative in algorithm._alternatives)
@@ -132,7 +132,7 @@ namespace Guardtime.KSI.Hashing
                 throw new HashingException("Invalid hash algorithm. Id: " + id);
             }
 
-            foreach (HashAlgorithm algorithm in _values)
+            foreach (HashAlgorithm algorithm in Values)
             {
                 if (algorithm.Id == id)
                 {
@@ -160,7 +160,7 @@ namespace Guardtime.KSI.Hashing
         /// <returns>List of supported hash algorithm names</returns>
         public static IEnumerable<string> GetNamesList()
         {
-            foreach (HashAlgorithm algorithm in _values)
+            foreach (HashAlgorithm algorithm in Values)
             {
                 yield return algorithm.Name;
             }
