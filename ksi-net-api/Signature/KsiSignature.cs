@@ -300,9 +300,9 @@ namespace Guardtime.KSI.Signature
                 }
                 if (identity.Length > 0)
                 {
-                    identity += ".";
+                    identity = " :: " + identity;
                 }
-                identity += id;
+                identity = id + identity;
             }
             return identity;
         }

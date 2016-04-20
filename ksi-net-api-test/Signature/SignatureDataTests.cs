@@ -53,82 +53,82 @@ namespace Guardtime.KSI.Test.Signature
         [Test]
         public void TestSignatureDataInvalidWithWrongType()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.That(delegate
             {
                 GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Wrong_Type);
-            }, "Invalid signature data type: 10");
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Invalid signature data type(10)"));
         }
 
         [Test]
         public void TestSignatureDataInvalidWithExtraTag()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.That(delegate
             {
                 GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Extra_Tag);
-            }, "Invalid tag");
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Unknown tag"));
         }
 
         [Test]
         public void TestSignatureDataInvalidWithoutSignatureTypeTag()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.That(delegate
             {
                 GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Signature_Type_Missing);
-            }, "Only one signature type must exist in signature data");
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one signature type must exist in signature data"));
         }
 
         [Test]
         public void TestSignatureDataInvalidWithMultipleSignatureTypes()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.That(delegate
             {
                 GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Multiple_Signature_Type);
-            }, "Only one signature type must exist in signature data");
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one signature type must exist in signature data"));
         }
 
         [Test]
         public void TestSignatureDataInvalidWithoutSignatureValueTag()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.That(delegate
             {
                 GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Signature_Value_Missing);
-            }, "Only one signature value must exist in signature data");
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one signature value must exist in signature data"));
         }
 
         [Test]
         public void TestSignatureDataInvalidWithMultipleSignatureValues()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.That(delegate
             {
                 GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Multiple_Signature_Value);
-            }, "Only one signature value must exist in signature data");
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one signature value must exist in signature data"));
         }
 
         [Test]
         public void TestSignatureDataInvalidWithoutCertificateIdTag()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.That(delegate
             {
                 GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Certificate_Id_Missing);
-            }, "Only one certificate id must exist in signature data");
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one certificate id must exist in signature data"));
         }
 
         [Test]
         public void TestSignatureDataInvalidWithMultipleCertificateIds()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.That(delegate
             {
                 GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Multiple_Certificate_Id);
-            }, "Only one certificate id must exist in signature data");
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one certificate id must exist in signature data"));
         }
 
         [Test]
         public void TestSignatureDataInvalidWithMultipleCertificateRepositoryUris()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.That(delegate
             {
                 GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Multiple_Certificate_Rep_Uri);
-            }, "Only one certificate repository uri is allowed in signature data");
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Only one certificate repository uri is allowed in signature data"));
         }
 
         [Test]

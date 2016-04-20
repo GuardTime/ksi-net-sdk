@@ -33,7 +33,7 @@ namespace Guardtime.KSI.Crypto.Microsoft.Hashing
         private const int DefaultStreamBufferSize = 8192;
 
         private readonly HashAlgorithm _algorithm;
-        private System.Security.Cryptography.HashAlgorithm _messageHasher;
+        private System.Security.Cryptography.HashAlgorithm _hasher;
         private DataHash _outputHash;
 
         /// <summary>
@@ -47,32 +47,16 @@ namespace Guardtime.KSI.Crypto.Microsoft.Hashing
                 throw new HashingException("Invalid hash algorithm: null.");
             }
 
-            /*
-                If an algorithm is given which is not implemented, an illegal argument exception is thrown
-                The developer must ensure that only implemented algorithms are used.
-             */
-            if (algorithm.Status == HashAlgorithm.AlgorithmStatus.NotImplemented)
-            {
-                throw new HashingException("Hash algorithm is not implemented.");
-            }
-
             _algorithm = algorithm;
 
-            _messageHasher = GetHasher(algorithm);
+            _hasher = GetHasher(algorithm);
 
-            if (_messageHasher == null)
+            if (_hasher == null)
             {
                 throw new HashingException("Hash algorithm(" + algorithm.Name + ") is not supported.");
             }
 
-            _messageHasher.Initialize();
-        }
-
-        /// <summary>
-        ///     Create new data hasher for the default algorithm.
-        /// </summary>
-        public DataHasher() : this(HashAlgorithm.GetByName("DEFAULT"))
-        {
+            _hasher.Initialize();
         }
 
         private static System.Security.Cryptography.HashAlgorithm GetHasher(HashAlgorithm algorithm)
@@ -89,10 +73,6 @@ namespace Guardtime.KSI.Crypto.Microsoft.Hashing
             {
                 return new RIPEMD160Managed();
             }
-            //if (algorithm == HashAlgorithm.Sha2224)
-            //{
-            //     return new SHA(key);
-            //}
             if (algorithm == HashAlgorithm.Sha2384)
             {
                 return new SHA384Managed();
@@ -123,7 +103,7 @@ namespace Guardtime.KSI.Crypto.Microsoft.Hashing
                 throw new HashingException("Invalid input data: null.");
             }
 
-            _messageHasher.TransformBlock(data, offset, length, null, 0);
+            _hasher.TransformBlock(data, offset, length, null, 0);
             return this;
         }
 
@@ -190,8 +170,8 @@ namespace Guardtime.KSI.Crypto.Microsoft.Hashing
             {
                 return _outputHash;
             }
-            _messageHasher.TransformFinalBlock(new byte[] { }, 0, 0);
-            byte[] hash = _messageHasher.Hash;
+            _hasher.TransformFinalBlock(new byte[] { }, 0, 0);
+            byte[] hash = _hasher.Hash;
             _outputHash = new DataHash(_algorithm, hash);
 
             return _outputHash;
@@ -204,8 +184,8 @@ namespace Guardtime.KSI.Crypto.Microsoft.Hashing
         public IDataHasher Reset()
         {
             _outputHash = null;
-            _messageHasher.Clear();
-            _messageHasher = GetHasher(_algorithm);
+            _hasher.Clear();
+            _hasher = GetHasher(_algorithm);
 
             return this;
         }

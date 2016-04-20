@@ -139,7 +139,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             SignaturePublicationRecordPublicationTimeRule rule = new SignaturePublicationRecordPublicationTimeRule();
 
             // Check invalid signature with invalid publications record
-            using (FileStream stream = 
+            using (FileStream stream =
                 new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Invalid_With_Invalid_Publication_Record), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
@@ -149,6 +149,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
 
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+                Assert.AreEqual(VerificationError.Int07, verificationResult.VerificationError);
             }
         }
     }

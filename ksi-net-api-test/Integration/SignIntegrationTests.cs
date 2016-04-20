@@ -173,6 +173,7 @@ namespace Guardtime.KSI.Test.Integration
         {
             VerificationResult verificationResult = SignedHashVerifyWithInvalidHash(ksi);
             Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode, "Invalid hash should not verify with key based policy");
+            Assert.AreEqual(VerificationError.Gen01, verificationResult.VerificationError);
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCases))]
@@ -180,6 +181,7 @@ namespace Guardtime.KSI.Test.Integration
         {
             VerificationResult verificationResult = SignedHashVerifyWithInvalidHash(ksi);
             Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode, "Invalid hash should not verify with key based policy");
+            Assert.AreEqual(VerificationError.Gen01, verificationResult.VerificationError);
         }
 
         public VerificationResult SignHash(Ksi ksi)

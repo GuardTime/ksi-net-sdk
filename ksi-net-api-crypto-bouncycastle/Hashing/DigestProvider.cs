@@ -49,10 +49,6 @@ namespace Guardtime.KSI.Crypto.BouncyCastle.Hashing
             {
                 return new RipeMD160Digest();
             }
-            if (algorithm == HashAlgorithm.Sha2224)
-            {
-                return new Sha224Digest();
-            }
             if (algorithm == HashAlgorithm.Sha2384)
             {
                 return new Sha384Digest();

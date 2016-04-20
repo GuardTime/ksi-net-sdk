@@ -80,41 +80,20 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         }
 
         [Test]
-        public void TestSignatureWithPublicationsFileMissingPublicationRecord()
+        public void TestSignatureWithPublicationsFileMissingCalendarHashChain()
         {
             PublicationsFilePublicationHashMatchesExtenderResponseRule rule = new PublicationsFilePublicationHashMatchesExtenderResponseRule();
 
-            // Check invalid publications recordin signature: null
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_Missing_Calendar_Hash_Chain), FileMode.Open))
+            // Check invalid extended calendar chain from context function: null
+            using (
+                FileStream stream =
+                    new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record),
+                        FileMode.Open))
             {
                 TestVerificationContextFaultyFunctions context = new TestVerificationContextFaultyFunctions()
                 {
                     Signature = new KsiSignatureFactory().Create(stream),
                     PublicationsFile = new TestPublicationsFile()
-                };
-
-                Assert.Throws<KsiVerificationException>(delegate
-                {
-                    rule.Verify(context);
-                });
-            }
-        }
-
-        [Test]
-        public void TestSignatureWithInvalidContextExtendFunctions()
-        {
-            PublicationsFilePublicationHashMatchesExtenderResponseRule rule = new PublicationsFilePublicationHashMatchesExtenderResponseRule();
-
-            // Check invalid extended calendar chain from context function: null
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
-            {
-                TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
-                // TODO
-
-                TestVerificationContextFaultyFunctions context = new TestVerificationContextFaultyFunctions()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream),
-                    PublicationsFile = testPublicationsFile
                 };
 
                 Assert.Throws<KsiVerificationException>(delegate
@@ -188,7 +167,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record), FileMode.Open))
             {
                 TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
-                testPublicationsFile.NearestPublications.Add(1404215325,
+                testPublicationsFile.NearestPublications.Add(1439577241,
                     new PublicationRecordInPublicationFile(new RawTag(0x703, false, false,
                         new PublicationData("AAAAAA-CT5VGY-AAPUCF-L3EKCC-NRSX56-AXIDFL-VZJQK4-WDCPOE-3KIWGB-XGPPM3-O5BIMW-REOVR4").Encode())));
 
@@ -216,7 +195,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record), FileMode.Open))
             {
                 TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
-                testPublicationsFile.NearestPublications.Add(1404215325,
+                testPublicationsFile.NearestPublications.Add(1439577241,
                     new PublicationRecordInPublicationFile(new RawTag(0x703, false, false,
                         new PublicationData("AAAAAA-CT5VGY-AAPUCF-L3EKCC-NRSX56-AXIDFL-VZJQK4-WDCPOE-3KIWGB-XGPPM3-O5BIMW-REOVR4").Encode())));
 
@@ -232,6 +211,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
 
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+                Assert.AreEqual(VerificationError.Pub01, verificationResult.VerificationError);
             }
         }
     }

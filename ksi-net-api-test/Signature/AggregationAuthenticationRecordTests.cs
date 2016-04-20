@@ -39,82 +39,82 @@ namespace Guardtime.KSI.Test.Signature
         [Test]
         public void TestAggregationAuthenticationRecordInvalidExtraTag()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.That(delegate
             {
                 GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Extra_Tag);
-            }, "Invalid tag");
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Unknown tag type"));
         }
 
         [Test]
         public void TestAggregationAuthenticationRecordInvalidMissingAggregationTime()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.That(delegate
             {
                 GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Missing_Aggregation_Time);
-            }, "Only one aggregation time must exist in aggregation authentication record");
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one aggregation time must exist in aggregation authentication record"));
         }
 
         [Test]
         public void TestAggregationAuthenticationRecordInvalidMissingChainIndex()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.That(delegate
             {
                 GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Missing_Chain_Index);
-            }, "Chain indexes must exist in aggregation authentication record");
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Chain indexes must exist in aggregation authentication record"));
         }
 
         [Test]
         public void TestAggregationAuthenticationRecordInvalidMissingInputHash()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.That(delegate
             {
                 GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Missing_Input_Hash);
-            }, "Only one input hash must exist in aggregation authentication record");
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one input hash must exist in aggregation authentication record"));
         }
 
         [Test]
         public void TestAggregationAuthenticationRecordInvalidMissingSignatureData()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.That(delegate
             {
                 GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Missing_Signature_Data);
-            }, "Only one signature data must exist in aggregation authentication record");
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one signature data must exist in aggregation authentication record"));
         }
 
         [Test]
         public void TestAggregationAuthenticationRecordInvalidMultipleAggregationTime()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.That(delegate
             {
                 GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Multiple_Aggregation_Time);
-            }, "Only one aggregation time must exist in aggregation authentication record");
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one aggregation time must exist in aggregation authentication record"));
         }
 
         [Test]
         public void TestAggregationAuthenticationRecordInvalidMultipleInputHash()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.That(delegate
             {
                 GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Multiple_Input_Hash);
-            }, "Only one input hash must exist in aggregation authentication record");
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one input hash must exist in aggregation authentication record"));
         }
 
         [Test]
         public void TestAggregationAuthenticationRecordInvalidMultipleSignatureData()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.That(delegate
             {
                 GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Multiple_Signature_Data);
-            }, "Only one signature data must exist in aggregation authentication record");
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one signature data must exist in aggregation authentication record"));
         }
 
         [Test]
         public void TestAggregationAuthenticationRecordInvalidType()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.That(delegate
             {
                 GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Type);
-            }, "Invalid aggregation authentication record type: 2053");
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Invalid aggregation authentication record type(2053)"));
         }
 
         [Test]

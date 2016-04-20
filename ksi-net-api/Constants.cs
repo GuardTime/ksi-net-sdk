@@ -261,7 +261,7 @@ namespace Guardtime.KSI
             {
                 public const uint LevelCorrectionTagType = 0x1;
                 public const uint SiblingHashTagType = 0x2;
-                public const uint MetaHashTagType = 0x3;
+                public const uint LegacyId = 0x3;
             }
 
             public static class MetaData
