@@ -23,8 +23,7 @@ using NLog;
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
     /// <summary>
-    ///     Rule checks that aggregation hash chain times are consistent. It means that previous aggregation hash chain
-    ///     aggregation time equals to current one.
+    ///     Rule checks that shape of the aggregation hash chain matches with chain index.
     /// </summary>
     public sealed class AggregationHashChainIndexRule : VerificationRule
     {
