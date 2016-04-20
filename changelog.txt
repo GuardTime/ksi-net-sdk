@@ -1,4 +1,8 @@
 
+Version 3.2
+
+2016-04-20 3.2.0
+
 * BUGFIX: Added aggregation hash chain index match rule (KSINETAPI-65)
 * IMPROVEMENT: Removed SHA-224 support. Added strict legacy id tag check on signature parsing. (KSINETAPI-62)
 * IMPROVEMENT: Changed signature identity separator to <space>::<space>
