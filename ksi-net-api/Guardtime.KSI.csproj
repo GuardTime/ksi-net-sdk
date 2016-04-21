@@ -88,6 +88,7 @@
     <Compile Include="Crypto\ICertificateSubjectRdnSelector.cs" />
     <Compile Include="Crypto\ICryptoSignatureVerifier.cs" />
     <Compile Include="Crypto\CertificateSubjectRdn.cs" />
+    <Compile Include="Exceptions\LocalAggregationExceptions.cs" />
     <Compile Include="Exceptions\HashingException.cs" />
     <Compile Include="Exceptions\KsiException.cs" />
     <Compile Include="Exceptions\KsiServiceException.cs" />

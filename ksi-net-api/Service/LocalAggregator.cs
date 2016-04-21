@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Signature;
@@ -37,7 +38,9 @@ namespace Guardtime.KSI.Service
         private readonly List<AggregationTreeNode> _documentNodes;
         private IKsiSignature _rootSignature;
         private readonly Ksi _ksi;
-        private readonly AggregationTreeNode _root;
+        private AggregationTreeNode _root;
+        private bool _canAddItems = true;
+        private bool _isTreeBuilt = false;
 
         /// <summary>
         /// Create local aggregator instance
@@ -67,59 +70,83 @@ namespace Guardtime.KSI.Service
 
             foreach (LocalAggregationItem item in aggregationItems)
             {
-                AggregationTreeNode node = new AggregationTreeNode(item);
+                _documentNodes.Add(new AggregationTreeNode(item));
+            }
+        }
 
-                _documentNodes.Add(node);
+        /// <summary>
+        /// Add aggregation item
+        /// </summary>
+        /// <param name="item"></param>
+        public void AddItem(LocalAggregationItem item)
+        {
+            if (!_canAddItems)
+            {
+                throw new LocalAggregationExceptions("Signing process is started. Cannot add new items.");
             }
 
-            _root = GetTreeRoot(_documentNodes);
+            _documentNodes.Add(new AggregationTreeNode(item));
         }
+
+        public LocalAggregationItem[] UniSignatures { get; set; }
+
+        public IKsiSignature MultiSignature { get; set; }
 
         /// <summary>
         /// Sign given documents
         /// </summary>
-        public LocalAggregationItem[] SignDocuments()
+        public void SignDocuments(bool useMultiSignature)
         {
+            _canAddItems = false;
+            Logger.Debug("Creating tree");
+            BuildTree();
             uint signLevel = _root.Level + 1;
 
             Logger.Debug("Signing root node hash. Level: {0}; Hash: ", signLevel, _root.NodeHash);
-
             _rootSignature = _ksi.Sign(_root.NodeHash, signLevel);
 
             AggregationHashChain existingChain = _rootSignature.GetAggregationHashChains()[0];
 
-            Logger.Debug("Start creating signatures.");
-            CreateSignatures(existingChain);
-            Logger.Debug("End creating signatures.");
-
-            LocalAggregationItem[] result = new LocalAggregationItem[_documentNodes.Count];
-
-            for (int i = 0; i < _documentNodes.Count; i++)
+            if (false && useMultiSignature)
             {
-                result[i] = _documentNodes[i].Item;
+                Logger.Debug("Start creating multi signature.");
+                CreateMultiSignature(existingChain);
+                Logger.Debug("End creating multi signature.");
             }
+            else
+            {
+                Logger.Debug("Start creating signatures.");
+                CreateSignatures(existingChain);
+                Logger.Debug("End creating signatures.");
 
-            return result;
+                UniSignatures = new LocalAggregationItem[_documentNodes.Count];
+
+                for (int i = 0; i < _documentNodes.Count; i++)
+                {
+                    UniSignatures[i] = _documentNodes[i].Item;
+                }
+            }
+        }
+
+        private void BuildTree()
+        {
+            if (!_isTreeBuilt)
+            {
+                _root = GetTreeRoot(_documentNodes);
+                _isTreeBuilt = true;
+            }
         }
 
         private void CreateSignatures(AggregationHashChain existingChain)
         {
             byte[] rootSignatureData = _rootSignature.EncodeValue();
-            ulong[] existingChainIndex = existingChain.GetChainIndex();
-            ulong[] chainIndex = new ulong[existingChainIndex.Length + 1];
-            Array.Copy(existingChainIndex, chainIndex, existingChainIndex.Length);
+            ulong[] chainIndex = PrepareChainIndex(existingChain);
 
             foreach (AggregationTreeNode node in _documentNodes)
             {
-                AggregationHashChain.Link[] chainLinks = CreateAggregationHashChainLinks(node);
-                chainIndex[chainIndex.Length - 1] = AggregationHashChain.CalcLocationPointer(chainLinks);
-
-                AggregationHashChain aggregationHashChain = new AggregationHashChain(existingChain.AggregationTime, chainIndex, node.Item.DocumentHash,
-                    node.Item.DocumentHash.Algorithm.Id, chainLinks);
-
                 using (MemoryStream stream = new MemoryStream())
-
                 {
+                    AggregationHashChain aggregationHashChain = GetAggregationHashChain(existingChain, node, chainIndex);
                     aggregationHashChain.WriteTo(stream);
 
                     // Take root node signature data and add aggregation hash chain.
@@ -133,12 +160,53 @@ namespace Guardtime.KSI.Service
             }
         }
 
+        private void CreateMultiSignature(AggregationHashChain existingChain)
+        {
+            byte[] rootSignatureData = _rootSignature.EncodeValue();
+            ulong[] chainIndex = PrepareChainIndex(existingChain);
+
+            using (MemoryStream stream = new MemoryStream())
+            {
+                foreach (AggregationTreeNode node in _documentNodes)
+                {
+                    AggregationHashChain aggregationHashChain = GetAggregationHashChain(existingChain, node, chainIndex);
+                    aggregationHashChain.WriteTo(stream);
+                }
+
+                // Take root node signature data and add aggregation hash chains.
+                byte[] signatureData = new byte[rootSignatureData.Length + stream.Length];
+                Array.Copy(rootSignatureData, signatureData, rootSignatureData.Length);
+                Array.Copy(stream.ToArray(), 0, signatureData, rootSignatureData.Length, stream.Length);
+
+                // Create new signature from the signature data.
+                MultiSignature = new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false, signatureData));
+            }
+        }
+
+        private static AggregationHashChain GetAggregationHashChain(AggregationHashChain existingChain, AggregationTreeNode node, ulong[] chainIndex)
+        {
+            AggregationHashChain.Link[] chainLinks = CreateAggregationHashChainLinks(node);
+            chainIndex[chainIndex.Length - 1] = AggregationHashChain.CalcLocationPointer(chainLinks);
+
+            return new AggregationHashChain(existingChain.AggregationTime, chainIndex, node.Item.DocumentHash,
+                node.Item.DocumentHash.Algorithm.Id, chainLinks);
+        }
+
+        private static ulong[] PrepareChainIndex(AggregationHashChain existingChain)
+        {
+            ulong[] existingChainIndex = existingChain.GetChainIndex();
+            ulong[] chainIndex = new ulong[existingChainIndex.Length + 1];
+            Array.Copy(existingChainIndex, chainIndex, existingChainIndex.Length);
+            return chainIndex;
+        }
+
         /// <summary>
         /// Get Merkle tree string representation
         /// </summary>
         /// <returns></returns>
         public string PrintTree()
         {
+            BuildTree();
             return AggregationTreeNode.PrintTree(_documentNodes);
         }
 
