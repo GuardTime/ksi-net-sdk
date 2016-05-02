@@ -17,35 +17,23 @@
  * reserves and retains all trademark rights.
  */
 
-using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Parser;
-
-namespace Guardtime.KSI.Publication
+namespace Guardtime.KSI.Signature.MultiSignature
 {
     /// <summary>
-    ///     Publication record TLV element in publication file.
+    /// Class for holding calendar authentication records.
     /// </summary>
-    public sealed class PublicationRecordInPublicationFile : PublicationRecord
+    public class CalendarAuthenticationRecordHolder : DataHolder<ulong, CalendarAuthenticationRecord>
     {
         /// <summary>
-        ///     Create new publication record TLV element from TLV element.
+        /// Add calendar authentication record. If a calendar authentication record with the same publication time already exists then element will not be added.
         /// </summary>
-        /// <param name="tag">TLV element</param>
-        public PublicationRecordInPublicationFile(ITlvTag tag) : base(tag)
+        public void Add(CalendarAuthenticationRecord calendarAuthenticationRecord)
         {
-            if (Type != Constants.PublicationRecord.TagTypeInPublicationsFile)
+            if (calendarAuthenticationRecord == null)
             {
-                throw new TlvException("Invalid publication record type(" + Type + ").");
+                return;
             }
-        }
-
-        /// <summary>
-        /// Convert current publication record to PublicationRecordInSignature
-        /// </summary>
-        /// <returns></returns>
-        public PublicationRecordInSignature ConvertToPublicationRecordInSignature()
-        {
-            return new PublicationRecordInSignature(NonCritical, Forward, EncodeValue());
+            Add(calendarAuthenticationRecord.PublicationData.PublicationTime, calendarAuthenticationRecord);
         }
     }
 }

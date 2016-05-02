@@ -59,5 +59,15 @@ namespace Guardtime.KSI.Test.Utils
             Assert.IsFalse(Util.IsOneValueEqualTo(1, 1, 1, 0, 3), "More than one value should be equal.");
             Assert.IsFalse(Util.IsOneValueEqualTo(1, 3, 2, 0, 3), "No values should be equal.");
         }
+
+        public void IsArrayPartEqualTest()
+        {
+            byte[] value = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 };
+            byte[] test = new byte[] { 0, 0, 3, 4, 5, 6, 7, 8, 9, 0, 0 };
+
+            Assert.IsTrue(Util.IsArrayEqual(value, test, 2, 7), "Array parts should be equal. Index: 2; Count: 7");
+            Assert.IsFalse(Util.IsArrayEqual(value, test, 2, 8), "Array parts should not be equal. Index: 2; Count: 8");
+            Assert.IsFalse(Util.IsArrayEqual(value, test, 1, 7), "Array parts should be equal. Index: 1; Count: 7");
+        }
     }
 }

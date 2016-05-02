@@ -17,35 +17,31 @@
  * reserves and retains all trademark rights.
  */
 
-using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Parser;
+using System;
 
-namespace Guardtime.KSI.Publication
+namespace Guardtime.KSI.Exceptions
 {
     /// <summary>
-    ///     Publication record TLV element in publication file.
+    ///     Multi-signature exception
     /// </summary>
-    public sealed class PublicationRecordInPublicationFile : PublicationRecord
+    [Serializable]
+    public class MultiSignatureException : Exception
     {
         /// <summary>
-        ///     Create new publication record TLV element from TLV element.
+        ///     Create new multi-signature exception
         /// </summary>
-        /// <param name="tag">TLV element</param>
-        public PublicationRecordInPublicationFile(ITlvTag tag) : base(tag)
+        /// <param name="message">Exception message</param>
+        public MultiSignatureException(string message) : base(message)
         {
-            if (Type != Constants.PublicationRecord.TagTypeInPublicationsFile)
-            {
-                throw new TlvException("Invalid publication record type(" + Type + ").");
-            }
         }
 
         /// <summary>
-        /// Convert current publication record to PublicationRecordInSignature
+        ///     Create new multi-signature exception
         /// </summary>
-        /// <returns></returns>
-        public PublicationRecordInSignature ConvertToPublicationRecordInSignature()
+        /// <param name="message">Exception message</param>
+        /// <param name="innerException">Inner exception</param>
+        public MultiSignatureException(string message, Exception innerException) : base(message, innerException)
         {
-            return new PublicationRecordInSignature(NonCritical, Forward, EncodeValue());
         }
     }
 }

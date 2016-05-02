@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright 2013-2016 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
@@ -17,35 +17,25 @@
  * reserves and retains all trademark rights.
  */
 
-using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Parser;
+using Guardtime.KSI.Publication;
 
-namespace Guardtime.KSI.Publication
+namespace Guardtime.KSI.Signature.MultiSignature
 {
     /// <summary>
-    ///     Publication record TLV element in publication file.
+    /// Class for holding publication records.
     /// </summary>
-    public sealed class PublicationRecordInPublicationFile : PublicationRecord
+    public class PublicationRecordHolder : DataHolder<ulong, PublicationRecordInSignature>
     {
         /// <summary>
-        ///     Create new publication record TLV element from TLV element.
+        /// Add publication record. If a publication record with the same publication time already exists then element will not be added.
         /// </summary>
-        /// <param name="tag">TLV element</param>
-        public PublicationRecordInPublicationFile(ITlvTag tag) : base(tag)
+        public void Add(PublicationRecordInSignature publicationRecord)
         {
-            if (Type != Constants.PublicationRecord.TagTypeInPublicationsFile)
+            if (publicationRecord == null)
             {
-                throw new TlvException("Invalid publication record type(" + Type + ").");
+                return;
             }
-        }
-
-        /// <summary>
-        /// Convert current publication record to PublicationRecordInSignature
-        /// </summary>
-        /// <returns></returns>
-        public PublicationRecordInSignature ConvertToPublicationRecordInSignature()
-        {
-            return new PublicationRecordInSignature(NonCritical, Forward, EncodeValue());
+            Add(publicationRecord.PublicationData.PublicationTime, publicationRecord);
         }
     }
 }
