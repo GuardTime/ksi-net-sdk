@@ -89,6 +89,7 @@
     <Compile Include="Crypto\ICryptoSignatureVerifier.cs" />
     <Compile Include="Crypto\CertificateSubjectRdn.cs" />
     <Compile Include="Exceptions\HashingException.cs" />
+    <Compile Include="Exceptions\MultiSignatureException.cs" />
     <Compile Include="Exceptions\KsiException.cs" />
     <Compile Include="Exceptions\KsiServiceException.cs" />
     <Compile Include="Exceptions\KsiServiceProtocolException.cs" />
@@ -130,6 +131,16 @@
     <Compile Include="Publication\PublicationData.cs" />
     <Compile Include="Service\TcpKsiServiceProtocol.cs" />
     <Compile Include="Signature\IKsiSignatureFactory.cs" />
+    <Compile Include="Signature\MultiSignature\AggregationHashChainHolder.cs" />
+    <Compile Include="Signature\MultiSignature\AggregationHashChainKey.cs" />
+    <Compile Include="Signature\MultiSignature\CalendarAuthenticationRecordHolder.cs" />
+    <Compile Include="Signature\MultiSignature\CalendarHashChainHolder.cs" />
+    <Compile Include="Signature\MultiSignature\DataHolder.cs" />
+    <Compile Include="Signature\MultiSignature\FirstAggregationHashChainsHolder.cs" />
+    <Compile Include="Signature\MultiSignature\KsiMultiSignature.cs" />
+    <Compile Include="Signature\MultiSignature\MultiValueDataHolder.cs" />
+    <Compile Include="Signature\MultiSignature\PublicationRecordHolder.cs" />
+    <Compile Include="Signature\MultiSignature\Rfc3161RecordHolder.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainIndexRule.cs" />
     <Compile Include="Utils\Base16.cs" />
     <Compile Include="Utils\Base32.cs" />

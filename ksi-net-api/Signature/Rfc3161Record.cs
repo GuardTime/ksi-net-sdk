@@ -162,6 +162,20 @@ namespace Guardtime.KSI.Signature
         public ulong AggregationTime => _aggregationTime.Value;
 
         /// <summary>
+        /// Get chain index values
+        /// </summary>
+        /// <returns></returns>
+        public ulong[] GetChainIndex()
+        {
+            List<ulong> result = new List<ulong>();
+            foreach (IntegerTag tag in _chainIndex)
+            {
+                result.Add(tag.Value);
+            }
+            return result.ToArray();
+        }
+
+        /// <summary>
         ///     Get RFC3161 input hash
         /// </summary>
         public DataHash InputHash => _inputHash.Value;

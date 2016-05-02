@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright 2013-2016 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
@@ -17,35 +17,24 @@
  * reserves and retains all trademark rights.
  */
 
-using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Parser;
-
-namespace Guardtime.KSI.Publication
+namespace Guardtime.KSI.Signature.MultiSignature
 {
     /// <summary>
-    ///     Publication record TLV element in publication file.
+    /// Class for holding calendar hash chains.
     /// </summary>
-    public sealed class PublicationRecordInPublicationFile : PublicationRecord
+    public class CalendarHashChainHolder : DataHolder<ulong, CalendarHashChain>
     {
         /// <summary>
-        ///     Create new publication record TLV element from TLV element.
+        /// Add calendar hash chain. If a calendar hash chain with the same aggregation time already exists then element will not be added.
         /// </summary>
-        /// <param name="tag">TLV element</param>
-        public PublicationRecordInPublicationFile(ITlvTag tag) : base(tag)
+        /// <param name="calendarHashChain"></param>
+        public void Add(CalendarHashChain calendarHashChain)
         {
-            if (Type != Constants.PublicationRecord.TagTypeInPublicationsFile)
+            if (calendarHashChain == null)
             {
-                throw new TlvException("Invalid publication record type(" + Type + ").");
+                return;
             }
-        }
-
-        /// <summary>
-        /// Convert current publication record to PublicationRecordInSignature
-        /// </summary>
-        /// <returns></returns>
-        public PublicationRecordInSignature ConvertToPublicationRecordInSignature()
-        {
-            return new PublicationRecordInSignature(NonCritical, Forward, EncodeValue());
+            Add(calendarHashChain.AggregationTime, calendarHashChain);
         }
     }
 }

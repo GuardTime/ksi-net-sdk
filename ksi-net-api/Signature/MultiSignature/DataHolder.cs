@@ -17,35 +17,51 @@
  * reserves and retains all trademark rights.
  */
 
-using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Parser;
+using System.Collections.Generic;
 
-namespace Guardtime.KSI.Publication
+namespace Guardtime.KSI.Signature.MultiSignature
 {
     /// <summary>
-    ///     Publication record TLV element in publication file.
+    /// Class for holding TLV elements in multi-signature.
     /// </summary>
-    public sealed class PublicationRecordInPublicationFile : PublicationRecord
+    public class DataHolder<T1, T2> : Dictionary<T1, T2> where T2 : class
     {
         /// <summary>
-        ///     Create new publication record TLV element from TLV element.
+        /// Get or set an element.
         /// </summary>
-        /// <param name="tag">TLV element</param>
-        public PublicationRecordInPublicationFile(ITlvTag tag) : base(tag)
+        /// <param name="key"></param>
+        public new T2 this[T1 key]
         {
-            if (Type != Constants.PublicationRecord.TagTypeInPublicationsFile)
+            get { return ContainsKey(key) ? base[key] : null; }
+            set { base[key] = value; }
+        }
+
+        /// <summary>
+        /// Add an element. If such key already exists then element will not be added.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public new void Add(T1 key, T2 value)
+        {
+            if (value == null)
             {
-                throw new TlvException("Invalid publication record type(" + Type + ").");
+                return;
+            }
+
+            if (!ContainsKey(key))
+            {
+                base.Add(key, value);
             }
         }
 
         /// <summary>
-        /// Convert current publication record to PublicationRecordInSignature
+        /// Remove element
         /// </summary>
+        /// <param name="key"></param>
         /// <returns></returns>
-        public PublicationRecordInSignature ConvertToPublicationRecordInSignature()
+        public new bool Remove(T1 key)
         {
-            return new PublicationRecordInSignature(NonCritical, Forward, EncodeValue());
+            return !ContainsKey(key) || base.Remove(key);
         }
     }
 }
