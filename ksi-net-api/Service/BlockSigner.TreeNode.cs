@@ -21,22 +21,23 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Guardtime.KSI.Hashing;
+using Guardtime.KSI.Signature;
 using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Service
 {
-    public partial class LocalAggregator
+    public partial class BlockSigner
     {
         /// <summary>
         /// Aggregation tree node. Used to build Merkle tree during local aggregation.
         /// </summary>
-        private class AggregationTreeNode
+        private class TreeNode
         {
             /// <summary>
             /// Create aggregation tree node instance.
             /// </summary>
             /// <param name="level">Node level in the tree</param>
-            public AggregationTreeNode(uint level)
+            public TreeNode(uint level)
             {
                 Level = level;
             }
@@ -44,20 +45,32 @@ namespace Guardtime.KSI.Service
             /// <summary>
             /// Create aggregation tree node instance.
             /// </summary>
-            /// <param name="item">Aggregation item</param>
-            public AggregationTreeNode(LocalAggregationItem item)
+            /// <param name="documentHash">Hash of a document to be signed</param>
+            /// <param name="metaData">Metadata</param>
+            public TreeNode(DataHash documentHash, AggregationHashChain.MetaData metaData)
             {
-                if (item == null)
+                if (documentHash == null)
                 {
-                    throw new ArgumentNullException(nameof(item));
+                    throw new ArgumentNullException(nameof(documentHash));
                 }
-                Item = item;
+                DocumentHash = documentHash;
+
+                if (metaData == null)
+                {
+                    throw new ArgumentNullException(nameof(metaData));
+                }
+                MetaData = metaData;
             }
 
             /// <summary>
-            /// Aggregation item.
+            /// Document hash value
             /// </summary>
-            public LocalAggregationItem Item { get; }
+            public DataHash DocumentHash { get; }
+
+            /// <summary>
+            /// Metadata to be added to aggregation hash chain
+            /// </summary>
+            public AggregationHashChain.MetaData MetaData { get; }
 
             /// <summary>
             /// Hash value of the node.
@@ -67,17 +80,17 @@ namespace Guardtime.KSI.Service
             /// <summary>
             /// Parent node
             /// </summary>
-            public AggregationTreeNode Parent { get; set; }
+            public TreeNode Parent { get; set; }
 
             /// <summary>
             /// Left child node
             /// </summary>
-            public AggregationTreeNode Left { get; set; }
+            public TreeNode Left { get; set; }
 
             /// <summary>
             /// Right child node
             /// </summary>
-            public AggregationTreeNode Right { get; set; }
+            public TreeNode Right { get; set; }
 
             /// <summary>
             /// If true then current node is left child, otherwise it is right node
@@ -95,7 +108,7 @@ namespace Guardtime.KSI.Service
             /// <returns></returns>
             public override string ToString()
             {
-                return string.Format("{0}{1}:{2}", Level, IsLeftNode ? "L" : "R", Base16.Encode((Item?.DocumentHash ?? NodeHash).Imprint));
+                return string.Format("{0}{1}:{2}", Level, IsLeftNode ? "L" : "R", Base16.Encode((DocumentHash ?? NodeHash).Imprint));
             }
 
             /// <summary>
@@ -107,9 +120,9 @@ namespace Guardtime.KSI.Service
                 return ToString().Substring(0, 10);
             }
 
-            private static List<AggregationTreeNode> ValidateChildNodes(AggregationTreeNode node)
+            private static List<TreeNode> ValidateChildNodes(TreeNode node)
             {
-                List<AggregationTreeNode> children = new List<AggregationTreeNode>();
+                List<TreeNode> children = new List<TreeNode>();
 
                 if (node.Left != null)
                 {
@@ -149,16 +162,16 @@ namespace Guardtime.KSI.Service
                 return children;
             }
 
-            private static void ValidateTree(List<AggregationTreeNode> lowestLevelNodes)
+            private static void ValidateTree(List<TreeNode> lowestLevelNodes)
             {
-                AggregationTreeNode root = lowestLevelNodes[0];
+                TreeNode root = lowestLevelNodes[0];
 
                 while (root.Parent != null)
                 {
                     root = root.Parent;
                 }
 
-                List<AggregationTreeNode> children = ValidateChildNodes(root);
+                List<TreeNode> children = ValidateChildNodes(root);
 
                 if (children.Count != lowestLevelNodes.Count)
                 {
@@ -174,13 +187,17 @@ namespace Guardtime.KSI.Service
                 }
             }
 
-            public static string PrintTree(List<AggregationTreeNode> lowestLevelNodes)
+            public static string PrintTree(List<TreeNode> lowestLevelNodes)
             {
+                if (lowestLevelNodes.Count == 0)
+                {
+                    return null;
+                }
                 ValidateTree(lowestLevelNodes);
                 return PrintTree(lowestLevelNodes, 0);
             }
 
-            private static string PrintTree(List<AggregationTreeNode> nodes, uint level)
+            private static string PrintTree(List<TreeNode> nodes, uint level)
             {
                 if (nodes == null || nodes.Count == 0)
                 {
@@ -191,8 +208,8 @@ namespace Guardtime.KSI.Service
 
                 if (nodes.Count > 1)
                 {
-                    List<AggregationTreeNode> parentNodes = new List<AggregationTreeNode>();
-                    foreach (AggregationTreeNode node in nodes)
+                    List<TreeNode> parentNodes = new List<TreeNode>();
+                    foreach (TreeNode node in nodes)
                     {
                         bool isParentNextLevel = node.Parent.Level == level + 1;
 
@@ -204,7 +221,7 @@ namespace Guardtime.KSI.Service
                         if (node.NodeHash == null || !isParentNextLevel)
                         {
                             // add dummy invisible node
-                            parentNodes.Add(new AggregationTreeNode(level + 1)
+                            parentNodes.Add(new TreeNode(level + 1)
                             {
                                 Parent = node.Parent,
                                 IsLeftNode = isParentNextLevel && parentNodes.Count % 2 == 0
@@ -243,7 +260,7 @@ namespace Guardtime.KSI.Service
                 if (nodes.Count > 1)
                 {
                     // print tree branches
-                    foreach (AggregationTreeNode node in nodes)
+                    foreach (TreeNode node in nodes)
                     {
                         bool isParentNextLevel = node.Parent.Level == level + 1;
                         if (isFirst)
@@ -277,7 +294,7 @@ namespace Guardtime.KSI.Service
                 isFirst = true;
 
                 // print nodes
-                foreach (AggregationTreeNode node in nodes)
+                foreach (TreeNode node in nodes)
                 {
                     if (isFirst)
                     {

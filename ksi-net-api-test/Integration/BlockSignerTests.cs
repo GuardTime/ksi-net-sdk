@@ -23,8 +23,10 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 using Guardtime.KSI.Hashing;
+using Guardtime.KSI.Parser;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature;
+using Guardtime.KSI.Signature.MultiSignature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
 using Guardtime.KSI.Test.Crypto;
@@ -34,10 +36,13 @@ using NUnit.Framework;
 namespace Guardtime.KSI.Test.Integration
 {
     [TestFixture]
-    public class LocalAggregationTests : IntegrationTests
+    public class BlockSignerTests : IntegrationTests
     {
+        /// <summary>
+        /// Test building Merkle trees
+        /// </summary>
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
-        public void MakeTreeTest(Ksi ksi)
+        public void BlockSignerMakeTreeTest(Ksi ksi)
         {
             Random random = new Random();
 
@@ -46,45 +51,46 @@ namespace Guardtime.KSI.Test.Integration
             for (int k = 1; k < 30; k++)
             {
                 byte[] buffer = new byte[10];
-                List<LocalAggregationItem> aggregationItems = new List<LocalAggregationItem>();
+
+                BlockSigner blockSigner = new BlockSigner(ksi);
+
                 for (int i = 0; i < k; i++)
                 {
                     IDataHasher hasher = KsiProvider.CreateDataHasher();
                     random.NextBytes(buffer);
                     hasher.AddData(buffer);
-                    aggregationItems.Add(new LocalAggregationItem(hasher.GetHash(), metaData));
+                    blockSigner.AddDocument(hasher.GetHash(), metaData);
                 }
 
-                LocalAggregator aggregator = new LocalAggregator(aggregationItems.ToArray(), ksi);
-
-                Console.WriteLine("Document count: " + aggregationItems.Count);
-                Console.WriteLine("Tree: " + aggregator.PrintTree());
+                Console.WriteLine("Document count: " + k);
+                Console.WriteLine("Tree: " + blockSigner.PrintTree());
             }
         }
 
+        /// <summary>
+        /// Test printingo tree with 11 elements
+        /// </summary>
+        /// <param name="ksi"></param>
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
-        public void PrintTreeTest(Ksi ksi)
+        public void BlockSignerPrintTreeTest(Ksi ksi)
         {
+            BlockSigner blockSigner = new BlockSigner(ksi);
+
             AggregationHashChain.MetaData metaData = new AggregationHashChain.MetaData("test client id");
-            List<LocalAggregationItem> aggregationItems = new List<LocalAggregationItem>
-            {
-                new LocalAggregationItem(new DataHash(Base16.Decode("0109A9FE430803D8984273324CF462E40A875D483DE6DD0D86BC6DFF4D27C9D853")), metaData),
-                new LocalAggregationItem(new DataHash(Base16.Decode("01BEC84E1F95F729F4482338E781341B1615F5B0A882231AE6C0FAEF7D0E6121D5")), metaData),
-                new LocalAggregationItem(new DataHash(Base16.Decode("01C734EEFE09B6B717B0BA6997CA634ADB93E2F227BEB785BBB8B4472651084509")), metaData),
-                new LocalAggregationItem(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")), metaData),
-                new LocalAggregationItem(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")), metaData),
-                new LocalAggregationItem(new DataHash(Base16.Decode("017943B1F4521425E11B461A76B9F46B08980FFD04CD080497D55A8C063E6DCDF7")), metaData),
-                new LocalAggregationItem(new DataHash(Base16.Decode("0123C4ADE3B64A45694088FD427399D3C2EC120BB0D5DF8C5212B1562F8D821902")), metaData),
-                new LocalAggregationItem(new DataHash(Base16.Decode("01A360BBAE9A0215196449971E57EB91B6C9B39725408324BE325D40C254353FBF")), metaData),
-                new LocalAggregationItem(new DataHash(Base16.Decode("010347A3E6C16B743473CECD6CAAD813464F8B8BD03829F649DD2FD3BA60D02ECD")), metaData),
-                new LocalAggregationItem(new DataHash(Base16.Decode("0178C63034846B2C6E67218FBD9F583330442A99D7165492FA5732024F27FE7FFA")), metaData),
-                new LocalAggregationItem(new DataHash(Base16.Decode("010579A776558FE48456A30E56B9BF58E595FF7D4DF049275C0D0ED5B361E91382")), metaData)
-            };
 
-            LocalAggregator aggregator = new LocalAggregator(aggregationItems.ToArray(), ksi);
+            blockSigner.AddDocument(new DataHash(Base16.Decode("0109A9FE430803D8984273324CF462E40A875D483DE6DD0D86BC6DFF4D27C9D853")), metaData);
+            blockSigner.AddDocument(new DataHash(Base16.Decode("01BEC84E1F95F729F4482338E781341B1615F5B0A882231AE6C0FAEF7D0E6121D5")), metaData);
+            blockSigner.AddDocument(new DataHash(Base16.Decode("01C734EEFE09B6B717B0BA6997CA634ADB93E2F227BEB785BBB8B4472651084509")), metaData);
+            blockSigner.AddDocument(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")), metaData);
+            blockSigner.AddDocument(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")), metaData);
+            blockSigner.AddDocument(new DataHash(Base16.Decode("017943B1F4521425E11B461A76B9F46B08980FFD04CD080497D55A8C063E6DCDF7")), metaData);
+            blockSigner.AddDocument(new DataHash(Base16.Decode("0123C4ADE3B64A45694088FD427399D3C2EC120BB0D5DF8C5212B1562F8D821902")), metaData);
+            blockSigner.AddDocument(new DataHash(Base16.Decode("01A360BBAE9A0215196449971E57EB91B6C9B39725408324BE325D40C254353FBF")), metaData);
+            blockSigner.AddDocument(new DataHash(Base16.Decode("010347A3E6C16B743473CECD6CAAD813464F8B8BD03829F649DD2FD3BA60D02ECD")), metaData);
+            blockSigner.AddDocument(new DataHash(Base16.Decode("0178C63034846B2C6E67218FBD9F583330442A99D7165492FA5732024F27FE7FFA")), metaData);
+            blockSigner.AddDocument(new DataHash(Base16.Decode("010579A776558FE48456A30E56B9BF58E595FF7D4DF049275C0D0ED5B361E91382")), metaData);
 
-            Console.WriteLine("Document count: " + aggregationItems.Count);
-            Console.WriteLine("Tree: \"" + aggregator.PrintTree() + "\"");
+            Console.WriteLine("Tree: \"" + blockSigner.PrintTree() + "\"");
             Assert.AreEqual(
                 @"                                                                                          
                                                                                           4R:01AEF61  
@@ -97,26 +103,27 @@ namespace Guardtime.KSI.Test.Integration
         /    \                  /    \                  /    \                  /    \                  /    \           \        
 0L:0109A9F  0R:01BEC84  0L:01C734E  0R:01B0CF0  0L:01BB95E  0R:017943B  0L:0123C4A  0R:01A360B  0L:010347A  0R:0178C63  0R:010579A  
 ",
-                aggregator.PrintTree());
+                blockSigner.PrintTree());
         }
 
+        /// <summary>
+        /// Test printing tree with 5 elements
+        /// </summary>
+        /// <param name="ksi"></param>
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
-        public void PrintTreeTest2(Ksi ksi)
+        public void BlockSignerPrintTreeTest2(Ksi ksi)
         {
+            BlockSigner blockSigner = new BlockSigner(ksi);
+
             AggregationHashChain.MetaData metaData = new AggregationHashChain.MetaData("test client id");
-            List<LocalAggregationItem> aggregationItems = new List<LocalAggregationItem>
-            {
-                new LocalAggregationItem(new DataHash(Base16.Decode("0109A9FE430803D8984273324CF462E40A875D483DE6DD0D86BC6DFF4D27C9D853")), metaData),
-                new LocalAggregationItem(new DataHash(Base16.Decode("01BEC84E1F95F729F4482338E781341B1615F5B0A882231AE6C0FAEF7D0E6121D5")), metaData),
-                new LocalAggregationItem(new DataHash(Base16.Decode("01C734EEFE09B6B717B0BA6997CA634ADB93E2F227BEB785BBB8B4472651084509")), metaData),
-                new LocalAggregationItem(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")), metaData),
-                new LocalAggregationItem(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")), metaData)
-            };
 
-            LocalAggregator aggregator = new LocalAggregator(aggregationItems.ToArray(), ksi);
+            blockSigner.AddDocument(new DataHash(Base16.Decode("0109A9FE430803D8984273324CF462E40A875D483DE6DD0D86BC6DFF4D27C9D853")), metaData);
+            blockSigner.AddDocument(new DataHash(Base16.Decode("01BEC84E1F95F729F4482338E781341B1615F5B0A882231AE6C0FAEF7D0E6121D5")), metaData);
+            blockSigner.AddDocument(new DataHash(Base16.Decode("01C734EEFE09B6B717B0BA6997CA634ADB93E2F227BEB785BBB8B4472651084509")), metaData);
+            blockSigner.AddDocument(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")), metaData);
+            blockSigner.AddDocument(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")), metaData);
 
-            Console.WriteLine("Document count: " + aggregationItems.Count);
-            Console.WriteLine("Tree: \"" + aggregator.PrintTree() + "\"");
+            Console.WriteLine("Tree: \"" + blockSigner.PrintTree() + "\"");
             Assert.AreEqual(
                 @"                                          
                                           3R:0114439  
@@ -127,17 +134,20 @@ namespace Guardtime.KSI.Test.Integration
         /    \                  /    \           \        
 0L:0109A9F  0R:01BEC84  0L:01C734E  0R:01B0CF0  0R:01BB95E  
 ",
-                aggregator.PrintTree());
+                blockSigner.PrintTree());
         }
 
+        /// <summary>
+        /// Testing getting uni-signatures of lots of randomly generated hashes
+        /// </summary>
+        /// <param name="ksi"></param>
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
-        public void LocalAggregationUniSignatureTest(Ksi ksi)
+        public void BlockSignerGetUniSignaturesOfManyRandomHashesTest(Ksi ksi)
         {
             int k = 11000;
             Random random = new Random();
             AggregationHashChain.MetaData metaData = new AggregationHashChain.MetaData("test client id", "test machine id");
-            List<LocalAggregationItem> aggregationItems = new List<LocalAggregationItem>();
-
+            List<DataHash> hashes = new List<DataHash>();
             byte[] buffer = new byte[10];
 
             for (int i = 0; i < k; i++)
@@ -145,48 +155,64 @@ namespace Guardtime.KSI.Test.Integration
                 IDataHasher hasher = KsiProvider.CreateDataHasher();
                 random.NextBytes(buffer);
                 hasher.AddData(buffer);
-                aggregationItems.Add(new LocalAggregationItem(hasher.GetHash(), metaData));
+                hashes.Add(hasher.GetHash());
             }
 
-            Console.WriteLine(DateTime.Now + ": Start creating local aggregator.");
-            LocalAggregator aggregator = new LocalAggregator(aggregationItems.ToArray(), ksi);
+            Console.WriteLine(DateTime.Now + ": Start creating local blockSigner.");
+            BlockSigner blockSigner = new BlockSigner(ksi);
+
+            foreach (DataHash hash in hashes)
+            {
+                blockSigner.AddDocument(hash, metaData);
+            }
 
             Console.WriteLine(DateTime.Now + ": Sign documents.");
-            aggregator.SignDocuments(false);
-
+            IEnumerable<RawTag> uniSignatures = blockSigner.GetUniSignatures();
             Console.WriteLine(DateTime.Now + ": Start verifying.");
+            int n = 0;
 
-            foreach (LocalAggregationItem aggregationItem in aggregator.UniSignatures)
+            foreach (RawTag signature in uniSignatures)
             {
-                Verify(ksi, new KsiSignature(aggregationItem.Signature), aggregationItem.DocumentHash);
+                Verify(ksi, new KsiSignature(signature), hashes[n++]);
             }
         }
 
+        /// <summary>
+        /// Testing getting uni-signatures of given hashes.
+        /// </summary>
+        /// <param name="ksi"></param>
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
-        public void LocalAggregationUniSignatureTest2(Ksi ksi)
+        public void BlockSignerGetUniSignaturesOfGivenHashesTest(Ksi ksi)
         {
+            BlockSigner blockSigner = new BlockSigner(ksi);
             AggregationHashChain.MetaData metaData = new AggregationHashChain.MetaData("test client id");
-            List<LocalAggregationItem> aggregationItems = new List<LocalAggregationItem>
+            List<DataHash> hashes = new List<DataHash>
             {
-                new LocalAggregationItem(new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2")), metaData),
-                new LocalAggregationItem(new DataHash(Base16.Decode("018D982C6911831201C5CF15E937514686A2169E2AD57BA36FD92CBEBD99A67E34")), metaData),
-                new LocalAggregationItem(new DataHash(Base16.Decode("0114F9189A45A30D856029F9537FD20C9C7342B82A2D949072AB195D95D7B32ECB")), metaData)
+                new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2")),
+                new DataHash(Base16.Decode("018D982C6911831201C5CF15E937514686A2169E2AD57BA36FD92CBEBD99A67E34")),
+                new DataHash(Base16.Decode("0114F9189A45A30D856029F9537FD20C9C7342B82A2D949072AB195D95D7B32ECB"))
             };
 
-            LocalAggregator aggregator = new LocalAggregator(aggregationItems.ToArray(), ksi);
-
-            Console.WriteLine("Tree: " + aggregator.PrintTree());
-
-            aggregator.SignDocuments(false);
-
-            foreach (LocalAggregationItem aggregationItem in aggregator.UniSignatures)
+            foreach (DataHash hash in hashes)
             {
-                Verify(ksi, new KsiSignature(aggregationItem.Signature), aggregationItem.DocumentHash);
+                blockSigner.AddDocument(hash, metaData);
+            }
+
+            Console.WriteLine("Tree: " + blockSigner.PrintTree());
+            int i = 0;
+
+            foreach (RawTag signature in blockSigner.GetUniSignatures())
+            {
+                Verify(ksi, new KsiSignature(signature), hashes[i++]);
             }
         }
 
+        /// <summary>
+        /// Test getting uni-signatures in parallel threads
+        /// </summary>
+        /// <param name="ksi"></param>
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
-        public void LocalAggregationUniSignatureParallelTest(Ksi ksi)
+        public void BlockSignerGetUniSignaturesParallelTest(Ksi ksi)
         {
             ManualResetEvent waitHandle = new ManualResetEvent(false);
 
@@ -207,7 +233,8 @@ namespace Guardtime.KSI.Test.Integration
                 {
                     Console.WriteLine("Document count: " + k);
 
-                    List<LocalAggregationItem> aggregationItems = new List<LocalAggregationItem>();
+                    BlockSigner blockSigner = new BlockSigner(ksi);
+                    List<DataHash> hashes = new List<DataHash>();
 
                     byte[] buffer = new byte[10];
 
@@ -216,18 +243,21 @@ namespace Guardtime.KSI.Test.Integration
                         IDataHasher hasher = KsiProvider.CreateDataHasher();
                         random.NextBytes(buffer);
                         hasher.AddData(buffer);
-                        aggregationItems.Add(new LocalAggregationItem(hasher.GetHash(), metaData));
+                        hashes.Add(hasher.GetHash());
+                    }
+
+                    foreach (DataHash hash in hashes)
+                    {
+                        blockSigner.AddDocument(hash, metaData);
                     }
 
                     try
                     {
-                        LocalAggregator aggregator = new LocalAggregator(aggregationItems.ToArray(), ksi);
+                        int i = 0;
 
-                        aggregator.SignDocuments(false);
-
-                        foreach (LocalAggregationItem aggregationItem in aggregator.UniSignatures)
+                        foreach (RawTag signature in blockSigner.GetUniSignatures())
                         {
-                            Verify(ksi, new KsiSignature(aggregationItem.Signature), aggregationItem.DocumentHash);
+                            Verify(ksi, new KsiSignature(signature), hashes[i++]);
                         }
                     }
                     catch (Exception ex)
@@ -264,13 +294,17 @@ namespace Guardtime.KSI.Test.Integration
             Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " All done.");
         }
 
+        /// <summary>
+        /// Testing getting multi-signature of lots of randomly generated hashes
+        /// </summary>
+        /// <param name="ksi"></param>
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
-        public void LocalAggregationMultiSignatureTest(Ksi ksi)
+        public void BlockSignerGetMultiSignatureOfManyRandomHashesTest(Ksi ksi)
         {
             int k = 11000;
             Random random = new Random();
             AggregationHashChain.MetaData metaData = new AggregationHashChain.MetaData("test client id", "test machine id");
-            List<LocalAggregationItem> aggregationItems = new List<LocalAggregationItem>();
+            List<DataHash> hashes = new List<DataHash>();
 
             byte[] buffer = new byte[10];
 
@@ -279,52 +313,77 @@ namespace Guardtime.KSI.Test.Integration
                 IDataHasher hasher = KsiProvider.CreateDataHasher();
                 random.NextBytes(buffer);
                 hasher.AddData(buffer);
-                aggregationItems.Add(new LocalAggregationItem(hasher.GetHash(), metaData));
+                hashes.Add(hasher.GetHash());
             }
 
-            Console.WriteLine(DateTime.Now + ": Start creating local aggregator.");
-            LocalAggregator aggregator = new LocalAggregator(aggregationItems.ToArray(), ksi);
+            Console.WriteLine(DateTime.Now + ": Start creating local blockSigner.");
+            BlockSigner blockSigner = new BlockSigner(ksi);
+            foreach (DataHash hash in hashes)
+            {
+                blockSigner.AddDocument(hash, metaData);
+            }
 
             Console.WriteLine(DateTime.Now + ": Sign documents.");
-            aggregator.SignDocuments(true);
-
+            KsiMultiSignature ksiMultiSignature = blockSigner.GetMultiSignature();
             Console.WriteLine(DateTime.Now + ": Start verifying.");
 
-            // TODO: verify multi signature
+            foreach (DataHash hash in hashes)
+            {
+                IKsiSignature ksiSignature = ksiMultiSignature.Get(hash);
+                if (ksiSignature == null)
+                {
+                    Assert.Fail("Signature cannot be null. Hash: " + hash);
+                }
 
-            //foreach (LocalAggregationItem aggregationItem in aggregator.UniSignatures)
-            //{
-            //    Verify(ksi, new KsiSignature(aggregationItem.Signature), aggregationItem.DocumentHash);
-            //}
+                Verify(ksi, ksiSignature, hash);
+            }
         }
 
+        /// <summary>
+        /// Testing getting multi-signature of given hashes.
+        /// </summary>
+        /// <param name="ksi"></param>
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
-        public void LocalAggregationMultiSignatureTest2(Ksi ksi)
+        public void BlockSignerGetMultiSignatureOfGivenHashesTest(Ksi ksi)
         {
+            BlockSigner blockSigner = new BlockSigner(ksi);
             AggregationHashChain.MetaData metaData = new AggregationHashChain.MetaData("test client id");
-            List<LocalAggregationItem> aggregationItems = new List<LocalAggregationItem>
+            List<DataHash> hashes = new List<DataHash>()
+
             {
-                new LocalAggregationItem(new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2")), metaData),
-                new LocalAggregationItem(new DataHash(Base16.Decode("018D982C6911831201C5CF15E937514686A2169E2AD57BA36FD92CBEBD99A67E34")), metaData),
-                new LocalAggregationItem(new DataHash(Base16.Decode("0114F9189A45A30D856029F9537FD20C9C7342B82A2D949072AB195D95D7B32ECB")), metaData)
+                new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2")),
+                new DataHash(Base16.Decode("018D982C6911831201C5CF15E937514686A2169E2AD57BA36FD92CBEBD99A67E34")),
+                new DataHash(Base16.Decode("0114F9189A45A30D856029F9537FD20C9C7342B82A2D949072AB195D95D7B32ECB")),
             };
 
-            LocalAggregator aggregator = new LocalAggregator(aggregationItems.ToArray(), ksi);
+            foreach (DataHash hash in hashes)
+            {
+                blockSigner.AddDocument(hash, metaData);
+            }
 
-            Console.WriteLine("Tree: " + aggregator.PrintTree());
+            Console.WriteLine("Tree: " + blockSigner.PrintTree());
+            Console.WriteLine(DateTime.Now + ": Sign documents.");
+            KsiMultiSignature ksiMultiSignature = blockSigner.GetMultiSignature();
+            Console.WriteLine(DateTime.Now + ": Start verifying.");
 
-            aggregator.SignDocuments(true);
+            foreach (DataHash hash in hashes)
+            {
+                IKsiSignature ksiSignature = ksiMultiSignature.Get(hash);
+                if (ksiSignature == null)
+                {
+                    Assert.Fail("Signature cannot be null. Hash: " + hash);
+                }
 
-            // TODO: verify multi signature
-
-            //foreach (LocalAggregationItem aggregationItem in aggregator.UniSignatures)
-            //{
-            //    Verify(ksi, new KsiSignature(aggregationItem.Signature), aggregationItem.DocumentHash);
-            //}
+                Verify(ksi, ksiSignature, hash);
+            }
         }
 
+        /// <summary>
+        /// Testing creating multi-signatures in parallel threads
+        /// </summary>
+        /// <param name="ksi"></param>
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
-        public void LocalAggregationMultiSignatureParallelTest(Ksi ksi)
+        public void BlockSignerMultiSignatureParallelTest(Ksi ksi)
         {
             ManualResetEvent waitHandle = new ManualResetEvent(false);
 
@@ -345,7 +404,8 @@ namespace Guardtime.KSI.Test.Integration
                 {
                     Console.WriteLine("Document count: " + k);
 
-                    List<LocalAggregationItem> aggregationItems = new List<LocalAggregationItem>();
+                    BlockSigner blockSigner = new BlockSigner(ksi);
+                    List<DataHash> hashes = new List<DataHash>();
 
                     byte[] buffer = new byte[10];
 
@@ -354,21 +414,27 @@ namespace Guardtime.KSI.Test.Integration
                         IDataHasher hasher = KsiProvider.CreateDataHasher();
                         random.NextBytes(buffer);
                         hasher.AddData(buffer);
-                        aggregationItems.Add(new LocalAggregationItem(hasher.GetHash(), metaData));
+                        hashes.Add(hasher.GetHash());
+                    }
+
+                    foreach (DataHash hash in hashes)
+                    {
+                        blockSigner.AddDocument(hash, metaData);
                     }
 
                     try
                     {
-                        LocalAggregator aggregator = new LocalAggregator(aggregationItems.ToArray(), ksi);
+                        KsiMultiSignature ksiMultiSignature = blockSigner.GetMultiSignature();
+                        foreach (DataHash hash in hashes)
+                        {
+                            IKsiSignature ksiSignature = ksiMultiSignature.Get(hash);
+                            if (ksiSignature == null)
+                            {
+                                Assert.Fail("Signature cannot be null. Hash: " + hash);
+                            }
 
-                        aggregator.SignDocuments(true);
-
-                        // TODO: verify multi signature
-
-                        //foreach (LocalAggregationItem aggregationItem in aggregator.UniSignatures)
-                        //{
-                        //    Verify(ksi, new KsiSignature(aggregationItem.Signature), aggregationItem.DocumentHash);
-                        //}
+                            Verify(ksi, ksiSignature, hash);
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -404,11 +470,11 @@ namespace Guardtime.KSI.Test.Integration
             Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " All done.");
         }
 
-        private static void Verify(Ksi ksi, IKsiSignature signature, DataHash documentHashm)
+        private static void Verify(Ksi ksi, IKsiSignature signature, DataHash documentHash)
         {
             VerificationContext verificationContext = new VerificationContext(signature)
             {
-                DocumentHash = documentHashm,
+                DocumentHash = documentHash,
                 PublicationsFile = ksi.GetPublicationsFile()
             };
 

@@ -22,25 +22,25 @@ using System;
 namespace Guardtime.KSI.Exceptions
 {
     /// <summary>
-    ///     Hashing functionality exception.
+    /// Exceptions thrown when doing block signing.
     /// </summary>
     [Serializable]
-    public class LocalAggregationExceptions : KsiException
+    public class BlockSigningException : KsiException
     {
         /// <summary>
-        ///     Create new local aggregation exception with message.
+        ///     Create new block signing exception with message.
         /// </summary>
         /// <param name="message">exception message</param>
-        public LocalAggregationExceptions(string message) : base(message)
+        public BlockSigningException(string message) : base(message)
         {
         }
 
         /// <summary>
-        ///     Create new local aggregation exception with message and inner exception.
+        ///     Create new block signing exception with message and inner exception.
         /// </summary>
         /// <param name="message">exception message</param>
         /// <param name="innerException">inner exception</param>
-        public LocalAggregationExceptions(string message, Exception innerException) : base(message, innerException)
+        public BlockSigningException(string message, Exception innerException) : base(message, innerException)
         {
         }
     }

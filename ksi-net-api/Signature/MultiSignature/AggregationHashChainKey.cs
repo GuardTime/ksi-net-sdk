@@ -36,6 +36,13 @@ namespace Guardtime.KSI.Signature.MultiSignature
         {
             AggregationTime = aggregationTime;
             ChainIndex = chainIndex;
+
+            EqualityCheckValue = aggregationTime;
+
+            foreach (ulong i in chainIndex)
+            {
+                EqualityCheckValue += i;
+            }
         }
 
         /// <summary>
@@ -47,6 +54,11 @@ namespace Guardtime.KSI.Signature.MultiSignature
         /// Chain index
         /// </summary>
         public ulong[] ChainIndex { get; }
+
+        /// <summary>
+        /// Holds equality check value used for comparing instances. Used for boosting Equals method performance.
+        /// </summary>
+        private ulong EqualityCheckValue { get; }
 
         /// <summary>
         /// Convert aggregation hash chain key to string
@@ -64,10 +76,16 @@ namespace Guardtime.KSI.Signature.MultiSignature
         /// <returns>True if keys are equal</returns>
         public bool Equals(AggregationHashChainKey valueToCompare)
         {
+            if (EqualityCheckValue != valueToCompare.EqualityCheckValue)
+            {
+                return false;
+            }
+
             if (AggregationTime != valueToCompare.AggregationTime)
             {
                 return false;
             }
+
             return Util.IsArrayEqual(ChainIndex, valueToCompare.ChainIndex);
         }
 
