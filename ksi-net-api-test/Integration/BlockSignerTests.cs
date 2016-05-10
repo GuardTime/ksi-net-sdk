@@ -36,107 +36,8 @@ using NUnit.Framework;
 namespace Guardtime.KSI.Test.Integration
 {
     [TestFixture]
-    public class BlockSignerTests : IntegrationTests
+    public partial class BlockSignerTests : IntegrationTests
     {
-        /// <summary>
-        /// Test building Merkle trees
-        /// </summary>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
-        public void BlockSignerMakeTreeTest(Ksi ksi)
-        {
-            Random random = new Random();
-
-            AggregationHashChain.MetaData metaData = new AggregationHashChain.MetaData("test client id");
-
-            for (int k = 1; k < 30; k++)
-            {
-                byte[] buffer = new byte[10];
-
-                BlockSigner blockSigner = new BlockSigner(ksi);
-
-                for (int i = 0; i < k; i++)
-                {
-                    IDataHasher hasher = KsiProvider.CreateDataHasher();
-                    random.NextBytes(buffer);
-                    hasher.AddData(buffer);
-                    blockSigner.AddDocument(hasher.GetHash(), metaData);
-                }
-
-                Console.WriteLine("Document count: " + k);
-                Console.WriteLine("Tree: " + blockSigner.PrintTree());
-            }
-        }
-
-        /// <summary>
-        /// Test printingo tree with 11 elements
-        /// </summary>
-        /// <param name="ksi"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
-        public void BlockSignerPrintTreeTest(Ksi ksi)
-        {
-            BlockSigner blockSigner = new BlockSigner(ksi);
-
-            AggregationHashChain.MetaData metaData = new AggregationHashChain.MetaData("test client id");
-
-            blockSigner.AddDocument(new DataHash(Base16.Decode("0109A9FE430803D8984273324CF462E40A875D483DE6DD0D86BC6DFF4D27C9D853")), metaData);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01BEC84E1F95F729F4482338E781341B1615F5B0A882231AE6C0FAEF7D0E6121D5")), metaData);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01C734EEFE09B6B717B0BA6997CA634ADB93E2F227BEB785BBB8B4472651084509")), metaData);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")), metaData);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")), metaData);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("017943B1F4521425E11B461A76B9F46B08980FFD04CD080497D55A8C063E6DCDF7")), metaData);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("0123C4ADE3B64A45694088FD427399D3C2EC120BB0D5DF8C5212B1562F8D821902")), metaData);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01A360BBAE9A0215196449971E57EB91B6C9B39725408324BE325D40C254353FBF")), metaData);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("010347A3E6C16B743473CECD6CAAD813464F8B8BD03829F649DD2FD3BA60D02ECD")), metaData);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("0178C63034846B2C6E67218FBD9F583330442A99D7165492FA5732024F27FE7FFA")), metaData);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("010579A776558FE48456A30E56B9BF58E595FF7D4DF049275C0D0ED5B361E91382")), metaData);
-
-            Console.WriteLine("Tree: \"" + blockSigner.PrintTree() + "\"");
-            Assert.AreEqual(
-                @"                                                                                          
-                                                                                          4R:01AEF61  
-                                                  / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \        
-                                          3L:0167E02                                                                                      
-                          / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                                               \        
-                  2L:01BD80B                                      2R:0143A80                                      2R:01F154F  
-              / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                              / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                              / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \        
-      1L:01C1E49              1R:0116478              1L:01E94E1              1R:011AD22              1L:01934A0              
-        /    \                  /    \                  /    \                  /    \                  /    \           \        
-0L:0109A9F  0R:01BEC84  0L:01C734E  0R:01B0CF0  0L:01BB95E  0R:017943B  0L:0123C4A  0R:01A360B  0L:010347A  0R:0178C63  0R:010579A  
-",
-                blockSigner.PrintTree());
-        }
-
-        /// <summary>
-        /// Test printing tree with 5 elements
-        /// </summary>
-        /// <param name="ksi"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
-        public void BlockSignerPrintTreeTest2(Ksi ksi)
-        {
-            BlockSigner blockSigner = new BlockSigner(ksi);
-
-            AggregationHashChain.MetaData metaData = new AggregationHashChain.MetaData("test client id");
-
-            blockSigner.AddDocument(new DataHash(Base16.Decode("0109A9FE430803D8984273324CF462E40A875D483DE6DD0D86BC6DFF4D27C9D853")), metaData);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01BEC84E1F95F729F4482338E781341B1615F5B0A882231AE6C0FAEF7D0E6121D5")), metaData);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01C734EEFE09B6B717B0BA6997CA634ADB93E2F227BEB785BBB8B4472651084509")), metaData);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")), metaData);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")), metaData);
-
-            Console.WriteLine("Tree: \"" + blockSigner.PrintTree() + "\"");
-            Assert.AreEqual(
-                @"                                          
-                                          3R:0114439  
-                          / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \        
-                  2L:01BD80B                                      
-              / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                      
-      1L:01C1E49              1R:0116478              
-        /    \                  /    \           \        
-0L:0109A9F  0R:01BEC84  0L:01C734E  0R:01B0CF0  0R:01BB95E  
-",
-                blockSigner.PrintTree());
-        }
-
         /// <summary>
         /// Testing getting uni-signatures of lots of randomly generated hashes
         /// </summary>
@@ -198,7 +99,6 @@ namespace Guardtime.KSI.Test.Integration
                 blockSigner.AddDocument(hash, metaData);
             }
 
-            Console.WriteLine("Tree: " + blockSigner.PrintTree());
             int i = 0;
 
             foreach (RawTag signature in blockSigner.GetUniSignatures())
@@ -361,7 +261,6 @@ namespace Guardtime.KSI.Test.Integration
                 blockSigner.AddDocument(hash, metaData);
             }
 
-            Console.WriteLine("Tree: " + blockSigner.PrintTree());
             Console.WriteLine(DateTime.Now + ": Sign documents.");
             KsiMultiSignature ksiMultiSignature = blockSigner.GetMultiSignature();
             Console.WriteLine(DateTime.Now + ": Start verifying.");
@@ -420,6 +319,182 @@ namespace Guardtime.KSI.Test.Integration
                     foreach (DataHash hash in hashes)
                     {
                         blockSigner.AddDocument(hash, metaData);
+                    }
+
+                    try
+                    {
+                        KsiMultiSignature ksiMultiSignature = blockSigner.GetMultiSignature();
+                        foreach (DataHash hash in hashes)
+                        {
+                            IKsiSignature ksiSignature = ksiMultiSignature.Get(hash);
+                            if (ksiSignature == null)
+                            {
+                                Assert.Fail("Signature cannot be null. Hash: " + hash);
+                            }
+
+                            Verify(ksi, ksiSignature, hash);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " Error " + k + ". " + ex);
+                        if (errorMessage == null)
+                        {
+                            errorMessage = ex.ToString();
+                        }
+                    }
+                    finally
+                    {
+                        doneCount++;
+
+                        Console.WriteLine("Done " + k);
+
+                        if (doneCount == runCount)
+                        {
+                            waitHandle.Set();
+                        }
+                    }
+                });
+            }
+
+            Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " Waiting ...");
+
+            waitHandle.WaitOne();
+
+            if (errorMessage != null)
+            {
+                Assert.Fail("ERROR: " + errorMessage);
+            }
+
+            Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " All done.");
+        }
+
+        /// <summary>
+        /// Testing getting multi-signature of lots of randomly generated hashes
+        /// </summary>
+        /// <param name="ksi"></param>
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void BlockSignerGetMultiSignatureOfManyRandomHashesWithBlindingMaskTest(Ksi ksi)
+        {
+            int k = 11000;
+            Random random = new Random();
+            AggregationHashChain.MetaData metaData = new AggregationHashChain.MetaData("test client id", "test machine id");
+            List<DataHash> hashes = new List<DataHash>();
+
+            byte[] buffer = new byte[10];
+
+            for (int i = 0; i < k; i++)
+            {
+                IDataHasher hasher = KsiProvider.CreateDataHasher();
+                random.NextBytes(buffer);
+                hasher.AddData(buffer);
+                hashes.Add(hasher.GetHash());
+            }
+
+            Console.WriteLine(DateTime.Now + ": Start creating local blockSigner.");
+            BlockSigner blockSigner = new BlockSigner(ksi, true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
+
+            foreach (DataHash hash in hashes)
+            {
+                blockSigner.AddDocument(hash, hash.Value[0] % 2 == 0 ? null : metaData);
+            }
+
+            Console.WriteLine(DateTime.Now + ": Sign documents.");
+            KsiMultiSignature ksiMultiSignature = blockSigner.GetMultiSignature();
+            Console.WriteLine(DateTime.Now + ": Start verifying.");
+
+            foreach (DataHash hash in hashes)
+            {
+                IKsiSignature ksiSignature = ksiMultiSignature.Get(hash);
+                if (ksiSignature == null)
+                {
+                    Assert.Fail("Signature cannot be null. Hash: " + hash);
+                }
+
+                Verify(ksi, ksiSignature, hash);
+            }
+        }
+
+        /// <summary>
+        /// Testing getting multi-signature of given hashes.
+        /// </summary>
+        /// <param name="ksi"></param>
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void BlockSignerGetMultiSignatureOfGivenHashesWithBlindingMaskTest(Ksi ksi)
+        {
+            BlockSigner blockSigner = new BlockSigner(ksi, true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
+            AggregationHashChain.MetaData metaData = new AggregationHashChain.MetaData("test client id");
+
+            List<DataHash> hashes = new List<DataHash>()
+            {
+                new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2")),
+                new DataHash(Base16.Decode("018D982C6911831201C5CF15E937514686A2169E2AD57BA36FD92CBEBD99A67E34")),
+                new DataHash(Base16.Decode("0114F9189A45A30D856029F9537FD20C9C7342B82A2D949072AB195D95D7B32ECB")),
+            };
+
+            foreach (DataHash hash in hashes)
+            {
+                blockSigner.AddDocument(hash, metaData);
+            }
+
+            Console.WriteLine(DateTime.Now + ": Sign documents.");
+            KsiMultiSignature ksiMultiSignature = blockSigner.GetMultiSignature();
+            Console.WriteLine(DateTime.Now + ": Start verifying.");
+
+            foreach (DataHash hash in hashes)
+            {
+                IKsiSignature ksiSignature = ksiMultiSignature.Get(hash);
+                if (ksiSignature == null)
+                {
+                    Assert.Fail("Signature cannot be null. Hash: " + hash);
+                }
+
+                Verify(ksi, ksiSignature, hash);
+            }
+        }
+
+        /// <summary>
+        /// Testing creating multi-signatures in parallel threads
+        /// </summary>
+        /// <param name="ksi"></param>
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void BlockSignerMultiSignatureWithBlindingMaskParallelTest(Ksi ksi)
+        {
+            ManualResetEvent waitHandle = new ManualResetEvent(false);
+
+            int[] treeSizes = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 100, 101, 102, 103, 104, 105 };
+            int doneCount = 0;
+            int runCount = treeSizes.Length;
+            string errorMessage = null;
+
+            Random random = new Random();
+
+            AggregationHashChain.MetaData metaData = new AggregationHashChain.MetaData("test client id");
+
+            foreach (int j in treeSizes)
+            {
+                int k = j;
+
+                Task.Run(() =>
+                {
+                    Console.WriteLine("Document count: " + k);
+
+                    BlockSigner blockSigner = new BlockSigner(ksi, true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
+                    List<DataHash> hashes = new List<DataHash>();
+
+                    byte[] buffer = new byte[10];
+
+                    for (int i = 0; i < k; i++)
+                    {
+                        IDataHasher hasher = KsiProvider.CreateDataHasher();
+                        random.NextBytes(buffer);
+                        hasher.AddData(buffer);
+                        hashes.Add(hasher.GetHash());
+                    }
+
+                    foreach (DataHash hash in hashes)
+                    {
+                        blockSigner.AddDocument(hash, hash.Value[0] % 2 == 0 ? null : metaData);
                     }
 
                     try

@@ -91,7 +91,7 @@ namespace Guardtime.KSI.Test.Signature
         }
 
         [Test]
-        public void TestGetLocationPointer2()
+        public void TestGetLocationPointerWithMixedAggregationChains()
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_With_Mixed_Aggregation_Chains), FileMode.Open))
             {
