@@ -147,7 +147,7 @@
     <Compile Include="Signature\MultiSignature\PublicationRecordHolder.cs" />
     <Compile Include="Signature\MultiSignature\Rfc3161RecordHolder.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainIndexRule.cs" />
-    <Compile Include="Service\BlockSigner.TreeNode.cs" />
+    <Compile Include="Service\TreeNode.cs" />
     <Compile Include="Utils\Base16.cs" />
     <Compile Include="Utils\Base32.cs" />
     <Compile Include="Utils\BaseX.cs" />

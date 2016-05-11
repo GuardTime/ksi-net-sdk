@@ -33,7 +33,7 @@ namespace Guardtime.KSI.Service
     /// <summary>
     /// Class to create multiple uni-signatures or one multi-signature.
     /// </summary>
-    public partial class BlockSigner
+    public class BlockSigner
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
@@ -131,6 +131,16 @@ namespace Guardtime.KSI.Service
             SignRoot();
             AggregationHashChain existingAggregationHashChain = _rootSignature.GetAggregationHashChains()[0];
             return CreateMultiSignature(existingAggregationHashChain);
+        }
+
+        /// <summary>
+        /// Get Merkle tree string representation
+        /// </summary>
+        /// <returns></returns>
+        public TreeNode GetRootNode()
+        {
+            BuildTree();
+            return _root;
         }
 
         /// <summary>
@@ -243,16 +253,6 @@ namespace Guardtime.KSI.Service
 
             return new AggregationHashChain(existingChain.AggregationTime, chainIndex, node.DocumentHash,
                 node.DocumentHash.Algorithm.Id, chainLinks);
-        }
-
-        /// <summary>
-        /// Get Merkle tree string representation
-        /// </summary>
-        /// <returns></returns>
-        public string PrintTree()
-        {
-            BuildTree();
-            return TreeNode.PrintTree(_root);
         }
 
         /// <summary>

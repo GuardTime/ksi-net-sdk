@@ -18,18 +18,10 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading;
-using System.Threading.Tasks;
 using Guardtime.KSI.Hashing;
-using Guardtime.KSI.Parser;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature;
-using Guardtime.KSI.Signature.MultiSignature;
-using Guardtime.KSI.Signature.Verification;
-using Guardtime.KSI.Signature.Verification.Policy;
-using Guardtime.KSI.Test.Crypto;
+using Guardtime.KSI.Test.Service;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
@@ -64,7 +56,7 @@ namespace Guardtime.KSI.Test.Integration
                 }
 
                 Console.WriteLine("Document count: " + k);
-                Console.WriteLine("Tree: " + blockSigner.PrintTree());
+                Console.WriteLine("Tree: " + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()));
             }
         }
 
@@ -93,7 +85,7 @@ namespace Guardtime.KSI.Test.Integration
                 }
 
                 Console.WriteLine("Document count: " + k);
-                Console.WriteLine("Tree: " + blockSigner.PrintTree());
+                Console.WriteLine("Tree: " + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()));
             }
         }
 
@@ -120,7 +112,7 @@ namespace Guardtime.KSI.Test.Integration
             blockSigner.AddDocument(new DataHash(Base16.Decode("0178C63034846B2C6E67218FBD9F583330442A99D7165492FA5732024F27FE7FFA")));
             blockSigner.AddDocument(new DataHash(Base16.Decode("010579A776558FE48456A30E56B9BF58E595FF7D4DF049275C0D0ED5B361E91382")), metaData);
 
-            Console.WriteLine("Tree: \"" + blockSigner.PrintTree() + "\"");
+            Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
             Assert.AreEqual(
                 @"                                                                                                                                                                                          
                                                                                                                                                                                           5R:A9A0905  
@@ -135,7 +127,7 @@ namespace Guardtime.KSI.Test.Integration
         /    \                       \                  /    \                  /    \                  /    \                       \                  /                       /    \                  /    \                       \                  /    \        
 0L:09A9FE4  0R:M:010F7              0R:BEC84E1  0L:C734EEF  0R:M:010F7  0L:B0CF0A7  0R:M:010F7  0L:BB95E9B  0R:M:010F7              0R:7943B1F  0L:23C4ADE              0L:A360BBA  0R:M:010F7  0L:0347A3E  0R:M:010F7              0R:78C6303  0L:0579A77  0R:M:010F7  
 ",
-                blockSigner.PrintTree());
+                BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()));
         }
 
         /// <summary>
@@ -155,7 +147,7 @@ namespace Guardtime.KSI.Test.Integration
             blockSigner.AddDocument(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")));
             blockSigner.AddDocument(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")), metaData);
 
-            Console.WriteLine("Tree: \"" + blockSigner.PrintTree() + "\"");
+            Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
             Assert.AreEqual(
                 @"                                                                                          
                                                                                           4R:E04268C  
@@ -168,7 +160,7 @@ namespace Guardtime.KSI.Test.Integration
         /    \                       \                  /                            \                  /    \        
 0L:09A9FE4  0R:M:010F7              0R:BEC84E1  0L:C734EEF                          0R:B0CF0A7  0L:BB95E9B  0R:M:010F7  
 ",
-                blockSigner.PrintTree());
+                BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()));
         }
 
         /// <summary>
@@ -188,7 +180,7 @@ namespace Guardtime.KSI.Test.Integration
             blockSigner.AddDocument(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")), metaData);
             blockSigner.AddDocument(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")));
 
-            Console.WriteLine("Tree: \"" + blockSigner.PrintTree() + "\"");
+            Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
             Assert.AreEqual(
                 @"                                                                                          
                                                                                           4R:DFE1797  
@@ -201,7 +193,7 @@ namespace Guardtime.KSI.Test.Integration
         /                       /    \                  /    \                  /    \           \        
 0L:09A9FE4              0L:BEC84E1  0R:M:010F7  0L:C734EEF  0R:M:010F7  0L:B0CF0A7  0R:M:010F7  0R:BB95E9B  
 ",
-                blockSigner.PrintTree());
+                BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()));
         }
 
         /// <summary>
@@ -221,7 +213,7 @@ namespace Guardtime.KSI.Test.Integration
             blockSigner.AddDocument(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")), metaData);
             blockSigner.AddDocument(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")), metaData);
 
-            Console.WriteLine("Tree: \"" + blockSigner.PrintTree() + "\"");
+            Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
             Assert.AreEqual(
                 @"                                                                                          
                                                                                           4R:144393A  
@@ -234,7 +226,7 @@ namespace Guardtime.KSI.Test.Integration
         /    \                  /    \                  /    \                  /    \                  /    \        
 0L:09A9FE4  0R:M:010F7  0L:BEC84E1  0R:M:010F7  0L:C734EEF  0R:M:010F7  0L:B0CF0A7  0R:M:010F7  0L:BB95E9B  0R:M:010F7  
 ",
-                blockSigner.PrintTree());
+                BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()));
         }
 
         /// <summary>
@@ -246,15 +238,13 @@ namespace Guardtime.KSI.Test.Integration
         {
             BlockSigner blockSigner = new BlockSigner(ksi);
 
-            AggregationHashChain.MetaData metaData = new AggregationHashChain.MetaData("test client id");
-
             blockSigner.AddDocument(new DataHash(Base16.Decode("0109A9FE430803D8984273324CF462E40A875D483DE6DD0D86BC6DFF4D27C9D853")));
             blockSigner.AddDocument(new DataHash(Base16.Decode("01BEC84E1F95F729F4482338E781341B1615F5B0A882231AE6C0FAEF7D0E6121D5")));
             blockSigner.AddDocument(new DataHash(Base16.Decode("01C734EEFE09B6B717B0BA6997CA634ADB93E2F227BEB785BBB8B4472651084509")));
             blockSigner.AddDocument(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")));
             blockSigner.AddDocument(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")));
 
-            Console.WriteLine("Tree: \"" + blockSigner.PrintTree() + "\"");
+            Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
             Assert.AreEqual(
                 @"                                                                                          
                                                                                           4R:69770A9  
@@ -267,7 +257,7 @@ namespace Guardtime.KSI.Test.Integration
         /                            \                  /                            \           \        
 0L:09A9FE4                          0R:BEC84E1  0L:C734EEF                          0R:B0CF0A7  0R:BB95E9B  
 ",
-                blockSigner.PrintTree());
+                BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()));
         }
 
         /// <summary>
@@ -293,7 +283,7 @@ namespace Guardtime.KSI.Test.Integration
             blockSigner.AddDocument(new DataHash(Base16.Decode("0178C63034846B2C6E67218FBD9F583330442A99D7165492FA5732024F27FE7FFA")), metaData);
             blockSigner.AddDocument(new DataHash(Base16.Decode("010579A776558FE48456A30E56B9BF58E595FF7D4DF049275C0D0ED5B361E91382")), metaData);
 
-            Console.WriteLine("Tree: \"" + blockSigner.PrintTree() + "\"");
+            Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
             Assert.AreEqual(
                 @"                                                                                                                                                                                                                                                                                                                                                                                          
                                                                                                                                                                                                                                                                                                                                                                                           6R:5D3E27B  
@@ -310,7 +300,7 @@ namespace Guardtime.KSI.Test.Integration
         /                       /    \                  /                            \                  /                       /    \                  /                       /    \                  /                       /    \                  /                       /    \                  /                            \                  /                            \                  /                       /    \                  /                       /    \                  /                       /    \        
 0L:4526CE6              0L:09A9FE4  0R:M:010F7  0L:C59F202                          0R:BEC84E1  0L:8E7123B              0L:C734EEF  0R:M:010F7  0L:25ACB7A              0L:B0CF0A7  0R:M:010F7  0L:DE99229              0L:BB95E9B  0R:M:010F7  0L:E72CC9A              0L:7943B1F  0R:M:010F7  0L:CC36E23                          0R:23C4ADE  0L:892771A                          0R:A360BBA  0L:FDE71A5              0L:0347A3E  0R:M:010F7  0L:3956D10              0L:78C6303  0R:M:010F7  0L:DA3F756              0L:0579A77  0R:M:010F7  
 ",
-                blockSigner.PrintTree());
+                BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()));
         }
 
         /// <summary>
@@ -330,7 +320,7 @@ namespace Guardtime.KSI.Test.Integration
             blockSigner.AddDocument(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")), metaData);
             blockSigner.AddDocument(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")), metaData);
 
-            Console.WriteLine("Tree: \"" + blockSigner.PrintTree() + "\"");
+            Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
             Assert.AreEqual(
                 @"                                                                                                                                                                                          
                                                                                                                                                                                           5R:1BBDB18  
@@ -345,7 +335,7 @@ namespace Guardtime.KSI.Test.Integration
         /                       /    \                  /                       /    \                  /                       /    \                  /                       /    \                  /                       /    \        
 0L:4526CE6              0L:09A9FE4  0R:M:010F7  0L:C59F202              0L:BEC84E1  0R:M:010F7  0L:1CB3590              0L:C734EEF  0R:M:010F7  0L:25ACB7A              0L:B0CF0A7  0R:M:010F7  0L:DE99229              0L:BB95E9B  0R:M:010F7  
 ",
-                blockSigner.PrintTree());
+                BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()));
         }
 
         /// <summary>
@@ -357,15 +347,13 @@ namespace Guardtime.KSI.Test.Integration
         {
             BlockSigner blockSigner = new BlockSigner(ksi, true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
 
-            AggregationHashChain.MetaData metaData = new AggregationHashChain.MetaData("test client id");
-
             blockSigner.AddDocument(new DataHash(Base16.Decode("0109A9FE430803D8984273324CF462E40A875D483DE6DD0D86BC6DFF4D27C9D853")));
             blockSigner.AddDocument(new DataHash(Base16.Decode("01BEC84E1F95F729F4482338E781341B1615F5B0A882231AE6C0FAEF7D0E6121D5")));
             blockSigner.AddDocument(new DataHash(Base16.Decode("01C734EEFE09B6B717B0BA6997CA634ADB93E2F227BEB785BBB8B4472651084509")));
             blockSigner.AddDocument(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")));
             blockSigner.AddDocument(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")));
 
-            Console.WriteLine("Tree: \"" + blockSigner.PrintTree() + "\"");
+            Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
             Assert.AreEqual(
                 @"                                                                                                                                                                                          
                                                                                                                                                                                           5R:9934662  
@@ -380,7 +368,7 @@ namespace Guardtime.KSI.Test.Integration
         /                            \                  /                            \                  /                            \                  /                            \                  /                \        
 0L:4526CE6                          0R:09A9FE4  0L:18EF136                          0R:BEC84E1  0L:8E7123B                          0R:C734EEF  0L:7637A80                          0R:B0CF0A7  0L:A1F7F24              0R:BB95E9B  
 ",
-                blockSigner.PrintTree());
+                BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()));
         }
 
         /// <summary>
@@ -400,7 +388,7 @@ namespace Guardtime.KSI.Test.Integration
             blockSigner.AddDocument(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")), metaData);
             blockSigner.AddDocument(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")), metaData);
 
-            Console.WriteLine("Tree: \"" + blockSigner.PrintTree() + "\"");
+            Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
             Assert.AreEqual(
                 @"                                                                                                                                                                                          
                                                                                                                                                                                           5R:3F88237  
@@ -415,7 +403,7 @@ namespace Guardtime.KSI.Test.Integration
         /                       /    \                  /                            \                  /                            \                  /                       /    \                  /                       /    \        
 0L:4526CE6              0L:09A9FE4  0R:M:010F7  0L:C59F202                          0R:BEC84E1  0L:8E7123B                          0R:C734EEF  0L:7637A80              0L:B0CF0A7  0R:M:010F7  0L:DE99229              0L:BB95E9B  0R:M:010F7  
 ",
-                blockSigner.PrintTree());
+                BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()));
         }
 
         /// <summary>
@@ -435,7 +423,7 @@ namespace Guardtime.KSI.Test.Integration
             blockSigner.AddDocument(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")), metaData);
             blockSigner.AddDocument(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")));
 
-            Console.WriteLine("Tree: \"" + blockSigner.PrintTree() + "\"");
+            Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
             Assert.AreEqual(
                 @"                                                                                                                                                                                          
                                                                                                                                                                                           5R:655AA77  
@@ -450,7 +438,39 @@ namespace Guardtime.KSI.Test.Integration
         /                            \                  /                       /    \                  /                       /    \                  /                       /    \                  /                \        
 0L:4526CE6                          0R:09A9FE4  0L:18EF136              0L:BEC84E1  0R:M:010F7  0L:1CB3590              0L:C734EEF  0R:M:010F7  0L:25ACB7A              0L:B0CF0A7  0R:M:010F7  0L:DE99229              0R:BB95E9B  
 ",
-                blockSigner.PrintTree());
+                BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()));
+        }
+
+        /// <summary>
+        /// Get root node test
+        /// </summary>
+        /// <param name="ksi"></param>
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void BlockSignerGetRootNodeTest(Ksi ksi)
+        {
+            BlockSigner blockSigner = new BlockSigner(ksi, true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
+
+            AggregationHashChain.MetaData metaData = new AggregationHashChain.MetaData("test client id");
+
+            blockSigner.AddDocument(new DataHash(Base16.Decode("0109A9FE430803D8984273324CF462E40A875D483DE6DD0D86BC6DFF4D27C9D853")));
+            blockSigner.AddDocument(new DataHash(Base16.Decode("01BEC84E1F95F729F4482338E781341B1615F5B0A882231AE6C0FAEF7D0E6121D5")), metaData);
+            blockSigner.AddDocument(new DataHash(Base16.Decode("01C734EEFE09B6B717B0BA6997CA634ADB93E2F227BEB785BBB8B4472651084509")), metaData);
+            blockSigner.AddDocument(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")), metaData);
+            blockSigner.AddDocument(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")));
+
+            Assert.AreEqual("5R:655AA77415635EBCC2F9DE21AEDED0191C18D9EC6955CB4FE0DB9B3C68864E65", blockSigner.GetRootNode().ToString(), "Invalid root node");
+        }
+
+        /// <summary>
+        /// Get root node test when no documents added
+        /// </summary>
+        /// <param name="ksi"></param>
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void BlockSignerGetRootNodeNoDocumentsTest(Ksi ksi)
+        {
+            BlockSigner blockSigner = new BlockSigner(ksi, true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
+
+            Assert.AreEqual(null, blockSigner.GetRootNode(), "Invalid root node");
         }
     }
 }
