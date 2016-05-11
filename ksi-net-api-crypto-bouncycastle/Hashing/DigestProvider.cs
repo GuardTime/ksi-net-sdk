@@ -34,7 +34,6 @@ namespace Guardtime.KSI.Crypto.BouncyCastle.Hashing
         /// </summary>
         /// <param name="algorithm"></param>
         /// <returns></returns>
-        /// <exception cref="HashingException"></exception>
         public static IDigest GetDigest(HashAlgorithm algorithm)
         {
             if (algorithm == HashAlgorithm.Sha1)

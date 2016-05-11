@@ -247,14 +247,13 @@ namespace Guardtime.KSI.Signature.MultiSignature
         /// Verifies that given stream starts with proper bytes.
         /// </summary>
         /// <param name="stream"></param>
-        /// <exception cref="MultiSignatureException"></exception>
         public void VerifyMagicBytes(Stream stream)
         {
             byte[] magicBytes = new byte[FileBeginningMagicBytes.Length];
             stream.Read(magicBytes, 0, FileBeginningMagicBytes.Length);
             if (!Util.IsArrayEqual(magicBytes, FileBeginningMagicBytes))
             {
-                throw new MultiSignatureException("Invalid multi-signature magic bytes");
+                throw new KsiMultiSignatureException("Invalid multi-signature magic bytes");
             }
         }
 
@@ -365,7 +364,7 @@ namespace Guardtime.KSI.Signature.MultiSignature
 
             if (aggregationHashChain == null)
             {
-                return null;
+                throw new KsiMultiSignatureInvalidHashException("Cannot find such document hash: " + documentHash);
             }
 
             List<AggregationHashChain> chains = new List<AggregationHashChain>() { aggregationHashChain };
@@ -407,6 +406,7 @@ namespace Guardtime.KSI.Signature.MultiSignature
         public void Remove(DataHash documentHash)
         {
             IKsiSignature signature = Get(documentHash);
+
             List<AggregationHashChainKey> sameRoundAggregationHashChainKeys = GetSameRoundAggregationHashChainKeys(signature);
             RemoveAggregationHashChains(signature, sameRoundAggregationHashChainKeys);
 
@@ -513,7 +513,7 @@ namespace Guardtime.KSI.Signature.MultiSignature
         {
             if (_ksiService == null)
             {
-                throw new MultiSignatureException("KsiService is null. KsiService is needed for exending.");
+                throw new KsiMultiSignatureException("KsiService is null. KsiService is needed for exending.");
             }
 
             Logger.Debug("Extending multi-signature.");
@@ -589,7 +589,7 @@ namespace Guardtime.KSI.Signature.MultiSignature
         {
             if (_ksiService == null)
             {
-                throw new MultiSignatureException("KsiService is null. KsiService is needed for exending.");
+                throw new KsiMultiSignatureException("KsiService is null. KsiService is needed for exending.");
             }
 
             Logger.Debug("Extending multi-signature.");

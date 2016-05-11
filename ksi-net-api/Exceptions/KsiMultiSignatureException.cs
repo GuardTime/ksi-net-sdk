@@ -25,13 +25,13 @@ namespace Guardtime.KSI.Exceptions
     ///     Multi-signature exception
     /// </summary>
     [Serializable]
-    public class MultiSignatureException : Exception
+    public class KsiMultiSignatureException : Exception
     {
         /// <summary>
         ///     Create new multi-signature exception
         /// </summary>
         /// <param name="message">Exception message</param>
-        public MultiSignatureException(string message) : base(message)
+        public KsiMultiSignatureException(string message) : base(message)
         {
         }
 
@@ -40,7 +40,7 @@ namespace Guardtime.KSI.Exceptions
         /// </summary>
         /// <param name="message">Exception message</param>
         /// <param name="innerException">Inner exception</param>
-        public MultiSignatureException(string message, Exception innerException) : base(message, innerException)
+        public KsiMultiSignatureException(string message, Exception innerException) : base(message, innerException)
         {
         }
     }

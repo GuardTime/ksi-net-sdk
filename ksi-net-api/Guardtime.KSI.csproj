@@ -89,7 +89,8 @@
     <Compile Include="Crypto\ICryptoSignatureVerifier.cs" />
     <Compile Include="Crypto\CertificateSubjectRdn.cs" />
     <Compile Include="Exceptions\HashingException.cs" />
-    <Compile Include="Exceptions\MultiSignatureException.cs" />
+    <Compile Include="Exceptions\KsiMultiSignatureInvalidHashException.cs" />
+    <Compile Include="Exceptions\KsiMultiSignatureException.cs" />
     <Compile Include="Exceptions\KsiException.cs" />
     <Compile Include="Exceptions\KsiServiceException.cs" />
     <Compile Include="Exceptions\KsiServiceProtocolException.cs" />

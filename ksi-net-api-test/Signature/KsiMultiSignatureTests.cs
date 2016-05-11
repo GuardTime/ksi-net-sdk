@@ -48,7 +48,7 @@ namespace Guardtime.KSI.Test.Signature
                 Assert.That(delegate
                 {
                     new KsiMultiSignature(stream, new KsiSignatureFactory());
-                }, Throws.TypeOf<MultiSignatureException>().With.Message.StartWith("Invalid multi-signature magic bytes"));
+                }, Throws.TypeOf<KsiMultiSignatureException>().With.Message.StartWith("Invalid multi-signature magic bytes"));
             }
         }
 
@@ -281,7 +281,10 @@ namespace Guardtime.KSI.Test.Signature
 
             multiSignature.Remove(signature1.GetAggregationHashChains()[0].InputHash);
 
-            Assert.IsNull(multiSignature.Get(signature1.GetAggregationHashChains()[0].InputHash), "First signature should be already removed");
+            Assert.Throws<KsiMultiSignatureInvalidHashException>(delegate
+            {
+                multiSignature.Get(signature1.GetAggregationHashChains()[0].InputHash);
+            }, "First signature should be already removed");
 
             ITlvTag[] allTags = multiSignature.GetAllTags();
             Assert.AreEqual(((KsiSignature)signature2).Count, allTags.Length, "Tag count does not match.");
@@ -296,6 +299,25 @@ namespace Guardtime.KSI.Test.Signature
 
             multiSignature.Remove(signature2.GetAggregationHashChains()[0].InputHash);
             Assert.AreEqual(0, multiSignature.GetAllTags().Length, "All tags should be removed from multi-signature.");
+        }
+
+        /// <summary>
+        /// Signature remove not existing hash test
+        /// </summary>
+        [Test]
+        public void MultiSignatureRemoveNotExistingTest()
+        {
+            IKsiSignature signature1 = GetKsiSignatureFromFile(Properties.Resources.KsiSignatureDo_Ok);
+            IKsiSignature signature2 = GetKsiSignatureFromFile(Properties.Resources.KsiSignatureDo_Ok_New);
+
+            KsiMultiSignature multiSignature = new KsiMultiSignature(new KsiSignatureFactory());
+
+            multiSignature.Add(signature2);
+
+            Assert.That(delegate
+            {
+                multiSignature.Remove(signature1.GetAggregationHashChains()[0].InputHash);
+            }, Throws.TypeOf<KsiMultiSignatureInvalidHashException>());
         }
 
         /// <summary>
