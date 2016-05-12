@@ -23,7 +23,6 @@ using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Signature;
@@ -220,24 +219,35 @@ namespace Guardtime.KSI.Test.Integration
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void ParallelSigningHttpTest(Ksi ksi)
+        {
+            ParallelSigningTest(ksi);
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCases))]
+        public void ParallelSigningTcpTest(Ksi ksi)
+        {
+            ParallelSigningTest(ksi);
+        }
+
         public void ParallelSigningTest(Ksi ksi)
         {
             ManualResetEvent waitHandle = new ManualResetEvent(false);
             int doneCount = 0;
-            int runCount = 10;
+            int runCount = 100;
             string errorMessage = null;
 
             for (int i = 0; i < runCount; i++)
             {
                 Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " Start " + i);
                 int k = i;
+                long start = DateTime.Now.Ticks;
 
-                Task.Run(() =>
+                new Thread(() =>
                 {
-                    long start = DateTime.Now.Ticks;
-                    Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " Start signing " + k);
                     try
                     {
+                        Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " Start signing " + k);
                         IKsiSignature signature = ksi.Sign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
                     }
                     catch (Exception ex)
@@ -258,7 +268,7 @@ namespace Guardtime.KSI.Test.Integration
                             waitHandle.Set();
                         }
                     }
-                });
+                }).Start();
             }
 
             Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " Waiting ...");
