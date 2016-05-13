@@ -17,9 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
 using Guardtime.KSI.Hashing;
-using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Signature
 {

@@ -17,6 +17,9 @@
  * reserves and retains all trademark rights.
  */
 
+
+#pragma warning disable 1591
+
 namespace Guardtime.KSI
 {
     public static class Constants
