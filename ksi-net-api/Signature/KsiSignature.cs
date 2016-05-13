@@ -36,6 +36,7 @@ namespace Guardtime.KSI.Signature
         private readonly List<AggregationHashChain> _aggregationHashChains = new List<AggregationHashChain>();
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private string _identity;
+        private DataHash _aggregationHashChainRootHash;
 
         /// <summary>
         ///     Create new KSI signature TLV element from TLV element.
@@ -176,7 +177,11 @@ namespace Guardtime.KSI.Signature
         /// <returns>output hash</returns>
         public DataHash GetAggregationHashChainRootHash()
         {
-            // Store result
+            if (_aggregationHashChainRootHash != null)
+            {
+                return _aggregationHashChainRootHash;
+            }
+
             AggregationHashChainResult lastResult = new AggregationHashChainResult(0, _aggregationHashChains[0].InputHash);
 
             foreach (AggregationHashChain chain in _aggregationHashChains)
@@ -184,7 +189,7 @@ namespace Guardtime.KSI.Signature
                 lastResult = chain.GetOutputHash(lastResult);
             }
 
-            return lastResult.Hash;
+            return _aggregationHashChainRootHash = lastResult.Hash;
         }
 
         /// <summary>

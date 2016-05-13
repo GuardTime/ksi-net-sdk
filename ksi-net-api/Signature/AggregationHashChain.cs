@@ -37,6 +37,7 @@ namespace Guardtime.KSI.Signature
         private readonly List<IntegerTag> _chainIndex = new List<IntegerTag>();
         private readonly RawTag _inputData;
         private readonly ImprintTag _inputHash;
+        private Dictionary<AggregationHashChainResult, AggregationHashChainResult> _aggregationHashChainResultCache;
 
         /// <summary>
         ///     Create new aggregation hash chain TLV element from TLV element.
@@ -214,6 +215,15 @@ namespace Guardtime.KSI.Signature
                 throw new KsiException("Invalid aggregation chain result: null.");
             }
 
+            if (_aggregationHashChainResultCache == null)
+            {
+                _aggregationHashChainResultCache = new Dictionary<AggregationHashChainResult, AggregationHashChainResult>();
+            }
+            else if (_aggregationHashChainResultCache.ContainsKey(result))
+            {
+                return _aggregationHashChainResultCache[result];
+            }
+
             DataHash lastHash = result.Hash;
             ulong level = result.Level;
 
@@ -231,7 +241,10 @@ namespace Guardtime.KSI.Signature
                 }
             }
 
-            return new AggregationHashChainResult(level, lastHash);
+            AggregationHashChainResult returnValue = new AggregationHashChainResult(level, lastHash);
+            _aggregationHashChainResultCache.Add(result, returnValue);
+
+            return returnValue;
         }
 
         /// <summary>
