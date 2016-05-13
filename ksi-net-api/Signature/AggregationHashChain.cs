@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Guardtime.KSI.Exceptions;
@@ -157,6 +158,16 @@ namespace Guardtime.KSI.Signature
         private static ITlvTag[] BuildChildTags(ulong aggreationTime, ulong[] chainIndex, DataHash inputHash, ulong aggregationAlgorithmId,
                                                 Link[] chainLinks)
         {
+            if (chainIndex == null)
+            {
+                throw new ArgumentNullException(nameof(chainIndex));
+            }
+
+            if (chainLinks == null)
+            {
+                throw new ArgumentNullException(nameof(chainLinks));
+            }
+
             List<ITlvTag> list = new List<ITlvTag>(new ITlvTag[]
             {
                 new IntegerTag(Constants.AggregationHashChain.AggregationTimeTagType, false, false, aggreationTime),

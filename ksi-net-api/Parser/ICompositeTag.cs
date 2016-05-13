@@ -27,7 +27,7 @@ namespace Guardtime.KSI.Parser
     public interface ICompositeTag : ITlvTag, IEnumerable<ITlvTag>
     {
         /// <summary>
-        ///     Get or set TLV child object
+        ///     Get TLV child object
         /// </summary>
         /// <param name="i">tlv element position</param>
         /// <returns>TLV element at given position</returns>
