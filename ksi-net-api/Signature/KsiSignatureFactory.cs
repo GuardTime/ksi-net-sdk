@@ -17,9 +17,11 @@
  * reserves and retains all trademark rights.
  */
 
+using System.Collections.Generic;
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
+using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 using NLog;
 
@@ -95,6 +97,49 @@ namespace Guardtime.KSI.Signature
                     Logger.Warn("Creating KSI signature from aggregation response failed: {0} (request id: {1})", e, payload.RequestId);
                     throw;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Get KSI signature instance from tlv tags
+        /// </summary>
+        /// <param name="aggregationHashChains">Aggregation hash chain tlv elements</param>
+        /// <param name="calendarHashChain">Calendar hash chain tlv element</param>
+        /// <param name="calendarAuthenticationRecord">Calendar authentication record tlv element</param>
+        /// <param name="publicationRecord">Publication record tlv element</param>
+        /// <param name="rfc3161Record">RFC3161 record tlv element</param>
+        /// <returns></returns>
+        public IKsiSignature Create(ICollection<AggregationHashChain> aggregationHashChains, CalendarHashChain calendarHashChain,
+                                    CalendarAuthenticationRecord calendarAuthenticationRecord, PublicationRecordInSignature publicationRecord,
+                                    Rfc3161Record rfc3161Record)
+        {
+            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
+            {
+                foreach (AggregationHashChain childTag in aggregationHashChains)
+                {
+                    writer.WriteTag(childTag);
+                }
+
+                if (calendarHashChain != null)
+                {
+                    writer.WriteTag(calendarHashChain);
+
+                    if (publicationRecord != null)
+                    {
+                        writer.WriteTag(publicationRecord);
+                    }
+                    else if (calendarAuthenticationRecord != null)
+                    {
+                        writer.WriteTag(calendarAuthenticationRecord);
+                    }
+                }
+
+                if (rfc3161Record != null)
+                {
+                    writer.WriteTag(rfc3161Record);
+                }
+
+                return new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false, ((MemoryStream)writer.BaseStream).ToArray()));
             }
         }
     }

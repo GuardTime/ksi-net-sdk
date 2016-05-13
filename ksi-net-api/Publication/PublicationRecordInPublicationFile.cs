@@ -45,12 +45,7 @@ namespace Guardtime.KSI.Publication
         /// <returns></returns>
         public PublicationRecordInSignature ConvertToPublicationRecordInSignature()
         {
-            ITlvTag[] values = new ITlvTag[Count];
-            for (int i = 0; i < Count; i++)
-            {
-                values[i] = this[i];
-            }
-            return new PublicationRecordInSignature(NonCritical, Forward, values);
+            return new PublicationRecordInSignature(NonCritical, Forward, EncodeValue());
         }
     }
 }

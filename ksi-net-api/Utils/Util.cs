@@ -65,15 +65,9 @@ namespace Guardtime.KSI.Utils
         /// <returns>true if arrays are equal</returns>
         public static bool IsArrayEqual<T>(T[] arr1, T[] arr2)
         {
-            if (arr1 == null && arr2 == null)
+            if (arr1 == null || arr2 == null)
             {
-                return true;
-            }
-
-            // If only one is null
-            if (arr1 == null ^ arr2 == null)
-            {
-                return false;
+                return arr1 == arr2;
             }
 
             if (arr1.Length != arr2.Length)
@@ -82,6 +76,28 @@ namespace Guardtime.KSI.Utils
             }
 
             for (int i = 0; i < arr1.Length; i++)
+            {
+                if (!Equals(arr1[i], arr2[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Are parts of given arrays equal
+        /// </summary>
+        /// <param name="arr1">first array</param>
+        /// <param name="arr2">second array</param>
+        /// <param name="index">index where to start comparing items</param>
+        /// <param name="count">item count to compare</param>
+        /// <typeparam name="T">any type</typeparam>
+        /// <returns></returns>
+        public static bool IsArrayEqual<T>(T[] arr1, T[] arr2, int index, int count)
+        {
+            for (int i = index; i < index + count; i++)
             {
                 if (!Equals(arr1[i], arr2[i]))
                 {

@@ -601,6 +601,123 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/multi-signature/infile_2015-05-05.tlv.
+        /// </summary>
+        internal static string KsiSignature_InputForMulti_20150505_Ok {
+            get {
+                return ResourceManager.GetString("KsiSignature_InputForMulti_20150505_Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/multi-signature/infile_2015-05-28.tlv.
+        /// </summary>
+        internal static string KsiSignature_InputForMulti_20150528_Ok {
+            get {
+                return ResourceManager.GetString("KsiSignature_InputForMulti_20150528_Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/multi-signature/infile_2015-06-22.tlv.
+        /// </summary>
+        internal static string KsiSignature_InputForMulti_20150622_Ok {
+            get {
+                return ResourceManager.GetString("KsiSignature_InputForMulti_20150622_Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/multi-signature/TestData.png.2015-02.tlv.
+        /// </summary>
+        internal static string KsiSignature_InputForMulti_Legacy_png_201502 {
+            get {
+                return ResourceManager.GetString("KsiSignature_InputForMulti_Legacy_png_201502", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/multi-signature/TestData.png.2015-04.tlv.
+        /// </summary>
+        internal static string KsiSignature_InputForMulti_Legacy_png_201504 {
+            get {
+                return ResourceManager.GetString("KsiSignature_InputForMulti_Legacy_png_201504", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/multi-signature/TestData.txt.2015-02.tlv.
+        /// </summary>
+        internal static string KsiSignature_InputForMulti_Legacy_txt_201502 {
+            get {
+                return ResourceManager.GetString("KsiSignature_InputForMulti_Legacy_txt_201502", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/multi-signature/TestData.txt.2015-05.tlv.
+        /// </summary>
+        internal static string KsiSignature_InputForMulti_Legacy_txt_201505 {
+            get {
+                return ResourceManager.GetString("KsiSignature_InputForMulti_Legacy_txt_201505", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/multi-signature/TestData.txt.2013-03.extended.tlv.
+        /// </summary>
+        internal static string KsiSignature_InputForMulti_Legacy_txt_extended_201303 {
+            get {
+                return ResourceManager.GetString("KsiSignature_InputForMulti_Legacy_txt_extended_201303", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/multi-signature/ksi-sha2-384.tlv.
+        /// </summary>
+        internal static string KsiSignature_InputForMulti_sha2_384 {
+            get {
+                return ResourceManager.GetString("KsiSignature_InputForMulti_sha2_384", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/multi-signature/ksi-sha2-512.tlv.
+        /// </summary>
+        internal static string KsiSignature_InputForMulti_sha2_512 {
+            get {
+                return ResourceManager.GetString("KsiSignature_InputForMulti_sha2_512", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/multi-signature/signature_data_1_agg_time_1437657023.tlv.
+        /// </summary>
+        internal static string KsiSignature_InputForMultiSameAggregationRound_1_Ok {
+            get {
+                return ResourceManager.GetString("KsiSignature_InputForMultiSameAggregationRound_1_Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/multi-signature/signature_data_2_agg_time_1437657023.tlv.
+        /// </summary>
+        internal static string KsiSignature_InputForMultiSameAggregationRound_2_Ok {
+            get {
+                return ResourceManager.GetString("KsiSignature_InputForMultiSameAggregationRound_2_Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/multi-signature/signature_data_3_agg_time_1437657023.tlv.
+        /// </summary>
+        internal static string KsiSignature_InputForMultiSameAggregationRound_3_Ok {
+            get {
+                return ResourceManager.GetString("KsiSignature_InputForMultiSameAggregationRound_3_Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-aggregation-chain-aggregation-time-mismatch.tlv.
         /// </summary>
         internal static string KsiSignatureDo_Invalid_Aggregation_Chain_Aggregation_Time_Mismatch {
@@ -868,6 +985,24 @@ namespace Guardtime.KSI.Test.Properties {
         internal static string KsiSignatureDo_Ok_With_Publication_Record {
             get {
                 return ResourceManager.GetString("KsiSignatureDo_Ok_With_Publication_Record", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/multi-signature/ksi-multi-signature-ok.tlv.
+        /// </summary>
+        internal static string MultiSignature_Ok {
+            get {
+                return ResourceManager.GetString("MultiSignature_Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/multi-signature/multi-signature-5.tlv.
+        /// </summary>
+        internal static string MultiSignatureWith5UniSignatures_Ok {
+            get {
+                return ResourceManager.GetString("MultiSignatureWith5UniSignatures_Ok", resourceCulture);
             }
         }
         
