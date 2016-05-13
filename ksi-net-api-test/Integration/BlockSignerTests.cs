@@ -42,7 +42,7 @@ namespace Guardtime.KSI.Test.Integration
         /// Testing getting uni-signatures of lots of randomly generated hashes
         /// </summary>
         /// <param name="ksi"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void BlockSignerGetUniSignaturesOfManyRandomHashesTest(Ksi ksi)
         {
             int k = 11000;
@@ -82,7 +82,7 @@ namespace Guardtime.KSI.Test.Integration
         /// Testing getting uni-signatures of given hashes.
         /// </summary>
         /// <param name="ksi"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void BlockSignerGetUniSignaturesOfGivenHashesTest(Ksi ksi)
         {
             BlockSigner blockSigner = new BlockSigner(ksi);
@@ -111,7 +111,7 @@ namespace Guardtime.KSI.Test.Integration
         /// Test getting uni-signatures in parallel threads
         /// </summary>
         /// <param name="ksi"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void BlockSignerGetUniSignaturesParallelTest(Ksi ksi)
         {
             ManualResetEvent waitHandle = new ManualResetEvent(false);
@@ -198,7 +198,7 @@ namespace Guardtime.KSI.Test.Integration
         /// Testing getting multi-signature of lots of randomly generated hashes
         /// </summary>
         /// <param name="ksi"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void BlockSignerGetMultiSignatureOfManyRandomHashesTest(Ksi ksi)
         {
             int k = 11000;
@@ -243,7 +243,7 @@ namespace Guardtime.KSI.Test.Integration
         /// Testing getting multi-signature of given hashes.
         /// </summary>
         /// <param name="ksi"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void BlockSignerGetMultiSignatureOfGivenHashesTest(Ksi ksi)
         {
             BlockSigner blockSigner = new BlockSigner(ksi);
@@ -281,7 +281,7 @@ namespace Guardtime.KSI.Test.Integration
         /// Testing creating multi-signatures in parallel threads
         /// </summary>
         /// <param name="ksi"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void BlockSignerMultiSignatureParallelTest(Ksi ksi)
         {
             ManualResetEvent waitHandle = new ManualResetEvent(false);
@@ -373,7 +373,7 @@ namespace Guardtime.KSI.Test.Integration
         /// Testing getting multi-signature of lots of randomly generated hashes
         /// </summary>
         /// <param name="ksi"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void BlockSignerGetMultiSignatureOfManyRandomHashesWithBlindingMaskTest(Ksi ksi)
         {
             int k = 11000;
@@ -419,7 +419,7 @@ namespace Guardtime.KSI.Test.Integration
         /// Testing getting multi-signature of given hashes.
         /// </summary>
         /// <param name="ksi"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void BlockSignerGetMultiSignatureOfGivenHashesWithBlindingMaskTest(Ksi ksi)
         {
             BlockSigner blockSigner = new BlockSigner(ksi, true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
@@ -457,7 +457,7 @@ namespace Guardtime.KSI.Test.Integration
         /// Testing creating multi-signatures in parallel threads
         /// </summary>
         /// <param name="ksi"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void BlockSignerMultiSignatureWithBlindingMaskParallelTest(Ksi ksi)
         {
             ManualResetEvent waitHandle = new ManualResetEvent(false);
