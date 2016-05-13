@@ -342,7 +342,7 @@ namespace Guardtime.KSI.Signature.MultiSignature
 
             if (parentAggregationHashChain == null)
             {
-                throw new MultiSignatureException("Cannot find parent aggregation chain. Make sure a parent aggregation hash chain is already added.");
+                throw new KsiMultiSignatureException("Cannot find parent aggregation chain. Make sure a parent aggregation hash chain is already added.");
             }
 
             _firstAggregationHashChains.Remove(parentAggregationHashChain.InputHash);
@@ -352,7 +352,7 @@ namespace Guardtime.KSI.Signature.MultiSignature
 
             if (parentAggregationHashChain.InputHash != hashChainResult.Hash)
             {
-                throw new MultiSignatureException("Aggregation hash chain output and parent chain input do not match.");
+                throw new KsiMultiSignatureException("Aggregation hash chain output and parent chain input do not match.");
             }
 
             AggregationHashChainKey key = new AggregationHashChainKey(aggregationHashChain.AggregationTime, chainIndex);
