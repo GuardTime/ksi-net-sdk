@@ -42,12 +42,12 @@ namespace Guardtime.KSI.Test.Integration
         /// Testing getting uni-signatures of lots of randomly generated hashes
         /// </summary>
         /// <param name="ksi"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCases))]
         public void BlockSignerGetUniSignaturesOfManyRandomHashesTest(Ksi ksi)
         {
             int k = 11000;
             Random random = new Random();
-            AggregationHashChain.MetaData metaData = new AggregationHashChain.MetaData("test client id", "test machine id");
+            AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id", "test machine id");
             List<DataHash> hashes = new List<DataHash>();
             byte[] buffer = new byte[10];
 
@@ -64,7 +64,7 @@ namespace Guardtime.KSI.Test.Integration
 
             foreach (DataHash hash in hashes)
             {
-                blockSigner.AddDocument(hash, metaData);
+                blockSigner.AddDocument(hash, metadata);
             }
 
             Console.WriteLine(DateTime.Now + ": Sign documents.");
@@ -82,11 +82,11 @@ namespace Guardtime.KSI.Test.Integration
         /// Testing getting uni-signatures of given hashes.
         /// </summary>
         /// <param name="ksi"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCases))]
         public void BlockSignerGetUniSignaturesOfGivenHashesTest(Ksi ksi)
         {
             BlockSigner blockSigner = new BlockSigner(ksi);
-            AggregationHashChain.MetaData metaData = new AggregationHashChain.MetaData("test client id");
+            AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
             List<DataHash> hashes = new List<DataHash>
             {
                 new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2")),
@@ -96,7 +96,7 @@ namespace Guardtime.KSI.Test.Integration
 
             foreach (DataHash hash in hashes)
             {
-                blockSigner.AddDocument(hash, metaData);
+                blockSigner.AddDocument(hash, metadata);
             }
 
             int i = 0;
@@ -111,7 +111,7 @@ namespace Guardtime.KSI.Test.Integration
         /// Test getting uni-signatures in parallel threads
         /// </summary>
         /// <param name="ksi"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCases))]
         public void BlockSignerGetUniSignaturesParallelTest(Ksi ksi)
         {
             ManualResetEvent waitHandle = new ManualResetEvent(false);
@@ -123,7 +123,7 @@ namespace Guardtime.KSI.Test.Integration
 
             Random random = new Random();
 
-            AggregationHashChain.MetaData metaData = new AggregationHashChain.MetaData("test client id");
+            AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
 
             foreach (int j in treeSizes)
             {
@@ -148,7 +148,7 @@ namespace Guardtime.KSI.Test.Integration
 
                     foreach (DataHash hash in hashes)
                     {
-                        blockSigner.AddDocument(hash, metaData);
+                        blockSigner.AddDocument(hash, metadata);
                     }
 
                     try
@@ -198,12 +198,12 @@ namespace Guardtime.KSI.Test.Integration
         /// Testing getting multi-signature of lots of randomly generated hashes
         /// </summary>
         /// <param name="ksi"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCases))]
         public void BlockSignerGetMultiSignatureOfManyRandomHashesTest(Ksi ksi)
         {
             int k = 11000;
             Random random = new Random();
-            AggregationHashChain.MetaData metaData = new AggregationHashChain.MetaData("test client id", "test machine id");
+            AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id", "test machine id");
             List<DataHash> hashes = new List<DataHash>();
 
             byte[] buffer = new byte[10];
@@ -220,7 +220,7 @@ namespace Guardtime.KSI.Test.Integration
             BlockSigner blockSigner = new BlockSigner(ksi);
             foreach (DataHash hash in hashes)
             {
-                blockSigner.AddDocument(hash, metaData);
+                blockSigner.AddDocument(hash, metadata);
             }
 
             Console.WriteLine(DateTime.Now + ": Sign documents.");
@@ -243,11 +243,11 @@ namespace Guardtime.KSI.Test.Integration
         /// Testing getting multi-signature of given hashes.
         /// </summary>
         /// <param name="ksi"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCases))]
         public void BlockSignerGetMultiSignatureOfGivenHashesTest(Ksi ksi)
         {
             BlockSigner blockSigner = new BlockSigner(ksi);
-            AggregationHashChain.MetaData metaData = new AggregationHashChain.MetaData("test client id");
+            AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
             List<DataHash> hashes = new List<DataHash>()
 
             {
@@ -258,7 +258,7 @@ namespace Guardtime.KSI.Test.Integration
 
             foreach (DataHash hash in hashes)
             {
-                blockSigner.AddDocument(hash, metaData);
+                blockSigner.AddDocument(hash, metadata);
             }
 
             Console.WriteLine(DateTime.Now + ": Sign documents.");
@@ -281,7 +281,7 @@ namespace Guardtime.KSI.Test.Integration
         /// Testing creating multi-signatures in parallel threads
         /// </summary>
         /// <param name="ksi"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCases))]
         public void BlockSignerMultiSignatureParallelTest(Ksi ksi)
         {
             ManualResetEvent waitHandle = new ManualResetEvent(false);
@@ -293,7 +293,7 @@ namespace Guardtime.KSI.Test.Integration
 
             Random random = new Random();
 
-            AggregationHashChain.MetaData metaData = new AggregationHashChain.MetaData("test client id");
+            AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
 
             foreach (int j in treeSizes)
             {
@@ -318,7 +318,7 @@ namespace Guardtime.KSI.Test.Integration
 
                     foreach (DataHash hash in hashes)
                     {
-                        blockSigner.AddDocument(hash, metaData);
+                        blockSigner.AddDocument(hash, metadata);
                     }
 
                     try
@@ -373,12 +373,12 @@ namespace Guardtime.KSI.Test.Integration
         /// Testing getting multi-signature of lots of randomly generated hashes
         /// </summary>
         /// <param name="ksi"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCases))]
         public void BlockSignerGetMultiSignatureOfManyRandomHashesWithBlindingMaskTest(Ksi ksi)
         {
             int k = 11000;
             Random random = new Random();
-            AggregationHashChain.MetaData metaData = new AggregationHashChain.MetaData("test client id", "test machine id");
+            AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id", "test machine id");
             List<DataHash> hashes = new List<DataHash>();
 
             byte[] buffer = new byte[10];
@@ -396,7 +396,7 @@ namespace Guardtime.KSI.Test.Integration
 
             foreach (DataHash hash in hashes)
             {
-                blockSigner.AddDocument(hash, hash.Value[0] % 2 == 0 ? null : metaData);
+                blockSigner.AddDocument(hash, hash.Value[0] % 2 == 0 ? null : metadata);
             }
 
             Console.WriteLine(DateTime.Now + ": Sign documents.");
@@ -419,11 +419,11 @@ namespace Guardtime.KSI.Test.Integration
         /// Testing getting multi-signature of given hashes.
         /// </summary>
         /// <param name="ksi"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCases))]
         public void BlockSignerGetMultiSignatureOfGivenHashesWithBlindingMaskTest(Ksi ksi)
         {
             BlockSigner blockSigner = new BlockSigner(ksi, true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
-            AggregationHashChain.MetaData metaData = new AggregationHashChain.MetaData("test client id");
+            AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
 
             List<DataHash> hashes = new List<DataHash>()
             {
@@ -434,7 +434,7 @@ namespace Guardtime.KSI.Test.Integration
 
             foreach (DataHash hash in hashes)
             {
-                blockSigner.AddDocument(hash, metaData);
+                blockSigner.AddDocument(hash, metadata);
             }
 
             Console.WriteLine(DateTime.Now + ": Sign documents.");
@@ -457,7 +457,7 @@ namespace Guardtime.KSI.Test.Integration
         /// Testing creating multi-signatures in parallel threads
         /// </summary>
         /// <param name="ksi"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCases))]
         public void BlockSignerMultiSignatureWithBlindingMaskParallelTest(Ksi ksi)
         {
             ManualResetEvent waitHandle = new ManualResetEvent(false);
@@ -469,7 +469,7 @@ namespace Guardtime.KSI.Test.Integration
 
             Random random = new Random();
 
-            AggregationHashChain.MetaData metaData = new AggregationHashChain.MetaData("test client id");
+            AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
 
             foreach (int j in treeSizes)
             {
@@ -494,7 +494,7 @@ namespace Guardtime.KSI.Test.Integration
 
                     foreach (DataHash hash in hashes)
                     {
-                        blockSigner.AddDocument(hash, hash.Value[0] % 2 == 0 ? null : metaData);
+                        blockSigner.AddDocument(hash, hash.Value[0] % 2 == 0 ? null : metadata);
                     }
 
                     try

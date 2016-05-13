@@ -87,8 +87,8 @@ namespace Guardtime.KSI.Service
         /// Add an item to be signed
         /// </summary>
         /// <param name="documentHash"></param>
-        /// <param name="metaData"></param>
-        public void AddDocument(DataHash documentHash, AggregationHashChain.MetaData metaData = null)
+        /// <param name="metadata"></param>
+        public void AddDocument(DataHash documentHash, AggregationHashChain.Metadata metadata = null)
         {
             if (!_canAddItems)
             {
@@ -100,7 +100,7 @@ namespace Guardtime.KSI.Service
                 throw new ArgumentNullException(nameof(documentHash));
             }
 
-            _documentNodes.Add(new TreeNode(documentHash, metaData));
+            _documentNodes.Add(new TreeNode(documentHash, metadata));
         }
 
         /// <summary>
@@ -272,7 +272,7 @@ namespace Guardtime.KSI.Service
                     links.Add(new AggregationHashChain.Link(
                         LinkDirection.Left,
                         node.Parent.Right.NodeHash,
-                        node.Parent.Right.NodeHash == null ? node.Parent.Right.MetaData : null,
+                        node.Parent.Right.NodeHash == null ? node.Parent.Right.Metadata : null,
                         levelCorrection));
                 }
                 else
@@ -280,7 +280,7 @@ namespace Guardtime.KSI.Service
                     links.Add(new AggregationHashChain.Link(
                         LinkDirection.Right,
                         node.Parent.Left.NodeHash,
-                        node.Parent.Left.NodeHash == null ? node.Parent.Left.MetaData : null,
+                        node.Parent.Left.NodeHash == null ? node.Parent.Left.Metadata : null,
                         levelCorrection));
                 }
 
@@ -303,16 +303,16 @@ namespace Guardtime.KSI.Service
             {
                 TreeNode node = documentNodes[i];
 
-                AggregationHashChain.MetaData metaData = node.MetaData;
+                AggregationHashChain.Metadata metadata = node.Metadata;
 
-                if (metaData != null)
+                if (metadata != null)
                 {
                     IDataHasher hasher = KsiProvider.CreateDataHasher(_hashAlgorithm);
                     hasher.AddData(node.DocumentHash.Imprint);
-                    hasher.AddData(metaData.EncodeValue());
+                    hasher.AddData(metadata.EncodeValue());
                     hasher.AddData(Util.EncodeUnsignedLong(1));
 
-                    TreeNode metadataNode = new TreeNode(metaData);
+                    TreeNode metadataNode = new TreeNode(metadata);
 
                     TreeNode parent = new TreeNode(1)
                     {

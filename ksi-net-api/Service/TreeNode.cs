@@ -42,29 +42,29 @@ namespace Guardtime.KSI.Service
         /// Create aggregation tree node instance.
         /// </summary>
         /// <param name="documentHash">Hash of a document to be signed</param>
-        /// <param name="metaData">Metadata to be added to hash chain</param>
-        public TreeNode(DataHash documentHash, AggregationHashChain.MetaData metaData = null)
+        /// <param name="metadata">Metadata to be added to hash chain</param>
+        public TreeNode(DataHash documentHash, AggregationHashChain.Metadata metadata = null)
         {
             if (documentHash == null)
             {
                 throw new ArgumentNullException(nameof(documentHash));
             }
             DocumentHash = NodeHash = documentHash;
-            MetaData = metaData;
+            Metadata = metadata;
             Level = 0;
         }
 
         /// <summary>
         /// Create aggregation tree node instance.
         /// </summary>
-        /// <param name="metaData">Metadata to be added to hash chain</param>
-        public TreeNode(AggregationHashChain.MetaData metaData)
+        /// <param name="metadata">Metadata to be added to hash chain</param>
+        public TreeNode(AggregationHashChain.Metadata metadata)
         {
-            if (metaData == null)
+            if (metadata == null)
             {
-                throw new ArgumentNullException(nameof(metaData));
+                throw new ArgumentNullException(nameof(metadata));
             }
-            MetaData = metaData;
+            Metadata = metadata;
             Level = 0;
         }
 
@@ -76,7 +76,7 @@ namespace Guardtime.KSI.Service
         /// <summary>
         /// Metadata to be added to aggregation hash chain
         /// </summary>
-        public AggregationHashChain.MetaData MetaData { get; }
+        public AggregationHashChain.Metadata Metadata { get; }
 
         /// <summary>
         /// Hash value of the node.
@@ -117,12 +117,12 @@ namespace Guardtime.KSI.Service
             string value;
             if (NodeHash == null)
             {
-                if (MetaData == null)
+                if (Metadata == null)
                 {
                     return nameof(TreeNode);
                 }
 
-                value = "M:" + Base16.Encode(MetaData.EncodeValue());
+                value = "M:" + Base16.Encode(Metadata.EncodeValue());
             }
             else
             {

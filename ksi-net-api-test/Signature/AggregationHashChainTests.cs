@@ -49,7 +49,7 @@ namespace Guardtime.KSI.Test.Signature
             Assert.AreEqual(63,
                 AggregationHashChain.CalcLocationPointer(new List<AggregationHashChain.Link>
                 {
-                    new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.MetaData("test client", "test machine id"), 0),
+                    new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.Metadata("test client", "test machine id"), 0),
                     new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE")), null, 0),
                     new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("0160D25FD6F2A962B41F20CFC2DD9CC62C9C802EADB08E8F15E60D0316E778ACDC")), null, 0),
                     new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01F2960B44B6846AE20FD4169D599D9F1C405A6CB1CBAA5B3179A06B3D1DB92166")), null, 0),
@@ -59,7 +59,7 @@ namespace Guardtime.KSI.Test.Signature
             Assert.AreEqual(51,
                 AggregationHashChain.CalcLocationPointer(new List<AggregationHashChain.Link>
                 {
-                    new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.MetaData("test client", "test machine id"), 0),
+                    new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.Metadata("test client", "test machine id"), 0),
                     new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE")), null, 0),
                     new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("0160D25FD6F2A962B41F20CFC2DD9CC62C9C802EADB08E8F15E60D0316E778ACDC")), null, 0),
                     new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01F2960B44B6846AE20FD4169D599D9F1C405A6CB1CBAA5B3179A06B3D1DB92166")), null, 0),
@@ -68,7 +68,7 @@ namespace Guardtime.KSI.Test.Signature
 
             Assert.AreEqual(23, AggregationHashChain.CalcLocationPointer(new List<AggregationHashChain.Link>
             {
-                new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.MetaData("test client", "test machine id"), 0),
+                new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.Metadata("test client", "test machine id"), 0),
                 new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE")), null, 0),
                 new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("0160D25FD6F2A962B41F20CFC2DD9CC62C9C802EADB08E8F15E60D0316E778ACDC")), null, 0),
                 new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01F2960B44B6846AE20FD4169D599D9F1C405A6CB1CBAA5B3179A06B3D1DB92166")), null, 0),
@@ -76,7 +76,7 @@ namespace Guardtime.KSI.Test.Signature
 
             Assert.AreEqual(21, AggregationHashChain.CalcLocationPointer(new List<AggregationHashChain.Link>
             {
-                new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.MetaData("test client", "test machine id"), 0),
+                new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.Metadata("test client", "test machine id"), 0),
                 new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE")), null, 0),
                 new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("0160D25FD6F2A962B41F20CFC2DD9CC62C9C802EADB08E8F15E60D0316E778ACDC")), null, 0),
                 new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01F2960B44B6846AE20FD4169D599D9F1C405A6CB1CBAA5B3179A06B3D1DB92166")), null, 0),
@@ -84,7 +84,7 @@ namespace Guardtime.KSI.Test.Signature
 
             Assert.AreEqual(9, AggregationHashChain.CalcLocationPointer(new List<AggregationHashChain.Link>
             {
-                new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.MetaData("test client", "test machine id"), 0),
+                new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.Metadata("test client", "test machine id"), 0),
                 new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE")), null, 0),
                 new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("0160D25FD6F2A962B41F20CFC2DD9CC62C9C802EADB08E8F15E60D0316E778ACDC")), null, 0),
             }.ToArray()), "Invalid location pointer.");
@@ -375,7 +375,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assembly assembly = typeof(AggregationHashChain).Assembly;
             Type linkType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Link");
-            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+MetaData");
+            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Metadata");
 
             AggregationHashChain tag = TestUtil.GetCompositeTag<AggregationHashChain>(Constants.AggregationHashChain.TagType,
                 new ITlvTag[]
@@ -391,13 +391,13 @@ namespace Guardtime.KSI.Test.Signature
                         new ITlvTag[]
                         {
                             new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, 0),
-                            TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.MetaData.TagType,
+                            TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.Metadata.TagType,
                                 new ITlvTag[]
                                 {
-                                    new StringTag(Constants.AggregationHashChain.MetaData.ClientIdTagType, false, false, "Test ClientId"),
-                                    new StringTag(Constants.AggregationHashChain.MetaData.MachineIdTagType, false, false, "Test Machine Id"),
-                                    new IntegerTag(Constants.AggregationHashChain.MetaData.SequenceNumberTagType, false, false, 1),
-                                    new IntegerTag(Constants.AggregationHashChain.MetaData.RequestTimeTagType, false, false, 2)
+                                    new StringTag(Constants.AggregationHashChain.Metadata.ClientIdTagType, false, false, "Test ClientId"),
+                                    new StringTag(Constants.AggregationHashChain.Metadata.MachineIdTagType, false, false, "Test Machine Id"),
+                                    new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
+                                    new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                 })
                         },
                         LinkDirection.Left)

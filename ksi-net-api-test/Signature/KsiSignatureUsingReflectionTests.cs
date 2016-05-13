@@ -41,7 +41,7 @@ namespace Guardtime.KSI.Test.Signature
             Assembly assembly = typeof(AggregationHashChain).Assembly;
             Type calendarLinkType = assembly.GetType("Guardtime.KSI.Signature.CalendarHashChain+Link");
             Type aggregationLinkType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Link");
-            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+MetaData");
+            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Metadata");
 
             KsiSignature tag = TestUtil.GetCompositeTag<KsiSignature>(Constants.KsiSignature.TagType,
                 new ITlvTag[]
@@ -60,13 +60,13 @@ namespace Guardtime.KSI.Test.Signature
                                 new ITlvTag[]
                                 {
                                     new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, 0),
-                                    TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.MetaData.TagType,
+                                    TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.Metadata.TagType,
                                         new ITlvTag[]
                                         {
-                                            new StringTag(Constants.AggregationHashChain.MetaData.ClientIdTagType, false, false, "Test ClientId"),
-                                            new StringTag(Constants.AggregationHashChain.MetaData.MachineIdTagType, false, false, "Test Machine Id"),
-                                            new IntegerTag(Constants.AggregationHashChain.MetaData.SequenceNumberTagType, false, false, 1),
-                                            new IntegerTag(Constants.AggregationHashChain.MetaData.RequestTimeTagType, false, false, 2)
+                                            new StringTag(Constants.AggregationHashChain.Metadata.ClientIdTagType, false, false, "Test ClientId"),
+                                            new StringTag(Constants.AggregationHashChain.Metadata.MachineIdTagType, false, false, "Test Machine Id"),
+                                            new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
+                                            new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                         })
                                 },
                                 LinkDirection.Left)
@@ -195,7 +195,7 @@ namespace Guardtime.KSI.Test.Signature
             Assembly assembly = typeof(AggregationHashChain).Assembly;
             Type calendarLinkType = assembly.GetType("Guardtime.KSI.Signature.CalendarHashChain+Link");
             Type aggregationLinkType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Link");
-            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+MetaData");
+            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Metadata");
 
             KsiSignature tag = TestUtil.GetCompositeTag<KsiSignature>(Constants.KsiSignature.TagType,
                 new ITlvTag[]
@@ -214,13 +214,13 @@ namespace Guardtime.KSI.Test.Signature
                                 new ITlvTag[]
                                 {
                                     new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, 0),
-                                    TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.MetaData.TagType,
+                                    TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.Metadata.TagType,
                                         new ITlvTag[]
                                         {
-                                            new StringTag(Constants.AggregationHashChain.MetaData.ClientIdTagType, false, false, "Test ClientId"),
-                                            new StringTag(Constants.AggregationHashChain.MetaData.MachineIdTagType, false, false, "Test Machine Id"),
-                                            new IntegerTag(Constants.AggregationHashChain.MetaData.SequenceNumberTagType, false, false, 1),
-                                            new IntegerTag(Constants.AggregationHashChain.MetaData.RequestTimeTagType, false, false, 2)
+                                            new StringTag(Constants.AggregationHashChain.Metadata.ClientIdTagType, false, false, "Test ClientId"),
+                                            new StringTag(Constants.AggregationHashChain.Metadata.MachineIdTagType, false, false, "Test Machine Id"),
+                                            new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
+                                            new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                         })
                                 },
                                 LinkDirection.Left)
@@ -354,7 +354,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assembly assembly = typeof(AggregationHashChain).Assembly;
             Type aggregationLinkType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Link");
-            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+MetaData");
+            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Metadata");
 
             KsiSignature tag = TestUtil.GetCompositeTag<KsiSignature>(Constants.KsiSignature.TagType,
                 new ITlvTag[]
@@ -373,13 +373,13 @@ namespace Guardtime.KSI.Test.Signature
                                 new ITlvTag[]
                                 {
                                     new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, 0),
-                                    TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.MetaData.TagType,
+                                    TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.Metadata.TagType,
                                         new ITlvTag[]
                                         {
-                                            new StringTag(Constants.AggregationHashChain.MetaData.ClientIdTagType, false, false, "Test ClientId"),
-                                            new StringTag(Constants.AggregationHashChain.MetaData.MachineIdTagType, false, false, "Test Machine Id"),
-                                            new IntegerTag(Constants.AggregationHashChain.MetaData.SequenceNumberTagType, false, false, 1),
-                                            new IntegerTag(Constants.AggregationHashChain.MetaData.RequestTimeTagType, false, false, 2)
+                                            new StringTag(Constants.AggregationHashChain.Metadata.ClientIdTagType, false, false, "Test ClientId"),
+                                            new StringTag(Constants.AggregationHashChain.Metadata.MachineIdTagType, false, false, "Test Machine Id"),
+                                            new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
+                                            new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                         })
                                 },
                                 LinkDirection.Left)
@@ -407,7 +407,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assembly assembly = typeof(AggregationHashChain).Assembly;
             Type aggregationLinkType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Link");
-            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+MetaData");
+            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Metadata");
 
             KsiSignature tag = TestUtil.GetCompositeTag<KsiSignature>(Constants.KsiSignature.TagType,
                 new ITlvTag[]
@@ -426,13 +426,13 @@ namespace Guardtime.KSI.Test.Signature
                                 new ITlvTag[]
                                 {
                                     new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, 0),
-                                    TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.MetaData.TagType,
+                                    TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.Metadata.TagType,
                                         new ITlvTag[]
                                         {
-                                            new StringTag(Constants.AggregationHashChain.MetaData.ClientIdTagType, false, false, "Test ClientId"),
-                                            new StringTag(Constants.AggregationHashChain.MetaData.MachineIdTagType, false, false, "Test Machine Id"),
-                                            new IntegerTag(Constants.AggregationHashChain.MetaData.SequenceNumberTagType, false, false, 1),
-                                            new IntegerTag(Constants.AggregationHashChain.MetaData.RequestTimeTagType, false, false, 2)
+                                            new StringTag(Constants.AggregationHashChain.Metadata.ClientIdTagType, false, false, "Test ClientId"),
+                                            new StringTag(Constants.AggregationHashChain.Metadata.MachineIdTagType, false, false, "Test Machine Id"),
+                                            new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
+                                            new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                         })
                                 },
                                 LinkDirection.Left)
@@ -451,13 +451,13 @@ namespace Guardtime.KSI.Test.Signature
                                 new ITlvTag[]
                                 {
                                     new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, 0),
-                                    TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.MetaData.TagType,
+                                    TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.Metadata.TagType,
                                         new ITlvTag[]
                                         {
-                                            new StringTag(Constants.AggregationHashChain.MetaData.ClientIdTagType, false, false, "Test ClientId"),
-                                            new StringTag(Constants.AggregationHashChain.MetaData.MachineIdTagType, false, false, "Test Machine Id"),
-                                            new IntegerTag(Constants.AggregationHashChain.MetaData.SequenceNumberTagType, false, false, 1),
-                                            new IntegerTag(Constants.AggregationHashChain.MetaData.RequestTimeTagType, false, false, 2)
+                                            new StringTag(Constants.AggregationHashChain.Metadata.ClientIdTagType, false, false, "Test ClientId"),
+                                            new StringTag(Constants.AggregationHashChain.Metadata.MachineIdTagType, false, false, "Test Machine Id"),
+                                            new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
+                                            new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                         })
                                 },
                                 LinkDirection.Left)
@@ -486,7 +486,7 @@ namespace Guardtime.KSI.Test.Signature
             Assembly assembly = typeof(AggregationHashChain).Assembly;
             Type calendarLinkType = assembly.GetType("Guardtime.KSI.Signature.CalendarHashChain+Link");
             Type aggregationLinkType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Link");
-            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+MetaData");
+            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Metadata");
 
             KsiSignature tag = TestUtil.GetCompositeTag<KsiSignature>(Constants.KsiSignature.TagType,
                 new ITlvTag[]
@@ -505,13 +505,13 @@ namespace Guardtime.KSI.Test.Signature
                                 new ITlvTag[]
                                 {
                                     new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, 0),
-                                    TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.MetaData.TagType,
+                                    TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.Metadata.TagType,
                                         new ITlvTag[]
                                         {
-                                            new StringTag(Constants.AggregationHashChain.MetaData.ClientIdTagType, false, false, "Test ClientId"),
-                                            new StringTag(Constants.AggregationHashChain.MetaData.MachineIdTagType, false, false, "Test Machine Id"),
-                                            new IntegerTag(Constants.AggregationHashChain.MetaData.SequenceNumberTagType, false, false, 1),
-                                            new IntegerTag(Constants.AggregationHashChain.MetaData.RequestTimeTagType, false, false, 2)
+                                            new StringTag(Constants.AggregationHashChain.Metadata.ClientIdTagType, false, false, "Test ClientId"),
+                                            new StringTag(Constants.AggregationHashChain.Metadata.MachineIdTagType, false, false, "Test Machine Id"),
+                                            new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
+                                            new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                         })
                                 },
                                 LinkDirection.Left)
@@ -553,7 +553,7 @@ namespace Guardtime.KSI.Test.Signature
             Assembly assembly = typeof(AggregationHashChain).Assembly;
             Type calendarLinkType = assembly.GetType("Guardtime.KSI.Signature.CalendarHashChain+Link");
             Type aggregationLinkType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Link");
-            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+MetaData");
+            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Metadata");
 
             Assert.That(delegate
             {
@@ -574,13 +574,13 @@ namespace Guardtime.KSI.Test.Signature
                                     new ITlvTag[]
                                     {
                                         new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, 0),
-                                        TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.MetaData.TagType,
+                                        TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.Metadata.TagType,
                                             new ITlvTag[]
                                             {
-                                                new StringTag(Constants.AggregationHashChain.MetaData.ClientIdTagType, false, false, "Test ClientId"),
-                                                new StringTag(Constants.AggregationHashChain.MetaData.MachineIdTagType, false, false, "Test Machine Id"),
-                                                new IntegerTag(Constants.AggregationHashChain.MetaData.SequenceNumberTagType, false, false, 1),
-                                                new IntegerTag(Constants.AggregationHashChain.MetaData.RequestTimeTagType, false, false, 2)
+                                                new StringTag(Constants.AggregationHashChain.Metadata.ClientIdTagType, false, false, "Test ClientId"),
+                                                new StringTag(Constants.AggregationHashChain.Metadata.MachineIdTagType, false, false, "Test Machine Id"),
+                                                new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
+                                                new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                             })
                                     },
                                     LinkDirection.Left)
@@ -624,7 +624,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assembly assembly = typeof(AggregationHashChain).Assembly;
             Type aggregationLinkType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Link");
-            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+MetaData");
+            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Metadata");
 
             KsiSignature tag = TestUtil.GetCompositeTag<KsiSignature>(Constants.KsiSignature.TagType,
                 new ITlvTag[]
@@ -643,13 +643,13 @@ namespace Guardtime.KSI.Test.Signature
                                 new ITlvTag[]
                                 {
                                     new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, 0),
-                                    TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.MetaData.TagType,
+                                    TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.Metadata.TagType,
                                         new ITlvTag[]
                                         {
-                                            new StringTag(Constants.AggregationHashChain.MetaData.ClientIdTagType, false, false, "Test ClientId"),
-                                            new StringTag(Constants.AggregationHashChain.MetaData.MachineIdTagType, false, false, "Test Machine Id"),
-                                            new IntegerTag(Constants.AggregationHashChain.MetaData.SequenceNumberTagType, false, false, 1),
-                                            new IntegerTag(Constants.AggregationHashChain.MetaData.RequestTimeTagType, false, false, 2)
+                                            new StringTag(Constants.AggregationHashChain.Metadata.ClientIdTagType, false, false, "Test ClientId"),
+                                            new StringTag(Constants.AggregationHashChain.Metadata.MachineIdTagType, false, false, "Test Machine Id"),
+                                            new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
+                                            new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                         })
                                 },
                                 LinkDirection.Left)
@@ -692,7 +692,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assembly assembly = typeof(AggregationHashChain).Assembly;
             Type aggregationLinkType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Link");
-            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+MetaData");
+            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Metadata");
 
             Assert.That(delegate
             {
@@ -713,13 +713,13 @@ namespace Guardtime.KSI.Test.Signature
                                     new ITlvTag[]
                                     {
                                         new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, 0),
-                                        TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.MetaData.TagType,
+                                        TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.Metadata.TagType,
                                             new ITlvTag[]
                                             {
-                                                new StringTag(Constants.AggregationHashChain.MetaData.ClientIdTagType, false, false, "Test ClientId"),
-                                                new StringTag(Constants.AggregationHashChain.MetaData.MachineIdTagType, false, false, "Test Machine Id"),
-                                                new IntegerTag(Constants.AggregationHashChain.MetaData.SequenceNumberTagType, false, false, 1),
-                                                new IntegerTag(Constants.AggregationHashChain.MetaData.RequestTimeTagType, false, false, 2)
+                                                new StringTag(Constants.AggregationHashChain.Metadata.ClientIdTagType, false, false, "Test ClientId"),
+                                                new StringTag(Constants.AggregationHashChain.Metadata.MachineIdTagType, false, false, "Test Machine Id"),
+                                                new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
+                                                new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                             })
                                     },
                                     LinkDirection.Left)
@@ -768,7 +768,7 @@ namespace Guardtime.KSI.Test.Signature
             Assembly assembly = typeof(AggregationHashChain).Assembly;
             Type calendarLinkType = assembly.GetType("Guardtime.KSI.Signature.CalendarHashChain+Link");
             Type aggregationLinkType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Link");
-            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+MetaData");
+            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Metadata");
 
             Assert.That(delegate
             {
@@ -789,13 +789,13 @@ namespace Guardtime.KSI.Test.Signature
                                     new ITlvTag[]
                                     {
                                         new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, 0),
-                                        TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.MetaData.TagType,
+                                        TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.Metadata.TagType,
                                             new ITlvTag[]
                                             {
-                                                new StringTag(Constants.AggregationHashChain.MetaData.ClientIdTagType, false, false, "Test ClientId"),
-                                                new StringTag(Constants.AggregationHashChain.MetaData.MachineIdTagType, false, false, "Test Machine Id"),
-                                                new IntegerTag(Constants.AggregationHashChain.MetaData.SequenceNumberTagType, false, false, 1),
-                                                new IntegerTag(Constants.AggregationHashChain.MetaData.RequestTimeTagType, false, false, 2)
+                                                new StringTag(Constants.AggregationHashChain.Metadata.ClientIdTagType, false, false, "Test ClientId"),
+                                                new StringTag(Constants.AggregationHashChain.Metadata.MachineIdTagType, false, false, "Test Machine Id"),
+                                                new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
+                                                new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                             })
                                     },
                                     LinkDirection.Left)
@@ -863,7 +863,7 @@ namespace Guardtime.KSI.Test.Signature
             Assembly assembly = typeof(AggregationHashChain).Assembly;
             Type calendarLinkType = assembly.GetType("Guardtime.KSI.Signature.CalendarHashChain+Link");
             Type aggregationLinkType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Link");
-            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+MetaData");
+            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Metadata");
 
             KsiSignature tag = TestUtil.GetCompositeTag<KsiSignature>(Constants.KsiSignature.TagType,
                 new ITlvTag[]
@@ -882,13 +882,13 @@ namespace Guardtime.KSI.Test.Signature
                                 new ITlvTag[]
                                 {
                                     new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, 0),
-                                    TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.MetaData.TagType,
+                                    TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.Metadata.TagType,
                                         new ITlvTag[]
                                         {
-                                            new StringTag(Constants.AggregationHashChain.MetaData.ClientIdTagType, false, false, "Test ClientId"),
-                                            new StringTag(Constants.AggregationHashChain.MetaData.MachineIdTagType, false, false, "Test Machine Id"),
-                                            new IntegerTag(Constants.AggregationHashChain.MetaData.SequenceNumberTagType, false, false, 1),
-                                            new IntegerTag(Constants.AggregationHashChain.MetaData.RequestTimeTagType, false, false, 2)
+                                            new StringTag(Constants.AggregationHashChain.Metadata.ClientIdTagType, false, false, "Test ClientId"),
+                                            new StringTag(Constants.AggregationHashChain.Metadata.MachineIdTagType, false, false, "Test Machine Id"),
+                                            new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
+                                            new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                         })
                                 },
                                 LinkDirection.Left)
@@ -946,7 +946,7 @@ namespace Guardtime.KSI.Test.Signature
             Assembly assembly = typeof(AggregationHashChain).Assembly;
             Type calendarLinkType = assembly.GetType("Guardtime.KSI.Signature.CalendarHashChain+Link");
             Type aggregationLinkType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Link");
-            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+MetaData");
+            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Metadata");
 
             KsiSignature tag = TestUtil.GetCompositeTag<KsiSignature>(Constants.KsiSignature.TagType,
                 new ITlvTag[]
@@ -965,13 +965,13 @@ namespace Guardtime.KSI.Test.Signature
                                 new ITlvTag[]
                                 {
                                     new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, 0),
-                                    TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.MetaData.TagType,
+                                    TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.Metadata.TagType,
                                         new ITlvTag[]
                                         {
-                                            new StringTag(Constants.AggregationHashChain.MetaData.ClientIdTagType, false, false, "Test ClientId"),
-                                            new StringTag(Constants.AggregationHashChain.MetaData.MachineIdTagType, false, false, "Test Machine Id"),
-                                            new IntegerTag(Constants.AggregationHashChain.MetaData.SequenceNumberTagType, false, false, 1),
-                                            new IntegerTag(Constants.AggregationHashChain.MetaData.RequestTimeTagType, false, false, 2)
+                                            new StringTag(Constants.AggregationHashChain.Metadata.ClientIdTagType, false, false, "Test ClientId"),
+                                            new StringTag(Constants.AggregationHashChain.Metadata.MachineIdTagType, false, false, "Test Machine Id"),
+                                            new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
+                                            new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                         })
                                 },
                                 LinkDirection.Left)
@@ -1033,7 +1033,7 @@ namespace Guardtime.KSI.Test.Signature
             Assembly assembly = typeof(AggregationHashChain).Assembly;
             Type calendarLinkType = assembly.GetType("Guardtime.KSI.Signature.CalendarHashChain+Link");
             Type aggregationLinkType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Link");
-            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+MetaData");
+            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Metadata");
 
             KsiSignature tag = TestUtil.GetCompositeTag<KsiSignature>(Constants.KsiSignature.TagType,
                 new ITlvTag[]
@@ -1052,13 +1052,13 @@ namespace Guardtime.KSI.Test.Signature
                                 new ITlvTag[]
                                 {
                                     new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, 0),
-                                    TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.MetaData.TagType,
+                                    TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.Metadata.TagType,
                                         new ITlvTag[]
                                         {
-                                            new StringTag(Constants.AggregationHashChain.MetaData.ClientIdTagType, false, false, "Test ClientId"),
-                                            new StringTag(Constants.AggregationHashChain.MetaData.MachineIdTagType, false, false, "Test Machine Id"),
-                                            new IntegerTag(Constants.AggregationHashChain.MetaData.SequenceNumberTagType, false, false, 1),
-                                            new IntegerTag(Constants.AggregationHashChain.MetaData.RequestTimeTagType, false, false, 2)
+                                            new StringTag(Constants.AggregationHashChain.Metadata.ClientIdTagType, false, false, "Test ClientId"),
+                                            new StringTag(Constants.AggregationHashChain.Metadata.MachineIdTagType, false, false, "Test Machine Id"),
+                                            new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
+                                            new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                         })
                                 },
                                 LinkDirection.Left)
@@ -1100,7 +1100,7 @@ namespace Guardtime.KSI.Test.Signature
             Assembly assembly = typeof(AggregationHashChain).Assembly;
             Type calendarLinkType = assembly.GetType("Guardtime.KSI.Signature.CalendarHashChain+Link");
             Type aggregationLinkType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Link");
-            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+MetaData");
+            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Metadata");
 
             Assert.That(delegate
             {
@@ -1121,13 +1121,13 @@ namespace Guardtime.KSI.Test.Signature
                                     new ITlvTag[]
                                     {
                                         new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, 0),
-                                        TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.MetaData.TagType,
+                                        TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.Metadata.TagType,
                                             new ITlvTag[]
                                             {
-                                                new StringTag(Constants.AggregationHashChain.MetaData.ClientIdTagType, false, false, "Test ClientId"),
-                                                new StringTag(Constants.AggregationHashChain.MetaData.MachineIdTagType, false, false, "Test Machine Id"),
-                                                new IntegerTag(Constants.AggregationHashChain.MetaData.SequenceNumberTagType, false, false, 1),
-                                                new IntegerTag(Constants.AggregationHashChain.MetaData.RequestTimeTagType, false, false, 2)
+                                                new StringTag(Constants.AggregationHashChain.Metadata.ClientIdTagType, false, false, "Test ClientId"),
+                                                new StringTag(Constants.AggregationHashChain.Metadata.MachineIdTagType, false, false, "Test Machine Id"),
+                                                new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
+                                                new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                             })
                                     },
                                     LinkDirection.Left)
@@ -1227,7 +1227,7 @@ namespace Guardtime.KSI.Test.Signature
             Assembly assembly = typeof(AggregationHashChain).Assembly;
             Type calendarLinkType = assembly.GetType("Guardtime.KSI.Signature.CalendarHashChain+Link");
             Type aggregationLinkType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Link");
-            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+MetaData");
+            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Metadata");
 
             KsiSignature tag = TestUtil.GetCompositeTag<KsiSignature>(Constants.KsiSignature.TagType,
                 new ITlvTag[]
@@ -1246,13 +1246,13 @@ namespace Guardtime.KSI.Test.Signature
                                 new ITlvTag[]
                                 {
                                     new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, 0),
-                                    TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.MetaData.TagType,
+                                    TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.Metadata.TagType,
                                         new ITlvTag[]
                                         {
-                                            new StringTag(Constants.AggregationHashChain.MetaData.ClientIdTagType, false, false, "Test ClientId"),
-                                            new StringTag(Constants.AggregationHashChain.MetaData.MachineIdTagType, false, false, "Test Machine Id"),
-                                            new IntegerTag(Constants.AggregationHashChain.MetaData.SequenceNumberTagType, false, false, 1),
-                                            new IntegerTag(Constants.AggregationHashChain.MetaData.RequestTimeTagType, false, false, 2)
+                                            new StringTag(Constants.AggregationHashChain.Metadata.ClientIdTagType, false, false, "Test ClientId"),
+                                            new StringTag(Constants.AggregationHashChain.Metadata.MachineIdTagType, false, false, "Test Machine Id"),
+                                            new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
+                                            new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                         })
                                 },
                                 LinkDirection.Left)
@@ -1346,7 +1346,7 @@ namespace Guardtime.KSI.Test.Signature
             Assembly assembly = typeof(AggregationHashChain).Assembly;
             Type calendarLinkType = assembly.GetType("Guardtime.KSI.Signature.CalendarHashChain+Link");
             Type aggregationLinkType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Link");
-            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+MetaData");
+            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Metadata");
 
             KsiSignature tag = TestUtil.GetCompositeTag<KsiSignature>(Constants.KsiSignature.TagType,
                 new ITlvTag[]
@@ -1365,13 +1365,13 @@ namespace Guardtime.KSI.Test.Signature
                                 new ITlvTag[]
                                 {
                                     new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, 0),
-                                    TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.MetaData.TagType,
+                                    TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.Metadata.TagType,
                                         new ITlvTag[]
                                         {
-                                            new StringTag(Constants.AggregationHashChain.MetaData.ClientIdTagType, false, false, "Test ClientId"),
-                                            new StringTag(Constants.AggregationHashChain.MetaData.MachineIdTagType, false, false, "Test Machine Id"),
-                                            new IntegerTag(Constants.AggregationHashChain.MetaData.SequenceNumberTagType, false, false, 1),
-                                            new IntegerTag(Constants.AggregationHashChain.MetaData.RequestTimeTagType, false, false, 2)
+                                            new StringTag(Constants.AggregationHashChain.Metadata.ClientIdTagType, false, false, "Test ClientId"),
+                                            new StringTag(Constants.AggregationHashChain.Metadata.MachineIdTagType, false, false, "Test Machine Id"),
+                                            new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
+                                            new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                         })
                                 },
                                 LinkDirection.Left)
@@ -1460,7 +1460,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assembly assembly = typeof(AggregationHashChain).Assembly;
             Type aggregationLinkType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Link");
-            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+MetaData");
+            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Metadata");
 
             KsiSignature tag = TestUtil.GetCompositeTag<KsiSignature>(Constants.KsiSignature.TagType,
                 new ITlvTag[]
@@ -1479,13 +1479,13 @@ namespace Guardtime.KSI.Test.Signature
                                 new ITlvTag[]
                                 {
                                     new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, 0),
-                                    TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.MetaData.TagType,
+                                    TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.Metadata.TagType,
                                         new ITlvTag[]
                                         {
-                                            new StringTag(Constants.AggregationHashChain.MetaData.ClientIdTagType, false, false, "Test ClientId"),
-                                            new StringTag(Constants.AggregationHashChain.MetaData.MachineIdTagType, false, false, "Test Machine Id"),
-                                            new IntegerTag(Constants.AggregationHashChain.MetaData.SequenceNumberTagType, false, false, 1),
-                                            new IntegerTag(Constants.AggregationHashChain.MetaData.RequestTimeTagType, false, false, 2)
+                                            new StringTag(Constants.AggregationHashChain.Metadata.ClientIdTagType, false, false, "Test ClientId"),
+                                            new StringTag(Constants.AggregationHashChain.Metadata.MachineIdTagType, false, false, "Test Machine Id"),
+                                            new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
+                                            new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                         })
                                 },
                                 LinkDirection.Left)
@@ -1530,7 +1530,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assembly assembly = typeof(AggregationHashChain).Assembly;
             Type aggregationLinkType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Link");
-            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+MetaData");
+            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Metadata");
 
             KsiSignature tag = TestUtil.GetCompositeTag<KsiSignature>(Constants.KsiSignature.TagType,
                 new ITlvTag[]
@@ -1549,13 +1549,13 @@ namespace Guardtime.KSI.Test.Signature
                                 new ITlvTag[]
                                 {
                                     new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, 0),
-                                    TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.MetaData.TagType,
+                                    TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.Metadata.TagType,
                                         new ITlvTag[]
                                         {
-                                            new StringTag(Constants.AggregationHashChain.MetaData.ClientIdTagType, false, false, "Test ClientId"),
-                                            new StringTag(Constants.AggregationHashChain.MetaData.MachineIdTagType, false, false, "Test Machine Id"),
-                                            new IntegerTag(Constants.AggregationHashChain.MetaData.SequenceNumberTagType, false, false, 1),
-                                            new IntegerTag(Constants.AggregationHashChain.MetaData.RequestTimeTagType, false, false, 2)
+                                            new StringTag(Constants.AggregationHashChain.Metadata.ClientIdTagType, false, false, "Test ClientId"),
+                                            new StringTag(Constants.AggregationHashChain.Metadata.MachineIdTagType, false, false, "Test Machine Id"),
+                                            new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
+                                            new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                         })
                                 },
                                 LinkDirection.Left)

@@ -241,7 +241,7 @@ namespace Guardtime.KSI.Test.Service
                     sb.Append(space);
                 }
 
-                if (node == null || (node.NodeHash == null && node.MetaData == null))
+                if (node == null || (node.NodeHash == null && node.Metadata == null))
                 {
                     sb.Append(twelveSpaces);
                 }

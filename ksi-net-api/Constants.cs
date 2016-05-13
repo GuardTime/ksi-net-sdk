@@ -267,7 +267,7 @@ namespace Guardtime.KSI
                 public const uint LegacyId = 0x3;
             }
 
-            public static class MetaData
+            public static class Metadata
             {
                 /// <summary>
                 ///     Metadata TLV type.

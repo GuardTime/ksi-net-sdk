@@ -28,7 +28,7 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         /// Aggregation hash chain link metadata TLV element.
         /// </summary>
-        public class MetaData : CompositeTag
+        public class Metadata : CompositeTag
         {
             private readonly StringTag _clientId;
             private readonly StringTag _machineId;
@@ -39,7 +39,7 @@ namespace Guardtime.KSI.Signature
             /// Create new aggregation hash chain link metadata TLV elment
             /// </summary>
             /// <param name="clientId">Client identifier</param>
-            public MetaData(string clientId) : this(clientId, null)
+            public Metadata(string clientId) : this(clientId, null)
             {
             }
 
@@ -48,7 +48,7 @@ namespace Guardtime.KSI.Signature
             /// </summary>
             /// <param name="clientId">Client identifier</param>
             /// <param name="machineId">Machine identifier</param>
-            public MetaData(string clientId, string machineId) : this(new MetaData(BuildChildTags(clientId, machineId)))
+            public Metadata(string clientId, string machineId) : this(new Metadata(BuildChildTags(clientId, machineId)))
             {
             }
 
@@ -56,9 +56,9 @@ namespace Guardtime.KSI.Signature
             /// Create new aggregation hash chain link metadata TLV elment from TLV element
             /// </summary>
             /// <param name="tag">TLV element</param>
-            public MetaData(ITlvTag tag) : base(tag)
+            public Metadata(ITlvTag tag) : base(tag)
             {
-                if (Type != Constants.AggregationHashChain.MetaData.TagType)
+                if (Type != Constants.AggregationHashChain.Metadata.TagType)
                 {
                     throw new TlvException("Invalid aggregation hash chain link metadata type(" + Type + ").");
                 }
@@ -74,19 +74,19 @@ namespace Guardtime.KSI.Signature
 
                     switch (childTag.Type)
                     {
-                        case Constants.AggregationHashChain.MetaData.ClientIdTagType:
+                        case Constants.AggregationHashChain.Metadata.ClientIdTagType:
                             this[i] = _clientId = new StringTag(childTag);
                             clientIdCount++;
                             break;
-                        case Constants.AggregationHashChain.MetaData.MachineIdTagType:
+                        case Constants.AggregationHashChain.Metadata.MachineIdTagType:
                             this[i] = _machineId = new StringTag(childTag);
                             machineIdCount++;
                             break;
-                        case Constants.AggregationHashChain.MetaData.SequenceNumberTagType:
+                        case Constants.AggregationHashChain.Metadata.SequenceNumberTagType:
                             this[i] = _sequenceNumber = new IntegerTag(childTag);
                             sequenceNumberCount++;
                             break;
-                        case Constants.AggregationHashChain.MetaData.RequestTimeTagType:
+                        case Constants.AggregationHashChain.Metadata.RequestTimeTagType:
                             this[i] = _requestTime = new IntegerTag(childTag);
                             requestTimeCount++;
                             break;
@@ -117,7 +117,7 @@ namespace Guardtime.KSI.Signature
                 }
             }
 
-            private MetaData(ITlvTag[] value) : base(Constants.AggregationHashChain.MetaData.TagType, false, false, value)
+            private Metadata(ITlvTag[] value) : base(Constants.AggregationHashChain.Metadata.TagType, false, false, value)
             {
             }
 
@@ -133,12 +133,12 @@ namespace Guardtime.KSI.Signature
 
                 if (!string.IsNullOrEmpty(clientId))
                 {
-                    list.Add(new StringTag(Constants.AggregationHashChain.MetaData.ClientIdTagType, false, false, clientId));
+                    list.Add(new StringTag(Constants.AggregationHashChain.Metadata.ClientIdTagType, false, false, clientId));
                 }
 
                 if (!string.IsNullOrEmpty(machineId))
                 {
-                    list.Add(new StringTag(Constants.AggregationHashChain.MetaData.MachineIdTagType, false, false, machineId));
+                    list.Add(new StringTag(Constants.AggregationHashChain.Metadata.MachineIdTagType, false, false, machineId));
                 }
 
                 return list.ToArray();
