@@ -88,6 +88,7 @@
     <Compile Include="Crypto\ICertificateSubjectRdnSelector.cs" />
     <Compile Include="Crypto\ICryptoSignatureVerifier.cs" />
     <Compile Include="Crypto\CertificateSubjectRdn.cs" />
+    <Compile Include="Exceptions\BlockSigningException.cs" />
     <Compile Include="Exceptions\HashingException.cs" />
     <Compile Include="Exceptions\KsiMultiSignatureInvalidHashException.cs" />
     <Compile Include="Exceptions\KsiMultiSignatureException.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="Hashing\IDataHasher.cs" />
     <Compile Include="Hashing\IHmacHasher.cs" />
     <Compile Include="Ksi.cs" />
+    <Compile Include="Parser\ICompositeTag.cs" />
     <Compile Include="Parser\ImprintTag.cs" />
     <Compile Include="Parser\IntegerTag.cs" />
     <Compile Include="Parser\RawTag.cs" />
@@ -130,7 +132,10 @@
     <Compile Include="Publication\PublicationsFileHeader.cs" />
     <Compile Include="Publication\PublicationsFile.cs" />
     <Compile Include="Publication\PublicationData.cs" />
+    <Compile Include="Service\BlockSigner.cs" />
     <Compile Include="Service\TcpKsiServiceProtocol.cs" />
+    <Compile Include="Signature\AggregationHashChain.Metadata.cs" />
+    <Compile Include="Signature\AggregationHashChain.Link.cs" />
     <Compile Include="Signature\IKsiSignatureFactory.cs" />
     <Compile Include="Signature\MultiSignature\AggregationHashChainHolder.cs" />
     <Compile Include="Signature\MultiSignature\AggregationHashChainKey.cs" />
@@ -143,6 +148,7 @@
     <Compile Include="Signature\MultiSignature\PublicationRecordHolder.cs" />
     <Compile Include="Signature\MultiSignature\Rfc3161RecordHolder.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainIndexRule.cs" />
+    <Compile Include="Service\TreeNode.cs" />
     <Compile Include="Utils\Base16.cs" />
     <Compile Include="Utils\Base32.cs" />
     <Compile Include="Utils\BaseX.cs" />

@@ -190,5 +190,26 @@ namespace Guardtime.KSI.Parser
 
             return builder.ToString();
         }
+
+        /// <summary>
+        ///     Write TlvTag to stream.
+        /// </summary>
+        /// <param name="outputStream">output stream</param>
+        public void WriteTo(Stream outputStream)
+        {
+            if (outputStream == null)
+            {
+                throw new KsiException("Invalid output stream: null.");
+            }
+
+            if (!outputStream.CanWrite)
+            {
+                throw new KsiException("Output stream is not writable.");
+            }
+
+            // Cannot use "using", otherwise outputStream will be closed
+            TlvWriter writer = new TlvWriter(outputStream);
+            writer.WriteTag(this);
+        }
     }
 }

@@ -17,19 +17,25 @@
  * reserves and retains all trademark rights.
  */
 
-namespace Guardtime.KSI.Hashing
+using System.Collections.Generic;
+
+namespace Guardtime.KSI.Parser
 {
     /// <summary>
-    /// HMAC hasher
+    ///     TLV element containing other TLV elements.
     /// </summary>
-    public interface IHmacHasher
+    public interface ICompositeTag : ITlvTag, IEnumerable<ITlvTag>
     {
         /// <summary>
-        ///     Calculate HMAC for data with given key.
+        ///     Get TLV child object
         /// </summary>
-        /// <param name="key">HMAC key</param>
-        /// <param name="data">HMAC calculation data</param>
-        /// <returns>HMAC data hash</returns>
-        DataHash GetHash(byte[] key, byte[] data);
+        /// <param name="i">tlv element position</param>
+        /// <returns>TLV element at given position</returns>
+        ITlvTag this[int i] { get; }
+
+        /// <summary>
+        ///     Get TLV element list size
+        /// </summary>
+        int Count { get; }
     }
 }

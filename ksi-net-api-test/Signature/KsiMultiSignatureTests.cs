@@ -785,8 +785,11 @@ namespace Guardtime.KSI.Test.Signature
         /// <returns></returns>
         private bool AreEqual(IEnumerable<ITlvTag> sig1, IEnumerable<ITlvTag> sig2)
         {
-            List<TlvTag> diff1 = Diff(sig1, sig2);
-            List<TlvTag> diff2 = Diff(sig2, sig1);
+            IEnumerable<ITlvTag> tags1 = sig1 as ITlvTag[] ?? sig1.ToArray();
+            IEnumerable<ITlvTag> tags2 = sig2 as ITlvTag[] ?? sig2.ToArray();
+
+            List<TlvTag> diff1 = Diff(tags1, tags2);
+            List<TlvTag> diff2 = Diff(tags2, tags1);
 
             foreach (TlvTag item in diff1)
             {

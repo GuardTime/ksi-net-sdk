@@ -17,19 +17,31 @@
  * reserves and retains all trademark rights.
  */
 
-namespace Guardtime.KSI.Hashing
+using System;
+
+namespace Guardtime.KSI.Exceptions
 {
     /// <summary>
-    /// HMAC hasher
+    /// Exceptions thrown when doing block signing.
     /// </summary>
-    public interface IHmacHasher
+    [Serializable]
+    public class BlockSigningException : KsiException
     {
         /// <summary>
-        ///     Calculate HMAC for data with given key.
+        ///     Create new block signing exception with message.
         /// </summary>
-        /// <param name="key">HMAC key</param>
-        /// <param name="data">HMAC calculation data</param>
-        /// <returns>HMAC data hash</returns>
-        DataHash GetHash(byte[] key, byte[] data);
+        /// <param name="message">exception message</param>
+        public BlockSigningException(string message) : base(message)
+        {
+        }
+
+        /// <summary>
+        ///     Create new block signing exception with message and inner exception.
+        /// </summary>
+        /// <param name="message">exception message</param>
+        /// <param name="innerException">inner exception</param>
+        public BlockSigningException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
     }
 }

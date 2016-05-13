@@ -323,6 +323,56 @@ namespace Guardtime.KSI.Signature.MultiSignature
         }
 
         /// <summary>
+        /// Add aggregation hash chain to multi-signature.
+        /// </summary>
+        /// <param name="aggregationHashChain">Aggregation hash chain to be added</param>
+        public void Add(AggregationHashChain aggregationHashChain)
+        {
+            if (aggregationHashChain == null)
+            {
+                throw new ArgumentNullException(nameof(aggregationHashChain));
+            }
+
+            ulong[] chainIndex = aggregationHashChain.GetChainIndex();
+            ulong[] parentChainIndex = new ulong[chainIndex.Length - 1];
+            Array.Copy(chainIndex, parentChainIndex, parentChainIndex.Length);
+
+            AggregationHashChainKey parentAggregationHashChainKey = new AggregationHashChainKey(aggregationHashChain.AggregationTime, parentChainIndex);
+            AggregationHashChain parentAggregationHashChain = _aggregationHashChains[parentAggregationHashChainKey];
+
+            if (parentAggregationHashChain == null)
+            {
+                throw new MultiSignatureException("Cannot find parent aggregation chain. Make sure a parent aggregation hash chain is already added.");
+            }
+
+            _firstAggregationHashChains.Remove(parentAggregationHashChain.InputHash);
+
+            AggregationHashChainResult hashChainResult = new AggregationHashChainResult(0, aggregationHashChain.InputHash);
+            hashChainResult = aggregationHashChain.GetOutputHash(hashChainResult);
+
+            if (parentAggregationHashChain.InputHash != hashChainResult.Hash)
+            {
+                throw new MultiSignatureException("Aggregation hash chain output and parent chain input do not match.");
+            }
+
+            AggregationHashChainKey key = new AggregationHashChainKey(aggregationHashChain.AggregationTime, chainIndex);
+
+            if (_aggregationHashChains[key] != null)
+            {
+                if (!_aggregationHashChains[key].Equals(aggregationHashChain))
+                {
+                    throw new KsiException(
+                        "Aggregation hash chain to be added exists in multi-signature (searched by aggregation time and chain index), but the chain values do no match.");
+                }
+            }
+            else
+            {
+                _aggregationHashChains.Add(key, aggregationHashChain);
+                _firstAggregationHashChains.Add(aggregationHashChain);
+            }
+        }
+
+        /// <summary>
         /// Get uni-signature from multi-signature
         /// </summary>
         /// <param name="documentHash">Hash of the document which signature is looked for</param>

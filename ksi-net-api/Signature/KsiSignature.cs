@@ -265,28 +265,6 @@ namespace Guardtime.KSI.Signature
             }
         }
 
-        /// <summary>
-        ///     Write KSI signature to stream.
-        /// </summary>
-        /// <param name="outputStream">output stream</param>
-        public void WriteTo(Stream outputStream)
-        {
-            if (outputStream == null)
-            {
-                throw new KsiException("Invalid output stream: null.");
-            }
-
-            if (!outputStream.CanWrite)
-            {
-                throw new KsiException("Output stream is not writable.");
-            }
-
-            using (TlvWriter writer = new TlvWriter(outputStream))
-            {
-                writer.WriteTag(this);
-            }
-        }
-
         private string GetIdentity()
         {
             string identity = "";

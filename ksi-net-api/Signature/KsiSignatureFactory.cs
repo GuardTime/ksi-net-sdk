@@ -19,7 +19,6 @@
 
 using System.Collections.Generic;
 using System.IO;
-using Guardtime.KSI;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;

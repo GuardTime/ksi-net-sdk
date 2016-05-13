@@ -200,11 +200,11 @@ namespace Guardtime.KSI.Test.Integration
             int doneCount = 0;
             int runCount = 10;
             string errorMessage = null;
+            MemoryStream ms = new MemoryStream();
 
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
             {
-                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
-                IKsiSignature extendedToNearest = ksi.Extend(ksiSignature);
+                stream.CopyTo(ms);
             }
 
             for (int i = 0; i < runCount; i ++)
@@ -213,11 +213,8 @@ namespace Guardtime.KSI.Test.Integration
                 int k = i;
 
                 MemoryStream s = new MemoryStream();
-                using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
-                {
-                    stream.CopyTo(s);
-                }
-
+                ms.Seek(0, SeekOrigin.Begin);
+                ms.CopyTo(s);
                 s.Seek(0, SeekOrigin.Begin);
 
                 Task.Run(() =>

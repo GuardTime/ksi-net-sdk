@@ -17,7 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
 using System.Collections.Generic;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
@@ -35,6 +34,8 @@ namespace Guardtime.KSI.Signature
         private readonly List<Link> _chain = new List<Link>();
         private readonly ImprintTag _inputHash;
         private readonly IntegerTag _publicationTime;
+        private DataHash _outputHash;
+        private PublicationData _publicationData;
 
         /// <summary>
         ///     Create new calendar hash chain TLV element from TLV element
@@ -102,14 +103,12 @@ namespace Guardtime.KSI.Signature
             }
 
             RegistrationTime = CalculateRegistrationTime();
-            OutputHash = CalculateOutputHash();
-            PublicationData = new PublicationData(_publicationTime.Value, OutputHash);
         }
 
         /// <summary>
         ///     Get aggregation time
         /// </summary>
-        public ulong AggregationTime => _aggregationTime == null ? _publicationTime.Value : _aggregationTime.Value;
+        public ulong AggregationTime => _aggregationTime?.Value ?? _publicationTime.Value;
 
         /// <summary>
         ///     Get publication time.
@@ -129,12 +128,12 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         ///     Get output hash.
         /// </summary>
-        public DataHash OutputHash { get; }
+        public DataHash OutputHash => _outputHash ?? (_outputHash = CalculateOutputHash());
 
         /// <summary>
         ///     Get publication data.
         /// </summary>
-        public PublicationData PublicationData { get; }
+        public PublicationData PublicationData => _publicationData ?? (_publicationData = new PublicationData(_publicationTime.Value, OutputHash));
 
         private static IEnumerable<Link> GetRightLinksEnumerable(IList<Link> chain)
         {
