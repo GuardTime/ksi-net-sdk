@@ -63,6 +63,20 @@ namespace Guardtime.KSI.Parser
         }
 
         /// <summary>
+        ///     Create new octet string TLV element from data
+        /// </summary>
+        /// <param name="type">TLV element type</param>
+        /// <param name="nonCritical">Is TLV element non critical</param>
+        /// <param name="forward">Is TLV element forwarded</param>
+        /// <param name="value">TLV element byte array value</param>
+        /// <param name="isReadAsTlv16">Indicates that TLV element was created using tlv16 encoding</param>
+        public RawTag(uint type, bool nonCritical, bool forward, byte[] value, bool? isReadAsTlv16 = null)
+            : this(type, nonCritical, forward, value)
+        {
+            IsReadAsTlv16 = isReadAsTlv16;
+        }
+
+        /// <summary>
         ///     Get TLV element byte array value.
         /// </summary>
         public byte[] Value => Util.Clone(_value);
@@ -93,5 +107,10 @@ namespace Guardtime.KSI.Parser
                 return res + Type.GetHashCode() + Forward.GetHashCode() + NonCritical.GetHashCode();
             }
         }
+
+        /// <summary>
+        /// Indicates that TLV element was created using tlv16 encoding
+        /// </summary>
+        public bool? IsReadAsTlv16 { get; }
     }
 }

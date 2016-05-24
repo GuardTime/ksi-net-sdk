@@ -18,6 +18,7 @@
  */
 
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
@@ -133,6 +134,15 @@ namespace Guardtime.KSI.Signature
         ///     Get aggregation time.
         /// </summary>
         public ulong AggregationTime => _aggregationTime.Value;
+
+        /// <summary>
+        /// Get aggregation chain links
+        /// </summary>
+        /// <returns></returns>
+        public ReadOnlyCollection<Link> GetChainLinks()
+        {
+            return _chain.AsReadOnly();
+        }
 
         /// <summary>
         ///     Get input data bytes if input data exists otherwise null.
@@ -251,9 +261,9 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
-        ///     Aggregation hash chain link.
+        ///     Aggregation hash chain link TLV element.
         /// </summary>
-        private class Link : CompositeTag
+        public class Link : CompositeTag
         {
             private const byte LegacyIdFirstOctet = 0x3;
             private const byte LegacyIdLength = 29;
@@ -264,6 +274,11 @@ namespace Guardtime.KSI.Signature
             private readonly RawTag _legacyId;
             private readonly string _legacyIdString;
 
+            /// <summary>
+            /// Create new aggregation hash chain link TLV elment from TLV element.
+            /// </summary>
+            /// <param name="tag">TLV element</param>
+            /// <param name="direction">Direction</param>
             public Link(ITlvTag tag, LinkDirection direction) : base(tag)
             {
                 int levelCorrectionCount = 0;
@@ -322,6 +337,11 @@ namespace Guardtime.KSI.Signature
             ///     Get direction
             /// </summary>
             public LinkDirection Direction { get; }
+
+            /// <summary>
+            /// Metadata element
+            /// </summary>
+            public MetaData Metadata => _metaData;
 
             /// <summary>
             /// Get link identity
@@ -386,7 +406,10 @@ namespace Guardtime.KSI.Signature
             }
         }
 
-        private class MetaData : CompositeTag
+        /// <summary>
+        /// Aggregation hash chain link metadata TLV element.
+        /// </summary>
+        public class MetaData : CompositeTag
         {
             private readonly StringTag _clientId;
             private readonly StringTag _machineId;
@@ -395,6 +418,10 @@ namespace Guardtime.KSI.Signature
             private readonly IntegerTag _requestTime;
             private readonly IntegerTag _sequenceNumber;
 
+            /// <summary>
+            /// Create new aggregation hash chain link metadata TLV elment from TLV element
+            /// </summary>
+            /// <param name="tag">TLV element</param>
             public MetaData(ITlvTag tag) : base(tag)
             {
                 if (Type != Constants.AggregationHashChain.MetaData.TagType)
@@ -413,6 +440,10 @@ namespace Guardtime.KSI.Signature
 
                     switch (childTag.Type)
                     {
+                        case Constants.AggregationHashChain.MetaData.PaddingTagType:
+                            this[i] = Padding = childTag as RawTag ?? new RawTag(childTag);
+                            PaddingTagIndex = i;
+                            break;
                         case Constants.AggregationHashChain.MetaData.ClientIdTagType:
                             this[i] = _clientId = new StringTag(childTag);
                             clientIdCount++;
@@ -456,9 +487,34 @@ namespace Guardtime.KSI.Signature
                 }
             }
 
+            /// <summary>
+            /// Padding element
+            /// </summary>
+            public RawTag Padding { get; }
+
+            /// <summary>
+            /// Padding element index inside the metadata element
+            /// </summary>       
+            public int PaddingTagIndex { get; }
+
+            /// <summary>
+            /// Client identifier
+            /// </summary>
             public string ClientId => _clientId.Value;
+
+            /// <summary>
+            /// Machine identifier
+            /// </summary>
             public string MachineId => _machineId.Value;
+
+            /// <summary>
+            /// The time when the server received the request from the client (in milliseconds)
+            /// </summary>
             public ulong RequestTime => _requestTime.Value;
+
+            /// <summary>
+            /// A local sequence number of a request assigned by the machine that created the link
+            /// </summary>
             public ulong SequenceNumber => _sequenceNumber.Value;
         }
 

@@ -70,19 +70,24 @@ namespace Guardtime.KSI.Signature.Verification
         public static readonly VerificationError Int07 = new VerificationError("INT-07", "Calendar hash chain time inconsistent with publication time");
 
         /// <summary>
-        ///     Calendar hash chain root has inconsistency with calendar authentication record time error.
+        ///     Calendar hash chain root hash is inconsistent with calendar auth record input hash error.
         /// </summary>
         public static readonly VerificationError Int08 = new VerificationError("INT-08", "Calendar hash chain root hash is inconsistent with calendar auth record input hash");
 
         /// <summary>
-        ///     Calendar hash chain root has inconsistency with publication time error.
+        ///     Calendar hash chain root hash is inconsistent with published hash value error.
         /// </summary>
         public static readonly VerificationError Int09 = new VerificationError("INT-09", "Calendar hash chain root hash is inconsistent with published hash value");
 
         /// <summary>
-        ///     Calendar hash chain root has inconsistency with publication time error.
+        ///     Aggregation hash chain chain index mismatch error.
         /// </summary>
         public static readonly VerificationError Int10 = new VerificationError("INT-10", "Aggregation hash chain chain index mismatch");
+
+        /// <summary>
+        ///     The meta-data record in the aggregation hash chain may not be trusted error.
+        /// </summary>
+        public static readonly VerificationError Int11 = new VerificationError("INT-11", "The meta-data record in the aggregation hash chain may not be trusted");
 
         /// <summary>
         ///     Extender response calendar root hash mismatch error.

@@ -108,7 +108,7 @@ namespace Guardtime.KSI.Hashing
         public string Name { get; }
 
         /// <summary>
-        ///     Return length of the algorithm value.
+        ///     Return length of the algorithm return value.
         /// </summary>
         public int Length { get; }
 
@@ -124,11 +124,6 @@ namespace Guardtime.KSI.Hashing
         /// <returns>HashAlgorithm when a match is found, otherwise null</returns>
         public static HashAlgorithm GetById(byte id)
         {
-            if (id == Invalid.Id)
-            {
-                throw new HashingException("Invalid hash algorithm. Id: " + id);
-            }
-
             foreach (HashAlgorithm algorithm in Values())
             {
                 if (algorithm.Id == id)
@@ -137,7 +132,37 @@ namespace Guardtime.KSI.Hashing
                 }
             }
 
+            if (IsInvalidAlgorithm(id))
+            {
+                throw new HashingException("Invalid hash algorithm. Id: " + id);
+            }
+
             return null;
+        }
+
+        /// <summary>
+        /// Returns true if alogrithm with given id is marked as invalid.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static bool IsInvalidAlgorithm(byte id)
+        {
+            foreach (HashAlgorithm algorithm in InvalidValues())
+            {
+                if (algorithm.Id != id)
+                {
+                    continue;
+                }
+
+                if (algorithm.Status == AlgorithmStatus.Invalid)
+                {
+                    return true;
+                }
+
+                break;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -180,6 +205,15 @@ namespace Guardtime.KSI.Hashing
         private static IEnumerable<HashAlgorithm> Values()
         {
             return new HashAlgorithm[] { Sha1, Sha2256, Ripemd160, Sha2384, Sha2512, Sha3224, Sha3256, Sha3384, Sha3512, Sm3 };
+        }
+
+        /// <summary>
+        ///     Get algorithm objects marked as invalid.
+        /// </summary>
+        /// <returns>Defined HashAlgorithm objects</returns>
+        private static IEnumerable<HashAlgorithm> InvalidValues()
+        {
+            return new HashAlgorithm[] { Invalid1, Invalid2 };
         }
     }
 }

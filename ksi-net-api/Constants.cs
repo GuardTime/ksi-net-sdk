@@ -272,6 +272,7 @@ namespace Guardtime.KSI
                 // ReSharper disable once MemberHidesStaticFromOuterClass
                 public const uint TagType = 0x4;
 
+                public const uint PaddingTagType = 0x1E;
                 public const uint ClientIdTagType = 0x1;
                 public const uint MachineIdTagType = 0x2;
                 public const uint SequenceNumberTagType = 0x3;

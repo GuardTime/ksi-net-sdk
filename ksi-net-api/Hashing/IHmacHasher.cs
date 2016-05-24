@@ -27,7 +27,6 @@ namespace Guardtime.KSI.Hashing
         /// <summary>
         ///     Calculate HMAC for data with given key.
         /// </summary>
-        /// <param name="hmacAlgorithm">HMAC algorithm</param>
         /// <param name="key">HMAC key</param>
         /// <param name="data">HMAC calculation data</param>
         /// <returns>HMAC data hash</returns>

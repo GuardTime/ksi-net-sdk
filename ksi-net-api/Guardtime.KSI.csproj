@@ -130,6 +130,7 @@
     <Compile Include="Publication\PublicationData.cs" />
     <Compile Include="Service\TcpKsiServiceProtocol.cs" />
     <Compile Include="Signature\IKsiSignatureFactory.cs" />
+    <Compile Include="Signature\Verification\Rule\AggregationHashChainMetadataRule.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainIndexRule.cs" />
     <Compile Include="Utils\Base16.cs" />
     <Compile Include="Utils\Base32.cs" />

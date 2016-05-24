@@ -72,7 +72,7 @@ namespace Guardtime.KSI.Parser
                 {
                     if (data.Length > ushort.MaxValue)
                     {
-                        throw new ArgumentOutOfRangeException(nameof(tag));
+                        throw new ArgumentOutOfRangeException(nameof(data));
                     }
                     Write((byte)(data.Length >> Constants.BitsInByte));
                     Write((byte)data.Length);

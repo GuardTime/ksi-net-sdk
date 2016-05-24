@@ -178,6 +178,7 @@
     <Compile Include="Service\KsiPduHeaderTests.cs" />
     <Compile Include="Service\TestKsiServiceProtocol.cs" />
     <Compile Include="Signature\KsiSignatureUsingReflectionTests.cs" />
+    <Compile Include="Signature\Verification\Rule\AggregationHashChainMetadataRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainIndexRuleTests.cs" />
     <Compile Include="TestSetup.cs" />
     <Compile Include="Signature\CalendarAuthenticationRecordTests.cs" />
@@ -401,6 +402,45 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\aggregation-hash-chain\aggregation-hash-chain-ok.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\MetadataPadding\TestAggregationHashChainMetadataInvalidPaddingFail.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\MetadataPadding\TestAggregationHashChainMetadataPaddingNotFirstFail.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\MetadataPadding\TestAggregationHashChainMetadataPaddingNotForwardFail.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\MetadataPadding\TestAggregationHashChainMetadataPaddingNotForwardNotNonCriticalFail.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\MetadataPadding\TestAggregationHashChainMetadataPaddingNotNonCriticalFail.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\MetadataPadding\TestAggregationHashChainMetadataPaddingNotTlv8Fail.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\MetadataPadding\TestAggregationHashChainMetadataUnknownPaddingValue1Fail.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\MetadataPadding\TestAggregationHashChainMetadataUnknownPaddingValue2Fail.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\MetadataPadding\TestAggregationHashChainMetadataUnknownPaddingValue3Fail.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\MetadataPadding\TestAggregationHashChainMetadataWithoutPadding.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\MetadataPadding\TestAggregationHashChainMetadataWithoutPaddingFail.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\MetadataPadding\TestAggregationHashChainMetadataWithPadding1.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\aggregation-hash-chain\MetadataPadding\TestAggregationHashChainMetadataWithPadding2.ksig">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\calendar-authentication-record\calendar-authentication-record-invalid-extra-tag.tlv">

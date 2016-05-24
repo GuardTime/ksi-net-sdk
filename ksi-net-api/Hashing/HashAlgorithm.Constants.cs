@@ -44,7 +44,7 @@ namespace Guardtime.KSI.Hashing
         /// <summary>
         ///     Hash Algorithm marked as "invalid"
         /// </summary>
-        public static readonly HashAlgorithm Invalid = new HashAlgorithm("Invalid", 0x03, 0, AlgorithmStatus.Invalid);
+        public static readonly HashAlgorithm Invalid1 = new HashAlgorithm("Invalid", 0x03, 0, AlgorithmStatus.Invalid);
 
         /// <summary>
         ///     SHA2-384 Hash Algorithm
@@ -80,5 +80,10 @@ namespace Guardtime.KSI.Hashing
         ///     SM3 Hash Algorithm
         /// </summary>
         public static readonly HashAlgorithm Sm3 = new HashAlgorithm("SM3", 0x0B, 32, AlgorithmStatus.NotImplemented);
+
+        /// <summary>
+        ///     Hash Algorithm marked as "invalid"
+        /// </summary>
+        public static readonly HashAlgorithm Invalid2 = new HashAlgorithm("Invalid", 0x7E, 0, AlgorithmStatus.Invalid);
     }
 }
