@@ -21,6 +21,7 @@ using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
+using Guardtime.KSI.Signature.Verification.Policy;
 using Guardtime.KSI.Signature.Verification.Rule;
 using NUnit.Framework;
 
@@ -317,6 +318,25 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
 
             VerificationResult verificationResult = rule.Verify(context);
             Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+        }
+
+        /// <summary>
+        /// Test internal policy with invalid metadata
+        /// </summary>
+        [Test]
+        public void TestAggregationHashChainMetadataInternalPolicyFail()
+        {
+            InternalVerificationPolicy policy = new InternalVerificationPolicy();
+
+            TestVerificationContext context = new TestVerificationContext()
+            {
+                Signature =
+                    new KsiSignatureFactory().Create(new FileStream(Path.Combine(TestSetup.LocalPath,
+                        Properties.Resources.AggregationHashChainMetadataPaddingNotFirstFail), FileMode.Open))
+            };
+
+            VerificationResult verificationResult = policy.Verify(context);
+            Assert.AreEqual(VerificationError.Int11.Code, verificationResult.VerificationError?.Code);
         }
     }
 }
