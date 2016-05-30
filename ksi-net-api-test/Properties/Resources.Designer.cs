@@ -430,6 +430,123 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataInvalidPaddingFail.ksig.
+        /// </summary>
+        internal static string AggregationHashChainMetadataInvalidPaddingFail {
+            get {
+                return ResourceManager.GetString("AggregationHashChainMetadataInvalidPaddingFail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataPaddingNotFirstFail.ksig.
+        /// </summary>
+        internal static string AggregationHashChainMetadataPaddingNotFirstFail {
+            get {
+                return ResourceManager.GetString("AggregationHashChainMetadataPaddingNotFirstFail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataPaddingNotForwardFail.ksig.
+        /// </summary>
+        internal static string AggregationHashChainMetadataPaddingNotForwardFail {
+            get {
+                return ResourceManager.GetString("AggregationHashChainMetadataPaddingNotForwardFail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataPaddingNotForwardNotNonCriticalFail.ksig.
+        /// </summary>
+        internal static string AggregationHashChainMetadataPaddingNotForwardNotNonCriticalFail {
+            get {
+                return ResourceManager.GetString("AggregationHashChainMetadataPaddingNotForwardNotNonCriticalFail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataPaddingNotNonCriticalFail.ksig.
+        /// </summary>
+        internal static string AggregationHashChainMetadataPaddingNotNonCriticalFail {
+            get {
+                return ResourceManager.GetString("AggregationHashChainMetadataPaddingNotNonCriticalFail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataPaddingNotTlv8Fail.ksig.
+        /// </summary>
+        internal static string AggregationHashChainMetadataPaddingNotTlv8Fail {
+            get {
+                return ResourceManager.GetString("AggregationHashChainMetadataPaddingNotTlv8Fail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataUnknownPaddingValue1Fail.ksig.
+        /// </summary>
+        internal static string AggregationHashChainMetadataUnknownPaddingValue1Fail {
+            get {
+                return ResourceManager.GetString("AggregationHashChainMetadataUnknownPaddingValue1Fail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataUnknownPaddingValue2Fail.ksig.
+        /// </summary>
+        internal static string AggregationHashChainMetadataUnknownPaddingValue2Fail {
+            get {
+                return ResourceManager.GetString("AggregationHashChainMetadataUnknownPaddingValue2Fail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataUnknownPaddingValue3Fail.ksig.
+        /// </summary>
+        internal static string AggregationHashChainMetadataUnknownPaddingValue3Fail {
+            get {
+                return ResourceManager.GetString("AggregationHashChainMetadataUnknownPaddingValue3Fail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataWithoutPadding.ksig.
+        /// </summary>
+        internal static string AggregationHashChainMetadataWithoutPadding {
+            get {
+                return ResourceManager.GetString("AggregationHashChainMetadataWithoutPadding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataWithoutPaddingFail.ksig.
+        /// </summary>
+        internal static string AggregationHashChainMetadataWithoutPaddingFail {
+            get {
+                return ResourceManager.GetString("AggregationHashChainMetadataWithoutPaddingFail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataWithPadding1.ksig.
+        /// </summary>
+        internal static string AggregationHashChainMetadataWithPadding1 {
+            get {
+                return ResourceManager.GetString("AggregationHashChainMetadataWithPadding1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataWithPadding2.ksig.
+        /// </summary>
+        internal static string AggregationHashChainMetadataWithPadding2 {
+            get {
+                return ResourceManager.GetString("AggregationHashChainMetadataWithPadding2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/calendar-authentication-record/calendar-authentication-record-invalid-extra-tag.tlv.
         /// </summary>
         internal static string CalendarAuthenticationRecord_Invalid_Extra_Tag {

@@ -151,6 +151,11 @@ namespace Guardtime.KSI.Signature
             public LinkDirection Direction { get; }
 
             /// <summary>
+            /// Metadata element
+            /// </summary>
+            public Metadata Metadata => _metadata;
+
+            /// <summary>
             /// Get link identity
             /// </summary>
             /// <returns></returns>

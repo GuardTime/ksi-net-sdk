@@ -137,6 +137,7 @@
     <Compile Include="Signature\AggregationHashChain.Metadata.cs" />
     <Compile Include="Signature\AggregationHashChain.Link.cs" />
     <Compile Include="Signature\IKsiSignatureFactory.cs" />
+    <Compile Include="Signature\Verification\Rule\AggregationHashChainMetadataRule.cs" />
     <Compile Include="Signature\MultiSignature\AggregationHashChainHolder.cs" />
     <Compile Include="Signature\MultiSignature\AggregationHashChainKey.cs" />
     <Compile Include="Signature\MultiSignature\CalendarAuthenticationRecordHolder.cs" />

@@ -74,6 +74,10 @@ namespace Guardtime.KSI.Signature
 
                     switch (childTag.Type)
                     {
+                        case Constants.AggregationHashChain.Metadata.PaddingTagType:
+                            this[i] = Padding = childTag as RawTag ?? new RawTag(childTag);
+                            PaddingTagIndex = i;
+                            break;
                         case Constants.AggregationHashChain.Metadata.ClientIdTagType:
                             this[i] = _clientId = new StringTag(childTag);
                             clientIdCount++;
@@ -143,6 +147,16 @@ namespace Guardtime.KSI.Signature
 
                 return list.ToArray();
             }
+
+            /// <summary>
+            /// Padding element
+            /// </summary>
+            public RawTag Padding { get; }
+
+            /// <summary>
+            /// Padding element index inside the metadata element
+            /// </summary>       
+            public int PaddingTagIndex { get; }
 
             /// <summary>
             /// Client identifier
