@@ -48,13 +48,10 @@ namespace Guardtime.KSI.Hashing
             /// <summary>
             ///     Algorithm defined in the specification, but not yet available in the implementation.
             /// </summary>
-            NotImplemented,
-
-            /// <summary>
-            ///     Algorithm defined in the specification as "invalid" and cannot be used for hashing.
-            /// </summary>
-            Invalid
+            NotImplemented
         }
+
+        private static readonly byte[] InvalidHashAlgorithmIds = new byte[] { 0x03, 0x7E };
 
         private static readonly Dictionary<string, HashAlgorithm> Lookup = new Dictionary<string, HashAlgorithm>();
 
@@ -147,19 +144,12 @@ namespace Guardtime.KSI.Hashing
         /// <returns></returns>
         public static bool IsInvalidAlgorithm(byte id)
         {
-            foreach (HashAlgorithm algorithm in InvalidValues())
+            foreach (byte algorithmId in InvalidHashAlgorithmIds)
             {
-                if (algorithm.Id != id)
-                {
-                    continue;
-                }
-
-                if (algorithm.Status == AlgorithmStatus.Invalid)
+                if (algorithmId == id)
                 {
                     return true;
                 }
-
-                break;
             }
 
             return false;
@@ -205,15 +195,6 @@ namespace Guardtime.KSI.Hashing
         private static IEnumerable<HashAlgorithm> Values()
         {
             return new HashAlgorithm[] { Sha1, Sha2256, Ripemd160, Sha2384, Sha2512, Sha3224, Sha3256, Sha3384, Sha3512, Sm3 };
-        }
-
-        /// <summary>
-        ///     Get algorithm objects marked as invalid.
-        /// </summary>
-        /// <returns>Defined HashAlgorithm objects</returns>
-        private static IEnumerable<HashAlgorithm> InvalidValues()
-        {
-            return new HashAlgorithm[] { Invalid1, Invalid2 };
         }
     }
 }
