@@ -27,7 +27,10 @@ using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.MultiSignature;
+using Guardtime.KSI.Signature.Verification;
+using Guardtime.KSI.Signature.Verification.Rule;
 using Guardtime.KSI.Test.Integration;
+using Guardtime.KSI.Test.Signature.Verification.Rule;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Signature
@@ -762,6 +765,58 @@ namespace Guardtime.KSI.Test.Signature
             KsiMultiSignature newMultiSignature = new KsiMultiSignature(outStream, new KsiSignatureFactory());
 
             Assert.True(AreEqual(multiSignature.GetAllTags(), newMultiSignature.GetAllTags()), "Written multi-signature should match the inital signature.");
+        }
+
+        /// <summary>
+        /// Reading signature with metadata padding
+        /// </summary>
+        [Test]
+        public void MultiSignatureWithMetadataPadding()
+        {
+            IKsiSignature signature = GetKsiSignatureFromFile(Properties.Resources.AggregationHashChainMetadataWithPadding1);
+
+            KsiMultiSignature multiSignature;
+
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.MultiSignatureWithMetadataPadding_Ok), FileMode.Open))
+            {
+                multiSignature = new KsiMultiSignature(stream, new KsiSignatureFactory());
+            }
+
+            AggregationHashChainMetadataRule rule = new AggregationHashChainMetadataRule();
+
+            TestVerificationContext context = new TestVerificationContext()
+            {
+                Signature = multiSignature.Get(signature.GetAggregationHashChains()[0].InputHash)
+            };
+
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+        }
+
+        /// <summary>
+        /// Reading signature with metadata padding encoded as tlv16
+        /// </summary>
+        [Test]
+        public void MultiSignatureWithMetadataPaddingTlv16Invalid()
+        {
+            IKsiSignature signature = GetKsiSignatureFromFile(Properties.Resources.AggregationHashChainMetadataWithPadding1);
+
+            KsiMultiSignature multiSignature;
+
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.MultiSignatureWithMetadataPaddingTlv16_Invalid), FileMode.Open))
+            {
+                multiSignature = new KsiMultiSignature(stream, new KsiSignatureFactory());
+            }
+
+            AggregationHashChainMetadataRule rule = new AggregationHashChainMetadataRule();
+
+            TestVerificationContext context = new TestVerificationContext()
+            {
+                Signature = multiSignature.Get(signature.GetAggregationHashChains()[0].InputHash)
+            };
+
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
         }
 
         /// <summary>

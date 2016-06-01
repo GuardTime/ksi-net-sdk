@@ -99,7 +99,7 @@ namespace Guardtime.KSI.Signature
                         break;
                     case (uint)LinkDirection.Left:
                     case (uint)LinkDirection.Right:
-                        Link linkTag = new Link(childTag, (LinkDirection)childTag.Type);
+                        Link linkTag = childTag as Link ?? new Link(childTag, (LinkDirection)childTag.Type);
                         _links.Add(linkTag);
                         this[i] = linkTag;
                         break;

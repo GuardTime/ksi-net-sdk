@@ -43,7 +43,7 @@ namespace Guardtime.KSI.Signature
             private readonly string _legacyIdString;
 
             /// <summary>
-            /// Create new aggregation hash chain link TLV elment.
+            /// Create new aggregation hash chain link TLV element.
             /// </summary>
             /// <param name="direction">Direction</param>
             /// <param name="siblingHash">Sibling hash value</param>
@@ -55,7 +55,7 @@ namespace Guardtime.KSI.Signature
             }
 
             /// <summary>
-            /// Create new aggregation hash chain link TLV elment from TLV element.
+            /// Create new aggregation hash chain link TLV element from TLV element.
             /// </summary>
             /// <param name="tag">TLV element</param>
             /// <param name="direction">Direction</param>
@@ -86,7 +86,7 @@ namespace Guardtime.KSI.Signature
                             legacyIdCount++;
                             break;
                         case Constants.AggregationHashChain.Metadata.TagType:
-                            this[i] = _metadata = new Metadata(childTag);
+                            this[i] = _metadata = childTag as Metadata ?? new Metadata(childTag);
                             metadataCount++;
                             break;
                         default:

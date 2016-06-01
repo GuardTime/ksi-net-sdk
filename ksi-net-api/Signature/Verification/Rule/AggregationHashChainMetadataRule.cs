@@ -46,20 +46,20 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                         continue;
                     }
 
-                    RawTag paddingTag = link.Metadata.Padding;
+                    AggregationHashChain.Metadata.PaddingTag paddingTag = link.Metadata.Padding;
 
                     if (paddingTag != null)
                     {
                         bool isValid = true;
                         string message = null;
 
-                        if (link.Metadata.PaddingTagIndex != 0)
+                        if (paddingTag.Index != 0)
                         {
                             isValid = false;
                             message = "Padding is not the first element.";
                         }
 
-                        if (isValid && link.Metadata.Padding.IsReadAsTlv16 != false)
+                        if (isValid && paddingTag.IsReadAsTlv16 != false)
                         {
                             isValid = false;
                             message = "Padding is not tlv8.";
@@ -71,7 +71,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                             message = "Non-critical and forward flags must be set.";
                         }
 
-                        if (isValid && !Util.IsArrayEqual(paddingTag.Value, new byte[] { 0x1 }) && !Util.IsArrayEqual(paddingTag.Value, new byte[] { 0x1, 0x1 }))
+                        if (isValid && !paddingTag.HasKnownValue())
                         {
                             isValid = false;
                             message = "Unknown padding value.";

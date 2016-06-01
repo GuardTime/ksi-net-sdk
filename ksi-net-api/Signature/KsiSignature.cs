@@ -61,7 +61,7 @@ namespace Guardtime.KSI.Signature
                 switch (childTag.Type)
                 {
                     case Constants.AggregationHashChain.TagType:
-                        AggregationHashChain aggregationChainTag = new AggregationHashChain(childTag);
+                        AggregationHashChain aggregationChainTag = childTag as AggregationHashChain ?? new AggregationHashChain(childTag);
                         _aggregationHashChains.Add(aggregationChainTag);
                         this[i] = aggregationChainTag;
                         break;

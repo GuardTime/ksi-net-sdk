@@ -228,7 +228,7 @@ namespace Guardtime.KSI.Signature.MultiSignature
                     Array.Copy(key2.ChainIndex, tmp, tmp.Length);
 
                     // if exists chain index that contains current chain index then it is not the first level chain
-                    if (key.ChainIndex == tmp)
+                    if (Util.IsArrayEqual(key.ChainIndex, tmp))
                     {
                         isFirst = false;
                         break;

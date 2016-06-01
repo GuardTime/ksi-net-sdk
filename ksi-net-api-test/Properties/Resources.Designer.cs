@@ -1124,6 +1124,24 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/multi-signature/ksi-multi-signature-padding-ok.tlv.
+        /// </summary>
+        internal static string MultiSignatureWithMetadataPadding_Ok {
+            get {
+                return ResourceManager.GetString("MultiSignatureWithMetadataPadding_Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/multi-signature/ksi-multi-signature-padding-tlv16-invalid.tlv.
+        /// </summary>
+        internal static string MultiSignatureWithMetadataPaddingTlv16_Invalid {
+            get {
+                return ResourceManager.GetString("MultiSignatureWithMetadataPaddingTlv16_Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/rfc3161-record/rfc3161-record-invalid-extra-tag.tlv.
         /// </summary>
         internal static string Rfc3161Record_Invalid_Extra_Tag {
