@@ -143,8 +143,6 @@ namespace Guardtime.KSI
             {
                 case HashAlgorithm.AlgorithmStatus.NotImplemented:
                     throw new HashingException("Hash algorithm is not implemented. Algorithm: " + algorithm.Name);
-                case HashAlgorithm.AlgorithmStatus.Invalid:
-                    throw new HashingException("Invalid hash algorithm. Id: " + algorithm.Id);
             }
         }
     }

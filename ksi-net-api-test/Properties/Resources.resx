@@ -480,4 +480,43 @@
   <data name="KsiSignatureDo_Invalid_Hash_Algorithm" xml:space="preserve">
     <value>resources/signature/ksi-signature-do/ksi-signature-invalid-hash-algorithm.tlv</value>
   </data>
+  <data name="AggregationHashChainMetadataInvalidPaddingFail" xml:space="preserve">
+    <value>resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataInvalidPaddingFail.ksig</value>
+  </data>
+  <data name="AggregationHashChainMetadataPaddingNotFirstFail" xml:space="preserve">
+    <value>resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataPaddingNotFirstFail.ksig</value>
+  </data>
+  <data name="AggregationHashChainMetadataPaddingNotForwardFail" xml:space="preserve">
+    <value>resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataPaddingNotForwardFail.ksig</value>
+  </data>
+  <data name="AggregationHashChainMetadataPaddingNotForwardNotNonCriticalFail" xml:space="preserve">
+    <value>resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataPaddingNotForwardNotNonCriticalFail.ksig</value>
+  </data>
+  <data name="AggregationHashChainMetadataPaddingNotNonCriticalFail" xml:space="preserve">
+    <value>resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataPaddingNotNonCriticalFail.ksig</value>
+  </data>
+  <data name="AggregationHashChainMetadataPaddingNotTlv8Fail" xml:space="preserve">
+    <value>resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataPaddingNotTlv8Fail.ksig</value>
+  </data>
+  <data name="AggregationHashChainMetadataUnknownPaddingValue1Fail" xml:space="preserve">
+    <value>resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataUnknownPaddingValue1Fail.ksig</value>
+  </data>
+  <data name="AggregationHashChainMetadataUnknownPaddingValue2Fail" xml:space="preserve">
+    <value>resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataUnknownPaddingValue2Fail.ksig</value>
+  </data>
+  <data name="AggregationHashChainMetadataUnknownPaddingValue3Fail" xml:space="preserve">
+    <value>resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataUnknownPaddingValue3Fail.ksig</value>
+  </data>
+  <data name="AggregationHashChainMetadataWithoutPadding" xml:space="preserve">
+    <value>resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataWithoutPadding.ksig</value>
+  </data>
+  <data name="AggregationHashChainMetadataWithoutPaddingFail" xml:space="preserve">
+    <value>resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataWithoutPaddingFail.ksig</value>
+  </data>
+  <data name="AggregationHashChainMetadataWithPadding1" xml:space="preserve">
+    <value>resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataWithPadding1.ksig</value>
+  </data>
+  <data name="AggregationHashChainMetadataWithPadding2" xml:space="preserve">
+    <value>resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataWithPadding2.ksig</value>
+  </data>
 </root>

@@ -18,6 +18,7 @@
  */
 
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
@@ -29,7 +30,7 @@ namespace Guardtime.KSI.Signature
     /// <summary>
     ///     Aggregation hash chain TLV element.
     /// </summary>
-    public sealed class AggregationHashChain : CompositeTag
+    public sealed partial class AggregationHashChain : CompositeTag
     {
         private readonly IntegerTag _aggrAlgorithmId;
         private readonly IntegerTag _aggregationTime;
@@ -133,6 +134,15 @@ namespace Guardtime.KSI.Signature
         ///     Get aggregation time.
         /// </summary>
         public ulong AggregationTime => _aggregationTime.Value;
+
+        /// <summary>
+        /// Get aggregation chain links
+        /// </summary>
+        /// <returns></returns>
+        public ReadOnlyCollection<Link> GetChainLinks()
+        {
+            return _chain.AsReadOnly();
+        }
 
         /// <summary>
         ///     Get input data bytes if input data exists otherwise null.
@@ -248,218 +258,6 @@ namespace Guardtime.KSI.Signature
             hasher.AddData(hashB);
             hasher.AddData(Util.EncodeUnsignedLong(level));
             return hasher.GetHash();
-        }
-
-        /// <summary>
-        ///     Aggregation hash chain link.
-        /// </summary>
-        private class Link : CompositeTag
-        {
-            private const byte LegacyIdFirstOctet = 0x3;
-            private const byte LegacyIdLength = 29;
-
-            private readonly IntegerTag _levelCorrection;
-            private readonly MetaData _metaData;
-            private readonly ImprintTag _siblingHash;
-            private readonly RawTag _legacyId;
-            private readonly string _legacyIdString;
-
-            public Link(ITlvTag tag, LinkDirection direction) : base(tag)
-            {
-                int levelCorrectionCount = 0;
-                int siblingHashCount = 0;
-                int legacyIdCount = 0;
-                int metaDataCount = 0;
-
-                for (int i = 0; i < Count; i++)
-                {
-                    ITlvTag childTag = this[i];
-
-                    switch (childTag.Type)
-                    {
-                        case Constants.AggregationHashChain.Link.LevelCorrectionTagType:
-                            this[i] = _levelCorrection = new IntegerTag(childTag);
-                            levelCorrectionCount++;
-                            break;
-                        case Constants.AggregationHashChain.Link.SiblingHashTagType:
-                            this[i] = _siblingHash = new ImprintTag(childTag);
-                            siblingHashCount++;
-                            break;
-                        case Constants.AggregationHashChain.Link.LegacyId:
-                            this[i] = _legacyId = new RawTag(childTag);
-                            _legacyIdString = GetLegacyIdString(_legacyId.Value);
-                            legacyIdCount++;
-                            break;
-                        case Constants.AggregationHashChain.MetaData.TagType:
-                            this[i] = _metaData = new MetaData(childTag);
-                            metaDataCount++;
-                            break;
-                        default:
-                            VerifyUnknownTag(childTag);
-                            break;
-                    }
-                }
-
-                if (levelCorrectionCount > 1)
-                {
-                    throw new TlvException("Only one levelcorrection value is allowed in aggregation hash chain link.");
-                }
-
-                if (!Util.IsOneValueEqualTo(1, siblingHashCount, legacyIdCount, metaDataCount))
-                {
-                    throw new TlvException("Exactly one of three from sibling hash, legacy id or metadata must exist in aggregation hash chain link.");
-                }
-
-                Direction = direction;
-            }
-
-            /// <summary>
-            ///     Get level correction
-            /// </summary>
-            public ulong LevelCorrection => _levelCorrection?.Value ?? 0UL;
-
-            /// <summary>
-            ///     Get direction
-            /// </summary>
-            public LinkDirection Direction { get; }
-
-            /// <summary>
-            /// Get link identity
-            /// </summary>
-            /// <returns></returns>
-            public string GetIdentity()
-            {
-                if (_legacyId != null)
-                {
-                    return _legacyIdString;
-                }
-
-                return _metaData != null ? _metaData.ClientId : "";
-            }
-
-            private static string GetLegacyIdString(byte[] bytes)
-            {
-                if (bytes[0] != LegacyIdFirstOctet)
-                {
-                    throw new TlvException("Invalid first octet in legacy id tag: " + bytes[0]);
-                }
-
-                if (bytes[1] != 0x0)
-                {
-                    throw new TlvException("Invalid second octet in legacy id tag: " + bytes[0]);
-                }
-
-                if (bytes.Length != LegacyIdLength)
-                {
-                    throw new TlvException("Invalid legacy id tag length. Length: " + bytes.Length);
-                }
-
-                int idStringLength = bytes[2];
-
-                if (bytes.Length < 4 + idStringLength)
-                {
-                    throw new TlvException("Invalid legacy id length value: " + idStringLength);
-                }
-
-                for (int i = idStringLength + 3; i < bytes.Length; i++)
-                {
-                    if (bytes[i] != 0x0)
-                    {
-                        throw new TlvException("Invalid padding octet. Index: " + i);
-                    }
-                }
-
-                return new UTF8Encoding(false, true).GetString(bytes, 3, idStringLength);
-            }
-
-            /// <summary>
-            ///     Get data byte array
-            /// </summary>
-            public byte[] GetSiblingData()
-            {
-                if (_siblingHash != null)
-                {
-                    return _siblingHash.EncodeValue();
-                }
-
-                return _legacyId != null ? _legacyId.EncodeValue() : _metaData?.EncodeValue();
-            }
-        }
-
-        private class MetaData : CompositeTag
-        {
-            private readonly StringTag _clientId;
-            private readonly StringTag _machineId;
-
-            // Please do keep in mind that request time is in milliseconds!
-            private readonly IntegerTag _requestTime;
-            private readonly IntegerTag _sequenceNumber;
-
-            public MetaData(ITlvTag tag) : base(tag)
-            {
-                if (Type != Constants.AggregationHashChain.MetaData.TagType)
-                {
-                    throw new TlvException("Invalid aggregation hash chain link metadata type(" + Type + ").");
-                }
-
-                int clientIdCount = 0;
-                int machineIdCount = 0;
-                int sequenceNumberCount = 0;
-                int requestTimeCount = 0;
-
-                for (int i = 0; i < Count; i++)
-                {
-                    ITlvTag childTag = this[i];
-
-                    switch (childTag.Type)
-                    {
-                        case Constants.AggregationHashChain.MetaData.ClientIdTagType:
-                            this[i] = _clientId = new StringTag(childTag);
-                            clientIdCount++;
-                            break;
-                        case Constants.AggregationHashChain.MetaData.MachineIdTagType:
-                            this[i] = _machineId = new StringTag(childTag);
-                            machineIdCount++;
-                            break;
-                        case Constants.AggregationHashChain.MetaData.SequenceNumberTagType:
-                            this[i] = _sequenceNumber = new IntegerTag(childTag);
-                            sequenceNumberCount++;
-                            break;
-                        case Constants.AggregationHashChain.MetaData.RequestTimeTagType:
-                            this[i] = _requestTime = new IntegerTag(childTag);
-                            requestTimeCount++;
-                            break;
-                        default:
-                            VerifyUnknownTag(childTag);
-                            break;
-                    }
-                }
-
-                if (clientIdCount != 1)
-                {
-                    throw new TlvException("Exactly one client id must exist in aggregation hash chain link metadata.");
-                }
-
-                if (machineIdCount > 1)
-                {
-                    throw new TlvException("Only one machine id is allowed in aggregation hash chain link metadata.");
-                }
-
-                if (sequenceNumberCount > 1)
-                {
-                    throw new TlvException("Only one sequence number is allowed in aggregation hash chain link metadata.");
-                }
-
-                if (requestTimeCount > 1)
-                {
-                    throw new TlvException("Only one request time is allowed in aggregation hash chain link metadata.");
-                }
-            }
-
-            public string ClientId => _clientId.Value;
-            public string MachineId => _machineId.Value;
-            public ulong RequestTime => _requestTime.Value;
-            public ulong SequenceNumber => _sequenceNumber.Value;
         }
 
         /// <summary>

@@ -20,6 +20,7 @@
 using System;
 using System.Text;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Utils
 {
@@ -352,7 +353,9 @@ namespace Guardtime.KSI.Utils
                 }
 
                 int variableLength = (headerBytes[2] << Constants.BitsInByte) | headerBytes[3];
-                return (ushort)(variableLength + 4);
+
+                // first 2 bytes + 2 length bytes + data bytes
+                return (ushort)(4 + variableLength);
             }
 
             if (headerBytes.Length < 2)
@@ -360,7 +363,38 @@ namespace Guardtime.KSI.Utils
                 throw new KsiException("It is 8-bit TLV and input array must contain at least 2 bytes. headerBytes.Length: " + headerBytes.Length);
             }
 
-            return (ushort)(headerBytes[1] + 2);
+            // first byte + length byte + data bytes
+            return (ushort)(2 + headerBytes[1]);
+        }
+
+        /// <summary>
+        ///     Write TLV object to given stream.
+        /// </summary>
+        /// <param name="tag">TLV object</param>
+        public static ushort GetTlvLength(ITlvTag tag)
+        {
+            if (tag == null)
+            {
+                throw new ArgumentNullException(nameof(tag));
+            }
+
+            byte[] data = tag.EncodeValue();
+            bool tlv16 = tag.Type > Constants.Tlv.TypeMask
+                         || (data != null && data.Length > byte.MaxValue);
+
+            if (tlv16)
+            {
+                if (data != null && data.Length > ushort.MaxValue)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(data));
+                }
+
+                // first 2 bytes + 2 length bytes + data
+                return (ushort)(4 + (data?.Length ?? 0));
+            }
+
+            // first byte + length byte + data
+            return (ushort)(2 + (data?.Length ?? 0));
         }
     }
 }

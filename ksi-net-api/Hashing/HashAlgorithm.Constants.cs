@@ -42,11 +42,6 @@ namespace Guardtime.KSI.Hashing
         public static readonly HashAlgorithm Ripemd160 = new HashAlgorithm("RIPEMD160", 0x02, 20, AlgorithmStatus.Normal);
 
         /// <summary>
-        ///     Hash Algorithm marked as "invalid"
-        /// </summary>
-        public static readonly HashAlgorithm Invalid = new HashAlgorithm("Invalid", 0x03, 0, AlgorithmStatus.Invalid);
-
-        /// <summary>
         ///     SHA2-384 Hash Algorithm
         /// </summary>
         public static readonly HashAlgorithm Sha2384 = new HashAlgorithm("SHA-384", 0x04, 48, AlgorithmStatus.Normal, new string[] { "SHA2-384" });

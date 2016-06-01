@@ -19,6 +19,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using NUnit.Framework;
 
@@ -47,6 +48,20 @@ namespace Guardtime.KSI.Test.Hashing
             Assert.AreEqual(32, algorithm.Length, "Hash algorithm length should be correct");
 
             Assert.AreEqual(HashAlgorithm.Sha2256, algorithm);
+        }
+
+        [Test]
+        public void TestAlgorithmGetByIdInvalid()
+        {
+            Assert.That(delegate
+            {
+                HashAlgorithm algorithm = HashAlgorithm.GetById(3);
+            }, Throws.TypeOf<HashingException>().With.Message.StartWith("Invalid hash algorithm"), "Id 3 should be invalid");
+
+            Assert.That(delegate
+            {
+                HashAlgorithm algorithm = HashAlgorithm.GetById(0x7E);
+            }, Throws.TypeOf<HashingException>().With.Message.StartWith("Invalid hash algorithm"), "Id 7E should be invalid");
         }
 
         [Test]

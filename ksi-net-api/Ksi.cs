@@ -24,8 +24,6 @@ using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature;
-using Guardtime.KSI.Signature.Verification;
-using Guardtime.KSI.Signature.Verification.Rule;
 
 namespace Guardtime.KSI
 {

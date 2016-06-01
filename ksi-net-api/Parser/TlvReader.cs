@@ -72,7 +72,7 @@ namespace Guardtime.KSI.Parser
                                            "), instead could only read length(" + bytesRead + ").");
                 }
 
-                return new RawTag(type, nonCritical, forward, data);
+                return new RawTag(type, nonCritical, forward, data, tlv16);
             }
             catch (EndOfStreamException e)
             {

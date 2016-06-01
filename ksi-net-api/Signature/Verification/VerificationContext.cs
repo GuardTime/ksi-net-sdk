@@ -17,7 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using System.Collections;
 using System.Collections.Generic;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
