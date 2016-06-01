@@ -1017,6 +1017,12 @@
     <None Include="resources\signature\multi-signature\infile_2015-06-22.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="resources\signature\multi-signature\ksi-multi-signature-padding-ok.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\multi-signature\ksi-multi-signature-padding-tlv16-invalid.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="resources\signature\multi-signature\ksi-multi-signature-ok.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

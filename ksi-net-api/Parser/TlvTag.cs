@@ -75,6 +75,11 @@ namespace Guardtime.KSI.Parser
         public bool Forward { get; }
 
         /// <summary>
+        /// Is TLV16 encoding forced when writing the TLV object
+        /// </summary>
+        public virtual bool ForceTlv16Encoding => false;
+
+        /// <summary>
         ///     Encode TLV object value.
         /// </summary>
         /// <returns>TLV object value as bytes</returns>

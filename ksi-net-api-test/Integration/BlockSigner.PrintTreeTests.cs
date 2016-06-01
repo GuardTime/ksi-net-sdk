@@ -115,17 +115,17 @@ namespace Guardtime.KSI.Test.Integration
             Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
             Assert.AreEqual(
                 @"                                                                                                                                                                                          
-                                                                                                                                                                                          5R:A9A0905  
+                                                                                                                                                                                          5R:48092EF  
                                                                                                   / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \        
-                                                                                          4L:B944B64                                                                                                                                                                                                  
+                                                                                          4L:F7AFBCE                                                                                                                                                                                                  
                                                   / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                                                                                               \        
-                                          3L:72B6A6B                                                                                      3R:29CBB88                                                                                      3R:4AAF227  
+                                          3L:418D6EB                                                                                      3R:318D0F3                                                                                      3R:7C8F6F0  
                           / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                                                      / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                                                      / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \        
-                  2L:CB1A52F                                      2R:1647806                                      2L:3AF8D26                                      2R:195B1D0                                      2L:7F0BD25                                                  
+                  2L:58515B2                                      2R:B0C5D9B                                      2L:B11BCD9                                      2R:A2E9319                                      2L:450CA0B                                                  
               / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                              / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                              / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                              / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                              / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                       \        
-      1L:11C3A77                                      1L:8A79D69              1R:6047EB7              1L:5D2A363                                                              1R:DF1D807              1L:86771B3                                      1R:24793A3  
+      1L:833EDDA                                      1L:DAB08DC              1R:B641272              1L:B162883                                                              1R:CA39D3D              1L:14BF310                                      1R:71974A8  
         /    \                       \                  /    \                  /    \                  /    \                       \                  /                       /    \                  /    \                       \                  /    \        
-0L:09A9FE4  0R:M:010F7              0R:BEC84E1  0L:C734EEF  0R:M:010F7  0L:B0CF0A7  0R:M:010F7  0L:BB95E9B  0R:M:010F7              0R:7943B1F  0L:23C4ADE              0L:A360BBA  0R:M:010F7  0L:0347A3E  0R:M:010F7              0R:78C6303  0L:0579A77  0R:M:010F7  
+0L:09A9FE4  0R:M:7E010              0R:BEC84E1  0L:C734EEF  0R:M:7E010  0L:B0CF0A7  0R:M:7E010  0L:BB95E9B  0R:M:7E010              0R:7943B1F  0L:23C4ADE              0L:A360BBA  0R:M:7E010  0L:0347A3E  0R:M:7E010              0R:78C6303  0L:0579A77  0R:M:7E010  
 ",
                 BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()));
         }
@@ -150,15 +150,15 @@ namespace Guardtime.KSI.Test.Integration
             Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
             Assert.AreEqual(
                 @"                                                                                          
-                                                                                          4R:E04268C  
+                                                                                          4R:8CC3714  
                                                   / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \        
-                                          3L:67656B3                                                                                                  
+                                          3L:81C9A75                                                                                                  
                           / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                                                        
-                  2L:CB1A52F                                      2R:BE13727                                                  
+                  2L:58515B2                                      2R:BE13727                                                  
               / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                              / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                       \        
-      1L:11C3A77                                                                                      1R:5D2A363  
+      1L:833EDDA                                                                                      1R:B162883  
         /    \                       \                  /                            \                  /    \        
-0L:09A9FE4  0R:M:010F7              0R:BEC84E1  0L:C734EEF                          0R:B0CF0A7  0L:BB95E9B  0R:M:010F7  
+0L:09A9FE4  0R:M:7E010              0R:BEC84E1  0L:C734EEF                          0R:B0CF0A7  0L:BB95E9B  0R:M:7E010  
 ",
                 BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()));
         }
@@ -183,15 +183,15 @@ namespace Guardtime.KSI.Test.Integration
             Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
             Assert.AreEqual(
                 @"                                                                                          
-                                                                                          4R:DFE1797  
+                                                                                          4R:8C4C794  
                                                   / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \        
-                                          3L:3D9A511                                                                                                  
+                                          3L:D7556F7                                                                                                  
                           / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                                                        
-                  2L:ACD2F4B                                      2R:1647806                                                  
+                  2L:D60EFD6                                      2R:B0C5D9B                                                  
               / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                              / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                                
-                              1R:9423D41              1L:8A79D69              1R:6047EB7                          
+                              1R:6C55357              1L:DAB08DC              1R:B641272                          
         /                       /    \                  /    \                  /    \           \        
-0L:09A9FE4              0L:BEC84E1  0R:M:010F7  0L:C734EEF  0R:M:010F7  0L:B0CF0A7  0R:M:010F7  0R:BB95E9B  
+0L:09A9FE4              0L:BEC84E1  0R:M:7E010  0L:C734EEF  0R:M:7E010  0L:B0CF0A7  0R:M:7E010  0R:BB95E9B  
 ",
                 BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()));
         }
@@ -216,15 +216,15 @@ namespace Guardtime.KSI.Test.Integration
             Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
             Assert.AreEqual(
                 @"                                                                                          
-                                                                                          4R:144393A  
+                                                                                          4R:5FD0F16  
                                                   / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \        
-                                          3L:BD80B9E                                                                                                  
+                                          3L:3007670                                                                                                  
                           / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                                                        
-                  2L:C1E4903                                      2R:1647806                                                  
+                  2L:CB29563                                      2R:B0C5D9B                                                  
               / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                              / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                       \        
-      1L:11C3A77              1R:9423D41              1L:8A79D69              1R:6047EB7              1R:5D2A363  
+      1L:833EDDA              1R:6C55357              1L:DAB08DC              1R:B641272              1R:B162883  
         /    \                  /    \                  /    \                  /    \                  /    \        
-0L:09A9FE4  0R:M:010F7  0L:BEC84E1  0R:M:010F7  0L:C734EEF  0R:M:010F7  0L:B0CF0A7  0R:M:010F7  0L:BB95E9B  0R:M:010F7  
+0L:09A9FE4  0R:M:7E010  0L:BEC84E1  0R:M:7E010  0L:C734EEF  0R:M:7E010  0L:B0CF0A7  0R:M:7E010  0L:BB95E9B  0R:M:7E010  
 ",
                 BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()));
         }
@@ -286,19 +286,19 @@ namespace Guardtime.KSI.Test.Integration
             Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
             Assert.AreEqual(
                 @"                                                                                                                                                                                                                                                                                                                                                                                          
-                                                                                                                                                                                                                                                                                                                                                                                          6R:5D3E27B  
+                                                                                                                                                                                                                                                                                                                                                                                          6R:C58E404  
                                                                                                                                                                                                   / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \        
-                                                                                                                                                                                          5L:A54F551                                                                                                                                                                                                                                                                                                                                                                                                  
+                                                                                                                                                                                          5L:C5AFE6D                                                                                                                                                                                                                                                                                                                                                                                                  
                                                                                                   / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                                                                                                                                                                                               \        
-                                                                                          4L:4DCB72B                                                                                                                                                                                      4R:7300BBF                                                                                                                                                                                      4R:818D379  
+                                                                                          4L:EA496FB                                                                                                                                                                                      4R:11F98FB                                                                                                                                                                                      4R:BFF7E21  
                                                   / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                                                                                                      / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                                                                                                      / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \        
-                                          3L:D967F1C                                                                                      3R:603F5D3                                                                                      3L:2845CD4                                                                                      3R:7FEF78B                                                                                      3L:0935AE5                                                                                                  
+                                          3L:F66D67C                                                                                      3R:29A8004                                                                                      3L:7836708                                                                                      3R:0FDAAC5                                                                                      3L:E73D2C7                                                                                                  
                           / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                                                      / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                                                      / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                                                      / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                                                      / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                                               \        
-                  2L:921B9E3                                      2R:7CC3C81                                      2L:1D2BB60                                      2R:CCE2926                                      2L:3320B34                                      2R:722B85B                                      2L:67C14BD                                      2R:E3080B2                                      2L:3D13A05                                      2R:409B67E                                      2R:CFDA2A8  
+                  2L:A8CE49A                                      2R:C907E14                                      2L:6B7C978                                      2R:173C33F                                      2L:D537A91                                      2R:850A763                                      2L:2EF2402                                      2R:E3080B2                                      2L:1DB30F2                                      2R:C608215                                      2R:CA4EE44  
               / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                              / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                              / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                              / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                              / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                              / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                              / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                              / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                              / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                              / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                              / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \        
-                              1R:11C3A77                                                                                      1R:8A79D69                                      1R:6047EB7                                      1R:5D2A363                                      1R:270830B                                                                                                                                      1R:86771B3                                      1R:B9C5CE6                                      1R:24793A3  
+                              1R:833EDDA                                                                                      1R:DAB08DC                                      1R:B641272                                      1R:B162883                                      1R:5219A57                                                                                                                                      1R:14BF310                                      1R:6FE689E                                      1R:71974A8  
         /                       /    \                  /                            \                  /                       /    \                  /                       /    \                  /                       /    \                  /                       /    \                  /                            \                  /                            \                  /                       /    \                  /                       /    \                  /                       /    \        
-0L:4526CE6              0L:09A9FE4  0R:M:010F7  0L:C59F202                          0R:BEC84E1  0L:8E7123B              0L:C734EEF  0R:M:010F7  0L:25ACB7A              0L:B0CF0A7  0R:M:010F7  0L:DE99229              0L:BB95E9B  0R:M:010F7  0L:E72CC9A              0L:7943B1F  0R:M:010F7  0L:CC36E23                          0R:23C4ADE  0L:892771A                          0R:A360BBA  0L:FDE71A5              0L:0347A3E  0R:M:010F7  0L:3956D10              0L:78C6303  0R:M:010F7  0L:DA3F756              0L:0579A77  0R:M:010F7  
+0L:4526CE6              0L:09A9FE4  0R:M:7E010  0L:CCBE4C3                          0R:BEC84E1  0L:8E7123B              0L:C734EEF  0R:M:7E010  0L:0518C1E              0L:B0CF0A7  0R:M:7E010  0L:C0249D2              0L:BB95E9B  0R:M:7E010  0L:0341422              0L:7943B1F  0R:M:7E010  0L:139480D                          0R:23C4ADE  0L:892771A                          0R:A360BBA  0L:FDE71A5              0L:0347A3E  0R:M:7E010  0L:748BC6B              0L:78C6303  0R:M:7E010  0L:DA0101F              0L:0579A77  0R:M:7E010  
 ",
                 BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()));
         }
@@ -323,17 +323,17 @@ namespace Guardtime.KSI.Test.Integration
             Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
             Assert.AreEqual(
                 @"                                                                                                                                                                                          
-                                                                                                                                                                                          5R:1BBDB18  
+                                                                                                                                                                                          5R:3D70E30  
                                                                                                   / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \        
-                                                                                          4L:0CF8522                                                                                                                                                                                                  
+                                                                                          4L:274892C                                                                                                                                                                                                  
                                                   / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                                                                                                        
-                                          3L:A7FE656                                                                                      3R:36CBF71                                                                                                  
+                                          3L:35136F9                                                                                      3R:DA14B49                                                                                                  
                           / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                                                      / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                                               \        
-                  2L:921B9E3                                      2R:5B555C9                                      2L:CBB3F93                                      2R:CCE2926                                      2R:3320B34  
+                  2L:A8CE49A                                      2R:8A85301                                      2L:097523F                                      2R:173C33F                                      2R:D537A91  
               / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                              / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                              / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                              / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                              / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \        
-                              1R:11C3A77                                      1R:9423D41                                      1R:8A79D69                                      1R:6047EB7                                      1R:5D2A363  
+                              1R:833EDDA                                      1R:6C55357                                      1R:DAB08DC                                      1R:B641272                                      1R:B162883  
         /                       /    \                  /                       /    \                  /                       /    \                  /                       /    \                  /                       /    \        
-0L:4526CE6              0L:09A9FE4  0R:M:010F7  0L:C59F202              0L:BEC84E1  0R:M:010F7  0L:1CB3590              0L:C734EEF  0R:M:010F7  0L:25ACB7A              0L:B0CF0A7  0R:M:010F7  0L:DE99229              0L:BB95E9B  0R:M:010F7  
+0L:4526CE6              0L:09A9FE4  0R:M:7E010  0L:CCBE4C3              0L:BEC84E1  0R:M:7E010  0L:E8C8085              0L:C734EEF  0R:M:7E010  0L:0518C1E              0L:B0CF0A7  0R:M:7E010  0L:C0249D2              0L:BB95E9B  0R:M:7E010  
 ",
                 BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()));
         }
@@ -391,17 +391,17 @@ namespace Guardtime.KSI.Test.Integration
             Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
             Assert.AreEqual(
                 @"                                                                                                                                                                                          
-                                                                                                                                                                                          5R:3F88237  
+                                                                                                                                                                                          5R:61E307C  
                                                                                                   / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \        
-                                                                                          4L:FF9B710                                                                                                                                                                                                  
+                                                                                          4L:A69F87C                                                                                                                                                                                                  
                                                   / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                                                                                                        
-                                          3L:D967F1C                                                                                      3R:0CADD33                                                                                                  
+                                          3L:F66D67C                                                                                      3R:D2F0485                                                                                                  
                           / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                                                      / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                                               \        
-                  2L:921B9E3                                      2R:7CC3C81                                      2L:8248411                                      2R:B409DB6                                      2R:3320B34  
+                  2L:A8CE49A                                      2R:C907E14                                      2L:8248411                                      2R:55AA865                                      2R:D537A91  
               / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                              / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                              / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                              / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                              / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \        
-                              1R:11C3A77                                                                                                                                      1R:6047EB7                                      1R:5D2A363  
+                              1R:833EDDA                                                                                                                                      1R:B641272                                      1R:B162883  
         /                       /    \                  /                            \                  /                            \                  /                       /    \                  /                       /    \        
-0L:4526CE6              0L:09A9FE4  0R:M:010F7  0L:C59F202                          0R:BEC84E1  0L:8E7123B                          0R:C734EEF  0L:7637A80              0L:B0CF0A7  0R:M:010F7  0L:DE99229              0L:BB95E9B  0R:M:010F7  
+0L:4526CE6              0L:09A9FE4  0R:M:7E010  0L:CCBE4C3                          0R:BEC84E1  0L:8E7123B                          0R:C734EEF  0L:7637A80              0L:B0CF0A7  0R:M:7E010  0L:C0249D2              0L:BB95E9B  0R:M:7E010  
 ",
                 BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()));
         }
@@ -426,17 +426,17 @@ namespace Guardtime.KSI.Test.Integration
             Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
             Assert.AreEqual(
                 @"                                                                                                                                                                                          
-                                                                                                                                                                                          5R:655AA77  
+                                                                                                                                                                                          5R:1DD1AB5  
                                                                                                   / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \        
-                                                                                          4L:39555AC                                                                                                                                                                                                  
+                                                                                          4L:70DE5FD                                                                                                                                                                                                  
                                                   / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                                                                                                        
-                                          3L:68F6464                                                                                      3R:36CBF71                                                                                                  
+                                          3L:5A5CCC6                                                                                      3R:DA14B49                                                                                                  
                           / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                                                      / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                                               \        
-                  2L:494220A                                      2R:A60A73B                                      2L:CBB3F93                                      2R:CCE2926                                      2R:4949765  
+                  2L:494220A                                      2R:F42B3E7                                      2L:097523F                                      2R:173C33F                                      2R:97068A3  
               / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                              / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                              / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                              / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                              / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \        
-                                                                              1R:9423D41                                      1R:8A79D69                                      1R:6047EB7                                                  
+                                                                              1R:6C55357                                      1R:DAB08DC                                      1R:B641272                                                  
         /                            \                  /                       /    \                  /                       /    \                  /                       /    \                  /                \        
-0L:4526CE6                          0R:09A9FE4  0L:18EF136              0L:BEC84E1  0R:M:010F7  0L:1CB3590              0L:C734EEF  0R:M:010F7  0L:25ACB7A              0L:B0CF0A7  0R:M:010F7  0L:DE99229              0R:BB95E9B  
+0L:4526CE6                          0R:09A9FE4  0L:18EF136              0L:BEC84E1  0R:M:7E010  0L:E8C8085              0L:C734EEF  0R:M:7E010  0L:0518C1E              0L:B0CF0A7  0R:M:7E010  0L:C0249D2              0R:BB95E9B  
 ",
                 BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()));
         }
@@ -458,7 +458,7 @@ namespace Guardtime.KSI.Test.Integration
             blockSigner.AddDocument(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")), metadata);
             blockSigner.AddDocument(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")));
 
-            Assert.AreEqual("5R:655AA77415635EBCC2F9DE21AEDED0191C18D9EC6955CB4FE0DB9B3C68864E65", blockSigner.GetRootNode().ToString(), "Invalid root node");
+            Assert.AreEqual("5R:1DD1AB5A8AB48055A0DBA5EF4209A8A0DA48A4A74CE64AA75929364235517ABC", blockSigner.GetRootNode().ToString(), "Invalid root node");
         }
 
         /// <summary>

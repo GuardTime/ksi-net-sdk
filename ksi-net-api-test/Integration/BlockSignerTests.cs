@@ -553,6 +553,12 @@ namespace Guardtime.KSI.Test.Integration
                 PublicationsFile = ksi.GetPublicationsFile()
             };
 
+            AggregationHashChain.Link firstChainLink = signature.GetAggregationHashChains()[0].GetChainLinks()[0];
+            if (firstChainLink.Metadata != null && firstChainLink.Metadata.Padding == null)
+            {
+                throw new Exception("Metadata padding is missing.");
+            }
+
             KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
                 CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
