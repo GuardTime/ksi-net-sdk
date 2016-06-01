@@ -1,3 +1,8 @@
+Version 3.3
+
+2016-06-01
+
+* IMPROVEMENT: Verify the existence and correctness of the padding in the metadata TLV when verifying the signature (KSINETAPI-68)
 
 Version 3.2
 

@@ -17,13 +17,8 @@
  * reserves and retains all trademark rights.
  */
 
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Text;
 using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
-using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Signature
 {
