@@ -173,14 +173,15 @@ namespace Guardtime.KSI.Signature
             List<ITlvTag> list = new List<ITlvTag>(new ITlvTag[]
             {
                 new IntegerTag(Constants.AggregationHashChain.AggregationTimeTagType, false, false, aggreationTime),
-                new ImprintTag(Constants.AggregationHashChain.InputHashTagType, false, false, inputHash),
-                new IntegerTag(Constants.AggregationHashChain.AggregationAlgorithmIdTagType, false, false, aggregationAlgorithmId),
             });
 
             foreach (ulong index in chainIndex)
             {
                 list.Add(new IntegerTag(Constants.AggregationHashChain.ChainIndexTagType, false, false, index));
             }
+
+            list.Add(new ImprintTag(Constants.AggregationHashChain.InputHashTagType, false, false, inputHash));
+            list.Add(new IntegerTag(Constants.AggregationHashChain.AggregationAlgorithmIdTagType, false, false, aggregationAlgorithmId));
 
             foreach (Link link in chainLinks)
             {
