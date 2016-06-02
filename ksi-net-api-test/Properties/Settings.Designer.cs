@@ -25,60 +25,6 @@ namespace Guardtime.KSI.Test.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://ksigw.test.guardtime.com:3333/gt-signingservice")]
-        public string HttpSigningServiceUrl {
-            get {
-                return ((string)(this["HttpSigningServiceUrl"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("anon")]
-        public string HttpSigningServiceUser {
-            get {
-                return ((string)(this["HttpSigningServiceUser"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("anon")]
-        public string HttpSigningServicePass {
-            get {
-                return ((string)(this["HttpSigningServicePass"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://ksigw.test.guardtime.com:8010/gt-extendingservice")]
-        public string HttpExtendingServiceUrl {
-            get {
-                return ((string)(this["HttpExtendingServiceUrl"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("anon")]
-        public string HttpExtendingServiceUser {
-            get {
-                return ((string)(this["HttpExtendingServiceUser"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("anon")]
-        public string HttpExtendingServicePass {
-            get {
-                return ((string)(this["HttpExtendingServicePass"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("http://verify.guardtime.com/ksi-publications.bin")]
         public string HttpPublicationsFileUrl {
             get {
@@ -88,7 +34,61 @@ namespace Guardtime.KSI.Test.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("ksigw.test.guardtime.com")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://signing.service.url")]
+        public string HttpSigningServiceUrl {
+            get {
+                return ((string)(this["HttpSigningServiceUrl"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("user")]
+        public string HttpSigningServiceUser {
+            get {
+                return ((string)(this["HttpSigningServiceUser"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("pass")]
+        public string HttpSigningServicePass {
+            get {
+                return ((string)(this["HttpSigningServicePass"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://extending.service.url")]
+        public string HttpExtendingServiceUrl {
+            get {
+                return ((string)(this["HttpExtendingServiceUrl"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("user")]
+        public string HttpExtendingServiceUser {
+            get {
+                return ((string)(this["HttpExtendingServiceUser"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("pass")]
+        public string HttpExtendingServicePass {
+            get {
+                return ((string)(this["HttpExtendingServicePass"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("signing.service.url")]
         public string TcpSigningServiceUrl {
             get {
                 return ((string)(this["TcpSigningServiceUrl"]));
@@ -97,7 +97,7 @@ namespace Guardtime.KSI.Test.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("3332")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1234")]
         public int TcpSigningServicePort {
             get {
                 return ((int)(this["TcpSigningServicePort"]));

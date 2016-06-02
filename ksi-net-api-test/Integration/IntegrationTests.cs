@@ -36,17 +36,14 @@ namespace Guardtime.KSI.Test.Integration
         private static readonly HttpKsiServiceProtocol HttpKsiServiceProtocol =
             new HttpKsiServiceProtocol(Settings.Default.HttpSigningServiceUrl, Settings.Default.HttpExtendingServiceUrl, Settings.Default.HttpPublicationsFileUrl, 100000);
 
-        //private static readonly HttpKsiServiceProtocol HttpKsiServiceProtocol =
-        //    new HttpKsiServiceProtocol(Settings.Default.HttpSigningServiceUrl, Settings.Default.HttpExtendingServiceUrl, Settings.Default.HttpPublicationsFileUrl, 100000, "http://127.0.0.1:8888", new NetworkCredential("1", "1"));
-
         private static readonly HttpKsiServiceProtocol HttpKsiServiceProtocolInvalidUrls =
-            new HttpKsiServiceProtocol("http://ksigw.test.QWERTYguardtime.com:3333/gt-signingservice", "http://ksigw.test.QWERTYguardtime.com:8010/gt-extendingservice",
-                "http://verify.QWERTYguardtime.com/ksi-publications.bin", 100000);
+            new HttpKsiServiceProtocol("http://invalid.signing.service.url", "http://invalid.extending.service.url",
+                "http://invalid.publications.file.url", 100000);
 
         private static readonly TcpKsiServiceProtocol TcpKsiServiceProtocol = new TcpKsiServiceProtocol(Settings.Default.TcpSigningServiceUrl,
             Settings.Default.TcpSigningServicePort, 100000);
 
-        private static readonly TcpKsiServiceProtocol TcpKsiServiceProtocolInvalidUrl = new TcpKsiServiceProtocol("ksigw.test.QWERTYguardtime.com",
+        private static readonly TcpKsiServiceProtocol TcpKsiServiceProtocolInvalidUrl = new TcpKsiServiceProtocol("tcp.invalid.service.url",
             Settings.Default.TcpSigningServicePort, 100000);
 
         private static readonly TcpKsiServiceProtocol TcpKsiServiceProtocolInvalidPort = new TcpKsiServiceProtocol(Settings.Default.TcpSigningServiceUrl, 2847, 100000);
