@@ -361,20 +361,7 @@ namespace Guardtime.KSI.Signature
             /// <returns>0 if equal, 1 if bigger, -1 if smaller</returns>
             public int Compare(AggregationHashChain x, AggregationHashChain y)
             {
-                for (int i = 0; i < x._chainIndex.Count; i++)
-                {
-                    if (i >= y._chainIndex.Count)
-                    {
-                        return -1;
-                    }
-
-                    if (x._chainIndex[i].Value != y._chainIndex[i].Value)
-                    {
-                        throw new KsiException("Chain index mismatch.");
-                    }
-                }
-
-                return x._chainIndex.Count == y._chainIndex.Count ? 0 : 1;
+                return y._chainIndex.Count.CompareTo(x._chainIndex.Count);
             }
         }
     }

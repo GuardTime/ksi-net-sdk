@@ -117,7 +117,44 @@ namespace Guardtime.KSI.Signature
                 throw new TlvException("Only one RFC 3161 record is allowed in KSI signature.");
             }
 
+            SortAggregationHashChains();
+        }
+
+        private void SortAggregationHashChains()
+        {
             _aggregationHashChains.Sort(new AggregationHashChain.ChainIndexOrdering());
+
+            for (int i = 0; i < _aggregationHashChains.Count - 1; i++)
+            {
+                ulong[] chainIndex1 = _aggregationHashChains[i].GetChainIndex();
+
+                for (int j = i + 1; j < _aggregationHashChains.Count; j++)
+                {
+                    ulong[] chainIndex2 = _aggregationHashChains[j].GetChainIndex();
+                    CompareAggregationHashChainIndexes(chainIndex1, chainIndex2);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Compare if longer index contains the shorter one
+        /// </summary>
+        /// <param name="chainIndex1"></param>
+        /// <param name="chainIndex2"></param>
+        private static void CompareAggregationHashChainIndexes(ulong[] chainIndex1, ulong[] chainIndex2)
+        {
+            for (int i = 0; i < chainIndex1.Length; i++)
+            {
+                if (i >= chainIndex2.Length)
+                {
+                    break;
+                }
+
+                if (chainIndex1[i] != chainIndex2[i])
+                {
+                    throw new TlvException("Chain index mismatch.");
+                }
+            }
         }
 
         /// <summary>
