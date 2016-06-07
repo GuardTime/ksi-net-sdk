@@ -124,33 +124,38 @@ namespace Guardtime.KSI.Signature
         {
             _aggregationHashChains.Sort(new AggregationHashChain.ChainIndexOrdering());
 
-            for (int i = 0; i < _aggregationHashChains.Count - 1; i++)
+            if (_aggregationHashChains.Count < 2)
             {
-                ulong[] chainIndex1 = _aggregationHashChains[i].GetChainIndex();
+                return;
+            }
 
-                for (int j = i + 1; j < _aggregationHashChains.Count; j++)
-                {
-                    ulong[] chainIndex2 = _aggregationHashChains[j].GetChainIndex();
-                    CompareAggregationHashChainIndexes(chainIndex1, chainIndex2);
-                }
+            ulong[] parentIndex = _aggregationHashChains[0].GetChainIndex();
+            ulong[] childIndex = _aggregationHashChains[1].GetChainIndex();
+            CheckAggregationHashChainIndexes(parentIndex, childIndex);
+
+            for (int i = 2; i < _aggregationHashChains.Count; i++)
+            {
+                parentIndex = childIndex;
+                childIndex = _aggregationHashChains[i].GetChainIndex();
+                CheckAggregationHashChainIndexes(parentIndex, childIndex);
             }
         }
 
         /// <summary>
-        /// Compare if longer index contains the shorter one
+        /// Checks if parent index contains the child index.
         /// </summary>
-        /// <param name="chainIndex1"></param>
-        /// <param name="chainIndex2"></param>
-        private static void CompareAggregationHashChainIndexes(ulong[] chainIndex1, ulong[] chainIndex2)
+        /// <param name="parentIndex">Parent index</param>
+        /// <param name="childIndex">Child index</param>
+        private static void CheckAggregationHashChainIndexes(ulong[] parentIndex, ulong[] childIndex)
         {
-            for (int i = 0; i < chainIndex1.Length; i++)
+            for (int i = 0; i < parentIndex.Length; i++)
             {
-                if (i >= chainIndex2.Length)
+                if (i >= childIndex.Length)
                 {
                     break;
                 }
 
-                if (chainIndex1[i] != chainIndex2[i])
+                if (parentIndex[i] != childIndex[i])
                 {
                     throw new TlvException("Chain index mismatch.");
                 }
