@@ -349,7 +349,7 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
-        ///     Aggregation hash chain chain index ordering.
+        ///     Aggregation hash chain chain index ordering. Orders by chain index length descending.
         /// </summary>
         internal class ChainIndexOrdering : IComparer<AggregationHashChain>
         {
@@ -358,23 +358,10 @@ namespace Guardtime.KSI.Signature
             /// </summary>
             /// <param name="x">aggregation hash chain</param>
             /// <param name="y">aggregation hash chain</param>
-            /// <returns>0 if equal, 1 if bigger, -1 if smaller</returns>
+            /// <returns>0 if equal, 1 if x is shorter, -1 if y is shorter</returns>
             public int Compare(AggregationHashChain x, AggregationHashChain y)
             {
-                for (int i = 0; i < x._chainIndex.Count; i++)
-                {
-                    if (i >= y._chainIndex.Count)
-                    {
-                        return -1;
-                    }
-
-                    if (x._chainIndex[i].Value != y._chainIndex[i].Value)
-                    {
-                        throw new KsiException("Chain index mismatch.");
-                    }
-                }
-
-                return x._chainIndex.Count == y._chainIndex.Count ? 0 : 1;
+                return y._chainIndex.Count.CompareTo(x._chainIndex.Count);
             }
         }
     }

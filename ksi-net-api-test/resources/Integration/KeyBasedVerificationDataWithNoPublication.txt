@@ -129,9 +129,9 @@ resources/signature/integration-test-signatures/ok-sig-2014-06-2-extended-no-pub
 #
 # Chain index errors
 #
-resources/signature/integration-test-signatures/NewSignature-AggrHashCore-NoChainIndex.ksig;true;Fail;KsiException;Chain index mismatch; 
-resources/signature/integration-test-signatures/NewSignature-AggrHashCore-WrongChainIndex.ksig;true;Fail;KsiException;Chain index mismatch; 
-resources/signature/integration-test-signatures/NewSignature-AggrHashGW-WrongChainID2.ksig;true;Fail;KsiException;Chain index mismatch; 
+resources/signature/integration-test-signatures/NewSignature-AggrHashCore-NoChainIndex.ksig;true;Fail;TlvException;Chain index mismatch; 
+resources/signature/integration-test-signatures/NewSignature-AggrHashCore-WrongChainIndex.ksig;true;Fail;TlvException;Chain index mismatch; 
+resources/signature/integration-test-signatures/NewSignature-AggrHashGW-WrongChainID2.ksig;true;Fail;TlvException;Chain index mismatch; 
 #
 # Ksi Exception
 #
