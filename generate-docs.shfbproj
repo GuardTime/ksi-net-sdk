@@ -32,7 +32,7 @@
     <PresentationStyle>VS2013</PresentationStyle>
     <Preliminary>False</Preliminary>
     <NamingMethod>Guid</NamingMethod>
-    <HelpTitle>KSI .Net API</HelpTitle>
+    <HelpTitle>KSI .NET API</HelpTitle>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
     <DocumentationSources>
       <DocumentationSource sourceFile="ksi-net-api-crypto-microsoft\bin\Debug\ksi-net-api-crypto-microsoft.dll" />

@@ -13,6 +13,7 @@ and verifying the signatures.
 ## Installation ##
 
 In your .NET project add reference to KSI .NET SDK and crypto provider to be used (You can use microsoft or bouncycastle crypto provider).
+Instead of adding references manually you can install packages "ksi-net-sdk" and "ksi-net-sdk-microsoft-crypto" using NuGet package manager.
 
 ## Usage ##
 
