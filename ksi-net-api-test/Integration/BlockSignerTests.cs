@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
@@ -103,8 +104,49 @@ namespace Guardtime.KSI.Test.Integration
 
             foreach (RawTag signature in blockSigner.GetUniSignatures())
             {
-                Verify(ksi, new KsiSignature(signature), hashes[i++]);
+                KsiSignature ksiSignature = new KsiSignature(signature);
+                VerifyChainAlgorithm(ksiSignature, HashAlgorithm.Default);
+                Verify(ksi, ksiSignature, hashes[i++]);
             }
+        }
+
+        /// <summary>
+        /// Testing getting uni-signatures of given hashes.
+        /// </summary>
+        /// <param name="ksi"></param>
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void BlockSignerGetUniSignaturesOfGivenHashesWithSha1Test(Ksi ksi)
+        {
+            BlockSigner blockSigner = new BlockSigner(ksi, HashAlgorithm.Sha1);
+            AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
+            List<DataHash> hashes = new List<DataHash>
+            {
+                new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2")),
+                new DataHash(Base16.Decode("018D982C6911831201C5CF15E937514686A2169E2AD57BA36FD92CBEBD99A67E34")),
+                new DataHash(Base16.Decode("0114F9189A45A30D856029F9537FD20C9C7342B82A2D949072AB195D95D7B32ECB"))
+            };
+
+            foreach (DataHash hash in hashes)
+            {
+                blockSigner.AddDocument(hash, metadata);
+            }
+
+            int i = 0;
+
+            foreach (RawTag signature in blockSigner.GetUniSignatures())
+            {
+                KsiSignature ksiSignature = new KsiSignature(signature);
+                VerifyChainAlgorithm(ksiSignature, HashAlgorithm.Sha1);
+                Verify(ksi, ksiSignature, hashes[i++]);
+            }
+        }
+
+        private static void VerifyChainAlgorithm(IKsiSignature ksiSignature, HashAlgorithm expecgedAloAlgorithm)
+        {
+            AggregationHashChain aggregationHashChain = ksiSignature.GetAggregationHashChains()[0];
+            IntegerTag id = aggregationHashChain.GetType().InvokeMember("_aggrAlgorithmId", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.GetField, null,
+                aggregationHashChain, null) as IntegerTag;
+            Assert.AreEqual(expecgedAloAlgorithm.Id, id.Value, "Aggregation hash chain hash algorithm should match");
         }
 
         /// <summary>
@@ -449,6 +491,46 @@ namespace Guardtime.KSI.Test.Integration
                     Assert.Fail("Signature cannot be null. Hash: " + hash);
                 }
 
+                VerifyChainAlgorithm(ksiSignature, HashAlgorithm.Default);
+                Verify(ksi, ksiSignature, hash);
+            }
+        }
+
+        /// <summary>
+        /// Testing getting multi-signature of given hashes.
+        /// </summary>
+        /// <param name="ksi"></param>
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void BlockSignerGetMultiSignatureOfGivenHashesWithBlindingMaskAndSha1Test(Ksi ksi)
+        {
+            BlockSigner blockSigner = new BlockSigner(ksi, true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 }, HashAlgorithm.Sha1);
+            AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
+
+            List<DataHash> hashes = new List<DataHash>()
+            {
+                new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2")),
+                new DataHash(Base16.Decode("018D982C6911831201C5CF15E937514686A2169E2AD57BA36FD92CBEBD99A67E34")),
+                new DataHash(Base16.Decode("0114F9189A45A30D856029F9537FD20C9C7342B82A2D949072AB195D95D7B32ECB")),
+            };
+
+            foreach (DataHash hash in hashes)
+            {
+                blockSigner.AddDocument(hash, metadata);
+            }
+
+            Console.WriteLine(DateTime.Now + ": Sign documents.");
+            KsiMultiSignature ksiMultiSignature = blockSigner.GetMultiSignature();
+            Console.WriteLine(DateTime.Now + ": Start verifying.");
+
+            foreach (DataHash hash in hashes)
+            {
+                IKsiSignature ksiSignature = ksiMultiSignature.Get(hash);
+                if (ksiSignature == null)
+                {
+                    Assert.Fail("Signature cannot be null. Hash: " + hash);
+                }
+
+                VerifyChainAlgorithm(ksiSignature, HashAlgorithm.Sha1);
                 Verify(ksi, ksiSignature, hash);
             }
         }
@@ -563,6 +645,12 @@ namespace Guardtime.KSI.Test.Integration
                 CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
             VerificationResult verificationResult = policy.Verify(verificationContext);
+            if (verificationResult.ResultCode != VerificationResultCode.Ok)
+            {
+                Console.WriteLine("Verification result code: " + verificationResult.ResultCode);
+                Console.WriteLine("Verification rule name: " + verificationResult.RuleName);
+                Console.WriteLine("Verification error: " + verificationResult.VerificationError);
+            }
             Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode, "Signature should verify with key based policy");
         }
     }

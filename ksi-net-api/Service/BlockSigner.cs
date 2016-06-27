@@ -195,8 +195,9 @@ namespace Guardtime.KSI.Service
 
                     // Take root node signature data and add aggregation hash chain.
                     byte[] signatureData = new byte[rootSignatureData.Length + stream.Length];
-                    Array.Copy(rootSignatureData, signatureData, rootSignatureData.Length);
-                    Array.Copy(stream.ToArray(), 0, signatureData, rootSignatureData.Length, stream.Length);
+
+                    Array.Copy(stream.ToArray(), signatureData, stream.Length);
+                    Array.Copy(rootSignatureData, 0, signatureData, stream.Length, rootSignatureData.Length);
 
                     // Create new signature from the signature data.
                     yield return new RawTag(Constants.KsiSignature.TagType, false, false, signatureData);
@@ -246,13 +247,12 @@ namespace Guardtime.KSI.Service
         /// <param name="node"></param>
         /// <param name="chainIndex"></param>
         /// <returns></returns>
-        private static AggregationHashChain GetAggregationHashChain(AggregationHashChain existingChain, TreeNode node, ulong[] chainIndex)
+        private AggregationHashChain GetAggregationHashChain(AggregationHashChain existingChain, TreeNode node, ulong[] chainIndex)
         {
             AggregationHashChain.Link[] chainLinks = CreateAggregationHashChainLinks(node);
             chainIndex[chainIndex.Length - 1] = AggregationHashChain.CalcLocationPointer(chainLinks);
 
-            return new AggregationHashChain(existingChain.AggregationTime, chainIndex, node.DocumentHash,
-                node.DocumentHash.Algorithm.Id, chainLinks);
+            return new AggregationHashChain(existingChain.AggregationTime, chainIndex, node.DocumentHash, _hashAlgorithm.Id, chainLinks);
         }
 
         /// <summary>
