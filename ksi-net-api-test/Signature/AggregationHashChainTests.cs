@@ -91,6 +91,24 @@ namespace Guardtime.KSI.Test.Signature
         }
 
         [Test]
+        public void AggregationHashChainLinkSequenceNumberTest()
+        {
+            AggregationHashChain.Link aggregationHashChain = new AggregationHashChain.Link(LinkDirection.Left, null,
+                new AggregationHashChain.Metadata("test client", "test machine id", 1, 2), 0);
+
+            AggregationHashChain.Metadata metadata = aggregationHashChain.Metadata;
+
+            IntegerTag sequenceNumber = metadata.GetType().InvokeMember("_sequenceNumber", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.GetField, null,
+                metadata, null) as IntegerTag;
+
+            IntegerTag requestTime = metadata.GetType().InvokeMember("_requestTime", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.GetField, null,
+                metadata, null) as IntegerTag;
+
+            Assert.AreEqual(1, sequenceNumber.Value, "Aggregation hash chain link metadata sequnece number should match");
+            Assert.AreEqual(2, requestTime.Value, "Aggregation hash chain link metadata request time should match");
+        }
+
+        [Test]
         public void TestGetLocationPointerWithMixedAggregationChains()
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_With_Mixed_Aggregation_Chains), FileMode.Open))

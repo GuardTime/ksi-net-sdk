@@ -33,8 +33,8 @@ namespace Guardtime.KSI.Signature
         {
             private readonly StringTag _clientId;
             private readonly StringTag _machineId;
-            private readonly IntegerTag _requestTime;
             private readonly IntegerTag _sequenceNumber;
+            private readonly IntegerTag _requestTime;
 
             /// <summary>
             /// Create new aggregation hash chain link metadata TLV element
@@ -51,8 +51,8 @@ namespace Guardtime.KSI.Signature
             /// <param name="machineId">Machine identifier</param>
             /// <param name="requestTime">Request time</param>
             /// <param name="sequenceNumber">Sequence number</param>
-            public Metadata(string clientId, string machineId, ulong? requestTime = null, ulong? sequenceNumber = null)
-                : this(new Metadata(BuildChildTags(clientId, machineId, requestTime, sequenceNumber)))
+            public Metadata(string clientId, string machineId, ulong? sequenceNumber = null, ulong? requestTime = null)
+                : this(new Metadata(BuildChildTags(clientId, machineId, sequenceNumber, requestTime)))
             {
             }
 
@@ -148,7 +148,7 @@ namespace Guardtime.KSI.Signature
             /// <param name="requestTime">Request time</param>
             /// <param name="sequenceNumber">Sequence number</param>
             /// <returns></returns>
-            private static ITlvTag[] BuildChildTags(string clientId, string machineId, ulong? requestTime = null, ulong? sequenceNumber = null)
+            private static ITlvTag[] BuildChildTags(string clientId, string machineId, ulong? sequenceNumber = null, ulong? requestTime = null)
             {
                 List<ITlvTag> list = new List<ITlvTag>();
 
@@ -162,14 +162,14 @@ namespace Guardtime.KSI.Signature
                     list.Add(new StringTag(Constants.AggregationHashChain.Metadata.MachineIdTagType, false, false, machineId));
                 }
 
-                if (requestTime.HasValue)
-                {
-                    list.Add(new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, requestTime.Value));
-                }
-
                 if (sequenceNumber.HasValue)
                 {
                     list.Add(new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, sequenceNumber.Value));
+                }
+
+                if (requestTime.HasValue)
+                {
+                    list.Add(new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, requestTime.Value));
                 }
 
                 ushort tagsLength = 0;
@@ -200,14 +200,14 @@ namespace Guardtime.KSI.Signature
             public string MachineId => _machineId.Value;
 
             /// <summary>
-            /// The time when the server received the request from the client (in milliseconds)
-            /// </summary>
-            public ulong RequestTime => _requestTime.Value;
-
-            /// <summary>
             /// A local sequence number of a request assigned by the machine that created the link
             /// </summary>
             public ulong SequenceNumber => _sequenceNumber.Value;
+
+            /// <summary>
+            /// The time when the server received the request from the client (in milliseconds)
+            /// </summary>
+            public ulong RequestTime => _requestTime.Value;
 
             /// <summary>
             /// Padding tag for metadata element
