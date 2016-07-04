@@ -519,4 +519,55 @@
   <data name="AggregationHashChainMetadataWithPadding2" xml:space="preserve">
     <value>resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataWithPadding2.ksig</value>
   </data>
+  <data name="KsiSignature_InputForMultiSameAggregationRound_1_Ok" xml:space="preserve">
+    <value>resources/signature/multi-signature/signature_data_1_agg_time_1437657023.tlv</value>
+  </data>
+  <data name="KsiSignature_InputForMultiSameAggregationRound_2_Ok" xml:space="preserve">
+    <value>resources/signature/multi-signature/signature_data_2_agg_time_1437657023.tlv</value>
+  </data>
+  <data name="KsiSignature_InputForMultiSameAggregationRound_3_Ok" xml:space="preserve">
+    <value>resources/signature/multi-signature/signature_data_3_agg_time_1437657023.tlv</value>
+  </data>
+  <data name="KsiSignature_InputForMulti_20150505_Ok" xml:space="preserve">
+    <value>resources/signature/multi-signature/infile_2015-05-05.tlv</value>
+  </data>
+  <data name="KsiSignature_InputForMulti_20150528_Ok" xml:space="preserve">
+    <value>resources/signature/multi-signature/infile_2015-05-28.tlv</value>
+  </data>
+  <data name="KsiSignature_InputForMulti_20150622_Ok" xml:space="preserve">
+    <value>resources/signature/multi-signature/infile_2015-06-22.tlv</value>
+  </data>
+  <data name="KsiSignature_InputForMulti_sha2_384" xml:space="preserve">
+    <value>resources/signature/multi-signature/ksi-sha2-384.tlv</value>
+  </data>
+  <data name="KsiSignature_InputForMulti_sha2_512" xml:space="preserve">
+    <value>resources/signature/multi-signature/ksi-sha2-512.tlv</value>
+  </data>
+  <data name="MultiSignatureWith5UniSignatures_Ok" xml:space="preserve">
+    <value>resources/signature/multi-signature/multi-signature-5.tlv</value>
+  </data>
+  <data name="MultiSignature_Ok" xml:space="preserve">
+    <value>resources/signature/multi-signature/ksi-multi-signature-ok.tlv</value>
+  </data>
+  <data name="KsiSignature_InputForMulti_Legacy_png_201502" xml:space="preserve">
+    <value>resources/signature/multi-signature/TestData.png.2015-02.tlv</value>
+  </data>
+  <data name="KsiSignature_InputForMulti_Legacy_png_201504" xml:space="preserve">
+    <value>resources/signature/multi-signature/TestData.png.2015-04.tlv</value>
+  </data>
+  <data name="KsiSignature_InputForMulti_Legacy_txt_201502" xml:space="preserve">
+    <value>resources/signature/multi-signature/TestData.txt.2015-02.tlv</value>
+  </data>
+  <data name="KsiSignature_InputForMulti_Legacy_txt_201505" xml:space="preserve">
+    <value>resources/signature/multi-signature/TestData.txt.2015-05.tlv</value>
+  </data>
+  <data name="KsiSignature_InputForMulti_Legacy_txt_extended_201303" xml:space="preserve">
+    <value>resources/signature/multi-signature/TestData.txt.2013-03.extended.tlv</value>
+  </data>
+  <data name="MultiSignatureWithMetadataPaddingTlv16_Invalid" xml:space="preserve">
+    <value>resources/signature/multi-signature/ksi-multi-signature-padding-tlv16-invalid.tlv</value>
+  </data>
+  <data name="MultiSignatureWithMetadataPadding_Ok" xml:space="preserve">
+    <value>resources/signature/multi-signature/ksi-multi-signature-padding-ok.tlv</value>
+  </data>
 </root>

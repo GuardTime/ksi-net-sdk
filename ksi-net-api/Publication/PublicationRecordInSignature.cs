@@ -44,8 +44,9 @@ namespace Guardtime.KSI.Publication
         /// </summary>
         /// <param name="nonCritical">Is TLV element non critical</param>
         /// <param name="forward">Is TLV element forwarded</param>
-        /// <param name="value">child TLV element list</param>
-        public PublicationRecordInSignature(bool nonCritical, bool forward, ITlvTag[] value) : base(Constants.PublicationRecord.TagTypeInSignature, nonCritical, forward, value)
+        /// <param name="value">value byte array</param>
+        public PublicationRecordInSignature(bool nonCritical, bool forward, byte[] value)
+            : base(new RawTag(Constants.PublicationRecord.TagTypeInSignature, nonCritical, forward, value))
         {
         }
     }

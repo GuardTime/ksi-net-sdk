@@ -75,6 +75,11 @@ namespace Guardtime.KSI.Parser
         public bool Forward { get; }
 
         /// <summary>
+        /// Is TLV16 encoding forced when writing the TLV object
+        /// </summary>
+        public virtual bool ForceTlv16Encoding => false;
+
+        /// <summary>
         ///     Encode TLV object value.
         /// </summary>
         /// <returns>TLV object value as bytes</returns>
@@ -189,6 +194,27 @@ namespace Guardtime.KSI.Parser
             builder.Append("0x").Append(Base16.Encode(EncodeValue()));
 
             return builder.ToString();
+        }
+
+        /// <summary>
+        ///     Write TlvTag to stream.
+        /// </summary>
+        /// <param name="outputStream">output stream</param>
+        public void WriteTo(Stream outputStream)
+        {
+            if (outputStream == null)
+            {
+                throw new KsiException("Invalid output stream: null.");
+            }
+
+            if (!outputStream.CanWrite)
+            {
+                throw new KsiException("Output stream is not writable.");
+            }
+
+            // Cannot use "using", otherwise outputStream will be closed
+            TlvWriter writer = new TlvWriter(outputStream);
+            writer.WriteTag(this);
         }
     }
 }

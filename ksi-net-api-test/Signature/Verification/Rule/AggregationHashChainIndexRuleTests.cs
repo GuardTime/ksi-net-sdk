@@ -113,7 +113,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         {
             AggregationHashChainIndexRule rule = new AggregationHashChainIndexRule();
 
-            // Check invalid signature for aggregation hash chain incosistency in time
+            // Check invalid signature for aggregation hash chain inconsistency in time
             using (FileStream stream =
                 new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Invalid_Aggregation_Chain_Index_Mismatch), FileMode.Open))
             {

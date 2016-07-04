@@ -29,7 +29,7 @@ namespace Guardtime.KSI.Parser
     /// <summary>
     ///     TLV element containing other TLV elements.
     /// </summary>
-    public abstract class CompositeTag : TlvTag, IEnumerable<ITlvTag>
+    public abstract class CompositeTag : TlvTag, ICompositeTag
     {
         private readonly List<ITlvTag> _value = new List<ITlvTag>();
 

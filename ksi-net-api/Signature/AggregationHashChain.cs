@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Guardtime.KSI.Exceptions;
@@ -33,10 +34,24 @@ namespace Guardtime.KSI.Signature
     {
         private readonly IntegerTag _aggrAlgorithmId;
         private readonly IntegerTag _aggregationTime;
-        private readonly List<Link> _chain = new List<Link>();
+        private readonly List<Link> _links = new List<Link>();
         private readonly List<IntegerTag> _chainIndex = new List<IntegerTag>();
         private readonly RawTag _inputData;
         private readonly ImprintTag _inputHash;
+        private Dictionary<AggregationHashChainResult, AggregationHashChainResult> _aggregationHashChainResultCache;
+
+        /// <summary>
+        ///  Create new aggregation hash chain TLV element from TLV element.
+        /// </summary>
+        /// <param name="aggreationTime"></param>
+        /// <param name="chainIndex"></param>
+        /// <param name="inputHash"></param>
+        /// <param name="aggregationAlgorithmId"></param>
+        /// <param name="chainLinks"></param>
+        public AggregationHashChain(ulong aggreationTime, ulong[] chainIndex, DataHash inputHash, ulong aggregationAlgorithmId, Link[] chainLinks)
+            : this(new AggregationHashChain(BuildChildTags(aggreationTime, chainIndex, inputHash, aggregationAlgorithmId, chainLinks)))
+        {
+        }
 
         /// <summary>
         ///     Create new aggregation hash chain TLV element from TLV element.
@@ -83,8 +98,8 @@ namespace Guardtime.KSI.Signature
                         break;
                     case (uint)LinkDirection.Left:
                     case (uint)LinkDirection.Right:
-                        Link linkTag = new Link(childTag, (LinkDirection)childTag.Type);
-                        _chain.Add(linkTag);
+                        Link linkTag = childTag as Link ?? new Link(childTag, (LinkDirection)childTag.Type);
+                        _links.Add(linkTag);
                         this[i] = linkTag;
                         break;
                     default:
@@ -118,10 +133,61 @@ namespace Guardtime.KSI.Signature
                 throw new TlvException("Exactly one algorithm must exist in aggregation hash chain.");
             }
 
-            if (_chain.Count == 0)
+            if (_links.Count == 0)
             {
                 throw new TlvException("Links are missing in aggregation hash chain.");
             }
+        }
+
+        /// <summary>
+        /// Create new aggregation hash chain TLV element from child TLV elements.
+        /// </summary>
+        /// <param name="childTags">Child TLV elements</param>
+        private AggregationHashChain(ITlvTag[] childTags) : base(Constants.AggregationHashChain.TagType, false, false, childTags)
+        {
+        }
+
+        /// <summary>
+        /// Create child TLV element list
+        /// </summary>
+        /// <param name="aggreationTime"></param>
+        /// <param name="chainIndex"></param>
+        /// <param name="inputHash"></param>
+        /// <param name="aggregationAlgorithmId"></param>
+        /// <param name="chainLinks"></param>
+        /// <returns></returns>
+        private static ITlvTag[] BuildChildTags(ulong aggreationTime, ulong[] chainIndex, DataHash inputHash, ulong aggregationAlgorithmId,
+                                                Link[] chainLinks)
+        {
+            if (chainIndex == null)
+            {
+                throw new ArgumentNullException(nameof(chainIndex));
+            }
+
+            if (chainLinks == null)
+            {
+                throw new ArgumentNullException(nameof(chainLinks));
+            }
+
+            List<ITlvTag> list = new List<ITlvTag>(new ITlvTag[]
+            {
+                new IntegerTag(Constants.AggregationHashChain.AggregationTimeTagType, false, false, aggreationTime),
+            });
+
+            foreach (ulong index in chainIndex)
+            {
+                list.Add(new IntegerTag(Constants.AggregationHashChain.ChainIndexTagType, false, false, index));
+            }
+
+            list.Add(new ImprintTag(Constants.AggregationHashChain.InputHashTagType, false, false, inputHash));
+            list.Add(new IntegerTag(Constants.AggregationHashChain.AggregationAlgorithmIdTagType, false, false, aggregationAlgorithmId));
+
+            foreach (Link link in chainLinks)
+            {
+                list.Add(link);
+            }
+
+            return list.ToArray();
         }
 
         /// <summary>
@@ -133,24 +199,6 @@ namespace Guardtime.KSI.Signature
         ///     Get aggregation time.
         /// </summary>
         public ulong AggregationTime => _aggregationTime.Value;
-
-        /// <summary>
-        /// Get aggregation chain links
-        /// </summary>
-        /// <returns></returns>
-        public ReadOnlyCollection<Link> GetChainLinks()
-        {
-            return _chain.AsReadOnly();
-        }
-
-        /// <summary>
-        ///     Get input data bytes if input data exists otherwise null.
-        /// </summary>
-        /// <returns>input data bytes</returns>
-        public byte[] GetInputData()
-        {
-            return _inputData?.Value;
-        }
 
         /// <summary>
         /// Get chain index values
@@ -167,22 +215,50 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
+        /// Get aggregation chain links
+        /// </summary>
+        /// <returns></returns>
+        public ReadOnlyCollection<Link> GetChainLinks()
+        {
+            return _links.AsReadOnly();
+        }
+
+        /// <summary>
+        ///     Get input data bytes if input data exists otherwise null.
+        /// </summary>
+        /// <returns>input data bytes</returns>
+        public byte[] GetInputData()
+        {
+            return _inputData?.Value;
+        }
+
+        /// <summary>
         /// Returns location pointer based on aggregation hash chain links
         /// </summary>
         /// <returns></returns>
         public ulong CalcLocationPointer()
         {
+            return CalcLocationPointer(_links.ToArray());
+        }
+
+        /// <summary>
+        /// eturns location pointer based on aggregation hash chain links
+        /// </summary>
+        /// <param name="links">aggregation hash chain links</param>
+        /// <returns></returns>
+        public static ulong CalcLocationPointer(Link[] links)
+        {
             ulong result = 0;
 
-            for (int i = 0; i < _chain.Count; i++)
+            for (int i = 0; i < links.Length; i++)
             {
-                if (_chain[i].Direction == LinkDirection.Left)
+                if (links[i].Direction == LinkDirection.Left)
                 {
                     result |= 1UL << i;
                 }
             }
 
-            result |= 1UL << _chain.Count;
+            result |= 1UL << links.Length;
 
             return result;
         }
@@ -195,7 +271,7 @@ namespace Guardtime.KSI.Signature
         {
             string identity = "";
 
-            foreach (Link aggregationChainLink in _chain)
+            foreach (Link aggregationChainLink in _links)
             {
                 string id = aggregationChainLink.GetIdentity();
                 if (id.Length <= 0)
@@ -223,10 +299,19 @@ namespace Guardtime.KSI.Signature
                 throw new KsiException("Invalid aggregation chain result: null.");
             }
 
+            if (_aggregationHashChainResultCache == null)
+            {
+                _aggregationHashChainResultCache = new Dictionary<AggregationHashChainResult, AggregationHashChainResult>();
+            }
+            else if (_aggregationHashChainResultCache.ContainsKey(result))
+            {
+                return _aggregationHashChainResultCache[result];
+            }
+
             DataHash lastHash = result.Hash;
             ulong level = result.Level;
 
-            foreach (Link link in _chain)
+            foreach (Link link in _links)
             {
                 level += link.LevelCorrection + 1;
 
@@ -240,7 +325,10 @@ namespace Guardtime.KSI.Signature
                 }
             }
 
-            return new AggregationHashChainResult(level, lastHash);
+            AggregationHashChainResult returnValue = new AggregationHashChainResult(level, lastHash);
+            _aggregationHashChainResultCache.Add(result, returnValue);
+
+            return returnValue;
         }
 
         /// <summary>
@@ -260,7 +348,7 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
-        ///     Aggregation hash chain chain index ordering.
+        ///     Aggregation hash chain chain index ordering. Orders by chain index length descending.
         /// </summary>
         internal class ChainIndexOrdering : IComparer<AggregationHashChain>
         {
@@ -269,23 +357,10 @@ namespace Guardtime.KSI.Signature
             /// </summary>
             /// <param name="x">aggregation hash chain</param>
             /// <param name="y">aggregation hash chain</param>
-            /// <returns>0 if equal, 1 if bigger, -1 if smaller</returns>
+            /// <returns>0 if equal, 1 if x is shorter, -1 if y is shorter</returns>
             public int Compare(AggregationHashChain x, AggregationHashChain y)
             {
-                for (int i = 0; i < x._chainIndex.Count; i++)
-                {
-                    if (i >= y._chainIndex.Count)
-                    {
-                        return -1;
-                    }
-
-                    if (x._chainIndex[i].Value != y._chainIndex[i].Value)
-                    {
-                        throw new KsiException("Chain index mismatch.");
-                    }
-                }
-
-                return x._chainIndex.Count == y._chainIndex.Count ? 0 : 1;
+                return y._chainIndex.Count.CompareTo(x._chainIndex.Count);
             }
         }
     }

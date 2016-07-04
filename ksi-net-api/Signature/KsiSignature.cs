@@ -36,6 +36,7 @@ namespace Guardtime.KSI.Signature
         private readonly List<AggregationHashChain> _aggregationHashChains = new List<AggregationHashChain>();
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private string _identity;
+        private DataHash _aggregationHashChainRootHash;
 
         /// <summary>
         ///     Create new KSI signature TLV element from TLV element.
@@ -60,7 +61,7 @@ namespace Guardtime.KSI.Signature
                 switch (childTag.Type)
                 {
                     case Constants.AggregationHashChain.TagType:
-                        AggregationHashChain aggregationChainTag = new AggregationHashChain(childTag);
+                        AggregationHashChain aggregationChainTag = childTag as AggregationHashChain ?? new AggregationHashChain(childTag);
                         _aggregationHashChains.Add(aggregationChainTag);
                         this[i] = aggregationChainTag;
                         break;
@@ -116,7 +117,49 @@ namespace Guardtime.KSI.Signature
                 throw new TlvException("Only one RFC 3161 record is allowed in KSI signature.");
             }
 
+            SortAggregationHashChains();
+        }
+
+        private void SortAggregationHashChains()
+        {
             _aggregationHashChains.Sort(new AggregationHashChain.ChainIndexOrdering());
+
+            if (_aggregationHashChains.Count < 2)
+            {
+                return;
+            }
+
+            ulong[] parentIndex = _aggregationHashChains[0].GetChainIndex();
+            ulong[] childIndex = _aggregationHashChains[1].GetChainIndex();
+            CheckAggregationHashChainIndexes(parentIndex, childIndex);
+
+            for (int i = 2; i < _aggregationHashChains.Count; i++)
+            {
+                parentIndex = childIndex;
+                childIndex = _aggregationHashChains[i].GetChainIndex();
+                CheckAggregationHashChainIndexes(parentIndex, childIndex);
+            }
+        }
+
+        /// <summary>
+        /// Checks if parent index contains the child index.
+        /// </summary>
+        /// <param name="parentIndex">Parent index</param>
+        /// <param name="childIndex">Child index</param>
+        private static void CheckAggregationHashChainIndexes(ulong[] parentIndex, ulong[] childIndex)
+        {
+            for (int i = 0; i < parentIndex.Length; i++)
+            {
+                if (i >= childIndex.Length)
+                {
+                    break;
+                }
+
+                if (parentIndex[i] != childIndex[i])
+                {
+                    throw new TlvException("Chain index mismatch.");
+                }
+            }
         }
 
         /// <summary>
@@ -176,7 +219,11 @@ namespace Guardtime.KSI.Signature
         /// <returns>output hash</returns>
         public DataHash GetAggregationHashChainRootHash()
         {
-            // Store result
+            if (_aggregationHashChainRootHash != null)
+            {
+                return _aggregationHashChainRootHash;
+            }
+
             AggregationHashChainResult lastResult = new AggregationHashChainResult(0, _aggregationHashChains[0].InputHash);
 
             foreach (AggregationHashChain chain in _aggregationHashChains)
@@ -184,7 +231,7 @@ namespace Guardtime.KSI.Signature
                 lastResult = chain.GetOutputHash(lastResult);
             }
 
-            return lastResult.Hash;
+            return _aggregationHashChainRootHash = lastResult.Hash;
         }
 
         /// <summary>
@@ -262,28 +309,6 @@ namespace Guardtime.KSI.Signature
                     Logger.Warn("Extending KSI signature failed: {0}", e);
                     throw;
                 }
-            }
-        }
-
-        /// <summary>
-        ///     Write KSI signature to stream.
-        /// </summary>
-        /// <param name="outputStream">output stream</param>
-        public void WriteTo(Stream outputStream)
-        {
-            if (outputStream == null)
-            {
-                throw new KsiException("Invalid output stream: null.");
-            }
-
-            if (!outputStream.CanWrite)
-            {
-                throw new KsiException("Output stream is not writable.");
-            }
-
-            using (TlvWriter writer = new TlvWriter(outputStream))
-            {
-                writer.WriteTag(this);
             }
         }
 

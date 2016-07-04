@@ -54,6 +54,7 @@ namespace Guardtime.KSI.Hashing
         private static readonly byte[] InvalidHashAlgorithmIds = new byte[] { 0x03, 0x7E };
 
         private static readonly Dictionary<string, HashAlgorithm> Lookup = new Dictionary<string, HashAlgorithm>();
+        private static readonly HashAlgorithm[] Values;
 
         private readonly string[] _alternatives;
 
@@ -62,7 +63,9 @@ namespace Guardtime.KSI.Hashing
         /// </summary>
         static HashAlgorithm()
         {
-            foreach (HashAlgorithm algorithm in Values())
+            Values = new HashAlgorithm[] { Sha1, Sha2256, Ripemd160, Sha2384, Sha2512, Sha3224, Sha3256, Sha3384, Sha3512, Sm3 };
+
+            foreach (HashAlgorithm algorithm in Values)
             {
                 Lookup.Add(NameNormalize(algorithm.Name), algorithm);
                 foreach (string alternative in algorithm._alternatives)
@@ -121,7 +124,7 @@ namespace Guardtime.KSI.Hashing
         /// <returns>HashAlgorithm when a match is found, otherwise null</returns>
         public static HashAlgorithm GetById(byte id)
         {
-            foreach (HashAlgorithm algorithm in Values())
+            foreach (HashAlgorithm algorithm in Values)
             {
                 if (algorithm.Id == id)
                 {
@@ -172,7 +175,7 @@ namespace Guardtime.KSI.Hashing
         /// <returns>List of supported hash algorithm names</returns>
         public static IEnumerable<string> GetNamesList()
         {
-            foreach (HashAlgorithm algorithm in Values())
+            foreach (HashAlgorithm algorithm in Values)
             {
                 yield return algorithm.Name;
             }
@@ -186,15 +189,6 @@ namespace Guardtime.KSI.Hashing
         private static string NameNormalize(string name)
         {
             return Regex.Replace(name.ToLower(), "[^a-z0-9]", "", RegexOptions.Compiled);
-        }
-
-        /// <summary>
-        ///     Get available algorithm objects.
-        /// </summary>
-        /// <returns>Defined HashAlgorithm objects</returns>
-        private static IEnumerable<HashAlgorithm> Values()
-        {
-            return new HashAlgorithm[] { Sha1, Sha2256, Ripemd160, Sha2384, Sha2512, Sha3224, Sha3256, Sha3384, Sha3512, Sm3 };
         }
     }
 }

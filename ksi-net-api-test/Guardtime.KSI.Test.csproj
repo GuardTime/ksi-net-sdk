@@ -136,6 +136,7 @@
     <Compile Include="Hashing\DataHasherTests.cs" />
     <Compile Include="Hashing\DataHashTests.cs" />
     <Compile Include="Hashing\HashAlgorithmTests.cs" />
+    <Compile Include="Integration\BlockSigner.PrintTreeTests.cs" />
     <Compile Include="Integration\CommonGetTestFilesAndResults.cs" />
     <Compile Include="Integration\CommonTestExecution.cs" />
     <Compile Include="Integration\DataHolderForIntegrationTests.cs" />
@@ -167,7 +168,9 @@
     <Compile Include="Publication\PublicationDataTests.cs" />
     <Compile Include="Publication\PublicationsFileTests.cs" />
     <Compile Include="Publication\TestPublicationsfile.cs" />
+    <Compile Include="Service\BlockSignerTreeNodeVisualizer.cs" />
     <Compile Include="Service\ExtendErrorPayloadTests.cs" />
+    <Compile Include="Integration\BlockSignerTests.cs" />
     <Compile Include="Service\ExtendPduTests.cs" />
     <Compile Include="Service\ExtendRequestPayloadTests.cs" />
     <Compile Include="Service\ExtendResponsePayloadTests.cs" />
@@ -177,6 +180,7 @@
     <Compile Include="Service\AggregationPduTests.cs" />
     <Compile Include="Service\KsiPduHeaderTests.cs" />
     <Compile Include="Service\TestKsiServiceProtocol.cs" />
+    <Compile Include="Signature\KsiMultiSignatureTests.cs" />
     <Compile Include="Signature\KsiSignatureUsingReflectionTests.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainMetadataRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainIndexRuleTests.cs" />
@@ -1003,6 +1007,57 @@
     </None>
     <None Include="resources\signature\integration-test-signatures\ok-sig-extended-2014-05-15.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\multi-signature\infile_2015-05-05.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\multi-signature\infile_2015-05-28.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\multi-signature\infile_2015-06-22.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\multi-signature\ksi-multi-signature-padding-ok.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\multi-signature\ksi-multi-signature-padding-tlv16-invalid.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\multi-signature\ksi-multi-signature-ok.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\multi-signature\ksi-sha2-384.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\multi-signature\ksi-sha2-512.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\multi-signature\multi-signature-5.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\multi-signature\signature_data_1_agg_time_1437657023.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\multi-signature\signature_data_2_agg_time_1437657023.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\multi-signature\signature_data_3_agg_time_1437657023.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\multi-signature\TestData.png.2015-02.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\multi-signature\TestData.png.2015-04.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\multi-signature\TestData.txt.2013-03.extended.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\multi-signature\TestData.txt.2015-02.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\multi-signature\TestData.txt.2015-05.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\rfc3161-record\rfc3161-record-invalid-extra-tag.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

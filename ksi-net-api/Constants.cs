@@ -17,6 +17,9 @@
  * reserves and retains all trademark rights.
  */
 
+
+#pragma warning disable 1591
+
 namespace Guardtime.KSI
 {
     public static class Constants
@@ -264,7 +267,7 @@ namespace Guardtime.KSI
                 public const uint LegacyId = 0x3;
             }
 
-            public static class MetaData
+            public static class Metadata
             {
                 /// <summary>
                 ///     Metadata TLV type.

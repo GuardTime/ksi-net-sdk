@@ -75,6 +75,22 @@ namespace Guardtime.KSI
         }
 
         /// <summary>
+        ///     Sign document hash.
+        /// </summary>
+        /// <param name="hash">document hash</param>
+        /// <param name="level">the level value of the aggregation tree node</param>
+        /// <returns>KSI signature</returns>
+        public IKsiSignature Sign(DataHash hash, uint level)
+        {
+            if (hash == null)
+            {
+                throw new KsiException("Document hash cannot be null.");
+            }
+
+            return _ksiService.Sign(hash, level);
+        }
+
+        /// <summary>
         /// Sign document
         /// </summary>
         /// <param name="stream">Stream containing document bytes</param>
@@ -100,7 +116,7 @@ namespace Guardtime.KSI
         {
             if (documentBytes == null)
             {
-                throw new KsiException("Dcoument bytes cannot be null.");
+                throw new KsiException("Document bytes cannot be null.");
             }
 
             IDataHasher dataHasher = KsiProvider.CreateDataHasher();

@@ -17,16 +17,15 @@
  * reserves and retains all trademark rights.
  */
 
+using System.Collections.Generic;
 using System.Text;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Signature
 {
-    /// <summary>
-    ///     Aggregation hash chain TLV element.
-    /// </summary>
     public sealed partial class AggregationHashChain
     {
         /// <summary>
@@ -38,13 +37,25 @@ namespace Guardtime.KSI.Signature
             private const byte LegacyIdLength = 29;
 
             private readonly IntegerTag _levelCorrection;
-            private readonly MetaData _metaData;
+            private readonly Metadata _metadata;
             private readonly ImprintTag _siblingHash;
             private readonly RawTag _legacyId;
             private readonly string _legacyIdString;
 
             /// <summary>
-            /// Create new aggregation hash chain link TLV elment from TLV element.
+            /// Create new aggregation hash chain link TLV element.
+            /// </summary>
+            /// <param name="direction">Direction</param>
+            /// <param name="siblingHash">Sibling hash value</param>
+            /// <param name="metadata">Metadata element</param>
+            /// <param name="levelCorrection">Level correction</param>
+            public Link(LinkDirection direction, DataHash siblingHash, Metadata metadata, ulong levelCorrection)
+                : this(new Link(BuildChildTags(siblingHash, metadata, levelCorrection), direction), direction)
+            {
+            }
+
+            /// <summary>
+            /// Create new aggregation hash chain link TLV element from TLV element.
             /// </summary>
             /// <param name="tag">TLV element</param>
             /// <param name="direction">Direction</param>
@@ -53,7 +64,7 @@ namespace Guardtime.KSI.Signature
                 int levelCorrectionCount = 0;
                 int siblingHashCount = 0;
                 int legacyIdCount = 0;
-                int metaDataCount = 0;
+                int metadataCount = 0;
 
                 for (int i = 0; i < Count; i++)
                 {
@@ -74,9 +85,9 @@ namespace Guardtime.KSI.Signature
                             _legacyIdString = GetLegacyIdString(_legacyId.Value);
                             legacyIdCount++;
                             break;
-                        case Constants.AggregationHashChain.MetaData.TagType:
-                            this[i] = _metaData = new MetaData(childTag);
-                            metaDataCount++;
+                        case Constants.AggregationHashChain.Metadata.TagType:
+                            this[i] = _metadata = childTag as Metadata ?? new Metadata(childTag);
+                            metadataCount++;
                             break;
                         default:
                             VerifyUnknownTag(childTag);
@@ -89,12 +100,44 @@ namespace Guardtime.KSI.Signature
                     throw new TlvException("Only one levelcorrection value is allowed in aggregation hash chain link.");
                 }
 
-                if (!Util.IsOneValueEqualTo(1, siblingHashCount, legacyIdCount, metaDataCount))
+                if (!Util.IsOneValueEqualTo(1, siblingHashCount, legacyIdCount, metadataCount))
                 {
                     throw new TlvException("Exactly one of three from sibling hash, legacy id or metadata must exist in aggregation hash chain link.");
                 }
 
                 Direction = direction;
+            }
+
+            private Link(ITlvTag[] value, LinkDirection direction) : base((uint)direction, false, false, value)
+            {
+            }
+
+            /// <summary>
+            /// Create child TLV element list
+            /// </summary>
+            /// <param name="siblingHash">Sibling hash value</param>
+            /// <param name="metadata">Metadata element</param>
+            /// <param name="levelCorrection">Level correction</param>
+            private static ITlvTag[] BuildChildTags(DataHash siblingHash, Metadata metadata, ulong levelCorrection)
+            {
+                List<ITlvTag> list = new List<ITlvTag>();
+
+                if (siblingHash != null)
+                {
+                    list.Add(new ImprintTag(Constants.AggregationHashChain.Link.SiblingHashTagType, false, false, siblingHash));
+                }
+
+                if (metadata != null)
+                {
+                    list.Add(metadata);
+                }
+
+                if (levelCorrection > 0)
+                {
+                    list.Add(new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, levelCorrection));
+                }
+
+                return list.ToArray();
             }
 
             /// <summary>
@@ -110,7 +153,7 @@ namespace Guardtime.KSI.Signature
             /// <summary>
             /// Metadata element
             /// </summary>
-            public MetaData Metadata => _metaData;
+            public Metadata Metadata => _metadata;
 
             /// <summary>
             /// Get link identity
@@ -123,7 +166,7 @@ namespace Guardtime.KSI.Signature
                     return _legacyIdString;
                 }
 
-                return _metaData != null ? _metaData.ClientId : "";
+                return _metadata != null ? _metadata.ClientId : "";
             }
 
             private static string GetLegacyIdString(byte[] bytes)
@@ -171,7 +214,7 @@ namespace Guardtime.KSI.Signature
                     return _siblingHash.EncodeValue();
                 }
 
-                return _legacyId != null ? _legacyId.EncodeValue() : _metaData?.EncodeValue();
+                return _legacyId != null ? _legacyId.EncodeValue() : _metadata?.EncodeValue();
             }
         }
     }

@@ -52,7 +52,9 @@ namespace Guardtime.KSI.Parser
             }
 
             byte[] data = tag.EncodeValue();
-            bool tlv16 = tag.Type > Constants.Tlv.TypeMask
+
+            bool tlv16 = ((tag as TlvTag)?.ForceTlv16Encoding ?? false)
+                         || tag.Type > Constants.Tlv.TypeMask
                          || (data != null && data.Length > byte.MaxValue);
             byte firstByte = (byte)((tlv16 ? Constants.Tlv.Tlv16Flag : 0)
                                     + (tag.NonCritical ? Constants.Tlv.NonCriticalFlag : 0)

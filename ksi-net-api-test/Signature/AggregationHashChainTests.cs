@@ -18,13 +18,17 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Signature;
+using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Signature
@@ -37,6 +41,89 @@ namespace Guardtime.KSI.Test.Signature
         {
             AggregationHashChain aggregationHashChain = GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Ok);
             Assert.AreEqual(9, aggregationHashChain.Count, "Invalid amount of child TLV objects");
+        }
+
+        [Test]
+        public void TestGetLocationPointer()
+        {
+            Assert.AreEqual(63,
+                AggregationHashChain.CalcLocationPointer(new List<AggregationHashChain.Link>
+                {
+                    new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.Metadata("test client", "test machine id"), 0),
+                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE")), null, 0),
+                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("0160D25FD6F2A962B41F20CFC2DD9CC62C9C802EADB08E8F15E60D0316E778ACDC")), null, 0),
+                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01F2960B44B6846AE20FD4169D599D9F1C405A6CB1CBAA5B3179A06B3D1DB92166")), null, 0),
+                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01F2960B44B6846AE20FD4169D599D9F1C405A6CB1CBAA5B3179A06B3D1DB92166")), null, 0),
+                }.ToArray()), "Invalid location pointer.");
+
+            Assert.AreEqual(51,
+                AggregationHashChain.CalcLocationPointer(new List<AggregationHashChain.Link>
+                {
+                    new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.Metadata("test client", "test machine id"), 0),
+                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE")), null, 0),
+                    new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("0160D25FD6F2A962B41F20CFC2DD9CC62C9C802EADB08E8F15E60D0316E778ACDC")), null, 0),
+                    new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01F2960B44B6846AE20FD4169D599D9F1C405A6CB1CBAA5B3179A06B3D1DB92166")), null, 0),
+                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01F2960B44B6846AE20FD4169D599D9F1C405A6CB1CBAA5B3179A06B3D1DB92166")), null, 0),
+                }.ToArray()), "Invalid location pointer.");
+
+            Assert.AreEqual(23, AggregationHashChain.CalcLocationPointer(new List<AggregationHashChain.Link>
+            {
+                new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.Metadata("test client", "test machine id"), 0),
+                new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE")), null, 0),
+                new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("0160D25FD6F2A962B41F20CFC2DD9CC62C9C802EADB08E8F15E60D0316E778ACDC")), null, 0),
+                new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01F2960B44B6846AE20FD4169D599D9F1C405A6CB1CBAA5B3179A06B3D1DB92166")), null, 0),
+            }.ToArray()), "Invalid location pointer.");
+
+            Assert.AreEqual(21, AggregationHashChain.CalcLocationPointer(new List<AggregationHashChain.Link>
+            {
+                new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.Metadata("test client", "test machine id"), 0),
+                new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE")), null, 0),
+                new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("0160D25FD6F2A962B41F20CFC2DD9CC62C9C802EADB08E8F15E60D0316E778ACDC")), null, 0),
+                new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01F2960B44B6846AE20FD4169D599D9F1C405A6CB1CBAA5B3179A06B3D1DB92166")), null, 0),
+            }.ToArray()), "Invalid location pointer.");
+
+            Assert.AreEqual(9, AggregationHashChain.CalcLocationPointer(new List<AggregationHashChain.Link>
+            {
+                new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.Metadata("test client", "test machine id"), 0),
+                new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE")), null, 0),
+                new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("0160D25FD6F2A962B41F20CFC2DD9CC62C9C802EADB08E8F15E60D0316E778ACDC")), null, 0),
+            }.ToArray()), "Invalid location pointer.");
+        }
+
+        [Test]
+        public void AggregationHashChainLinkSequenceNumberTest()
+        {
+            AggregationHashChain.Link aggregationHashChain = new AggregationHashChain.Link(LinkDirection.Left, null,
+                new AggregationHashChain.Metadata("test client", "test machine id", 1, 2), 0);
+
+            AggregationHashChain.Metadata metadata = aggregationHashChain.Metadata;
+
+            IntegerTag sequenceNumber = metadata.GetType().InvokeMember("_sequenceNumber", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.GetField, null,
+                metadata, null) as IntegerTag;
+
+            IntegerTag requestTime = metadata.GetType().InvokeMember("_requestTime", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.GetField, null,
+                metadata, null) as IntegerTag;
+
+            Assert.AreEqual(1, sequenceNumber.Value, "Aggregation hash chain link metadata sequnece number should match");
+            Assert.AreEqual(2, requestTime.Value, "Aggregation hash chain link metadata request time should match");
+        }
+
+        [Test]
+        public void TestGetLocationPointerWithMixedAggregationChains()
+        {
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_With_Mixed_Aggregation_Chains), FileMode.Open))
+            {
+                IKsiSignature signature = new KsiSignatureFactory().Create(stream);
+                ReadOnlyCollection<AggregationHashChain> hashChains = signature.GetAggregationHashChains();
+                ulong[] index = hashChains[0].GetChainIndex();
+                int i = index.Length - 1;
+
+                foreach (AggregationHashChain chain in hashChains)
+                {
+                    ReadOnlyCollection<AggregationHashChain.Link> links = chain.GetChainLinks();
+                    Assert.AreEqual(index[i--], AggregationHashChain.CalcLocationPointer(links.ToArray()), "Location pointers do not match.");
+                }
+            }
         }
 
         [Test]
@@ -306,7 +393,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assembly assembly = typeof(AggregationHashChain).Assembly;
             Type linkType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Link");
-            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+MetaData");
+            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Metadata");
 
             AggregationHashChain tag = TestUtil.GetCompositeTag<AggregationHashChain>(Constants.AggregationHashChain.TagType,
                 new ITlvTag[]
@@ -322,13 +409,13 @@ namespace Guardtime.KSI.Test.Signature
                         new ITlvTag[]
                         {
                             new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, 0),
-                            TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.MetaData.TagType,
+                            TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.Metadata.TagType,
                                 new ITlvTag[]
                                 {
-                                    new StringTag(Constants.AggregationHashChain.MetaData.ClientIdTagType, false, false, "Test ClientId"),
-                                    new StringTag(Constants.AggregationHashChain.MetaData.MachineIdTagType, false, false, "Test Machine Id"),
-                                    new IntegerTag(Constants.AggregationHashChain.MetaData.SequenceNumberTagType, false, false, 1),
-                                    new IntegerTag(Constants.AggregationHashChain.MetaData.RequestTimeTagType, false, false, 2)
+                                    new StringTag(Constants.AggregationHashChain.Metadata.ClientIdTagType, false, false, "Test ClientId"),
+                                    new StringTag(Constants.AggregationHashChain.Metadata.MachineIdTagType, false, false, "Test Machine Id"),
+                                    new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
+                                    new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                 })
                         },
                         LinkDirection.Left)

@@ -17,7 +17,9 @@
  * reserves and retains all trademark rights.
  */
 
+using System.Collections.Generic;
 using System.IO;
+using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 
 namespace Guardtime.KSI.Signature
@@ -40,5 +42,18 @@ namespace Guardtime.KSI.Signature
         /// <param name="payload">aggregation response payload</param>
         /// <returns>KSI signature</returns>
         IKsiSignature Create(AggregationResponsePayload payload);
+
+        /// <summary>
+        /// Get KSI signature instance from tlv tags
+        /// </summary>
+        /// <param name="aggregationHashChains">Aggregation hash chain tlv elements</param>
+        /// <param name="calendarHashChain">Calendar hash chain tlv element</param>
+        /// <param name="calendarAuthenticationRecord">Calendar authentication record tlv element</param>
+        /// <param name="publicationRecord">Publication record tlv element</param>
+        /// <param name="rfc3161Record">RFC3161 record tlv element</param>
+        /// <returns></returns>
+        IKsiSignature Create(ICollection<AggregationHashChain> aggregationHashChains, CalendarHashChain calendarHashChain,
+                             CalendarAuthenticationRecord calendarAuthenticationRecord, PublicationRecordInSignature publicationRecord,
+                             Rfc3161Record rfc3161Record);
     }
 }

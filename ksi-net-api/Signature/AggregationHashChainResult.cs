@@ -46,5 +46,46 @@ namespace Guardtime.KSI.Signature
         ///     Get aggregation chain output hash level
         /// </summary>
         public ulong Level { get; }
+
+        /// <summary>
+        ///     Compare current object against another object.
+        /// </summary>
+        /// <param name="obj">object to compare with</param>
+        /// <returns>true if objects are equal</returns>
+        public override bool Equals(object obj)
+        {
+            AggregationHashChainResult a = obj as AggregationHashChainResult;
+
+            // If parameter is null, return false. 
+            if (ReferenceEquals(a, null))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, a))
+            {
+                return true;
+            }
+
+            // If run-time types are not exactly the same, return false. 
+            if (GetType() != a.GetType())
+            {
+                return false;
+            }
+
+            return Hash == a.Hash && Level == a.Level;
+        }
+
+        /// <summary>
+        ///     Get hash code of current object.
+        /// </summary>
+        /// <returns>hash code of current object</returns>
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return Level.GetHashCode() + Hash.GetHashCode();
+            }
+        }
     }
 }
