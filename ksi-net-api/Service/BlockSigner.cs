@@ -119,9 +119,9 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        /// Sign given hashes. Returns multi-signature
+        /// Sign given hashes. Returns multi-signature.
         /// </summary>
-        public KsiMultiSignature GetMultiSignature()
+        private KsiMultiSignature GetMultiSignature()
         {
             if (_documentNodes.Count == 0)
             {
