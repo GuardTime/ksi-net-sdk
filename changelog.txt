@@ -1,3 +1,10 @@
+Version 3.4
+
+2016-07-04 3.4.0
+
+* FEATURE: Added support for local aggregation (KSINETAPI-61)
+* BUGFIX: Changed exception to be thrown when invalid chain index (KSINETAPI-48)
+
 Version 3.3
 
 2016-06-01
