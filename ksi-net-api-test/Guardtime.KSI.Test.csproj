@@ -179,6 +179,7 @@
     <Compile Include="Service\AggregationRequestPayloadTests.cs" />
     <Compile Include="Service\AggregationPduTests.cs" />
     <Compile Include="Service\KsiPduHeaderTests.cs" />
+    <Compile Include="Service\TestBlockSigner.cs" />
     <Compile Include="Service\TestKsiServiceProtocol.cs" />
     <Compile Include="Signature\KsiMultiSignatureTests.cs" />
     <Compile Include="Signature\KsiSignatureUsingReflectionTests.cs" />
