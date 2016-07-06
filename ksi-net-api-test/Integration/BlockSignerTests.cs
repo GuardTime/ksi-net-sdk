@@ -31,6 +31,7 @@ using Guardtime.KSI.Signature.MultiSignature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
 using Guardtime.KSI.Test.Crypto;
+using Guardtime.KSI.Test.Service;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
@@ -259,7 +260,7 @@ namespace Guardtime.KSI.Test.Integration
             }
 
             Console.WriteLine(DateTime.Now + ": Start creating local blockSigner.");
-            BlockSigner blockSigner = new BlockSigner(ksi);
+            TestBlockSigner blockSigner = new TestBlockSigner(ksi);
             foreach (DataHash hash in hashes)
             {
                 blockSigner.AddDocument(hash, metadata);
@@ -288,7 +289,7 @@ namespace Guardtime.KSI.Test.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void BlockSignerGetMultiSignatureOfGivenHashesTest(Ksi ksi)
         {
-            BlockSigner blockSigner = new BlockSigner(ksi);
+            TestBlockSigner blockSigner = new TestBlockSigner(ksi);
             AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
             List<DataHash> hashes = new List<DataHash>()
 
@@ -345,7 +346,7 @@ namespace Guardtime.KSI.Test.Integration
                 {
                     Console.WriteLine("Document count: " + k);
 
-                    BlockSigner blockSigner = new BlockSigner(ksi);
+                    TestBlockSigner blockSigner = new TestBlockSigner(ksi);
                     List<DataHash> hashes = new List<DataHash>();
 
                     byte[] buffer = new byte[10];
@@ -434,7 +435,7 @@ namespace Guardtime.KSI.Test.Integration
             }
 
             Console.WriteLine(DateTime.Now + ": Start creating local blockSigner.");
-            BlockSigner blockSigner = new BlockSigner(ksi, true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
+            TestBlockSigner blockSigner = new TestBlockSigner(ksi, true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
 
             foreach (DataHash hash in hashes)
             {
@@ -464,7 +465,7 @@ namespace Guardtime.KSI.Test.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void BlockSignerGetMultiSignatureOfGivenHashesWithBlindingMaskTest(Ksi ksi)
         {
-            BlockSigner blockSigner = new BlockSigner(ksi, true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
+            TestBlockSigner blockSigner = new TestBlockSigner(ksi, true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
             AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
 
             List<DataHash> hashes = new List<DataHash>()
@@ -503,7 +504,7 @@ namespace Guardtime.KSI.Test.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void BlockSignerGetMultiSignatureOfGivenHashesWithBlindingMaskAndSha1Test(Ksi ksi)
         {
-            BlockSigner blockSigner = new BlockSigner(ksi, true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 }, HashAlgorithm.Sha1);
+            TestBlockSigner blockSigner = new TestBlockSigner(ksi, true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 }, HashAlgorithm.Sha1);
             AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
 
             List<DataHash> hashes = new List<DataHash>()
@@ -561,7 +562,7 @@ namespace Guardtime.KSI.Test.Integration
                 {
                     Console.WriteLine("Document count: " + k);
 
-                    BlockSigner blockSigner = new BlockSigner(ksi, true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
+                    TestBlockSigner blockSigner = new TestBlockSigner(ksi, true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
                     List<DataHash> hashes = new List<DataHash>();
 
                     byte[] buffer = new byte[10];
