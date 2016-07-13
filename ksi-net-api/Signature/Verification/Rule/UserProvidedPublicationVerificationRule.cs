@@ -38,9 +38,14 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             PublicationData userPublication = GetUserPublication(context);
             PublicationData signaturePublication = GetPublicationRecord(signature).PublicationData;
 
-            if (userPublication.PublicationTime == signaturePublication.PublicationTime && userPublication.PublicationHash == signaturePublication.PublicationHash)
+            if (userPublication.PublicationTime == signaturePublication.PublicationTime)
             {
-                return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
+                if (userPublication.PublicationHash == signaturePublication.PublicationHash)
+                {
+                    return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
+                }
+
+                return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int09);
             }
 
             Logger.Debug("User provided publication does not equal to signature publication.{0}User provided publication:{1}{2}{3}Signature publication:{4}{5}",
