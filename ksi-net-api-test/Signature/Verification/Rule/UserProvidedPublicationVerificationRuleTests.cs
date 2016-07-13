@@ -137,7 +137,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         {
             UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
 
-            // Check  legacy signature with publication record
+            // Check legacy signature with publication record
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Legacy_Ok_With_Publication_Record), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
@@ -156,7 +156,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         {
             UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
 
-            // Check  legacy signature with publication record
+            // Check signature with publication record
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()

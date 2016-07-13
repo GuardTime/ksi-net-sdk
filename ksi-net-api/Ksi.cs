@@ -210,8 +210,9 @@ namespace Guardtime.KSI
                 throw new KsiException("Publication data cannot be null.");
             }
 
-            PublicationRecordInPublicationFile publicationRecord = GetPublicationsFile().GetNearestPublicationRecord(publicationData.PublicationTime);
-            return Extend(signature, publicationRecord);
+            CalendarHashChain calendarHashChain = _ksiService.Extend(signature.AggregationTime, publicationData.PublicationTime);
+            PublicationRecordInSignature publicationRecord = new PublicationRecordInSignature(false, false, publicationData);
+            return signature.Extend(calendarHashChain, publicationRecord);
         }
 
         /// <summary>

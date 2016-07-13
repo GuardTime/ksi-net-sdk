@@ -25,6 +25,7 @@ using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
+using Guardtime.KSI.Signature.Verification.Policy;
 using Guardtime.KSI.Signature.Verification.Rule;
 using Guardtime.KSI.Test.Signature.Verification.Rule;
 using NUnit.Framework;
@@ -98,7 +99,7 @@ namespace Guardtime.KSI.Test.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void ExtendAndVerifyTest(Ksi ksi)
         {
-            UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
+            PublicationBasedVerificationPolicy rule = new PublicationBasedVerificationPolicy();
 
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
             {
@@ -120,7 +121,7 @@ namespace Guardtime.KSI.Test.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void ExtendAndVerifyToUserProvidedPublicationTest(Ksi ksi)
         {
-            UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
+            PublicationBasedVerificationPolicy rule = new PublicationBasedVerificationPolicy();
 
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
             {
@@ -141,10 +142,83 @@ namespace Guardtime.KSI.Test.Integration
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void ExtendAndVerifyToUserProvidedPublicationNotInPublicationsFileTest(Ksi ksi)
+        {
+            PublicationBasedVerificationPolicy rule = new PublicationBasedVerificationPolicy();
+
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
+            {
+                // publication data that is not included in publications file. Time: 2016-07-12 00:00:00 UTC
+                PublicationData publicationData = new PublicationData("AAAAAA-CXQQZQ-AAPGJF-HGNMUN-DXEIQW-NJZZOE-J76OK4-BV3FKY-AEAWIP-KSPZPW-EJKVAI-JPOOR7");
+
+                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+                IKsiSignature extendedSignature = ksi.Extend(ksiSignature, publicationData);
+
+                TestVerificationContext context = new TestVerificationContext()
+                {
+                    Signature = extendedSignature,
+                    UserPublication = publicationData
+                };
+
+                VerificationResult verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            }
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void InvalidExtendAndVerifyToUserProvidedPublicationFromTestCoreTest(Ksi ksi)
+        {
+            PublicationBasedVerificationPolicy rule = new PublicationBasedVerificationPolicy();
+
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
+            {
+                // publication data from Test core, not included in publications file. Time: 2016-07-12 00:00:00 UTC
+                PublicationData publicationData = new PublicationData("AAAAAA-CXQQZQ-AAOSZH-ONCB4K-TFGPBW-R6S6TF-6EW4DU-4QMP7X-GI2VCO-TNGAZM-EV6AZR-464IOA");
+
+                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+                IKsiSignature extendedSignature = ksi.Extend(ksiSignature, publicationData);
+
+                TestVerificationContext context = new TestVerificationContext()
+                {
+                    Signature = extendedSignature,
+                    UserPublication = publicationData
+                };
+
+                VerificationResult verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+                Assert.AreEqual(VerificationError.Int09, verificationResult.VerificationError);
+            }
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void InvalidExtendToUserProvidedPublicationFromTestCoreAllowExtendingTest(Ksi ksi)
+        {
+            PublicationBasedVerificationPolicy rule = new PublicationBasedVerificationPolicy();
+
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
+            {
+                // publication data from Test core. not included in publications file. Time: 2016-07-12 00:00:00 UTC
+                PublicationData publicationData = new PublicationData("AAAAAA-CXQQZQ-AAOSZH-ONCB4K-TFGPBW-R6S6TF-6EW4DU-4QMP7X-GI2VCO-TNGAZM-EV6AZR-464IOA");
+
+                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+
+                TestVerificationContext context = new TestVerificationContext()
+                {
+                    Signature = ksiSignature,
+                    IsExtendingAllowed = true,
+                    UserPublication = publicationData,
+                    ExtendedCalendarHashChain = GetHttpKsiService().Extend(ksiSignature.AggregationTime, publicationData.PublicationTime)
+                };
+
+                VerificationResult verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+                Assert.AreEqual(VerificationError.Pub01, verificationResult.VerificationError);
+            }
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void InvalidExtendToUserProvidedPublicationTest(Ksi ksi)
         {
-            UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
-
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
             {
                 // publication data with modified hash
@@ -159,8 +233,33 @@ namespace Guardtime.KSI.Test.Integration
                     UserPublication = publicationData
                 };
 
+                PublicationBasedVerificationPolicy rule = new PublicationBasedVerificationPolicy();
                 VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
+                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+                Assert.AreEqual(VerificationError.Int09, verificationResult.VerificationError);
+            }
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void ExtendToUserProvidedPublicationNotInPublilcationsFilesTest(Ksi ksi)
+        {
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
+            {
+                // publication data that is not included in publications file. Time: 2016-07-12 00:00:00 UTC
+                PublicationData publicationData = new PublicationData("AAAAAA-CXQQZQ-AAPGJF-HGNMUN-DXEIQW-NJZZOE-J76OK4-BV3FKY-AEAWIP-KSPZPW-EJKVAI-JPOOR7");
+
+                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+                IKsiSignature extendedSignature = ksi.Extend(ksiSignature, publicationData);
+
+                TestVerificationContext context = new TestVerificationContext()
+                {
+                    Signature = extendedSignature,
+                    UserPublication = publicationData
+                };
+
+                PublicationBasedVerificationPolicy rule = new PublicationBasedVerificationPolicy();
+                VerificationResult verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
         }
 

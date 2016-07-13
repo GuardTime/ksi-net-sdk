@@ -1213,7 +1213,11 @@
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>IF EXIST "$(ProjectDir)\Guardtime.KSI.Test.dll.config" COPY /Y "$(ProjectDir)\Guardtime.KSI.Test.dll.config" "$(TargetDir)"</PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>IF EXIST "$(ProjectDir)\Guardtime.KSI.Test.dll.config" COPY /Y "$(ProjectDir)\Guardtime.KSI.Test.dll.config" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
