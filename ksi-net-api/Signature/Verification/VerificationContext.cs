@@ -77,6 +77,11 @@ namespace Guardtime.KSI.Signature.Verification
         public IPublicationsFile PublicationsFile { get; set; }
 
         /// <summary>
+        /// Document hash node level value in the aggregation tree
+        /// </summary>
+        public uint Level { get; set; }
+
+        /// <summary>
         ///     Get extended latest calendar hash chain.
         /// </summary>
         /// <returns>extended calendar hash chain</returns>

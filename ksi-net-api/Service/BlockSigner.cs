@@ -143,7 +143,7 @@ namespace Guardtime.KSI.Service
             BuildTree();
             uint signLevel = _root.Level;
 
-            Logger.Debug("Signing root node hash. Level: {0}; Hash: ", signLevel, _root.NodeHash);
+            Logger.Debug("Signing root node hash. Level: {0}; Hash: {1}", signLevel, _root.NodeHash);
             RootSignature = _ksi.Sign(_root.NodeHash, signLevel);
         }
 
@@ -197,6 +197,11 @@ namespace Guardtime.KSI.Service
             Logger.Debug("End creating uni-signatures.");
         }
 
+        /// <summary>
+        /// Prepare chain index. Leave element is filled later.
+        /// </summary>
+        /// <param name="existingChain"></param>
+        /// <returns></returns>
         protected static ulong[] PrepareChainIndex(AggregationHashChain existingChain)
         {
             ulong[] existingChainIndex = existingChain.GetChainIndex();

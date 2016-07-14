@@ -800,7 +800,6 @@ namespace Guardtime.KSI.Test.Signature
         public void MultiSignatureWithMetadataPaddingTlv16Invalid()
         {
             IKsiSignature signature = GetKsiSignatureFromFile(Properties.Resources.AggregationHashChainMetadataWithPadding1);
-
             KsiMultiSignature multiSignature;
 
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.MultiSignatureWithMetadataPaddingTlv16_Invalid), FileMode.Open))
@@ -808,15 +807,10 @@ namespace Guardtime.KSI.Test.Signature
                 multiSignature = new KsiMultiSignature(stream, new KsiSignatureFactory());
             }
 
-            AggregationHashChainMetadataRule rule = new AggregationHashChainMetadataRule();
-
-            TestVerificationContext context = new TestVerificationContext()
+            Assert.That(delegate
             {
-                Signature = multiSignature.Get(signature.GetAggregationHashChains()[0].InputHash)
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+                multiSignature.Get(signature.GetAggregationHashChains()[0].InputHash);
+            }, Throws.TypeOf<KsiSignatureException>().With.Message.Contains(VerificationError.Int11.Code));
         }
 
         /// <summary>

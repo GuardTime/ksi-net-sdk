@@ -81,8 +81,9 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         ///     Get aggregation hash chain output hash.
         /// </summary>
+        /// <param name="level">Document hash node level value in the aggregation tree</param>
         /// <returns>output hash</returns>
-        DataHash GetAggregationHashChainRootHash();
+        DataHash GetAggregationHashChainRootHash(uint level);
 
         /// <summary>
         ///     Extend KSI signature with given calendar hash chain.
@@ -112,5 +113,12 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         /// <param name="outputStream">output stream</param>
         void WriteTo(Stream outputStream);
+
+        /// <summary>
+        /// Verify with internal verification policy
+        /// </summary>
+        /// <param name="documentHash"></param>
+        /// <param name="level">Document hash node level value in the aggregation tree</param>
+        void DoInternalVerification(DataHash documentHash, uint level = 0);
     }
 }

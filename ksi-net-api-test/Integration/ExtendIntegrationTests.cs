@@ -26,7 +26,6 @@ using Guardtime.KSI.Publication;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
-using Guardtime.KSI.Signature.Verification.Rule;
 using Guardtime.KSI.Test.Signature.Verification.Rule;
 using NUnit.Framework;
 
@@ -168,25 +167,17 @@ namespace Guardtime.KSI.Test.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void InvalidExtendAndVerifyToUserProvidedPublicationFromTestCoreTest(Ksi ksi)
         {
-            PublicationBasedVerificationPolicy rule = new PublicationBasedVerificationPolicy();
-
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
             {
                 // publication data from Test core, not included in publications file. Time: 2016-07-12 00:00:00 UTC
                 PublicationData publicationData = new PublicationData("AAAAAA-CXQQZQ-AAOSZH-ONCB4K-TFGPBW-R6S6TF-6EW4DU-4QMP7X-GI2VCO-TNGAZM-EV6AZR-464IOA");
 
                 IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
-                IKsiSignature extendedSignature = ksi.Extend(ksiSignature, publicationData);
 
-                TestVerificationContext context = new TestVerificationContext()
+                Assert.That(delegate
                 {
-                    Signature = extendedSignature,
-                    UserPublication = publicationData
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-                Assert.AreEqual(VerificationError.Int09, verificationResult.VerificationError);
+                    ksi.Extend(ksiSignature, publicationData);
+                }, Throws.TypeOf<KsiSignatureException>().With.Message.Contains(VerificationError.Int09.Code));
             }
         }
 
@@ -225,18 +216,11 @@ namespace Guardtime.KSI.Test.Integration
                 PublicationData publicationData = new PublicationData("AAAAAA-CW45II-AAIYPA-UJ4GRT-HXMFBE-OTB4AB-XH3PT3-KNIKGV-PYCJXU-HL2TN4-RG6SCA-ZP3ZLX");
 
                 IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
-                IKsiSignature extendedSignature = ksi.Extend(ksiSignature, publicationData);
 
-                TestVerificationContext context = new TestVerificationContext()
+                Assert.That(delegate
                 {
-                    Signature = extendedSignature,
-                    UserPublication = publicationData
-                };
-
-                PublicationBasedVerificationPolicy rule = new PublicationBasedVerificationPolicy();
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-                Assert.AreEqual(VerificationError.Int09, verificationResult.VerificationError);
+                    ksi.Extend(ksiSignature, publicationData);
+                }, Throws.TypeOf<KsiSignatureException>().With.Message.Contains(VerificationError.Int09.Code));
             }
         }
 
