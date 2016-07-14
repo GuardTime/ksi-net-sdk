@@ -49,5 +49,16 @@ namespace Guardtime.KSI.Publication
             : base(new RawTag(Constants.PublicationRecord.TagTypeInSignature, nonCritical, forward, value))
         {
         }
+
+        /// <summary>
+        /// Create new publication record TLV element to be used in signature.
+        /// </summary>
+        /// <param name="nonCritical">Is TLV element non critical</param>
+        /// <param name="forward">Is TLV element forwarded</param>
+        /// <param name="publicationData">Publication data</param>
+        public PublicationRecordInSignature(bool nonCritical, bool forward, PublicationData publicationData)
+            : base(new RawTag(Constants.PublicationRecord.TagTypeInSignature, nonCritical, forward, publicationData.Encode()))
+        {
+        }
     }
 }
