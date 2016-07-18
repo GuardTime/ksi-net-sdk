@@ -26,7 +26,6 @@ using Guardtime.KSI.Publication;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
-using Guardtime.KSI.Test.Signature.Verification.Rule;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Integration
@@ -106,9 +105,8 @@ namespace Guardtime.KSI.Test.Integration
                 IKsiSignature extendedSignature = ksi.Extend(ksiSignature);
                 PublicationData publicationData = ksi.GetPublicationsFile().GetNearestPublicationRecord(ksiSignature.AggregationTime).PublicationData;
 
-                TestVerificationContext context = new TestVerificationContext()
+                VerificationContext context = new VerificationContext(extendedSignature)
                 {
-                    Signature = extendedSignature,
                     UserPublication = publicationData
                 };
 
@@ -129,9 +127,8 @@ namespace Guardtime.KSI.Test.Integration
                 IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
                 IKsiSignature extendedSignature = ksi.Extend(ksiSignature, publicationData);
 
-                TestVerificationContext context = new TestVerificationContext()
+                VerificationContext context = new VerificationContext(extendedSignature)
                 {
-                    Signature = extendedSignature,
                     UserPublication = publicationData
                 };
 
@@ -153,9 +150,8 @@ namespace Guardtime.KSI.Test.Integration
                 IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
                 IKsiSignature extendedSignature = ksi.Extend(ksiSignature, publicationData);
 
-                TestVerificationContext context = new TestVerificationContext()
+                VerificationContext context = new VerificationContext(extendedSignature)
                 {
-                    Signature = extendedSignature,
                     UserPublication = publicationData
                 };
 
@@ -193,12 +189,11 @@ namespace Guardtime.KSI.Test.Integration
 
                 IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
 
-                TestVerificationContext context = new TestVerificationContext()
+                VerificationContext context = new VerificationContext(ksiSignature)
                 {
-                    Signature = ksiSignature,
                     IsExtendingAllowed = true,
                     UserPublication = publicationData,
-                    ExtendedCalendarHashChain = GetHttpKsiService().Extend(ksiSignature.AggregationTime, publicationData.PublicationTime)
+                    KsiService = GetHttpKsiService()
                 };
 
                 VerificationResult verificationResult = rule.Verify(context);
@@ -221,29 +216,6 @@ namespace Guardtime.KSI.Test.Integration
                 {
                     ksi.Extend(ksiSignature, publicationData);
                 }, Throws.TypeOf<KsiSignatureException>().With.Message.Contains(VerificationError.Int09.Code));
-            }
-        }
-
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
-        public void ExtendToUserProvidedPublicationNotInPublilcationsFilesTest(Ksi ksi)
-        {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
-            {
-                // publication data that is not included in publications file. Time: 2016-07-12 00:00:00 UTC
-                PublicationData publicationData = new PublicationData("AAAAAA-CXQQZQ-AAPGJF-HGNMUN-DXEIQW-NJZZOE-J76OK4-BV3FKY-AEAWIP-KSPZPW-EJKVAI-JPOOR7");
-
-                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
-                IKsiSignature extendedSignature = ksi.Extend(ksiSignature, publicationData);
-
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = extendedSignature,
-                    UserPublication = publicationData
-                };
-
-                PublicationBasedVerificationPolicy rule = new PublicationBasedVerificationPolicy();
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
         }
 
