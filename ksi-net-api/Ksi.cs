@@ -77,8 +77,8 @@ namespace Guardtime.KSI
         /// <summary>
         ///     Sign document hash.
         /// </summary>
-        /// <param name="hash">document hash</param>
-        /// <param name="level">the level value of the aggregation tree node</param>
+        /// <param name="hash">Document hash</param>
+        /// <param name="level">The document hash node level value in the aggregation tree</param>
         /// <returns>KSI signature</returns>
         public IKsiSignature Sign(DataHash hash, uint level)
         {

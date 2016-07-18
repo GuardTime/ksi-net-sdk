@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -24,6 +25,8 @@ using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
+using Guardtime.KSI.Signature.Verification;
+using Guardtime.KSI.Signature.Verification.Policy;
 using NLog;
 
 namespace Guardtime.KSI.Signature
@@ -216,15 +219,16 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         ///     Get aggregation hash chain output hash.
         /// </summary>
+        /// <param name="level">Document hash node level value in the aggregation tree</param>
         /// <returns>output hash</returns>
-        public DataHash GetAggregationHashChainRootHash()
+        public DataHash GetAggregationHashChainRootHash(uint level)
         {
             if (_aggregationHashChainRootHash != null)
             {
                 return _aggregationHashChainRootHash;
             }
 
-            AggregationHashChainResult lastResult = new AggregationHashChainResult(0, _aggregationHashChains[0].InputHash);
+            AggregationHashChainResult lastResult = new AggregationHashChainResult(level, _aggregationHashChains[0].InputHash);
 
             foreach (AggregationHashChain chain in _aggregationHashChains)
             {
@@ -301,7 +305,9 @@ namespace Guardtime.KSI.Signature
                 try
                 {
                     KsiSignature signature = new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false, ((MemoryStream)writer.BaseStream).ToArray()));
+                    signature.DoInternalVerification(GetAggregationHashChains()[0].InputHash);
                     Logger.Debug("Extending KSI signature successful.");
+
                     return signature;
                 }
                 catch (TlvException e)
@@ -309,6 +315,36 @@ namespace Guardtime.KSI.Signature
                     Logger.Warn("Extending KSI signature failed: {0}", e);
                     throw;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Verify with internal verification policy
+        /// </summary>
+        /// <param name="documentHash"></param>
+        /// <param name="level">Document hash node level value in the aggregation tree</param>
+        public void DoInternalVerification(DataHash documentHash, uint level = 0)
+        {
+            if (documentHash == null)
+            {
+                throw new ArgumentNullException(nameof(documentHash));
+            }
+
+            VerificationPolicy policy = new InternalVerificationPolicy();
+            VerificationContext context = new VerificationContext(this) { DocumentHash = documentHash, Level = level };
+            VerificationResult verificationResult = policy.Verify(context);
+
+            if (verificationResult.ResultCode != VerificationResultCode.Ok)
+            {
+                Logger.Warn("Signature internal verification failed. {0}Verification error: {1}{2}Verification result: {3}{4}Signature: {5}",
+                    Environment.NewLine,
+                    verificationResult.VerificationError,
+                    Environment.NewLine,
+                    verificationResult,
+                    Environment.NewLine,
+                    this);
+
+                throw new KsiSignatureException("Signature internal verification failed. Verification error: " + verificationResult.VerificationError);
             }
         }
 
