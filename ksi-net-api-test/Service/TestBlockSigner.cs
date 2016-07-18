@@ -18,15 +18,10 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.MultiSignature;
-using NUnit.Framework.Internal;
 
 namespace Guardtime.KSI.Test.Service
 {
