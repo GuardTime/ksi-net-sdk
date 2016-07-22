@@ -155,7 +155,7 @@ namespace Guardtime.KSI
             /// <summary>
             ///     Aggregation PDU TLV type.
             /// </summary>
-            public const uint TagType = 0x200;
+            public const uint TagType = 0x2FF;
         }
 
         public static class AggregationRequestPayload
@@ -197,7 +197,7 @@ namespace Guardtime.KSI
             /// <summary>
             ///     Extension PDU TLV type.
             /// </summary>
-            public const uint TagType = 0x300;
+            public const uint TagType = 0x3FF;
         }
 
         public static class ExtendRequestPayload

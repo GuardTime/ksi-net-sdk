@@ -18,6 +18,7 @@
  */
 
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Service
@@ -98,11 +99,29 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="header">KSI header</param>
         /// <param name="payload">Extend pdu payload</param>
-        /// <param name="mac">Extend pdu hmac</param>
-        public ExtendPdu(KsiPduHeader header, KsiPduPayload payload, ImprintTag mac)
-            : base(header, mac, Constants.ExtendPdu.TagType, false, false, new ITlvTag[] { header, payload, mac })
+        /// <param name="hmacAlgorithm">HMAC algorithm</param>
+        /// <param name="key">hmac key</param>
+        public ExtendPdu(KsiPduHeader header, KsiPduPayload payload, HashAlgorithm hmacAlgorithm, byte[] key)
+            : base(Constants.ExtendPdu.TagType, false, false, new ITlvTag[] { header, payload, GetEmptyHashMacTag(hmacAlgorithm) })
         {
+            if (header == null)
+            {
+                throw new TlvException("Invalid header TLV: null.");
+            }
+
+            if (payload == null)
+            {
+                throw new TlvException("Invalid payload TLV: null.");
+            }
+
+            if (hmacAlgorithm == null)
+            {
+                throw new TlvException("Invalid HMAC algorithm: null.");
+            }
+
+            Header = header;
             Payload = payload;
+            SetHmacValue(hmacAlgorithm, key);
         }
     }
 }

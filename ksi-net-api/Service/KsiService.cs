@@ -19,6 +19,7 @@
 
 using System;
 using System.IO;
+using System.Security.Cryptography;
 using System.Threading;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
@@ -27,6 +28,7 @@ using Guardtime.KSI.Publication;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Utils;
 using NLog;
+using HashAlgorithm = Guardtime.KSI.Hashing.HashAlgorithm;
 
 namespace Guardtime.KSI.Service
 {
@@ -223,7 +225,7 @@ namespace Guardtime.KSI.Service
 
             KsiPduHeader header = new KsiPduHeader(_signingServiceCredentials.LoginId);
             AggregationRequestPayload payload = level == 0 ? new AggregationRequestPayload(hash) : new AggregationRequestPayload(hash, level);
-            AggregationPdu pdu = new AggregationPdu(header, payload, KsiPdu.GetHashMacTag(_hmacAlgorithm, _signingServiceCredentials.LoginKey, header, payload));
+            AggregationPdu pdu = new AggregationPdu(header, payload, _hmacAlgorithm, _signingServiceCredentials.LoginKey);
 
             Logger.Debug("Begin sign (request id: {0}){1}{2}", payload.RequestId, Environment.NewLine, pdu);
             IAsyncResult serviceProtocolAsyncResult = _sigingServiceProtocol.BeginSign(pdu.Encode(), payload.RequestId, callback, asyncState);
@@ -405,7 +407,7 @@ namespace Guardtime.KSI.Service
 
                     if (payload == null && errorPayload == null)
                     {
-                        throw new KsiException("Invalid extension response payload: null.");
+                        throw new KsiException("Invalid extend response payload: null.");
                     }
 
                     if (payload == null || payload.Status != 0)
@@ -416,7 +418,7 @@ namespace Guardtime.KSI.Service
 
                     if (!pdu.ValidateMac(_extendingServiceCredentials.LoginKey))
                     {
-                        throw new KsiServiceException("Invalid HMAC in aggregation response payload");
+                        throw new KsiServiceException("Invalid HMAC in extend response payload");
                     }
 
                     if (payload.CalendarHashChain == null)
@@ -521,7 +523,7 @@ namespace Guardtime.KSI.Service
             }
 
             KsiPduHeader header = new KsiPduHeader(_extendingServiceCredentials.LoginId);
-            ExtendPdu pdu = new ExtendPdu(header, payload, KsiPdu.GetHashMacTag(_hmacAlgorithm, _extendingServiceCredentials.LoginKey, header, payload));
+            ExtendPdu pdu = new ExtendPdu(header, payload, _hmacAlgorithm, _extendingServiceCredentials.LoginKey);
 
             Logger.Debug("Begin extend. (request id: {0}){1}{2}", payload.RequestId, Environment.NewLine, pdu);
             IAsyncResult serviceProtocolAsyncResult = _extendingServiceProtocol.BeginExtend(pdu.Encode(), payload.RequestId, callback, asyncState);

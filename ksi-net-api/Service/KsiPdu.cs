@@ -17,8 +17,8 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.IO;
-using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 
@@ -29,13 +29,14 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public abstract class KsiPdu : CompositeTag
     {
-        private readonly KsiPduHeader _header;
-        private readonly ImprintTag _mac;
+        private ImprintTag _mac;
 
         /// <summary>
         ///     Get PDU payload.
         /// </summary>
         public abstract KsiPduPayload Payload { get; }
+
+        protected KsiPduHeader Header { get; set; }
 
         /// <summary>
         ///     Create KSI PDU from TLV element.
@@ -50,7 +51,7 @@ namespace Guardtime.KSI.Service
                 switch (childTag.Type)
                 {
                     case Constants.KsiPduHeader.TagType:
-                        this[i] = _header = new KsiPduHeader(childTag);
+                        this[i] = Header = new KsiPduHeader(childTag);
                         break;
                     case Constants.KsiPdu.MacTagType:
                         this[i] = _mac = new ImprintTag(childTag);
@@ -62,27 +63,28 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Create KSI PDU from PDU header and data.
         /// </summary>
-        /// <param name="header">KSI PDU header</param>
-        /// <param name="mac">KSI pdu hmac</param>
         /// <param name="type">TLV type</param>
         /// <param name="nonCritical">Is TLV element non critical</param>
         /// <param name="forward">Is TLV element forwarded</param>
         /// <param name="value">TLV element list</param>
-        protected KsiPdu(KsiPduHeader header, ImprintTag mac, uint type, bool nonCritical, bool forward, ITlvTag[] value)
+        protected KsiPdu(uint type, bool nonCritical, bool forward, ITlvTag[] value)
             : base(type, nonCritical, forward, value)
         {
-            if (header == null)
-            {
-                throw new TlvException("Invalid TLV header: null.");
-            }
+        }
 
-            if (mac == null)
+        protected void SetHmacValue(HashAlgorithm hmacAlgorithm, byte[] key)
+        {
+            for (int i = 0; i < Count; i++)
             {
-                throw new TlvException("Invalid hashmac hash: null");
-            }
+                ITlvTag childTag = this[i];
 
-            _header = header;
-            _mac = mac;
+                switch (childTag.Type)
+                {
+                    case Constants.KsiPdu.MacTagType:
+                        this[i] = _mac = CreateHashMacTag(GetHashMac(hmacAlgorithm, key));
+                        break;
+                }
+            }
         }
 
         /// <summary>
@@ -90,16 +92,29 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="hmacAlgorithm">HMAC algorithm</param>
         /// <param name="key">hmac key</param>
-        /// <param name="header">KSI header</param>
-        /// <param name="payload">KSI payload</param>
-        public static ImprintTag GetHashMacTag(HashAlgorithm hmacAlgorithm, byte[] key, KsiPduHeader header, KsiPduPayload payload)
+        protected DataHash GetHashMac(HashAlgorithm hmacAlgorithm, byte[] key)
         {
-            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
+            // replace last n bytes with HMAC
+            MemoryStream stream = new MemoryStream();
+            using (TlvWriter writer = new TlvWriter(stream))
             {
-                writer.WriteTag(header);
-                writer.WriteTag(payload);
-                return new ImprintTag(Constants.KsiPdu.MacTagType, false, false, CalculateMac(hmacAlgorithm, key, ((MemoryStream)writer.BaseStream).ToArray()));
+                writer.WriteTag(this);
+                byte[] target = new byte[stream.Length - hmacAlgorithm.Length];
+                Array.Copy(stream.ToArray(), 0, target, 0, target.Length);
+                return CalculateMac(hmacAlgorithm, key, target);
             }
+        }
+
+        protected static ImprintTag GetEmptyHashMacTag(HashAlgorithm hmacAlgorithm)
+        {
+            byte[] imprintBytes = new byte[hmacAlgorithm.Length + 1];
+            imprintBytes[0] = hmacAlgorithm.Id;
+            return CreateHashMacTag(new DataHash(imprintBytes));
+        }
+
+        protected static ImprintTag CreateHashMacTag(DataHash dataHash)
+        {
+            return new ImprintTag(Constants.KsiPdu.MacTagType, false, false, dataHash);
         }
 
         /// <summary>
@@ -127,14 +142,16 @@ namespace Guardtime.KSI.Service
                 return false;
             }
 
-            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
-            {
-                writer.WriteTag(_header);
-                writer.WriteTag(Payload);
+            return GetHashMac(_mac.Value.Algorithm, key).Equals(_mac.Value);
 
-                DataHash hash = CalculateMac(_mac.Value.Algorithm, key, ((MemoryStream)writer.BaseStream).ToArray());
-                return hash.Equals(_mac.Value);
-            }
+            //using (TlvWriter writer = new TlvWriter(new MemoryStream()))
+            //{
+            //    writer.WriteTag(Header);
+            //    writer.WriteTag(Payload);
+
+            //    DataHash hash = CalculateMac(_mac.Value.Algorithm, key, ((MemoryStream)writer.BaseStream).ToArray());
+            //    return hash.Equals(_mac.Value);
+            //}
         }
     }
 }
