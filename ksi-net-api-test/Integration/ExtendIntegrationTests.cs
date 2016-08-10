@@ -160,7 +160,8 @@ namespace Guardtime.KSI.Test.Integration
                 };
 
                 VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
+                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+                Assert.AreEqual(VerificationError.Int09.Code, verificationResult.VerificationError.Code);
             }
         }
 
