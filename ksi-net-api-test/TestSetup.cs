@@ -18,6 +18,7 @@
  */
 
 using System;
+using System.Configuration;
 using System.IO;
 using System.Reflection;
 using Guardtime.KSI.Test.Crypto;
@@ -29,6 +30,7 @@ namespace Guardtime.KSI.Test
     public class TestSetup
     {
         private static string _localPath;
+        private static bool? _runLegacyRequestFormatTests;
 
         public static string LocalPath
         {
@@ -40,6 +42,18 @@ namespace Guardtime.KSI.Test
                 }
 
                 return _localPath;
+            }
+        }
+
+        public static bool RunLegacyRequestFormatTests
+        {
+            get
+            {
+                if (_runLegacyRequestFormatTests == null)
+                {
+                    _runLegacyRequestFormatTests = ConfigurationManager.AppSettings["RunLegacyRequestFormatTests"]?.ToLower() == "true";
+                }
+                return _runLegacyRequestFormatTests.Value;
             }
         }
 

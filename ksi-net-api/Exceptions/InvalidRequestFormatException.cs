@@ -17,20 +17,18 @@
  * reserves and retains all trademark rights.
  */
 
-using Guardtime.KSI.Parser;
-
-namespace Guardtime.KSI.Service
+namespace Guardtime.KSI.Exceptions
 {
     /// <summary>
-    ///     Extend error payload.
+    /// Invalid request format exception
     /// </summary>
-    public sealed class ExtendErrorPayload : ErrorPayload
+    public class InvalidRequestFormatException : KsiException
     {
         /// <summary>
-        ///     Create extend error payload from TLV element.
+        /// Create invalid request format exception
         /// </summary>
-        /// <param name="tag">TLV element</param>
-        public ExtendErrorPayload(ITlvTag tag) : base(tag, Constants.ExtendErrorPayload.TagType)
+        /// <param name="message"></param>
+        public InvalidRequestFormatException(string message) : base(message)
         {
         }
     }

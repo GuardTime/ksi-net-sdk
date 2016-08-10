@@ -25,6 +25,7 @@ using System.Text;
 using System.Threading;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
+using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
@@ -281,6 +282,22 @@ namespace Guardtime.KSI.Test.Integration
             }
 
             Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " All done.");
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void HttpGetAggregationConfig(Ksi ksi)
+        {
+            if (TestSetup.RunLegacyRequestFormatTests)
+            {
+                Assert.Throws<InvalidRequestFormatException>(delegate
+                {
+                    ksi.GetAggregationConfig();
+                });
+            }
+            else
+            {
+                ksi.GetAggregationConfig();
+            }
         }
     }
 }

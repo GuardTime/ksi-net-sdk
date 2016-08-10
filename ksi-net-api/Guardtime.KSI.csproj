@@ -90,6 +90,7 @@
     <Compile Include="Crypto\CertificateSubjectRdn.cs" />
     <Compile Include="Exceptions\BlockSigningException.cs" />
     <Compile Include="Exceptions\HashingException.cs" />
+    <Compile Include="Exceptions\InvalidRequestFormatException.cs" />
     <Compile Include="Exceptions\KsiSignatureException.cs" />
     <Compile Include="Exceptions\KsiMultiSignatureInvalidHashException.cs" />
     <Compile Include="Exceptions\KsiMultiSignatureException.cs" />
@@ -133,7 +134,12 @@
     <Compile Include="Publication\PublicationsFileHeader.cs" />
     <Compile Include="Publication\PublicationsFile.cs" />
     <Compile Include="Publication\PublicationData.cs" />
+    <Compile Include="Service\LegacyAggregationPdu.cs" />
+    <Compile Include="Service\AggregationConfigRequestPayload.cs" />
+    <Compile Include="Service\AggregationConfigResponsePayload.cs" />
     <Compile Include="Service\BlockSigner.cs" />
+    <Compile Include="Service\LegacyExtendPdu.cs" />
+    <Compile Include="Service\LegacyKsiPdu.cs" />
     <Compile Include="Service\TcpKsiServiceProtocol.cs" />
     <Compile Include="Signature\AggregationHashChain.Metadata.cs" />
     <Compile Include="Signature\AggregationHashChain.Link.cs" />

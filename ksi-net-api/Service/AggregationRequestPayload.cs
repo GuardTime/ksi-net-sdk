@@ -35,7 +35,7 @@ namespace Guardtime.KSI.Service
         private readonly IntegerTag _requestLevel;
 
         /// <summary>
-        ///     Create extend request payload from TLV element.
+        ///     Create aggregation request payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         public AggregationRequestPayload(ITlvTag tag) : base(tag)

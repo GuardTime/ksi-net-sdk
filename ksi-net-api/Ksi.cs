@@ -125,6 +125,15 @@ namespace Guardtime.KSI
         }
 
         /// <summary>
+        /// Get additional aggergation configuration data (sync)
+        /// </summary>
+        /// <returns>Aggregation configuration response payload</returns>
+        public AggregationConfigResponsePayload GetAggregationConfig()
+        {
+            return _ksiService.GetAggregationConfig();
+        }
+
+        /// <summary>
         ///     Extend signature to publication.
         ///     <example>
         ///         Equals to following code

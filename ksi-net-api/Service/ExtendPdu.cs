@@ -24,7 +24,7 @@ using Guardtime.KSI.Parser;
 namespace Guardtime.KSI.Service
 {
     /// <summary>
-    ///     Extension PDU.
+    ///     Extendx PDU.
     /// </summary>
     public sealed class ExtendPdu : KsiPdu
     {

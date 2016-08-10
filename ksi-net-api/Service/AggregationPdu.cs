@@ -66,6 +66,14 @@ namespace Guardtime.KSI.Service
                         this[i] = Payload = new AggregationErrorPayload(childTag);
                         payloadCount++;
                         break;
+                    case Constants.AggregationConfigRequestPayload.TagType:
+                        this[i] = Payload = new AggregationConfigRequestPayload(childTag);
+                        payloadCount++;
+                        break;
+                    case Constants.AggregationConfigResponsePayload.TagType:
+                        this[i] = Payload = new AggregationConfigResponsePayload(childTag);
+                        payloadCount++;
+                        break;
                     case Constants.KsiPduHeader.TagType:
                         headerCount++;
                         break;

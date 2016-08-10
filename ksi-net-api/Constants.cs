@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 
 #pragma warning disable 1591
 
@@ -142,12 +143,13 @@ namespace Guardtime.KSI
             public const uint ErrorMessageTagType = 0x5;
         }
 
-        public static class AggregationErrorPayload
+        [Obsolete]
+        public static class LegacyAggregationPdu
         {
             /// <summary>
-            ///     Aggregation error payload TLV type.
+            ///     Aggregation PDU TLV type.
             /// </summary>
-            public const uint TagType = 0x203;
+            public const uint TagType = 0x200;
         }
 
         public static class AggregationPdu
@@ -169,6 +171,8 @@ namespace Guardtime.KSI
             public const uint RequestIdTagType = 0x1;
             public const uint RequestHashTagType = 0x2;
             public const uint RequestLevelTagType = 0x3;
+
+            [Obsolete]
             public const uint ConfigTagType = 0x10;
         }
 
@@ -180,22 +184,61 @@ namespace Guardtime.KSI
             public const uint TagType = 0x202;
 
             public const uint RequestIdTagType = 0x1;
+
+            [Obsolete]
             public const uint ConfigTagType = 0x10;
+
+            [Obsolete]
             public const uint RequestAcknowledgmentTagType = 0x11;
         }
 
-        public static class ExtendErrorPayload
+        public static class AggregationErrorPayload
         {
             /// <summary>
-            ///     Extension error payload TLV type.
+            ///     Aggregation error payload TLV type.
             /// </summary>
-            public const uint TagType = 0x303;
+            public const uint TagType = 0x203;
+        }
+
+        public static class AggregationConfigRequestPayload
+        {
+            /// <summary>
+            ///     Aggregation config request TLV type.
+            /// </summary>
+            public const uint TagType = 0x204;
+        }
+
+        public static class AggregationConfigResponsePayload
+        {
+            /// <summary>
+            ///     Aggregation config response payload TLV type.
+            /// </summary>
+            public const uint TagType = 0x205;
+
+            public const uint AggregationPeriodTagType = 0x1;
+
+            public const uint AggregationAlgorithmTagType = 0x2;
+
+            public const uint MaxLevelTagType = 0x3;
+
+            public const uint MaxRequestsTagType = 0x4;
+
+            public const uint ParentUriTagType = 0x10;
+        }
+
+        [Obsolete]
+        public static class LegacyExtendPdu
+        {
+            /// <summary>
+            ///     Extension PDU TLV type.
+            /// </summary>
+            public const uint TagType = 0x300;
         }
 
         public static class ExtendPdu
         {
             /// <summary>
-            ///     Extension PDU TLV type.
+            ///     Extend PDU TLV type.
             /// </summary>
             public const uint TagType = 0x3FF;
         }
@@ -215,12 +258,24 @@ namespace Guardtime.KSI
         public static class ExtendResponsePayload
         {
             /// <summary>
-            ///     Extension response payload TLV type.
+            ///     Extend response payload TLV type.
             /// </summary>
             public const uint TagType = 0x302;
 
             public const uint RequestIdTagType = 0x1;
+
+            [Obsolete]
             public const uint LastTimeTagType = 0x10;
+
+            public const uint CalendarLastTimeTagType = 0x12;
+        }
+
+        public static class ExtendErrorPayload
+        {
+            /// <summary>
+            ///     Extend error payload TLV type.
+            /// </summary>
+            public const uint TagType = 0x303;
         }
 
         public static class KsiPduHeader
