@@ -229,7 +229,7 @@ namespace Guardtime.KSI.Test.Signature
             Assert.That(delegate
             {
                 GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Type);
-            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Invalid aggregation hash chain type(2050)"));
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Invalid tag type! Class: AggregationHashChain; Type: 0x802;"));
         }
 
         [Test]

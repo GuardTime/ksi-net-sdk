@@ -39,10 +39,7 @@ namespace Guardtime.KSI.Signature
         /// <param name="tag">TLV element</param>
         public AggregationAuthenticationRecord(ITlvTag tag) : base(tag)
         {
-            if (Type != Constants.AggregationAuthenticationRecord.TagType)
-            {
-                throw new TlvException("Invalid aggregation authentication record type(" + Type + ").");
-            }
+            CheckTagType(Constants.AggregationAuthenticationRecord.TagType);
 
             int aggregationTimeCount = 0;
             int inputHashCount = 0;

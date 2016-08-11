@@ -47,10 +47,7 @@ namespace Guardtime.KSI.Signature
         /// <param name="tag">TLV element</param>
         public KsiSignature(ITlvTag tag) : base(tag)
         {
-            if (Type != Constants.KsiSignature.TagType)
-            {
-                throw new TlvException("Invalid KSI signature type(" + Type + ").");
-            }
+            CheckTagType(Constants.KsiSignature.TagType);
 
             int calendarChainCount = 0;
             int publicationRecordCount = 0;

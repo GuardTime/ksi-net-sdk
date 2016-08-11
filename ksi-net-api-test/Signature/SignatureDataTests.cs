@@ -56,7 +56,7 @@ namespace Guardtime.KSI.Test.Signature
             Assert.That(delegate
             {
                 GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Wrong_Type);
-            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Invalid signature data type(10)"));
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Invalid tag type! Class: SignatureData; Type: 0xA;"));
         }
 
         [Test]
@@ -65,7 +65,7 @@ namespace Guardtime.KSI.Test.Signature
             Assert.That(delegate
             {
                 GetSignatureDataFromFile(Properties.Resources.SignatureData_Invalid_Extra_Tag);
-            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Unknown tag"));
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Unknown tag type (0xF)"));
         }
 
         [Test]
