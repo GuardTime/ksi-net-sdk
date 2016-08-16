@@ -130,9 +130,9 @@ namespace Guardtime.KSI.Signature.Verification
         public static readonly VerificationError Cal03 = new VerificationError("CAL-03", "Aggregation time mismatch");
 
         /// <summary>
-        ///     Aggregation hash chain right links are inconsistent error.
+        ///     Calendar hash chain right links are inconsistent error.
         /// </summary>
-        public static readonly VerificationError Cal04 = new VerificationError("CAL-04", "Aggregation hash chain right links are inconsistent");
+        public static readonly VerificationError Cal04 = new VerificationError("CAL-04", "Calendar hash chain right links are inconsistent");
 
         private VerificationError(string code, string message)
         {
