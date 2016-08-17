@@ -41,10 +41,7 @@ namespace Guardtime.KSI.Service
         [Obsolete]
         public LegacyAggregationPdu(ITlvTag tag) : base(tag)
         {
-            if (Type != Constants.LegacyAggregationPdu.TagType)
-            {
-                throw new TlvException("Invalid aggregation PDU type(" + Type + ").");
-            }
+            CheckTagType(Constants.LegacyAggregationPdu.TagType);
 
             int headerCount = 0;
             int payloadCount = 0;
