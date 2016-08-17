@@ -44,10 +44,6 @@ namespace Guardtime.KSI.Service
                 throw new TlvException("Invalid extend PDU type(" + Type + ").");
             }
 
-            int headerCount = 0;
-            int payloadCount = 0;
-            int macCount = 0;
-
             for (int i = 0; i < Count; i++)
             {
                 ITlvTag childTag = this[i];
@@ -56,41 +52,20 @@ namespace Guardtime.KSI.Service
                 {
                     case Constants.ExtendRequestPayload.TagType:
                         this[i] = Payload = new ExtendRequestPayload(childTag);
-                        payloadCount++;
                         break;
                     case Constants.ExtendResponsePayload.TagType:
                         this[i] = Payload = new ExtendResponsePayload(childTag);
-                        payloadCount++;
                         break;
                     case Constants.ExtendErrorPayload.TagType:
                         this[i] = Payload = new ExtendErrorPayload(childTag);
-                        payloadCount++;
                         break;
                     case Constants.KsiPduHeader.TagType:
-                        headerCount++;
-                        break;
                     case Constants.KsiPdu.MacTagType:
-                        macCount++;
                         break;
                     default:
                         VerifyUnknownTag(childTag);
                         break;
                 }
-            }
-
-            if (payloadCount != 1)
-            {
-                throw new TlvException("Exactly one payload must exist in KSI PDU.");
-            }
-
-            if (Payload.Type != Constants.ExtendErrorPayload.TagType && headerCount != 1)
-            {
-                throw new TlvException("Exactly one header must exist in KSI PDU.");
-            }
-
-            if (Payload.Type != Constants.ExtendErrorPayload.TagType && macCount != 1)
-            {
-                throw new TlvException("Exactly one mac must exist in KSI PDU.");
             }
         }
 
@@ -102,26 +77,9 @@ namespace Guardtime.KSI.Service
         /// <param name="hmacAlgorithm">HMAC algorithm</param>
         /// <param name="key">hmac key</param>
         public ExtendPdu(KsiPduHeader header, KsiPduPayload payload, HashAlgorithm hmacAlgorithm, byte[] key)
-            : base(Constants.ExtendPdu.TagType, false, false, new ITlvTag[] { header, payload, GetEmptyHashMacTag(hmacAlgorithm) })
+            : base(Constants.ExtendPdu.TagType, header, payload, hmacAlgorithm, key)
         {
-            if (header == null)
-            {
-                throw new TlvException("Invalid header TLV: null.");
-            }
-
-            if (payload == null)
-            {
-                throw new TlvException("Invalid payload TLV: null.");
-            }
-
-            if (hmacAlgorithm == null)
-            {
-                throw new TlvException("Invalid HMAC algorithm: null.");
-            }
-
-            Header = header;
             Payload = payload;
-            SetHmacValue(hmacAlgorithm, key);
         }
     }
 }

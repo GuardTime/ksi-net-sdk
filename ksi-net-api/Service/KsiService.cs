@@ -188,14 +188,13 @@ namespace Guardtime.KSI.Service
         /// <returns>KSI signature</returns>
         public IKsiSignature Sign(DataHash hash, uint level)
         {
-            bool useLegacyRequestFormat = _useLegacyRequestFormat;
             try
             {
-                return EndSign(useLegacyRequestFormat ? BeginLegacySign(hash, level, null, null) : BeginSign(hash, level, null, null));
+                return EndSign(_useLegacyRequestFormat ? BeginLegacySign(hash, level, null, null) : BeginSign(hash, level, null, null));
             }
             catch (InvalidRequestFormatException e)
             {
-                if (useLegacyRequestFormat)
+                if (_useLegacyRequestFormat)
                 {
                     _useLegacyRequestFormat = false;
                     Logger.Debug("Invalid request format. Used format: legacy. " + e.Message);
@@ -551,14 +550,13 @@ namespace Guardtime.KSI.Service
         /// <returns>extended calendar hash chain</returns>
         public CalendarHashChain Extend(ulong aggregationTime)
         {
-            bool useLegacyRequestFormat = _useLegacyRequestFormat;
             try
             {
-                return useLegacyRequestFormat ? EndExtend(BeginLegacyExtend(aggregationTime, null, null)) : EndExtend(BeginExtend(aggregationTime, null, null));
+                return _useLegacyRequestFormat ? EndExtend(BeginLegacyExtend(aggregationTime, null, null)) : EndExtend(BeginExtend(aggregationTime, null, null));
             }
             catch (InvalidRequestFormatException e)
             {
-                if (useLegacyRequestFormat)
+                if (_useLegacyRequestFormat)
                 {
                     _useLegacyRequestFormat = false;
                     Logger.Debug("Invalid request format. Used format: legacy. " + e.Message);
@@ -585,18 +583,15 @@ namespace Guardtime.KSI.Service
         /// <returns>extended calendar hash chain</returns>
         public CalendarHashChain Extend(ulong aggregationTime, ulong publicationTime)
         {
-            //return EndExtend(BeginExtend(aggregationTime, publicationTime, null, null));
-
-            bool useLegacyRequestFormat = _useLegacyRequestFormat;
             try
             {
-                return useLegacyRequestFormat
+                return _useLegacyRequestFormat
                     ? EndExtend(BeginLegacyExtend(aggregationTime, publicationTime, null, null))
                     : EndExtend(BeginExtend(aggregationTime, publicationTime, null, null));
             }
             catch (InvalidRequestFormatException e)
             {
-                if (useLegacyRequestFormat)
+                if (_useLegacyRequestFormat)
                 {
                     _useLegacyRequestFormat = false;
                     Logger.Debug("Invalid request format. Used format: legacy. " + e.Message);
@@ -935,17 +930,6 @@ namespace Guardtime.KSI.Service
         private class ExtendSignatureKsiServiceAsyncResult : KsiServiceAsyncResult
         {
             public ExtendSignatureKsiServiceAsyncResult(ulong requestId, IAsyncResult serviceProtocolAsyncResult, object asyncState)
-                : base(serviceProtocolAsyncResult, asyncState)
-            {
-                RequestId = requestId;
-            }
-
-            public ulong RequestId { get; }
-        }
-
-        private class ExtenderConfigKsiServiceAsyncResult : KsiServiceAsyncResult
-        {
-            public ExtenderConfigKsiServiceAsyncResult(ulong requestId, IAsyncResult serviceProtocolAsyncResult, object asyncState)
                 : base(serviceProtocolAsyncResult, asyncState)
             {
                 RequestId = requestId;

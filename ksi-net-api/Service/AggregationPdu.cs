@@ -44,10 +44,6 @@ namespace Guardtime.KSI.Service
                 throw new TlvException("Invalid aggregation PDU type(" + Type + ").");
             }
 
-            int headerCount = 0;
-            int payloadCount = 0;
-            int macCount = 0;
-
             for (int i = 0; i < Count; i++)
             {
                 ITlvTag childTag = this[i];
@@ -56,49 +52,26 @@ namespace Guardtime.KSI.Service
                 {
                     case Constants.AggregationRequestPayload.TagType:
                         this[i] = Payload = new AggregationRequestPayload(childTag);
-                        payloadCount++;
                         break;
                     case Constants.AggregationResponsePayload.TagType:
                         this[i] = Payload = new AggregationResponsePayload(childTag);
-                        payloadCount++;
                         break;
                     case Constants.AggregationErrorPayload.TagType:
                         this[i] = Payload = new AggregationErrorPayload(childTag);
-                        payloadCount++;
                         break;
                     case Constants.AggregationConfigRequestPayload.TagType:
                         this[i] = Payload = new AggregationConfigRequestPayload(childTag);
-                        payloadCount++;
                         break;
                     case Constants.AggregationConfigResponsePayload.TagType:
                         this[i] = Payload = new AggregationConfigResponsePayload(childTag);
-                        payloadCount++;
                         break;
                     case Constants.KsiPduHeader.TagType:
-                        headerCount++;
-                        break;
                     case Constants.KsiPdu.MacTagType:
-                        macCount++;
                         break;
                     default:
                         VerifyUnknownTag(childTag);
                         break;
                 }
-            }
-
-            if (payloadCount != 1)
-            {
-                throw new TlvException("Exactly one payload must exist in KSI PDU.");
-            }
-
-            if (Payload.Type != Constants.AggregationErrorPayload.TagType && headerCount != 1)
-            {
-                throw new TlvException("Exactly one header must exist in KSI PDU.");
-            }
-
-            if (Payload.Type != Constants.AggregationErrorPayload.TagType && macCount != 1)
-            {
-                throw new TlvException("Exactly one mac must exist in KSI PDU");
             }
         }
 
@@ -110,26 +83,9 @@ namespace Guardtime.KSI.Service
         /// <param name="hmacAlgorithm">HMAC algorithm</param>
         /// <param name="key">hmac key</param>
         public AggregationPdu(KsiPduHeader header, KsiPduPayload payload, HashAlgorithm hmacAlgorithm, byte[] key)
-            : base(Constants.AggregationPdu.TagType, false, false, new ITlvTag[] { header, payload, GetEmptyHashMacTag(hmacAlgorithm) })
+            : base(Constants.AggregationPdu.TagType, header, payload, hmacAlgorithm, key)
         {
-            if (header == null)
-            {
-                throw new TlvException("Invalid header TLV: null.");
-            }
-
-            if (payload == null)
-            {
-                throw new TlvException("Invalid payload TLV: null.");
-            }
-
-            if (hmacAlgorithm == null)
-            {
-                throw new TlvException("Invalid HMAC algorithm: null.");
-            }
-
-            Header = header;
             Payload = payload;
-            SetHmacValue(hmacAlgorithm, key);
         }
     }
 }
