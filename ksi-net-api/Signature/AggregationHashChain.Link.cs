@@ -61,6 +61,8 @@ namespace Guardtime.KSI.Signature
             /// <param name="direction">Direction</param>
             public Link(ITlvTag tag, LinkDirection direction) : base(tag)
             {
+                CheckTagType((uint)LinkDirection.Right, (uint)LinkDirection.Left);
+
                 int levelCorrectionCount = 0;
                 int siblingHashCount = 0;
                 int legacyIdCount = 0;

@@ -51,7 +51,7 @@ namespace Guardtime.KSI.Test.Signature
             Assert.That(delegate
             {
                 GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Type);
-            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Invalid calendar hash chain type(2051)"));
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Invalid tag type! Class: CalendarHashChain; Type: 0x803;"));
         }
 
         [Test]

@@ -90,7 +90,7 @@ namespace Guardtime.KSI.Test.Signature
             Assert.That(delegate
             {
                 GetKsiSignatureDoFromFile(Properties.Resources.KsiSignatureDo_Invalid_Type);
-            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Invalid KSI signature type(2201)"));
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Invalid tag type! Class: KsiSignature; Type: 0x899;"));
         }
 
         [Test]

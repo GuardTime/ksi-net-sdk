@@ -39,10 +39,7 @@ namespace Guardtime.KSI.Signature
         /// <param name="tag">TLV element</param>
         public SignatureData(ITlvTag tag) : base(tag)
         {
-            if (Type != Constants.SignatureData.TagType)
-            {
-                throw new TlvException("Invalid signature data type(" + Type + ").");
-            }
+            CheckTagType(Constants.SignatureData.TagType);
 
             int signatureTypeCount = 0;
             int signatureValueCount = 0;

@@ -62,10 +62,7 @@ namespace Guardtime.KSI.Signature
             /// <param name="tag">TLV element</param>
             public Metadata(ITlvTag tag) : base(tag)
             {
-                if (Type != Constants.AggregationHashChain.Metadata.TagType)
-                {
-                    throw new TlvException("Invalid aggregation hash chain link metadata type(" + Type + ").");
-                }
+                CheckTagType(Constants.AggregationHashChain.Metadata.TagType);
 
                 int clientIdCount = 0;
                 int machineIdCount = 0;

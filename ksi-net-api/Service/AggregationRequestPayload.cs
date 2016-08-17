@@ -40,10 +40,7 @@ namespace Guardtime.KSI.Service
         /// <param name="tag">TLV element</param>
         public AggregationRequestPayload(ITlvTag tag) : base(tag)
         {
-            if (Type != Constants.AggregationRequestPayload.TagType)
-            {
-                throw new TlvException("Invalid aggregation request payload type(" + Type + ").");
-            }
+            CheckTagType(Constants.AggregationRequestPayload.TagType);
 
             int requestIdCount = 0;
             int requestHashCount = 0;

@@ -147,7 +147,7 @@ namespace Guardtime.KSI.Parser
 
             if (!tag.NonCritical)
             {
-                throw new TlvException("Unknown tag type(" + tag.Type + ").");
+                throw new TlvException("Unknown tag type (0x" + tag.Type.ToString("X") + ").");
             }
         }
 

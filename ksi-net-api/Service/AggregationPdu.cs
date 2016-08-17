@@ -39,10 +39,7 @@ namespace Guardtime.KSI.Service
         /// <param name="tag">TLV element</param>
         public AggregationPdu(ITlvTag tag) : base(tag)
         {
-            if (Type != Constants.AggregationPdu.TagType)
-            {
-                throw new TlvException("Invalid aggregation PDU type(" + Type + ").");
-            }
+            CheckTagType(Constants.AggregationPdu.TagType);
 
             for (int i = 0; i < Count; i++)
             {

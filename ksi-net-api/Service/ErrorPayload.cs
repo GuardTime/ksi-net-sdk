@@ -34,10 +34,7 @@ namespace Guardtime.KSI.Service
         /// <param name="expectedTagType">expected tag type</param>
         protected ErrorPayload(ITlvTag tag, uint expectedTagType) : base(tag)
         {
-            if (Type != expectedTagType)
-            {
-                throw new TlvException("Invalid aggregation error type(" + Type + ").");
-            }
+            CheckTagType(expectedTagType);
 
             int statusCount = 0;
             int errorMessageCount = 0;

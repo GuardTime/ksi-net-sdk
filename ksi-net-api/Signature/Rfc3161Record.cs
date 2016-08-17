@@ -47,10 +47,7 @@ namespace Guardtime.KSI.Signature
         /// <param name="tag">TLV element</param>
         public Rfc3161Record(ITlvTag tag) : base(tag)
         {
-            if (Type != Constants.Rfc3161Record.TagType)
-            {
-                throw new TlvException("Invalid RFC#3161 record type(" + Type + ").");
-            }
+            CheckTagType(Constants.Rfc3161Record.TagType);
 
             int aggregationTimeCount = 0;
             int inputHashCount = 0;
