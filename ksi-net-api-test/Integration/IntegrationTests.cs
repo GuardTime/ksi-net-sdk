@@ -51,16 +51,7 @@ namespace Guardtime.KSI.Test.Integration
         {
             new object[]
             {
-                new Ksi(
-                    new KsiService(
-                        HttpKsiServiceProtocol,
-                        new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
-                        HttpKsiServiceProtocol,
-                        new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
-                        HttpKsiServiceProtocol,
-                        new PublicationsFileFactory(
-                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
-                        HashAlgorithm.Sha2256))
+                new Ksi(GetHttpKsiService())
             }
         };
 
@@ -77,7 +68,10 @@ namespace Guardtime.KSI.Test.Integration
                         HttpKsiServiceProtocol,
                         new PublicationsFileFactory(
                             new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
-                        new KsiSignatureFactory()))
+                        new KsiSignatureFactory())
+                    {
+                        PduVersion = TestSetup.PduVersion
+                    })
             }
         };
 
@@ -95,7 +89,10 @@ namespace Guardtime.KSI.Test.Integration
                         new PublicationsFileFactory(
                             new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
                         new KsiSignatureFactory(),
-                        HashAlgorithm.Sha2256))
+                        HashAlgorithm.Sha2256)
+                    {
+                        PduVersion = TestSetup.PduVersion
+                    })
             }
         };
 
@@ -111,7 +108,10 @@ namespace Guardtime.KSI.Test.Integration
                         new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
                         HttpKsiServiceProtocol,
                         new PublicationsFileFactory(
-                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com")))))
+                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))))
+                    {
+                        PduVersion = TestSetup.PduVersion
+                    })
             }
         };
 
@@ -127,7 +127,10 @@ namespace Guardtime.KSI.Test.Integration
                         new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
                         HttpKsiServiceProtocol,
                         new PublicationsFileFactory(
-                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com")))))
+                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))))
+                    {
+                        PduVersion = TestSetup.PduVersion
+                    })
             }
         };
 
@@ -143,7 +146,10 @@ namespace Guardtime.KSI.Test.Integration
                         new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
                         HttpKsiServiceProtocolInvalidUrls,
                         new PublicationsFileFactory(
-                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com")))))
+                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))))
+                    {
+                        PduVersion = TestSetup.PduVersion
+                    })
             }
         };
 
@@ -159,7 +165,10 @@ namespace Guardtime.KSI.Test.Integration
                         new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
                         HttpKsiServiceProtocol,
                         new PublicationsFileFactory(
-                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com")))))
+                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))))
+                    {
+                        PduVersion = TestSetup.PduVersion
+                    })
             }
         };
 
@@ -175,7 +184,10 @@ namespace Guardtime.KSI.Test.Integration
                         new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, "anonx"),
                         HttpKsiServiceProtocol,
                         new PublicationsFileFactory(
-                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com")))))
+                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))))
+                    {
+                        PduVersion = TestSetup.PduVersion
+                    })
             }
         };
 
@@ -191,7 +203,10 @@ namespace Guardtime.KSI.Test.Integration
                         new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
                         HttpKsiServiceProtocolInvalidUrls,
                         new PublicationsFileFactory(
-                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com")))))
+                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))))
+                    {
+                        PduVersion = TestSetup.PduVersion
+                    })
             }
         };
 
@@ -207,7 +222,10 @@ namespace Guardtime.KSI.Test.Integration
                         new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
                         HttpKsiServiceProtocolInvalidUrls,
                         new PublicationsFileFactory(
-                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com")))))
+                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))))
+                    {
+                        PduVersion = TestSetup.PduVersion
+                    })
             }
         };
 
@@ -220,7 +238,10 @@ namespace Guardtime.KSI.Test.Integration
                 new ServiceCredentials("anon", "anon"),
                 HttpKsiServiceProtocol,
                 new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                    CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))));
+                    CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))))
+            {
+                PduVersion = TestSetup.PduVersion
+            };
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]

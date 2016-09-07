@@ -36,9 +36,13 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public class KsiService : IKsiService
     {
-        private static bool _useLegacyRequestFormat;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly HashAlgorithm DefaultHmacAlgorithm = HashAlgorithm.Sha2256;
+
+        /// <summary>
+        /// Default PDU format version
+        /// </summary>
+        public const PduVersion DefaultPduVersion = PduVersion.v1;
 
         private readonly IKsiSigningServiceProtocol _sigingServiceProtocol;
         private readonly IKsiExtendingServiceProtocol _extendingServiceProtocol;
@@ -157,7 +161,7 @@ namespace Guardtime.KSI.Service
         {
             if (publicationsFileFactory == null)
             {
-                throw new KsiException("Invalid publications file factory: null.");
+                throw new KsiServiceException("Invalid publications file factory: null.");
             }
 
             _sigingServiceProtocol = signingServiceProtocol;
@@ -168,7 +172,13 @@ namespace Guardtime.KSI.Service
             _publicationsFileFactory = publicationsFileFactory;
             _ksiSignatureFactory = ksiSignatureFactory;
             _hmacAlgorithm = hmacAlgorithm;
+            PduVersion = DefaultPduVersion;
         }
+
+        /// <summary>
+        /// PDU format version
+        /// </summary>
+        public PduVersion PduVersion { get; set; }
 
         /// <summary>
         ///     Create signature with given data hash (sync).
@@ -188,29 +198,7 @@ namespace Guardtime.KSI.Service
         /// <returns>KSI signature</returns>
         public IKsiSignature Sign(DataHash hash, uint level)
         {
-            try
-            {
-                return EndSign(_useLegacyRequestFormat ? BeginLegacySign(hash, level, null, null) : BeginSign(hash, level, null, null));
-            }
-            catch (InvalidRequestFormatException e)
-            {
-                if (_useLegacyRequestFormat)
-                {
-                    _useLegacyRequestFormat = false;
-                    Logger.Debug("Invalid request format. Used format: legacy. " + e.Message);
-                    Logger.Debug("Trying to use different format: new.");
-
-                    return EndSign(BeginSign(hash, level, null, null));
-                }
-                else
-                {
-                    _useLegacyRequestFormat = true;
-                    Logger.Debug("Invalid request format. Used format: new. " + e.Message);
-                    Logger.Debug("Trying to use different format: legacy.");
-
-                    return EndSign(BeginLegacySign(hash, level, null, null));
-                }
-            }
+            return EndSign(BeginSign(hash, level, null, null));
         }
 
         /// <summary>
@@ -242,7 +230,12 @@ namespace Guardtime.KSI.Service
 
             if (_signingServiceCredentials == null)
             {
-                throw new KsiException("Signing service credentials are missing.");
+                throw new KsiServiceException("Signing service credentials are missing.");
+            }
+
+            if (PduVersion == PduVersion.v1)
+            {
+                return BeginLegacySign(hash, level, callback, asyncState);
             }
 
             KsiPduHeader header = new KsiPduHeader(_signingServiceCredentials.LoginId);
@@ -266,16 +259,6 @@ namespace Guardtime.KSI.Service
         [Obsolete]
         private IAsyncResult BeginLegacySign(DataHash hash, uint level, AsyncCallback callback, object asyncState)
         {
-            if (_sigingServiceProtocol == null)
-            {
-                throw new KsiServiceException("Signing service protocol is missing from service.");
-            }
-
-            if (_signingServiceCredentials == null)
-            {
-                throw new KsiException("Signing service credentials are missing.");
-            }
-
             KsiPduHeader header = new KsiPduHeader(_signingServiceCredentials.LoginId);
             AggregationRequestPayload payload = level == 0 ? new AggregationRequestPayload(hash) : new AggregationRequestPayload(hash, level);
             LegacyAggregationPdu pdu = new LegacyAggregationPdu(header, payload, LegacyKsiPdu.GetHashMacTag(_hmacAlgorithm, _signingServiceCredentials.LoginKey, header, payload));
@@ -300,7 +283,7 @@ namespace Guardtime.KSI.Service
 
             if (asyncResult == null)
             {
-                throw new KsiException("Invalid IAsyncResult: null.");
+                throw new KsiServiceException("Invalid IAsyncResult: null.");
             }
 
             CreateSignatureKsiServiceAsyncResult serviceAsyncResult = asyncResult as CreateSignatureKsiServiceAsyncResult;
@@ -334,7 +317,7 @@ namespace Guardtime.KSI.Service
             {
                 if (data == null)
                 {
-                    throw new KsiException("Invalid sign response payload: null.");
+                    throw new KsiServiceException("Invalid sign response payload: null.");
                 }
 
                 RawTag rawTag;
@@ -358,14 +341,21 @@ namespace Guardtime.KSI.Service
 
                 if (payload == null && errorPayload == null)
                 {
-                    throw new KsiException("Invalid aggregation response payload: null.");
+                    throw new KsiServiceException("Invalid aggregation response payload: null.");
                 }
 
                 if (payload == null || payload.Status != 0)
                 {
                     if ((payload?.Status ?? errorPayload.Status) == 0x0101)
                     {
-                        throw new InvalidRequestFormatException("Expected format: " + (legacyPdu != null ? "legacy" : "new"));
+                        if (PduVersion == PduVersion.v1 && legacyPdu == null)
+                        {
+                            throw new InvalidRequestFormatException("Received PDU v2 response to PDU v1 request. Configure the SDK to use PDU v2 format for the given Aggregator.");
+                        }
+                        if (PduVersion == PduVersion.v2 && legacyPdu != null)
+                        {
+                            throw new InvalidRequestFormatException("Received PDU v1 response to PDU v2 request. Configure the SDK to use PDU v1 format for the given Aggregator.");
+                        }
                     }
 
                     string errorMessage = payload == null ? errorPayload.ErrorMessage : payload.ErrorMessage;
@@ -376,7 +366,7 @@ namespace Guardtime.KSI.Service
                 {
                     if (!legacyPdu.ValidateMac(_signingServiceCredentials.LoginKey))
                     {
-                        throw new KsiServiceException("Invalid HMAC in aggregation response payload");
+                        throw new KsiServiceException("Invalid HMAC in aggregation response payload.");
                     }
                     Logger.Debug("End sign successful (request id: {0}){1}{2}", serviceAsyncResult.RequestId, Environment.NewLine, legacyPdu);
                 }
@@ -384,7 +374,7 @@ namespace Guardtime.KSI.Service
                 {
                     if (!pdu.ValidateMac(_signingServiceCredentials.LoginKey))
                     {
-                        throw new KsiServiceException("Invalid HMAC in aggregation response payload");
+                        throw new KsiServiceException("Invalid HMAC in aggregation response payload.");
                     }
                     Logger.Debug("End sign successful (request id: {0}){1}{2}", serviceAsyncResult.RequestId, Environment.NewLine, pdu);
                 }
@@ -395,7 +385,7 @@ namespace Guardtime.KSI.Service
             }
             catch (TlvException e)
             {
-                KsiException ksiException = new KsiException("Could not parse response message: " + Base16.Encode(data), e);
+                KsiException ksiException = new KsiServiceException("Could not parse response message: " + Base16.Encode(data), e);
                 Logger.Warn("End sign request failed (request id: {0}): {1}", serviceAsyncResult.RequestId, ksiException);
                 throw ksiException;
             }
@@ -431,6 +421,11 @@ namespace Guardtime.KSI.Service
         /// <returns>async result</returns>
         public IAsyncResult BeginGetAggregationConfig(AsyncCallback callback, object asyncState)
         {
+            if (PduVersion == PduVersion.v1)
+            {
+                throw new KsiServiceException("Config request is not supported using PDU version v1.");
+            }
+
             if (_sigingServiceProtocol == null)
             {
                 throw new KsiServiceException("Signing service protocol is missing from service.");
@@ -438,7 +433,7 @@ namespace Guardtime.KSI.Service
 
             if (_signingServiceCredentials == null)
             {
-                throw new KsiException("Signing service credentials are missing.");
+                throw new KsiServiceException("Signing service credentials are missing.");
             }
 
             KsiPduHeader header = new KsiPduHeader(_signingServiceCredentials.LoginId);
@@ -468,7 +463,7 @@ namespace Guardtime.KSI.Service
 
             if (asyncResult == null)
             {
-                throw new KsiException("Invalid IAsyncResult: null.");
+                throw new KsiServiceException("Invalid IAsyncResult: null.");
             }
 
             AggregationConfigKsiServiceAsyncResult serviceAsyncResult = asyncResult as AggregationConfigKsiServiceAsyncResult;
@@ -490,7 +485,7 @@ namespace Guardtime.KSI.Service
             {
                 if (data == null)
                 {
-                    throw new KsiException("Invalid aggregation config response payload: null.");
+                    throw new KsiServiceException("Invalid aggregation config response payload: null.");
                 }
 
                 RawTag rawTag;
@@ -502,7 +497,7 @@ namespace Guardtime.KSI.Service
 
                 if (rawTag.Type == Constants.LegacyAggregationPdu.TagType)
                 {
-                    throw new InvalidRequestFormatException("Aggregation configuration request can be used only with aggregators using new request format.");
+                    throw new InvalidRequestFormatException("Aggregation configuration request can be used only with aggregators using PDU version v2.");
                 }
 
                 pdu = new AggregationPdu(rawTag);
@@ -513,7 +508,7 @@ namespace Guardtime.KSI.Service
 
                 if (payload == null && errorPayload == null)
                 {
-                    throw new KsiException("Invalid aggregation config response payload: null.");
+                    throw new KsiServiceException("Invalid aggregation config response payload: null.");
                 }
 
                 if (payload == null)
@@ -523,7 +518,7 @@ namespace Guardtime.KSI.Service
 
                 if (!pdu.ValidateMac(_signingServiceCredentials.LoginKey))
                 {
-                    throw new KsiServiceException("Invalid HMAC in aggregation config response payload");
+                    throw new KsiServiceException("Invalid HMAC in aggregation config response payload.");
                 }
                 Logger.Debug("End sign successful (request id: {0}){1}{2}", serviceAsyncResult.RequestId, Environment.NewLine, pdu);
 
@@ -531,7 +526,7 @@ namespace Guardtime.KSI.Service
             }
             catch (TlvException e)
             {
-                KsiException ksiException = new KsiException("Could not parse response message: " + Base16.Encode(data), e);
+                KsiException ksiException = new KsiServiceException("Could not parse response message: " + Base16.Encode(data), e);
                 Logger.Warn("End aggregation config request failed (request id: {0}): {1}", serviceAsyncResult.RequestId, ksiException);
                 throw ksiException;
             }
@@ -550,29 +545,7 @@ namespace Guardtime.KSI.Service
         /// <returns>extended calendar hash chain</returns>
         public CalendarHashChain Extend(ulong aggregationTime)
         {
-            try
-            {
-                return _useLegacyRequestFormat ? EndExtend(BeginLegacyExtend(aggregationTime, null, null)) : EndExtend(BeginExtend(aggregationTime, null, null));
-            }
-            catch (InvalidRequestFormatException e)
-            {
-                if (_useLegacyRequestFormat)
-                {
-                    _useLegacyRequestFormat = false;
-                    Logger.Debug("Invalid request format. Used format: legacy. " + e.Message);
-                    Logger.Debug("Trying to use different format: new.");
-
-                    return EndExtend(BeginExtend(aggregationTime, null, null));
-                }
-                else
-                {
-                    _useLegacyRequestFormat = true;
-                    Logger.Debug("Invalid request format. Used format: new. " + e.Message);
-                    Logger.Debug("Trying to use different format: legacy.");
-
-                    return EndExtend(BeginLegacyExtend(aggregationTime, null, null));
-                }
-            }
+            return EndExtend(BeginExtend(aggregationTime, null, null));
         }
 
         /// <summary>
@@ -583,31 +556,7 @@ namespace Guardtime.KSI.Service
         /// <returns>extended calendar hash chain</returns>
         public CalendarHashChain Extend(ulong aggregationTime, ulong publicationTime)
         {
-            try
-            {
-                return _useLegacyRequestFormat
-                    ? EndExtend(BeginLegacyExtend(aggregationTime, publicationTime, null, null))
-                    : EndExtend(BeginExtend(aggregationTime, publicationTime, null, null));
-            }
-            catch (InvalidRequestFormatException e)
-            {
-                if (_useLegacyRequestFormat)
-                {
-                    _useLegacyRequestFormat = false;
-                    Logger.Debug("Invalid request format. Used format: legacy. " + e.Message);
-                    Logger.Debug("Trying to use different format: new.");
-
-                    return EndExtend(BeginExtend(aggregationTime, publicationTime, null, null));
-                }
-                else
-                {
-                    _useLegacyRequestFormat = true;
-                    Logger.Debug("Invalid request format. Used format: new. " + e.Message);
-                    Logger.Debug("Trying to use different format: legacy.");
-
-                    return EndExtend(BeginLegacyExtend(aggregationTime, publicationTime, null, null));
-                }
-            }
+            return EndExtend(BeginExtend(aggregationTime, publicationTime, null, null));
         }
 
         /// <summary>
@@ -619,6 +568,10 @@ namespace Guardtime.KSI.Service
         /// <returns>async result</returns>
         public IAsyncResult BeginExtend(ulong aggregationTime, AsyncCallback callback, object asyncState)
         {
+            if (PduVersion == PduVersion.v1)
+            {
+                return BeginLegacyExtend(aggregationTime, null, null);
+            }
             return BeginExtend(new ExtendRequestPayload(aggregationTime), callback, asyncState);
         }
 
@@ -633,6 +586,11 @@ namespace Guardtime.KSI.Service
         public IAsyncResult BeginExtend(ulong aggregationTime, ulong publicationTime, AsyncCallback callback,
                                         object asyncState)
         {
+            if (PduVersion == PduVersion.v1)
+            {
+                return BeginLegacyExtend(aggregationTime, publicationTime, null, null);
+            }
+
             return BeginExtend(new ExtendRequestPayload(aggregationTime, publicationTime), callback, asyncState);
         }
 
@@ -652,7 +610,7 @@ namespace Guardtime.KSI.Service
 
             if (_extendingServiceCredentials == null)
             {
-                throw new KsiException("Extending service credentials are missing.");
+                throw new KsiServiceException("Extending service credentials are missing.");
             }
 
             KsiPduHeader header = new KsiPduHeader(_extendingServiceCredentials.LoginId);
@@ -687,7 +645,7 @@ namespace Guardtime.KSI.Service
 
             if (_extendingServiceCredentials == null)
             {
-                throw new KsiException("Extending service credentials are missing.");
+                throw new KsiServiceException("Extending service credentials are missing.");
             }
 
             KsiPduHeader header = new KsiPduHeader(_extendingServiceCredentials.LoginId);
@@ -713,7 +671,7 @@ namespace Guardtime.KSI.Service
 
             if (asyncResult == null)
             {
-                throw new KsiException("Invalid IAsyncResult: null.");
+                throw new KsiServiceException("Invalid IAsyncResult: null.");
             }
 
             ExtendSignatureKsiServiceAsyncResult serviceAsyncResult = asyncResult as ExtendSignatureKsiServiceAsyncResult;
@@ -741,7 +699,7 @@ namespace Guardtime.KSI.Service
             {
                 if (data == null)
                 {
-                    throw new KsiException("Invalid extend response payload: null.");
+                    throw new KsiServiceException("Invalid extend response payload: null.");
                 }
 
                 RawTag rawTag;
@@ -765,25 +723,32 @@ namespace Guardtime.KSI.Service
 
                 if (payload == null && errorPayload == null)
                 {
-                    throw new KsiException("Invalid extend response payload: null.");
+                    throw new KsiServiceException("Invalid extend response payload: null.");
                 }
 
                 if (payload == null || payload.Status != 0)
                 {
                     if ((payload?.Status ?? errorPayload.Status) == 0x0101)
                     {
-                        throw new InvalidRequestFormatException("Expected format: " + (legacyPdu != null ? "legacy" : "new"));
+                        if (PduVersion == PduVersion.v1 && legacyPdu == null)
+                        {
+                            throw new InvalidRequestFormatException("Received PDU v2 response to PDU v1 request. Configure the SDK to use PDU v2 format for the given Extender.");
+                        }
+                        if (PduVersion == PduVersion.v2 && legacyPdu != null)
+                        {
+                            throw new InvalidRequestFormatException("Received PDU v1 response to PDU v2 request. Configure the SDK to use PDU v1 format for the given Extender.");
+                        }
                     }
 
                     string errorMessage = payload == null ? errorPayload.ErrorMessage : payload.ErrorMessage;
-                    throw new KsiException("Error occured during extending: " + errorMessage + ".");
+                    throw new KsiServiceException("Error occured during extending: " + errorMessage + ".");
                 }
 
                 if (pdu != null)
                 {
                     if (!pdu.ValidateMac(_extendingServiceCredentials.LoginKey))
                     {
-                        throw new KsiServiceException("Invalid HMAC in extend response payload");
+                        throw new KsiServiceException("Invalid HMAC in extend response payload.");
                     }
 
                     if (payload.CalendarHashChain == null)
@@ -797,7 +762,7 @@ namespace Guardtime.KSI.Service
                 {
                     if (!legacyPdu.ValidateMac(_extendingServiceCredentials.LoginKey))
                     {
-                        throw new KsiServiceException("Invalid HMAC in extend response payload");
+                        throw new KsiServiceException("Invalid HMAC in extend response payload.");
                     }
 
                     if (payload.CalendarHashChain == null)
@@ -812,7 +777,7 @@ namespace Guardtime.KSI.Service
             }
             catch (TlvException e)
             {
-                KsiException ksiException = new KsiException("Could not parse response message: " + Base16.Encode(data), e);
+                KsiException ksiException = new KsiServiceException("Could not parse response message: " + Base16.Encode(data), e);
                 Logger.Warn("End extend request failed (request id: {0}): {1}", serviceAsyncResult.RequestId, ksiException);
                 throw ksiException;
             }
@@ -872,7 +837,7 @@ namespace Guardtime.KSI.Service
 
             if (asyncResult == null)
             {
-                throw new KsiException("Invalid IAsyncResult: null.");
+                throw new KsiServiceException("Invalid IAsyncResult: null.");
             }
 
             KsiServiceAsyncResult serviceAsyncResult = asyncResult as PublicationKsiServiceAsyncResult;
@@ -958,7 +923,7 @@ namespace Guardtime.KSI.Service
             {
                 if (serviceProtocolAsyncResult == null)
                 {
-                    throw new KsiException("Invalid service protocol IAsyncResult: null.");
+                    throw new KsiServiceException("Invalid service protocol IAsyncResult: null.");
                 }
 
                 ServiceProtocolAsyncResult = serviceProtocolAsyncResult;

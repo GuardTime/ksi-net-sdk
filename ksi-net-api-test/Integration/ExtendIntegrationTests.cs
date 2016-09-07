@@ -23,6 +23,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
+using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
@@ -40,7 +41,7 @@ namespace Guardtime.KSI.Test.Integration
             {
                 IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
 
-                Exception ex = Assert.Throws<KsiException>(delegate
+                Exception ex = Assert.Throws<KsiServiceException>(delegate
                 {
                     ksi.Extend(ksiSignature);
                 });
@@ -315,6 +316,24 @@ namespace Guardtime.KSI.Test.Integration
             }
 
             Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " All done.");
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void ExtendInvalidPduFormat(Ksi ksi)
+        {
+            if (TestSetup.PduVersion == PduVersion.v1)
+            {
+                KsiService service = GetHttpKsiService();
+                service.PduVersion = PduVersion.v2;
+
+                Exception ex = Assert.Throws<InvalidRequestFormatException>(delegate
+                {
+                    service.Extend(1);
+                });
+
+                Assert.That(ex.Message.StartsWith("Received PDU v1 response to PDU v2 request. Configure the SDK to use PDU v1 format for the given Extender"),
+                    "Unexpected exception message: " + ex.Message);
+            }
         }
     }
 }

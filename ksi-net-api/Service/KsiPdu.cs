@@ -71,7 +71,10 @@ namespace Guardtime.KSI.Service
                     case Constants.AggregationConfigResponsePayload.TagType:
                     case Constants.ExtendRequestPayload.TagType:
                     case Constants.ExtendResponsePayload.TagType:
+                        payloadCount++;
+                        break;
                     case Constants.ExtendErrorPayload.TagType:
+                        hasErrorPayload = true;
                         payloadCount++;
                         break;
                     case Constants.KsiPduHeader.TagType:

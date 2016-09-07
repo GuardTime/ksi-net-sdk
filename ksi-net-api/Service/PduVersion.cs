@@ -17,19 +17,11 @@
  * reserves and retains all trademark rights.
  */
 
-namespace Guardtime.KSI.Exceptions
+namespace Guardtime.KSI.Service
 {
-    /// <summary>
-    /// Invalid request format exception
-    /// </summary>
-    public class InvalidRequestFormatException : KsiServiceException
+    public enum PduVersion
     {
-        /// <summary>
-        /// Create invalid request format exception
-        /// </summary>
-        /// <param name="message"></param>
-        public InvalidRequestFormatException(string message) : base(message)
-        {
-        }
+        v1,
+        v2
     }
 }

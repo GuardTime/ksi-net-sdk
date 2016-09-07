@@ -137,15 +137,33 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void InvalidExtendPduHeaderNotFirst()
         {
+            Assembly assembly = typeof(AggregationHashChain).Assembly;
+            Type linkType = assembly.GetType("Guardtime.KSI.Signature.CalendarHashChain+Link");
+
             Assert.That(delegate
             {
                 ExtendPdu tag = TestUtil.GetCompositeTag<ExtendPdu>(Constants.ExtendPdu.TagType,
                     new ITlvTag[]
                     {
-                        TestUtil.GetCompositeTag<ExtendErrorPayload>(Constants.ExtendErrorPayload.TagType, new ITlvTag[]
+                        TestUtil.GetCompositeTag<ExtendResponsePayload>(Constants.ExtendResponsePayload.TagType, new ITlvTag[]
                         {
-                            new IntegerTag(Constants.KsiPduPayload.StatusTagType, false, false, 1),
-                            new StringTag(Constants.KsiPduPayload.ErrorMessageTagType, false, false, "Test Error message")
+                            new IntegerTag(Constants.ExtendResponsePayload.RequestIdTagType, false, false, 2),
+                            new IntegerTag(Constants.KsiPduPayload.StatusTagType, false, false, 0),
+                            new StringTag(Constants.KsiPduPayload.ErrorMessageTagType, false, false, "Test error message."),
+                            new IntegerTag(Constants.ExtendResponsePayload.LastTimeTagType, false, false, 1),
+                            TestUtil.GetCompositeTag<CalendarHashChain>(Constants.CalendarHashChain.TagType,
+                                new ITlvTag[]
+                                {
+                                    new IntegerTag(Constants.CalendarHashChain.PublicationTimeTagType, false, false, 1),
+                                    new IntegerTag(Constants.CalendarHashChain.AggregationTimeTagType, false, false, 0),
+                                    new ImprintTag(Constants.CalendarHashChain.InputHashTagType, false, false,
+                                        new DataHash(HashAlgorithm.Sha2256,
+                                            new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
+                                    // add links
+                                    (ITlvTag)Activator.CreateInstance(linkType, new ImprintTag((uint)LinkDirection.Left, false, false,
+                                        new DataHash(HashAlgorithm.Sha2256,
+                                            new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })))
+                                })
                         }),
                         TestUtil.GetCompositeTag<KsiPduHeader>(Constants.KsiPduHeader.TagType,
                             new ITlvTag[]
@@ -165,6 +183,9 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void InvalidExtendPduHmacNotLast()
         {
+            Assembly assembly = typeof(AggregationHashChain).Assembly;
+            Type linkType = assembly.GetType("Guardtime.KSI.Signature.CalendarHashChain+Link");
+
             Assert.That(delegate
             {
                 ExtendPdu tag = TestUtil.GetCompositeTag<ExtendPdu>(Constants.ExtendPdu.TagType,
@@ -180,10 +201,25 @@ namespace Guardtime.KSI.Test.Service
                         new ImprintTag(Constants.KsiPdu.MacTagType, false, false,
                             new DataHash(HashAlgorithm.Sha2256,
                                 new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
-                        TestUtil.GetCompositeTag<ExtendErrorPayload>(Constants.ExtendErrorPayload.TagType, new ITlvTag[]
+                        TestUtil.GetCompositeTag<ExtendResponsePayload>(Constants.ExtendResponsePayload.TagType, new ITlvTag[]
                         {
-                            new IntegerTag(Constants.KsiPduPayload.StatusTagType, false, false, 1),
-                            new StringTag(Constants.KsiPduPayload.ErrorMessageTagType, false, false, "Test Error message")
+                            new IntegerTag(Constants.ExtendResponsePayload.RequestIdTagType, false, false, 2),
+                            new IntegerTag(Constants.KsiPduPayload.StatusTagType, false, false, 0),
+                            new StringTag(Constants.KsiPduPayload.ErrorMessageTagType, false, false, "Test error message."),
+                            new IntegerTag(Constants.ExtendResponsePayload.LastTimeTagType, false, false, 1),
+                            TestUtil.GetCompositeTag<CalendarHashChain>(Constants.CalendarHashChain.TagType,
+                                new ITlvTag[]
+                                {
+                                    new IntegerTag(Constants.CalendarHashChain.PublicationTimeTagType, false, false, 1),
+                                    new IntegerTag(Constants.CalendarHashChain.AggregationTimeTagType, false, false, 0),
+                                    new ImprintTag(Constants.CalendarHashChain.InputHashTagType, false, false,
+                                        new DataHash(HashAlgorithm.Sha2256,
+                                            new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
+                                    // add links
+                                    (ITlvTag)Activator.CreateInstance(linkType, new ImprintTag((uint)LinkDirection.Left, false, false,
+                                        new DataHash(HashAlgorithm.Sha2256,
+                                            new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })))
+                                })
                         }),
                     });
             }, Throws.Exception.InnerException.TypeOf<TlvException>().With.InnerException.Message.StartWith("HMAC must be the last element"),

@@ -28,27 +28,6 @@ namespace Guardtime.KSI.Test
     public class CryptoTestFactoryTests
     {
         [Test]
-        public void ProviderTypeTest()
-        {
-            string providerTypeString = ConfigurationManager.AppSettings["CryptoProviderType"];
-
-            Console.WriteLine("Selected crypto provider: " + CryptoTestFactory.ProviderType);
-
-            if (providerTypeString == "Microsoft")
-            {
-                Assert.AreEqual(CryptoProviderType.Microsoft, CryptoTestFactory.ProviderType, "Invalid crypto provider type.");
-            }
-            else if (providerTypeString == "BouncyCastle")
-            {
-                Assert.AreEqual(CryptoProviderType.BouncyCastle, CryptoTestFactory.ProviderType, "Invalid crypto provider type.");
-            }
-            else
-            {
-                Assert.Fail("Invalid CryptoProviderType in App.Config: " + providerTypeString);
-            }
-        }
-
-        [Test]
         public void CreateProviderTest()
         {
             string typeName = CryptoTestFactory.CreateProvider().GetType().FullName;

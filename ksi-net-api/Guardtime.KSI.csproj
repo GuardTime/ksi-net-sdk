@@ -140,6 +140,7 @@
     <Compile Include="Service\BlockSigner.cs" />
     <Compile Include="Service\LegacyExtendPdu.cs" />
     <Compile Include="Service\LegacyKsiPdu.cs" />
+    <Compile Include="Service\PduVersion.cs" />
     <Compile Include="Service\TcpKsiServiceProtocol.cs" />
     <Compile Include="Signature\AggregationHashChain.Metadata.cs" />
     <Compile Include="Signature\AggregationHashChain.Link.cs" />

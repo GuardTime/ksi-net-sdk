@@ -21,6 +21,7 @@ using System;
 using System.Configuration;
 using System.IO;
 using System.Reflection;
+using Guardtime.KSI.Service;
 using Guardtime.KSI.Test.Crypto;
 using NUnit.Framework;
 
@@ -30,7 +31,7 @@ namespace Guardtime.KSI.Test
     public class TestSetup
     {
         private static string _localPath;
-        private static bool? _runLegacyRequestFormatTests;
+        private static PduVersion? _pduVersion;
 
         public static string LocalPath
         {
@@ -45,15 +46,26 @@ namespace Guardtime.KSI.Test
             }
         }
 
-        public static bool RunLegacyRequestFormatTests
+        public static PduVersion PduVersion
         {
             get
             {
-                if (_runLegacyRequestFormatTests == null)
+                if (_pduVersion == null)
                 {
-                    _runLegacyRequestFormatTests = ConfigurationManager.AppSettings["RunLegacyRequestFormatTests"]?.ToLower() == "true";
+                    switch (Properties.Settings.Default.PduVersion)
+                    {
+                        case 1:
+                            _pduVersion = PduVersion.v1;
+                            break;
+                        case 2:
+                            _pduVersion = PduVersion.v2;
+                            break;
+                        default:
+                            _pduVersion = KsiService.DefaultPduVersion;
+                            break;
+                    }
                 }
-                return _runLegacyRequestFormatTests.Value;
+                return _pduVersion.Value;
             }
         }
 
