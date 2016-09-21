@@ -1036,6 +1036,9 @@
     <None Include="resources\signature\multi-signature\multi-signature-5.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="resources\signature\ksi-signature-do\ksi-signature-level-3-ok.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="resources\signature\multi-signature\signature_data_1_agg_time_1437657023.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

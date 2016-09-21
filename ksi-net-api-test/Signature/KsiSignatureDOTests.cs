@@ -180,7 +180,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, file), FileMode.Open))
             {
-                return new KsiSignatureFactory().Create(stream);
+                return new KsiSignatureFactory().Create(stream, false);
             }
         }
     }

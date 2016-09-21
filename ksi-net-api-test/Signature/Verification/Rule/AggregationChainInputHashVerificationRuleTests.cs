@@ -68,7 +68,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
-                    Signature = new KsiSignatureFactory().Create(stream)
+                    Signature = new KsiSignatureFactory().Create(stream, false)
                 };
 
                 Assert.Throws<KsiException>(delegate
@@ -107,7 +107,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
-                    Signature = new KsiSignatureFactory().Create(stream),
+                    Signature = new KsiSignatureFactory().Create(stream, false),
                     DocumentHash =
                         new DataHash(Base16.Decode("015466E3CBA14A843A5E93B78E3D6AB8D3491EDCAC7E06431CE1A7F49828C340C3"))
                 };
@@ -127,7 +127,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
-                    Signature = new KsiSignatureFactory().Create(stream),
+                    Signature = new KsiSignatureFactory().Create(stream, false),
                     DocumentHash =
                         new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D"))
                 };
@@ -147,7 +147,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
-                    Signature = new KsiSignatureFactory().Create(stream),
+                    Signature = new KsiSignatureFactory().Create(stream, false),
                     DocumentHash =
                         new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772E"))
                 };

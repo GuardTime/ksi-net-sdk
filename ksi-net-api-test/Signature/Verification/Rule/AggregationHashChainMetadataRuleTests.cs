@@ -85,7 +85,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 Signature = new KsiSignatureFactory().Create(
                     new FileStream(Path.Combine(TestSetup.LocalPath,
-                        Properties.Resources.AggregationHashChainMetadataWithPadding1), FileMode.Open))
+                        Properties.Resources.AggregationHashChainMetadataWithPadding1), FileMode.Open), false)
             };
 
             VerificationResult verificationResult = rule.Verify(context);
@@ -104,7 +104,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 Signature =
                     new KsiSignatureFactory().Create(new FileStream(Path.Combine(TestSetup.LocalPath,
-                        Properties.Resources.AggregationHashChainMetadataWithPadding2), FileMode.Open))
+                        Properties.Resources.AggregationHashChainMetadataWithPadding2), FileMode.Open), false)
             };
 
             VerificationResult verificationResult = rule.Verify(context);
@@ -123,7 +123,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 Signature =
                     new KsiSignatureFactory().Create(new FileStream(Path.Combine(TestSetup.LocalPath,
-                        Properties.Resources.AggregationHashChainMetadataPaddingNotFirstFail), FileMode.Open))
+                        Properties.Resources.AggregationHashChainMetadataPaddingNotFirstFail), FileMode.Open), false)
             };
 
             VerificationResult verificationResult = rule.Verify(context);
@@ -142,7 +142,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 Signature =
                     new KsiSignatureFactory().Create(new FileStream(Path.Combine(TestSetup.LocalPath,
-                        Properties.Resources.AggregationHashChainMetadataPaddingNotTlv8Fail), FileMode.Open))
+                        Properties.Resources.AggregationHashChainMetadataPaddingNotTlv8Fail), FileMode.Open), false)
             };
 
             VerificationResult verificationResult = rule.Verify(context);
@@ -161,7 +161,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 Signature =
                     new KsiSignatureFactory().Create(new FileStream(Path.Combine(TestSetup.LocalPath,
-                        Properties.Resources.AggregationHashChainMetadataPaddingNotForwardFail), FileMode.Open))
+                        Properties.Resources.AggregationHashChainMetadataPaddingNotForwardFail), FileMode.Open), false)
             };
 
             VerificationResult verificationResult = rule.Verify(context);
@@ -180,7 +180,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 Signature =
                     new KsiSignatureFactory().Create(new FileStream(Path.Combine(TestSetup.LocalPath,
-                        Properties.Resources.AggregationHashChainMetadataPaddingNotNonCriticalFail), FileMode.Open))
+                        Properties.Resources.AggregationHashChainMetadataPaddingNotNonCriticalFail), FileMode.Open), false)
             };
 
             VerificationResult verificationResult = rule.Verify(context);
@@ -199,7 +199,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 Signature =
                     new KsiSignatureFactory().Create(new FileStream(Path.Combine(TestSetup.LocalPath,
-                        Properties.Resources.AggregationHashChainMetadataPaddingNotForwardNotNonCriticalFail), FileMode.Open))
+                        Properties.Resources.AggregationHashChainMetadataPaddingNotForwardNotNonCriticalFail), FileMode.Open), false)
             };
 
             VerificationResult verificationResult = rule.Verify(context);
@@ -218,7 +218,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 Signature =
                     new KsiSignatureFactory().Create(new FileStream(Path.Combine(TestSetup.LocalPath,
-                        Properties.Resources.AggregationHashChainMetadataUnknownPaddingValue1Fail), FileMode.Open))
+                        Properties.Resources.AggregationHashChainMetadataUnknownPaddingValue1Fail), FileMode.Open), false)
             };
 
             VerificationResult verificationResult = rule.Verify(context);
@@ -237,7 +237,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 Signature =
                     new KsiSignatureFactory().Create(new FileStream(Path.Combine(TestSetup.LocalPath,
-                        Properties.Resources.AggregationHashChainMetadataUnknownPaddingValue2Fail), FileMode.Open))
+                        Properties.Resources.AggregationHashChainMetadataUnknownPaddingValue2Fail), FileMode.Open), false)
             };
 
             VerificationResult verificationResult = rule.Verify(context);
@@ -256,7 +256,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 Signature =
                     new KsiSignatureFactory().Create(new FileStream(Path.Combine(TestSetup.LocalPath,
-                        Properties.Resources.AggregationHashChainMetadataUnknownPaddingValue3Fail), FileMode.Open))
+                        Properties.Resources.AggregationHashChainMetadataUnknownPaddingValue3Fail), FileMode.Open), false)
             };
 
             VerificationResult verificationResult = rule.Verify(context);
@@ -275,7 +275,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 Signature =
                     new KsiSignatureFactory().Create(new FileStream(Path.Combine(TestSetup.LocalPath,
-                        Properties.Resources.AggregationHashChainMetadataInvalidPaddingFail), FileMode.Open))
+                        Properties.Resources.AggregationHashChainMetadataInvalidPaddingFail), FileMode.Open), false)
             };
 
             VerificationResult verificationResult = rule.Verify(context);
@@ -294,7 +294,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 Signature =
                     new KsiSignatureFactory().Create(new FileStream(Path.Combine(TestSetup.LocalPath,
-                        Properties.Resources.AggregationHashChainMetadataWithoutPadding), FileMode.Open))
+                        Properties.Resources.AggregationHashChainMetadataWithoutPadding), FileMode.Open), false)
             };
 
             VerificationResult verificationResult = rule.Verify(context);
@@ -313,7 +313,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 Signature =
                     new KsiSignatureFactory().Create(new FileStream(Path.Combine(TestSetup.LocalPath,
-                        Properties.Resources.AggregationHashChainMetadataWithoutPaddingFail), FileMode.Open))
+                        Properties.Resources.AggregationHashChainMetadataWithoutPaddingFail), FileMode.Open), false)
             };
 
             VerificationResult verificationResult = rule.Verify(context);
@@ -332,7 +332,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 Signature =
                     new KsiSignatureFactory().Create(new FileStream(Path.Combine(TestSetup.LocalPath,
-                        Properties.Resources.AggregationHashChainMetadataPaddingNotFirstFail), FileMode.Open))
+                        Properties.Resources.AggregationHashChainMetadataPaddingNotFirstFail), FileMode.Open), false)
             };
 
             VerificationResult verificationResult = policy.Verify(context);

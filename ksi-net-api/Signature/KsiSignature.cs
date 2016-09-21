@@ -318,17 +318,17 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         /// Verify with internal verification policy
         /// </summary>
-        /// <param name="documentHash"></param>
-        /// <param name="level">Document hash node level value in the aggregation tree</param>
-        public void DoInternalVerification(DataHash documentHash, uint level = 0)
+        /// <param name="hash">Signed hash</param>
+        /// <param name="level">Signed hash node level value in the aggregation tree</param>
+        public void DoInternalVerification(DataHash hash, uint level = 0)
         {
-            if (documentHash == null)
+            if (hash == null)
             {
-                throw new ArgumentNullException(nameof(documentHash));
+                throw new ArgumentNullException(nameof(hash));
             }
 
             VerificationPolicy policy = new InternalVerificationPolicy();
-            VerificationContext context = new VerificationContext(this) { DocumentHash = documentHash, Level = level };
+            VerificationContext context = new VerificationContext(this) { DocumentHash = hash, Level = level };
             VerificationResult verificationResult = policy.Verify(context);
 
             if (verificationResult.ResultCode != VerificationResultCode.Ok)
@@ -341,7 +341,7 @@ namespace Guardtime.KSI.Signature
                     Environment.NewLine,
                     this);
 
-                throw new KsiSignatureException("Signature internal verification failed. Verification error: " + verificationResult.VerificationError);
+                throw new KsiSignatureException("Signature internal verification failed. Verification error: " + verificationResult.VerificationError, this);
             }
         }
 

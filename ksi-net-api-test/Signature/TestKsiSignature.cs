@@ -114,7 +114,7 @@ namespace Guardtime.KSI.Test.Signature
 
         public bool IsExtended => PublicationRecord != null;
 
-        public void DoInternalVerification(DataHash documentHash, uint level = 0)
+        public void DoInternalVerification(DataHash hash, uint level = 0)
         {
             throw new NotImplementedException();
         }

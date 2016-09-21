@@ -45,7 +45,7 @@ namespace Guardtime.KSI.Test.Integration
             {
                 try
                 {
-                    IKsiSignature signature = new KsiSignatureFactory().Create(stream);
+                    IKsiSignature signature = new KsiSignatureFactory().Create(stream, false);
                     Assert.IsFalse(testData.GetSigantureReadInFails(),
                         testData.GetTestFile() + " supposed to fail with class " + testData.GetExpectedExceptionClass() + " exception.");
                     VerificationContext context = new VerificationContext(signature);

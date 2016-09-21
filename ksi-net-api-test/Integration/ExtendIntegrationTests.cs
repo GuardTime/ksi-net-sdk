@@ -38,7 +38,7 @@ namespace Guardtime.KSI.Test.Integration
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
             {
-                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream, false);
 
                 Exception ex = Assert.Throws<KsiException>(delegate
                 {
@@ -54,7 +54,7 @@ namespace Guardtime.KSI.Test.Integration
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
             {
-                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream, false);
 
                 Exception ex = Assert.Throws<KsiServiceProtocolException>(delegate
                 {
@@ -71,7 +71,7 @@ namespace Guardtime.KSI.Test.Integration
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
             {
-                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream, false);
 
                 Assert.DoesNotThrow(delegate
                 {
@@ -85,7 +85,7 @@ namespace Guardtime.KSI.Test.Integration
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
             {
-                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream, false);
 
                 Assert.DoesNotThrow(delegate
                 {
@@ -101,7 +101,7 @@ namespace Guardtime.KSI.Test.Integration
 
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
             {
-                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream, false);
                 IKsiSignature extendedSignature = ksi.Extend(ksiSignature);
                 PublicationData publicationData = ksi.GetPublicationsFile().GetNearestPublicationRecord(ksiSignature.AggregationTime).PublicationData;
 
@@ -116,6 +116,23 @@ namespace Guardtime.KSI.Test.Integration
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void ExtendInvalidSignatureTest(Ksi ksi)
+        {
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Invalid_Aggregation_Chain_Input_Hash), FileMode.Open))
+            {
+                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream, false);
+
+                KsiSignatureException ex = Assert.Throws<KsiSignatureException>(delegate
+                {
+                    IKsiSignature extendedSignature = ksi.Extend(ksiSignature);
+                });
+
+                Assert.That(ex.Message.StartsWith("Signature internal verification failed"), "Unexpected exception message: " + ex.Message);
+                Assert.IsNotNull(ex.Signature);
+            }
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void ExtendAndVerifyToUserProvidedPublicationTest(Ksi ksi)
         {
             PublicationBasedVerificationPolicy rule = new PublicationBasedVerificationPolicy();
@@ -124,7 +141,7 @@ namespace Guardtime.KSI.Test.Integration
             {
                 PublicationData publicationData = new PublicationData("AAAAAA-CW45II-AAKWRK-F7FBNM-KB6FNV-DYYFW7-PJQN6F-JKZWBQ-3OQYZO-HCB7RA-YNYAGA-ODRL2V");
 
-                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream, false);
                 IKsiSignature extendedSignature = ksi.Extend(ksiSignature, publicationData);
 
                 VerificationContext context = new VerificationContext(extendedSignature)
@@ -147,7 +164,7 @@ namespace Guardtime.KSI.Test.Integration
                 // publication data that is not included in publications file. Time: 2016-07-12 00:00:00 UTC
                 PublicationData publicationData = new PublicationData("AAAAAA-CXQQZQ-AAPGJF-HGNMUN-DXEIQW-NJZZOE-J76OK4-BV3FKY-AEAWIP-KSPZPW-EJKVAI-JPOOR7");
 
-                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream, false);
                 IKsiSignature extendedSignature = ksi.Extend(ksiSignature, publicationData);
 
                 VerificationContext context = new VerificationContext(extendedSignature)
@@ -168,7 +185,7 @@ namespace Guardtime.KSI.Test.Integration
                 // publication data from Test core, not included in publications file. Time: 2016-07-12 00:00:00 UTC
                 PublicationData publicationData = new PublicationData("AAAAAA-CXQQZQ-AAOSZH-ONCB4K-TFGPBW-R6S6TF-6EW4DU-4QMP7X-GI2VCO-TNGAZM-EV6AZR-464IOA");
 
-                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream, false);
 
                 Assert.That(delegate
                 {
@@ -187,7 +204,7 @@ namespace Guardtime.KSI.Test.Integration
                 // publication data from Test core. not included in publications file. Time: 2016-07-12 00:00:00 UTC
                 PublicationData publicationData = new PublicationData("AAAAAA-CXQQZQ-AAOSZH-ONCB4K-TFGPBW-R6S6TF-6EW4DU-4QMP7X-GI2VCO-TNGAZM-EV6AZR-464IOA");
 
-                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream, false);
 
                 VerificationContext context = new VerificationContext(ksiSignature)
                 {
@@ -210,7 +227,7 @@ namespace Guardtime.KSI.Test.Integration
                 // publication data with modified hash
                 PublicationData publicationData = new PublicationData("AAAAAA-CW45II-AAIYPA-UJ4GRT-HXMFBE-OTB4AB-XH3PT3-KNIKGV-PYCJXU-HL2TN4-RG6SCA-ZP3ZLX");
 
-                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream, false);
 
                 Assert.That(delegate
                 {
@@ -239,7 +256,7 @@ namespace Guardtime.KSI.Test.Integration
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
             {
-                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream, false);
                 IKsiSignature extendedToLatest = ksi.Extend(ksiSignature, ksi.GetPublicationsFile().GetLatestPublication());
                 IKsiSignature extendedToNearest = ksi.Extend(ksiSignature);
 

@@ -65,7 +65,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 Assert.Throws<KsiVerificationException>(delegate
                 {
-                    IKsiSignature signature = new KsiSignatureFactory().Create(stream);
+                    IKsiSignature signature = new KsiSignatureFactory().Create(stream, false);
                     TestVerificationContext context = new TestVerificationContext()
                     {
                         Signature = new TestKsiSignature()
@@ -89,7 +89,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
-                    Signature = new KsiSignatureFactory().Create(stream)
+                    Signature = new KsiSignatureFactory().Create(stream, false)
                 };
 
                 VerificationResult verificationResult = rule.Verify(context);
@@ -107,7 +107,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
-                    Signature = new KsiSignatureFactory().Create(stream)
+                    Signature = new KsiSignatureFactory().Create(stream, false)
                 };
 
                 VerificationResult verificationResult = rule.Verify(context);
@@ -128,7 +128,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
-                    Signature = new KsiSignatureFactory().Create(stream)
+                    Signature = new KsiSignatureFactory().Create(stream, false)
                 };
 
                 VerificationResult verificationResult = rule.Verify(context);
@@ -149,7 +149,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
-                    Signature = new KsiSignatureFactory().Create(stream)
+                    Signature = new KsiSignatureFactory().Create(stream, false)
                 };
 
                 VerificationResult verificationResult = rule.Verify(context);

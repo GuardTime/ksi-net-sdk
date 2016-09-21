@@ -44,7 +44,7 @@ namespace Guardtime.KSI.Crypto
                 case "1.2.840.113549.1.7.2":
                     return KsiProvider.CreatePkcs7CryptoSignatureVerifier(trustStore, certificateRdnSelector);
                 default:
-                    throw new PkiVerificationErrorException("Cryptographic signature not supported.");
+                    throw new PkiVerificationErrorException("Cryptographic signature not supported. Oid: " + oid);
             }
         }
     }

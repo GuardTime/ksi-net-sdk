@@ -70,7 +70,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
-                    Signature = new KsiSignatureFactory().Create(stream),
+                    Signature = new KsiSignatureFactory().Create(stream, false),
                     LatestCalendarHashChain =
                         new CalendarHashChain(new RawTag(Constants.CalendarHashChain.TagType, false, false,
                             Base16.Decode(
@@ -91,7 +91,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 TestVerificationContextFaultyFunctions context = new TestVerificationContextFaultyFunctions()
                 {
-                    Signature = new KsiSignatureFactory().Create(stream)
+                    Signature = new KsiSignatureFactory().Create(stream, false)
                 };
 
                 Assert.Throws<KsiVerificationException>(delegate
@@ -111,7 +111,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
-                    Signature = new KsiSignatureFactory().Create(stream),
+                    Signature = new KsiSignatureFactory().Create(stream, false),
                     ExtendedCalendarHashChain =
                         new CalendarHashChain(new RawTag(Constants.CalendarHashChain.TagType, false, false,
                             Base16.Decode(
@@ -133,7 +133,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
-                    Signature = new KsiSignatureFactory().Create(stream),
+                    Signature = new KsiSignatureFactory().Create(stream, false),
                     ExtendedCalendarHashChain =
                         new CalendarHashChain(new RawTag(Constants.CalendarHashChain.TagType, false, false,
                             Base16.Decode(
@@ -157,7 +157,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
-                    Signature = new KsiSignatureFactory().Create(stream),
+                    Signature = new KsiSignatureFactory().Create(stream, false),
                     ExtendedCalendarHashChain =
                         new CalendarHashChain(new RawTag(Constants.CalendarHashChain.TagType, false, false,
                             Base16.Decode(

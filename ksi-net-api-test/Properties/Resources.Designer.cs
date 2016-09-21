@@ -1070,6 +1070,15 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-level-3-ok.tlv.
+        /// </summary>
+        internal static string KsiSignatureDo_Ok_Level3 {
+            get {
+                return ResourceManager.GetString("KsiSignatureDo_Ok_Level3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-ok-Missing-publication-record-and-calendar-authentication-record.tlv.
         /// </summary>
         internal static string KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record {

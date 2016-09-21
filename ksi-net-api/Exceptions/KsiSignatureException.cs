@@ -18,6 +18,7 @@
  */
 
 using System;
+using Guardtime.KSI.Signature;
 
 namespace Guardtime.KSI.Exceptions
 {
@@ -31,8 +32,10 @@ namespace Guardtime.KSI.Exceptions
         ///     Create new KSI signature exception
         /// </summary>
         /// <param name="message">Exception message</param>
-        public KsiSignatureException(string message) : base(message)
+        /// <param name="signature">The signature the exception is associated to</param>
+        public KsiSignatureException(string message, IKsiSignature signature) : base(message)
         {
+            Signature = signature;
         }
 
         /// <summary>
@@ -40,8 +43,15 @@ namespace Guardtime.KSI.Exceptions
         /// </summary>
         /// <param name="message">Exception message</param>
         /// <param name="innerException">Inner exception</param>
-        public KsiSignatureException(string message, Exception innerException) : base(message, innerException)
+        /// <param name="signature">The signature the exception is associated to</param>
+        public KsiSignatureException(string message, Exception innerException, IKsiSignature signature) : base(message, innerException)
         {
+            Signature = signature;
         }
+
+        /// <summary>
+        /// The signature the exception is associated to
+        /// </summary>
+        public IKsiSignature Signature { get; set; }
     }
 }

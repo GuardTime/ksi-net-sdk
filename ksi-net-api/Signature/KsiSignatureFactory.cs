@@ -38,8 +38,10 @@ namespace Guardtime.KSI.Signature
         ///     Get KSI signature instance from stream.
         /// </summary>
         /// <param name="stream">signature data stream</param>
+        /// <param name="doInternalVerification">Indicates if internal verification of the signature should be done before the signature is returned.</param>
+        /// <param name="level">Signed hash node level value in the aggregation tree</param>
         /// <returns>KSI signature</returns>
-        public IKsiSignature Create(Stream stream)
+        public IKsiSignature Create(Stream stream, bool doInternalVerification = true, uint level = 0)
         {
             if (stream == null)
             {
@@ -52,7 +54,14 @@ namespace Guardtime.KSI.Signature
                 {
                     Logger.Debug("Creating KSI signature from stream.");
                     KsiSignature signature = new KsiSignature(reader.ReadTag());
+
+                    if (doInternalVerification)
+                    {
+                        signature.DoInternalVerification(signature.GetAggregationHashChains()[0].InputHash, level);
+                    }
+
                     Logger.Debug("Creating KSI signature from stream successful.");
+
                     return signature;
                 }
                 catch (TlvException e)

@@ -33,8 +33,10 @@ namespace Guardtime.KSI.Signature
         ///     Get KSI signature instance from stream.
         /// </summary>
         /// <param name="stream">signature data stream</param>
+        /// <param name="doInternalVerification">Indicates if internal verification of the signature should be done before the signature is returned.</param>
+        /// <param name="level">Signed hash node level value in the aggregation tree</param>
         /// <returns>KSI signature</returns>
-        IKsiSignature Create(Stream stream);
+        IKsiSignature Create(Stream stream, bool doInternalVerification = true, uint level = 0);
 
         /// <summary>
         ///     Get KSI signature instance from aggregation response payload.

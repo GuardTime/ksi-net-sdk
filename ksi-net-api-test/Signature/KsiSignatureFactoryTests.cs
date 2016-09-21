@@ -32,18 +32,53 @@ namespace Guardtime.KSI.Test.Signature
     public class KsiSignatureFactoryTests
     {
         [Test]
-        public void CreateFromStreamTest()
+        public void CreateFromStreamFromNullInvalidTest()
         {
-            KsiSignatureFactory signatureFactory = new KsiSignatureFactory();
-
             Assert.Throws<KsiException>(delegate
             {
-                signatureFactory.Create((Stream)null);
+                new KsiSignatureFactory().Create((Stream)null);
             });
+        }
 
+        [Test]
+        public void CreateFromStreamTest()
+        {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok), FileMode.Open))
             {
-                signatureFactory.Create(stream);
+                new KsiSignatureFactory().Create(stream);
+            }
+        }
+
+        [Test]
+        public void CreateFromStreamAndVerifyInvalidSignatureTest()
+        {
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Invalid_Aggregation_Chain_Input_Hash), FileMode.Open))
+            {
+                KsiSignatureException ex = Assert.Throws<KsiSignatureException>(delegate
+                {
+                    new KsiSignatureFactory().Create(stream);
+                });
+
+                Assert.That(ex.Message.StartsWith("Signature internal verification failed"), "Unexpected exception message: " + ex.Message);
+                Assert.IsNotNull(ex.Signature);
+            }
+        }
+
+        [Test]
+        public void CreateFromStreamDoNotVerifyInvalidSingatureTest()
+        {
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Invalid_Aggregation_Chain_Input_Hash), FileMode.Open))
+            {
+                new KsiSignatureFactory().Create(stream, false);
+            }
+        }
+
+        [Test]
+        public void CreateFromStreamAndVerifyWithLevel3Test()
+        {
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok_Level3), FileMode.Open))
+            {
+                new KsiSignatureFactory().Create(stream, true, 3);
             }
         }
 

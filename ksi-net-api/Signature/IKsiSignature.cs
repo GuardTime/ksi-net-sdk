@@ -117,8 +117,8 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         /// Verify with internal verification policy
         /// </summary>
-        /// <param name="documentHash"></param>
+        /// <param name="hash"></param>
         /// <param name="level">Document hash node level value in the aggregation tree</param>
-        void DoInternalVerification(DataHash documentHash, uint level = 0);
+        void DoInternalVerification(DataHash hash, uint level = 0);
     }
 }
