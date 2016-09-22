@@ -293,9 +293,7 @@ namespace Guardtime.KSI.Service
 
                     Logger.Debug("End sign successful (request id: {0}){1}{2}", serviceAsyncResult.RequestId, Environment.NewLine, pdu);
 
-                    IKsiSignature signature = _ksiSignatureFactory.Create(payload);
-                    signature.DoInternalVerification(serviceAsyncResult.DocumentHash, serviceAsyncResult.Level);
-                    return signature;
+                    return _ksiSignatureFactory.Create(payload, serviceAsyncResult.DocumentHash, serviceAsyncResult.Level);
                 }
             }
             catch (TlvException e)

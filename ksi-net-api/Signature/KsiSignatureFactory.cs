@@ -20,6 +20,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
@@ -76,8 +77,10 @@ namespace Guardtime.KSI.Signature
         ///     Get KSI signature instance from aggregation response payload.
         /// </summary>
         /// <param name="payload">aggregation response payload</param>
+        /// <param name="hash">Signed hash</param>
+        /// <param name="level">Signed hash node level value in the aggregation tree</param>
         /// <returns>KSI signature</returns>
-        public IKsiSignature Create(AggregationResponsePayload payload)
+        public IKsiSignature Create(AggregationResponsePayload payload, DataHash hash, uint level = 0)
         {
             if (payload == null)
             {
@@ -97,7 +100,10 @@ namespace Guardtime.KSI.Signature
                 try
                 {
                     Logger.Debug("Creating KSI signature from aggregation response. (request id: {0})", payload.RequestId);
+
                     KsiSignature signature = new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false, ((MemoryStream)writer.BaseStream).ToArray()));
+                    signature.DoInternalVerification(hash, level);
+
                     Logger.Debug("Creating KSI signature from aggregation response successful. (request id: {0})", payload.RequestId);
                     return signature;
                 }
@@ -117,10 +123,12 @@ namespace Guardtime.KSI.Signature
         /// <param name="calendarAuthenticationRecord">Calendar authentication record tlv element</param>
         /// <param name="publicationRecord">Publication record tlv element</param>
         /// <param name="rfc3161Record">RFC3161 record tlv element</param>
+        /// <param name="hash">Signed hash</param>
+        /// <param name="level">Signed hash node level value in the aggregation tree</param>
         /// <returns></returns>
         public IKsiSignature Create(ICollection<AggregationHashChain> aggregationHashChains, CalendarHashChain calendarHashChain,
                                     CalendarAuthenticationRecord calendarAuthenticationRecord, PublicationRecordInSignature publicationRecord,
-                                    Rfc3161Record rfc3161Record)
+                                    Rfc3161Record rfc3161Record, DataHash hash, uint level = 0)
         {
             using (TlvWriter writer = new TlvWriter(new MemoryStream()))
             {
@@ -148,7 +156,9 @@ namespace Guardtime.KSI.Signature
                     writer.WriteTag(rfc3161Record);
                 }
 
-                return new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false, ((MemoryStream)writer.BaseStream).ToArray()));
+                KsiSignature signature = new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false, ((MemoryStream)writer.BaseStream).ToArray()));
+                signature.DoInternalVerification(hash, level);
+                return signature;
             }
         }
     }
