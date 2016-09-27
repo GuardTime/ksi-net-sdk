@@ -54,7 +54,7 @@ namespace Guardtime.KSI.Test.Signature.Verification
                     new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                         CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))));
 
-                VerificationContext context = new VerificationContext(new KsiSignatureFactory().Create(stream, false))
+                VerificationContext context = new VerificationContext(new KsiSignatureFactory().Create(stream))
                 {
                     DocumentHash =
                         new KSI.Hashing.DataHash(new byte[]

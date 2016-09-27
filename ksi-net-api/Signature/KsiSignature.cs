@@ -17,7 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -25,8 +24,6 @@ using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
-using Guardtime.KSI.Signature.Verification;
-using Guardtime.KSI.Signature.Verification.Policy;
 using NLog;
 
 namespace Guardtime.KSI.Signature
@@ -244,10 +241,11 @@ namespace Guardtime.KSI.Signature
         ///     Extend KSI signature with given calendar hash chain.
         /// </summary>
         /// <param name="calendarHashChain">calendar hash chain</param>
+        /// <param name="signatureFactory">signature factory to be used when creating extended signature</param>
         /// <returns>extended KSI signature</returns>
-        public IKsiSignature Extend(CalendarHashChain calendarHashChain)
+        public IKsiSignature Extend(CalendarHashChain calendarHashChain, IKsiSignatureFactory signatureFactory = null)
         {
-            return Extend(calendarHashChain, (PublicationRecordInSignature)null);
+            return Extend(calendarHashChain, (PublicationRecordInSignature)null, signatureFactory);
         }
 
         /// <summary>
@@ -255,10 +253,11 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         /// <param name="calendarHashChain">extended calendar hash chain</param>
         /// <param name="publicationRecord">extended publication record</param>
+        /// <param name="signatureFactory">signature factory to be used when creating extended signature</param>
         /// <returns>extended KSI signature</returns>
-        public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInPublicationFile publicationRecord)
+        public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInPublicationFile publicationRecord, IKsiSignatureFactory signatureFactory = null)
         {
-            return Extend(calendarHashChain, publicationRecord?.ConvertToPublicationRecordInSignature());
+            return Extend(calendarHashChain, publicationRecord?.ConvertToPublicationRecordInSignature(), signatureFactory);
         }
 
         /// <summary>
@@ -266,14 +265,20 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         /// <param name="calendarHashChain">extended calendar hash chain</param>
         /// <param name="publicationRecord">extended publication record</param>
+        /// <param name="signatureFactory">signature factory to be used when creating extended signature</param>
         /// <returns>extended KSI signature</returns>
-        public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInSignature publicationRecord)
+        public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInSignature publicationRecord, IKsiSignatureFactory signatureFactory = null)
         {
             Logger.Debug("Extending KSI signature.");
 
             if (calendarHashChain == null)
             {
                 throw new KsiException("Invalid calendar hash chain: null.");
+            }
+
+            if (signatureFactory == null)
+            {
+                signatureFactory = new KsiSignatureFactory();
             }
 
             using (TlvWriter writer = new TlvWriter(new MemoryStream()))
@@ -301,8 +306,7 @@ namespace Guardtime.KSI.Signature
 
                 try
                 {
-                    KsiSignature signature = new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false, ((MemoryStream)writer.BaseStream).ToArray()));
-                    signature.DoInternalVerification(GetAggregationHashChains()[0].InputHash);
+                    IKsiSignature signature = signatureFactory.Create(((MemoryStream)writer.BaseStream).ToArray(), GetAggregationHashChains()[0].InputHash);
                     Logger.Debug("Extending KSI signature successful.");
 
                     return signature;
@@ -312,36 +316,6 @@ namespace Guardtime.KSI.Signature
                     Logger.Warn("Extending KSI signature failed: {0}", e);
                     throw;
                 }
-            }
-        }
-
-        /// <summary>
-        /// Verify with internal verification policy
-        /// </summary>
-        /// <param name="hash">Signed hash</param>
-        /// <param name="level">Signed hash node level value in the aggregation tree</param>
-        public void DoInternalVerification(DataHash hash, uint level = 0)
-        {
-            if (hash == null)
-            {
-                throw new ArgumentNullException(nameof(hash));
-            }
-
-            VerificationPolicy policy = new InternalVerificationPolicy();
-            VerificationContext context = new VerificationContext(this) { DocumentHash = hash, Level = level };
-            VerificationResult verificationResult = policy.Verify(context);
-
-            if (verificationResult.ResultCode != VerificationResultCode.Ok)
-            {
-                Logger.Warn("Signature internal verification failed. {0}Verification error: {1}{2}Verification result: {3}{4}Signature: {5}",
-                    Environment.NewLine,
-                    verificationResult.VerificationError,
-                    Environment.NewLine,
-                    verificationResult,
-                    Environment.NewLine,
-                    this);
-
-                throw new KsiSignatureException("Signature internal verification failed. Verification error: " + verificationResult.VerificationError, this);
             }
         }
 

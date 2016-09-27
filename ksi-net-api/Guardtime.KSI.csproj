@@ -90,7 +90,7 @@
     <Compile Include="Crypto\CertificateSubjectRdn.cs" />
     <Compile Include="Exceptions\BlockSigningException.cs" />
     <Compile Include="Exceptions\HashingException.cs" />
-    <Compile Include="Exceptions\KsiSignatureException.cs" />
+    <Compile Include="Exceptions\KsiSignatureInvalidContentException.cs" />
     <Compile Include="Exceptions\KsiMultiSignatureInvalidHashException.cs" />
     <Compile Include="Exceptions\KsiMultiSignatureException.cs" />
     <Compile Include="Exceptions\KsiException.cs" />

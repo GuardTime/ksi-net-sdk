@@ -31,12 +31,12 @@ namespace Guardtime.KSI.Signature.Verification
         /// <summary>
         ///     Get document hash.
         /// </summary>
-        DataHash DocumentHash { get; }
+        DataHash DocumentHash { get; set; }
 
         /// <summary>
         ///     Get signature.
         /// </summary>
-        IKsiSignature Signature { get; }
+        IKsiSignature Signature { get; set; }
 
         /// <summary>
         ///     Get user publication.

@@ -113,7 +113,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_With_Mixed_Aggregation_Chains), FileMode.Open))
             {
-                IKsiSignature signature = new KsiSignatureFactory().Create(stream, false);
+                IKsiSignature signature = new KsiSignatureFactory().Create(stream);
                 ReadOnlyCollection<AggregationHashChain> hashChains = signature.GetAggregationHashChains();
                 ulong[] index = hashChains[0].GetChainIndex();
                 int i = index.Length - 1;

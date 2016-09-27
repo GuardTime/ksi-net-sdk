@@ -17,31 +17,28 @@
  * reserves and retains all trademark rights.
  */
 
-using Guardtime.KSI.Parser;
+using System.Collections.Generic;
+using Guardtime.KSI.Signature.Verification;
+using Guardtime.KSI.Signature.Verification.Policy;
+using Guardtime.KSI.Signature.Verification.Rule;
 
-namespace Guardtime.KSI.Publication
+namespace Guardtime.KSI.Test.Signature.Verification
 {
-    /// <summary>
-    ///     Publication record TLV element in publication file.
-    /// </summary>
-    public sealed class PublicationRecordInPublicationFile : PublicationRecord
+    public class TestVerificationPolicy : VerificationPolicy
     {
-        /// <summary>
-        ///     Create new publication record TLV element from TLV element.
-        /// </summary>
-        /// <param name="tag">TLV element</param>
-        public PublicationRecordInPublicationFile(ITlvTag tag) : base(tag)
+        public TestVerificationPolicy(VerificationRule rule = null)
         {
-            CheckTagType(Constants.PublicationRecord.TagTypeInPublicationsFile);
+            FirstRule = rule;
         }
 
-        /// <summary>
-        /// Convert current publication record to PublicationRecordInSignature
-        /// </summary>
-        /// <returns></returns>
-        public PublicationRecordInSignature ConvertToPublicationRecordInSignature()
+        public override VerificationResult Verify(IVerificationContext context)
         {
-            return new PublicationRecordInSignature(NonCritical, Forward, EncodeValue());
+            if (FirstRule == null)
+            {
+                return new VerificationResult("Dummy", new List<VerificationResult>() { new VerificationResult("Dummy", VerificationResultCode.Ok) });
+            }
+
+            return base.Verify(context);
         }
     }
 }

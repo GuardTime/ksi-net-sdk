@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Guardtime.KSI.Exceptions;
@@ -24,6 +25,8 @@ using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
+using Guardtime.KSI.Signature.Verification;
+using Guardtime.KSI.Signature.Verification.Policy;
 using NLog;
 
 namespace Guardtime.KSI.Signature
@@ -35,14 +38,52 @@ namespace Guardtime.KSI.Signature
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
+        private readonly VerificationPolicy _verificationPolicy;
+        private readonly IVerificationContext _verificationContext;
+
+        /// <summary>
+        /// Indicates if automatic verification should be disabled
+        /// </summary>
+        public bool DisableVerification { get; set; }
+
+        /// <summary>
+        ///     Create KSI signature factory
+        /// </summary>
+        /// <param name="verificationPolicy">Verification policy to be used when verifying a signature after it is created</param>
+        /// <param name="verificationContext">Verification context to be used when verifying a signature after it is created</param>
+        public KsiSignatureFactory(VerificationPolicy verificationPolicy = null, IVerificationContext verificationContext = null)
+        {
+            _verificationPolicy = verificationPolicy ?? new InternalVerificationPolicy();
+            _verificationContext = verificationContext ?? new VerificationContext();
+        }
+
+        /// <summary>
+        ///     Get KSI signature instance from byte array.
+        /// </summary>
+        /// <param name="bytes">signature byte array</param>
+        /// <param name="hash">Signed hash</param>
+        /// <param name="level">Signed hash node level value in the aggregation tree</param>
+        /// <returns>KSI signature</returns>
+        public IKsiSignature Create(byte[] bytes, DataHash hash = null, uint level = 0)
+        {
+            KsiSignature signature = new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false, bytes));
+
+            if (!DisableVerification)
+            {
+                Verify(signature, hash, level);
+            }
+
+            return signature;
+        }
+
         /// <summary>
         ///     Get KSI signature instance from stream.
         /// </summary>
         /// <param name="stream">signature data stream</param>
-        /// <param name="doInternalVerification">Indicates if internal verification of the signature should be done before the signature is returned.</param>
+        /// <param name="hash">Signed hash</param>
         /// <param name="level">Signed hash node level value in the aggregation tree</param>
         /// <returns>KSI signature</returns>
-        public IKsiSignature Create(Stream stream, bool doInternalVerification = true, uint level = 0)
+        public IKsiSignature Create(Stream stream, DataHash hash = null, uint level = 0)
         {
             if (stream == null)
             {
@@ -56,9 +97,9 @@ namespace Guardtime.KSI.Signature
                     Logger.Debug("Creating KSI signature from stream.");
                     KsiSignature signature = new KsiSignature(reader.ReadTag());
 
-                    if (doInternalVerification)
+                    if (!DisableVerification)
                     {
-                        signature.DoInternalVerification(signature.GetAggregationHashChains()[0].InputHash, level);
+                        Verify(signature, null, level);
                     }
 
                     Logger.Debug("Creating KSI signature from stream successful.");
@@ -102,7 +143,11 @@ namespace Guardtime.KSI.Signature
                     Logger.Debug("Creating KSI signature from aggregation response. (request id: {0})", payload.RequestId);
 
                     KsiSignature signature = new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false, ((MemoryStream)writer.BaseStream).ToArray()));
-                    signature.DoInternalVerification(hash, level);
+
+                    if (!DisableVerification)
+                    {
+                        Verify(signature, hash, level);
+                    }
 
                     Logger.Debug("Creating KSI signature from aggregation response successful. (request id: {0})", payload.RequestId);
                     return signature;
@@ -157,8 +202,42 @@ namespace Guardtime.KSI.Signature
                 }
 
                 KsiSignature signature = new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false, ((MemoryStream)writer.BaseStream).ToArray()));
-                signature.DoInternalVerification(hash, level);
+
+                if (!DisableVerification)
+                {
+                    Verify(signature, hash, level);
+                }
+
                 return signature;
+            }
+        }
+
+        /// <summary>
+        /// Verify with given verification policy
+        /// </summary>
+        /// <param name="signature">Signature to be verified</param>
+        /// <param name="hash">Signed hash</param>
+        /// <param name="level">Signed hash node level value in the aggregation tree</param>
+        private void Verify(IKsiSignature signature, DataHash hash, uint level = 0)
+        {
+            _verificationContext.Signature = signature;
+            _verificationContext.DocumentHash = hash;
+            _verificationContext.Level = level;
+            VerificationResult verificationResult = _verificationPolicy.Verify(_verificationContext);
+
+            if (verificationResult.ResultCode != VerificationResultCode.Ok)
+            {
+                Logger.Warn("Signature verification failed.{0}Verification policy: {1}{2}Verification error: {3}{4}Verification result: {5}{6}Signature: {7}",
+                    Environment.NewLine,
+                    _verificationPolicy.GetRuleName(),
+                    Environment.NewLine,
+                    verificationResult.VerificationError,
+                    Environment.NewLine,
+                    verificationResult,
+                    Environment.NewLine,
+                    this);
+
+                throw new KsiSignatureInvalidContentException("Signature verification failed.", signature, verificationResult);
             }
         }
     }

@@ -75,7 +75,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
-                    Signature = new KsiSignatureFactory().Create(stream, false),
+                    Signature = new KsiSignatureFactory().Create(stream),
                     PublicationsFile = new TestPublicationsFile()
                 };
 
@@ -98,7 +98,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
-                    Signature = new KsiSignatureFactory().Create(stream, false),
+                    Signature = new KsiSignatureFactory().Create(stream),
                     PublicationsFile = new TestPublicationsFile()
                 };
 
@@ -120,7 +120,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
-                    Signature = new KsiSignatureFactory().Create(stream, false)
+                    Signature = new KsiSignatureFactory().Create(stream)
                 };
 
                 Assert.Throws<KsiVerificationException>(delegate
@@ -147,7 +147,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
 
                 TestVerificationContext context = new TestVerificationContext()
                 {
-                    Signature = new KsiSignatureFactory().Create(stream, false),
+                    Signature = new KsiSignatureFactory().Create(stream),
                     PublicationsFile = testPublicationsFile
                 };
 
@@ -173,7 +173,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
 
                 TestVerificationContext context = new TestVerificationContext()
                 {
-                    Signature = new KsiSignatureFactory().Create(stream, false),
+                    Signature = new KsiSignatureFactory().Create(stream),
                     PublicationsFile = testPublicationsFile
                 };
 
@@ -200,7 +200,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
 
                 TestVerificationContext context = new TestVerificationContext()
                 {
-                    Signature = new KsiSignatureFactory().Create(stream, false),
+                    Signature = new KsiSignatureFactory().Create(stream),
                     PublicationsFile = testPublicationsFile
                 };
 

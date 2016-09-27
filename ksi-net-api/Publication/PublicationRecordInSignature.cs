@@ -17,7 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Publication

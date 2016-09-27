@@ -19,39 +19,50 @@
 
 using System;
 using Guardtime.KSI.Signature;
+using Guardtime.KSI.Signature.Verification;
 
 namespace Guardtime.KSI.Exceptions
 {
     /// <summary>
-    ///     KSI signature exception
+    ///     KSI signature invalid content exception. Used when creating signature and signature automatic verification fails.
     /// </summary>
     [Serializable]
-    public class KsiSignatureException : Exception
+    public class KsiSignatureInvalidContentException : Exception
     {
         /// <summary>
-        ///     Create new KSI signature exception
+        ///     Create new KSI signature invalid content exception
         /// </summary>
         /// <param name="message">Exception message</param>
-        /// <param name="signature">The signature the exception is associated to</param>
-        public KsiSignatureException(string message, IKsiSignature signature) : base(message)
+        /// <param name="signature">The signature the exception is associated with</param>
+        /// <param name="verificationResult">Verficiation result</param>
+        public KsiSignatureInvalidContentException(string message, IKsiSignature signature, VerificationResult verificationResult) : base(message)
         {
             Signature = signature;
+            VerificationResult = verificationResult;
         }
 
         /// <summary>
-        ///     Create new KSI signature exception
+        ///     Create new KSI signature invalid content exception
         /// </summary>
         /// <param name="message">Exception message</param>
         /// <param name="innerException">Inner exception</param>
-        /// <param name="signature">The signature the exception is associated to</param>
-        public KsiSignatureException(string message, Exception innerException, IKsiSignature signature) : base(message, innerException)
+        /// <param name="signature">The signature the exception is associated with</param>
+        /// <param name="verificationResult">Verficiation result</param>
+        public KsiSignatureInvalidContentException(string message, Exception innerException, IKsiSignature signature, VerificationResult verificationResult)
+            : base(message, innerException)
         {
             Signature = signature;
+            VerificationResult = verificationResult;
         }
 
         /// <summary>
-        /// The signature the exception is associated to
+        /// The signature the exception is associated with
         /// </summary>
-        public IKsiSignature Signature { get; set; }
+        public IKsiSignature Signature { get; }
+
+        /// <summary>
+        /// Verificiation result
+        /// </summary>
+        public VerificationResult VerificationResult { get; }
     }
 }

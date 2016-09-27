@@ -31,13 +31,22 @@ namespace Guardtime.KSI.Signature
     public interface IKsiSignatureFactory
     {
         /// <summary>
+        ///     Get KSI signature instance from byte array.
+        /// </summary>
+        /// <param name="bytes">signature byte array</param>
+        /// <param name="hash">Signed hash</param>
+        /// <param name="level">Signed hash node level value in the aggregation tree</param>
+        /// <returns>KSI signature</returns>
+        IKsiSignature Create(byte[] bytes, DataHash hash = null, uint level = 0);
+
+        /// <summary>
         ///     Get KSI signature instance from stream.
         /// </summary>
         /// <param name="stream">signature data stream</param>
-        /// <param name="doInternalVerification">Indicates if internal verification of the signature should be done before the signature is returned.</param>
+        /// <param name="hash">Signed hash</param>
         /// <param name="level">Signed hash node level value in the aggregation tree</param>
         /// <returns>KSI signature</returns>
-        IKsiSignature Create(Stream stream, bool doInternalVerification = true, uint level = 0);
+        IKsiSignature Create(Stream stream, DataHash hash = null, uint level = 0);
 
         /// <summary>
         ///     Get KSI signature instance from aggregation response payload.

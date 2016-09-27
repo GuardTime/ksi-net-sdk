@@ -76,17 +76,17 @@ namespace Guardtime.KSI.Test.Signature
             return AggregationHashChainRootHash;
         }
 
-        public IKsiSignature Extend(CalendarHashChain calendarHashChain)
+        public IKsiSignature Extend(CalendarHashChain calendarHashChain, IKsiSignatureFactory signatureFactory)
         {
             return ExtendedKsiSignature;
         }
 
-        public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInPublicationFile publicationRecord)
+        public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInPublicationFile publicationRecord, IKsiSignatureFactory signatureFactory)
         {
             return ExtendedKsiSignature;
         }
 
-        public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInSignature publicationRecord)
+        public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInSignature publicationRecord, IKsiSignatureFactory signatureFactory)
         {
             return ExtendedKsiSignature;
         }

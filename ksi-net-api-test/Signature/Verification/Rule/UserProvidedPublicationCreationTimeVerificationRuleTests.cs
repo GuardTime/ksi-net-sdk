@@ -66,7 +66,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
-                    Signature = new KsiSignatureFactory().Create(stream, false)
+                    Signature = new KsiSignatureFactory().Create(stream)
                 };
 
                 Assert.Throws<KsiVerificationException>(delegate
@@ -86,7 +86,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
-                    Signature = new KsiSignatureFactory().Create(stream, false)
+                    Signature = new KsiSignatureFactory().Create(stream)
                 };
 
                 Assert.Throws<KsiVerificationException>(delegate
@@ -106,7 +106,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
-                    Signature = new KsiSignatureFactory().Create(stream, false),
+                    Signature = new KsiSignatureFactory().Create(stream),
                     UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K")
                 };
 
@@ -125,7 +125,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
-                    Signature = new KsiSignatureFactory().Create(stream, false),
+                    Signature = new KsiSignatureFactory().Create(stream),
                     UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K")
                 };
 
@@ -144,7 +144,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
-                    Signature = new KsiSignatureFactory().Create(stream, false),
+                    Signature = new KsiSignatureFactory().Create(stream),
                     UserPublication = new PublicationData("AAAAAA-CVUWRI-AANGVK-SV7GJL-36LN65-AVJYZR-6XRZSL-HIMRH3-6GU7WR-YNRY7C-X2XEC3-YOVLRM")
                 };
 
