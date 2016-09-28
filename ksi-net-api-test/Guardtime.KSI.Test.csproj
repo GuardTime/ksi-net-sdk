@@ -185,7 +185,6 @@
     <Compile Include="Signature\KsiSignatureUsingReflectionTests.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainMetadataRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainIndexRuleTests.cs" />
-    <Compile Include="Signature\Verification\TestVerificationPolicy.cs" />
     <Compile Include="TestSetup.cs" />
     <Compile Include="Signature\CalendarAuthenticationRecordTests.cs" />
     <Compile Include="Signature\AggregationAuthenticationRecordTests.cs" />
