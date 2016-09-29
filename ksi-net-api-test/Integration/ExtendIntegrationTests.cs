@@ -326,13 +326,15 @@ namespace Guardtime.KSI.Test.Integration
                 KsiService service = GetHttpKsiService();
                 service.PduVersion = PduVersion.v2;
 
-                Exception ex = Assert.Throws<InvalidRequestFormatException>(delegate
+                try
                 {
-                    service.Extend(1);
-                });
-
-                Assert.That(ex.Message.StartsWith("Received PDU v1 response to PDU v2 request. Configure the SDK to use PDU v1 format for the given Extender"),
-                    "Unexpected exception message: " + ex.Message);
+                    service.Extend(1455494400);
+                }
+                catch (Exception ex)
+                {
+                    Assert.That(ex.Message.StartsWith("Received PDU v1 response to PDU v2 request. Configure the SDK to use PDU v1 format for the given Extender"),
+                        "Unexpected exception message: " + ex.Message);
+                }
             }
         }
     }

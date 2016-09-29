@@ -31,7 +31,7 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void ToStringWithRequestPayloadTest()
         {
-            AggregationPdu tag = TestUtil.GetCompositeTag<AggregationPdu>(Constants.AggregationPdu.TagType,
+            AggregationRequestPdu tag = TestUtil.GetCompositeTag<AggregationRequestPdu>(Constants.AggregationRequestPdu.TagType,
                 new ITlvTag[]
                 {
                     TestUtil.GetCompositeTag<KsiPduHeader>(Constants.KsiPduHeader.TagType,
@@ -48,14 +48,13 @@ namespace Guardtime.KSI.Test.Service
                             new DataHash(HashAlgorithm.Sha2256,
                                 new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
                         new IntegerTag(Constants.AggregationRequestPayload.RequestLevelTagType, false, false, 0),
-                        new RawTag(Constants.AggregationRequestPayload.ConfigTagType, false, false, new byte[] { 0x1 }),
                     }),
                     new ImprintTag(Constants.KsiPdu.MacTagType, false, false,
                         new DataHash(HashAlgorithm.Sha2256,
                             new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
                 });
 
-            AggregationPdu tag2 = new AggregationPdu(tag);
+            AggregationRequestPdu tag2 = new AggregationRequestPdu(tag);
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
         }
@@ -63,7 +62,7 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void ToStringWithReponseTest()
         {
-            AggregationPdu tag = TestUtil.GetCompositeTag<AggregationPdu>(Constants.AggregationPdu.TagType,
+            AggregationResponsePdu tag = TestUtil.GetCompositeTag<AggregationResponsePdu>(Constants.AggregationResponsePdu.TagType,
                 new ITlvTag[]
                 {
                     TestUtil.GetCompositeTag<KsiPduHeader>(Constants.KsiPduHeader.TagType,
@@ -78,15 +77,13 @@ namespace Guardtime.KSI.Test.Service
                         new IntegerTag(Constants.AggregationResponsePayload.RequestIdTagType, false, false, 2),
                         new IntegerTag(Constants.KsiPduPayload.StatusTagType, false, false, 1),
                         new StringTag(Constants.KsiPduPayload.ErrorMessageTagType, false, false, "Test error message."),
-                        new RawTag(Constants.AggregationResponsePayload.ConfigTagType, false, false, new byte[] { 0x1 }),
-                        new RawTag(Constants.AggregationResponsePayload.RequestAcknowledgmentTagType, false, false, new byte[] { 0x1 }),
                     }),
                     new ImprintTag(Constants.KsiPdu.MacTagType, false, false,
                         new DataHash(HashAlgorithm.Sha2256,
                             new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
                 });
 
-            AggregationPdu tag2 = new AggregationPdu(tag);
+            AggregationResponsePdu tag2 = new AggregationResponsePdu(tag);
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
         }
@@ -94,7 +91,7 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void ToStringWithErrorTest()
         {
-            AggregationPdu tag = TestUtil.GetCompositeTag<AggregationPdu>(Constants.AggregationPdu.TagType,
+            AggregationResponsePdu tag = TestUtil.GetCompositeTag<AggregationResponsePdu>(Constants.AggregationResponsePdu.TagType,
                 new ITlvTag[]
                 {
                     TestUtil.GetCompositeTag<AggregationErrorPayload>(Constants.AggregationErrorPayload.TagType, new ITlvTag[]
@@ -104,7 +101,7 @@ namespace Guardtime.KSI.Test.Service
                     })
                 });
 
-            AggregationPdu tag2 = new AggregationPdu(tag);
+            AggregationResponsePdu tag2 = new AggregationResponsePdu(tag);
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
         }
@@ -114,7 +111,7 @@ namespace Guardtime.KSI.Test.Service
         {
             Assert.That(delegate
             {
-                AggregationPdu tag = TestUtil.GetCompositeTag<AggregationPdu>(Constants.AggregationPdu.TagType,
+                AggregationResponsePdu tag = TestUtil.GetCompositeTag<AggregationResponsePdu>(Constants.AggregationResponsePdu.TagType,
                     new ITlvTag[]
                     {
                         TestUtil.GetCompositeTag<AggregationResponsePayload>(Constants.AggregationResponsePayload.TagType, new ITlvTag[]
@@ -122,8 +119,6 @@ namespace Guardtime.KSI.Test.Service
                             new IntegerTag(Constants.AggregationResponsePayload.RequestIdTagType, false, false, 2),
                             new IntegerTag(Constants.KsiPduPayload.StatusTagType, false, false, 1),
                             new StringTag(Constants.KsiPduPayload.ErrorMessageTagType, false, false, "Test error message."),
-                            new RawTag(Constants.AggregationResponsePayload.ConfigTagType, false, false, new byte[] { 0x1 }),
-                            new RawTag(Constants.AggregationResponsePayload.RequestAcknowledgmentTagType, false, false, new byte[] { 0x1 }),
                         }),
                         TestUtil.GetCompositeTag<KsiPduHeader>(Constants.KsiPduHeader.TagType,
                             new ITlvTag[]
@@ -145,7 +140,7 @@ namespace Guardtime.KSI.Test.Service
         {
             Assert.That(delegate
             {
-                AggregationPdu tag = TestUtil.GetCompositeTag<AggregationPdu>(Constants.AggregationPdu.TagType,
+                AggregationResponsePdu tag = TestUtil.GetCompositeTag<AggregationResponsePdu>(Constants.AggregationResponsePdu.TagType,
                     new ITlvTag[]
                     {
                         TestUtil.GetCompositeTag<KsiPduHeader>(Constants.KsiPduHeader.TagType,
@@ -163,8 +158,6 @@ namespace Guardtime.KSI.Test.Service
                             new IntegerTag(Constants.AggregationResponsePayload.RequestIdTagType, false, false, 2),
                             new IntegerTag(Constants.KsiPduPayload.StatusTagType, false, false, 1),
                             new StringTag(Constants.KsiPduPayload.ErrorMessageTagType, false, false, "Test error message."),
-                            new RawTag(Constants.AggregationResponsePayload.ConfigTagType, false, false, new byte[] { 0x1 }),
-                            new RawTag(Constants.AggregationResponsePayload.RequestAcknowledgmentTagType, false, false, new byte[] { 0x1 }),
                         }),
                     });
             }, Throws.Exception.InnerException.TypeOf<TlvException>().With.InnerException.Message.StartWith("HMAC must be the last element"),

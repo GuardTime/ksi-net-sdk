@@ -74,7 +74,25 @@ namespace Guardtime.KSI.Signature
             {
                 throw new KsiException("Invalid aggregation response payload: null.");
             }
+            return CreateFromResponsePayload(payload, payload.RequestId);
+        }
 
+        /// <summary>
+        ///     Get KSI signature instance from legacy aggregation response payload.
+        /// </summary>
+        /// <param name="payload">aggregation response payload</param>
+        /// <returns>KSI signature</returns>
+        public IKsiSignature Create(LegacyAggregationResponsePayload payload)
+        {
+            if (payload == null)
+            {
+                throw new KsiException("Invalid aggregation response payload: null.");
+            }
+            return CreateFromResponsePayload(payload, payload.RequestId);
+        }
+
+        private IKsiSignature CreateFromResponsePayload(CompositeTag payload, ulong requestId)
+        {
             using (TlvWriter writer = new TlvWriter(new MemoryStream()))
             {
                 foreach (ITlvTag childTag in payload)
@@ -87,14 +105,14 @@ namespace Guardtime.KSI.Signature
 
                 try
                 {
-                    Logger.Debug("Creating KSI signature from aggregation response. (request id: {0})", payload.RequestId);
+                    Logger.Debug("Creating KSI signature from aggregation response. (request id: {0})", requestId);
                     KsiSignature signature = new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false, ((MemoryStream)writer.BaseStream).ToArray()));
-                    Logger.Debug("Creating KSI signature from aggregation response successful. (request id: {0})", payload.RequestId);
+                    Logger.Debug("Creating KSI signature from aggregation response successful. (request id: {0})", requestId);
                     return signature;
                 }
                 catch (TlvException e)
                 {
-                    Logger.Warn("Creating KSI signature from aggregation response failed: {0} (request id: {1})", e, payload.RequestId);
+                    Logger.Warn("Creating KSI signature from aggregation response failed: {0} (request id: {1})", e, requestId);
                     throw;
                 }
             }

@@ -35,6 +35,8 @@ namespace Guardtime.KSI.Test.Integration
         private static readonly HttpKsiServiceProtocol HttpKsiServiceProtocol =
             new HttpKsiServiceProtocol(Settings.Default.HttpSigningServiceUrl, Settings.Default.HttpExtendingServiceUrl, Settings.Default.HttpPublicationsFileUrl, 100000);
 
+        //,"http://localhost.:8888", null);
+
         private static readonly HttpKsiServiceProtocol HttpKsiServiceProtocolInvalidUrls =
             new HttpKsiServiceProtocol("http://invalid.signing.service.url", "http://invalid.extending.service.url",
                 "http://invalid.publications.file.url", 100000);

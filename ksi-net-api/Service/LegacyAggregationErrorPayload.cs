@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright 2013-2016 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
@@ -17,28 +17,23 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using Guardtime.KSI.Parser;
-using Guardtime.KSI.Service;
-using NUnit.Framework;
 
-namespace Guardtime.KSI.Test.Service
+namespace Guardtime.KSI.Service
 {
-    [TestFixture]
-    public class AggregationResponsePayloadTests
+    /// <summary>
+    ///     Aggregation Error payload TLV element.
+    /// </summary>
+    [Obsolete]
+    public sealed class LegacyAggregationErrorPayload : ErrorPayload
     {
-        [Test]
-        public void ToStringTest()
+        /// <summary>
+        ///     Create aggregation error payload TLV element from TLV element.
+        /// </summary>
+        /// <param name="tag">TLV element</param>
+        public LegacyAggregationErrorPayload(ITlvTag tag) : base(tag, Constants.AggregationErrorPayload.LegacyTagType)
         {
-            AggregationResponsePayload tag = TestUtil.GetCompositeTag<AggregationResponsePayload>(Constants.AggregationResponsePayload.TagType, new ITlvTag[]
-            {
-                new IntegerTag(Constants.AggregationResponsePayload.RequestIdTagType, false, false, 2),
-                new IntegerTag(Constants.KsiPduPayload.StatusTagType, false, false, 1),
-                new StringTag(Constants.KsiPduPayload.ErrorMessageTagType, false, false, "Test error message."),
-            });
-
-            AggregationResponsePayload tag2 = new AggregationResponsePayload(tag);
-
-            Assert.AreEqual(tag.ToString(), tag2.ToString());
         }
     }
 }

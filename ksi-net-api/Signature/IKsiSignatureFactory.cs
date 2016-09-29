@@ -44,6 +44,13 @@ namespace Guardtime.KSI.Signature
         IKsiSignature Create(AggregationResponsePayload payload);
 
         /// <summary>
+        ///     Get KSI signature instance from aggregation response payload.
+        /// </summary>
+        /// <param name="payload">legacy aggregation response payload</param>
+        /// <returns>KSI signature</returns>
+        IKsiSignature Create(LegacyAggregationResponsePayload payload);
+
+        /// <summary>
         /// Get KSI signature instance from tlv tags
         /// </summary>
         /// <param name="aggregationHashChains">Aggregation hash chain tlv elements</param>

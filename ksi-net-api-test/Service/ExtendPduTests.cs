@@ -34,7 +34,7 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void ToStringWithRequestPayloadTest()
         {
-            ExtendPdu tag = TestUtil.GetCompositeTag<ExtendPdu>(Constants.ExtendPdu.TagType,
+            ExtendRequestPdu tag = TestUtil.GetCompositeTag<ExtendRequestPdu>(Constants.ExtendRequestPdu.TagType,
                 new ITlvTag[]
                 {
                     TestUtil.GetCompositeTag<KsiPduHeader>(Constants.KsiPduHeader.TagType,
@@ -55,7 +55,7 @@ namespace Guardtime.KSI.Test.Service
                             new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
                 });
 
-            ExtendPdu tag2 = new ExtendPdu(tag);
+            ExtendRequestPdu tag2 = new ExtendRequestPdu(tag);
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
         }
@@ -66,7 +66,7 @@ namespace Guardtime.KSI.Test.Service
             Assembly assembly = typeof(AggregationHashChain).Assembly;
             Type linkType = assembly.GetType("Guardtime.KSI.Signature.CalendarHashChain+Link");
 
-            ExtendPdu tag = TestUtil.GetCompositeTag<ExtendPdu>(Constants.ExtendPdu.TagType,
+            ExtendResponsePdu tag = TestUtil.GetCompositeTag<ExtendResponsePdu>(Constants.ExtendResponsePdu.TagType,
                 new ITlvTag[]
                 {
                     TestUtil.GetCompositeTag<KsiPduHeader>(Constants.KsiPduHeader.TagType,
@@ -81,7 +81,7 @@ namespace Guardtime.KSI.Test.Service
                         new IntegerTag(Constants.ExtendResponsePayload.RequestIdTagType, false, false, 2),
                         new IntegerTag(Constants.KsiPduPayload.StatusTagType, false, false, 0),
                         new StringTag(Constants.KsiPduPayload.ErrorMessageTagType, false, false, "Test error message."),
-                        new IntegerTag(Constants.ExtendResponsePayload.LastTimeTagType, false, false, 1),
+                        new IntegerTag(Constants.ExtendResponsePayload.CalendarLastTimeTagType, false, false, 1),
                         TestUtil.GetCompositeTag<CalendarHashChain>(Constants.CalendarHashChain.TagType,
                             new ITlvTag[]
                             {
@@ -101,7 +101,7 @@ namespace Guardtime.KSI.Test.Service
                             new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
                 });
 
-            ExtendPdu tag2 = new ExtendPdu(tag);
+            ExtendResponsePdu tag2 = new ExtendResponsePdu(tag);
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
         }
@@ -109,7 +109,7 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void ToStringWithErrorTest()
         {
-            ExtendPdu tag = TestUtil.GetCompositeTag<ExtendPdu>(Constants.ExtendPdu.TagType,
+            ExtendResponsePdu tag = TestUtil.GetCompositeTag<ExtendResponsePdu>(Constants.ExtendResponsePdu.TagType,
                 new ITlvTag[]
                 {
                     TestUtil.GetCompositeTag<KsiPduHeader>(Constants.KsiPduHeader.TagType,
@@ -129,7 +129,7 @@ namespace Guardtime.KSI.Test.Service
                             new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
                 });
 
-            ExtendPdu tag2 = new ExtendPdu(tag);
+            ExtendResponsePdu tag2 = new ExtendResponsePdu(tag);
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
         }
@@ -142,7 +142,7 @@ namespace Guardtime.KSI.Test.Service
 
             Assert.That(delegate
             {
-                ExtendPdu tag = TestUtil.GetCompositeTag<ExtendPdu>(Constants.ExtendPdu.TagType,
+                ExtendResponsePdu tag = TestUtil.GetCompositeTag<ExtendResponsePdu>(Constants.ExtendResponsePdu.TagType,
                     new ITlvTag[]
                     {
                         TestUtil.GetCompositeTag<ExtendResponsePayload>(Constants.ExtendResponsePayload.TagType, new ITlvTag[]
@@ -150,7 +150,7 @@ namespace Guardtime.KSI.Test.Service
                             new IntegerTag(Constants.ExtendResponsePayload.RequestIdTagType, false, false, 2),
                             new IntegerTag(Constants.KsiPduPayload.StatusTagType, false, false, 0),
                             new StringTag(Constants.KsiPduPayload.ErrorMessageTagType, false, false, "Test error message."),
-                            new IntegerTag(Constants.ExtendResponsePayload.LastTimeTagType, false, false, 1),
+                            new IntegerTag(Constants.ExtendResponsePayload.CalendarLastTimeTagType, false, false, 1),
                             TestUtil.GetCompositeTag<CalendarHashChain>(Constants.CalendarHashChain.TagType,
                                 new ITlvTag[]
                                 {
@@ -188,7 +188,7 @@ namespace Guardtime.KSI.Test.Service
 
             Assert.That(delegate
             {
-                ExtendPdu tag = TestUtil.GetCompositeTag<ExtendPdu>(Constants.ExtendPdu.TagType,
+                ExtendResponsePdu tag = TestUtil.GetCompositeTag<ExtendResponsePdu>(Constants.ExtendResponsePdu.TagType,
                     new ITlvTag[]
                     {
                         TestUtil.GetCompositeTag<KsiPduHeader>(Constants.KsiPduHeader.TagType,
@@ -206,7 +206,7 @@ namespace Guardtime.KSI.Test.Service
                             new IntegerTag(Constants.ExtendResponsePayload.RequestIdTagType, false, false, 2),
                             new IntegerTag(Constants.KsiPduPayload.StatusTagType, false, false, 0),
                             new StringTag(Constants.KsiPduPayload.ErrorMessageTagType, false, false, "Test error message."),
-                            new IntegerTag(Constants.ExtendResponsePayload.LastTimeTagType, false, false, 1),
+                            new IntegerTag(Constants.ExtendResponsePayload.CalendarLastTimeTagType, false, false, 1),
                             TestUtil.GetCompositeTag<CalendarHashChain>(Constants.CalendarHashChain.TagType,
                                 new ITlvTag[]
                                 {

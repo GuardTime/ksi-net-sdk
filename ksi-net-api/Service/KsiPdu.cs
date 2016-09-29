@@ -59,34 +59,28 @@ namespace Guardtime.KSI.Service
             {
                 ITlvTag childTag = this[i];
 
-                switch (childTag.Type)
+                if (childTag.Type == Constants.AggregationErrorPayload.TagType || childTag.Type == Constants.ExtendErrorPayload.TagType)
                 {
-                    case Constants.AggregationErrorPayload.TagType:
-                        hasErrorPayload = true;
-                        payloadCount++;
-                        break;
-                    case Constants.AggregationRequestPayload.TagType:
-                    case Constants.AggregationResponsePayload.TagType:
-                    case Constants.AggregationConfigRequestPayload.TagType:
-                    case Constants.AggregationConfigResponsePayload.TagType:
-                    case Constants.ExtendRequestPayload.TagType:
-                    case Constants.ExtendResponsePayload.TagType:
-                        payloadCount++;
-                        break;
-                    case Constants.ExtendErrorPayload.TagType:
-                        hasErrorPayload = true;
-                        payloadCount++;
-                        break;
-                    case Constants.KsiPduHeader.TagType:
-                        this[i] = Header = new KsiPduHeader(childTag);
-                        headerCount++;
-                        headerIndex = i;
-                        break;
-                    case Constants.KsiPdu.MacTagType:
-                        this[i] = _mac = new ImprintTag(childTag);
-                        macCount++;
-                        macIndex = i;
-                        break;
+                    hasErrorPayload = true;
+                    payloadCount++;
+                }
+                else if (childTag.Type == Constants.AggregationRequestPayload.TagType || childTag.Type == Constants.AggregationResponsePayload.TagType ||
+                         childTag.Type == Constants.AggregationConfigRequestPayload.TagType || childTag.Type == Constants.AggregationConfigResponsePayload.TagType ||
+                         childTag.Type == Constants.ExtendRequestPayload.TagType || childTag.Type == Constants.ExtendResponsePayload.TagType)
+                {
+                    payloadCount++;
+                }
+                else if (childTag.Type == Constants.KsiPduHeader.TagType)
+                {
+                    this[i] = Header = new KsiPduHeader(childTag);
+                    headerCount++;
+                    headerIndex = i;
+                }
+                else if (childTag.Type == Constants.KsiPdu.MacTagType)
+                {
+                    this[i] = _mac = new ImprintTag(childTag);
+                    macCount++;
+                    macIndex = i;
                 }
             }
 

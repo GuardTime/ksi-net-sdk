@@ -53,16 +53,16 @@ namespace Guardtime.KSI.Service
 
                 switch (childTag.Type)
                 {
-                    case Constants.AggregationRequestPayload.TagType:
-                        this[i] = Payload = new AggregationRequestPayload(childTag);
+                    case Constants.AggregationRequestPayload.LegacyTagType:
+                        this[i] = Payload = new LegacyAggregationRequestPayload(childTag);
                         payloadCount++;
                         break;
-                    case Constants.AggregationResponsePayload.TagType:
-                        this[i] = Payload = new AggregationResponsePayload(childTag);
+                    case Constants.AggregationResponsePayload.LegacyTagType:
+                        this[i] = Payload = new LegacyAggregationResponsePayload(childTag);
                         payloadCount++;
                         break;
-                    case Constants.AggregationErrorPayload.TagType:
-                        this[i] = Payload = new AggregationErrorPayload(childTag);
+                    case Constants.AggregationErrorPayload.LegacyTagType:
+                        this[i] = Payload = new LegacyAggregationErrorPayload(childTag);
                         payloadCount++;
                         break;
                     case Constants.KsiPduHeader.TagType:
@@ -82,12 +82,12 @@ namespace Guardtime.KSI.Service
                 throw new TlvException("Exactly one payload must exist in KSI PDU.");
             }
 
-            if (Payload.Type != Constants.AggregationErrorPayload.TagType && headerCount != 1)
+            if (Payload.Type != Constants.AggregationErrorPayload.TagType && Payload.Type != Constants.AggregationErrorPayload.LegacyTagType && headerCount != 1)
             {
                 throw new TlvException("Exactly one header must exist in KSI PDU.");
             }
 
-            if (Payload.Type != Constants.AggregationErrorPayload.TagType && macCount != 1)
+            if (Payload.Type != Constants.AggregationErrorPayload.TagType && Payload.Type != Constants.AggregationErrorPayload.LegacyTagType && macCount != 1)
             {
                 throw new TlvException("Exactly one mac must exist in KSI PDU");
             }

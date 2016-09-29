@@ -53,16 +53,16 @@ namespace Guardtime.KSI.Service
 
                 switch (childTag.Type)
                 {
-                    case Constants.ExtendRequestPayload.TagType:
-                        this[i] = Payload = new ExtendRequestPayload(childTag);
+                    case Constants.ExtendRequestPayload.LegacyTagType:
+                        this[i] = Payload = new LegacyExtendRequestPayload(childTag);
                         payloadCount++;
                         break;
-                    case Constants.ExtendResponsePayload.TagType:
-                        this[i] = Payload = new ExtendResponsePayload(childTag);
+                    case Constants.ExtendResponsePayload.LegacyTagType:
+                        this[i] = Payload = new LegacyExtendResponsePayload(childTag);
                         payloadCount++;
                         break;
-                    case Constants.ExtendErrorPayload.TagType:
-                        this[i] = Payload = new ExtendErrorPayload(childTag);
+                    case Constants.ExtendErrorPayload.LegacyTagType:
+                        this[i] = Payload = new LegacyExtendErrorPayload(childTag);
                         payloadCount++;
                         break;
                     case Constants.KsiPduHeader.TagType:
@@ -82,12 +82,12 @@ namespace Guardtime.KSI.Service
                 throw new TlvException("Exactly one payload must exist in KSI PDU.");
             }
 
-            if (Payload.Type != Constants.ExtendErrorPayload.TagType && headerCount != 1)
+            if (Payload.Type != Constants.ExtendErrorPayload.TagType && Payload.Type != Constants.ExtendErrorPayload.LegacyTagType && headerCount != 1)
             {
                 throw new TlvException("Exactly one header must exist in KSI PDU.");
             }
 
-            if (Payload.Type != Constants.ExtendErrorPayload.TagType && macCount != 1)
+            if (Payload.Type != Constants.ExtendErrorPayload.TagType && Payload.Type != Constants.ExtendErrorPayload.LegacyTagType && macCount != 1)
             {
                 throw new TlvException("Exactly one mac must exist in KSI PDU.");
             }

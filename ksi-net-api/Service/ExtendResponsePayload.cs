@@ -65,7 +65,6 @@ namespace Guardtime.KSI.Service
                         this[i] = _errorMessage = new StringTag(childTag);
                         errorMessageCount++;
                         break;
-                    case Constants.ExtendResponsePayload.LastTimeTagType:
                     case Constants.ExtendResponsePayload.CalendarLastTimeTagType:
                         this[i] = _calendarLastTime = new IntegerTag(childTag);
                         calendarLastTimeCount++;

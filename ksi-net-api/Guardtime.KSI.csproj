@@ -134,6 +134,17 @@
     <Compile Include="Publication\PublicationsFileHeader.cs" />
     <Compile Include="Publication\PublicationsFile.cs" />
     <Compile Include="Publication\PublicationData.cs" />
+    <Compile Include="Service\ISignatureCreatingPayload.cs" />
+    <Compile Include="Service\LegacyAggregationErrorPayload.cs" />
+    <Compile Include="Service\LegacyAggregationRequestPayload.cs" />
+    <Compile Include="Service\LegacyAggregationResponsePayload.cs" />
+    <Compile Include="Service\AggregationResponsePdu.cs" />
+    <Compile Include="Service\AggregationRequestPdu.cs" />
+    <Compile Include="Service\LegacyExtendErrorPayload.cs" />
+    <Compile Include="Service\LegacyExtendRequestPayload.cs" />
+    <Compile Include="Service\LegacyExtendResponsePayload.cs" />
+    <Compile Include="Service\ExtendResponsePdu.cs" />
+    <Compile Include="Service\ExtendRequestPdu.cs" />
     <Compile Include="Service\LegacyAggregationPdu.cs" />
     <Compile Include="Service\AggregationConfigRequestPayload.cs" />
     <Compile Include="Service\AggregationConfigResponsePayload.cs" />
@@ -177,8 +188,6 @@
     <Compile Include="Service\AggregationErrorPayload.cs" />
     <Compile Include="Service\AggregationResponsePayload.cs" />
     <Compile Include="Service\AggregationRequestPayload.cs" />
-    <Compile Include="Service\AggregationPdu.cs" />
-    <Compile Include="Service\ExtendPdu.cs" />
     <Compile Include="Service\ExtendResponsePayload.cs" />
     <Compile Include="Service\HttpKsiServiceProtocol.cs" />
     <Compile Include="Service\IKsiService.cs" />

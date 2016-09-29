@@ -41,7 +41,7 @@ namespace Guardtime.KSI.Test.Service
 
             using (TlvReader reader = new TlvReader(new MemoryStream(result.Request)))
             {
-                AggregationPdu pdu = new AggregationPdu(reader.ReadTag());
+                AggregationRequestPdu pdu = new AggregationRequestPdu(reader.ReadTag());
                 AggregationRequestPayload payload = pdu.Payload as AggregationRequestPayload;
                 Assert.IsNotNull(payload);
             }
@@ -60,7 +60,7 @@ namespace Guardtime.KSI.Test.Service
 
             using (TlvReader reader = new TlvReader(new MemoryStream(result.Request)))
             {
-                ExtendPdu pdu = new ExtendPdu(reader.ReadTag());
+                ExtendRequestPdu pdu = new ExtendRequestPdu(reader.ReadTag());
                 ExtendRequestPayload payload = (ExtendRequestPayload)pdu.Payload;
                 string filename = "response-" + (FailNext ? "invalid" : "ok") + "-anon-";
                 FailNext = false;
