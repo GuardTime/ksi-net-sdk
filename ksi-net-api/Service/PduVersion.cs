@@ -19,9 +19,19 @@
 
 namespace Guardtime.KSI.Service
 {
+    /// <summary>
+    /// PDU version
+    /// </summary>
     public enum PduVersion
     {
+        /// <summary>
+        /// Version v1
+        /// </summary>
         v1,
+
+        /// <summary>
+        /// Version v2
+        /// </summary>
         v2
     }
 }

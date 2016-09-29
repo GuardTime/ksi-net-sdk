@@ -19,7 +19,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Crypto.BouncyCastle;
 using Guardtime.KSI.Crypto.Microsoft;

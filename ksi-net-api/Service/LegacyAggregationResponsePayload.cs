@@ -29,11 +29,7 @@ namespace Guardtime.KSI.Service
     [Obsolete]
     public sealed class LegacyAggregationResponsePayload : KsiPduPayload
     {
-        // TODO: Create config
-        private readonly RawTag _config;
         private readonly StringTag _errorMessage;
-        // TODO: Create request acknowledgement 
-        private readonly RawTag _requestAcknowledgment;
         private readonly IntegerTag _requestId;
         private readonly IntegerTag _status;
 
@@ -70,11 +66,11 @@ namespace Guardtime.KSI.Service
                         errorMessageCount++;
                         break;
                     case Constants.AggregationResponsePayload.ConfigTagType:
-                        this[i] = _config = new RawTag(childTag);
+                        this[i] = new RawTag(childTag);
                         configCount++;
                         break;
                     case Constants.AggregationResponsePayload.RequestAcknowledgmentTagType:
-                        this[i] = _requestAcknowledgment = new RawTag(childTag);
+                        this[i] = new RawTag(childTag);
                         requestAcknowledgmentCount++;
                         break;
                     case Constants.AggregationHashChain.TagType:

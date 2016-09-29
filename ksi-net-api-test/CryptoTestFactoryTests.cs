@@ -17,8 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
-using System.Configuration;
 using Guardtime.KSI.Test.Crypto;
 using NUnit.Framework;
 

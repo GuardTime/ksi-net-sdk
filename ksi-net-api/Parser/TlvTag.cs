@@ -89,6 +89,7 @@ namespace Guardtime.KSI.Parser
             Type type = GetType();
             string typeName = type.Name;
 
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             while (type.DeclaringType != null)
             {
                 type = type.DeclaringType;

@@ -134,7 +134,6 @@
     <Compile Include="Publication\PublicationsFileHeader.cs" />
     <Compile Include="Publication\PublicationsFile.cs" />
     <Compile Include="Publication\PublicationData.cs" />
-    <Compile Include="Service\ISignatureCreatingPayload.cs" />
     <Compile Include="Service\LegacyAggregationErrorPayload.cs" />
     <Compile Include="Service\LegacyAggregationRequestPayload.cs" />
     <Compile Include="Service\LegacyAggregationResponsePayload.cs" />

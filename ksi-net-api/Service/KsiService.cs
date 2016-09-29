@@ -339,13 +339,11 @@ namespace Guardtime.KSI.Service
                     throw new KsiServiceException("Unknown response PDU tag type: " + rawTag.Type.ToString("X"));
                 }
 
-                LegacyAggregationResponsePayload legacyPayload = null;
-                AggregationResponsePayload payload = null;
                 IKsiSignature signature;
 
                 if (legacyPdu != null)
                 {
-                    legacyPayload = legacyPdu.Payload as LegacyAggregationResponsePayload;
+                    LegacyAggregationResponsePayload legacyPayload = legacyPdu.Payload as LegacyAggregationResponsePayload;
                     LegacyAggregationErrorPayload errorPayload = legacyPdu.Payload as LegacyAggregationErrorPayload;
 
                     if (legacyPayload == null && errorPayload == null)
@@ -379,7 +377,7 @@ namespace Guardtime.KSI.Service
                 }
                 else
                 {
-                    payload = pdu.Payload as AggregationResponsePayload;
+                    AggregationResponsePayload payload = pdu.Payload as AggregationResponsePayload;
                     AggregationErrorPayload errorPayload = pdu.Payload as AggregationErrorPayload;
 
                     if (payload == null && errorPayload == null)
