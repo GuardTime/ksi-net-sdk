@@ -321,20 +321,18 @@ namespace Guardtime.KSI.Test.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void ExtendInvalidPduFormat(Ksi ksi)
         {
-            if (TestSetup.PduVersion == PduVersion.v1)
-            {
-                KsiService service = GetHttpKsiService();
-                service.PduVersion = PduVersion.v2;
+            KsiService service = GetHttpKsiService();
+            service.PduVersion = PduVersion.v2;
 
-                try
-                {
-                    service.Extend(1455494400);
-                }
-                catch (Exception ex)
-                {
-                    Assert.That(ex.Message.StartsWith("Received PDU v1 response to PDU v2 request. Configure the SDK to use PDU v1 format for the given Extender"),
-                        "Unexpected exception message: " + ex.Message);
-                }
+            try
+            {
+                service.Extend(1455494400);
+            }
+                // if new aggregator then no exception
+            catch (Exception ex)
+            {
+                Assert.That(ex.Message.StartsWith("Received PDU v1 response to PDU v2 request. Configure the SDK to use PDU v1 format for the given Extender"),
+                    "Unexpected exception message: " + ex.Message);
             }
         }
     }
