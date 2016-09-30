@@ -20,15 +20,18 @@
 using System;
 using System.IO;
 using System.Threading;
+using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Service;
-using NUnit.Framework;
+using Guardtime.KSI.Signature;
+using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Test.Service
 {
     public class TestKsiServiceProtocol : IKsiSigningServiceProtocol, IKsiExtendingServiceProtocol, IKsiPublicationsFileServiceProtocol
     {
-        public bool FailNext { get; set; }
+        public IKsiSignature SignResult { get; set; }
+        public CalendarHashChain ExtendResult { get; set; }
 
         public IAsyncResult BeginSign(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
@@ -37,16 +40,29 @@ namespace Guardtime.KSI.Test.Service
 
         public byte[] EndSign(IAsyncResult asyncResult)
         {
-            AsyncResult result = (AsyncResult)asyncResult;
-
-            using (TlvReader reader = new TlvReader(new MemoryStream(result.Request)))
+            AggregationResponsePayload payload;
+            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
             {
-                AggregationPdu pdu = new AggregationPdu(reader.ReadTag());
-                AggregationRequestPayload payload = pdu.Payload as AggregationRequestPayload;
-                Assert.IsNotNull(payload);
+                writer.WriteTag(new IntegerTag(Constants.AggregationResponsePayload.RequestIdTagType, false, false, 2));
+                writer.WriteTag(new IntegerTag(Constants.KsiPduPayload.StatusTagType, false, false, 0));
+
+                foreach (ITlvTag childTag in SignResult)
+                {
+                    if (childTag.Type > 0x800 && childTag.Type < 0x900)
+                    {
+                        writer.WriteTag(childTag);
+                    }
+                }
+
+                payload = new AggregationResponsePayload(new RawTag(Constants.AggregationResponsePayload.TagType, false, false,
+                    ((MemoryStream)writer.BaseStream).ToArray()));
             }
 
-            return null;
+            KsiPduHeader header = new KsiPduHeader("test");
+
+            AggregationPdu pdu = new AggregationPdu(header, payload, KsiPdu.GetHashMacTag(HashAlgorithm.Default, Util.EncodeNullTerminatedUtf8String("test"), header, payload));
+
+            return pdu.Encode();
         }
 
         public IAsyncResult BeginExtend(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
@@ -56,19 +72,22 @@ namespace Guardtime.KSI.Test.Service
 
         public byte[] EndExtend(IAsyncResult asyncResult)
         {
-            AsyncResult result = (AsyncResult)asyncResult;
-
-            using (TlvReader reader = new TlvReader(new MemoryStream(result.Request)))
+            ExtendResponsePayload payload;
+            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
             {
-                ExtendPdu pdu = new ExtendPdu(reader.ReadTag());
-                ExtendRequestPayload payload = (ExtendRequestPayload)pdu.Payload;
-                string filename = "response-" + (FailNext ? "invalid" : "ok") + "-anon-";
-                FailNext = false;
+                writer.WriteTag(new IntegerTag(Constants.ExtendResponsePayload.RequestIdTagType, false, false, 2));
+                writer.WriteTag(new IntegerTag(Constants.KsiPduPayload.StatusTagType, false, false, 0));
+                writer.WriteTag(ExtendResult);
 
-                return payload.PublicationTime == null
-                    ? ReadFile("resources/extender-response/" + filename + payload.AggregationTime + ".tlv")
-                    : ReadFile("resources/extender-response/" + filename + payload.AggregationTime + "-" + payload.PublicationTime + ".tlv");
+                payload = new ExtendResponsePayload(new RawTag(Constants.ExtendResponsePayload.TagType, false, false,
+                    ((MemoryStream)writer.BaseStream).ToArray()));
             }
+
+            KsiPduHeader header = new KsiPduHeader("test");
+
+            ExtendPdu pdu = new ExtendPdu(header, payload, KsiPdu.GetHashMacTag(HashAlgorithm.Default, Util.EncodeNullTerminatedUtf8String("test"), header, payload));
+
+            return pdu.Encode();
         }
 
         public IAsyncResult BeginGetPublicationsFile(AsyncCallback callback, object asyncState)

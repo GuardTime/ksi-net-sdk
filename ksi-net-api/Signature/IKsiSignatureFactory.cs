@@ -40,6 +40,15 @@ namespace Guardtime.KSI.Signature
         IKsiSignature Create(byte[] bytes, DataHash hash = null, uint level = 0);
 
         /// <summary>
+        ///     Get KSI signature instance from content byte array.
+        /// </summary>
+        /// <param name="contentBytes">signature content byte array</param>
+        /// <param name="hash">Signed hash</param>
+        /// <param name="level">Signed hash node level value in the aggregation tree</param>
+        /// <returns>KSI signature</returns>
+        IKsiSignature CreateByContent(byte[] contentBytes, DataHash hash = null, uint level = 0);
+
+        /// <summary>
         ///     Get KSI signature instance from stream.
         /// </summary>
         /// <param name="stream">signature data stream</param>

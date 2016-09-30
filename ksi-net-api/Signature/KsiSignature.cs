@@ -306,7 +306,7 @@ namespace Guardtime.KSI.Signature
 
                 try
                 {
-                    IKsiSignature signature = signatureFactory.Create(((MemoryStream)writer.BaseStream).ToArray(), GetAggregationHashChains()[0].InputHash);
+                    IKsiSignature signature = signatureFactory.CreateByContent(((MemoryStream)writer.BaseStream).ToArray(), GetAggregationHashChains()[0].InputHash);
                     Logger.Debug("Extending KSI signature successful.");
 
                     return signature;

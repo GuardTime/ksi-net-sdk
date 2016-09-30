@@ -66,7 +66,29 @@ namespace Guardtime.KSI.Signature
         /// <returns>KSI signature</returns>
         public IKsiSignature Create(byte[] bytes, DataHash hash = null, uint level = 0)
         {
-            KsiSignature signature = new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false, bytes));
+            using (TlvReader reader = new TlvReader(new MemoryStream(bytes)))
+            {
+                KsiSignature signature = new KsiSignature(reader.ReadTag());
+
+                if (!DisableVerification)
+                {
+                    Verify(signature, hash, level);
+                }
+
+                return signature;
+            }
+        }
+
+        /// <summary>
+        ///     Get KSI signature instance from byte array.
+        /// </summary>
+        /// <param name="contentBytes">signature content byte array</param>
+        /// <param name="hash">Signed hash</param>
+        /// <param name="level">Signed hash node level value in the aggregation tree</param>
+        /// <returns>KSI signature</returns>
+        public IKsiSignature CreateByContent(byte[] contentBytes, DataHash hash = null, uint level = 0)
+        {
+            KsiSignature signature = new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false, contentBytes));
 
             if (!DisableVerification)
             {
