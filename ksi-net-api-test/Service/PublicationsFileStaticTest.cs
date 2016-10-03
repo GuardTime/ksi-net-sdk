@@ -17,18 +17,11 @@
  * reserves and retains all trademark rights.
  */
 
-using System.IO;
 using System.Security.Cryptography.X509Certificates;
-using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
-using Guardtime.KSI.Signature;
-using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Test.Crypto;
-using Guardtime.KSI.Test.Properties;
 using Guardtime.KSI.Trust;
-using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Service

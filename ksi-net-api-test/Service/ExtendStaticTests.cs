@@ -20,7 +20,6 @@
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature;
