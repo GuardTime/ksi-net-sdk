@@ -30,8 +30,20 @@ namespace Guardtime.KSI.Test.Service
 {
     public class TestKsiServiceProtocol : IKsiSigningServiceProtocol, IKsiExtendingServiceProtocol, IKsiPublicationsFileServiceProtocol
     {
+        /// <summary>
+        /// If given then it will be used to calculate signing request result byte array. Otherwise RequestResult is used.
+        /// </summary>
         public IKsiSignature SignResult { get; set; }
+
+        /// <summary>
+        /// If given then it will be used to calculate extending request result byte array. Otherwise RequestResult is used.
+        /// </summary>
         public CalendarHashChain ExtendResult { get; set; }
+
+        /// <summary>
+        /// Return value of signing/extending request
+        /// </summary>
+        public byte[] RequestResult { get; set; }
 
         public IAsyncResult BeginSign(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
@@ -40,29 +52,34 @@ namespace Guardtime.KSI.Test.Service
 
         public byte[] EndSign(IAsyncResult asyncResult)
         {
-            AggregationResponsePayload payload;
-            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
+            if (SignResult != null)
             {
-                writer.WriteTag(new IntegerTag(Constants.AggregationResponsePayload.RequestIdTagType, false, false, 2));
-                writer.WriteTag(new IntegerTag(Constants.KsiPduPayload.StatusTagType, false, false, 0));
-
-                foreach (ITlvTag childTag in SignResult)
+                AggregationResponsePayload payload;
+                using (TlvWriter writer = new TlvWriter(new MemoryStream()))
                 {
-                    if (childTag.Type > 0x800 && childTag.Type < 0x900)
+                    writer.WriteTag(new IntegerTag(Constants.AggregationResponsePayload.RequestIdTagType, false, false, 2));
+                    writer.WriteTag(new IntegerTag(Constants.KsiPduPayload.StatusTagType, false, false, 0));
+
+                    foreach (ITlvTag childTag in SignResult)
                     {
-                        writer.WriteTag(childTag);
+                        if (childTag.Type > 0x800 && childTag.Type < 0x900)
+                        {
+                            writer.WriteTag(childTag);
+                        }
                     }
+
+                    payload = new AggregationResponsePayload(new RawTag(Constants.AggregationResponsePayload.TagType, false, false,
+                        ((MemoryStream)writer.BaseStream).ToArray()));
                 }
 
-                payload = new AggregationResponsePayload(new RawTag(Constants.AggregationResponsePayload.TagType, false, false,
-                    ((MemoryStream)writer.BaseStream).ToArray()));
+                KsiPduHeader header = new KsiPduHeader("test");
+
+                AggregationPdu pdu = new AggregationPdu(header, payload, KsiPdu.GetHashMacTag(HashAlgorithm.Default, Util.EncodeNullTerminatedUtf8String("test"), header, payload));
+
+                return pdu.Encode();
             }
 
-            KsiPduHeader header = new KsiPduHeader("test");
-
-            AggregationPdu pdu = new AggregationPdu(header, payload, KsiPdu.GetHashMacTag(HashAlgorithm.Default, Util.EncodeNullTerminatedUtf8String("test"), header, payload));
-
-            return pdu.Encode();
+            return RequestResult;
         }
 
         public IAsyncResult BeginExtend(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
@@ -72,22 +89,27 @@ namespace Guardtime.KSI.Test.Service
 
         public byte[] EndExtend(IAsyncResult asyncResult)
         {
-            ExtendResponsePayload payload;
-            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
+            if (ExtendResult != null)
             {
-                writer.WriteTag(new IntegerTag(Constants.ExtendResponsePayload.RequestIdTagType, false, false, 2));
-                writer.WriteTag(new IntegerTag(Constants.KsiPduPayload.StatusTagType, false, false, 0));
-                writer.WriteTag(ExtendResult);
+                ExtendResponsePayload payload;
+                using (TlvWriter writer = new TlvWriter(new MemoryStream()))
+                {
+                    writer.WriteTag(new IntegerTag(Constants.ExtendResponsePayload.RequestIdTagType, false, false, 2));
+                    writer.WriteTag(new IntegerTag(Constants.KsiPduPayload.StatusTagType, false, false, 0));
+                    writer.WriteTag(ExtendResult);
 
-                payload = new ExtendResponsePayload(new RawTag(Constants.ExtendResponsePayload.TagType, false, false,
-                    ((MemoryStream)writer.BaseStream).ToArray()));
+                    payload = new ExtendResponsePayload(new RawTag(Constants.ExtendResponsePayload.TagType, false, false,
+                        ((MemoryStream)writer.BaseStream).ToArray()));
+                }
+
+                KsiPduHeader header = new KsiPduHeader("test");
+
+                ExtendPdu pdu = new ExtendPdu(header, payload, KsiPdu.GetHashMacTag(HashAlgorithm.Default, Util.EncodeNullTerminatedUtf8String("test"), header, payload));
+
+                return pdu.Encode();
             }
 
-            KsiPduHeader header = new KsiPduHeader("test");
-
-            ExtendPdu pdu = new ExtendPdu(header, payload, KsiPdu.GetHashMacTag(HashAlgorithm.Default, Util.EncodeNullTerminatedUtf8String("test"), header, payload));
-
-            return pdu.Encode();
+            return RequestResult;
         }
 
         public IAsyncResult BeginGetPublicationsFile(AsyncCallback callback, object asyncState)
