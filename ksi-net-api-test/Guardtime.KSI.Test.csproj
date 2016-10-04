@@ -493,6 +493,9 @@
     <None Include="resources\signature\calendar-hash-chain\calendar-hash-chain-invalid-type.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="resources\signature\calendar-hash-chain\calendar-hash-chain-ok-changed-algorithm.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="resources\signature\calendar-hash-chain\calendar-hash-chain-ok-missing-optionals.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

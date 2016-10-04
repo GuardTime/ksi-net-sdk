@@ -691,6 +691,15 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/calendar-hash-chain/calendar-hash-chain-ok-changed-algorithm.tlv.
+        /// </summary>
+        internal static string CalendarHashChain_Ok_Changed_Algorithm {
+            get {
+                return ResourceManager.GetString("CalendarHashChain_Ok_Changed_Algorithm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/calendar-hash-chain/calendar-hash-chain-ok-missing-optionals.tlv.
         /// </summary>
         internal static string CalendarHashChain_Ok_Missing_Optionals {
