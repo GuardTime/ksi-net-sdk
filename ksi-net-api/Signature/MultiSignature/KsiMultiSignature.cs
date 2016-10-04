@@ -446,8 +446,7 @@ namespace Guardtime.KSI.Signature.MultiSignature
                 calendarAuthenticationRecord = _calendarAuthenticationRecords[calendarHashChain.PublicationTime];
             }
 
-            IKsiSignature signature = _uniSignatureFactory.Create(chains, calendarHashChain, calendarAuthenticationRecord, signaturePublicationRecord, rfc3161Record);
-            signature.DoInternalVerification(documentHash);
+            IKsiSignature signature = _uniSignatureFactory.Create(chains, calendarHashChain, calendarAuthenticationRecord, signaturePublicationRecord, rfc3161Record, documentHash);
             return signature;
         }
 

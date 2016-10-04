@@ -89,36 +89,32 @@ namespace Guardtime.KSI.Signature
         ///     Extend KSI signature with given calendar hash chain.
         /// </summary>
         /// <param name="calendarHashChain">extended calendar hash chain</param>
+        /// <param name="signatureFactory">signature factory to be used when creating extended signature</param>
         /// <returns>extended KSI signature</returns>
-        IKsiSignature Extend(CalendarHashChain calendarHashChain);
+        IKsiSignature Extend(CalendarHashChain calendarHashChain, IKsiSignatureFactory signatureFactory = null);
 
         /// <summary>
         ///     Extend signature to publication.
         /// </summary>
         /// <param name="calendarHashChain">extended calendar hash chain</param>
         /// <param name="publicationRecord">extended publication record</param>
+        /// <param name="signatureFactory">signature factory to be used when creating extended signature</param>
         /// <returns>extended KSI signature</returns>
-        IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInPublicationFile publicationRecord);
+        IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInPublicationFile publicationRecord, IKsiSignatureFactory signatureFactory = null);
 
         /// <summary>
         ///     Extend signature to publication.
         /// </summary>
         /// <param name="calendarHashChain">extended calendar hash chain</param>
         /// <param name="publicationRecord">extended publication record</param>
+        /// <param name="signatureFactory">signature factory to be used when creating extended signature</param>
         /// <returns>extended KSI signature</returns>
-        IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInSignature publicationRecord);
+        IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInSignature publicationRecord, IKsiSignatureFactory signatureFactory = null);
 
         /// <summary>
         ///     Write KSI signature to stream.
         /// </summary>
         /// <param name="outputStream">output stream</param>
         void WriteTo(Stream outputStream);
-
-        /// <summary>
-        /// Verify with internal verification policy
-        /// </summary>
-        /// <param name="documentHash"></param>
-        /// <param name="level">Document hash node level value in the aggregation tree</param>
-        void DoInternalVerification(DataHash documentHash, uint level = 0);
     }
 }

@@ -116,6 +116,24 @@ namespace Guardtime.KSI.Test.Integration
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void ExtendInvalidSignatureTest(Ksi ksi)
+        {
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Invalid_Aggregation_Chain_Input_Hash), FileMode.Open))
+            {
+                IKsiSignature ksiSignature = new KsiSignatureFactory() { DisableVerification = true }.Create(stream);
+
+                KsiSignatureInvalidContentException ex = Assert.Throws<KsiSignatureInvalidContentException>(delegate
+                {
+                    IKsiSignature extendedSignature = ksi.Extend(ksiSignature);
+                });
+
+                Assert.That(ex.Message.StartsWith("Signature verification failed"), "Unexpected exception message: " + ex.Message);
+                Assert.IsNotNull(ex.Signature);
+                Assert.IsTrue(ex.Signature.IsExtended);
+            }
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void ExtendAndVerifyToUserProvidedPublicationTest(Ksi ksi)
         {
             PublicationBasedVerificationPolicy rule = new PublicationBasedVerificationPolicy();
@@ -170,10 +188,12 @@ namespace Guardtime.KSI.Test.Integration
 
                 IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
 
-                Assert.That(delegate
+                KsiSignatureInvalidContentException ex = Assert.Throws<KsiSignatureInvalidContentException>(delegate
                 {
                     ksi.Extend(ksiSignature, publicationData);
-                }, Throws.TypeOf<KsiSignatureException>().With.Message.Contains(VerificationError.Int09.Code));
+                });
+
+                Assert.AreEqual(VerificationError.Int09.Code, ex.VerificationResult.VerificationError.Code, "Invalid result code");
             }
         }
 
@@ -212,10 +232,12 @@ namespace Guardtime.KSI.Test.Integration
 
                 IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
 
-                Assert.That(delegate
+                KsiSignatureInvalidContentException ex = Assert.Throws<KsiSignatureInvalidContentException>(delegate
                 {
                     ksi.Extend(ksiSignature, publicationData);
-                }, Throws.TypeOf<KsiSignatureException>().With.Message.Contains(VerificationError.Int09.Code));
+                });
+
+                Assert.AreEqual(VerificationError.Int09.Code, ex.VerificationResult.VerificationError.Code, "Unexpected result code");
             }
         }
 
