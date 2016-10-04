@@ -291,6 +291,9 @@
   <data name="CalendarHashChain_Invalid_Type" xml:space="preserve">
     <value>resources/signature/calendar-hash-chain/calendar-hash-chain-invalid-type.tlv</value>
   </data>
+  <data name="CalendarHashChain_Ok_Changed_Algorithm" xml:space="preserve">
+    <value>resources/signature/calendar-hash-chain/calendar-hash-chain-ok-changed-algorithm.tlv</value>
+  </data>
   <data name="DataHasher_TestFile" xml:space="preserve">
     <value>resources/testdata.txt</value>
   </data>
@@ -479,6 +482,9 @@
   </data>
   <data name="KsiSignatureDo_Invalid_Hash_Algorithm" xml:space="preserve">
     <value>resources/signature/ksi-signature-do/ksi-signature-invalid-hash-algorithm.tlv</value>
+  </data>
+  <data name="KsiSignatureDo_Ok_Level3" xml:space="preserve">
+    <value>resources/signature/ksi-signature-do/ksi-signature-level-3-ok.tlv</value>
   </data>
   <data name="AggregationHashChainMetadataInvalidPaddingFail" xml:space="preserve">
     <value>resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataInvalidPaddingFail.ksig</value>

@@ -35,6 +35,13 @@ namespace Guardtime.KSI.Signature.Verification
         /// <summary>
         ///     Create new verification context instance.
         /// </summary>
+        public VerificationContext()
+        {
+        }
+
+        /// <summary>
+        ///     Create new verification context instance.
+        /// </summary>
         /// <param name="signature">KSI signature</param>
         public VerificationContext(IKsiSignature signature)
         {
@@ -54,7 +61,7 @@ namespace Guardtime.KSI.Signature.Verification
         /// <summary>
         ///     Get KSI signature.
         /// </summary>
-        public IKsiSignature Signature { get; }
+        public IKsiSignature Signature { get; set; }
 
         /// <summary>
         ///     Get or set user publication.

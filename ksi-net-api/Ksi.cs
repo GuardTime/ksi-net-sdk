@@ -33,6 +33,7 @@ namespace Guardtime.KSI
     public class Ksi
     {
         private readonly IKsiService _ksiService;
+        private readonly IKsiSignatureFactory _ksiSignatureFactoryForExtending;
         private IPublicationsFile _publicationsFile;
         private DateTime _publicationsFileLoadTime;
 
@@ -40,13 +41,16 @@ namespace Guardtime.KSI
         ///     Create new KSI instance.
         /// </summary>
         /// <param name="ksiService">KSI service</param>
-        public Ksi(IKsiService ksiService)
+        /// <param name="ksiSignatureFactoryForExtending">Signature factory to be used for creating an extended signature</param>
+        public Ksi(IKsiService ksiService, IKsiSignatureFactory ksiSignatureFactoryForExtending = null)
         {
             if (ksiService == null)
             {
                 throw new KsiException("KSI service cannot be null.");
             }
+
             _ksiService = ksiService;
+            _ksiSignatureFactoryForExtending = ksiSignatureFactoryForExtending ?? new KsiSignatureFactory();
         }
 
         /// <summary>
@@ -155,7 +159,7 @@ namespace Guardtime.KSI
             }
 
             CalendarHashChain calendarHashChain = _ksiService.Extend(signature.AggregationTime, publicationRecord.PublicationData.PublicationTime);
-            return signature.Extend(calendarHashChain, publicationRecord);
+            return signature.Extend(calendarHashChain, publicationRecord, _ksiSignatureFactoryForExtending);
         }
 
         /// <summary>
@@ -189,7 +193,7 @@ namespace Guardtime.KSI
             }
 
             CalendarHashChain calendarHashChain = _ksiService.Extend(signature.AggregationTime, publicationRecord.PublicationData.PublicationTime);
-            return signature.Extend(calendarHashChain, publicationRecord);
+            return signature.Extend(calendarHashChain, publicationRecord, _ksiSignatureFactoryForExtending);
         }
 
         /// <summary>
@@ -212,7 +216,7 @@ namespace Guardtime.KSI
 
             CalendarHashChain calendarHashChain = _ksiService.Extend(signature.AggregationTime, publicationData.PublicationTime);
             PublicationRecordInSignature publicationRecord = new PublicationRecordInSignature(false, false, publicationData);
-            return signature.Extend(calendarHashChain, publicationRecord);
+            return signature.Extend(calendarHashChain, publicationRecord, _ksiSignatureFactoryForExtending);
         }
 
         /// <summary>

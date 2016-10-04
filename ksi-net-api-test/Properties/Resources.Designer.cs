@@ -691,6 +691,15 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/calendar-hash-chain/calendar-hash-chain-ok-changed-algorithm.tlv.
+        /// </summary>
+        internal static string CalendarHashChain_Ok_Changed_Algorithm {
+            get {
+                return ResourceManager.GetString("CalendarHashChain_Ok_Changed_Algorithm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/calendar-hash-chain/calendar-hash-chain-ok-missing-optionals.tlv.
         /// </summary>
         internal static string CalendarHashChain_Ok_Missing_Optionals {
@@ -1066,6 +1075,15 @@ namespace Guardtime.KSI.Test.Properties {
         internal static string KsiSignatureDo_Ok_Identity {
             get {
                 return ResourceManager.GetString("KsiSignatureDo_Ok_Identity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-level-3-ok.tlv.
+        /// </summary>
+        internal static string KsiSignatureDo_Ok_Level3 {
+            get {
+                return ResourceManager.GetString("KsiSignatureDo_Ok_Level3", resourceCulture);
             }
         }
         

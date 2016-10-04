@@ -779,7 +779,7 @@ namespace Guardtime.KSI.Test.Signature
 
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.MultiSignatureWithMetadataPadding_Ok), FileMode.Open))
             {
-                multiSignature = new KsiMultiSignature(stream, new KsiSignatureFactory());
+                multiSignature = new KsiMultiSignature(stream, new KsiSignatureFactory() { DisableVerification = true });
             }
 
             AggregationHashChainMetadataRule rule = new AggregationHashChainMetadataRule();
@@ -807,10 +807,12 @@ namespace Guardtime.KSI.Test.Signature
                 multiSignature = new KsiMultiSignature(stream, new KsiSignatureFactory());
             }
 
-            Assert.That(delegate
+            KsiSignatureInvalidContentException ex = Assert.Throws<KsiSignatureInvalidContentException>(delegate
             {
                 multiSignature.Get(signature.GetAggregationHashChains()[0].InputHash);
-            }, Throws.TypeOf<KsiSignatureException>().With.Message.Contains(VerificationError.Int11.Code));
+            });
+
+            Assert.AreEqual(VerificationError.Int11.Code, ex.VerificationResult.VerificationError.Code, "Unexpected result code");
         }
 
         /// <summary>
@@ -822,7 +824,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, file), FileMode.Open))
             {
-                return new KsiSignatureFactory().Create(stream);
+                return new KsiSignatureFactory() { DisableVerification = true }.Create(stream);
             }
         }
 
