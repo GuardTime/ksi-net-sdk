@@ -129,6 +129,7 @@ namespace Guardtime.KSI.Test.Integration
 
                 Assert.That(ex.Message.StartsWith("Signature verification failed"), "Unexpected exception message: " + ex.Message);
                 Assert.IsNotNull(ex.Signature);
+                Assert.IsTrue(ex.Signature.IsExtended);
             }
         }
 
