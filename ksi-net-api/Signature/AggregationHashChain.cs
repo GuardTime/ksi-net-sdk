@@ -323,7 +323,7 @@ namespace Guardtime.KSI.Signature
             }
 
             AggregationHashChainResult returnValue = new AggregationHashChainResult(level, lastHash);
-            _aggregationHashChainResultCache.Add(result, returnValue);
+            _aggregationHashChainResultCache[result] = returnValue;
 
             return returnValue;
         }
