@@ -71,13 +71,13 @@ namespace Guardtime.KSI.Service
         IKsiSignature EndSign(IAsyncResult asyncResult);
 
         /// <summary>
-        /// Get additional aggergation configuration data (sync)
+        /// Get additional aggregation configuration data (sync)
         /// </summary>
         /// <returns>Aggregation configuration response payload</returns>
         AggregationConfigResponsePayload GetAggregationConfig();
 
         /// <summary>
-        /// Begin get additional aggergation configuration data (async)
+        /// Begin get additional aggregation configuration data (async)
         /// </summary>
         /// <param name="callback"></param>
         /// <param name="asyncState"></param>
@@ -85,7 +85,7 @@ namespace Guardtime.KSI.Service
         IAsyncResult BeginGetAggregationConfig(AsyncCallback callback, object asyncState);
 
         /// <summary>
-        /// End get additional aggergation configuration data (async)
+        /// End get additional aggregation configuration data (async)
         /// </summary>
         /// <param name="asyncResult"></param>
         /// <returns>Aggregation configuration response payload</returns>
@@ -131,8 +131,6 @@ namespace Guardtime.KSI.Service
         /// <param name="asyncResult">async result</param>
         /// <returns>extended calendar hash chain</returns>
         CalendarHashChain EndExtend(IAsyncResult asyncResult);
-
-
 
         /// <summary>
         ///     Get publications file (sync).

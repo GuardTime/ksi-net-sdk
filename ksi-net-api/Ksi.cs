@@ -125,7 +125,7 @@ namespace Guardtime.KSI
         }
 
         /// <summary>
-        /// Get additional aggergation configuration data
+        /// Get additional aggregation configuration data
         /// </summary>
         /// <returns>Aggregation configuration response payload</returns>
         public AggregationConfigResponsePayload GetAggregationConfig()

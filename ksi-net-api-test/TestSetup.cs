@@ -60,7 +60,7 @@ namespace Guardtime.KSI.Test
                             _pduVersion = PduVersion.v2;
                             break;
                         default:
-                            _pduVersion = KsiService.DefaultPduVersion;
+                            _pduVersion = PduVersion.v1;
                             break;
                     }
                 }

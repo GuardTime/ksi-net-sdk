@@ -40,7 +40,7 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Get and set PDU header
         /// </summary>
-        public KsiPduHeader Header { get; protected set; }
+        public KsiPduHeader Header { get; private set; }
 
         /// <summary>
         ///     Create KSI PDU from TLV element.

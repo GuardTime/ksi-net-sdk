@@ -319,10 +319,9 @@ namespace Guardtime.KSI.Test.Integration
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
-        public void ExtendInvalidPduFormat(Ksi ksi)
+        public void ExtendInvalidPduFormatTest(Ksi ksi)
         {
-            KsiService service = GetHttpKsiService();
-            service.PduVersion = PduVersion.v2;
+            KsiService service = GetHttpKsiService(PduVersion.v2);
 
             try
             {

@@ -285,7 +285,7 @@ namespace Guardtime.KSI.Test.Integration
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
-        public void HttpGetAggregationConfig(Ksi ksi)
+        public void HttpGetAggregationConfigTest(Ksi ksi)
         {
             if (TestSetup.PduVersion == PduVersion.v1)
             {
@@ -303,10 +303,9 @@ namespace Guardtime.KSI.Test.Integration
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
-        public void HttpSignInvalidPduFormat(Ksi ksi)
+        public void HttpSignInvalidPduFormatTest(Ksi ksi)
         {
-            KsiService service = GetHttpKsiService();
-            service.PduVersion = PduVersion.v2;
+            KsiService service = GetHttpKsiService(PduVersion.v2);
 
             try
             {
@@ -318,6 +317,13 @@ namespace Guardtime.KSI.Test.Integration
                 Assert.That(ex.Message.StartsWith("Received PDU v1 response to PDU v2 request. Configure the SDK to use PDU v1 format for the given Aggregator"),
                     "Unexpected exception message: " + ex.Message);
             }
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void HttpSignDefaultPduFormatTest(Ksi ksi)
+        {
+            KsiService service = GetHttpKsiServiceWithDefaultPduVersion();
+            service.Sign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
         }
     }
 }
