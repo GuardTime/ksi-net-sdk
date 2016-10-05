@@ -1,6 +1,6 @@
 Version 3.5
 
-2016-X-X 3.5.X
+2016-10-05 3.5.X
 
 * IMPROVEMENT: Improved user provided publication based verification (KSINETAPI-71)
 * BUGFIX: Fixed typo in CAL-04 error text (KSINETAPI-79)
