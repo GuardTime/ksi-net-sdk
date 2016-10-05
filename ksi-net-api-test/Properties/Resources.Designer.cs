@@ -547,6 +547,15 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/integration-test-signatures/all-wrong-hash-chains-in-signature.ksig.
+        /// </summary>
+        internal static string All_Wrong_Chains_Invalid_Signature {
+            get {
+                return ResourceManager.GetString("All_Wrong_Chains_Invalid_Signature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/calendar-authentication-record/calendar-authentication-record-invalid-extra-tag.tlv.
         /// </summary>
         internal static string CalendarAuthenticationRecord_Invalid_Extra_Tag {
@@ -1336,6 +1345,15 @@ namespace Guardtime.KSI.Test.Properties {
         internal static string Rfc3161Record_Ok {
             get {
                 return ResourceManager.GetString("Rfc3161Record_Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/integration-test-signatures/NewSignature-CalAuth-WrongCertID.ksig.
+        /// </summary>
+        internal static string Signature_Wrong_Cert_ID {
+            get {
+                return ResourceManager.GetString("Signature_Wrong_Cert_ID", resourceCulture);
             }
         }
         

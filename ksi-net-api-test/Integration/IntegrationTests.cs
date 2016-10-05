@@ -47,20 +47,21 @@ namespace Guardtime.KSI.Test.Integration
 
         private static readonly TcpKsiServiceProtocol TcpKsiServiceProtocolInvalidPort = new TcpKsiServiceProtocol(Settings.Default.TcpSigningServiceUrl, 2847, 100000);
 
+
+        public static object[] KsiServiceTestCases =
+        {
+            new object[]
+            {
+                GetHttpKsiService()
+            }
+        };
+
         public static object[] HttpTestCases =
         {
             new object[]
             {
                 new Ksi(
-                    new KsiService(
-                        HttpKsiServiceProtocol,
-                        new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
-                        HttpKsiServiceProtocol,
-                        new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
-                        HttpKsiServiceProtocol,
-                        new PublicationsFileFactory(
-                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
-                        HashAlgorithm.Sha2256))
+                    GetHttpKsiService())
             }
         };
 
@@ -215,9 +216,9 @@ namespace Guardtime.KSI.Test.Integration
         {
             return new KsiService(
                 HttpKsiServiceProtocol,
-                new ServiceCredentials("anon", "anon"),
+                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
                 HttpKsiServiceProtocol,
-                new ServiceCredentials("anon", "anon"),
+                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
                 HttpKsiServiceProtocol,
                 new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                     CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))));
