@@ -30,6 +30,7 @@ using Guardtime.KSI.Signature.MultiSignature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
 using Guardtime.KSI.Test.Integration;
+using Guardtime.KSI.Test.Signature.Verification;
 using Guardtime.KSI.Test.Signature.Verification.Rule;
 using NUnit.Framework;
 
@@ -779,7 +780,7 @@ namespace Guardtime.KSI.Test.Signature
 
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.MultiSignatureWithMetadataPadding_Ok), FileMode.Open))
             {
-                multiSignature = new KsiMultiSignature(stream, new KsiSignatureFactory() { DisableVerification = true });
+                multiSignature = new KsiMultiSignature(stream, new KsiSignatureFactory(new EmptyVerificationPolicy()));
             }
 
             AggregationHashChainMetadataRule rule = new AggregationHashChainMetadataRule();
@@ -824,7 +825,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, file), FileMode.Open))
             {
-                return new KsiSignatureFactory() { DisableVerification = true }.Create(stream);
+                return new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream);
             }
         }
 

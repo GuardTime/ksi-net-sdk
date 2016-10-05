@@ -28,6 +28,7 @@ using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
 using Guardtime.KSI.Test.Crypto;
+using Guardtime.KSI.Test.Signature.Verification;
 using Guardtime.KSI.Trust;
 using NUnit.Framework;
 
@@ -45,7 +46,7 @@ namespace Guardtime.KSI.Test.Integration
             {
                 try
                 {
-                    KsiSignatureFactory ksiSignatureFactory = new KsiSignatureFactory() { DisableVerification = true };
+                    KsiSignatureFactory ksiSignatureFactory = new KsiSignatureFactory(new EmptyVerificationPolicy());
                     IKsiSignature signature = ksiSignatureFactory.Create(stream);
                     Assert.IsFalse(testData.GetSigantureReadInFails(),
                         testData.GetTestFile() + " supposed to fail with class " + testData.GetExpectedExceptionClass() + " exception.");

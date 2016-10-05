@@ -26,6 +26,7 @@ using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Test.Crypto;
 using Guardtime.KSI.Test.Properties;
+using Guardtime.KSI.Test.Signature.Verification;
 using Guardtime.KSI.Trust;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
@@ -79,7 +80,7 @@ namespace Guardtime.KSI.Test.Service
             IKsiSignature signature = new KsiSignatureFactory().Create(
                 File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok)));
 
-            CalendarHashChain calendarHashChain = new KsiSignatureFactory() { DisableVerification = true }.
+            CalendarHashChain calendarHashChain = new KsiSignatureFactory(new EmptyVerificationPolicy()).
                 Create(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Invalid_Calendar_Chain_Input_Hash))).CalendarHashChain;
 
             Ksi ksi = GetKsi(calendarHashChain);

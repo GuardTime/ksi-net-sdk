@@ -26,6 +26,7 @@ using Guardtime.KSI.Publication;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
+using Guardtime.KSI.Test.Signature.Verification;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Integration
@@ -120,7 +121,7 @@ namespace Guardtime.KSI.Test.Integration
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Invalid_Aggregation_Chain_Input_Hash), FileMode.Open))
             {
-                IKsiSignature ksiSignature = new KsiSignatureFactory() { DisableVerification = true }.Create(stream);
+                IKsiSignature ksiSignature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream);
 
                 KsiSignatureInvalidContentException ex = Assert.Throws<KsiSignatureInvalidContentException>(delegate
                 {

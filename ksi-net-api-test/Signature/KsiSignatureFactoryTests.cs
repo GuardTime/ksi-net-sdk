@@ -27,6 +27,7 @@ using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
 using Guardtime.KSI.Test.Properties;
+using Guardtime.KSI.Test.Signature.Verification;
 using Guardtime.KSI.Test.Signature.Verification.Rule;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
@@ -114,7 +115,7 @@ namespace Guardtime.KSI.Test.Signature
             // Check invalid signature
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Invalid_Aggregation_Chain_Index_Mismatch), FileMode.Open))
             {
-                signature = new KsiSignatureFactory() { DisableVerification = true }.Create(stream);
+                signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream);
             }
         }
 

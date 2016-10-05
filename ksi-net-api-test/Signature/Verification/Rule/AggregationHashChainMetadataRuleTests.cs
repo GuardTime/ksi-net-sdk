@@ -30,7 +30,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
     [TestFixture]
     public class AggregationHashChainMetadataRuleTests
     {
-        readonly KsiSignatureFactory _ksiSignatureFactory = new KsiSignatureFactory() { DisableVerification = true };
+        readonly KsiSignatureFactory _ksiSignatureFactory = new KsiSignatureFactory(new EmptyVerificationPolicy());
 
         [Test]
         public void TestMissingContext()

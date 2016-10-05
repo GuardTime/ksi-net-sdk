@@ -42,11 +42,6 @@ namespace Guardtime.KSI.Signature
         private readonly IVerificationContext _verificationContext;
 
         /// <summary>
-        /// Indicates if automatic verification should be disabled
-        /// </summary>
-        public bool DisableVerification { get; set; }
-
-        /// <summary>
         ///     Create KSI signature factory
         /// </summary>
         /// <param name="verificationPolicy">Verification policy to be used when verifying a signature after it is created</param>
@@ -66,16 +61,9 @@ namespace Guardtime.KSI.Signature
         /// <returns>KSI signature</returns>
         public IKsiSignature Create(byte[] bytes, DataHash hash = null, uint level = 0)
         {
-            using (TlvReader reader = new TlvReader(new MemoryStream(bytes)))
+            using (Stream stream = new MemoryStream(bytes))
             {
-                KsiSignature signature = new KsiSignature(reader.ReadTag());
-
-                if (!DisableVerification)
-                {
-                    Verify(signature, hash, level);
-                }
-
-                return signature;
+                return Create(stream, hash, level);
             }
         }
 
@@ -88,14 +76,7 @@ namespace Guardtime.KSI.Signature
         /// <returns>KSI signature</returns>
         public IKsiSignature CreateByContent(byte[] contentBytes, DataHash hash = null, uint level = 0)
         {
-            KsiSignature signature = new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false, contentBytes));
-
-            if (!DisableVerification)
-            {
-                Verify(signature, hash, level);
-            }
-
-            return signature;
+            return CreateAndVerify(new RawTag(Constants.KsiSignature.TagType, false, false, contentBytes), hash, level);
         }
 
         /// <summary>
@@ -117,13 +98,7 @@ namespace Guardtime.KSI.Signature
                 try
                 {
                     Logger.Debug("Creating KSI signature from stream.");
-                    KsiSignature signature = new KsiSignature(reader.ReadTag());
-
-                    if (!DisableVerification)
-                    {
-                        Verify(signature, null, level);
-                    }
-
+                    IKsiSignature signature = CreateAndVerify(reader.ReadTag(), null, level);
                     Logger.Debug("Creating KSI signature from stream successful.");
 
                     return signature;
@@ -164,12 +139,7 @@ namespace Guardtime.KSI.Signature
                 {
                     Logger.Debug("Creating KSI signature from aggregation response. (request id: {0})", payload.RequestId);
 
-                    KsiSignature signature = new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false, ((MemoryStream)writer.BaseStream).ToArray()));
-
-                    if (!DisableVerification)
-                    {
-                        Verify(signature, hash, level);
-                    }
+                    IKsiSignature signature = CreateAndVerify(new RawTag(Constants.KsiSignature.TagType, false, false, ((MemoryStream)writer.BaseStream).ToArray()), hash, level);
 
                     Logger.Debug("Creating KSI signature from aggregation response successful. (request id: {0})", payload.RequestId);
                     return signature;
@@ -223,25 +193,19 @@ namespace Guardtime.KSI.Signature
                     writer.WriteTag(rfc3161Record);
                 }
 
-                KsiSignature signature = new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false, ((MemoryStream)writer.BaseStream).ToArray()));
-
-                if (!DisableVerification)
-                {
-                    Verify(signature, hash, level);
-                }
-
-                return signature;
+                return CreateAndVerify(new RawTag(Constants.KsiSignature.TagType, false, false, ((MemoryStream)writer.BaseStream).ToArray()), hash, level);
             }
         }
 
         /// <summary>
-        /// Verify with given verification policy
+        /// Create signature and verify with given verification policy
         /// </summary>
-        /// <param name="signature">Signature to be verified</param>
+        /// <param name="signatureRaw">Signature to be verified</param>
         /// <param name="hash">Signed hash</param>
         /// <param name="level">Signed hash node level value in the aggregation tree</param>
-        private void Verify(IKsiSignature signature, DataHash hash, uint level = 0)
+        private IKsiSignature CreateAndVerify(RawTag signatureRaw, DataHash hash, uint level = 0)
         {
+            IKsiSignature signature = new KsiSignature(signatureRaw);
             _verificationContext.Signature = signature;
             _verificationContext.DocumentHash = hash;
             _verificationContext.Level = level;
@@ -261,6 +225,8 @@ namespace Guardtime.KSI.Signature
 
                 throw new KsiSignatureInvalidContentException("Signature verification failed.", signature, verificationResult);
             }
+
+            return signature;
         }
     }
 }

@@ -27,6 +27,7 @@ using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Test.Crypto;
 using Guardtime.KSI.Test.Properties;
+using Guardtime.KSI.Test.Signature.Verification;
 using Guardtime.KSI.Trust;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
@@ -73,7 +74,7 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void SignAndVerifyInvalidStaticTest()
         {
-            IKsiSignature signResultSignature = new KsiSignatureFactory() { DisableVerification = true }.Create(
+            IKsiSignature signResultSignature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(
                 File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Invalid_Aggregation_Chain_Input_Hash)));
 
             Ksi ksi = GetKsi(signResultSignature);

@@ -227,7 +227,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
 
                 TestVerificationContext context = new TestVerificationContext()
                 {
-                    Signature = new KsiSignatureFactory() { DisableVerification = true }.Create(stream),
+                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream),
                     PublicationsFile = testPublicationsFile,
                     ExtendedCalendarHashChain =
                         new CalendarHashChain(new RawTag(Constants.CalendarHashChain.TagType, false, false,
