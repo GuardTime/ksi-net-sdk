@@ -17,7 +17,19 @@
  * reserves and retains all trademark rights.
  */
 
+using Guardtime.KSI.Crypto;
+using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Service;
+using Guardtime.KSI.Signature;
+using Guardtime.KSI.Signature.Verification;
+using Guardtime.KSI.Signature.Verification.Policy;
+using Guardtime.KSI.Test.Crypto;
+using Guardtime.KSI.Publication;
 using NUnit.Framework;
+using System.Collections.Generic;
+using System.IO;
+using System.Security.Cryptography.X509Certificates;
+using System;
 
 namespace Guardtime.KSI.Test.Integration
 {
@@ -72,6 +84,118 @@ namespace Guardtime.KSI.Test.Integration
         public void CalendarBasedVerificationTest(DataHolderForIntegrationTests data)
         {
             new CommonTestExecution().TestExecution(data, "CalendarBasedVerificationPolicy");
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiServiceTestCases))]
+        public void InternalVerificationAsDefaultVerification(KsiService service)
+        {
+            InternalVerificationPolicy policy = new InternalVerificationPolicy();
+            VerificationContext context = new VerificationContext();
+            IKsiSignatureFactory factory = new KsiSignatureFactory(policy);
+            Ksi ksi = new Ksi(service, factory);
+
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.AggregationHashChainMetadataWithoutPaddingFail), FileMode.Open))
+            {
+                KsiSignatureInvalidContentException ex = Assert.Throws<KsiSignatureInvalidContentException>(delegate
+                {
+                    IKsiSignature ksiSignature = factory.Create(stream);
+
+                    Console.WriteLine("Must not reach");
+                });
+                Assert.That(ex.VerificationResult.VerificationError.Equals(VerificationError.Int11), "Unexpected verification error code: " + ex.VerificationResult.VerificationError);
+                Console.WriteLine("All OK");
+            }
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiServiceTestCases))]
+        public void KeyBasedVerificationAsDefaultVerification(KsiService service)
+        {
+            KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
+                                CryptoTestFactory.CreateCertificateSubjectRdnSelector(new List<CertificateSubjectRdn>
+                                {
+                                    new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com")
+                                }));
+            VerificationContext context = new VerificationContext();
+            context.PublicationsFile = service.GetPublicationsFile();
+            KsiSignatureFactory factory = new KsiSignatureFactory(policy, context);
+
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.Signature_Wrong_Cert_ID), FileMode.Open))
+            {
+                KsiSignatureInvalidContentException ex = Assert.Throws<KsiSignatureInvalidContentException>(delegate
+                {
+                    IKsiSignature ksiSignature = factory.Create(stream);
+                    Console.WriteLine("Must not reach");
+                });
+                Assert.That(ex.VerificationResult.VerificationError.Equals(VerificationError.Key01), "Unexpected verification error code: " + ex.VerificationResult.VerificationError);
+                Console.WriteLine("All OK");
+
+            }
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiServiceTestCases))]
+        public void CalendarBasedVerificationAsDefaultVerification(KsiService service)
+        {
+            CalendarBasedVerificationPolicy policy = new CalendarBasedVerificationPolicy();
+            VerificationContext context = new VerificationContext();
+            context.IsExtendingAllowed = true;
+            context.KsiService = service;
+            KsiSignatureFactory factory = new KsiSignatureFactory(policy, context);
+
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.All_Wrong_Chains_Invalid_Signature), FileMode.Open))
+            {
+                KsiSignatureInvalidContentException ex = Assert.Throws<KsiSignatureInvalidContentException>(delegate
+                {
+                    IKsiSignature ksiSignature = factory.Create(stream);
+                    Console.WriteLine("Must not reach");
+                });
+                Assert.That(ex.VerificationResult.VerificationError.Equals(VerificationError.Cal02), "Unexpected verification error code: " + ex.VerificationResult.VerificationError);
+                Console.WriteLine("All OK");
+            }
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiServiceTestCases))]
+        public void PublicationFileBasedVerificationAsDefaultVerification(KsiService service)
+        {
+            PublicationBasedVerificationPolicy policy = new PublicationBasedVerificationPolicy();
+            VerificationContext context = new VerificationContext();
+            context.PublicationsFile = service.GetPublicationsFile();
+            context.IsExtendingAllowed = true;
+            context.KsiService = service;
+            KsiSignatureFactory factory = new KsiSignatureFactory(policy, context);
+
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.All_Wrong_Chains_Invalid_Signature), FileMode.Open))
+            {
+                KsiSignatureInvalidContentException ex = Assert.Throws<KsiSignatureInvalidContentException>(delegate
+                {
+                    IKsiSignature ksiSignature = factory.Create(stream);
+                    Console.WriteLine("Must not reach");
+                });
+                Assert.That(ex.VerificationResult.VerificationError.Equals(VerificationError.Pub03), "Unexpected verification error code: " + ex.VerificationResult.VerificationError);
+                Console.WriteLine("All OK");
+            }
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiServiceTestCases))]
+        public void UserPublicationBasedVerificationAsDefaultVerification(KsiService service)
+        {
+            PublicationBasedVerificationPolicy policy = new PublicationBasedVerificationPolicy();
+
+            VerificationContext context = new VerificationContext();
+            context.UserPublication = new PublicationData("AAAAAA-CW45II-AAKWRK-F7FBNM-KB6FNV-DYYFW7-PJQN6F-JKZWBQ-3OQYZO-HCB7RA-YNYAGA-ODRL2V");
+            context.IsExtendingAllowed = true;
+            context.KsiService = service;
+            KsiSignatureFactory factory = new KsiSignatureFactory(policy, context);
+
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.All_Wrong_Chains_Invalid_Signature), FileMode.Open))
+            {
+                KsiSignatureInvalidContentException ex = Assert.Throws<KsiSignatureInvalidContentException>(delegate
+                {
+                    IKsiSignature ksiSignature = factory.Create(stream);
+                    Console.WriteLine("Must not reach");
+                });
+                Assert.That(ex.VerificationResult.VerificationError.Equals(VerificationError.Pub03), "Unexpected verification error code: " + ex.VerificationResult.VerificationError);
+                Console.WriteLine("All OK");
+            }
         }
     }
 }

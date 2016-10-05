@@ -576,4 +576,10 @@
   <data name="MultiSignatureWithMetadataPadding_Ok" xml:space="preserve">
     <value>resources/signature/multi-signature/ksi-multi-signature-padding-ok.tlv</value>
   </data>
+  <data name="All_Wrong_Chains_Invalid_Signature" xml:space="preserve">
+    <value>resources/signature/integration-test-signatures/all-wrong-hash-chains-in-signature.ksig</value>
+  </data>
+  <data name="Signature_Wrong_Cert_ID" xml:space="preserve">
+    <value>resources/signature/integration-test-signatures/NewSignature-CalAuth-WrongCertID.ksig</value>
+  </data>
 </root>
