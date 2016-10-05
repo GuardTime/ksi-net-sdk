@@ -214,7 +214,7 @@ namespace Guardtime.KSI.Test.Integration
                 {
                     IsExtendingAllowed = true,
                     UserPublication = publicationData,
-                    KsiService = GetHttpKsiService()
+                    KsiService = HttpKsiService
                 };
 
                 VerificationResult verificationResult = rule.Verify(context);

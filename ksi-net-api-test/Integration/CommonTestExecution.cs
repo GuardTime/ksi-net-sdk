@@ -69,7 +69,7 @@ namespace Guardtime.KSI.Test.Integration
                                     })))
                                     .Create(publicationFileInStream);
                                 context.IsExtendingAllowed = true;
-                                context.KsiService = IntegrationTests.GetHttpKsiService();
+                                context.KsiService = IntegrationTests.HttpKsiService;
                                 break;
                             }
 
@@ -101,26 +101,26 @@ namespace Guardtime.KSI.Test.Integration
                             policy = new PublicationBasedVerificationPolicy();
                             context.UserPublication = new PublicationData("AAAAAA-CWYEKQ-AAIYPA-UJ4GRT-HXMFBE-OTB4AB-XH3PT3-KNIKGV-PYCJXU-HL2TN4-RG6SCC-3ZGSBM");
                             context.IsExtendingAllowed = true;
-                            context.KsiService = IntegrationTests.GetHttpKsiService();
+                            context.KsiService = IntegrationTests.HttpKsiService;
                             break;
 
                         case "PublicationStringBasedVerificationNoExtendingPolicy":
                             policy = new PublicationBasedVerificationPolicy();
                             context.UserPublication = new PublicationData("AAAAAA-CWYEKQ-AAIYPA-UJ4GRT-HXMFBE-OTB4AB-XH3PT3-KNIKGV-PYCJXU-HL2TN4-RG6SCC-3ZGSBM");
-                            context.KsiService = IntegrationTests.GetHttpKsiService();
+                            context.KsiService = IntegrationTests.HttpKsiService;
                             break;
 
                         case "PublicationStringBasedVerificationUsingOldStringPolicy":
                             policy = new PublicationBasedVerificationPolicy();
                             context.UserPublication = new PublicationData("AAAAAA-CS2XHY-AAJCBE-DDAFMR-R3RKMY-GMAQDZ-FSAE7B-ZO64CT-QPNC3B-RQ6UGY-67QORK-6STDTS");
                             context.IsExtendingAllowed = true;
-                            context.KsiService = IntegrationTests.GetHttpKsiService();
+                            context.KsiService = IntegrationTests.HttpKsiService;
                             break;
 
                         case "CalendarBasedVerificationPolicy":
                             policy = new CalendarBasedVerificationPolicy();
                             context.IsExtendingAllowed = true;
-                            context.KsiService = IntegrationTests.GetHttpKsiService();
+                            context.KsiService = IntegrationTests.HttpKsiService;
                             break;
 
                         default:
