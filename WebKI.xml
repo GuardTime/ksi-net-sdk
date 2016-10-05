@@ -467,16 +467,16 @@
   <HelpKINode Title="CertificateSubjectRdnSelector class">
     <HelpKINode Title="CertificateSubjectRdnSelector Class" Url="html/8841c168-7c77-af5f-3130-65e814d99544.htm" />
     <HelpKINode Title="CertificateSubjectRdnSelector Class" Url="html/07a58e22-7ac5-c1b6-4f7f-a252c03d1da9.htm" />
-    <HelpKINode Title="about CertificateSubjectRdnSelector class" Url="html/8841c168-7c77-af5f-3130-65e814d99544.htm" />
     <HelpKINode Title="about CertificateSubjectRdnSelector class" Url="html/07a58e22-7ac5-c1b6-4f7f-a252c03d1da9.htm" />
-    <HelpKINode Title="constructor" Url="html/22136802-9a23-1953-d09e-c467228a6a90.htm" />
+    <HelpKINode Title="about CertificateSubjectRdnSelector class" Url="html/8841c168-7c77-af5f-3130-65e814d99544.htm" />
     <HelpKINode Title="constructor" Url="html/2c010107-d5c8-18b6-45c1-bdc36647b4bb.htm" />
-    <HelpKINode Title="methods" Url="html/3467c471-474f-1573-4a4c-66e3de7fb20f.htm" />
+    <HelpKINode Title="constructor" Url="html/22136802-9a23-1953-d09e-c467228a6a90.htm" />
     <HelpKINode Title="methods" Url="html/46cb3900-fda1-026e-16ef-19f432010016.htm" />
+    <HelpKINode Title="methods" Url="html/3467c471-474f-1573-4a4c-66e3de7fb20f.htm" />
   </HelpKINode>
   <HelpKINode Title="CertificateSubjectRdnSelector.CertificateSubjectRdnSelector constructor">
-    <HelpKINode Title="CertificateSubjectRdnSelector Constructor " Url="html/2c010107-d5c8-18b6-45c1-bdc36647b4bb.htm" />
     <HelpKINode Title="CertificateSubjectRdnSelector Constructor " Url="html/22136802-9a23-1953-d09e-c467228a6a90.htm" />
+    <HelpKINode Title="CertificateSubjectRdnSelector Constructor " Url="html/2c010107-d5c8-18b6-45c1-bdc36647b4bb.htm" />
   </HelpKINode>
   <HelpKINode Title="CertificateSubjectRdnSelector.IsMatch method">
     <HelpKINode Title="CertificateSubjectRdnSelector.IsMatch Method " Url="html/e6deb03b-5e15-6a9c-3d2b-290daa8411a1.htm" />
@@ -492,6 +492,7 @@
     <HelpKINode Title="Constants.AggregationHashChain.ChainIndexTagType Field" Url="html/3b78f174-9be3-30c5-9f7d-5ab78220becb.htm" />
     <HelpKINode Title="Constants.Rfc3161Record.ChainIndexTagType Field" Url="html/3c0964fd-5d04-1911-1d64-f6f9d035fe64.htm" />
   </HelpKINode>
+  <HelpKINode Title="CheckTagType method" Url="html/3c0bb7a3-84bb-10bb-bd06-9a222e28ed9b.htm" />
   <HelpKINode Title="CheckVerificationContext method" Url="html/e1680d3c-4591-c77e-0e62-2c37398709db.htm" />
   <HelpKINode Title="ClientId property" Url="html/07bd301d-5eeb-a534-3d97-b3d9fbaf4df5.htm" />
   <HelpKINode Title="ClientIdTagType field" Url="html/c7d89d3c-b8b1-8d5c-e2ee-c96ba225fa2d.htm" />
@@ -738,6 +739,10 @@
     <HelpKINode Title="KsiSignatureFactory.Create Method " Url="html/4c361c95-1034-d0a7-74bb-d83c6f14596e.htm" />
     <HelpKINode Title="PublicationsFileFactory.Create Method " Url="html/83ad0f89-6aa4-dc58-9d5e-a5b459a00759.htm" />
   </HelpKINode>
+  <HelpKINode Title="CreateByContent method">
+    <HelpKINode Title="IKsiSignatureFactory.CreateByContent Method " Url="html/2a7db415-5725-eb54-2a5a-022349a87b24.htm" />
+    <HelpKINode Title="KsiSignatureFactory.CreateByContent Method " Url="html/ced78a1a-d0d2-dd6b-4e1d-5685f1bec221.htm" />
+  </HelpKINode>
   <HelpKINode Title="CreateDataHasher method">
     <HelpKINode Title="BouncyCastleCryptoProvider.CreateDataHasher Method " Url="html/ca4686a9-b9d6-639e-0ae7-b0bfdc474c71.htm" />
     <HelpKINode Title="ICryptoProvider.CreateDataHasher Method " Url="html/d0603dca-355b-e9f2-5e72-55a3b2c544c5.htm" />
@@ -797,8 +802,8 @@
   <HelpKINode Title="DataHash.ToString method" Url="html/7f873a98-c9bf-9061-0726-e3b795d23426.htm" />
   <HelpKINode Title="DataHash.Value property" Url="html/1c55c6eb-9fe1-528a-80e0-9fa609565dff.htm" />
   <HelpKINode Title="DataHasher class">
-    <HelpKINode Title="DataHasher Class" Url="html/f339960a-222a-8af1-ffe8-6d8199887afd.htm" />
     <HelpKINode Title="DataHasher Class" Url="html/058b7fc4-04ce-fdbd-f8a9-f3b8347eb266.htm" />
+    <HelpKINode Title="DataHasher Class" Url="html/f339960a-222a-8af1-ffe8-6d8199887afd.htm" />
     <HelpKINode Title="about DataHasher class" Url="html/f339960a-222a-8af1-ffe8-6d8199887afd.htm" />
     <HelpKINode Title="about DataHasher class" Url="html/058b7fc4-04ce-fdbd-f8a9-f3b8347eb266.htm" />
     <HelpKINode Title="constructor" Url="html/326e259c-87e4-d38f-0549-58dbbda73b1d.htm" />
@@ -807,8 +812,8 @@
     <HelpKINode Title="methods" Url="html/5c024098-ddd9-5c9d-6883-d3601837672f.htm" />
   </HelpKINode>
   <HelpKINode Title="DataHasher.AddData method">
-    <HelpKINode Title="DataHasher.AddData Method " Url="html/164cb775-4306-1edc-3bf6-5faeaa8301fc.htm" />
     <HelpKINode Title="DataHasher.AddData Method " Url="html/b11f7e0e-5a4f-a04e-4d5f-c1ce9c6251db.htm" />
+    <HelpKINode Title="DataHasher.AddData Method " Url="html/164cb775-4306-1edc-3bf6-5faeaa8301fc.htm" />
   </HelpKINode>
   <HelpKINode Title="DataHasher.DataHasher constructor">
     <HelpKINode Title="DataHasher Constructor " Url="html/326e259c-87e4-d38f-0549-58dbbda73b1d.htm" />
@@ -1053,8 +1058,8 @@
   </HelpKINode>
   <HelpKINode Title="GetAggregationHashChain method" Url="html/1709dbe7-98ca-ba14-0273-31814b5ddb58.htm" />
   <HelpKINode Title="GetAggregationHashChainRootHash method">
-    <HelpKINode Title="IKsiSignature.GetAggregationHashChainRootHash Method " Url="html/c534146d-4014-e52b-7049-425dd239689c.htm" />
-    <HelpKINode Title="KsiSignature.GetAggregationHashChainRootHash Method " Url="html/1e62c216-9ccc-aaa2-7b79-5790baa32bfd.htm" />
+    <HelpKINode Title="IKsiSignature.GetAggregationHashChainRootHash Method " Url="html/ac3ce415-c883-7519-baf9-dc08346c704d.htm" />
+    <HelpKINode Title="KsiSignature.GetAggregationHashChainRootHash Method " Url="html/1021c1eb-5cf9-7e8c-5d98-2374527c18a9.htm" />
   </HelpKINode>
   <HelpKINode Title="GetAggregationHashChains method">
     <HelpKINode Title="IKsiSignature.GetAggregationHashChains Method " Url="html/c72db272-5a15-7ebc-2f99-a81f7ff0e2e4.htm" />
@@ -1088,8 +1093,8 @@
   </HelpKINode>
   <HelpKINode Title="GetGreatestCommonDivisor method" Url="html/eb0821e6-edc1-e6c6-d4bb-d32f797c6740.htm" />
   <HelpKINode Title="GetHash method">
-    <HelpKINode Title="DataHasher.GetHash Method " Url="html/f35db092-223e-599c-d6bd-577486cf3a52.htm" />
     <HelpKINode Title="DataHasher.GetHash Method " Url="html/82143431-fd2c-f143-9569-e7b6b2b83d84.htm" />
+    <HelpKINode Title="DataHasher.GetHash Method " Url="html/f35db092-223e-599c-d6bd-577486cf3a52.htm" />
     <HelpKINode Title="HmacHasher.GetHash Method " Url="html/1088c985-4a04-59ab-5c0e-a685f60b9f3f.htm" />
     <HelpKINode Title="HmacHasher.GetHash Method " Url="html/35e1590e-294e-7390-0369-dc97172db375.htm" />
     <HelpKINode Title="IDataHasher.GetHash Method " Url="html/e915be68-a0f3-67e2-06b2-62c35cb2cce8.htm" />
@@ -1208,6 +1213,7 @@
   <HelpKINode Title="Guardtime.KSI.Exceptions.KsiMultiSignatureInvalidHashException class" Url="html/5f047170-a875-b953-c898-8d5dee0d3789.htm" />
   <HelpKINode Title="Guardtime.KSI.Exceptions.KsiServiceException class" Url="html/d001a62c-2785-237d-58bc-75886d06cd80.htm" />
   <HelpKINode Title="Guardtime.KSI.Exceptions.KsiServiceProtocolException class" Url="html/49cc40af-c44f-934d-3d99-6a60cdae0985.htm" />
+  <HelpKINode Title="Guardtime.KSI.Exceptions.KsiSignatureInvalidContentException class" Url="html/f9d4f02c-82b5-cacc-e350-2f6cd0666f3f.htm" />
   <HelpKINode Title="Guardtime.KSI.Exceptions.KsiVerificationException class" Url="html/965f8446-e22e-da48-2603-cf66fad8603e.htm" />
   <HelpKINode Title="Guardtime.KSI.Exceptions.PkiVerificationErrorException class" Url="html/0289d448-fd62-72ed-78e9-a82e4f0c8eae.htm" />
   <HelpKINode Title="Guardtime.KSI.Exceptions.PkiVerificationException class" Url="html/59048f95-4978-bc91-5730-6f152c69190a.htm" />
@@ -1395,16 +1401,16 @@
   <HelpKINode Title="HmacHasher class">
     <HelpKINode Title="HmacHasher Class" Url="html/e5608714-bc00-7575-11f1-1af04a98de2f.htm" />
     <HelpKINode Title="HmacHasher Class" Url="html/878fc824-1e0c-d1a0-c77c-26aa83f049dc.htm" />
-    <HelpKINode Title="about HmacHasher class" Url="html/878fc824-1e0c-d1a0-c77c-26aa83f049dc.htm" />
     <HelpKINode Title="about HmacHasher class" Url="html/e5608714-bc00-7575-11f1-1af04a98de2f.htm" />
-    <HelpKINode Title="constructor" Url="html/fff58ce8-1f39-6310-2a8a-f167e03c200f.htm" />
+    <HelpKINode Title="about HmacHasher class" Url="html/878fc824-1e0c-d1a0-c77c-26aa83f049dc.htm" />
     <HelpKINode Title="constructor" Url="html/3cc8695e-7e0d-9f15-a141-be7aee391ace.htm" />
-    <HelpKINode Title="methods" Url="html/6a4b3bdf-11f8-854a-c138-f33ff9186089.htm" />
+    <HelpKINode Title="constructor" Url="html/fff58ce8-1f39-6310-2a8a-f167e03c200f.htm" />
     <HelpKINode Title="methods" Url="html/518e3f69-c64f-30cb-f451-4176c21127b0.htm" />
+    <HelpKINode Title="methods" Url="html/6a4b3bdf-11f8-854a-c138-f33ff9186089.htm" />
   </HelpKINode>
   <HelpKINode Title="HmacHasher.GetHash method">
-    <HelpKINode Title="HmacHasher.GetHash Method " Url="html/1088c985-4a04-59ab-5c0e-a685f60b9f3f.htm" />
     <HelpKINode Title="HmacHasher.GetHash Method " Url="html/35e1590e-294e-7390-0369-dc97172db375.htm" />
+    <HelpKINode Title="HmacHasher.GetHash Method " Url="html/1088c985-4a04-59ab-5c0e-a685f60b9f3f.htm" />
   </HelpKINode>
   <HelpKINode Title="HmacHasher.HmacHasher constructor">
     <HelpKINode Title="HmacHasher Constructor " Url="html/fff58ce8-1f39-6310-2a8a-f167e03c200f.htm" />
@@ -1510,7 +1516,7 @@
   <HelpKINode Title="IKsiSignature.CalendarAuthenticationRecord property" Url="html/e1c9ac9c-8a55-4b68-7afa-d9889409f0bb.htm" />
   <HelpKINode Title="IKsiSignature.CalendarHashChain property" Url="html/4ddd1009-9435-c5d7-8db8-29570fdf2ea9.htm" />
   <HelpKINode Title="IKsiSignature.Extend method" Url="html/074e5820-d746-3fd3-d113-a7f87c3a4abd.htm" />
-  <HelpKINode Title="IKsiSignature.GetAggregationHashChainRootHash method" Url="html/c534146d-4014-e52b-7049-425dd239689c.htm" />
+  <HelpKINode Title="IKsiSignature.GetAggregationHashChainRootHash method" Url="html/ac3ce415-c883-7519-baf9-dc08346c704d.htm" />
   <HelpKINode Title="IKsiSignature.GetAggregationHashChains method" Url="html/c72db272-5a15-7ebc-2f99-a81f7ff0e2e4.htm" />
   <HelpKINode Title="IKsiSignature.Identity property" Url="html/61f2c9f5-a005-efe1-21f8-79259277587e.htm" />
   <HelpKINode Title="IKsiSignature.IsExtended property" Url="html/a3ff0b4d-80c8-a880-16c1-0b79a851a2e8.htm" />
@@ -1524,6 +1530,7 @@
     <HelpKINode Title="methods" Url="html/a6e6c02a-6243-f0a7-b9f9-396a449bb15e.htm" />
   </HelpKINode>
   <HelpKINode Title="IKsiSignatureFactory.Create method" Url="html/14021168-bf18-a21a-9636-c88deaa7139d.htm" />
+  <HelpKINode Title="IKsiSignatureFactory.CreateByContent method" Url="html/2a7db415-5725-eb54-2a5a-022349a87b24.htm" />
   <HelpKINode Title="IKsiSigningServiceProtocol interface">
     <HelpKINode Title="IKsiSigningServiceProtocol Interface" Url="html/fd26ebac-5415-1dc7-2718-ab6f2dd95406.htm" />
     <HelpKINode Title="about IKsiSigningServiceProtocol interface" Url="html/fd26ebac-5415-1dc7-2718-ab6f2dd95406.htm" />
@@ -1679,6 +1686,7 @@
   <HelpKINode Title="IVerificationContext.GetExtendedTimeCalendarHashChain method" Url="html/ffe4a45c-dce4-5388-e842-30b4776483f3.htm" />
   <HelpKINode Title="IVerificationContext.IsExtendingAllowed property" Url="html/7d6da501-0e55-b061-b17d-b818ea9c2711.htm" />
   <HelpKINode Title="IVerificationContext.KsiService property" Url="html/f649b12e-1991-a64e-1c9c-4152f1be182f.htm" />
+  <HelpKINode Title="IVerificationContext.Level property" Url="html/e15ec533-fd81-7dce-0835-8f88c885c460.htm" />
   <HelpKINode Title="IVerificationContext.PublicationsFile property" Url="html/5dee8d9d-bbe8-bbc6-f1c8-62952485cce9.htm" />
   <HelpKINode Title="IVerificationContext.Signature property" Url="html/d98449ec-d75c-2485-7f91-99d1a2a17156.htm" />
   <HelpKINode Title="IVerificationContext.UserPublication property" Url="html/f1eec393-9520-1467-cccf-5747af447f26.htm" />
@@ -1695,12 +1703,12 @@
   <HelpKINode Title="Ksi class">
     <HelpKINode Title="Ksi Class" Url="html/00805511-d1eb-ab5e-5474-8f235d1dbc2b.htm" />
     <HelpKINode Title="about Ksi class" Url="html/00805511-d1eb-ab5e-5474-8f235d1dbc2b.htm" />
-    <HelpKINode Title="constructor" Url="html/f643b7fe-2d97-0a01-d50d-ea62e2c173dc.htm" />
+    <HelpKINode Title="constructor" Url="html/b45b3cf4-2571-0d74-761c-41ac2ddca6fe.htm" />
     <HelpKINode Title="methods" Url="html/68b95448-536f-f593-7fa4-4d41bd050091.htm" />
   </HelpKINode>
   <HelpKINode Title="Ksi.Extend method" Url="html/dce6499d-da47-92d8-6387-1a663331de13.htm" />
   <HelpKINode Title="Ksi.GetPublicationsFile method" Url="html/72067549-f297-d1af-7085-d495364e3496.htm" />
-  <HelpKINode Title="Ksi.Ksi constructor" Url="html/f643b7fe-2d97-0a01-d50d-ea62e2c173dc.htm" />
+  <HelpKINode Title="Ksi.Ksi constructor" Url="html/b45b3cf4-2571-0d74-761c-41ac2ddca6fe.htm" />
   <HelpKINode Title="Ksi.Sign method" Url="html/24fdc146-bc27-6adc-d824-b17ed68881ad.htm" />
   <HelpKINode Title="KsiException class">
     <HelpKINode Title="KsiException Class" Url="html/c7fc9024-fb21-bff5-c9e0-ba3c7d8fa0f7.htm" />
@@ -1840,7 +1848,7 @@
   <HelpKINode Title="KsiSignature.CalendarAuthenticationRecord property" Url="html/5b1caa27-3aa0-4790-4166-a268e9fb75a7.htm" />
   <HelpKINode Title="KsiSignature.CalendarHashChain property" Url="html/69100169-03c3-0399-b649-0a4683dc4845.htm" />
   <HelpKINode Title="KsiSignature.Extend method" Url="html/005663d5-7067-45d4-cbb4-8e33ce530b0b.htm" />
-  <HelpKINode Title="KsiSignature.GetAggregationHashChainRootHash method" Url="html/1e62c216-9ccc-aaa2-7b79-5790baa32bfd.htm" />
+  <HelpKINode Title="KsiSignature.GetAggregationHashChainRootHash method" Url="html/1021c1eb-5cf9-7e8c-5d98-2374527c18a9.htm" />
   <HelpKINode Title="KsiSignature.GetAggregationHashChains method" Url="html/56d0cf0c-fe43-11fd-c93f-71a79632f3b1.htm" />
   <HelpKINode Title="KsiSignature.Identity property" Url="html/dbb2a920-509d-2b57-402e-f74bf7ef0736.htm" />
   <HelpKINode Title="KsiSignature.IsExtended property" Url="html/be8e09db-2db2-999f-a0fa-d1a40c7c213d.htm" />
@@ -1851,11 +1859,23 @@
   <HelpKINode Title="KsiSignatureFactory class">
     <HelpKINode Title="KsiSignatureFactory Class" Url="html/355751a8-676c-0591-40da-8b0da92f7ca0.htm" />
     <HelpKINode Title="about KsiSignatureFactory class" Url="html/355751a8-676c-0591-40da-8b0da92f7ca0.htm" />
-    <HelpKINode Title="constructor" Url="html/907af2c8-82cc-fead-9a0d-527c7f672d8a.htm" />
+    <HelpKINode Title="constructor" Url="html/2e1e339e-0842-5ea7-266a-a120d66bc198.htm" />
     <HelpKINode Title="methods" Url="html/fe59f33d-50c3-1ac6-12c7-43365474d07f.htm" />
   </HelpKINode>
   <HelpKINode Title="KsiSignatureFactory.Create method" Url="html/4c361c95-1034-d0a7-74bb-d83c6f14596e.htm" />
-  <HelpKINode Title="KsiSignatureFactory.KsiSignatureFactory constructor" Url="html/907af2c8-82cc-fead-9a0d-527c7f672d8a.htm" />
+  <HelpKINode Title="KsiSignatureFactory.CreateByContent method" Url="html/ced78a1a-d0d2-dd6b-4e1d-5685f1bec221.htm" />
+  <HelpKINode Title="KsiSignatureFactory.KsiSignatureFactory constructor" Url="html/2e1e339e-0842-5ea7-266a-a120d66bc198.htm" />
+  <HelpKINode Title="KsiSignatureInvalidContentException class">
+    <HelpKINode Title="KsiSignatureInvalidContentException Class" Url="html/f9d4f02c-82b5-cacc-e350-2f6cd0666f3f.htm" />
+    <HelpKINode Title="about KsiSignatureInvalidContentException class" Url="html/f9d4f02c-82b5-cacc-e350-2f6cd0666f3f.htm" />
+    <HelpKINode Title="constructor" Url="html/38bf80d4-241c-559d-45bb-0904bd3132e0.htm" />
+    <HelpKINode Title="events" Url="html/ebfa97b6-a026-e9ae-7557-09e1fcf36529.htm" />
+    <HelpKINode Title="methods" Url="html/bd007bfc-ac25-766d-192f-89ef3a001255.htm" />
+    <HelpKINode Title="properties" Url="html/9de809bd-8cba-07a5-2a03-d2aa4942dbbe.htm" />
+  </HelpKINode>
+  <HelpKINode Title="KsiSignatureInvalidContentException.KsiSignatureInvalidContentException constructor" Url="html/38bf80d4-241c-559d-45bb-0904bd3132e0.htm" />
+  <HelpKINode Title="KsiSignatureInvalidContentException.Signature property" Url="html/3c1b9a95-61b5-bd81-1e95-e6174f5aa5bc.htm" />
+  <HelpKINode Title="KsiSignatureInvalidContentException.VerificationResult property" Url="html/be73c444-b59c-59ef-5a57-5276e3c30f94.htm" />
   <HelpKINode Title="KsiVerificationException class">
     <HelpKINode Title="KsiVerificationException Class" Url="html/965f8446-e22e-da48-2603-cf66fad8603e.htm" />
     <HelpKINode Title="about KsiVerificationException class" Url="html/965f8446-e22e-da48-2603-cf66fad8603e.htm" />
@@ -1873,7 +1893,9 @@
   <HelpKINode Title="Length property" Url="html/1f781fdf-de4a-fa81-9409-bffc9b71d316.htm" />
   <HelpKINode Title="Level property">
     <HelpKINode Title="AggregationHashChainResult.Level Property " Url="html/4285e969-7747-6422-bc7d-b948bc894c40.htm" />
+    <HelpKINode Title="IVerificationContext.Level Property " Url="html/e15ec533-fd81-7dce-0835-8f88c885c460.htm" />
     <HelpKINode Title="TreeNode.Level Property " Url="html/6f9f6ef3-f348-7480-6b39-980551dc3417.htm" />
+    <HelpKINode Title="VerificationContext.Level Property " Url="html/6ea1286a-6976-e960-a42d-878627621d52.htm" />
   </HelpKINode>
   <HelpKINode Title="LevelCorrection property" Url="html/5d836bcd-95be-33e7-cc3e-7e2dbf33ec07.htm" />
   <HelpKINode Title="LevelCorrectionTagType field" Url="html/1a811d84-d16d-6b97-281c-f98fa428b1cb.htm" />
@@ -1897,8 +1919,8 @@
   <HelpKINode Title="MachineIdTagType field" Url="html/d0de21cf-a870-46ac-b7f9-3ffb0965aa45.htm" />
   <HelpKINode Title="MacTagType field" Url="html/32aa6777-cb41-cd27-d055-677a06fa9ebf.htm" />
   <HelpKINode Title="Match method">
-    <HelpKINode Title="CertificateSubjectRdnSelector.Match Method " Url="html/6b6a1cff-363e-861e-7559-813df688f540.htm" />
     <HelpKINode Title="CertificateSubjectRdnSelector.Match Method " Url="html/abd96a6a-913b-cf40-669a-4b94ff00f71b.htm" />
+    <HelpKINode Title="CertificateSubjectRdnSelector.Match Method " Url="html/6b6a1cff-363e-861e-7559-813df688f540.htm" />
   </HelpKINode>
   <HelpKINode Title="MaxType field" Url="html/22b88bea-a7b4-043e-c592-148ffb767d56.htm" />
   <HelpKINode Title="Message property" Url="html/7bce523b-50e0-dae8-c7a0-ed97eb56c49f.htm" />
@@ -1981,18 +2003,18 @@
     <HelpKINode Title="KsiPdu.Payload Property " Url="html/8d593bc0-420a-addf-9479-f13cadd73179.htm" />
   </HelpKINode>
   <HelpKINode Title="Pkcs7CryptoSignatureVerifier class">
-    <HelpKINode Title="Pkcs7CryptoSignatureVerifier Class" Url="html/52eab78f-8755-218f-6257-a30ec8f5d884.htm" />
     <HelpKINode Title="Pkcs7CryptoSignatureVerifier Class" Url="html/adac00b2-e625-c03a-e5a6-4bcef831dabf.htm" />
-    <HelpKINode Title="about Pkcs7CryptoSignatureVerifier class" Url="html/52eab78f-8755-218f-6257-a30ec8f5d884.htm" />
+    <HelpKINode Title="Pkcs7CryptoSignatureVerifier Class" Url="html/52eab78f-8755-218f-6257-a30ec8f5d884.htm" />
     <HelpKINode Title="about Pkcs7CryptoSignatureVerifier class" Url="html/adac00b2-e625-c03a-e5a6-4bcef831dabf.htm" />
-    <HelpKINode Title="constructor" Url="html/7889c044-ed6c-39c0-64c8-2b7e219611df.htm" />
+    <HelpKINode Title="about Pkcs7CryptoSignatureVerifier class" Url="html/52eab78f-8755-218f-6257-a30ec8f5d884.htm" />
     <HelpKINode Title="constructor" Url="html/a9ac7882-53db-9c72-6eaf-f50eaeaef4a7.htm" />
-    <HelpKINode Title="methods" Url="html/b04f7161-4bf7-6113-a49f-0d40a56b3531.htm" />
+    <HelpKINode Title="constructor" Url="html/7889c044-ed6c-39c0-64c8-2b7e219611df.htm" />
     <HelpKINode Title="methods" Url="html/3ad8d27f-fefd-bd91-6d45-7067fc1d0969.htm" />
+    <HelpKINode Title="methods" Url="html/b04f7161-4bf7-6113-a49f-0d40a56b3531.htm" />
   </HelpKINode>
   <HelpKINode Title="Pkcs7CryptoSignatureVerifier.Pkcs7CryptoSignatureVerifier constructor">
-    <HelpKINode Title="Pkcs7CryptoSignatureVerifier Constructor " Url="html/7889c044-ed6c-39c0-64c8-2b7e219611df.htm" />
     <HelpKINode Title="Pkcs7CryptoSignatureVerifier Constructor " Url="html/a9ac7882-53db-9c72-6eaf-f50eaeaef4a7.htm" />
+    <HelpKINode Title="Pkcs7CryptoSignatureVerifier Constructor " Url="html/7889c044-ed6c-39c0-64c8-2b7e219611df.htm" />
   </HelpKINode>
   <HelpKINode Title="Pkcs7CryptoSignatureVerifier.ValidateCertPath method" Url="html/930cd4d6-3f32-2849-fdce-7ae652666b0c.htm" />
   <HelpKINode Title="Pkcs7CryptoSignatureVerifier.Verify method">
@@ -2284,12 +2306,12 @@
   <HelpKINode Title="Ripemd160 field" Url="html/50210687-0ec8-8090-e622-6796c9a77dcb.htm" />
   <HelpKINode Title="RootSignature field" Url="html/0211ad0c-b7d7-829c-8fe7-6a44e7177887.htm" />
   <HelpKINode Title="RsaCryptoSignatureVerifier class">
-    <HelpKINode Title="RsaCryptoSignatureVerifier Class" Url="html/ab9007f8-db05-4753-b3f2-0511a0cbac2c.htm" />
     <HelpKINode Title="RsaCryptoSignatureVerifier Class" Url="html/9d53c71e-0a4c-45ae-02d5-51681f19eaf3.htm" />
-    <HelpKINode Title="about RsaCryptoSignatureVerifier class" Url="html/9d53c71e-0a4c-45ae-02d5-51681f19eaf3.htm" />
+    <HelpKINode Title="RsaCryptoSignatureVerifier Class" Url="html/ab9007f8-db05-4753-b3f2-0511a0cbac2c.htm" />
     <HelpKINode Title="about RsaCryptoSignatureVerifier class" Url="html/ab9007f8-db05-4753-b3f2-0511a0cbac2c.htm" />
-    <HelpKINode Title="constructor" Url="html/541677a2-971d-7ac4-a566-03d026ac5745.htm" />
+    <HelpKINode Title="about RsaCryptoSignatureVerifier class" Url="html/9d53c71e-0a4c-45ae-02d5-51681f19eaf3.htm" />
     <HelpKINode Title="constructor" Url="html/66db3171-7aef-194b-7b0a-ca82a6bdc5ed.htm" />
+    <HelpKINode Title="constructor" Url="html/541677a2-971d-7ac4-a566-03d026ac5745.htm" />
     <HelpKINode Title="methods" Url="html/4cd0041d-8b8e-211b-97a0-5456097e1782.htm" />
     <HelpKINode Title="methods" Url="html/335140bb-ac2e-fe64-56aa-cdcf92c7808b.htm" />
   </HelpKINode>
@@ -2298,8 +2320,8 @@
     <HelpKINode Title="RsaCryptoSignatureVerifier Constructor " Url="html/66db3171-7aef-194b-7b0a-ca82a6bdc5ed.htm" />
   </HelpKINode>
   <HelpKINode Title="RsaCryptoSignatureVerifier.Verify method">
-    <HelpKINode Title="RsaCryptoSignatureVerifier.Verify Method " Url="html/f6565c33-7c05-8479-1fb9-96999cd97103.htm" />
     <HelpKINode Title="RsaCryptoSignatureVerifier.Verify Method " Url="html/c2b01f2e-af28-ef29-41e8-0567e3c338b0.htm" />
+    <HelpKINode Title="RsaCryptoSignatureVerifier.Verify Method " Url="html/f6565c33-7c05-8479-1fb9-96999cd97103.htm" />
   </HelpKINode>
   <HelpKINode Title="RuleName property" Url="html/6d5317e9-2c88-3fcb-5852-3f8c299b9cae.htm" />
   <HelpKINode Title="SequenceNumber property" Url="html/37225881-8535-bd84-b4b3-a0f1033949f7.htm" />
@@ -2331,6 +2353,7 @@
   </HelpKINode>
   <HelpKINode Title="Signature property">
     <HelpKINode Title="IVerificationContext.Signature Property " Url="html/d98449ec-d75c-2485-7f91-99d1a2a17156.htm" />
+    <HelpKINode Title="KsiSignatureInvalidContentException.Signature Property " Url="html/3c1b9a95-61b5-bd81-1e95-e6174f5aa5bc.htm" />
     <HelpKINode Title="VerificationContext.Signature Property " Url="html/3a803029-12a7-be8f-50c8-f99f4c21e5fd.htm" />
   </HelpKINode>
   <HelpKINode Title="SignatureData class">
@@ -2465,6 +2488,7 @@
     <HelpKINode Title="operators" Url="html/9b6df1a1-9256-ad7c-4fd6-66a2d971bb60.htm" />
     <HelpKINode Title="properties" Url="html/65f97f9f-d78e-b059-5f15-9f0b3f8fdafa.htm" />
   </HelpKINode>
+  <HelpKINode Title="TlvTag.CheckTagType method" Url="html/3c0bb7a3-84bb-10bb-bd06-9a222e28ed9b.htm" />
   <HelpKINode Title="TlvTag.Encode method" Url="html/a98a5771-c269-0655-681a-d88f731ddd65.htm" />
   <HelpKINode Title="TlvTag.EncodeValue method" Url="html/25837bc1-9ad9-04a6-cc0b-7ab81400c335.htm" />
   <HelpKINode Title="TlvTag.Equality operator" Url="html/3f9be54e-cc2d-386b-b340-0e06e3a40fd4.htm" />
@@ -2612,7 +2636,7 @@
   <HelpKINode Title="VerificationContext class">
     <HelpKINode Title="VerificationContext Class" Url="html/15828cd5-ffb7-d957-0c7b-d2b54e956919.htm" />
     <HelpKINode Title="about VerificationContext class" Url="html/15828cd5-ffb7-d957-0c7b-d2b54e956919.htm" />
-    <HelpKINode Title="constructor" Url="html/550aa141-7c0a-c386-c574-b90c6ca8383f.htm" />
+    <HelpKINode Title="constructor" Url="html/a84053e7-6e77-d969-a7cd-423a7a8cf90e.htm" />
     <HelpKINode Title="methods" Url="html/ffce8bb5-a81c-102c-024f-fcca1b0d1b57.htm" />
     <HelpKINode Title="properties" Url="html/2e79e5f9-1b80-faea-3634-fce4227f20cf.htm" />
   </HelpKINode>
@@ -2621,10 +2645,11 @@
   <HelpKINode Title="VerificationContext.GetExtendedTimeCalendarHashChain method" Url="html/6aaec314-2a0e-ea26-7dce-89fade59fc8b.htm" />
   <HelpKINode Title="VerificationContext.IsExtendingAllowed property" Url="html/1ab02682-ef6a-d0aa-7400-ddcc4de4ecbb.htm" />
   <HelpKINode Title="VerificationContext.KsiService property" Url="html/6a454c99-87bc-084a-9b53-a4712ad90480.htm" />
+  <HelpKINode Title="VerificationContext.Level property" Url="html/6ea1286a-6976-e960-a42d-878627621d52.htm" />
   <HelpKINode Title="VerificationContext.PublicationsFile property" Url="html/eadf271b-ebad-26e5-74b2-2945d0db8e1f.htm" />
   <HelpKINode Title="VerificationContext.Signature property" Url="html/3a803029-12a7-be8f-50c8-f99f4c21e5fd.htm" />
   <HelpKINode Title="VerificationContext.UserPublication property" Url="html/18f4c045-9dde-5215-dd8c-63a0fed6806b.htm" />
-  <HelpKINode Title="VerificationContext.VerificationContext constructor" Url="html/550aa141-7c0a-c386-c574-b90c6ca8383f.htm" />
+  <HelpKINode Title="VerificationContext.VerificationContext constructor" Url="html/a84053e7-6e77-d969-a7cd-423a7a8cf90e.htm" />
   <HelpKINode Title="VerificationError class">
     <HelpKINode Title="VerificationError Class" Url="html/50c2d3c9-1fea-55c9-f1b0-1a1ff2d774cc.htm" />
     <HelpKINode Title="about VerificationError class" Url="html/50c2d3c9-1fea-55c9-f1b0-1a1ff2d774cc.htm" />
@@ -2675,6 +2700,7 @@
     <HelpKINode Title="methods" Url="html/4873b399-0d23-5160-2ac5-01340646a5a8.htm" />
     <HelpKINode Title="properties" Url="html/bf002412-2cc2-ff3a-24b8-9ee3fdc3da43.htm" />
   </HelpKINode>
+  <HelpKINode Title="VerificationResult property" Url="html/be73c444-b59c-59ef-5a57-5276e3c30f94.htm" />
   <HelpKINode Title="VerificationResult.ResultCode property" Url="html/53a5fa06-5844-e1e5-d390-77d4337a09b5.htm" />
   <HelpKINode Title="VerificationResult.RuleName property" Url="html/6d5317e9-2c88-3fcb-5852-3f8c299b9cae.htm" />
   <HelpKINode Title="VerificationResult.ToString method" Url="html/ac485fa3-85d9-fc6d-2266-103c86926f8d.htm" />
@@ -2726,15 +2752,15 @@
     <HelpKINode Title="ExtendingPermittedVerificationRule.Verify Method " Url="html/91e75db0-8667-8a62-c5eb-434bc8dc5fdb.htm" />
     <HelpKINode Title="ICryptoSignatureVerifier.Verify Method " Url="html/990ad2d2-4090-e3fe-b62c-b23374e0be5c.htm" />
     <HelpKINode Title="IPkiTrustProvider.Verify Method " Url="html/952d00c2-74be-15c3-e0ed-c280c6feeb78.htm" />
-    <HelpKINode Title="Pkcs7CryptoSignatureVerifier.Verify Method " Url="html/fbee9809-059c-3631-fd10-d32bf0e9f870.htm" />
     <HelpKINode Title="Pkcs7CryptoSignatureVerifier.Verify Method " Url="html/190e1600-71b3-befe-cd08-3e60ee5008e0.htm" />
+    <HelpKINode Title="Pkcs7CryptoSignatureVerifier.Verify Method " Url="html/fbee9809-059c-3631-fd10-d32bf0e9f870.htm" />
     <HelpKINode Title="PkiTrustStoreProvider.Verify Method " Url="html/7bfdacdd-2cdd-8dfb-617e-15a2eb865712.htm" />
     <HelpKINode Title="PublicationsFileContainsSignaturePublicationRule.Verify Method " Url="html/7ca6d04f-3714-0a73-f9f9-12d3d7fcb7d5.htm" />
     <HelpKINode Title="PublicationsFileExtendedSignatureInputHashRule.Verify Method " Url="html/23225517-fe5b-803d-5256-febb19115cf7.htm" />
     <HelpKINode Title="PublicationsFilePublicationHashMatchesExtenderResponseRule.Verify Method " Url="html/87edb9b6-93d4-1369-55f2-ea995f6f7da2.htm" />
     <HelpKINode Title="PublicationsFilePublicationTimeMatchesExtenderResponseRule.Verify Method " Url="html/a33bf0b4-b083-d5e8-7330-9f9cfc008b65.htm" />
-    <HelpKINode Title="RsaCryptoSignatureVerifier.Verify Method " Url="html/c2b01f2e-af28-ef29-41e8-0567e3c338b0.htm" />
     <HelpKINode Title="RsaCryptoSignatureVerifier.Verify Method " Url="html/f6565c33-7c05-8479-1fb9-96999cd97103.htm" />
+    <HelpKINode Title="RsaCryptoSignatureVerifier.Verify Method " Url="html/c2b01f2e-af28-ef29-41e8-0567e3c338b0.htm" />
     <HelpKINode Title="SignaturePublicationRecordExistenceRule.Verify Method " Url="html/ab1cfd69-eee7-7f94-16f0-f3299cf100c1.htm" />
     <HelpKINode Title="SignaturePublicationRecordPublicationHashRule.Verify Method " Url="html/c739c3c8-60c7-d579-bac9-2bcd7194375c.htm" />
     <HelpKINode Title="SignaturePublicationRecordPublicationTimeRule.Verify Method " Url="html/59c1bd40-a526-d12e-3bb3-e86ccaa5db70.htm" />
