@@ -34,6 +34,8 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         public bool IsExtendingAllowed { get; set; }
         public IPublicationsFile PublicationsFile { get; set; }
 
+        public uint Level { get; set; }
+
         public CalendarHashChain LatestCalendarHashChain;
 
         public CalendarHashChain GetExtendedLatestCalendarHashChain()

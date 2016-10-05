@@ -24,6 +24,9 @@ using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Signature;
+using Guardtime.KSI.Signature.Verification;
+using Guardtime.KSI.Signature.Verification.Rule;
+using Guardtime.KSI.Test.Signature.Verification.Rule;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Signature
@@ -51,7 +54,7 @@ namespace Guardtime.KSI.Test.Signature
             Assert.That(delegate
             {
                 GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Type);
-            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Invalid calendar hash chain type(2051)"));
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Invalid tag type! Class: CalendarHashChain; Type: 0x803;"));
         }
 
         [Test]
@@ -115,6 +118,24 @@ namespace Guardtime.KSI.Test.Signature
             {
                 GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Multiple_Publication_Time);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one publication time must exist in calendar hash chain"));
+        }
+
+        /// <summary>
+        /// Test calendar hash chain with changed hash algorithm
+        /// </summary>
+        [Test]
+        public void TestCalendarHashChainOkChangedAlgorithm()
+        {
+            SignaturePublicationRecordPublicationHashRule rule = new SignaturePublicationRecordPublicationHashRule();
+
+            using (Stream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.CalendarHashChain_Ok_Changed_Algorithm), FileMode.Open))
+            {
+                IKsiSignature signature = new KsiSignatureFactory().Create(stream);
+                VerificationContext context = new VerificationContext(signature);
+                VerificationResult result = rule.Verify(context);
+
+                Assert.AreEqual(VerificationResultCode.Ok, result.ResultCode);
+            }
         }
 
         [Test]

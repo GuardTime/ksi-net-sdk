@@ -38,10 +38,7 @@ namespace Guardtime.KSI.Service
         /// <param name="tag">TLV element</param>
         public ExtendPdu(ITlvTag tag) : base(tag)
         {
-            if (Type != Constants.ExtendPdu.TagType)
-            {
-                throw new TlvException("Invalid extend PDU type(" + Type + ").");
-            }
+            CheckTagType(Constants.ExtendPdu.TagType);
 
             int headerCount = 0;
             int payloadCount = 0;

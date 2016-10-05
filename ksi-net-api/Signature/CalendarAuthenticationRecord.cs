@@ -34,10 +34,7 @@ namespace Guardtime.KSI.Signature
         /// <param name="tag">TLV element</param>
         public CalendarAuthenticationRecord(ITlvTag tag) : base(tag)
         {
-            if (Type != Constants.CalendarAuthenticationRecord.TagType)
-            {
-                throw new TlvException("Invalid calendar authentication record type(" + Type + ").");
-            }
+            CheckTagType(Constants.CalendarAuthenticationRecord.TagType);
 
             int publicationDataCount = 0;
             int signatureDataCount = 0;

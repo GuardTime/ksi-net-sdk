@@ -19,7 +19,7 @@ Instead of adding references manually you can install packages "ksi-net-sdk" and
 
 In order to get trial access to the KSI platform, go to [https://guardtime.com/blockchain-developers](https://guardtime.com/blockchain-developers).
 
-Creating ksiService:
+**Creating ksiService**:
 
 ```cs
 // Set crypto provider to bouncycastle or microsoft 
@@ -41,7 +41,7 @@ var ksiService = new KsiService(
 
 There are 2 ways to use KSI service, with and without simple API wrapper.
 
-Example using simple wrapper:
+**Example using simple wrapper**:
 
 ```cs
 // Create new simple wrapper
@@ -57,7 +57,7 @@ ksiSignature = ksi.Extend(ksiSignature);
 var publicationsFile = ksi.GetPublicationsFile();
 ```
 
-Example without simple wrapper
+**Example without simple wrapper**:
 
 ```cs
 // Signing 
@@ -70,10 +70,22 @@ publicationsFile = ksiService.GetPublicationsFile();
 var publicationRecord = publicationsFile.GetNearestPublicationRecord(signature.AggregationTime);
 CalendarHashChain calendarHashChain = _ksiService.Extend(signature.AggregationTime, publicationRecord.PublicationData.PublicationTime);
 var extendedSignature = signature.Extend(calendarHashChain, publicationRecord);
-
 ```
+
 The API full reference is available here [http://guardtime.github.io/ksi-net-sdk/](http://guardtime.github.io/ksi-net-sdk/).
 
 ## License ##
 
 See LICENSE file.
+
+## Dependencies ##
+
+| **Dependency**                     | **Version** | **License**                                                        | **Notes**                                                                |
+| ---------------------------------- |-------------| -------------------------------------------------------------------|--------------------------------------------------------------------------|
+| NLog                               | 2.1         | https://raw.githubusercontent.com/NLog/NLog/master/LICENSE.txt     |                                                                          |
+| Bouncy Castle Crypto APIs for .Net | 1.8         | MIT http://www.bouncycastle.org/csharp/licence.html                | Not needed when KSI .NET SDK Microsoft cryptography provider is used     |
+| NUnit	                             | 3.0.1       | http://nunit.org/nuget/nunit3-license.txt                          | Required only for testing                                                |
+
+## Compatibility ##
+
+.NET 2.0 or newer

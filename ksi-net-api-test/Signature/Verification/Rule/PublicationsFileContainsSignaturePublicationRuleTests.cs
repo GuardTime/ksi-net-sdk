@@ -149,17 +149,17 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         }
 
         [Test]
-        public void TestVerify()
+        public void TestSignatureWithPubRecordMissingInPubFile()
         {
             PublicationsFileContainsSignaturePublicationRule rule = new PublicationsFileContainsSignaturePublicationRule();
 
-            // Check invalid signature with publication record missing from publications file
-            using (FileStream stream = 
+            // Check invalid signature with publication record missing in publications file
+            using (FileStream stream =
                 new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Invalid_With_Invalid_Publication_Record), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
-                    Signature = new KsiSignatureFactory().Create(stream),
+                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream),
                     PublicationsFile = new TestPublicationsFile()
                 };
 

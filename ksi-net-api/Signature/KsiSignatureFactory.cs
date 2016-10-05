@@ -17,12 +17,16 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
+using Guardtime.KSI.Signature.Verification;
+using Guardtime.KSI.Signature.Verification.Policy;
 using NLog;
 
 namespace Guardtime.KSI.Signature
@@ -34,12 +38,55 @@ namespace Guardtime.KSI.Signature
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
+        private readonly VerificationPolicy _verificationPolicy;
+        private readonly IVerificationContext _verificationContext;
+
+        /// <summary>
+        ///     Create KSI signature factory
+        /// </summary>
+        /// <param name="verificationPolicy">Verification policy to be used when verifying a signature after it is created</param>
+        /// <param name="verificationContext">Verification context to be used when verifying a signature after it is created</param>
+        public KsiSignatureFactory(VerificationPolicy verificationPolicy = null, IVerificationContext verificationContext = null)
+        {
+            _verificationPolicy = verificationPolicy ?? new InternalVerificationPolicy();
+            _verificationContext = verificationContext ?? new VerificationContext();
+        }
+
+        /// <summary>
+        ///     Get KSI signature instance from byte array.
+        /// </summary>
+        /// <param name="bytes">signature byte array</param>
+        /// <param name="hash">Signed hash</param>
+        /// <param name="level">Signed hash node level value in the aggregation tree</param>
+        /// <returns>KSI signature</returns>
+        public IKsiSignature Create(byte[] bytes, DataHash hash = null, uint level = 0)
+        {
+            using (Stream stream = new MemoryStream(bytes))
+            {
+                return Create(stream, hash, level);
+            }
+        }
+
+        /// <summary>
+        ///     Get KSI signature instance from byte array.
+        /// </summary>
+        /// <param name="contentBytes">signature content byte array</param>
+        /// <param name="hash">Signed hash</param>
+        /// <param name="level">Signed hash node level value in the aggregation tree</param>
+        /// <returns>KSI signature</returns>
+        public IKsiSignature CreateByContent(byte[] contentBytes, DataHash hash = null, uint level = 0)
+        {
+            return CreateAndVerify(new RawTag(Constants.KsiSignature.TagType, false, false, contentBytes), hash, level);
+        }
+
         /// <summary>
         ///     Get KSI signature instance from stream.
         /// </summary>
         /// <param name="stream">signature data stream</param>
+        /// <param name="hash">Signed hash</param>
+        /// <param name="level">Signed hash node level value in the aggregation tree</param>
         /// <returns>KSI signature</returns>
-        public IKsiSignature Create(Stream stream)
+        public IKsiSignature Create(Stream stream, DataHash hash = null, uint level = 0)
         {
             if (stream == null)
             {
@@ -51,8 +98,9 @@ namespace Guardtime.KSI.Signature
                 try
                 {
                     Logger.Debug("Creating KSI signature from stream.");
-                    KsiSignature signature = new KsiSignature(reader.ReadTag());
+                    IKsiSignature signature = CreateAndVerify(reader.ReadTag(), null, level);
                     Logger.Debug("Creating KSI signature from stream successful.");
+
                     return signature;
                 }
                 catch (TlvException e)
@@ -67,8 +115,10 @@ namespace Guardtime.KSI.Signature
         ///     Get KSI signature instance from aggregation response payload.
         /// </summary>
         /// <param name="payload">aggregation response payload</param>
+        /// <param name="hash">Signed hash</param>
+        /// <param name="level">Signed hash node level value in the aggregation tree</param>
         /// <returns>KSI signature</returns>
-        public IKsiSignature Create(AggregationResponsePayload payload)
+        public IKsiSignature Create(AggregationResponsePayload payload, DataHash hash, uint level = 0)
         {
             if (payload == null)
             {
@@ -88,7 +138,9 @@ namespace Guardtime.KSI.Signature
                 try
                 {
                     Logger.Debug("Creating KSI signature from aggregation response. (request id: {0})", payload.RequestId);
-                    KsiSignature signature = new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false, ((MemoryStream)writer.BaseStream).ToArray()));
+
+                    IKsiSignature signature = CreateAndVerify(new RawTag(Constants.KsiSignature.TagType, false, false, ((MemoryStream)writer.BaseStream).ToArray()), hash, level);
+
                     Logger.Debug("Creating KSI signature from aggregation response successful. (request id: {0})", payload.RequestId);
                     return signature;
                 }
@@ -108,10 +160,12 @@ namespace Guardtime.KSI.Signature
         /// <param name="calendarAuthenticationRecord">Calendar authentication record tlv element</param>
         /// <param name="publicationRecord">Publication record tlv element</param>
         /// <param name="rfc3161Record">RFC3161 record tlv element</param>
+        /// <param name="hash">Signed hash</param>
+        /// <param name="level">Signed hash node level value in the aggregation tree</param>
         /// <returns></returns>
         public IKsiSignature Create(ICollection<AggregationHashChain> aggregationHashChains, CalendarHashChain calendarHashChain,
                                     CalendarAuthenticationRecord calendarAuthenticationRecord, PublicationRecordInSignature publicationRecord,
-                                    Rfc3161Record rfc3161Record)
+                                    Rfc3161Record rfc3161Record, DataHash hash, uint level = 0)
         {
             using (TlvWriter writer = new TlvWriter(new MemoryStream()))
             {
@@ -139,8 +193,40 @@ namespace Guardtime.KSI.Signature
                     writer.WriteTag(rfc3161Record);
                 }
 
-                return new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false, ((MemoryStream)writer.BaseStream).ToArray()));
+                return CreateAndVerify(new RawTag(Constants.KsiSignature.TagType, false, false, ((MemoryStream)writer.BaseStream).ToArray()), hash, level);
             }
+        }
+
+        /// <summary>
+        /// Create signature and verify with given verification policy
+        /// </summary>
+        /// <param name="signatureRaw">Signature to be verified</param>
+        /// <param name="hash">Signed hash</param>
+        /// <param name="level">Signed hash node level value in the aggregation tree</param>
+        private IKsiSignature CreateAndVerify(RawTag signatureRaw, DataHash hash, uint level = 0)
+        {
+            IKsiSignature signature = new KsiSignature(signatureRaw);
+            _verificationContext.Signature = signature;
+            _verificationContext.DocumentHash = hash;
+            _verificationContext.Level = level;
+            VerificationResult verificationResult = _verificationPolicy.Verify(_verificationContext);
+
+            if (verificationResult.ResultCode != VerificationResultCode.Ok)
+            {
+                Logger.Warn("Signature verification failed.{0}Verification policy: {1}{2}Verification error: {3}{4}Verification result: {5}{6}Signature: {7}",
+                    Environment.NewLine,
+                    _verificationPolicy.GetRuleName(),
+                    Environment.NewLine,
+                    verificationResult.VerificationError,
+                    Environment.NewLine,
+                    verificationResult,
+                    Environment.NewLine,
+                    this);
+
+                throw new KsiSignatureInvalidContentException("Signature verification failed.", signature, verificationResult);
+            }
+
+            return signature;
         }
     }
 }

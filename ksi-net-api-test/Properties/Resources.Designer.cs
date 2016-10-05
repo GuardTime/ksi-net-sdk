@@ -547,6 +547,15 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/integration-test-signatures/all-wrong-hash-chains-in-signature.ksig.
+        /// </summary>
+        internal static string All_Wrong_Chains_Invalid_Signature {
+            get {
+                return ResourceManager.GetString("All_Wrong_Chains_Invalid_Signature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/calendar-authentication-record/calendar-authentication-record-invalid-extra-tag.tlv.
         /// </summary>
         internal static string CalendarAuthenticationRecord_Invalid_Extra_Tag {
@@ -687,6 +696,15 @@ namespace Guardtime.KSI.Test.Properties {
         internal static string CalendarHashChain_Ok {
             get {
                 return ResourceManager.GetString("CalendarHashChain_Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/calendar-hash-chain/calendar-hash-chain-ok-changed-algorithm.tlv.
+        /// </summary>
+        internal static string CalendarHashChain_Ok_Changed_Algorithm {
+            get {
+                return ResourceManager.GetString("CalendarHashChain_Ok_Changed_Algorithm", resourceCulture);
             }
         }
         
@@ -1070,6 +1088,15 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-level-3-ok.tlv.
+        /// </summary>
+        internal static string KsiSignatureDo_Ok_Level3 {
+            get {
+                return ResourceManager.GetString("KsiSignatureDo_Ok_Level3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-ok-Missing-publication-record-and-calendar-authentication-record.tlv.
         /// </summary>
         internal static string KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record {
@@ -1318,6 +1345,15 @@ namespace Guardtime.KSI.Test.Properties {
         internal static string Rfc3161Record_Ok {
             get {
                 return ResourceManager.GetString("Rfc3161Record_Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/integration-test-signatures/NewSignature-CalAuth-WrongCertID.ksig.
+        /// </summary>
+        internal static string Signature_Wrong_Cert_ID {
+            get {
+                return ResourceManager.GetString("Signature_Wrong_Cert_ID", resourceCulture);
             }
         }
         

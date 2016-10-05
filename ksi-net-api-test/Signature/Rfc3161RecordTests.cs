@@ -51,7 +51,7 @@ namespace Guardtime.KSI.Test.Signature
             Assert.That(delegate
             {
                 GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Type);
-            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Invalid RFC#3161 record type(2055)"));
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Invalid tag type! Class: Rfc3161Record; Type: 0x807;"));
         }
 
         [Test]

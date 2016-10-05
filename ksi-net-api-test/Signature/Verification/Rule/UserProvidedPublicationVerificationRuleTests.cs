@@ -114,7 +114,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         }
 
         [Test]
-        public void TestInvalidSignature()
+        public void TestInvalidPublicationDataTimeAndHashMismatch()
         {
             UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
 
@@ -124,6 +124,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                 TestVerificationContext context = new TestVerificationContext()
                 {
                     Signature = new KsiSignatureFactory().Create(stream),
+                    // time and hash mismatch
                     UserPublication = new PublicationData("AAAAAA-CVUWRI-AANGVK-SV7GJL-36LN65-AVJYZR-6XRZSL-HIMRH3-6GU7WR-YNRY7C-X2XEC3-YOVLRM")
                 };
 
@@ -133,11 +134,32 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         }
 
         [Test]
+        public void TestInvalidPublicationDataHashMismatch()
+        {
+            UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
+
+            // Check invalid signature
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record), FileMode.Open))
+            {
+                TestVerificationContext context = new TestVerificationContext()
+                {
+                    Signature = new KsiSignatureFactory().Create(stream),
+                    // time match but hash mismatch
+                    UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AANGVK-SV7GJL-36LN65-AVJYZR-6XRZSL-HIMRH3-6GU7WR-YNRY7C-X2XECY-WFQXRB")
+                };
+
+                VerificationResult verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+                Assert.AreEqual(VerificationError.Int09, verificationResult.VerificationError);
+            }
+        }
+
+        [Test]
         public void TestRfc3161SignatureWithPublicationRecord()
         {
             UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
 
-            // Check  legacy signature with publication record
+            // Check legacy signature with publication record
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Legacy_Ok_With_Publication_Record), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
@@ -156,7 +178,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         {
             UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
 
-            // Check  legacy signature with publication record
+            // Check signature with publication record
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()

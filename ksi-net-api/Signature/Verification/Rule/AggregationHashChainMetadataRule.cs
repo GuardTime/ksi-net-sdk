@@ -19,7 +19,6 @@
 
 using System.Collections.ObjectModel;
 using Guardtime.KSI.Hashing;
-using Guardtime.KSI.Parser;
 using Guardtime.KSI.Utils;
 using NLog;
 

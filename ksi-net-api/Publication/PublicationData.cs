@@ -39,10 +39,7 @@ namespace Guardtime.KSI.Publication
         /// <param name="tag">TLV element</param>
         public PublicationData(ITlvTag tag) : base(tag)
         {
-            if (Type != Constants.PublicationData.TagType)
-            {
-                throw new TlvException("Invalid publication data type(" + Type + ").");
-            }
+            CheckTagType(Constants.PublicationData.TagType);
 
             int publicationTimeCount = 0;
             int publicationHashCount = 0;

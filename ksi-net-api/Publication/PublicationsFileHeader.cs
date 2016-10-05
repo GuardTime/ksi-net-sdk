@@ -38,10 +38,7 @@ namespace Guardtime.KSI.Publication
         /// <param name="tag">TLV element</param>
         public PublicationsFileHeader(ITlvTag tag) : base(tag)
         {
-            if (Type != Constants.PublicationsFileHeader.TagType)
-            {
-                throw new TlvException("Invalid certificate record type(" + Type + ").");
-            }
+            CheckTagType(Constants.PublicationsFileHeader.TagType);
 
             int versionCount = 0;
             int creationTimeCount = 0;

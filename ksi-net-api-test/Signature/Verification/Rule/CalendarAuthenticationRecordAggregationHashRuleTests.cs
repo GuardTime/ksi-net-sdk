@@ -149,7 +149,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
-                    Signature = new KsiSignatureFactory().Create(stream)
+                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream)
                 };
 
                 VerificationResult verificationResult = rule.Verify(context);

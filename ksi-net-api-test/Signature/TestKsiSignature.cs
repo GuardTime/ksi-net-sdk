@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -65,28 +66,27 @@ namespace Guardtime.KSI.Test.Signature
             return GetEnumerator();
         }
 
-
         public ReadOnlyCollection<AggregationHashChain> GetAggregationHashChains()
         {
             return AggregationHashChains;
         }
 
-        public DataHash GetAggregationHashChainRootHash()
+        public DataHash GetAggregationHashChainRootHash(uint level)
         {
             return AggregationHashChainRootHash;
         }
 
-        public IKsiSignature Extend(CalendarHashChain calendarHashChain)
+        public IKsiSignature Extend(CalendarHashChain calendarHashChain, IKsiSignatureFactory signatureFactory)
         {
             return ExtendedKsiSignature;
         }
 
-        public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInPublicationFile publicationRecord)
+        public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInPublicationFile publicationRecord, IKsiSignatureFactory signatureFactory)
         {
             return ExtendedKsiSignature;
         }
 
-        public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInSignature publicationRecord)
+        public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInSignature publicationRecord, IKsiSignatureFactory signatureFactory)
         {
             return ExtendedKsiSignature;
         }
@@ -113,5 +113,10 @@ namespace Guardtime.KSI.Test.Signature
         public string Identity => "Test";
 
         public bool IsExtended => PublicationRecord != null;
+
+        public void DoInternalVerification(DataHash hash, uint level = 0)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

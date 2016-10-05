@@ -228,7 +228,7 @@ namespace Guardtime.KSI.Service
             Logger.Debug("Begin sign (request id: {0}){1}{2}", payload.RequestId, Environment.NewLine, pdu);
             IAsyncResult serviceProtocolAsyncResult = _sigingServiceProtocol.BeginSign(pdu.Encode(), payload.RequestId, callback, asyncState);
 
-            return new CreateSignatureKsiServiceAsyncResult(payload.RequestId, serviceProtocolAsyncResult, asyncState);
+            return new CreateSignatureKsiServiceAsyncResult(hash, level, payload.RequestId, serviceProtocolAsyncResult, asyncState);
         }
 
         /// <summary>
@@ -293,7 +293,7 @@ namespace Guardtime.KSI.Service
 
                     Logger.Debug("End sign successful (request id: {0}){1}{2}", serviceAsyncResult.RequestId, Environment.NewLine, pdu);
 
-                    return _ksiSignatureFactory.Create(payload);
+                    return _ksiSignatureFactory.Create(payload, serviceAsyncResult.DocumentHash, serviceAsyncResult.Level);
                 }
             }
             catch (TlvException e)
@@ -532,13 +532,22 @@ namespace Guardtime.KSI.Service
         /// </summary>
         private class CreateSignatureKsiServiceAsyncResult : KsiServiceAsyncResult
         {
-            public CreateSignatureKsiServiceAsyncResult(ulong requestId, IAsyncResult serviceProtocolAsyncResult, object asyncState)
+            public CreateSignatureKsiServiceAsyncResult(DataHash documentHash, uint level, ulong requestId, IAsyncResult serviceProtocolAsyncResult, object asyncState)
                 : base(serviceProtocolAsyncResult, asyncState)
             {
+                if (documentHash == null)
+                {
+                    throw new ArgumentNullException(nameof(documentHash));
+                }
+
                 RequestId = requestId;
+                DocumentHash = documentHash;
+                Level = level;
             }
 
             public ulong RequestId { get; }
+            public DataHash DocumentHash { get; }
+            public uint Level { get; }
         }
 
         /// <summary>

@@ -38,10 +38,7 @@ namespace Guardtime.KSI.Service
         /// <param name="tag">TLV element</param>
         public ExtendRequestPayload(ITlvTag tag) : base(tag)
         {
-            if (Type != Constants.ExtendRequestPayload.TagType)
-            {
-                throw new TlvException("Invalid extend request payload type(" + Type + ").");
-            }
+            CheckTagType(Constants.ExtendRequestPayload.TagType);
 
             int requestIdCount = 0;
             int aggregationTimeCount = 0;

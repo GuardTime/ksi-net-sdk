@@ -47,7 +47,7 @@ namespace Guardtime.KSI.Test.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void BlockSignerGetUniSignaturesOfManyRandomHashesTest(Ksi ksi)
         {
-            int k = 10;
+            int k = 8;
             Random random = new Random();
             AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id", "test machine id");
             List<DataHash> hashes = new List<DataHash>();
@@ -159,7 +159,7 @@ namespace Guardtime.KSI.Test.Integration
         {
             ManualResetEvent waitHandle = new ManualResetEvent(false);
 
-            int[] treeSizes = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+            int[] treeSizes = new[] { 1, 2, 3, 4, 5, 6, 7, 8 };
             int doneCount = 0;
             int runCount = treeSizes.Length;
             string errorMessage = null;
@@ -244,7 +244,7 @@ namespace Guardtime.KSI.Test.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void BlockSignerGetMultiSignatureOfManyRandomHashesTest(Ksi ksi)
         {
-            int k = 10;
+            int k = 8;
             Random random = new Random();
             AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id", "test machine id");
             List<DataHash> hashes = new List<DataHash>();
@@ -329,7 +329,7 @@ namespace Guardtime.KSI.Test.Integration
         {
             ManualResetEvent waitHandle = new ManualResetEvent(false);
 
-            int[] treeSizes = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+            int[] treeSizes = new[] { 1, 2, 3, 4, 5, 6, 7, 8 };
             int doneCount = 0;
             int runCount = treeSizes.Length;
             string errorMessage = null;
@@ -419,7 +419,7 @@ namespace Guardtime.KSI.Test.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void BlockSignerGetMultiSignatureOfManyRandomHashesWithBlindingMaskTest(Ksi ksi)
         {
-            int k = 10;
+            int k = 4;
             Random random = new Random();
             AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id", "test machine id");
             List<DataHash> hashes = new List<DataHash>();
@@ -545,7 +545,7 @@ namespace Guardtime.KSI.Test.Integration
         {
             ManualResetEvent waitHandle = new ManualResetEvent(false);
 
-            int[] treeSizes = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+            int[] treeSizes = new[] { 1, 2, 3, 4 };
             int doneCount = 0;
             int runCount = treeSizes.Length;
             string errorMessage = null;

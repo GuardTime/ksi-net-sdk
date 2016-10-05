@@ -47,20 +47,28 @@ namespace Guardtime.KSI.Test.Integration
 
         private static readonly TcpKsiServiceProtocol TcpKsiServiceProtocolInvalidPort = new TcpKsiServiceProtocol(Settings.Default.TcpSigningServiceUrl, 2847, 100000);
 
+        public static KsiService HttpKsiService = new KsiService(
+            HttpKsiServiceProtocol,
+            new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
+            HttpKsiServiceProtocol,
+            new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
+            HttpKsiServiceProtocol,
+            new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
+                CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))));
+
+        public static object[] KsiServiceTestCases =
+        {
+            new object[]
+            {
+                HttpKsiService
+            }
+        };
+
         public static object[] HttpTestCases =
         {
             new object[]
             {
-                new Ksi(
-                    new KsiService(
-                        HttpKsiServiceProtocol,
-                        new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
-                        HttpKsiServiceProtocol,
-                        new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
-                        HttpKsiServiceProtocol,
-                        new PublicationsFileFactory(
-                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
-                        HashAlgorithm.Sha2256))
+                new Ksi(HttpKsiService)
             }
         };
 
@@ -210,18 +218,6 @@ namespace Guardtime.KSI.Test.Integration
                             new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com")))))
             }
         };
-
-        public static KsiService GetHttpKsiService()
-        {
-            return new KsiService(
-                HttpKsiServiceProtocol,
-                new ServiceCredentials("anon", "anon"),
-                HttpKsiServiceProtocol,
-                new ServiceCredentials("anon", "anon"),
-                HttpKsiServiceProtocol,
-                new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                    CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))));
-        }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void GetPublicationsFileTest(Ksi ksi)

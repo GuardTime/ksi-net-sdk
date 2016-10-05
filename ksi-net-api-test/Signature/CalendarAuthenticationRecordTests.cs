@@ -98,7 +98,7 @@ namespace Guardtime.KSI.Test.Signature
             Assert.That(delegate
             {
                 GetCalendarAuthenticationRecordFromFile(Properties.Resources.CalendarAuthenticationRecord_Invalid_Type);
-            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Invalid calendar authentication record type(2054)"));
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Invalid tag type! Class: CalendarAuthenticationRecord; Type: 0x806;"));
         }
 
         [Test]

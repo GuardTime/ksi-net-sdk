@@ -94,7 +94,7 @@ resources/signature/integration-test-signatures/ok-sig-2014-06-2-extra-critical-
 resources/signature/integration-test-signatures/ok-sig-2014-06-2-extended-extra-critical-elements-in-publication-record-lvl1.ksig;true;Fail;TlvException;Unknown tag type; 
 resources/signature/integration-test-signatures/ok-sig-2014-06-2-extended-extra-critical-elements-in-publication-record-lvl2.ksig;true;Fail;TlvException;Unknown tag type; 
 resources/signature/integration-test-signatures/ok-sig-2014-06-2-extra-nested-critical-tlv-in-main.ksig;true;Fail;TlvException;Unknown tag type; 
-resources/signature/integration-test-signatures/non-signature-file.ksig;true;Fail;TlvException;Invalid KSI signature type; 
+resources/signature/integration-test-signatures/non-signature-file.ksig;true;Fail;TlvException;Invalid tag type! Class: KsiSignature; 
 #
 # Various TLVExceptions
 #
@@ -123,7 +123,7 @@ resources/signature/integration-test-signatures/NewSignature-AggrHashCore-NoCore
 resources/signature/integration-test-signatures/NewSignature-AggrHashCore-NoLeftLink.ksig;true;Fail;TlvException;Exactly one of three from sibling hash, legacy id or metadata must exist in aggregation hash chain link; 
 resources/signature/integration-test-signatures/NewSignature-AggrHashCore-NoRightLink1.ksig;true;Fail;TlvException;Exactly one of three from sibling hash, legacy id or metadata must exist in aggregation hash chain link; 
 resources/signature/integration-test-signatures/NewSignature-AggrHashGW-MissingLeftLinkClientId.ksig;true;Fail;TlvException;Exactly one client id must exist in aggregation hash chain link metadata.; 
-resources/signature/integration-test-signatures/another-core-response-with-only-cal-chain.tlv;true;Fail;TlvException;Invalid KSI signature type; 
+resources/signature/integration-test-signatures/another-core-response-with-only-cal-chain.tlv;true;Fail;TlvException;Invalid tag type! Class: KsiSignature; 
 resources/signature/integration-test-signatures/NewSignature-CalHash-MissingCalHash.ksig;true;Fail;TlvException;No publication record or calendar authentication record is allowed in KSI signature if there is no calendar hash chain; 
 resources/signature/integration-test-signatures/ok-sig-2014-06-2-extended-no-publication-time.ksig;true;Fail;TlvException;Exactly one publication time must exist in publication data; 
 #

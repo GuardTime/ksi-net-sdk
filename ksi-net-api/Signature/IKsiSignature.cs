@@ -81,31 +81,35 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         ///     Get aggregation hash chain output hash.
         /// </summary>
+        /// <param name="level">Document hash node level value in the aggregation tree</param>
         /// <returns>output hash</returns>
-        DataHash GetAggregationHashChainRootHash();
+        DataHash GetAggregationHashChainRootHash(uint level);
 
         /// <summary>
         ///     Extend KSI signature with given calendar hash chain.
         /// </summary>
         /// <param name="calendarHashChain">extended calendar hash chain</param>
+        /// <param name="signatureFactory">signature factory to be used when creating extended signature</param>
         /// <returns>extended KSI signature</returns>
-        IKsiSignature Extend(CalendarHashChain calendarHashChain);
+        IKsiSignature Extend(CalendarHashChain calendarHashChain, IKsiSignatureFactory signatureFactory = null);
 
         /// <summary>
         ///     Extend signature to publication.
         /// </summary>
         /// <param name="calendarHashChain">extended calendar hash chain</param>
         /// <param name="publicationRecord">extended publication record</param>
+        /// <param name="signatureFactory">signature factory to be used when creating extended signature</param>
         /// <returns>extended KSI signature</returns>
-        IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInPublicationFile publicationRecord);
+        IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInPublicationFile publicationRecord, IKsiSignatureFactory signatureFactory = null);
 
         /// <summary>
         ///     Extend signature to publication.
         /// </summary>
         /// <param name="calendarHashChain">extended calendar hash chain</param>
         /// <param name="publicationRecord">extended publication record</param>
+        /// <param name="signatureFactory">signature factory to be used when creating extended signature</param>
         /// <returns>extended KSI signature</returns>
-        IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInSignature publicationRecord);
+        IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInSignature publicationRecord, IKsiSignatureFactory signatureFactory = null);
 
         /// <summary>
         ///     Write KSI signature to stream.

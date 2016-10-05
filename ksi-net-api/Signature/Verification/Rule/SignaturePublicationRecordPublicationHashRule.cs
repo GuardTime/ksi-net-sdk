@@ -22,7 +22,8 @@ using Guardtime.KSI.Publication;
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
     /// <summary>
-    ///    Checks if publication data hash in signature publication record equals publication data hash in calendar hash chain.
+    ///     Rule checks if KSI signature calendar hash chain publication hash matches signature publication record publication hash. 
+    ///     If publication record is missing, <see cref="VerificationResultCode.Ok" /> is returned.
     /// </summary>
     public sealed class SignaturePublicationRecordPublicationHashRule : VerificationRule
     {
@@ -30,16 +31,16 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         public override VerificationResult Verify(IVerificationContext context)
         {
             IKsiSignature signature = GetSignature(context);
-            PublicationRecordInSignature publicationRecord = signature.PublicationRecord;
 
-            if (publicationRecord == null)
+            if (signature.PublicationRecord == null)
             {
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
             }
 
-            CalendarHashChain calendarHashChain = GetCalendarHashChain(signature);
+            PublicationData publicationRecordPublicationData = signature.PublicationRecord.PublicationData;
+            PublicationData calendarHashChainPublicationData = GetCalendarHashChain(signature).PublicationData;
 
-            return publicationRecord.PublicationData.PublicationHash != calendarHashChain.PublicationData.PublicationHash
+            return publicationRecordPublicationData.PublicationHash != calendarHashChainPublicationData.PublicationHash
                 ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int09)
                 : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }

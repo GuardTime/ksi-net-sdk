@@ -114,7 +114,7 @@ namespace Guardtime.KSI.Test.Signature
             Assert.That(delegate
             {
                 GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Type);
-            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Invalid aggregation authentication record type(2053)"));
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Invalid tag type! Class: AggregationAuthenticationRecord; Type: 0x805;"));
         }
 
         [Test]

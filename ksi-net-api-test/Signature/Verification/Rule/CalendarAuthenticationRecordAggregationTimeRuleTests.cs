@@ -29,6 +29,8 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
     [TestFixture]
     public class CalendarAuthenticationRecordAggregationTimeRuleTests
     {
+        readonly KsiSignatureFactory _ksiSignatureFactory = new KsiSignatureFactory(new EmptyVerificationPolicy());
+
         [Test]
         public void TestMissingContext()
         {
@@ -65,7 +67,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 Assert.Throws<KsiVerificationException>(delegate
                 {
-                    IKsiSignature signature = new KsiSignatureFactory().Create(stream);
+                    IKsiSignature signature = _ksiSignatureFactory.Create(stream);
                     TestVerificationContext context = new TestVerificationContext()
                     {
                         Signature = new TestKsiSignature()
@@ -89,7 +91,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
-                    Signature = new KsiSignatureFactory().Create(stream)
+                    Signature = _ksiSignatureFactory.Create(stream)
                 };
 
                 VerificationResult verificationResult = rule.Verify(context);
@@ -107,7 +109,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
-                    Signature = new KsiSignatureFactory().Create(stream)
+                    Signature = _ksiSignatureFactory.Create(stream)
                 };
 
                 VerificationResult verificationResult = rule.Verify(context);
@@ -127,7 +129,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
-                    Signature = new KsiSignatureFactory().Create(stream)
+                    Signature = _ksiSignatureFactory.Create(stream)
                 };
 
                 VerificationResult verificationResult = rule.Verify(context);
@@ -147,7 +149,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
-                    Signature = new KsiSignatureFactory().Create(stream)
+                    Signature = _ksiSignatureFactory.Create(stream)
                 };
 
                 VerificationResult verificationResult = rule.Verify(context);

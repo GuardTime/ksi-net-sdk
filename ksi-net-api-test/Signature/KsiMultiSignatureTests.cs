@@ -30,6 +30,7 @@ using Guardtime.KSI.Signature.MultiSignature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
 using Guardtime.KSI.Test.Integration;
+using Guardtime.KSI.Test.Signature.Verification;
 using Guardtime.KSI.Test.Signature.Verification.Rule;
 using NUnit.Framework;
 
@@ -488,7 +489,7 @@ namespace Guardtime.KSI.Test.Signature
         [Test]
         public void MultiSignatureRemoveUniSignaturesFromSameAggregationRoundTest()
         {
-            KsiMultiSignature multiSignature = new KsiMultiSignature(new KsiSignatureFactory(), IntegrationTests.GetHttpKsiService());
+            KsiMultiSignature multiSignature = new KsiMultiSignature(new KsiSignatureFactory());
 
             IKsiSignature signature1 = GetKsiSignatureFromFile(Properties.Resources.KsiSignature_InputForMultiSameAggregationRound_1_Ok);
             IKsiSignature signature2 = GetKsiSignatureFromFile(Properties.Resources.KsiSignature_InputForMultiSameAggregationRound_2_Ok);
@@ -550,7 +551,7 @@ namespace Guardtime.KSI.Test.Signature
         /// </summary>
         public void MultiSignatureExtendAllWithPublicationRecordTest(bool overwrite)
         {
-            KsiMultiSignature multiSignature = new KsiMultiSignature(new KsiSignatureFactory(), IntegrationTests.GetHttpKsiService());
+            KsiMultiSignature multiSignature = new KsiMultiSignature(new KsiSignatureFactory(), IntegrationTests.HttpKsiService);
 
             IKsiSignature signature1 = GetKsiSignatureFromFile(Properties.Resources.KsiSignature_InputForMultiSameAggregationRound_1_Ok); // created: 23.07.2015
             IKsiSignature signature2 = GetKsiSignatureFromFile(Properties.Resources.KsiSignatureDo_Ok_Extended); // created: 14.02.2016
@@ -564,7 +565,7 @@ namespace Guardtime.KSI.Test.Signature
 
             PublicationRecordInSignature existingPublicationRecord = tags.OfType<PublicationRecordInSignature>().First();
 
-            multiSignature.Extend(IntegrationTests.GetHttpKsiService().GetPublicationsFile().GetNearestPublicationRecord(new DateTime(2016, 3, 1)), overwrite);
+            multiSignature.Extend(IntegrationTests.HttpKsiService.GetPublicationsFile().GetNearestPublicationRecord(new DateTime(2016, 3, 1)), overwrite);
 
             tags = multiSignature.GetAllTags();
 
@@ -609,7 +610,7 @@ namespace Guardtime.KSI.Test.Signature
         /// <param name="overwrite"></param>
         public void MultiSignatureExtendOneWithPublicationRecordTest(bool overwrite)
         {
-            KsiMultiSignature multiSignature = new KsiMultiSignature(new KsiSignatureFactory(), IntegrationTests.GetHttpKsiService());
+            KsiMultiSignature multiSignature = new KsiMultiSignature(new KsiSignatureFactory(), IntegrationTests.HttpKsiService);
 
             IKsiSignature signature1 = GetKsiSignatureFromFile(Properties.Resources.KsiSignature_InputForMultiSameAggregationRound_1_Ok); // created: 23.07.2015
             IKsiSignature signature2 = GetKsiSignatureFromFile(Properties.Resources.KsiSignatureDo_Ok_Extended); // created: 14.02.2016
@@ -623,7 +624,7 @@ namespace Guardtime.KSI.Test.Signature
 
             PublicationRecordInSignature existingPublicationRecord = tags.OfType<PublicationRecordInSignature>().First();
 
-            multiSignature.Extend(IntegrationTests.GetHttpKsiService().GetPublicationsFile().GetNearestPublicationRecord(new DateTime(2015, 8, 1)), overwrite);
+            multiSignature.Extend(IntegrationTests.HttpKsiService.GetPublicationsFile().GetNearestPublicationRecord(new DateTime(2015, 8, 1)), overwrite);
 
             tags = multiSignature.GetAllTags();
 
@@ -659,7 +660,7 @@ namespace Guardtime.KSI.Test.Signature
         /// <param name="overwrite"></param>
         public void MultiSignatureExtendWithPublicationsFileTest(bool overwrite)
         {
-            KsiMultiSignature multiSignature = new KsiMultiSignature(new KsiSignatureFactory(), IntegrationTests.GetHttpKsiService());
+            KsiMultiSignature multiSignature = new KsiMultiSignature(new KsiSignatureFactory(), IntegrationTests.HttpKsiService);
 
             IKsiSignature signature1 = GetKsiSignatureFromFile(Properties.Resources.KsiSignature_InputForMultiSameAggregationRound_1_Ok); // created: 23.07.2015
             IKsiSignature signature2 = GetKsiSignatureFromFile(Properties.Resources.KsiSignatureDo_Ok_Extended); // created: 14.02.2016
@@ -673,7 +674,7 @@ namespace Guardtime.KSI.Test.Signature
 
             PublicationRecordInSignature existingPublicationRecord = tags.OfType<PublicationRecordInSignature>().First();
 
-            multiSignature.Extend(IntegrationTests.GetHttpKsiService().GetPublicationsFile(), overwrite);
+            multiSignature.Extend(IntegrationTests.HttpKsiService.GetPublicationsFile(), overwrite);
 
             tags = multiSignature.GetAllTags();
 
@@ -699,7 +700,7 @@ namespace Guardtime.KSI.Test.Signature
         [Test]
         public void MultiSignatureExtendUniSignaturesFromSameAggregationRoundTest()
         {
-            KsiMultiSignature multiSignature = new KsiMultiSignature(new KsiSignatureFactory(), IntegrationTests.GetHttpKsiService());
+            KsiMultiSignature multiSignature = new KsiMultiSignature(new KsiSignatureFactory(), IntegrationTests.HttpKsiService);
 
             IKsiSignature signature1 = GetKsiSignatureFromFile(Properties.Resources.KsiSignature_InputForMultiSameAggregationRound_1_Ok);
             IKsiSignature signature2 = GetKsiSignatureFromFile(Properties.Resources.KsiSignature_InputForMultiSameAggregationRound_2_Ok);
@@ -709,7 +710,7 @@ namespace Guardtime.KSI.Test.Signature
             multiSignature.Add(signature2);
             multiSignature.Add(signature3);
 
-            multiSignature.Extend(IntegrationTests.GetHttpKsiService().GetPublicationsFile());
+            multiSignature.Extend(IntegrationTests.HttpKsiService.GetPublicationsFile());
 
             ITlvTag[] tags = multiSignature.GetAllTags();
 
@@ -779,7 +780,7 @@ namespace Guardtime.KSI.Test.Signature
 
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.MultiSignatureWithMetadataPadding_Ok), FileMode.Open))
             {
-                multiSignature = new KsiMultiSignature(stream, new KsiSignatureFactory());
+                multiSignature = new KsiMultiSignature(stream, new KsiSignatureFactory(new EmptyVerificationPolicy()));
             }
 
             AggregationHashChainMetadataRule rule = new AggregationHashChainMetadataRule();
@@ -800,7 +801,6 @@ namespace Guardtime.KSI.Test.Signature
         public void MultiSignatureWithMetadataPaddingTlv16Invalid()
         {
             IKsiSignature signature = GetKsiSignatureFromFile(Properties.Resources.AggregationHashChainMetadataWithPadding1);
-
             KsiMultiSignature multiSignature;
 
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.MultiSignatureWithMetadataPaddingTlv16_Invalid), FileMode.Open))
@@ -808,15 +808,12 @@ namespace Guardtime.KSI.Test.Signature
                 multiSignature = new KsiMultiSignature(stream, new KsiSignatureFactory());
             }
 
-            AggregationHashChainMetadataRule rule = new AggregationHashChainMetadataRule();
-
-            TestVerificationContext context = new TestVerificationContext()
+            KsiSignatureInvalidContentException ex = Assert.Throws<KsiSignatureInvalidContentException>(delegate
             {
-                Signature = multiSignature.Get(signature.GetAggregationHashChains()[0].InputHash)
-            };
+                multiSignature.Get(signature.GetAggregationHashChains()[0].InputHash);
+            });
 
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+            Assert.AreEqual(VerificationError.Int11.Code, ex.VerificationResult.VerificationError.Code, "Unexpected result code");
         }
 
         /// <summary>
@@ -828,7 +825,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, file), FileMode.Open))
             {
-                return new KsiSignatureFactory().Create(stream);
+                return new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream);
             }
         }
 

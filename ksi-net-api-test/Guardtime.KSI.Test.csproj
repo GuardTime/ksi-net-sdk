@@ -178,11 +178,15 @@
     <Compile Include="Service\AggregationErrorPayloadTests.cs" />
     <Compile Include="Service\AggregationRequestPayloadTests.cs" />
     <Compile Include="Service\AggregationPduTests.cs" />
+    <Compile Include="Service\ExtendStaticTests.cs" />
     <Compile Include="Service\KsiPduHeaderTests.cs" />
+    <Compile Include="Service\PublicationsFileStaticTest.cs" />
+    <Compile Include="Service\SigningStaticTests.cs" />
     <Compile Include="Service\TestBlockSigner.cs" />
     <Compile Include="Service\TestKsiServiceProtocol.cs" />
     <Compile Include="Signature\KsiMultiSignatureTests.cs" />
     <Compile Include="Signature\KsiSignatureUsingReflectionTests.cs" />
+    <Compile Include="Signature\Verification\EmptyVerificationPolicy.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainMetadataRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainIndexRuleTests.cs" />
     <Compile Include="TestSetup.cs" />
@@ -491,6 +495,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\calendar-hash-chain\calendar-hash-chain-invalid-type.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\calendar-hash-chain\calendar-hash-chain-ok-changed-algorithm.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\calendar-hash-chain\calendar-hash-chain-ok-missing-optionals.tlv">
@@ -1036,6 +1043,9 @@
     <None Include="resources\signature\multi-signature\multi-signature-5.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="resources\signature\ksi-signature-do\ksi-signature-level-3-ok.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="resources\signature\multi-signature\signature_data_1_agg_time_1437657023.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -1213,7 +1223,11 @@
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>IF EXIST "$(ProjectDir)\Guardtime.KSI.Test.dll.config" COPY /Y "$(ProjectDir)\Guardtime.KSI.Test.dll.config" "$(TargetDir)"</PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>IF EXIST "$(ProjectDir)\Guardtime.KSI.Test.dll.config" COPY /Y "$(ProjectDir)\Guardtime.KSI.Test.dll.config" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

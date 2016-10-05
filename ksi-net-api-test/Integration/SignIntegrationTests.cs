@@ -234,7 +234,7 @@ namespace Guardtime.KSI.Test.Integration
         {
             ManualResetEvent waitHandle = new ManualResetEvent(false);
             int doneCount = 0;
-            int runCount = 100;
+            int runCount = 8;
             string errorMessage = null;
 
             for (int i = 0; i < runCount; i++)

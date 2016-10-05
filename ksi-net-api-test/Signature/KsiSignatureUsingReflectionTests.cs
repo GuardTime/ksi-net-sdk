@@ -25,6 +25,7 @@ using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Signature;
+using Guardtime.KSI.Test.Signature.Verification;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Signature
@@ -392,7 +393,7 @@ namespace Guardtime.KSI.Test.Signature
                 {
                     writer.WriteTag(tag);
                     writer.BaseStream.Seek(0, SeekOrigin.Begin);
-                    IKsiSignature tag2 = new KsiSignatureFactory().Create(writer.BaseStream);
+                    IKsiSignature tag2 = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(writer.BaseStream);
                     Assert.AreEqual(tag.ToString(), tag2.ToString(), "Signatures' strings should match.");
                 }
             });
@@ -470,7 +471,7 @@ namespace Guardtime.KSI.Test.Signature
                 {
                     writer.WriteTag(tag);
                     writer.BaseStream.Seek(0, SeekOrigin.Begin);
-                    IKsiSignature tag2 = new KsiSignatureFactory().Create(writer.BaseStream);
+                    IKsiSignature tag2 = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(writer.BaseStream);
                     Assert.AreEqual(tag.ToString(), tag2.ToString(), "Signatures' strings should match.");
                 }
             });
@@ -537,7 +538,7 @@ namespace Guardtime.KSI.Test.Signature
                 {
                     writer.WriteTag(tag);
                     writer.BaseStream.Seek(0, SeekOrigin.Begin);
-                    IKsiSignature tag2 = new KsiSignatureFactory().Create(writer.BaseStream);
+                    IKsiSignature tag2 = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(writer.BaseStream);
                     Assert.AreEqual(tag.ToString(), tag2.ToString(), "Signatures' strings should match.");
                 }
             });
@@ -677,7 +678,7 @@ namespace Guardtime.KSI.Test.Signature
                 {
                     writer.WriteTag(tag);
                     writer.BaseStream.Seek(0, SeekOrigin.Begin);
-                    IKsiSignature tag2 = new KsiSignatureFactory().Create(writer.BaseStream);
+                    IKsiSignature tag2 = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(writer.BaseStream);
                     Assert.AreEqual(tag.ToString(), tag2.ToString(), "Signatures' strings should match.");
                 }
             });
@@ -930,7 +931,7 @@ namespace Guardtime.KSI.Test.Signature
                 {
                     writer.WriteTag(tag);
                     writer.BaseStream.Seek(0, SeekOrigin.Begin);
-                    IKsiSignature tag2 = new KsiSignatureFactory().Create(writer.BaseStream);
+                    IKsiSignature tag2 = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(writer.BaseStream);
                     Assert.AreEqual(tag.ToString(), tag2.ToString(), "Signatures' strings should match.");
                 }
             });
@@ -1017,7 +1018,7 @@ namespace Guardtime.KSI.Test.Signature
                 {
                     writer.WriteTag(tag);
                     writer.BaseStream.Seek(0, SeekOrigin.Begin);
-                    IKsiSignature tag2 = new KsiSignatureFactory().Create(writer.BaseStream);
+                    IKsiSignature tag2 = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(writer.BaseStream);
                     Assert.AreEqual(tag.ToString(), tag2.ToString(), "Signatures' strings should match.");
                 }
             });
@@ -1084,7 +1085,7 @@ namespace Guardtime.KSI.Test.Signature
                 {
                     writer.WriteTag(tag);
                     writer.BaseStream.Seek(0, SeekOrigin.Begin);
-                    IKsiSignature tag2 = new KsiSignatureFactory().Create(writer.BaseStream);
+                    IKsiSignature tag2 = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(writer.BaseStream);
                     Assert.AreEqual(tag.ToString(), tag2.ToString(), "Signatures' strings should match.");
                 }
             });
@@ -1330,7 +1331,7 @@ namespace Guardtime.KSI.Test.Signature
                 {
                     writer.WriteTag(tag);
                     writer.BaseStream.Seek(0, SeekOrigin.Begin);
-                    IKsiSignature tag2 = new KsiSignatureFactory().Create(writer.BaseStream);
+                    IKsiSignature tag2 = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(writer.BaseStream);
                     Assert.AreEqual(tag.ToString(), tag2.ToString(), "Signatures' strings should match.");
                 }
             });
@@ -1445,7 +1446,7 @@ namespace Guardtime.KSI.Test.Signature
                 {
                     writer.WriteTag(tag);
                     writer.BaseStream.Seek(0, SeekOrigin.Begin);
-                    IKsiSignature tag2 = new KsiSignatureFactory().Create(writer.BaseStream);
+                    IKsiSignature tag2 = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(writer.BaseStream);
                     Assert.AreEqual(tag.ToString(), tag2.ToString(), "Signatures' strings should match.");
                 }
             });
@@ -1515,7 +1516,7 @@ namespace Guardtime.KSI.Test.Signature
                 {
                     writer.WriteTag(tag);
                     writer.BaseStream.Seek(0, SeekOrigin.Begin);
-                    IKsiSignature tag2 = new KsiSignatureFactory().Create(writer.BaseStream);
+                    IKsiSignature tag2 = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(writer.BaseStream);
                     Assert.AreEqual(tag.ToString(), tag2.ToString(), "Signatures' strings should match.");
                 }
             });
@@ -1602,7 +1603,7 @@ namespace Guardtime.KSI.Test.Signature
                 {
                     writer.WriteTag(tag);
                     writer.BaseStream.Seek(0, SeekOrigin.Begin);
-                    IKsiSignature tag2 = new KsiSignatureFactory().Create(writer.BaseStream);
+                    IKsiSignature tag2 = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(writer.BaseStream);
                     Assert.AreEqual(tag.ToString(), tag2.ToString(), "Signatures' strings should match.");
                 }
             });

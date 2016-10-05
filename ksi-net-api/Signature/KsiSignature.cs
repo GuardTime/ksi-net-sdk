@@ -44,10 +44,7 @@ namespace Guardtime.KSI.Signature
         /// <param name="tag">TLV element</param>
         public KsiSignature(ITlvTag tag) : base(tag)
         {
-            if (Type != Constants.KsiSignature.TagType)
-            {
-                throw new TlvException("Invalid KSI signature type(" + Type + ").");
-            }
+            CheckTagType(Constants.KsiSignature.TagType);
 
             int calendarChainCount = 0;
             int publicationRecordCount = 0;
@@ -216,15 +213,16 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         ///     Get aggregation hash chain output hash.
         /// </summary>
+        /// <param name="level">Document hash node level value in the aggregation tree</param>
         /// <returns>output hash</returns>
-        public DataHash GetAggregationHashChainRootHash()
+        public DataHash GetAggregationHashChainRootHash(uint level)
         {
             if (_aggregationHashChainRootHash != null)
             {
                 return _aggregationHashChainRootHash;
             }
 
-            AggregationHashChainResult lastResult = new AggregationHashChainResult(0, _aggregationHashChains[0].InputHash);
+            AggregationHashChainResult lastResult = new AggregationHashChainResult(level, _aggregationHashChains[0].InputHash);
 
             foreach (AggregationHashChain chain in _aggregationHashChains)
             {
@@ -243,10 +241,11 @@ namespace Guardtime.KSI.Signature
         ///     Extend KSI signature with given calendar hash chain.
         /// </summary>
         /// <param name="calendarHashChain">calendar hash chain</param>
+        /// <param name="signatureFactory">signature factory to be used when creating extended signature</param>
         /// <returns>extended KSI signature</returns>
-        public IKsiSignature Extend(CalendarHashChain calendarHashChain)
+        public IKsiSignature Extend(CalendarHashChain calendarHashChain, IKsiSignatureFactory signatureFactory = null)
         {
-            return Extend(calendarHashChain, (PublicationRecordInSignature)null);
+            return Extend(calendarHashChain, (PublicationRecordInSignature)null, signatureFactory);
         }
 
         /// <summary>
@@ -254,10 +253,11 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         /// <param name="calendarHashChain">extended calendar hash chain</param>
         /// <param name="publicationRecord">extended publication record</param>
+        /// <param name="signatureFactory">signature factory to be used when creating extended signature</param>
         /// <returns>extended KSI signature</returns>
-        public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInPublicationFile publicationRecord)
+        public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInPublicationFile publicationRecord, IKsiSignatureFactory signatureFactory = null)
         {
-            return Extend(calendarHashChain, publicationRecord?.ConvertToPublicationRecordInSignature());
+            return Extend(calendarHashChain, publicationRecord?.ConvertToPublicationRecordInSignature(), signatureFactory);
         }
 
         /// <summary>
@@ -265,14 +265,20 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         /// <param name="calendarHashChain">extended calendar hash chain</param>
         /// <param name="publicationRecord">extended publication record</param>
+        /// <param name="signatureFactory">signature factory to be used when creating extended signature</param>
         /// <returns>extended KSI signature</returns>
-        public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInSignature publicationRecord)
+        public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInSignature publicationRecord, IKsiSignatureFactory signatureFactory = null)
         {
             Logger.Debug("Extending KSI signature.");
 
             if (calendarHashChain == null)
             {
                 throw new KsiException("Invalid calendar hash chain: null.");
+            }
+
+            if (signatureFactory == null)
+            {
+                signatureFactory = new KsiSignatureFactory();
             }
 
             using (TlvWriter writer = new TlvWriter(new MemoryStream()))
@@ -300,8 +306,9 @@ namespace Guardtime.KSI.Signature
 
                 try
                 {
-                    KsiSignature signature = new KsiSignature(new RawTag(Constants.KsiSignature.TagType, false, false, ((MemoryStream)writer.BaseStream).ToArray()));
+                    IKsiSignature signature = signatureFactory.CreateByContent(((MemoryStream)writer.BaseStream).ToArray(), GetAggregationHashChains()[0].InputHash);
                     Logger.Debug("Extending KSI signature successful.");
+
                     return signature;
                 }
                 catch (TlvException e)

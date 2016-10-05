@@ -102,8 +102,8 @@ simplified wrapper.
             DataHash hash = hasher.GetHash();
 
             // Creates http service protocol which can be used for signing, extending and getting publications file.
-            HttpKsiServiceProtocol httpKsiServiceProtocol = new HttpKsiServiceProtocol("http://192.168.11.123",
-                "http://192.168.11.123:8081", "http://verify.guardtime.com/ksi-publications.bin");
+            HttpKsiServiceProtocol httpKsiServiceProtocol = new HttpKsiServiceProtocol("http://signing.service.url",
+                "http://extending.service.url", "http://verify.guardtime.com/ksi-publications.bin");
 
             // Creates service settings which are used to access service.
             ServiceCredentials serviceCredentials = new ServiceCredentials("anon", "anon");
@@ -218,8 +218,8 @@ Following code represents the verification against publications file and will pr
             }
 
             // Creates http service protocol which can be used for signing, extending and getting publications file.
-            HttpKsiServiceProtocol httpKsiServiceProtocol = new HttpKsiServiceProtocol("http://192.168.11.123",
-                "http://192.168.11.123:8081", "http://verify.guardtime.com/ksi-publications.bin");
+            HttpKsiServiceProtocol httpKsiServiceProtocol = new HttpKsiServiceProtocol("http://signing.service.url",
+                "http://extending.service.url", "http://verify.guardtime.com/ksi-publications.bin");
 
             // Creates service settings which are used to access service.
             ServiceCredentials serviceCredentials = new ServiceCredentials("anon", "anon");
@@ -288,8 +288,8 @@ it is extended to closest publication.
             }
 
             // Creates http service protocol which can be used for signing, extending and getting publications file.
-            HttpKsiServiceProtocol httpKsiServiceProtocol = new HttpKsiServiceProtocol("http://192.168.11.123",
-                "http://192.168.11.123:8081", "http://verify.guardtime.com/ksi-publications.bin");
+            HttpKsiServiceProtocol httpKsiServiceProtocol = new HttpKsiServiceProtocol("http://signing.service.url",
+                "http://extending.service.url", "http://verify.guardtime.com/ksi-publications.bin");
 
             // Creates service settings which are used to access service.
             ServiceCredentials serviceCredentials = new ServiceCredentials("anon", "anon");

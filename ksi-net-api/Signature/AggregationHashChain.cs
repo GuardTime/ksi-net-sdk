@@ -59,10 +59,7 @@ namespace Guardtime.KSI.Signature
         /// <param name="tag">TLV element</param>
         public AggregationHashChain(ITlvTag tag) : base(tag)
         {
-            if (Type != Constants.AggregationHashChain.TagType)
-            {
-                throw new TlvException("Invalid aggregation hash chain type(" + Type + ").");
-            }
+            CheckTagType(Constants.AggregationHashChain.TagType);
 
             int aggregationTimeCount = 0;
             int inputDataCount = 0;
@@ -326,7 +323,7 @@ namespace Guardtime.KSI.Signature
             }
 
             AggregationHashChainResult returnValue = new AggregationHashChainResult(level, lastHash);
-            _aggregationHashChainResultCache.Add(result, returnValue);
+            _aggregationHashChainResultCache[result] = returnValue;
 
             return returnValue;
         }

@@ -37,10 +37,7 @@ namespace Guardtime.KSI.Service
         /// <param name="tag">TLV element</param>
         public KsiPduHeader(ITlvTag tag) : base(tag)
         {
-            if (Type != Constants.KsiPduHeader.TagType)
-            {
-                throw new TlvException("Invalid KSI PDU header type(" + Type + ").");
-            }
+            CheckTagType(Constants.KsiPduHeader.TagType);
 
             int loginIdCount = 0;
             int instanceIdCount = 0;

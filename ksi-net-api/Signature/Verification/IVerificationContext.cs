@@ -31,12 +31,12 @@ namespace Guardtime.KSI.Signature.Verification
         /// <summary>
         ///     Get document hash.
         /// </summary>
-        DataHash DocumentHash { get; }
+        DataHash DocumentHash { get; set; }
 
         /// <summary>
         ///     Get signature.
         /// </summary>
-        IKsiSignature Signature { get; }
+        IKsiSignature Signature { get; set; }
 
         /// <summary>
         ///     Get user publication.
@@ -57,6 +57,11 @@ namespace Guardtime.KSI.Signature.Verification
         ///     Get publications file.
         /// </summary>
         IPublicationsFile PublicationsFile { get; }
+
+        /// <summary>
+        /// Document hash node level value in the aggregation tree
+        /// </summary>
+        uint Level { get; set; }
 
         /// <summary>
         ///     Get extended latest calendar hash chain.

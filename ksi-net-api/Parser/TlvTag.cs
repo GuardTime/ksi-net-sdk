@@ -60,6 +60,45 @@ namespace Guardtime.KSI.Parser
         }
 
         /// <summary>
+        /// Checks if TLV tag type is valid and throws a TLV exception if the type is invalid.
+        /// </summary>
+        /// <param name="expectedTagType"></param>
+        protected void CheckTagType(params uint[] expectedTagType)
+        {
+            bool isValid = false;
+            foreach (uint type in expectedTagType)
+            {
+                if (Type == type)
+                {
+                    isValid = true;
+                    break;
+                }
+            }
+
+            if (!isValid)
+            {
+                ThrowInvalidTypeException();
+            }
+        }
+
+        /// <summary>
+        /// Throw TLV exception indicating to an invalid TLV type.
+        /// </summary>
+        private void ThrowInvalidTypeException()
+        {
+            Type type = GetType();
+            string typeName = type.Name;
+
+            while (type.DeclaringType != null)
+            {
+                type = type.DeclaringType;
+                typeName = type.Name + "." + typeName;
+            }
+
+            throw new TlvException(string.Format("Invalid tag type! Class: {0}; Type: 0x{1};", typeName, Type.ToString("X")));
+        }
+
+        /// <summary>
         ///     Tlv tag type.
         /// </summary>
         public uint Type { get; }

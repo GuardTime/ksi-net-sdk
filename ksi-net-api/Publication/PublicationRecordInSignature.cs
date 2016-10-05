@@ -17,7 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Publication
@@ -33,10 +32,7 @@ namespace Guardtime.KSI.Publication
         /// <param name="tag">TLV element the publication record will be created from</param>
         public PublicationRecordInSignature(ITlvTag tag) : base(tag)
         {
-            if (Type != Constants.PublicationRecord.TagTypeInSignature)
-            {
-                throw new TlvException("Invalid publication record type(" + Type + ").");
-            }
+            CheckTagType(Constants.PublicationRecord.TagTypeInSignature);
         }
 
         /// <summary>
@@ -47,6 +43,17 @@ namespace Guardtime.KSI.Publication
         /// <param name="value">value byte array</param>
         public PublicationRecordInSignature(bool nonCritical, bool forward, byte[] value)
             : base(new RawTag(Constants.PublicationRecord.TagTypeInSignature, nonCritical, forward, value))
+        {
+        }
+
+        /// <summary>
+        /// Create new publication record TLV element to be used in signature.
+        /// </summary>
+        /// <param name="nonCritical">Is TLV element non critical</param>
+        /// <param name="forward">Is TLV element forwarded</param>
+        /// <param name="publicationData">Publication data</param>
+        public PublicationRecordInSignature(bool nonCritical, bool forward, PublicationData publicationData)
+            : base(new RawTag(Constants.PublicationRecord.TagTypeInSignature, nonCritical, forward, publicationData.Encode()))
         {
         }
     }

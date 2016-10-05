@@ -34,6 +34,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         {
             IKsiSignature signature = GetSignature(context);
             DataHash inputHash = context.DocumentHash;
+
+            if (inputHash == null)
+            {
+                return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
+            }
+
             ReadOnlyCollection<AggregationHashChain> aggregationHashChains = GetAggregationHashChains(signature, false);
             DataHash aggregationHashChainInputHash = aggregationHashChains[0].InputHash;
 
@@ -52,11 +58,6 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 return inputHash != aggregationHashChainInputHash
                     ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int01)
                     : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
-            }
-
-            if (inputHash == null)
-            {
-                return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
             }
 
             return inputHash != aggregationHashChainInputHash

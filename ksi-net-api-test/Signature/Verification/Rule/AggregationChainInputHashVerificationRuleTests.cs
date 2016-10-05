@@ -71,10 +71,8 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                     Signature = new KsiSignatureFactory().Create(stream)
                 };
 
-                Assert.Throws<KsiException>(delegate
-                {
-                    rule.Verify(context);
-                });
+                VerificationResult verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
         }
 

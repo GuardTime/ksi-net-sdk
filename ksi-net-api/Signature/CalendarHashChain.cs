@@ -43,10 +43,7 @@ namespace Guardtime.KSI.Signature
         /// <param name="tag">TLV element</param>
         public CalendarHashChain(ITlvTag tag) : base(tag)
         {
-            if (Type != Constants.CalendarHashChain.TagType)
-            {
-                throw new TlvException("Invalid calendar hash chain type(" + Type + ").");
-            }
+            CheckTagType(Constants.CalendarHashChain.TagType);
 
             int publicationTimeCount = 0;
             int aggregationTimeCount = 0;
@@ -272,16 +269,16 @@ namespace Guardtime.KSI.Signature
         {
             public Link(ITlvTag tag) : base(tag)
             {
-                switch (tag.Type)
+                CheckTagType((uint)LinkDirection.Right, (uint)LinkDirection.Left);
+
+                switch (Type)
                 {
-                    case (int)LinkDirection.Left:
+                    case (uint)LinkDirection.Left:
                         Direction = LinkDirection.Left;
                         break;
-                    case (int)LinkDirection.Right:
+                    case (uint)LinkDirection.Right:
                         Direction = LinkDirection.Right;
                         break;
-                    default:
-                        throw new TlvException("Invalid calendar hash chain link type(" + Type + ").");
                 }
             }
 
