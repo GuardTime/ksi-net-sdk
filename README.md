@@ -1,4 +1,5 @@
 # KSI .NET SDK #
+
 Guardtime Keyless Signature Infrastructure (KSI) is an industrial scale blockchain platform that cryptographically 
 ensures data integrity and proves time of existence. Its keyless signatures, based on hash chains, link data to global 
 calendar blockchain. The checkpoints of the blockchain, published in newspapers and electronic media, enable long term 
@@ -74,10 +75,6 @@ var extendedSignature = signature.Extend(calendarHashChain, publicationRecord);
 
 The API full reference is available here [http://guardtime.github.io/ksi-net-sdk/](http://guardtime.github.io/ksi-net-sdk/).
 
-## License ##
-
-See LICENSE file.
-
 ## Dependencies ##
 
 | **Dependency**                     | **Version** | **License**                                                        | **Notes**                                                                |
@@ -89,3 +86,11 @@ See LICENSE file.
 ## Compatibility ##
 
 .NET 2.0 or newer
+
+## Contributing ##
+
+See [CONTRIBUTING.md](https://github.com/guardtime/ksi-net-sdk/blob/master/CONTRIBUTING.md) file.
+
+## License ##
+
+See [LICENSE](https://github.com/guardtime/ksi-net-sdk/blob/master/LICENSE) file.
