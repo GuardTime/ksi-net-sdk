@@ -26,7 +26,6 @@ using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Test.Crypto;
 using Guardtime.KSI.Test.Properties;
-using Guardtime.KSI.Test.Signature.Verification;
 using Guardtime.KSI.Trust;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
@@ -66,7 +65,7 @@ namespace Guardtime.KSI.Test.Service
             IKsiSignature signature = new KsiSignatureFactory().Create(
                 File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok)));
 
-            Ksi ksi = GetKsi(signature.CalendarHashChain);
+            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu)));
 
             ksi.Extend(signature, signature.CalendarHashChain.PublicationData);
         }
@@ -80,32 +79,16 @@ namespace Guardtime.KSI.Test.Service
             IKsiSignature signature = new KsiSignatureFactory().Create(
                 File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok)));
 
-            CalendarHashChain calendarHashChain = new KsiSignatureFactory(new EmptyVerificationPolicy()).
-                Create(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Invalid_Calendar_Chain_Input_Hash))).CalendarHashChain;
-
-            Ksi ksi = GetKsi(calendarHashChain);
+            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_Invalid_Signature)));
 
             KsiSignatureInvalidContentException ex = Assert.Throws<KsiSignatureInvalidContentException>(delegate
             {
-                ksi.Extend(signature, calendarHashChain.PublicationData);
+                ksi.Extend(signature, signature.CalendarHashChain.PublicationData);
             });
 
             Assert.That(ex.Message.StartsWith("Signature verification failed"), "Unexpected exception message: " + ex.Message);
             Assert.IsNotNull(ex.Signature);
             Assert.AreEqual(VerificationError.Int03.Code, ex.VerificationResult.VerificationError.Code);
-        }
-
-        private static Ksi GetKsi(CalendarHashChain extendResult)
-        {
-            TestKsiServiceProtocol protocol = new TestKsiServiceProtocol
-            {
-                ExtendResult = extendResult
-            };
-
-            return new Ksi(new KsiService(protocol, new ServiceCredentials("test", "test"), protocol, new ServiceCredentials("test", "test"), protocol,
-                new PublicationsFileFactory(
-                    new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com")))));
         }
 
         private static Ksi GetKsi(byte[] requestResult)

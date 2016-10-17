@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright 2013-2016 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
@@ -17,20 +17,22 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Service
 {
     /// <summary>
-    ///     Extend error payload.
+    ///     Aggregation Error payload TLV element.
     /// </summary>
-    public sealed class ExtendErrorPayload : ErrorPayload
+    [Obsolete]
+    public sealed class LegacyAggregationErrorPayload : ErrorPayload
     {
         /// <summary>
-        ///     Create extend error payload from TLV element.
+        ///     Create aggregation error payload TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        public ExtendErrorPayload(ITlvTag tag) : base(tag, Constants.ExtendErrorPayload.TagType)
+        public LegacyAggregationErrorPayload(ITlvTag tag) : base(tag, Constants.AggregationErrorPayload.LegacyTagType)
         {
         }
     }

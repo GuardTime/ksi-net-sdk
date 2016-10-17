@@ -23,11 +23,9 @@ using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
-using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Test.Crypto;
 using Guardtime.KSI.Test.Properties;
-using Guardtime.KSI.Test.Signature.Verification;
 using Guardtime.KSI.Trust;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
@@ -61,9 +59,7 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void SignAndVerifyStaticTest()
         {
-            IKsiSignature signResultSignature = new KsiSignatureFactory().Create(
-                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok)));
-            Ksi ksi = GetKsi(signResultSignature);
+            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu)));
 
             ksi.Sign(new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")));
         }
@@ -74,10 +70,7 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void SignAndVerifyInvalidStaticTest()
         {
-            IKsiSignature signResultSignature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(
-                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Invalid_Aggregation_Chain_Input_Hash)));
-
-            Ksi ksi = GetKsi(signResultSignature);
+            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_Invalid_Signature)));
 
             KsiSignatureInvalidContentException ex = Assert.Throws<KsiSignatureInvalidContentException>(delegate
             {
@@ -87,19 +80,6 @@ namespace Guardtime.KSI.Test.Service
             Assert.That(ex.Message.StartsWith("Signature verification failed"), "Unexpected exception message: " + ex.Message);
             Assert.IsNotNull(ex.Signature);
             Assert.AreEqual(VerificationError.Int01.Code, ex.VerificationResult.VerificationError.Code);
-        }
-
-        private static Ksi GetKsi(IKsiSignature signResultSignature)
-        {
-            TestKsiServiceProtocol protocol = new TestKsiServiceProtocol
-            {
-                SignResult = signResultSignature,
-            };
-
-            return new Ksi(new KsiService(protocol, new ServiceCredentials("test", "test"), protocol, new ServiceCredentials("test", "test"), protocol,
-                new PublicationsFileFactory(
-                    new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com")))));
         }
 
         private static Ksi GetKsi(byte[] requestResult)

@@ -582,4 +582,16 @@
   <data name="Signature_Wrong_Cert_ID" xml:space="preserve">
     <value>resources/signature/integration-test-signatures/NewSignature-CalAuth-WrongCertID.ksig</value>
   </data>
+  <data name="KsiService_AggregationResponsePdu" xml:space="preserve">
+    <value>resources/service/aggregation-response-pdu.tlv</value>
+  </data>
+  <data name="KsiService_AggregationResponsePdu_Invalid_Signature" xml:space="preserve">
+    <value>resources/service/aggregation-response-pdu-invalid-signature.tlv</value>
+  </data>
+  <data name="KsiService_ExtendResponsePdu" xml:space="preserve">
+    <value>resources/service/extend-response-pdu.tlv</value>
+  </data>
+  <data name="KsiService_ExtendResponsePdu_Invalid_Signature" xml:space="preserve">
+    <value>resources/service/extend-response-pdu-invalid-signature.tlv</value>
+  </data>
 </root>

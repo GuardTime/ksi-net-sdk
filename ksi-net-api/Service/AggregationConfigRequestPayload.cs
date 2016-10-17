@@ -22,15 +22,23 @@ using Guardtime.KSI.Parser;
 namespace Guardtime.KSI.Service
 {
     /// <summary>
-    ///     Extend error payload.
+    ///     Aggregation configuration request payload.
     /// </summary>
-    public sealed class ExtendErrorPayload : ErrorPayload
+    public sealed class AggregationConfigRequestPayload : KsiPduPayload
     {
         /// <summary>
-        ///     Create extend error payload from TLV element.
+        ///     Create aggregation configuration request payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        public ExtendErrorPayload(ITlvTag tag) : base(tag, Constants.ExtendErrorPayload.TagType)
+        public AggregationConfigRequestPayload(ITlvTag tag) : base(tag)
+        {
+            CheckTagType(Constants.AggregationConfigRequestPayload.TagType);
+        }
+
+        /// <summary>
+        ///     Create aggregation configuration request payload.
+        /// </summary>
+        public AggregationConfigRequestPayload() : base(Constants.AggregationConfigRequestPayload.TagType, false, false, new ITlvTag[] { })
         {
         }
     }

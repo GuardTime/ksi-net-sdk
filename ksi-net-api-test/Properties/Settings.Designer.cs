@@ -103,5 +103,14 @@ namespace Guardtime.KSI.Test.Properties {
                 return ((int)(this["TcpSigningServicePort"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int PduVersion {
+            get {
+                return ((int)(this["PduVersion"]));
+            }
+        }
     }
 }

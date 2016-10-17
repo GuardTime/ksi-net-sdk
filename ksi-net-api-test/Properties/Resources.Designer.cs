@@ -736,6 +736,42 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/service/aggregation-response-pdu.tlv.
+        /// </summary>
+        internal static string KsiService_AggregationResponsePdu {
+            get {
+                return ResourceManager.GetString("KsiService_AggregationResponsePdu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/aggregation-response-pdu-invalid-signature.tlv.
+        /// </summary>
+        internal static string KsiService_AggregationResponsePdu_Invalid_Signature {
+            get {
+                return ResourceManager.GetString("KsiService_AggregationResponsePdu_Invalid_Signature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/extend-response-pdu.tlv.
+        /// </summary>
+        internal static string KsiService_ExtendResponsePdu {
+            get {
+                return ResourceManager.GetString("KsiService_ExtendResponsePdu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/extend-response-pdu-invalid-signature.tlv.
+        /// </summary>
+        internal static string KsiService_ExtendResponsePdu_Invalid_Signature {
+            get {
+                return ResourceManager.GetString("KsiService_ExtendResponsePdu_Invalid_Signature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/multi-signature/infile_2015-05-05.tlv.
         /// </summary>
         internal static string KsiSignature_InputForMulti_20150505_Ok {

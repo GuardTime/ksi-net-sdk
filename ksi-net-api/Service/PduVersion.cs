@@ -17,21 +17,21 @@
  * reserves and retains all trademark rights.
  */
 
-using Guardtime.KSI.Parser;
-
 namespace Guardtime.KSI.Service
 {
     /// <summary>
-    ///     Extend error payload.
+    /// PDU version
     /// </summary>
-    public sealed class ExtendErrorPayload : ErrorPayload
+    public enum PduVersion
     {
         /// <summary>
-        ///     Create extend error payload from TLV element.
+        /// Version v1
         /// </summary>
-        /// <param name="tag">TLV element</param>
-        public ExtendErrorPayload(ITlvTag tag) : base(tag, Constants.ExtendErrorPayload.TagType)
-        {
-        }
+        v1,
+
+        /// <summary>
+        /// Version v2
+        /// </summary>
+        v2
     }
 }

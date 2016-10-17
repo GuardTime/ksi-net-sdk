@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Service
@@ -24,13 +25,14 @@ namespace Guardtime.KSI.Service
     /// <summary>
     ///     Extend error payload.
     /// </summary>
-    public sealed class ExtendErrorPayload : ErrorPayload
+    [Obsolete]
+    public sealed class LegacyExtendErrorPayload : ErrorPayload
     {
         /// <summary>
         ///     Create extend error payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        public ExtendErrorPayload(ITlvTag tag) : base(tag, Constants.ExtendErrorPayload.TagType)
+        public LegacyExtendErrorPayload(ITlvTag tag) : base(tag, Constants.ExtendErrorPayload.LegacyTagType)
         {
         }
     }

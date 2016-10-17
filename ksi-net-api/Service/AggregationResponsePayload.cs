@@ -27,11 +27,7 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public sealed class AggregationResponsePayload : KsiPduPayload
     {
-        // TODO: Create config
-        private readonly RawTag _config;
         private readonly StringTag _errorMessage;
-        // TODO: Create request acknowledgement 
-        private readonly RawTag _requestAcknowledgment;
         private readonly IntegerTag _requestId;
         private readonly IntegerTag _status;
 
@@ -46,8 +42,6 @@ namespace Guardtime.KSI.Service
             int requestIdCount = 0;
             int statusCount = 0;
             int errorMessageCount = 0;
-            int configCount = 0;
-            int requestAcknowledgmentCount = 0;
 
             for (int i = 0; i < Count; i++)
             {
@@ -66,14 +60,6 @@ namespace Guardtime.KSI.Service
                     case Constants.KsiPduPayload.ErrorMessageTagType:
                         this[i] = _errorMessage = new StringTag(childTag);
                         errorMessageCount++;
-                        break;
-                    case Constants.AggregationResponsePayload.ConfigTagType:
-                        this[i] = _config = new RawTag(childTag);
-                        configCount++;
-                        break;
-                    case Constants.AggregationResponsePayload.RequestAcknowledgmentTagType:
-                        this[i] = _requestAcknowledgment = new RawTag(childTag);
-                        requestAcknowledgmentCount++;
                         break;
                     case Constants.AggregationHashChain.TagType:
                     case Constants.CalendarHashChain.TagType:
@@ -101,16 +87,6 @@ namespace Guardtime.KSI.Service
             if (errorMessageCount > 1)
             {
                 throw new TlvException("Only one error message is allowed in aggregation response payload.");
-            }
-
-            if (configCount > 1)
-            {
-                throw new TlvException("Only one config is allowed in aggregation response payload.");
-            }
-
-            if (requestAcknowledgmentCount > 1)
-            {
-                throw new TlvException("Only one request acknowledgment is allowed in aggregation response payload.");
             }
         }
 

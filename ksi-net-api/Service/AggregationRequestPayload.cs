@@ -29,13 +29,12 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public sealed class AggregationRequestPayload : KsiPduPayload
     {
-        private readonly RawTag _config;
         private readonly ImprintTag _requestHash;
         private readonly IntegerTag _requestId;
         private readonly IntegerTag _requestLevel;
 
         /// <summary>
-        ///     Create extend request payload from TLV element.
+        ///     Create aggregation request payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         public AggregationRequestPayload(ITlvTag tag) : base(tag)
@@ -45,7 +44,6 @@ namespace Guardtime.KSI.Service
             int requestIdCount = 0;
             int requestHashCount = 0;
             int requestLevelCount = 0;
-            int configCount = 0;
 
             for (int i = 0; i < Count; i++)
             {
@@ -64,10 +62,6 @@ namespace Guardtime.KSI.Service
                     case Constants.AggregationRequestPayload.RequestLevelTagType:
                         this[i] = _requestLevel = new IntegerTag(childTag);
                         requestLevelCount++;
-                        break;
-                    case Constants.AggregationRequestPayload.ConfigTagType:
-                        this[i] = _config = new RawTag(childTag);
-                        configCount++;
                         break;
                     default:
                         VerifyUnknownTag(childTag);
@@ -88,11 +82,6 @@ namespace Guardtime.KSI.Service
             if (requestLevelCount > 1)
             {
                 throw new TlvException("Only one request level is allowed in aggregation request payload.");
-            }
-
-            if (configCount > 1)
-            {
-                throw new TlvException("Only one config tag is allowed in aggregation request payload.");
             }
         }
 
@@ -131,11 +120,6 @@ namespace Guardtime.KSI.Service
         ///     Get request hash.
         /// </summary>
         public DataHash RequestHash => _requestHash.Value;
-
-        /// <summary>
-        ///     Is config requested.
-        /// </summary>
-        public bool IsConfigRequested => _config == null;
 
         /// <summary>
         ///     Get request ID.

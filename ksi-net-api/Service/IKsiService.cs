@@ -37,7 +37,7 @@ namespace Guardtime.KSI.Service
         IKsiSignature Sign(DataHash hash);
 
         /// <summary>
-        ///     Sync create signature with given data hash.
+        ///     Create signature with given data hash (sync)
         /// </summary>
         /// <param name="hash">data hash</param>
         /// <param name="level">the level value of the aggregation tree node</param>
@@ -45,7 +45,7 @@ namespace Guardtime.KSI.Service
         IKsiSignature Sign(DataHash hash, uint level);
 
         /// <summary>
-        ///     Async begin create signature with given data hash.
+        ///     Begin create signature with given data hash (async).
         /// </summary>
         /// <param name="hash">data hash</param>
         /// <param name="callback">callback when creating signature is finished</param>
@@ -54,7 +54,7 @@ namespace Guardtime.KSI.Service
         IAsyncResult BeginSign(DataHash hash, AsyncCallback callback, object asyncState);
 
         /// <summary>
-        ///     Async begin create signature with given data hash.
+        ///     Begin create signature with given data hash (async).
         /// </summary>
         /// <param name="hash">data hash</param>
         /// <param name="level">the level value of the aggregation tree node</param>
@@ -64,21 +64,42 @@ namespace Guardtime.KSI.Service
         IAsyncResult BeginSign(DataHash hash, uint level, AsyncCallback callback, object asyncState);
 
         /// <summary>
-        ///     Async end create signature.
+        ///     End create signature (async)
         /// </summary>
         /// <param name="asyncResult">async result status</param>
         /// <returns>KSI signature</returns>
         IKsiSignature EndSign(IAsyncResult asyncResult);
 
         /// <summary>
-        ///     Sync extend signature to latest publication.
+        /// Get additional aggregation configuration data (sync)
+        /// </summary>
+        /// <returns>Aggregation configuration response payload</returns>
+        AggregationConfigResponsePayload GetAggregationConfig();
+
+        /// <summary>
+        /// Begin get additional aggregation configuration data (async)
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <param name="asyncState"></param>
+        /// <returns>async result</returns>
+        IAsyncResult BeginGetAggregationConfig(AsyncCallback callback, object asyncState);
+
+        /// <summary>
+        /// End get additional aggregation configuration data (async)
+        /// </summary>
+        /// <param name="asyncResult"></param>
+        /// <returns>Aggregation configuration response payload</returns>
+        AggregationConfigResponsePayload EndGetAggregationConfig(IAsyncResult asyncResult);
+
+        /// <summary>
+        ///     Extend signature to latest publication (sync).
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
         /// <returns>extended calendar hash chain</returns>
         CalendarHashChain Extend(ulong aggregationTime);
 
         /// <summary>
-        ///     Sync extend signature to given publication.
+        ///     Extend signature to given publication (sync).
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
         /// <param name="publicationTime">publication time</param>
@@ -86,7 +107,7 @@ namespace Guardtime.KSI.Service
         CalendarHashChain Extend(ulong aggregationTime, ulong publicationTime);
 
         /// <summary>
-        ///     Async begin extend signature to latest publication.
+        ///     Begin extend signature to latest publication (async).
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
         /// <param name="callback">callback when extending signature is finished</param>
@@ -95,7 +116,7 @@ namespace Guardtime.KSI.Service
         IAsyncResult BeginExtend(ulong aggregationTime, AsyncCallback callback, object asyncState);
 
         /// <summary>
-        ///     Async begin extend signature to given publication.
+        ///     Begin extend signature to given publication (async).
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
         /// <param name="publicationTime">publication time</param>
@@ -105,20 +126,20 @@ namespace Guardtime.KSI.Service
         IAsyncResult BeginExtend(ulong aggregationTime, ulong publicationTime, AsyncCallback callback, object asyncState);
 
         /// <summary>
-        ///     Async end extend signature.
+        ///     End extend signature (async).
         /// </summary>
         /// <param name="asyncResult">async result</param>
         /// <returns>extended calendar hash chain</returns>
         CalendarHashChain EndExtend(IAsyncResult asyncResult);
 
         /// <summary>
-        ///     Sync get publications file.
+        ///     Get publications file (sync).
         /// </summary>
         /// <returns>Publications file</returns>
         IPublicationsFile GetPublicationsFile();
 
         /// <summary>
-        ///     Async begin get publications file.
+        ///     Begin get publications file (async).
         /// </summary>
         /// <param name="callback">callback when publications file is downloaded</param>
         /// <param name="asyncState">async state object</param>
@@ -126,7 +147,7 @@ namespace Guardtime.KSI.Service
         IAsyncResult BeginGetPublicationsFile(AsyncCallback callback, object asyncState);
 
         /// <summary>
-        ///     Async end get publications file.
+        ///     End get publications file (async).
         /// </summary>
         /// <param name="asyncResult">async result</param>
         /// <returns>publications file</returns>

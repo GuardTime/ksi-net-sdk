@@ -20,6 +20,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using Guardtime.KSI.Service;
 using Guardtime.KSI.Test.Crypto;
 using NUnit.Framework;
 
@@ -29,6 +30,7 @@ namespace Guardtime.KSI.Test
     public class TestSetup
     {
         private static string _localPath;
+        private static PduVersion? _pduVersion;
 
         public static string LocalPath
         {
@@ -40,6 +42,29 @@ namespace Guardtime.KSI.Test
                 }
 
                 return _localPath;
+            }
+        }
+
+        public static PduVersion PduVersion
+        {
+            get
+            {
+                if (_pduVersion == null)
+                {
+                    switch (Properties.Settings.Default.PduVersion)
+                    {
+                        case 1:
+                            _pduVersion = PduVersion.v1;
+                            break;
+                        case 2:
+                            _pduVersion = PduVersion.v2;
+                            break;
+                        default:
+                            _pduVersion = PduVersion.v1;
+                            break;
+                    }
+                }
+                return _pduVersion.Value;
             }
         }
 

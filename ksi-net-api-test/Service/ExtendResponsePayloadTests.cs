@@ -41,7 +41,7 @@ namespace Guardtime.KSI.Test.Service
                 new IntegerTag(Constants.ExtendResponsePayload.RequestIdTagType, false, false, 2),
                 new IntegerTag(Constants.KsiPduPayload.StatusTagType, false, false, 0),
                 new StringTag(Constants.KsiPduPayload.ErrorMessageTagType, false, false, "Test error message."),
-                new IntegerTag(Constants.ExtendResponsePayload.LastTimeTagType, false, false, 1),
+                new IntegerTag(Constants.ExtendResponsePayload.CalendarLastTimeTagType, false, false, 1),
                 TestUtil.GetCompositeTag<CalendarHashChain>(Constants.CalendarHashChain.TagType,
                     new ITlvTag[]
                     {
