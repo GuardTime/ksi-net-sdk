@@ -303,7 +303,6 @@
     <None Include="resources\service\aggregation-response-pdu.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\service\extend-response-error-status.tlv" />
     <None Include="resources\service\extend-response-pdu-invalid-signature.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
