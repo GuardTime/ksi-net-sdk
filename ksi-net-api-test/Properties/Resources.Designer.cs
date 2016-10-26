@@ -736,6 +736,15 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/service/aggregation-config-response-pdu.tlv.
+        /// </summary>
+        internal static string KsiService_AggregationConfigResponsePdu {
+            get {
+                return ResourceManager.GetString("KsiService_AggregationConfigResponsePdu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/service/aggregation-response-pdu.tlv.
         /// </summary>
         internal static string KsiService_AggregationResponsePdu {
@@ -754,6 +763,15 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/service/aggregation-response-pdu-multi-payloads.tlv.
+        /// </summary>
+        internal static string KsiService_AggregationResponsePdu_Multi_Payloads {
+            get {
+                return ResourceManager.GetString("KsiService_AggregationResponsePdu_Multi_Payloads", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/service/extend-response-pdu.tlv.
         /// </summary>
         internal static string KsiService_ExtendResponsePdu {
@@ -768,6 +786,15 @@ namespace Guardtime.KSI.Test.Properties {
         internal static string KsiService_ExtendResponsePdu_Invalid_Signature {
             get {
                 return ResourceManager.GetString("KsiService_ExtendResponsePdu_Invalid_Signature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/extend-response-pud-multi-payloads.tlv.
+        /// </summary>
+        internal static string KsiService_ExtendResponsePdu_Multi_Payloads {
+            get {
+                return ResourceManager.GetString("KsiService_ExtendResponsePdu_Multi_Payloads", resourceCulture);
             }
         }
         

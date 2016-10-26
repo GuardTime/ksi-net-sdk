@@ -181,8 +181,10 @@
     <Compile Include="Service\ExtendStaticTests.cs" />
     <Compile Include="Service\KsiPduHeaderTests.cs" />
     <Compile Include="Service\PublicationsFileStaticTest.cs" />
+    <Compile Include="Service\AggregationConfigRequestStaticTests.cs" />
     <Compile Include="Service\SigningStaticTests.cs" />
     <Compile Include="Service\TestBlockSigner.cs" />
+    <Compile Include="Service\TestKsiService.cs" />
     <Compile Include="Service\TestKsiServiceProtocol.cs" />
     <Compile Include="Signature\KsiMultiSignatureTests.cs" />
     <Compile Include="Signature\KsiSignatureUsingReflectionTests.cs" />
@@ -289,16 +291,26 @@
     <None Include="resources\publication\publicationsfile\ksi-publications.bin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="resources\service\aggregation-config-response-pdu.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="resources\service\aggregation-response-pdu-invalid-signature.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\service\aggregation-response-pdu-multi-payloads.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\service\aggregation-response-pdu.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="resources\service\extend-response-error-status.tlv" />
     <None Include="resources\service\extend-response-pdu-invalid-signature.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\service\extend-response-pdu.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\service\extend-response-pud-multi-payloads.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\aggregation-authentication-record\aggregation-authentication-record-invalid-extra-tag.tlv">

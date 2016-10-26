@@ -18,6 +18,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
@@ -33,9 +34,9 @@ namespace Guardtime.KSI.Service
         private ImprintTag _mac;
 
         /// <summary>
-        ///     Get PDU payload.
+        /// List on payloads
         /// </summary>
-        public abstract KsiPduPayload Payload { get; }
+        protected List<KsiPduPayload> Payloads { get; } = new List<KsiPduPayload>();
 
         /// <summary>
         ///     Get and set PDU header
@@ -84,9 +85,9 @@ namespace Guardtime.KSI.Service
                 }
             }
 
-            if (payloadCount != 1)
+            if (payloadCount == 0)
             {
-                throw new TlvException("Exactly one payload must exist in KSI PDU.");
+                throw new TlvException("Payloads are missing in KSI PDU.");
             }
 
             if (!hasErrorPayload)
@@ -156,6 +157,42 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
+        /// Get payload of a given type
+        /// </summary>
+        /// <typeparam name="T">KSI PDU payload type</typeparam>
+        /// <returns></returns>
+        protected T GetPayload<T>() where T : KsiPduPayload
+        {
+            foreach (KsiPduPayload payload in Payloads)
+            {
+                T p = payload as T;
+                if (p != null)
+                {
+                    return p;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Get payloads of a given type
+        /// </summary>
+        /// <typeparam name="T">KSI PDU payload type</typeparam>
+        /// <returns></returns>
+        protected IEnumerable<T> GetPayloads<T>() where T : KsiPduPayload
+        {
+            foreach (KsiPduPayload payload in Payloads)
+            {
+                T p = payload as T;
+                if (p != null)
+                {
+                    yield return p;
+                }
+            }
+        }
+
+        /// <summary>
         /// Set HMAC tag value
         /// </summary>
         /// <param name="hmacAlgorithm"></param>
@@ -169,7 +206,7 @@ namespace Guardtime.KSI.Service
                 switch (childTag.Type)
                 {
                     case Constants.KsiPdu.MacTagType:
-                        this[i] = _mac = CreateHashMacTag(GetHashMacValue(hmacAlgorithm, key));
+                        this[i] = _mac = CreateHashMacTag(CalcHashMacValue(hmacAlgorithm, key));
                         break;
                 }
             }
@@ -180,7 +217,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="hmacAlgorithm">HMAC algorithm</param>
         /// <param name="key">HMAC key</param>
-        private DataHash GetHashMacValue(HashAlgorithm hmacAlgorithm, byte[] key)
+        private DataHash CalcHashMacValue(HashAlgorithm hmacAlgorithm, byte[] key)
         {
             MemoryStream stream = new MemoryStream();
             using (TlvWriter writer = new TlvWriter(stream))
@@ -228,7 +265,7 @@ namespace Guardtime.KSI.Service
                 return false;
             }
 
-            return GetHashMacValue(_mac.Value.Algorithm, key).Equals(_mac.Value);
+            return CalcHashMacValue(_mac.Value.Algorithm, key).Equals(_mac.Value);
         }
     }
 }

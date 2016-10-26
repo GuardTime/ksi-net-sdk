@@ -588,10 +588,19 @@
   <data name="KsiService_AggregationResponsePdu_Invalid_Signature" xml:space="preserve">
     <value>resources/service/aggregation-response-pdu-invalid-signature.tlv</value>
   </data>
+  <data name="KsiService_AggregationResponsePdu_Multi_Payloads" xml:space="preserve">
+    <value>resources/service/aggregation-response-pdu-multi-payloads.tlv</value>
+  </data>
+  <data name="KsiService_AggregationConfigResponsePdu" xml:space="preserve">
+    <value>resources/service/aggregation-config-response-pdu.tlv</value>
+  </data>
   <data name="KsiService_ExtendResponsePdu" xml:space="preserve">
     <value>resources/service/extend-response-pdu.tlv</value>
   </data>
   <data name="KsiService_ExtendResponsePdu_Invalid_Signature" xml:space="preserve">
     <value>resources/service/extend-response-pdu-invalid-signature.tlv</value>
+  </data>
+  <data name="KsiService_ExtendResponsePdu_Multi_Payloads" xml:space="preserve">
+    <value>resources/service/extend-response-pud-multi-payloads.tlv</value>
   </data>
 </root>

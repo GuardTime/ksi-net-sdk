@@ -232,11 +232,11 @@ namespace Guardtime.KSI
             /// </summary>
             public const uint TagType = 0x4;
 
-            public const uint AggregationPeriodTagType = 0x1;
+            public const uint MaxLevelTagType = 0x1;
 
             public const uint AggregationAlgorithmTagType = 0x2;
 
-            public const uint MaxLevelTagType = 0x3;
+            public const uint AggregationPeriodTagType = 0x3;
 
             public const uint MaxRequestsTagType = 0x4;
 
