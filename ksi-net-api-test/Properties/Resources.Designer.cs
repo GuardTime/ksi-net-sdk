@@ -790,7 +790,7 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/service/extend-response-pud-multi-payloads.tlv.
+        ///   Looks up a localized string similar to resources/service/extend-response-pdu-multi-payloads.tlv.
         /// </summary>
         internal static string KsiService_ExtendResponsePdu_Multi_Payloads {
             get {

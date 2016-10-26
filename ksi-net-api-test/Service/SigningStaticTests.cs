@@ -55,7 +55,7 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void SignAndVerifyStaticWithMultiPayloadsResponseTest()
         {
-            // Response has multiple payloads (including a payload containing invalid signature and a configuration payload)
+            // Response has multiple payloads (including a payload containing invalid signature, a configuration payload and an acknowledgment payload)
             Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_Multi_Payloads)), 1584727637);
 
             ksi.Sign(new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));

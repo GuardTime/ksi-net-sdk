@@ -601,6 +601,6 @@
     <value>resources/service/extend-response-pdu-invalid-signature.tlv</value>
   </data>
   <data name="KsiService_ExtendResponsePdu_Multi_Payloads" xml:space="preserve">
-    <value>resources/service/extend-response-pud-multi-payloads.tlv</value>
+    <value>resources/service/extend-response-pdu-multi-payloads.tlv</value>
   </data>
 </root>

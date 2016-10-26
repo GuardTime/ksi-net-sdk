@@ -53,7 +53,7 @@ namespace Guardtime.KSI.Test.Service
         }
 
         /// <summary>
-        /// Test extending and verifying.
+        /// Test extending and verifying. Response has multiple payloads.
         /// </summary>
         [Test]
         public void ExtendAndVerifyWithMultiPayloadsResponseStaticTest()
@@ -61,6 +61,7 @@ namespace Guardtime.KSI.Test.Service
             IKsiSignature signature = new KsiSignatureFactory().Create(
                 File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok)));
 
+            // Response has multiple payloads (including a configuration payload)
             Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_Multi_Payloads)), 8396215651691691389,
                 new KsiSignatureFactory(new EmptyVerificationPolicy()));
 
