@@ -55,6 +55,7 @@ namespace Guardtime.KSI.Service
                         this[i] = aggregationConfigResponsePayload;
                         Payloads.Add(aggregationConfigResponsePayload);
                         break;
+                    case Constants.AggregationAcknowledgmentResponsePayload.TagType:
                     case Constants.KsiPduHeader.TagType:
                     case Constants.KsiPdu.MacTagType:
                         break;

@@ -243,6 +243,14 @@ namespace Guardtime.KSI
             public const uint ParentUriTagType = 0x10;
         }
 
+        public static class AggregationAcknowledgmentResponsePayload
+        {
+            /// <summary>
+            ///     Aggregation acknowledgment response payload TLV type.
+            /// </summary>
+            public const uint TagType = 0x5;
+        }
+
         [Obsolete]
         public static class LegacyExtendPdu
         {
@@ -310,6 +318,14 @@ namespace Guardtime.KSI
 
             [Obsolete]
             public const uint LegacyTagType = 0x303;
+        }
+
+        public static class ExtendConfigResponsePayload
+        {
+            /// <summary>
+            ///     Extender config response payload TLV type.
+            /// </summary>
+            public const uint TagType = 0x4;
         }
 
         public static class KsiPduHeader

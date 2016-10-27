@@ -50,6 +50,7 @@ namespace Guardtime.KSI.Service
                         this[i] = extendErrorPayload;
                         Payloads.Add(extendErrorPayload);
                         break;
+                    case Constants.ExtendConfigResponsePayload.TagType:
                     case Constants.KsiPduHeader.TagType:
                     case Constants.KsiPdu.MacTagType:
                         break;

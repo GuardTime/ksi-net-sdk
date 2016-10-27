@@ -309,7 +309,7 @@
     <None Include="resources\service\extend-response-pdu.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\service\extend-response-pud-multi-payloads.tlv">
+    <None Include="resources\service\extend-response-pdu-multi-payloads.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\aggregation-authentication-record\aggregation-authentication-record-invalid-extra-tag.tlv">
