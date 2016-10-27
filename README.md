@@ -40,6 +40,31 @@ var ksiService = new KsiService(
             new CertificateSubjectRdnSelector("E=publications@guardtime.com"))));
 ```
 
+**Creating ksiService and setting PDU version**:
+
+```cs
+// Set crypto provider to bouncycastle or microsoft 
+KsiProvider.SetCryptoProvider(new MicrosoftCryptoProvider()); 
+//KsiProvider.SetCryptoProvider(new BouncyCastleCryptoProvider()); 
+
+// Create HTTP KSI service protocol
+var httpKsiServiceProtocol = new HttpKsiServiceProtocol("http://signingservice_url", "http://extendingservice_url", "http://publicationsfile_url");
+// Create new KSI service
+var ksiService = new KsiService(
+    httpKsiServiceProtocol, new ServiceCredentials("anon", "anon"),
+    httpKsiServiceProtocol, new ServiceCredentials("anon", "anon"),
+    httpKsiServiceProtocol,
+    new PublicationsFileFactory(
+        new PkiTrustStoreProvider(
+            new X509Store(StoreName.Root), 
+            new CertificateSubjectRdnSelector("E=publications@guardtime.com")))
+	PduVersion.v1);
+```
+
+If PDU version is not given then version v1 is used by default (expected to change to v2 in the future).
+
+If different PDU versions are needed for aggregating and extending then separate KsiServices should be used.
+
 There are 2 ways to use KSI service, with and without simple API wrapper.
 
 **Example using simple wrapper**:
