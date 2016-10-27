@@ -28,11 +28,6 @@ namespace Guardtime.KSI.Service
     public sealed class AggregationRequestPdu : KsiPdu
     {
         /// <summary>
-        ///     Get PDU payload.
-        /// </summary>
-        public override KsiPduPayload Payload { get; }
-
-        /// <summary>
         ///     Create aggregation request pdu TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
@@ -47,10 +42,14 @@ namespace Guardtime.KSI.Service
                 switch (childTag.Type)
                 {
                     case Constants.AggregationRequestPayload.TagType:
-                        this[i] = Payload = new AggregationRequestPayload(childTag);
+                        AggregationRequestPayload aggregationRequestPayload = new AggregationRequestPayload(childTag);
+                        this[i] = aggregationRequestPayload;
+                        Payloads.Add(aggregationRequestPayload);
                         break;
                     case Constants.AggregationConfigRequestPayload.TagType:
-                        this[i] = Payload = new AggregationConfigRequestPayload(childTag);
+                        AggregationConfigRequestPayload aggregationConfigRequestPayload = new AggregationConfigRequestPayload(childTag);
+                        this[i] = aggregationConfigRequestPayload;
+                        Payloads.Add(aggregationConfigRequestPayload);
                         break;
                     case Constants.KsiPduHeader.TagType:
                     case Constants.KsiPdu.MacTagType:
@@ -72,7 +71,7 @@ namespace Guardtime.KSI.Service
         public AggregationRequestPdu(KsiPduHeader header, KsiPduPayload payload, HashAlgorithm hmacAlgorithm, byte[] key)
             : base(Constants.AggregationRequestPdu.TagType, header, payload, hmacAlgorithm, key)
         {
-            Payload = payload;
+            Payloads.Add(payload);
         }
     }
 }

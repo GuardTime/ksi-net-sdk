@@ -70,6 +70,8 @@ namespace Guardtime.KSI.Signature
         ///     Get KSI signature instance from aggregation response payload.
         /// </summary>
         /// <param name="payload">legacy aggregation response payload</param>
+        /// <param name="hash">Signed hash</param>
+        /// <param name="level">Signed hash node level value in the aggregation tree</param>
         /// <returns>KSI signature</returns>
         IKsiSignature Create(LegacyAggregationResponsePayload payload, DataHash hash, uint level = 0);
 

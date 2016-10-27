@@ -19,28 +19,13 @@
 
 using System;
 using System.IO;
-using System.Reflection;
 using System.Threading;
-using Guardtime.KSI.Hashing;
-using Guardtime.KSI.Parser;
 using Guardtime.KSI.Service;
-using Guardtime.KSI.Signature;
-using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Test.Service
 {
     public class TestKsiServiceProtocol : IKsiSigningServiceProtocol, IKsiExtendingServiceProtocol, IKsiPublicationsFileServiceProtocol
     {
-        /// <summary>
-        /// If given then it will be used to calculate signing request result byte array. Otherwise RequestResult is used.
-        /// </summary>
-        public IKsiSignature SignResult { get; set; }
-
-        /// <summary>
-        /// If given then it will be used to calculate extending request result byte array. Otherwise RequestResult is used.
-        /// </summary>
-        public CalendarHashChain ExtendResult { get; set; }
-
         /// <summary>
         /// Return value of signing/extending request
         /// </summary>
@@ -94,12 +79,9 @@ namespace Guardtime.KSI.Test.Service
 
             public AsyncResult(byte[] request)
             {
-                Request = request;
             }
 
             public bool IsCompleted => true;
-
-            public byte[] Request { get; }
 
             public WaitHandle AsyncWaitHandle => _resetEvent;
 

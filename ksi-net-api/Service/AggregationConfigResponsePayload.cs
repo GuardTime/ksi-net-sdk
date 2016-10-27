@@ -52,17 +52,17 @@ namespace Guardtime.KSI.Service
 
                 switch (childTag.Type)
                 {
-                    case Constants.AggregationConfigResponsePayload.AggregationPeriodTagType:
-                        this[i] = _aggregationPeriod = new IntegerTag(childTag);
-                        aggregationPeriodCount++;
+                    case Constants.AggregationConfigResponsePayload.MaxLevelTagType:
+                        this[i] = _maxLevel = new IntegerTag(childTag);
+                        maxLevelCount++;
                         break;
                     case Constants.AggregationConfigResponsePayload.AggregationAlgorithmTagType:
                         this[i] = _aggregationAlgorithm = new IntegerTag(childTag);
                         aggregationAlgorithmCount++;
                         break;
-                    case Constants.AggregationConfigResponsePayload.MaxLevelTagType:
-                        this[i] = _maxLevel = new IntegerTag(childTag);
-                        maxLevelCount++;
+                    case Constants.AggregationConfigResponsePayload.AggregationPeriodTagType:
+                        this[i] = _aggregationPeriod = new IntegerTag(childTag);
+                        aggregationPeriodCount++;
                         break;
                     case Constants.AggregationConfigResponsePayload.MaxRequestsTagType:
                         this[i] = _maxRequests = new IntegerTag(childTag);

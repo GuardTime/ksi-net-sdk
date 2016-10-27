@@ -27,11 +27,6 @@ namespace Guardtime.KSI.Service
     public sealed class ExtendResponsePdu : KsiPdu
     {
         /// <summary>
-        ///     Get PDU payload.
-        /// </summary>
-        public override KsiPduPayload Payload { get; }
-
-        /// <summary>
         ///     Create extend response PDU from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
@@ -46,11 +41,16 @@ namespace Guardtime.KSI.Service
                 switch (childTag.Type)
                 {
                     case Constants.ExtendResponsePayload.TagType:
-                        this[i] = Payload = new ExtendResponsePayload(childTag);
+                        ExtendResponsePayload extendResponsePayload = new ExtendResponsePayload(childTag);
+                        this[i] = extendResponsePayload;
+                        Payloads.Add(extendResponsePayload);
                         break;
                     case Constants.ExtendErrorPayload.TagType:
-                        this[i] = Payload = new ExtendErrorPayload(childTag);
+                        ExtendErrorPayload extendErrorPayload = new ExtendErrorPayload(childTag);
+                        this[i] = extendErrorPayload;
+                        Payloads.Add(extendErrorPayload);
                         break;
+                    case Constants.ExtendConfigResponsePayload.TagType:
                     case Constants.KsiPduHeader.TagType:
                     case Constants.KsiPdu.MacTagType:
                         break;
@@ -59,6 +59,33 @@ namespace Guardtime.KSI.Service
                         break;
                 }
             }
+        }
+
+        /// <summary>
+        /// Get extend response payload
+        /// </summary>
+        /// <param name="requestId">Request ID</param>
+        /// <returns></returns>
+        public ExtendResponsePayload GetExtendResponsePayload(ulong requestId)
+        {
+            foreach (ExtendResponsePayload payload in GetPayloads<ExtendResponsePayload>())
+            {
+                if (payload.RequestId == requestId)
+                {
+                    return payload;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Get extend error payload
+        /// </summary>
+        /// <returns></returns>
+        public ExtendErrorPayload GetExtendErrorPayload()
+        {
+            return GetPayload<ExtendErrorPayload>();
         }
     }
 }

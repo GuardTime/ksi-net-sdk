@@ -27,11 +27,6 @@ namespace Guardtime.KSI.Service
     public sealed class AggregationResponsePdu : KsiPdu
     {
         /// <summary>
-        ///     Get PDU payload.
-        /// </summary>
-        public override KsiPduPayload Payload { get; }
-
-        /// <summary>
         ///     Create aggregation response pdu TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
@@ -46,14 +41,21 @@ namespace Guardtime.KSI.Service
                 switch (childTag.Type)
                 {
                     case Constants.AggregationResponsePayload.TagType:
-                        this[i] = Payload = new AggregationResponsePayload(childTag);
+                        AggregationResponsePayload aggregationResponsePayload = new AggregationResponsePayload(childTag);
+                        this[i] = aggregationResponsePayload;
+                        Payloads.Add(aggregationResponsePayload);
                         break;
                     case Constants.AggregationErrorPayload.TagType:
-                        this[i] = Payload = new AggregationErrorPayload(childTag);
+                        AggregationErrorPayload aggregationErrorPayload = new AggregationErrorPayload(childTag);
+                        this[i] = aggregationErrorPayload;
+                        Payloads.Add(aggregationErrorPayload);
                         break;
                     case Constants.AggregationConfigResponsePayload.TagType:
-                        this[i] = Payload = new AggregationConfigResponsePayload(childTag);
+                        AggregationConfigResponsePayload aggregationConfigResponsePayload = new AggregationConfigResponsePayload(childTag);
+                        this[i] = aggregationConfigResponsePayload;
+                        Payloads.Add(aggregationConfigResponsePayload);
                         break;
+                    case Constants.AggregationAcknowledgmentResponsePayload.TagType:
                     case Constants.KsiPduHeader.TagType:
                     case Constants.KsiPdu.MacTagType:
                         break;
@@ -62,6 +64,42 @@ namespace Guardtime.KSI.Service
                         break;
                 }
             }
+        }
+
+        /// <summary>
+        /// Get aggregation response payload
+        /// </summary>
+        /// <param name="requestId">Request ID</param>
+        /// <returns></returns>
+        public AggregationResponsePayload GetAggregationResponsePayload(ulong requestId)
+        {
+            foreach (AggregationResponsePayload payload in GetPayloads<AggregationResponsePayload>())
+            {
+                if (payload.RequestId == requestId)
+                {
+                    return payload;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Get aggregation error payload
+        /// </summary>
+        /// <returns></returns>
+        public AggregationErrorPayload GetAggregationErrorPayload()
+        {
+            return GetPayload<AggregationErrorPayload>();
+        }
+
+        /// <summary>
+        /// Get aggregation configuration response payload
+        /// </summary>
+        /// <returns></returns>
+        public AggregationConfigResponsePayload GetAggregationConfigResponsePayload()
+        {
+            return GetPayload<AggregationConfigResponsePayload>();
         }
     }
 }

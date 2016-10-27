@@ -28,11 +28,6 @@ namespace Guardtime.KSI.Service
     public sealed class ExtendRequestPdu : KsiPdu
     {
         /// <summary>
-        ///     Get PDU payload.
-        /// </summary>
-        public override KsiPduPayload Payload { get; }
-
-        /// <summary>
         ///     Create extend request PDU from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
@@ -47,7 +42,9 @@ namespace Guardtime.KSI.Service
                 switch (childTag.Type)
                 {
                     case Constants.ExtendRequestPayload.TagType:
-                        this[i] = Payload = new ExtendRequestPayload(childTag);
+                        ExtendRequestPayload extendRequestPayload = new ExtendRequestPayload(childTag);
+                        this[i] = extendRequestPayload;
+                        Payloads.Add(extendRequestPayload);
                         break;
                     case Constants.KsiPduHeader.TagType:
                     case Constants.KsiPdu.MacTagType:
@@ -69,7 +66,7 @@ namespace Guardtime.KSI.Service
         public ExtendRequestPdu(KsiPduHeader header, KsiPduPayload payload, HashAlgorithm hmacAlgorithm, byte[] key)
             : base(Constants.ExtendRequestPdu.TagType, header, payload, hmacAlgorithm, key)
         {
-            Payload = payload;
+            Payloads.Add(payload);
         }
     }
 }

@@ -26,7 +26,6 @@ using Guardtime.KSI.Parser;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
-using Guardtime.KSI.Test.Signature.Verification.Rule;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Signature

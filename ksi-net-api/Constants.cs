@@ -232,15 +232,23 @@ namespace Guardtime.KSI
             /// </summary>
             public const uint TagType = 0x4;
 
-            public const uint AggregationPeriodTagType = 0x1;
+            public const uint MaxLevelTagType = 0x1;
 
             public const uint AggregationAlgorithmTagType = 0x2;
 
-            public const uint MaxLevelTagType = 0x3;
+            public const uint AggregationPeriodTagType = 0x3;
 
             public const uint MaxRequestsTagType = 0x4;
 
             public const uint ParentUriTagType = 0x10;
+        }
+
+        public static class AggregationAcknowledgmentResponsePayload
+        {
+            /// <summary>
+            ///     Aggregation acknowledgment response payload TLV type.
+            /// </summary>
+            public const uint TagType = 0x5;
         }
 
         [Obsolete]
@@ -310,6 +318,14 @@ namespace Guardtime.KSI
 
             [Obsolete]
             public const uint LegacyTagType = 0x303;
+        }
+
+        public static class ExtendConfigResponsePayload
+        {
+            /// <summary>
+            ///     Extender config response payload TLV type.
+            /// </summary>
+            public const uint TagType = 0x4;
         }
 
         public static class KsiPduHeader
