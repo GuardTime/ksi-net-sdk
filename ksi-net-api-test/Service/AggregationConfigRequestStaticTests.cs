@@ -22,7 +22,6 @@ using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
-using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Test.Crypto;
 using Guardtime.KSI.Test.Properties;
 using Guardtime.KSI.Trust;
@@ -31,7 +30,7 @@ using NUnit.Framework;
 namespace Guardtime.KSI.Test.Service
 {
     /// <summary>
-    /// Signing tests with static response
+    /// Aggregation configuration tests with static response
     /// </summary>
     [TestFixture]
     public class AggregationConfigRequestStaticTests
@@ -42,7 +41,6 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void AggregationConfigRequestStaticTest()
         {
-            // Response has multiple payloads (including a payload containing invalid signature and a configuration payload)
             Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationConfigResponsePdu)));
 
             AggregationConfigResponsePayload config = ksi.GetAggregationConfig();
@@ -76,6 +74,7 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void AggregationConfigRequestInvalidStaticTest()
         {
+            // pdu does not contain aggregation config payload
             Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu)));
 
             KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
@@ -83,7 +82,7 @@ namespace Guardtime.KSI.Test.Service
                 ksi.GetAggregationConfig();
             });
 
-            Assert.That(ex.Message.StartsWith("Invalid aggregation config response payload: null"), "Unexpected exception message: " + ex.Message);
+            Assert.That(ex.Message.StartsWith("Invalid aggregation config response PDU. Could not find a valid payload."), "Unexpected exception message: " + ex.Message);
         }
 
         private static Ksi GetKsi(byte[] requestResult)

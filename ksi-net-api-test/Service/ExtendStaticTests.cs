@@ -39,10 +39,10 @@ namespace Guardtime.KSI.Test.Service
     public class ExtendStaticTests
     {
         /// <summary>
-        /// Test extending and verifying.
+        /// Test extending.
         /// </summary>
         [Test]
-        public void ExtendAndVerifyStaticTest()
+        public void ExtendStaticTest()
         {
             IKsiSignature signature = new KsiSignatureFactory().Create(
                 File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok)));
@@ -53,10 +53,10 @@ namespace Guardtime.KSI.Test.Service
         }
 
         /// <summary>
-        /// Test signing and verifying with PDU v2 response to PDU v1 request
+        /// Test extending. PDU v2 response is returned to PDU v1 request
         /// </summary>
         [Test]
-        public void SignAndVerifyStaticInvalidPduResponseVersionTest()
+        public void ExtendStaticInvalidPduResponseVersionTest()
         {
             IKsiSignature signature = new KsiSignatureFactory().Create(
                 File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok)));
@@ -72,10 +72,10 @@ namespace Guardtime.KSI.Test.Service
         }
 
         /// <summary>
-        /// Test extending and verifying.
+        /// Test extending. Response PDU contains multiple payloads.
         /// </summary>
         [Test]
-        public void ExtendAndVerifyWithMultiPayloadsResponseStaticTest()
+        public void ExtendStaticWithMultiPayloadsResponseTest()
         {
             IKsiSignature signature = new KsiSignatureFactory().Create(
                 File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok)));
@@ -87,10 +87,10 @@ namespace Guardtime.KSI.Test.Service
         }
 
         /// <summary>
-        /// Test exteding and verification fail
+        /// Test exteding and verification fail (calendar hash chain input hash mismatch)
         /// </summary>
         [Test]
-        public void ExtendAndVerifyInvalidStaticTest()
+        public void ExtendStaticInvalidCalendarHashChainTest()
         {
             IKsiSignature signature = new KsiSignatureFactory().Create(
                 File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok)));

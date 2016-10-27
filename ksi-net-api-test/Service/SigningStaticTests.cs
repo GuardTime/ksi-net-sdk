@@ -39,10 +39,10 @@ namespace Guardtime.KSI.Test.Service
     public class SigningStaticTests
     {
         /// <summary>
-        /// Test signing and verifying.
+        /// Test signing.
         /// </summary>
         [Test]
-        public void SignAndVerifyStaticTest()
+        public void SignStaticTest()
         {
             Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu)), 1584727637);
 
@@ -50,10 +50,10 @@ namespace Guardtime.KSI.Test.Service
         }
 
         /// <summary>
-        /// Test signing and verifying with PDU v2 response to PDU v1 request
+        /// Test signing. PDU v2 response is returned to PDU v1 request.
         /// </summary>
         [Test]
-        public void SignAndVerifyStaticInvalidPduResponseVersionTest()
+        public void SignStaticInvalidPduResponseVersionTest()
         {
             Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu)), 1584727637, PduVersion.v1);
 
@@ -66,10 +66,10 @@ namespace Guardtime.KSI.Test.Service
         }
 
         /// <summary>
-        /// Test signing and verifying. Response has multiple payloads
+        /// Test signing. Response has multiple payloads
         /// </summary>
         [Test]
-        public void SignAndVerifyStaticWithMultiPayloadsResponseTest()
+        public void SignStaticWithMultiPayloadsResponseTest()
         {
             // Response has multiple payloads (including a payload containing invalid signature and a configuration payload)
             Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_Multi_Payloads)), 1584727637);
@@ -81,7 +81,7 @@ namespace Guardtime.KSI.Test.Service
         /// Test signing and verification fail.
         /// </summary>
         [Test]
-        public void SignAndVerifyInvalidStaticTest()
+        public void SignStaticInvalidSignatureTest()
         {
             Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_Invalid_Signature)), 2);
 
