@@ -53,6 +53,25 @@ namespace Guardtime.KSI.Test.Service
         }
 
         /// <summary>
+        /// Test extending. Response payload has non-zero status value.
+        /// </summary>
+        [Test]
+        public void ExtendStaticWithNonZeroPayloadStatusTest()
+        {
+            IKsiSignature signature = new KsiSignatureFactory().Create(
+                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok)));
+
+            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_NonZeroPayloadStatus)), 0x748559A670A87D7D);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                ksi.Extend(signature);
+            });
+
+            Assert.That(ex.Message.StartsWith("Error occured during extending. Status: 17; Message: No error."), "Unexpected exception message: " + ex.Message);
+        }
+
+        /// <summary>
         /// Test extending. PDU v2 response is returned to PDU v1 request
         /// </summary>
         [Test]
