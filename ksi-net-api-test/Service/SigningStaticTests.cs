@@ -39,10 +39,10 @@ namespace Guardtime.KSI.Test.Service
     public class SigningStaticTests
     {
         /// <summary>
-        /// Test signing and verifying.
+        /// Test signing.
         /// </summary>
         [Test]
-        public void SignAndVerifyStaticTest()
+        public void SignStaticTest()
         {
             Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu)), 1584727637);
 
@@ -50,10 +50,26 @@ namespace Guardtime.KSI.Test.Service
         }
 
         /// <summary>
-        /// Test signing and verifying. Response has multiple payloads
+        /// Test signing. PDU v2 response is returned to PDU v1 request.
         /// </summary>
         [Test]
-        public void SignAndVerifyStaticWithMultiPayloadsResponseTest()
+        public void SignStaticInvalidPduResponseVersionTest()
+        {
+            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu)), 1584727637, PduVersion.v1);
+
+            InvalidRequestFormatException ex = Assert.Throws<InvalidRequestFormatException>(delegate
+            {
+                ksi.Sign(new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")));
+            });
+
+            Assert.That(ex.Message.StartsWith("Received PDU v2 response to PDU v1 request."), "Unexpected exception message: " + ex.Message);
+        }
+
+        /// <summary>
+        /// Test signing. Response has multiple payloads
+        /// </summary>
+        [Test]
+        public void SignStaticWithMultiPayloadsResponseTest()
         {
             // Response has multiple payloads (including a payload containing invalid signature, a configuration payload and an acknowledgment payload)
             Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_Multi_Payloads)), 1584727637);
@@ -65,7 +81,7 @@ namespace Guardtime.KSI.Test.Service
         /// Test signing and verification fail.
         /// </summary>
         [Test]
-        public void SignAndVerifyInvalidStaticTest()
+        public void SignStaticInvalidSignatureTest()
         {
             Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_Invalid_Signature)), 2);
 
@@ -79,7 +95,7 @@ namespace Guardtime.KSI.Test.Service
             Assert.AreEqual(VerificationError.Int01.Code, ex.VerificationResult.VerificationError.Code);
         }
 
-        private static Ksi GetKsi(byte[] requestResult, ulong requestId)
+        private static Ksi GetKsi(byte[] requestResult, ulong requestId, PduVersion pduVersion = PduVersion.v2)
         {
             TestKsiServiceProtocol protocol = new TestKsiServiceProtocol
             {
@@ -89,7 +105,7 @@ namespace Guardtime.KSI.Test.Service
             return new Ksi(new TestKsiService(protocol, new ServiceCredentials("anon", "anon"), protocol, new ServiceCredentials("anon", "anon"), protocol,
                 new PublicationsFileFactory(
                     new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))), requestId, PduVersion.v2));
+                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))), requestId, pduVersion));
         }
     }
 }

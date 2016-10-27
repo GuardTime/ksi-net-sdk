@@ -39,10 +39,10 @@ namespace Guardtime.KSI.Test.Service
     public class ExtendStaticTests
     {
         /// <summary>
-        /// Test extending and verifying.
+        /// Test extending.
         /// </summary>
         [Test]
-        public void ExtendAndVerifyStaticTest()
+        public void ExtendStaticTest()
         {
             IKsiSignature signature = new KsiSignatureFactory().Create(
                 File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok)));
@@ -53,15 +53,33 @@ namespace Guardtime.KSI.Test.Service
         }
 
         /// <summary>
-        /// Test extending and verifying. Response has multiple payloads.
+        /// Test extending. PDU v2 response is returned to PDU v1 request
         /// </summary>
         [Test]
-        public void ExtendAndVerifyWithMultiPayloadsResponseStaticTest()
+        public void ExtendStaticInvalidPduResponseVersionTest()
         {
             IKsiSignature signature = new KsiSignatureFactory().Create(
                 File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok)));
 
-            // Response has multiple payloads (including a configuration payload)
+            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu)), 1043101455, null, PduVersion.v1);
+
+            InvalidRequestFormatException ex = Assert.Throws<InvalidRequestFormatException>(delegate
+            {
+                ksi.Extend(signature);
+            });
+
+            Assert.That(ex.Message.StartsWith("Received PDU v2 response to PDU v1 request."), "Unexpected exception message: " + ex.Message);
+        }
+
+        /// <summary>
+        /// Test extending. Response PDU contains multiple payloads.
+        /// </summary>
+        [Test]
+        public void ExtendStaticWithMultiPayloadsResponseTest()
+        {
+            IKsiSignature signature = new KsiSignatureFactory().Create(
+                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok)));
+
             Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_Multi_Payloads)), 8396215651691691389,
                 new KsiSignatureFactory(new EmptyVerificationPolicy()));
 
@@ -69,10 +87,10 @@ namespace Guardtime.KSI.Test.Service
         }
 
         /// <summary>
-        /// Test exteding and verification fail
+        /// Test exteding and verification fail (calendar hash chain input hash mismatch)
         /// </summary>
         [Test]
-        public void ExtendAndVerifyInvalidStaticTest()
+        public void ExtendStaticInvalidCalendarHashChainTest()
         {
             IKsiSignature signature = new KsiSignatureFactory().Create(
                 File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok)));
@@ -89,7 +107,7 @@ namespace Guardtime.KSI.Test.Service
             Assert.AreEqual(VerificationError.Int03.Code, ex.VerificationResult.VerificationError.Code);
         }
 
-        private static Ksi GetKsi(byte[] requestResult, ulong requestId, IKsiSignatureFactory ksiSignatureFactory = null)
+        private static Ksi GetKsi(byte[] requestResult, ulong requestId, IKsiSignatureFactory ksiSignatureFactory = null, PduVersion pduVersion = PduVersion.v2)
         {
             TestKsiServiceProtocol protocol = new TestKsiServiceProtocol
             {
@@ -99,7 +117,7 @@ namespace Guardtime.KSI.Test.Service
             return new Ksi(new TestKsiService(protocol, new ServiceCredentials("anon", "anon"), protocol, new ServiceCredentials("anon", "anon"), protocol,
                 new PublicationsFileFactory(
                     new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))), requestId, PduVersion.v2),
+                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))), requestId, pduVersion),
                 ksiSignatureFactory);
         }
     }

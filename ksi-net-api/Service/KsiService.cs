@@ -182,6 +182,8 @@ namespace Guardtime.KSI.Service
             PduVersion = pduVersion;
         }
 
+        private bool IsLegacyPduVersion => PduVersion == PduVersion.v1;
+
         /// <summary>
         /// PDU format version
         /// </summary>
@@ -240,7 +242,7 @@ namespace Guardtime.KSI.Service
                 throw new KsiServiceException("Signing service credentials are missing.");
             }
 
-            if (PduVersion == PduVersion.v1)
+            if (IsLegacyPduVersion)
             {
                 return BeginLegacySign(hash, level, callback, asyncState);
             }
@@ -328,7 +330,7 @@ namespace Guardtime.KSI.Service
             {
                 if (data == null)
                 {
-                    throw new KsiServiceException("Invalid sign response payload: null.");
+                    throw new KsiServiceException("Invalid sign response PDU: null.");
                 }
 
                 using (TlvReader reader = new TlvReader(new MemoryStream(data)))
@@ -338,10 +340,20 @@ namespace Guardtime.KSI.Service
 
                 if (rawTag.Type == Constants.AggregationResponsePdu.TagType)
                 {
+                    if (IsLegacyPduVersion)
+                    {
+                        throw new InvalidRequestFormatException("Received PDU v2 response to PDU v1 request. Configure the SDK to use PDU v2 format for the given Aggregator.");
+                    }
+
                     pdu = new AggregationResponsePdu(rawTag);
                 }
                 else if (rawTag.Type == Constants.LegacyAggregationPdu.TagType)
                 {
+                    if (!IsLegacyPduVersion)
+                    {
+                        throw new InvalidRequestFormatException("Received PDU v1 response to PDU v2 request. Configure the SDK to use PDU v1 format for the given Aggregator.");
+                    }
+
                     legacyPdu = new LegacyAggregationPdu(rawTag);
                 }
                 else
@@ -363,22 +375,14 @@ namespace Guardtime.KSI.Service
 
                     if (legacyPayload == null || legacyPayload.Status != 0)
                     {
-                        if ((legacyPayload?.Status ?? errorPayload.Status) == 0x0101)
-                        {
-                            if (PduVersion == PduVersion.v2)
-                            {
-                                throw new InvalidRequestFormatException(
-                                    "Received PDU v1 response to PDU v2 request. Configure the SDK to use PDU v1 format for the given Aggregator.");
-                            }
-                        }
-
+                        ulong status = legacyPayload?.Status ?? errorPayload.Status;
                         string errorMessage = legacyPayload == null ? errorPayload.ErrorMessage : legacyPayload.ErrorMessage;
-                        throw new KsiServiceException("Error occured during aggregation: " + errorMessage + ".");
+                        throw new KsiServiceException("Error occured during aggregation. Status: " + status + "; Message: " + errorMessage + ".");
                     }
 
                     if (!legacyPdu.ValidateMac(_signingServiceCredentials.LoginKey))
                     {
-                        throw new KsiServiceException("Invalid HMAC in aggregation response payload.");
+                        throw new KsiServiceException("Invalid HMAC in aggregation response PDU.");
                     }
 
                     signature = _ksiSignatureFactory.Create(legacyPayload, serviceAsyncResult.DocumentHash, serviceAsyncResult.Level);
@@ -392,27 +396,19 @@ namespace Guardtime.KSI.Service
 
                     if (payload == null && errorPayload == null)
                     {
-                        throw new KsiServiceException("Invalid aggregation response pdu. Could to find aggregation response payload or error payload. PDU: " + pdu);
+                        throw new KsiServiceException("Invalid aggregation response PDU. Could not find a valid payload. PDU: " + pdu);
                     }
 
                     if (payload == null || payload.Status != 0)
                     {
-                        if ((payload?.Status ?? errorPayload.Status) == 0x0101)
-                        {
-                            if (PduVersion == PduVersion.v1)
-                            {
-                                throw new InvalidRequestFormatException(
-                                    "Received PDU v2 response to PDU v1 request. Configure the SDK to use PDU v2 format for the given Aggregator.");
-                            }
-                        }
-
+                        ulong status = payload?.Status ?? errorPayload.Status;
                         string errorMessage = payload == null ? errorPayload.ErrorMessage : payload.ErrorMessage;
-                        throw new KsiServiceException("Error occured during aggregation: " + errorMessage + ".");
+                        throw new KsiServiceException("Error occured during aggregation. Status: " + status + "; Message: " + errorMessage + ".");
                     }
 
                     if (!pdu.ValidateMac(_signingServiceCredentials.LoginKey))
                     {
-                        throw new KsiServiceException("Invalid HMAC in aggregation response payload.");
+                        throw new KsiServiceException("Invalid HMAC in aggregation response PDU.");
                     }
 
                     signature = _ksiSignatureFactory.Create(payload, serviceAsyncResult.DocumentHash, serviceAsyncResult.Level);
@@ -452,9 +448,9 @@ namespace Guardtime.KSI.Service
         /// <returns>async result</returns>
         public IAsyncResult BeginGetAggregationConfig(AsyncCallback callback, object asyncState)
         {
-            if (PduVersion == PduVersion.v1)
+            if (IsLegacyPduVersion)
             {
-                throw new KsiServiceException("Config request is not supported using PDU version v1.");
+                throw new KsiServiceException("Config request is not supported using PDU version v1. Configure the SDK to use PDU v2 format for the given Aggregator.");
             }
 
             if (_sigingServiceProtocol == null)
@@ -525,7 +521,7 @@ namespace Guardtime.KSI.Service
             {
                 if (data == null)
                 {
-                    throw new KsiServiceException("Invalid aggregation config response payload: null.");
+                    throw new KsiServiceException("Invalid aggregation config response PDU: null.");
                 }
 
                 RawTag rawTag;
@@ -537,7 +533,7 @@ namespace Guardtime.KSI.Service
 
                 if (rawTag.Type == Constants.LegacyAggregationPdu.TagType)
                 {
-                    throw new InvalidRequestFormatException("Aggregation configuration request can be used only with aggregators using PDU version v2.");
+                    throw new InvalidRequestFormatException("Received PDU v1 response to PDU v2 request.");
                 }
 
                 pdu = new AggregationResponsePdu(rawTag);
@@ -547,17 +543,18 @@ namespace Guardtime.KSI.Service
 
                 if (payload == null && errorPayload == null)
                 {
-                    throw new KsiServiceException("Invalid aggregation config response payload: null.");
+                    throw new KsiServiceException("Invalid aggregation config response PDU. Could not find a valid payload. PDU: " + pdu);
                 }
 
                 if (payload == null)
                 {
-                    throw new KsiServiceException("Error occured during aggregation config request: " + errorPayload.ErrorMessage + ".");
+                    throw new KsiServiceException("Error occured during aggregation config request. Status: " + errorPayload.Status + "; Message: " + errorPayload.ErrorMessage +
+                                                  ".");
                 }
 
                 if (!pdu.ValidateMac(_signingServiceCredentials.LoginKey))
                 {
-                    throw new KsiServiceException("Invalid HMAC in aggregation config response payload.");
+                    throw new KsiServiceException("Invalid HMAC in aggregation config response PDU.");
                 }
                 Logger.Debug("End get aggregation config successful (request id: {0}){1}{2}", serviceAsyncResult.RequestId, Environment.NewLine, pdu);
 
@@ -607,7 +604,7 @@ namespace Guardtime.KSI.Service
         /// <returns>async result</returns>
         public IAsyncResult BeginExtend(ulong aggregationTime, AsyncCallback callback, object asyncState)
         {
-            if (PduVersion == PduVersion.v1)
+            if (IsLegacyPduVersion)
             {
                 return BeginLegacyExtend(aggregationTime, null, null);
             }
@@ -625,7 +622,7 @@ namespace Guardtime.KSI.Service
         public IAsyncResult BeginExtend(ulong aggregationTime, ulong publicationTime, AsyncCallback callback,
                                         object asyncState)
         {
-            if (PduVersion == PduVersion.v1)
+            if (IsLegacyPduVersion)
             {
                 return BeginLegacyExtend(aggregationTime, publicationTime, null, null);
             }
@@ -740,7 +737,7 @@ namespace Guardtime.KSI.Service
             {
                 if (data == null)
                 {
-                    throw new KsiServiceException("Invalid extend response payload: null.");
+                    throw new KsiServiceException("Invalid extend response PDU: null.");
                 }
 
                 using (TlvReader reader = new TlvReader(new MemoryStream(data)))
@@ -750,10 +747,20 @@ namespace Guardtime.KSI.Service
 
                 if (rawTag.Type == Constants.ExtendResponsePdu.TagType)
                 {
+                    if (IsLegacyPduVersion)
+                    {
+                        throw new InvalidRequestFormatException("Received PDU v2 response to PDU v1 request. Configure the SDK to use PDU v2 format for the given Extender.");
+                    }
+
                     pdu = new ExtendResponsePdu(rawTag);
                 }
                 else if (rawTag.Type == Constants.LegacyExtendPdu.TagType)
                 {
+                    if (!IsLegacyPduVersion)
+                    {
+                        throw new InvalidRequestFormatException("Received PDU v1 response to PDU v2 request. Configure the SDK to use PDU v1 format for the given Extender.");
+                    }
+
                     legacyPdu = new LegacyExtendPdu(rawTag);
                 }
                 else
@@ -763,41 +770,34 @@ namespace Guardtime.KSI.Service
 
                 if (legacyPdu != null)
                 {
-                    LegacyExtendResponsePayload payload = legacyPdu.Payload as LegacyExtendResponsePayload;
+                    LegacyExtendResponsePayload legacyPayload = legacyPdu.Payload as LegacyExtendResponsePayload;
                     LegacyExtendErrorPayload errorPayload = legacyPdu.Payload as LegacyExtendErrorPayload;
 
-                    if (payload == null && errorPayload == null)
+                    if (legacyPayload == null && errorPayload == null)
                     {
                         throw new KsiServiceException("Invalid extend response payload: null.");
                     }
 
-                    if (payload == null || payload.Status != 0)
+                    if (legacyPayload == null || legacyPayload.Status != 0)
                     {
-                        if ((payload?.Status ?? errorPayload.Status) == 0x0101)
-                        {
-                            if (PduVersion == PduVersion.v2)
-                            {
-                                throw new InvalidRequestFormatException("Received PDU v1 response to PDU v2 request. Configure the SDK to use PDU v1 format for the given Extender.");
-                            }
-                        }
-
-                        string errorMessage = payload == null ? errorPayload.ErrorMessage : payload.ErrorMessage;
-                        throw new KsiServiceException("Error occured during extending: " + errorMessage + ".");
+                        ulong status = legacyPayload?.Status ?? errorPayload.Status;
+                        string errorMessage = legacyPayload == null ? errorPayload.ErrorMessage : legacyPayload.ErrorMessage;
+                        throw new KsiServiceException("Error occured during extending. Status: " + status + "; Message: " + errorMessage + ".");
                     }
 
                     if (!legacyPdu.ValidateMac(_extendingServiceCredentials.LoginKey))
                     {
-                        throw new KsiServiceException("Invalid HMAC in extend response payload.");
+                        throw new KsiServiceException("Invalid HMAC in extend response PDU.");
                     }
 
-                    if (payload.CalendarHashChain == null)
+                    if (legacyPayload.CalendarHashChain == null)
                     {
                         throw new KsiServiceException("No calendar hash chain in payload.");
                     }
 
                     Logger.Debug("End extend successful (request id: {0}) {1}{2}", serviceAsyncResult.RequestId, Environment.NewLine, legacyPdu);
 
-                    return payload.CalendarHashChain;
+                    return legacyPayload.CalendarHashChain;
                 }
                 else
                 {
@@ -806,26 +806,19 @@ namespace Guardtime.KSI.Service
 
                     if (payload == null && errorPayload == null)
                     {
-                        throw new KsiServiceException("Invalid extend response pdu. Could to find extend response payload or error payload. PDU: " + pdu);
+                        throw new KsiServiceException("Invalid extend response PDU. Could not find a valid payload. PDU: " + pdu);
                     }
 
                     if (payload == null || payload.Status != 0)
                     {
-                        if ((payload?.Status ?? errorPayload.Status) == 0x0101)
-                        {
-                            if (PduVersion == PduVersion.v1)
-                            {
-                                throw new InvalidRequestFormatException("Received PDU v2 response to PDU v1 request. Configure the SDK to use PDU v2 format for the given Extender.");
-                            }
-                        }
-
+                        ulong status = payload?.Status ?? errorPayload.Status;
                         string errorMessage = payload == null ? errorPayload.ErrorMessage : payload.ErrorMessage;
-                        throw new KsiServiceException("Error occured during extending: " + errorMessage + ".");
+                        throw new KsiServiceException("Error occured during extending. Status: " + status + "; Message: " + errorMessage + ".");
                     }
 
                     if (!pdu.ValidateMac(_extendingServiceCredentials.LoginKey))
                     {
-                        throw new KsiServiceException("Invalid HMAC in extend response payload.");
+                        throw new KsiServiceException("Invalid HMAC in extend response PDU.");
                     }
 
                     if (payload.CalendarHashChain == null)
