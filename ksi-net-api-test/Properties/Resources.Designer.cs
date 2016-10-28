@@ -808,6 +808,24 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/service/legacy-extend-response-pdu.tlv.
+        /// </summary>
+        internal static string KsiService_LegacyExtendResponsePdu {
+            get {
+                return ResourceManager.GetString("KsiService_LegacyExtendResponsePdu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/legacy-extend-response-pdu-status-17.tlv.
+        /// </summary>
+        internal static string KsiService_LegacyExtendResponsePdu_NonZeroPayloadStatus {
+            get {
+                return ResourceManager.GetString("KsiService_LegacyExtendResponsePdu_NonZeroPayloadStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/multi-signature/infile_2015-05-05.tlv.
         /// </summary>
         internal static string KsiSignature_InputForMulti_20150505_Ok {

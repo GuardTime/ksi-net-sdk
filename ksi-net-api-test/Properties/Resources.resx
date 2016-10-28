@@ -612,4 +612,10 @@
   <data name="KsiService_ExtendResponsePdu_NonZeroPayloadStatus" xml:space="preserve">
     <value>resources/service/extend-response-pdu-status-17.tlv</value>
   </data>
+  <data name="KsiService_LegacyExtendResponsePdu_NonZeroPayloadStatus" xml:space="preserve">
+    <value>resources/service/legacy-extend-response-pdu-status-17.tlv</value>
+  </data>
+  <data name="KsiService_LegacyExtendResponsePdu" xml:space="preserve">
+    <value>resources/service/legacy-extend-response-pdu.tlv</value>
+  </data>
 </root>

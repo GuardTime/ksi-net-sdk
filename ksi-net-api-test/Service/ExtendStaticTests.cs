@@ -126,6 +126,40 @@ namespace Guardtime.KSI.Test.Service
             Assert.AreEqual(VerificationError.Int03.Code, ex.VerificationResult.VerificationError.Code);
         }
 
+        /// <summary>
+        /// Test extending with PDU v1.
+        /// </summary>
+        [Test]
+        public void LegacyExtendStaticTest()
+        {
+            IKsiSignature signature = new KsiSignatureFactory().Create(
+                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok)));
+
+            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_LegacyExtendResponsePdu)), 0, null, PduVersion.v1);
+
+            ksi.Extend(signature);
+        }
+
+        /// <summary>
+        /// Test extending with PDU v1. Response payload has non-zero status value.
+        /// </summary>
+        [Test]
+        public void LegacyExtendStaticWithNonZeroPayloadStatusTest()
+        {
+            IKsiSignature signature = new KsiSignatureFactory().Create(
+                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok)));
+
+            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_LegacyExtendResponsePdu_NonZeroPayloadStatus)), 0, null,
+                PduVersion.v1);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                ksi.Extend(signature);
+            });
+
+            Assert.That(ex.Message.StartsWith("Error occured during extending. Status: 17; Message: No error."), "Unexpected exception message: " + ex.Message);
+        }
+
         private static Ksi GetKsi(byte[] requestResult, ulong requestId, IKsiSignatureFactory ksiSignatureFactory = null, PduVersion pduVersion = PduVersion.v2)
         {
             TestKsiServiceProtocol protocol = new TestKsiServiceProtocol

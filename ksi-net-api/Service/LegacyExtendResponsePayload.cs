@@ -106,11 +106,6 @@ namespace Guardtime.KSI.Service
             {
                 throw new TlvException("Exactly one calendar hash chain must exist in extend response payload.");
             }
-
-            if (_status.Value != 0 && calendarHashChainCount != 0)
-            {
-                throw new TlvException("Calendar hash chain should be missing when error occurs in extend response payload.");
-            }
         }
 
         /// <summary>

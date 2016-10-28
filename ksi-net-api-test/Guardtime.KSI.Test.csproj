@@ -315,6 +315,12 @@
     <None Include="resources\service\extend-response-pdu-multi-payloads.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="resources\service\legacy-extend-response-pdu-status-17.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\service\legacy-extend-response-pdu.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="resources\signature\aggregation-authentication-record\aggregation-authentication-record-invalid-extra-tag.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
