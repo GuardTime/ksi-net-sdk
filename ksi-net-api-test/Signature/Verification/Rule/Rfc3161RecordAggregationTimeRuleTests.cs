@@ -27,12 +27,12 @@ using NUnit.Framework;
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
-    public class AggregationHashChainIndexRuleTests
+    public class Rfc3161RecordAggregationTimeRuleTests
     {
         [Test]
         public void TestMissingContext()
         {
-            AggregationHashChainIndexRule rule = new AggregationHashChainIndexRule();
+            Rfc3161RecordAggregationTimeRule rule = new Rfc3161RecordAggregationTimeRule();
 
             // Argument null exception when no context
             Assert.Throws<KsiException>(delegate
@@ -44,7 +44,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         [Test]
         public void TestContextMissingSignature()
         {
-            AggregationHashChainIndexRule rule = new AggregationHashChainIndexRule();
+            Rfc3161RecordAggregationTimeRule rule = new Rfc3161RecordAggregationTimeRule();
 
             // Verification exception on missing KSI signature 
             Assert.Throws<KsiVerificationException>(delegate
@@ -58,26 +58,30 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         [Test]
         public void TestSignatureWithoutAggregationHashChain()
         {
-            AggregationHashChainIndexRule rule = new AggregationHashChainIndexRule();
+            Rfc3161RecordAggregationTimeRule rule = new Rfc3161RecordAggregationTimeRule();
 
-            // Verification exception on missing KSI signature aggregation hash chain 
-            Assert.Throws<KsiVerificationException>(delegate
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Legacy_Ok), FileMode.Open))
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new TestKsiSignature()
-                };
+                Rfc3161Record rfc3161Record = new KsiSignatureFactory().Create(stream).Rfc3161Record;
 
-                rule.Verify(context);
-            });
+                // Verification exception on missing KSI signature aggregation hash chain 
+                Assert.Throws<KsiVerificationException>(delegate
+                {
+                    TestVerificationContext context = new TestVerificationContext()
+                    {
+                        Signature = new TestKsiSignature() { Rfc3161Record = rfc3161Record }
+                    };
+
+                    rule.Verify(context);
+                });
+            }
         }
 
         [Test]
-        public void TestRfc3161SignatureAggregationHashChainIndex()
+        public void TestRfc3161RecordAggregationTime()
         {
-            AggregationHashChainIndexRule rule = new AggregationHashChainIndexRule();
+            Rfc3161RecordAggregationTimeRule rule = new Rfc3161RecordAggregationTimeRule();
 
-            // Check legacy signature for aggregation hash chain index consistency
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Legacy_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
@@ -91,31 +95,12 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         }
 
         [Test]
-        public void TestSignatureAggregationHashChainIndex()
+        public void TestInvalidRfc3161RecordAggregationTime()
         {
-            AggregationHashChainIndexRule rule = new AggregationHashChainIndexRule();
+            Rfc3161RecordAggregationTimeRule rule = new Rfc3161RecordAggregationTimeRule();
 
-            // Check signature for aggregation hash chain index consistency
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream)
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
-        }
-
-        [Test]
-        public void TestInvalidSignatureAggregationHashChainIndex()
-        {
-            AggregationHashChainIndexRule rule = new AggregationHashChainIndexRule();
-
-            // Check invalid signature for aggregation hash chain inconsistency in index
             using (FileStream stream =
-                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Invalid_Aggregation_Chain_Index_Mismatch), FileMode.Open))
+                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Invalid_Rfc3161_Aggregation_Time_Mismatch), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -124,7 +109,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
 
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-                Assert.AreEqual(VerificationError.Int10, verificationResult.VerificationError);
+                Assert.AreEqual(VerificationError.Int02, verificationResult.VerificationError);
             }
         }
     }

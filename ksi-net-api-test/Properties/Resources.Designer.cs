@@ -1088,6 +1088,24 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-rfc3161-aggregation-time-mismatch.tlv.
+        /// </summary>
+        internal static string KsiSignatureDo_Invalid_Rfc3161_Aggregation_Time_Mismatch {
+            get {
+                return ResourceManager.GetString("KsiSignatureDo_Invalid_Rfc3161_Aggregation_Time_Mismatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-chain-index-mismatch.tlv.
+        /// </summary>
+        internal static string KsiSignatureDo_Invalid_Rfc3161_Chain_Index_Mismatch {
+            get {
+                return ResourceManager.GetString("KsiSignatureDo_Invalid_Rfc3161_Chain_Index_Mismatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-type.tlv.
         /// </summary>
         internal static string KsiSignatureDo_Invalid_Type {
