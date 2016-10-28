@@ -435,6 +435,12 @@
   <data name="Rfc3161Record_Invalid_Multiple_TstInfo_Suffix" xml:space="preserve">
     <value>resources/signature/rfc3161-record/rfc3161-record-invalid-multiple-tstinfo-suffix.tlv</value>
   </data>
+  <data name="KsiSignatureDo_Invalid_Rfc3161_Aggregation_Time_Mismatch" xml:space="preserve">
+    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-rfc3161-aggregation-time-mismatch.tlv</value>
+  </data>
+  <data name="KsiSignatureDo_Invalid_Rfc3161_Chain_Index_Mismatch" xml:space="preserve">
+    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-chain-index-mismatch.tlv</value>
+  </data>
   <data name="SignatureData_Invalid_Certificate_Id_Missing" xml:space="preserve">
     <value>resources/signature/signaturedata/signature-data-invalid-certificate-id-missing.tlv</value>
   </data>
