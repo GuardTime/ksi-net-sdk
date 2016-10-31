@@ -250,6 +250,15 @@ namespace Guardtime.KSI
         }
 
         /// <summary>
+        /// Get additional extender configuration data
+        /// </summary>
+        /// <returns>Extender configuration response payload</returns>
+        public ExtenderConfigResponsePayload GetExtenderConfig()
+        {
+            return _ksiService.GetExtenderConfig();
+        }
+
+        /// <summary>
         ///     Get publications file.
         ///     <example>
         ///         Equals to following code

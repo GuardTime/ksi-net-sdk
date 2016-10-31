@@ -357,5 +357,23 @@ namespace Guardtime.KSI.Test.Integration
                     "Unexpected exception message: " + ex.Message);
             }
         }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void HttpGetExtenderConfig(Ksi ksi)
+        {
+            if (TestSetup.PduVersion == PduVersion.v1)
+            {
+                Exception ex = Assert.Throws<KsiServiceException>(delegate
+                {
+                    ksi.GetExtenderConfig();
+                });
+
+                Assert.That(ex.Message.StartsWith("Extender config request is not supported using PDU version v1"), "Unexpected exception message: " + ex.Message);
+            }
+            else
+            {
+                ksi.GetExtenderConfig();
+            }
+        }
     }
 }

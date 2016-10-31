@@ -134,6 +134,8 @@
     <Compile Include="Publication\PublicationsFileHeader.cs" />
     <Compile Include="Publication\PublicationsFile.cs" />
     <Compile Include="Publication\PublicationData.cs" />
+    <Compile Include="Service\ExtenderConfigRequestPayload.cs" />
+    <Compile Include="Service\ExtenderConfigResponsePayload.cs" />
     <Compile Include="Service\LegacyAggregationErrorPayload.cs" />
     <Compile Include="Service\LegacyAggregationRequestPayload.cs" />
     <Compile Include="Service\LegacyAggregationResponsePayload.cs" />
