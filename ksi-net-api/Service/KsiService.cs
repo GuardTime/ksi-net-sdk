@@ -373,6 +373,11 @@ namespace Guardtime.KSI.Service
                         throw new KsiServiceException("Invalid aggregation response payload: " + legacyPdu.Payload);
                     }
 
+                    if (legacyPayload != null && legacyPayload.RequestId != serviceAsyncResult.RequestId)
+                    {
+                        throw new KsiServiceException("Unknown request ID: " + legacyPayload.RequestId);
+                    }
+
                     if (legacyPayload == null || legacyPayload.Status != 0)
                     {
                         ulong status = legacyPayload?.Status ?? errorPayload.Status;
@@ -776,6 +781,11 @@ namespace Guardtime.KSI.Service
                     if (legacyPayload == null && errorPayload == null)
                     {
                         throw new KsiServiceException("Invalid extend response payload: null.");
+                    }
+
+                    if (legacyPayload != null && legacyPayload.RequestId != serviceAsyncResult.RequestId)
+                    {
+                        throw new KsiServiceException("Unknown request ID: " + legacyPayload.RequestId);
                     }
 
                     if (legacyPayload == null || legacyPayload.Status != 0)
