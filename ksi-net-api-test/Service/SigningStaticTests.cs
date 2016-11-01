@@ -95,6 +95,39 @@ namespace Guardtime.KSI.Test.Service
             Assert.AreEqual(VerificationError.Int01.Code, ex.VerificationResult.VerificationError.Code);
         }
 
+        /// <summary>
+        /// Test signing with PDU containing multiple payloads including an error payload.
+        /// </summary>
+        [Test]
+        public void SignStaticMultiPayloadsResponseIncludingErrorPayloadTest()
+        {
+            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_Multi_Payloads_Including_ErrorPayload)), 2);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                ksi.Sign(new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")));
+            });
+
+            Assert.That(ex.Message.StartsWith("Error occured during aggregation. Status: 418464624128; Message: anon"), "Unexpected inner exception message: " + ex.Message);
+        }
+
+        /// <summary>
+        /// Test signing with PDU containing only an error payload.
+        /// </summary>
+        [Test]
+        public void SignStaticErrorPayloadTest()
+        {
+            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregatorResponsePdu_ErrorPayload)), 2);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                ksi.Sign(new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")));
+            });
+
+            Assert.That(ex.Message.StartsWith("Error occured during aggregation. Status: 258; Message: The request could not be authenticated."),
+                "Unexpected exception message: " + ex.Message);
+        }
+
         private static Ksi GetKsi(byte[] requestResult, ulong requestId, PduVersion pduVersion = PduVersion.v2)
         {
             TestKsiServiceProtocol protocol = new TestKsiServiceProtocol
