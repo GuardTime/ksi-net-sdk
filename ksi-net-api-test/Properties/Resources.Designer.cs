@@ -772,6 +772,33 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/service/aggregation-response-pdu-multi-payloads-including-error.tlv.
+        /// </summary>
+        internal static string KsiService_AggregationResponsePdu_Multi_Payloads_Including_ErrorPayload {
+            get {
+                return ResourceManager.GetString("KsiService_AggregationResponsePdu_Multi_Payloads_Including_ErrorPayload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/aggregator-response-pdu-error-payload.tlv.
+        /// </summary>
+        internal static string KsiService_AggregatorResponsePdu_ErrorPayload {
+            get {
+                return ResourceManager.GetString("KsiService_AggregatorResponsePdu_ErrorPayload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/extender-response-pdu-error-payload.tlv.
+        /// </summary>
+        internal static string KsiService_ExtenderResponsePdu_ErrorPayload {
+            get {
+                return ResourceManager.GetString("KsiService_ExtenderResponsePdu_ErrorPayload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/service/extend-response-pdu.tlv.
         /// </summary>
         internal static string KsiService_ExtendResponsePdu {
@@ -795,6 +822,15 @@ namespace Guardtime.KSI.Test.Properties {
         internal static string KsiService_ExtendResponsePdu_Multi_Payloads {
             get {
                 return ResourceManager.GetString("KsiService_ExtendResponsePdu_Multi_Payloads", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/extend-response-pdu-multi-payloads-including-error.tlv.
+        /// </summary>
+        internal static string KsiService_ExtendResponsePdu_Multi_Payloads_Including_ErrorPayload {
+            get {
+                return ResourceManager.GetString("KsiService_ExtendResponsePdu_Multi_Payloads_Including_ErrorPayload", resourceCulture);
             }
         }
         

@@ -160,6 +160,45 @@ namespace Guardtime.KSI.Test.Service
             Assert.That(ex.Message.StartsWith("Error occured during extending. Status: 17; Message: No error."), "Unexpected exception message: " + ex.Message);
         }
 
+        /// <summary>
+        /// Test extending with PDU containing multiple payloads including an error payload.
+        /// </summary>
+        [Test]
+        public void ExtendStaticMultiPayloadsResponseIncludingErrorPayloadTest()
+        {
+            IKsiSignature signature = new KsiSignatureFactory().Create(
+                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok)));
+
+            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_Multi_Payloads_Including_ErrorPayload)), 0);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                ksi.Extend(signature);
+            });
+
+            Assert.That(ex.Message.StartsWith("Error occured during extending. Status: 418464624128; Message: anon"), "Unexpected inner exception message: " + ex.Message);
+        }
+
+        /// <summary>
+        /// Test extending with PDU containing only an error payload.
+        /// </summary>
+        [Test]
+        public void ExtendStaticErrorPayloadTest()
+        {
+            IKsiSignature signature = new KsiSignatureFactory().Create(
+                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok)));
+
+            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtenderResponsePdu_ErrorPayload)), 0);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                ksi.Extend(signature);
+            });
+
+            Assert.That(ex.Message.StartsWith("Error occured during extending. Status: 258; Message: The request could not be authenticated."),
+                "Unexpected exception message: " + ex.Message);
+        }
+
         private static Ksi GetKsi(byte[] requestResult, ulong requestId, IKsiSignatureFactory ksiSignatureFactory = null, PduVersion pduVersion = PduVersion.v2)
         {
             TestKsiServiceProtocol protocol = new TestKsiServiceProtocol
