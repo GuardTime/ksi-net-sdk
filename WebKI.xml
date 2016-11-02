@@ -16,7 +16,12 @@
     <HelpKINode Title="IDataHasher.AddData Method " Url="html/6e87d41c-0bd9-f263-54f5-a1b4efa993ef.htm" />
   </HelpKINode>
   <HelpKINode Title="AddDocument method" Url="html/13f7b1ee-60b0-a0f7-f222-7655fd228caf.htm" />
+  <HelpKINode Title="AggregationAcknowledgmentResponsePayload class">
+    <HelpKINode Title="fields" Url="html/54357252-d5b6-976a-767d-a316b38a0249.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AggregationAlgorithm property" Url="html/2d9d2ef0-f5ae-46f0-8fd6-8b5074b49cfc.htm" />
   <HelpKINode Title="AggregationAlgorithmIdTagType field" Url="html/a03a952c-0b49-1d46-8e95-a7f875332ca4.htm" />
+  <HelpKINode Title="AggregationAlgorithmTagType field" Url="html/b7ca7398-f69e-bad9-f3e6-f470512fa674.htm" />
   <HelpKINode Title="AggregationAuthenticationRecord class">
     <HelpKINode Title="AggregationAuthenticationRecord Class" Url="html/1716e187-9841-7837-eb4e-da511273f5a4.htm" />
     <HelpKINode Title="about AggregationAuthenticationRecord class" Url="html/1716e187-9841-7837-eb4e-da511273f5a4.htm" />
@@ -38,6 +43,29 @@
   </HelpKINode>
   <HelpKINode Title="AggregationChainInputHashVerificationRule.AggregationChainInputHashVerificationRule constructor" Url="html/1546f78d-76ab-55d7-f5bb-6a900db2dfa6.htm" />
   <HelpKINode Title="AggregationChainInputHashVerificationRule.Verify method" Url="html/eaa6c023-cf21-a0a4-f790-70cb18d89675.htm" />
+  <HelpKINode Title="AggregationConfigRequestPayload class">
+    <HelpKINode Title="AggregationConfigRequestPayload Class" Url="html/8d37e9a1-2376-5a26-ac12-fd25e1887f7c.htm" />
+    <HelpKINode Title="about AggregationConfigRequestPayload class" Url="html/8d37e9a1-2376-5a26-ac12-fd25e1887f7c.htm" />
+    <HelpKINode Title="constructor" Url="html/db615c07-a139-daa1-71ff-6b1f39f95a9a.htm" />
+    <HelpKINode Title="fields" Url="html/a23f49e4-a25e-bc1b-a054-6c0893c8112b.htm" />
+    <HelpKINode Title="methods" Url="html/9d90437f-0529-f72f-2b88-d67f6a35507d.htm" />
+    <HelpKINode Title="properties" Url="html/0705a44a-9c97-8c5a-d69b-65439e668f40.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AggregationConfigRequestPayload.AggregationConfigRequestPayload constructor" Url="html/db615c07-a139-daa1-71ff-6b1f39f95a9a.htm" />
+  <HelpKINode Title="AggregationConfigResponsePayload class">
+    <HelpKINode Title="AggregationConfigResponsePayload Class" Url="html/606c3140-c848-c667-3f0a-b019717fd794.htm" />
+    <HelpKINode Title="about AggregationConfigResponsePayload class" Url="html/606c3140-c848-c667-3f0a-b019717fd794.htm" />
+    <HelpKINode Title="constructor" Url="html/0be93f31-fd59-a7ed-3519-b5f75cdbae4d.htm" />
+    <HelpKINode Title="fields" Url="html/3473518d-6400-ab08-e9ec-f4cd2bce1b82.htm" />
+    <HelpKINode Title="methods" Url="html/29de6a4b-799c-8d36-647e-8e2db6e27df5.htm" />
+    <HelpKINode Title="properties" Url="html/77ed5736-9619-2748-23f5-ca9fe6c6c4a1.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AggregationConfigResponsePayload.AggregationAlgorithm property" Url="html/2d9d2ef0-f5ae-46f0-8fd6-8b5074b49cfc.htm" />
+  <HelpKINode Title="AggregationConfigResponsePayload.AggregationConfigResponsePayload constructor" Url="html/0be93f31-fd59-a7ed-3519-b5f75cdbae4d.htm" />
+  <HelpKINode Title="AggregationConfigResponsePayload.AggregationPeriod property" Url="html/57237808-b333-4c52-082d-f6ad832eff92.htm" />
+  <HelpKINode Title="AggregationConfigResponsePayload.MaxLevel property" Url="html/197af0a1-102e-b137-a7d6-1757745c9aaf.htm" />
+  <HelpKINode Title="AggregationConfigResponsePayload.MaxRequests property" Url="html/72166e9a-0b19-f64b-de95-21cce73af33f.htm" />
+  <HelpKINode Title="AggregationConfigResponsePayload.ParentsUris property" Url="html/cde4804a-0c9a-e819-f14c-2202edec1429.htm" />
   <HelpKINode Title="AggregationErrorPayload class">
     <HelpKINode Title="AggregationErrorPayload Class" Url="html/e29c4909-e8d0-2cf8-bc31-58636a5b1a6e.htm" />
     <HelpKINode Title="about AggregationErrorPayload class" Url="html/e29c4909-e8d0-2cf8-bc31-58636a5b1a6e.htm" />
@@ -160,16 +188,8 @@
   </HelpKINode>
   <HelpKINode Title="AggregationHashChainTimeConsistencyRule.AggregationHashChainTimeConsistencyRule constructor" Url="html/adf6b366-a264-b7fa-0fda-462295e22f52.htm" />
   <HelpKINode Title="AggregationHashChainTimeConsistencyRule.Verify method" Url="html/adb3b23e-39a7-5f57-f0de-e5a9ef261129.htm" />
-  <HelpKINode Title="AggregationPdu class">
-    <HelpKINode Title="AggregationPdu Class" Url="html/1bf70549-6f48-c53e-637b-ee3ef84c15b7.htm" />
-    <HelpKINode Title="about AggregationPdu class" Url="html/1bf70549-6f48-c53e-637b-ee3ef84c15b7.htm" />
-    <HelpKINode Title="constructor" Url="html/a4112c1f-8312-96ff-d3d9-25212037d8b6.htm" />
-    <HelpKINode Title="fields" Url="html/3837f8a4-3a91-b8ed-c90a-d88d50c53c2a.htm" />
-    <HelpKINode Title="methods" Url="html/b2ab8252-0168-037a-c4f8-a23cb261635b.htm" />
-    <HelpKINode Title="properties" Url="html/374e96f9-ffcc-e945-596d-622f88e0a2ae.htm" />
-  </HelpKINode>
-  <HelpKINode Title="AggregationPdu.AggregationPdu constructor" Url="html/a4112c1f-8312-96ff-d3d9-25212037d8b6.htm" />
-  <HelpKINode Title="AggregationPdu.Payload property" Url="html/0264d54e-7ccc-4140-4c4e-fc2980294bc2.htm" />
+  <HelpKINode Title="AggregationPeriod property" Url="html/57237808-b333-4c52-082d-f6ad832eff92.htm" />
+  <HelpKINode Title="AggregationPeriodTagType field" Url="html/6c89abf2-d55a-0f89-fd50-cde4549f6070.htm" />
   <HelpKINode Title="AggregationRequestPayload class">
     <HelpKINode Title="AggregationRequestPayload Class" Url="html/6ab15b26-efb6-c1b6-e877-8130e44e4637.htm" />
     <HelpKINode Title="about AggregationRequestPayload class" Url="html/6ab15b26-efb6-c1b6-e877-8130e44e4637.htm" />
@@ -179,10 +199,18 @@
     <HelpKINode Title="properties" Url="html/1d9c659b-ad13-0931-3eee-92d9d223e2d6.htm" />
   </HelpKINode>
   <HelpKINode Title="AggregationRequestPayload.AggregationRequestPayload constructor" Url="html/b4c52818-9f39-5e03-0661-8e70be5bc3cb.htm" />
-  <HelpKINode Title="AggregationRequestPayload.IsConfigRequested property" Url="html/e36fb53c-2849-c77e-b237-e62390dcfc16.htm" />
   <HelpKINode Title="AggregationRequestPayload.RequestHash property" Url="html/0293fbe0-6724-422b-b778-b86cc7601f4f.htm" />
   <HelpKINode Title="AggregationRequestPayload.RequestId property" Url="html/1693be5d-f62a-b2a0-508e-ec4b3c3aa6d1.htm" />
   <HelpKINode Title="AggregationRequestPayload.RequestLevel property" Url="html/46e21e04-8a9b-142f-15d3-f8d35243a1da.htm" />
+  <HelpKINode Title="AggregationRequestPdu class">
+    <HelpKINode Title="AggregationRequestPdu Class" Url="html/c1ec8259-a344-953e-5ae6-62f6d9e1a262.htm" />
+    <HelpKINode Title="about AggregationRequestPdu class" Url="html/c1ec8259-a344-953e-5ae6-62f6d9e1a262.htm" />
+    <HelpKINode Title="constructor" Url="html/941bb56e-a186-9a63-1383-01a1931f6ab0.htm" />
+    <HelpKINode Title="fields" Url="html/f44c65fb-a952-01eb-3c90-86800f13cbf7.htm" />
+    <HelpKINode Title="methods" Url="html/ab0dfb3b-c617-e557-83bf-c1e144333430.htm" />
+    <HelpKINode Title="properties" Url="html/d09299da-bece-6794-4e83-127846385df5.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AggregationRequestPdu.AggregationRequestPdu constructor" Url="html/941bb56e-a186-9a63-1383-01a1931f6ab0.htm" />
   <HelpKINode Title="AggregationResponsePayload class">
     <HelpKINode Title="AggregationResponsePayload Class" Url="html/d0b4ec7d-8abc-8e03-54ac-3edc14e2a08d.htm" />
     <HelpKINode Title="about AggregationResponsePayload class" Url="html/d0b4ec7d-8abc-8e03-54ac-3edc14e2a08d.htm" />
@@ -195,6 +223,18 @@
   <HelpKINode Title="AggregationResponsePayload.ErrorMessage property" Url="html/e4c91de2-e278-6e80-79fa-f90487c27b81.htm" />
   <HelpKINode Title="AggregationResponsePayload.RequestId property" Url="html/efbffcaa-ae1d-e8a9-5e2a-2b767866a89a.htm" />
   <HelpKINode Title="AggregationResponsePayload.Status property" Url="html/587aa944-2a87-be24-813f-33baa5839d09.htm" />
+  <HelpKINode Title="AggregationResponsePdu class">
+    <HelpKINode Title="AggregationResponsePdu Class" Url="html/315af5e7-7690-c935-11c6-f93f8c16716b.htm" />
+    <HelpKINode Title="about AggregationResponsePdu class" Url="html/315af5e7-7690-c935-11c6-f93f8c16716b.htm" />
+    <HelpKINode Title="constructor" Url="html/f163396b-e994-2d4a-5e5f-06da25e00b1d.htm" />
+    <HelpKINode Title="fields" Url="html/123c1ce9-fd5e-ecc6-9574-0bb62331cf39.htm" />
+    <HelpKINode Title="methods" Url="html/a06dbb3f-3df5-8e89-2373-b4560997fdb2.htm" />
+    <HelpKINode Title="properties" Url="html/df78ea5d-0942-7b4c-0595-bb266766d4e0.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AggregationResponsePdu.AggregationResponsePdu constructor" Url="html/f163396b-e994-2d4a-5e5f-06da25e00b1d.htm" />
+  <HelpKINode Title="AggregationResponsePdu.GetAggregationConfigResponsePayload method" Url="html/7da6d354-61c4-db1d-2b98-7d46ea15953a.htm" />
+  <HelpKINode Title="AggregationResponsePdu.GetAggregationErrorPayload method" Url="html/cf93317d-1887-10f8-65d1-3416362f33bf.htm" />
+  <HelpKINode Title="AggregationResponsePdu.GetAggregationResponsePayload method" Url="html/8c8e94d7-10ed-7b0d-ab7b-3ffd8e3f2924.htm" />
   <HelpKINode Title="AggregationTime property">
     <HelpKINode Title="AggregationAuthenticationRecord.AggregationTime Property " Url="html/75b6ffcb-a0aa-29c6-b4c0-463b848c0c2c.htm" />
     <HelpKINode Title="AggregationHashChain.AggregationTime Property " Url="html/6173ee4d-a8f5-148e-6c1d-c33fc2ae9c14.htm" />
@@ -203,6 +243,7 @@
     <HelpKINode Title="ExtendRequestPayload.AggregationTime Property " Url="html/bc068261-db0c-115e-e5b9-5bd618a21bb9.htm" />
     <HelpKINode Title="IKsiSignature.AggregationTime Property " Url="html/2e661f36-d2c7-7df3-4a23-f3382077cda3.htm" />
     <HelpKINode Title="KsiSignature.AggregationTime Property " Url="html/60de1295-f631-1489-f215-2f034eeeae7e.htm" />
+    <HelpKINode Title="LegacyExtendRequestPayload.AggregationTime Property " Url="html/d7d461bd-7fca-0412-fc90-88fc69bda1d8.htm" />
     <HelpKINode Title="Rfc3161Record.AggregationTime Property " Url="html/a4a8f946-0278-a4d9-78c0-2e6c388d3d20.htm" />
   </HelpKINode>
   <HelpKINode Title="AggregationTimeTagType field">
@@ -244,6 +285,10 @@
     <HelpKINode Title="IKsiExtendingServiceProtocol.BeginExtend Method " Url="html/73d2f92d-3056-d9e2-75aa-59bd669b2cf8.htm" />
     <HelpKINode Title="IKsiService.BeginExtend Method " Url="html/7db751c9-e3ec-c43e-4a14-77ccc48a94fe.htm" />
     <HelpKINode Title="KsiService.BeginExtend Method " Url="html/83afa12b-15fe-e6c7-ec41-ba010e2fad57.htm" />
+  </HelpKINode>
+  <HelpKINode Title="BeginGetAggregationConfig method">
+    <HelpKINode Title="IKsiService.BeginGetAggregationConfig Method " Url="html/d2ad38c7-5797-126b-8217-afde21f6eb57.htm" />
+    <HelpKINode Title="KsiService.BeginGetAggregationConfig Method " Url="html/8bfc8fcf-27d6-e9a1-aaf7-4a3de0bf5207.htm" />
   </HelpKINode>
   <HelpKINode Title="BeginGetPublicationsFile method">
     <HelpKINode Title="HttpKsiServiceProtocol.BeginGetPublicationsFile Method " Url="html/586c5f8a-c4bc-c94c-0460-b4f878b69b11.htm" />
@@ -377,6 +422,7 @@
     <HelpKINode Title="ExtendResponsePayload.CalendarHashChain Property " Url="html/0b735f13-8158-ce54-9389-de6ba311955b.htm" />
     <HelpKINode Title="IKsiSignature.CalendarHashChain Property " Url="html/4ddd1009-9435-c5d7-8db8-29570fdf2ea9.htm" />
     <HelpKINode Title="KsiSignature.CalendarHashChain Property " Url="html/69100169-03c3-0399-b649-0a4683dc4845.htm" />
+    <HelpKINode Title="LegacyExtendResponsePayload.CalendarHashChain Property " Url="html/b0c8d3ad-fa46-835c-8536-47ffa182722d.htm" />
   </HelpKINode>
   <HelpKINode Title="CalendarHashChain.AggregationTime property" Url="html/25ff740b-8be6-ce6d-4515-b85d90441f95.htm" />
   <HelpKINode Title="CalendarHashChain.AreRightLinksEqual method" Url="html/f10894f8-837f-784b-98e9-99968b5883a1.htm" />
@@ -427,6 +473,11 @@
   </HelpKINode>
   <HelpKINode Title="CalendarHashChainRegistrationTimeRule.CalendarHashChainRegistrationTimeRule constructor" Url="html/de5a7a3e-ed90-76bc-18c7-c3a892be8f53.htm" />
   <HelpKINode Title="CalendarHashChainRegistrationTimeRule.Verify method" Url="html/01810c8a-5547-e9b8-abf8-f219c5242e54.htm" />
+  <HelpKINode Title="CalendarLastTime property">
+    <HelpKINode Title="ExtendResponsePayload.CalendarLastTime Property " Url="html/b7f2d96b-826c-d5cf-f317-df477f993906.htm" />
+    <HelpKINode Title="LegacyExtendResponsePayload.CalendarLastTime Property " Url="html/f9ac9ca9-841f-f5ca-de10-9817d6c76822.htm" />
+  </HelpKINode>
+  <HelpKINode Title="CalendarLastTimeTagType field" Url="html/d2bfbbc1-a106-611e-7670-ae273386ba16.htm" />
   <HelpKINode Title="CertificateBytes property" Url="html/40820225-7134-c30e-a599-4502ea8111c0.htm" />
   <HelpKINode Title="CertificateExistenceRule class">
     <HelpKINode Title="CertificateExistenceRule Class" Url="html/88f5ec84-8c4a-da18-719b-b5c63d2b0381.htm" />
@@ -465,26 +516,26 @@
   <HelpKINode Title="CertificateSubjectRdn.Oid property" Url="html/57207fec-fcb7-52bf-1557-7f264ae3e3d2.htm" />
   <HelpKINode Title="CertificateSubjectRdn.Value property" Url="html/15d0b41c-5e16-e729-ddc7-c5b8ca5d8bc6.htm" />
   <HelpKINode Title="CertificateSubjectRdnSelector class">
-    <HelpKINode Title="CertificateSubjectRdnSelector Class" Url="html/8841c168-7c77-af5f-3130-65e814d99544.htm" />
     <HelpKINode Title="CertificateSubjectRdnSelector Class" Url="html/07a58e22-7ac5-c1b6-4f7f-a252c03d1da9.htm" />
-    <HelpKINode Title="about CertificateSubjectRdnSelector class" Url="html/07a58e22-7ac5-c1b6-4f7f-a252c03d1da9.htm" />
+    <HelpKINode Title="CertificateSubjectRdnSelector Class" Url="html/8841c168-7c77-af5f-3130-65e814d99544.htm" />
     <HelpKINode Title="about CertificateSubjectRdnSelector class" Url="html/8841c168-7c77-af5f-3130-65e814d99544.htm" />
-    <HelpKINode Title="constructor" Url="html/2c010107-d5c8-18b6-45c1-bdc36647b4bb.htm" />
+    <HelpKINode Title="about CertificateSubjectRdnSelector class" Url="html/07a58e22-7ac5-c1b6-4f7f-a252c03d1da9.htm" />
     <HelpKINode Title="constructor" Url="html/22136802-9a23-1953-d09e-c467228a6a90.htm" />
-    <HelpKINode Title="methods" Url="html/46cb3900-fda1-026e-16ef-19f432010016.htm" />
+    <HelpKINode Title="constructor" Url="html/2c010107-d5c8-18b6-45c1-bdc36647b4bb.htm" />
     <HelpKINode Title="methods" Url="html/3467c471-474f-1573-4a4c-66e3de7fb20f.htm" />
+    <HelpKINode Title="methods" Url="html/46cb3900-fda1-026e-16ef-19f432010016.htm" />
   </HelpKINode>
   <HelpKINode Title="CertificateSubjectRdnSelector.CertificateSubjectRdnSelector constructor">
-    <HelpKINode Title="CertificateSubjectRdnSelector Constructor " Url="html/22136802-9a23-1953-d09e-c467228a6a90.htm" />
     <HelpKINode Title="CertificateSubjectRdnSelector Constructor " Url="html/2c010107-d5c8-18b6-45c1-bdc36647b4bb.htm" />
+    <HelpKINode Title="CertificateSubjectRdnSelector Constructor " Url="html/22136802-9a23-1953-d09e-c467228a6a90.htm" />
   </HelpKINode>
   <HelpKINode Title="CertificateSubjectRdnSelector.IsMatch method">
     <HelpKINode Title="CertificateSubjectRdnSelector.IsMatch Method " Url="html/e6deb03b-5e15-6a9c-3d2b-290daa8411a1.htm" />
     <HelpKINode Title="CertificateSubjectRdnSelector.IsMatch Method " Url="html/7209bb20-4670-a754-5672-10f7d06ff751.htm" />
   </HelpKINode>
   <HelpKINode Title="CertificateSubjectRdnSelector.Match method">
-    <HelpKINode Title="CertificateSubjectRdnSelector.Match Method " Url="html/abd96a6a-913b-cf40-669a-4b94ff00f71b.htm" />
     <HelpKINode Title="CertificateSubjectRdnSelector.Match Method " Url="html/6b6a1cff-363e-861e-7559-813df688f540.htm" />
+    <HelpKINode Title="CertificateSubjectRdnSelector.Match Method " Url="html/abd96a6a-913b-cf40-669a-4b94ff00f71b.htm" />
   </HelpKINode>
   <HelpKINode Title="ChainIndex property" Url="html/4ffb9902-def7-67b2-32e6-73cfc18aadd5.htm" />
   <HelpKINode Title="ChainIndexTagType field">
@@ -524,6 +575,11 @@
     <HelpKINode Title="about Constants class" Url="html/907092fb-98ea-0735-9155-55db81829485.htm" />
     <HelpKINode Title="fields" Url="html/4a4878ea-3e0f-a748-5497-298bb3a0830f.htm" />
   </HelpKINode>
+  <HelpKINode Title="Constants.AggregationAcknowledgmentResponsePayload class">
+    <HelpKINode Title="Constants.AggregationAcknowledgmentResponsePayload Class" Url="html/2247adf6-c515-970d-c1be-b98235a3294e.htm" />
+    <HelpKINode Title="about Constants.AggregationAcknowledgmentResponsePayload class" Url="html/2247adf6-c515-970d-c1be-b98235a3294e.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Constants.AggregationAcknowledgmentResponsePayload.TagType field" Url="html/9278082a-8226-bdf6-67db-d4dee3fbc631.htm" />
   <HelpKINode Title="Constants.AggregationAuthenticationRecord class">
     <HelpKINode Title="Constants.AggregationAuthenticationRecord Class" Url="html/e59e5dfc-6be1-23af-b0f5-543945c75e5e.htm" />
     <HelpKINode Title="about Constants.AggregationAuthenticationRecord class" Url="html/e59e5dfc-6be1-23af-b0f5-543945c75e5e.htm" />
@@ -532,10 +588,26 @@
   <HelpKINode Title="Constants.AggregationAuthenticationRecord.ChainIndexTagType field" Url="html/d430e371-e8b3-274d-c7d4-c2eff3b5aded.htm" />
   <HelpKINode Title="Constants.AggregationAuthenticationRecord.InputHashTagType field" Url="html/d1acf8c7-4486-6322-c927-1565df93a329.htm" />
   <HelpKINode Title="Constants.AggregationAuthenticationRecord.TagType field" Url="html/eee45367-bba8-7a99-7d49-8945b68cddc5.htm" />
+  <HelpKINode Title="Constants.AggregationConfigRequestPayload class">
+    <HelpKINode Title="Constants.AggregationConfigRequestPayload Class" Url="html/45176f5f-0376-b58e-ecf8-3d183dda5f9b.htm" />
+    <HelpKINode Title="about Constants.AggregationConfigRequestPayload class" Url="html/45176f5f-0376-b58e-ecf8-3d183dda5f9b.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Constants.AggregationConfigRequestPayload.TagType field" Url="html/ed2d88bd-5099-c920-9aac-a6d60c2b7dda.htm" />
+  <HelpKINode Title="Constants.AggregationConfigResponsePayload class">
+    <HelpKINode Title="Constants.AggregationConfigResponsePayload Class" Url="html/9df2dd5e-8c5a-8aa9-234a-3a1e0d908684.htm" />
+    <HelpKINode Title="about Constants.AggregationConfigResponsePayload class" Url="html/9df2dd5e-8c5a-8aa9-234a-3a1e0d908684.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Constants.AggregationConfigResponsePayload.AggregationAlgorithmTagType field" Url="html/b7ca7398-f69e-bad9-f3e6-f470512fa674.htm" />
+  <HelpKINode Title="Constants.AggregationConfigResponsePayload.AggregationPeriodTagType field" Url="html/6c89abf2-d55a-0f89-fd50-cde4549f6070.htm" />
+  <HelpKINode Title="Constants.AggregationConfigResponsePayload.MaxLevelTagType field" Url="html/3fed3e6b-0cfc-ac7a-a3b8-546dcd8a4751.htm" />
+  <HelpKINode Title="Constants.AggregationConfigResponsePayload.MaxRequestsTagType field" Url="html/a94190f7-b51c-4728-8352-dc08444eb8dd.htm" />
+  <HelpKINode Title="Constants.AggregationConfigResponsePayload.ParentUriTagType field" Url="html/1a1896e7-21c7-7591-ed53-0cb4b4ab0666.htm" />
+  <HelpKINode Title="Constants.AggregationConfigResponsePayload.TagType field" Url="html/5d2bd7c6-d928-1b21-ee5d-66ea5673cd29.htm" />
   <HelpKINode Title="Constants.AggregationErrorPayload class">
     <HelpKINode Title="Constants.AggregationErrorPayload Class" Url="html/a71eb764-96c7-2ed1-b94e-d4d362db9c78.htm" />
     <HelpKINode Title="about Constants.AggregationErrorPayload class" Url="html/a71eb764-96c7-2ed1-b94e-d4d362db9c78.htm" />
   </HelpKINode>
+  <HelpKINode Title="Constants.AggregationErrorPayload.LegacyTagType field" Url="html/415b8aad-e56d-efc8-b470-4145f4cdbd77.htm" />
   <HelpKINode Title="Constants.AggregationErrorPayload.TagType field" Url="html/fd626c2a-91f0-2e0e-aaf8-369d8c97b52f.htm" />
   <HelpKINode Title="Constants.AggregationHashChain class">
     <HelpKINode Title="Constants.AggregationHashChain Class" Url="html/4a49e36b-3ceb-3015-40b2-fff60254f287.htm" />
@@ -564,28 +636,35 @@
   <HelpKINode Title="Constants.AggregationHashChain.Metadata.SequenceNumberTagType field" Url="html/00056294-9f54-1b1b-2a0d-53a8124f8f5e.htm" />
   <HelpKINode Title="Constants.AggregationHashChain.Metadata.TagType field" Url="html/461ba72f-8c96-6148-1368-faa3988e0fe4.htm" />
   <HelpKINode Title="Constants.AggregationHashChain.TagType field" Url="html/763c3160-0803-bb7e-7d4b-b8ffb27ce3e2.htm" />
-  <HelpKINode Title="Constants.AggregationPdu class">
-    <HelpKINode Title="Constants.AggregationPdu Class" Url="html/95335238-179e-8ba1-4645-0222bd98c5f1.htm" />
-    <HelpKINode Title="about Constants.AggregationPdu class" Url="html/95335238-179e-8ba1-4645-0222bd98c5f1.htm" />
-  </HelpKINode>
-  <HelpKINode Title="Constants.AggregationPdu.TagType field" Url="html/47ccc880-c34b-7b94-672c-ca0eb3baae29.htm" />
   <HelpKINode Title="Constants.AggregationRequestPayload class">
     <HelpKINode Title="Constants.AggregationRequestPayload Class" Url="html/c57515c3-edce-e1ef-35c0-a0afeaa5ea53.htm" />
     <HelpKINode Title="about Constants.AggregationRequestPayload class" Url="html/c57515c3-edce-e1ef-35c0-a0afeaa5ea53.htm" />
   </HelpKINode>
   <HelpKINode Title="Constants.AggregationRequestPayload.ConfigTagType field" Url="html/24deef1c-d008-2db9-2913-1348fbadf25d.htm" />
+  <HelpKINode Title="Constants.AggregationRequestPayload.LegacyTagType field" Url="html/7f271b09-fda2-28b6-b009-74cfbc5d3336.htm" />
   <HelpKINode Title="Constants.AggregationRequestPayload.RequestHashTagType field" Url="html/b3e0701d-43d0-30c0-3b05-41826aa4890c.htm" />
   <HelpKINode Title="Constants.AggregationRequestPayload.RequestIdTagType field" Url="html/72974bc9-4bda-bc3a-4840-67328aaf5212.htm" />
   <HelpKINode Title="Constants.AggregationRequestPayload.RequestLevelTagType field" Url="html/13df7685-4b74-a1b4-aa70-59388c934480.htm" />
   <HelpKINode Title="Constants.AggregationRequestPayload.TagType field" Url="html/6d67c173-a40d-1a7d-38df-c4b156eb8001.htm" />
+  <HelpKINode Title="Constants.AggregationRequestPdu class">
+    <HelpKINode Title="Constants.AggregationRequestPdu Class" Url="html/b8d712f8-7298-037e-b2ef-c3afb7751536.htm" />
+    <HelpKINode Title="about Constants.AggregationRequestPdu class" Url="html/b8d712f8-7298-037e-b2ef-c3afb7751536.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Constants.AggregationRequestPdu.TagType field" Url="html/c46a56dc-b64f-5d7f-4f38-0408d9365274.htm" />
   <HelpKINode Title="Constants.AggregationResponsePayload class">
     <HelpKINode Title="Constants.AggregationResponsePayload Class" Url="html/1440428e-82ad-5b4d-8eb6-6d853ef9739f.htm" />
     <HelpKINode Title="about Constants.AggregationResponsePayload class" Url="html/1440428e-82ad-5b4d-8eb6-6d853ef9739f.htm" />
   </HelpKINode>
   <HelpKINode Title="Constants.AggregationResponsePayload.ConfigTagType field" Url="html/2e21ed8c-8b66-daf8-8072-bd07d8cbe03b.htm" />
+  <HelpKINode Title="Constants.AggregationResponsePayload.LegacyTagType field" Url="html/951529d8-8df7-9cae-603f-9ac9633270b3.htm" />
   <HelpKINode Title="Constants.AggregationResponsePayload.RequestAcknowledgmentTagType field" Url="html/5d90c85a-511a-f014-22f4-57f4ba34b623.htm" />
   <HelpKINode Title="Constants.AggregationResponsePayload.RequestIdTagType field" Url="html/2e5f17df-43d2-91f7-e3ea-1058903a26f7.htm" />
   <HelpKINode Title="Constants.AggregationResponsePayload.TagType field" Url="html/7d403f02-a5b0-91e5-a69a-3e4ba0a43a16.htm" />
+  <HelpKINode Title="Constants.AggregationResponsePdu class">
+    <HelpKINode Title="Constants.AggregationResponsePdu Class" Url="html/adc3b86f-3da3-370c-4cd6-27b251be659b.htm" />
+    <HelpKINode Title="about Constants.AggregationResponsePdu class" Url="html/adc3b86f-3da3-370c-4cd6-27b251be659b.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Constants.AggregationResponsePdu.TagType field" Url="html/6159d330-4a64-4756-4fe4-f35b215957b7.htm" />
   <HelpKINode Title="Constants.BitsInByte field" Url="html/fc4010b8-9200-9069-4469-2703f9b12fe9.htm" />
   <HelpKINode Title="Constants.CalendarAuthenticationRecord class">
     <HelpKINode Title="Constants.CalendarAuthenticationRecord Class" Url="html/fde0b618-b338-d657-1029-3a025ffc4340.htm" />
@@ -607,31 +686,45 @@
   <HelpKINode Title="Constants.CertificateRecord.CertificateIdTagType field" Url="html/35831b04-6fe8-6e08-eeba-fce9b3317538.htm" />
   <HelpKINode Title="Constants.CertificateRecord.TagType field" Url="html/7f569d3b-a44d-c079-5b3f-f1ba5519d7b3.htm" />
   <HelpKINode Title="Constants.CertificateRecord.X509CertificateTagType field" Url="html/0bd5409e-4a64-7ac9-9b86-e70fdc0457cc.htm" />
+  <HelpKINode Title="Constants.ExtendConfigResponsePayload class">
+    <HelpKINode Title="Constants.ExtendConfigResponsePayload Class" Url="html/cecc86b1-0a94-dc8f-f714-439ce28b33a8.htm" />
+    <HelpKINode Title="about Constants.ExtendConfigResponsePayload class" Url="html/cecc86b1-0a94-dc8f-f714-439ce28b33a8.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Constants.ExtendConfigResponsePayload.TagType field" Url="html/4a332580-015d-210c-4d80-0dd170585933.htm" />
   <HelpKINode Title="Constants.ExtendErrorPayload class">
     <HelpKINode Title="Constants.ExtendErrorPayload Class" Url="html/52415862-3569-315f-56b7-5a45dc0e062b.htm" />
     <HelpKINode Title="about Constants.ExtendErrorPayload class" Url="html/52415862-3569-315f-56b7-5a45dc0e062b.htm" />
   </HelpKINode>
+  <HelpKINode Title="Constants.ExtendErrorPayload.LegacyTagType field" Url="html/2bb661ca-d89d-b136-402e-65f334b1ce22.htm" />
   <HelpKINode Title="Constants.ExtendErrorPayload.TagType field" Url="html/85521098-0e02-52d1-08df-01a0feb4b907.htm" />
-  <HelpKINode Title="Constants.ExtendPdu class">
-    <HelpKINode Title="Constants.ExtendPdu Class" Url="html/9d554001-9ef1-9b55-691e-0d80cb949ff3.htm" />
-    <HelpKINode Title="about Constants.ExtendPdu class" Url="html/9d554001-9ef1-9b55-691e-0d80cb949ff3.htm" />
-  </HelpKINode>
-  <HelpKINode Title="Constants.ExtendPdu.TagType field" Url="html/f5764798-ace0-1197-230e-76f57e6f23f9.htm" />
   <HelpKINode Title="Constants.ExtendRequestPayload class">
     <HelpKINode Title="Constants.ExtendRequestPayload Class" Url="html/17891c3b-07f6-27c4-17a8-5b36a1571343.htm" />
     <HelpKINode Title="about Constants.ExtendRequestPayload class" Url="html/17891c3b-07f6-27c4-17a8-5b36a1571343.htm" />
   </HelpKINode>
   <HelpKINode Title="Constants.ExtendRequestPayload.AggregationTimeTagType field" Url="html/254ece24-93a0-5534-2ade-413659e0aea0.htm" />
+  <HelpKINode Title="Constants.ExtendRequestPayload.LegacyTagType field" Url="html/894596a3-cf4f-0129-df70-ff4131ac1ce2.htm" />
   <HelpKINode Title="Constants.ExtendRequestPayload.PublicationTimeTagType field" Url="html/77db3d8c-ccc7-7509-47c6-f629118cb5e9.htm" />
   <HelpKINode Title="Constants.ExtendRequestPayload.RequestIdTagType field" Url="html/bd7c4775-adc3-8109-ddcc-88de98feb0a4.htm" />
   <HelpKINode Title="Constants.ExtendRequestPayload.TagType field" Url="html/5a1e1909-363c-61e5-c8c7-fff98833b3c3.htm" />
+  <HelpKINode Title="Constants.ExtendRequestPdu class">
+    <HelpKINode Title="Constants.ExtendRequestPdu Class" Url="html/e301f5a8-e139-965e-f63d-d01c972f30d0.htm" />
+    <HelpKINode Title="about Constants.ExtendRequestPdu class" Url="html/e301f5a8-e139-965e-f63d-d01c972f30d0.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Constants.ExtendRequestPdu.TagType field" Url="html/fb3cf7f6-eda5-b6a6-1e9b-96bfa980ffa6.htm" />
   <HelpKINode Title="Constants.ExtendResponsePayload class">
     <HelpKINode Title="Constants.ExtendResponsePayload Class" Url="html/7616cf27-6ce1-6ba5-1ff6-0082ba364b96.htm" />
     <HelpKINode Title="about Constants.ExtendResponsePayload class" Url="html/7616cf27-6ce1-6ba5-1ff6-0082ba364b96.htm" />
   </HelpKINode>
+  <HelpKINode Title="Constants.ExtendResponsePayload.CalendarLastTimeTagType field" Url="html/d2bfbbc1-a106-611e-7670-ae273386ba16.htm" />
   <HelpKINode Title="Constants.ExtendResponsePayload.LastTimeTagType field" Url="html/01e2b5ca-c823-2cb1-90bb-5acbba4d2687.htm" />
+  <HelpKINode Title="Constants.ExtendResponsePayload.LegacyTagType field" Url="html/33f2e925-15f1-e5ad-83da-c8e18152e230.htm" />
   <HelpKINode Title="Constants.ExtendResponsePayload.RequestIdTagType field" Url="html/8b484c47-31f3-7ca8-5bd0-f2ca62355d40.htm" />
   <HelpKINode Title="Constants.ExtendResponsePayload.TagType field" Url="html/5d420e79-f13b-da84-8e7e-f9070c375a3c.htm" />
+  <HelpKINode Title="Constants.ExtendResponsePdu class">
+    <HelpKINode Title="Constants.ExtendResponsePdu Class" Url="html/2c1a86c9-c718-e2a7-0283-32d124e58c2f.htm" />
+    <HelpKINode Title="about Constants.ExtendResponsePdu class" Url="html/2c1a86c9-c718-e2a7-0283-32d124e58c2f.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Constants.ExtendResponsePdu.TagType field" Url="html/2b567940-7905-1701-2269-3ac89c995600.htm" />
   <HelpKINode Title="Constants.KsiPdu class">
     <HelpKINode Title="Constants.KsiPdu Class" Url="html/46ca2847-6bcb-866e-25d2-bb80670d59d0.htm" />
     <HelpKINode Title="about Constants.KsiPdu class" Url="html/46ca2847-6bcb-866e-25d2-bb80670d59d0.htm" />
@@ -656,6 +749,16 @@
     <HelpKINode Title="about Constants.KsiSignature class" Url="html/a9cd368f-418a-d84d-141e-e339e1fd25ed.htm" />
   </HelpKINode>
   <HelpKINode Title="Constants.KsiSignature.TagType field" Url="html/1749f419-a2ab-4084-be74-13c42c3e3f44.htm" />
+  <HelpKINode Title="Constants.LegacyAggregationPdu class">
+    <HelpKINode Title="Constants.LegacyAggregationPdu Class" Url="html/bcf764ef-8427-725c-f2f0-cb0c4c5614dd.htm" />
+    <HelpKINode Title="about Constants.LegacyAggregationPdu class" Url="html/bcf764ef-8427-725c-f2f0-cb0c4c5614dd.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Constants.LegacyAggregationPdu.TagType field" Url="html/8938d9af-4622-73c0-79e4-1a6d52dee614.htm" />
+  <HelpKINode Title="Constants.LegacyExtendPdu class">
+    <HelpKINode Title="Constants.LegacyExtendPdu Class" Url="html/617d1089-9d42-0955-6126-27eebd8c2812.htm" />
+    <HelpKINode Title="about Constants.LegacyExtendPdu class" Url="html/617d1089-9d42-0955-6126-27eebd8c2812.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Constants.LegacyExtendPdu.TagType field" Url="html/637d7480-8cad-72de-35b7-c2f025afed56.htm" />
   <HelpKINode Title="Constants.PublicationData class">
     <HelpKINode Title="Constants.PublicationData Class" Url="html/82350006-6a02-2691-e568-34a4a3dedddc.htm" />
     <HelpKINode Title="about Constants.PublicationData class" Url="html/82350006-6a02-2691-e568-34a4a3dedddc.htm" />
@@ -804,20 +907,20 @@
   <HelpKINode Title="DataHasher class">
     <HelpKINode Title="DataHasher Class" Url="html/058b7fc4-04ce-fdbd-f8a9-f3b8347eb266.htm" />
     <HelpKINode Title="DataHasher Class" Url="html/f339960a-222a-8af1-ffe8-6d8199887afd.htm" />
-    <HelpKINode Title="about DataHasher class" Url="html/f339960a-222a-8af1-ffe8-6d8199887afd.htm" />
     <HelpKINode Title="about DataHasher class" Url="html/058b7fc4-04ce-fdbd-f8a9-f3b8347eb266.htm" />
+    <HelpKINode Title="about DataHasher class" Url="html/f339960a-222a-8af1-ffe8-6d8199887afd.htm" />
     <HelpKINode Title="constructor" Url="html/326e259c-87e4-d38f-0549-58dbbda73b1d.htm" />
     <HelpKINode Title="constructor" Url="html/ba962da1-77ab-4819-929b-1f8eef78888c.htm" />
-    <HelpKINode Title="methods" Url="html/9f0dd905-2e60-a5c2-b966-3b7f4e9f4663.htm" />
     <HelpKINode Title="methods" Url="html/5c024098-ddd9-5c9d-6883-d3601837672f.htm" />
+    <HelpKINode Title="methods" Url="html/9f0dd905-2e60-a5c2-b966-3b7f4e9f4663.htm" />
   </HelpKINode>
   <HelpKINode Title="DataHasher.AddData method">
     <HelpKINode Title="DataHasher.AddData Method " Url="html/b11f7e0e-5a4f-a04e-4d5f-c1ce9c6251db.htm" />
     <HelpKINode Title="DataHasher.AddData Method " Url="html/164cb775-4306-1edc-3bf6-5faeaa8301fc.htm" />
   </HelpKINode>
   <HelpKINode Title="DataHasher.DataHasher constructor">
-    <HelpKINode Title="DataHasher Constructor " Url="html/326e259c-87e4-d38f-0549-58dbbda73b1d.htm" />
     <HelpKINode Title="DataHasher Constructor " Url="html/ba962da1-77ab-4819-929b-1f8eef78888c.htm" />
+    <HelpKINode Title="DataHasher Constructor " Url="html/326e259c-87e4-d38f-0549-58dbbda73b1d.htm" />
   </HelpKINode>
   <HelpKINode Title="DataHasher.GetHash method">
     <HelpKINode Title="DataHasher.GetHash Method " Url="html/82143431-fd2c-f143-9569-e7b6b2b83d84.htm" />
@@ -893,6 +996,10 @@
     <HelpKINode Title="IKsiService.EndExtend Method " Url="html/4bdeaff1-99b5-cc17-71d8-80da482ba44d.htm" />
     <HelpKINode Title="KsiService.EndExtend Method " Url="html/71c7d89c-6146-f347-d8bf-fa9638075ecc.htm" />
   </HelpKINode>
+  <HelpKINode Title="EndGetAggregationConfig method">
+    <HelpKINode Title="IKsiService.EndGetAggregationConfig Method " Url="html/ebd05414-5d74-1025-dc2e-616024a89268.htm" />
+    <HelpKINode Title="KsiService.EndGetAggregationConfig Method " Url="html/bb2add7b-36d2-d246-2d86-1f7d93f3fa58.htm" />
+  </HelpKINode>
   <HelpKINode Title="EndGetPublicationsFile method">
     <HelpKINode Title="HttpKsiServiceProtocol.EndGetPublicationsFile Method " Url="html/37068b23-0781-b891-ce0f-a5ea5e8cc675.htm" />
     <HelpKINode Title="IKsiPublicationsFileServiceProtocol.EndGetPublicationsFile Method " Url="html/958db4e1-f340-2085-e8a2-7f3434a1ea79.htm" />
@@ -920,6 +1027,8 @@
     <HelpKINode Title="AggregationResponsePayload.ErrorMessage Property " Url="html/e4c91de2-e278-6e80-79fa-f90487c27b81.htm" />
     <HelpKINode Title="ErrorPayload.ErrorMessage Property " Url="html/66469157-defb-f183-b7a6-93144c24ea06.htm" />
     <HelpKINode Title="ExtendResponsePayload.ErrorMessage Property " Url="html/a128c955-3296-e1d9-8681-918a882a6f54.htm" />
+    <HelpKINode Title="LegacyAggregationResponsePayload.ErrorMessage Property " Url="html/01038229-eabe-beb2-e842-e5966eb591c2.htm" />
+    <HelpKINode Title="LegacyExtendResponsePayload.ErrorMessage Property " Url="html/fb36df0b-2210-a120-5b2e-4dd8d81635e5.htm" />
   </HelpKINode>
   <HelpKINode Title="ErrorMessageTagType field" Url="html/14a70bf5-6025-36b9-48c3-b91947f4f58d.htm" />
   <HelpKINode Title="ErrorPayload class">
@@ -939,6 +1048,9 @@
     <HelpKINode Title="KsiMultiSignature.Extend Method " Url="html/ddd42836-fe89-7baa-8996-0a532b03fef2.htm" />
     <HelpKINode Title="KsiService.Extend Method " Url="html/10ec01c7-eb4a-faef-de1c-ca6f8d83d286.htm" />
     <HelpKINode Title="KsiSignature.Extend Method " Url="html/005663d5-7067-45d4-cbb4-8e33ce530b0b.htm" />
+  </HelpKINode>
+  <HelpKINode Title="ExtendConfigResponsePayload class">
+    <HelpKINode Title="fields" Url="html/2df5f803-d19f-1bc5-50be-60310a2331ed.htm" />
   </HelpKINode>
   <HelpKINode Title="ExtendedSignatureAggregationChainRightLinksMatchesRule class">
     <HelpKINode Title="ExtendedSignatureAggregationChainRightLinksMatchesRule Class" Url="html/87e8e296-5de9-f163-f8ec-0e17c5ba78bd.htm" />
@@ -989,16 +1101,6 @@
   </HelpKINode>
   <HelpKINode Title="ExtendingPermittedVerificationRule.ExtendingPermittedVerificationRule constructor" Url="html/ce25ea3a-c680-4197-0706-e82b7469de8a.htm" />
   <HelpKINode Title="ExtendingPermittedVerificationRule.Verify method" Url="html/91e75db0-8667-8a62-c5eb-434bc8dc5fdb.htm" />
-  <HelpKINode Title="ExtendPdu class">
-    <HelpKINode Title="ExtendPdu Class" Url="html/404257c5-c50f-96d1-35b9-ff75f901a72c.htm" />
-    <HelpKINode Title="about ExtendPdu class" Url="html/404257c5-c50f-96d1-35b9-ff75f901a72c.htm" />
-    <HelpKINode Title="constructor" Url="html/2071c6fc-ba46-0e94-a017-0623b35c6b90.htm" />
-    <HelpKINode Title="fields" Url="html/142e12b5-3ec9-c581-2b52-b4cca0d00324.htm" />
-    <HelpKINode Title="methods" Url="html/4d04fe03-f3d1-6f31-c762-c2d814f69040.htm" />
-    <HelpKINode Title="properties" Url="html/a6684081-248f-ede7-5eb8-019aed83073d.htm" />
-  </HelpKINode>
-  <HelpKINode Title="ExtendPdu.ExtendPdu constructor" Url="html/2071c6fc-ba46-0e94-a017-0623b35c6b90.htm" />
-  <HelpKINode Title="ExtendPdu.Payload property" Url="html/d1679a29-981d-5e14-dbd1-65d9b0ba19fb.htm" />
   <HelpKINode Title="ExtendRequestPayload class">
     <HelpKINode Title="ExtendRequestPayload Class" Url="html/b3d0ca89-cff7-6bb4-61f2-1ffb2e4039e9.htm" />
     <HelpKINode Title="about ExtendRequestPayload class" Url="html/b3d0ca89-cff7-6bb4-61f2-1ffb2e4039e9.htm" />
@@ -1011,6 +1113,15 @@
   <HelpKINode Title="ExtendRequestPayload.ExtendRequestPayload constructor" Url="html/eb9cb99a-6f7c-3dbe-d728-7f403e1d4787.htm" />
   <HelpKINode Title="ExtendRequestPayload.PublicationTime property" Url="html/40bd694e-2fc3-add0-b729-4d8528001db0.htm" />
   <HelpKINode Title="ExtendRequestPayload.RequestId property" Url="html/3243fa08-1b33-bcc5-4010-e279082c2ac0.htm" />
+  <HelpKINode Title="ExtendRequestPdu class">
+    <HelpKINode Title="ExtendRequestPdu Class" Url="html/405a9368-981b-2f75-eec5-30b4342b0206.htm" />
+    <HelpKINode Title="about ExtendRequestPdu class" Url="html/405a9368-981b-2f75-eec5-30b4342b0206.htm" />
+    <HelpKINode Title="constructor" Url="html/1e26d372-d951-581c-d5bb-e1099c5d0182.htm" />
+    <HelpKINode Title="fields" Url="html/40fb8137-a71f-1215-45fd-6a531858b3ce.htm" />
+    <HelpKINode Title="methods" Url="html/986e6216-8b20-868c-fc0f-0fa95a3a2276.htm" />
+    <HelpKINode Title="properties" Url="html/5a47d3a2-bda9-3caa-36ae-eca7e268ba34.htm" />
+  </HelpKINode>
+  <HelpKINode Title="ExtendRequestPdu.ExtendRequestPdu constructor" Url="html/1e26d372-d951-581c-d5bb-e1099c5d0182.htm" />
   <HelpKINode Title="ExtendResponsePayload class">
     <HelpKINode Title="ExtendResponsePayload Class" Url="html/950e896a-7031-4977-fefe-c8df666de67e.htm" />
     <HelpKINode Title="about ExtendResponsePayload class" Url="html/950e896a-7031-4977-fefe-c8df666de67e.htm" />
@@ -1020,11 +1131,22 @@
     <HelpKINode Title="properties" Url="html/4bd1f2a7-5981-30d7-1ea1-ad9ba9ed782a.htm" />
   </HelpKINode>
   <HelpKINode Title="ExtendResponsePayload.CalendarHashChain property" Url="html/0b735f13-8158-ce54-9389-de6ba311955b.htm" />
+  <HelpKINode Title="ExtendResponsePayload.CalendarLastTime property" Url="html/b7f2d96b-826c-d5cf-f317-df477f993906.htm" />
   <HelpKINode Title="ExtendResponsePayload.ErrorMessage property" Url="html/a128c955-3296-e1d9-8681-918a882a6f54.htm" />
   <HelpKINode Title="ExtendResponsePayload.ExtendResponsePayload constructor" Url="html/912e7a26-dcb8-9489-d6c4-37813061c5ea.htm" />
-  <HelpKINode Title="ExtendResponsePayload.LastTime property" Url="html/100dd80c-5634-9e6b-b44a-b05c3b0f8be9.htm" />
   <HelpKINode Title="ExtendResponsePayload.RequestId property" Url="html/b7e7e583-d267-a02e-c02f-591b37f298f8.htm" />
   <HelpKINode Title="ExtendResponsePayload.Status property" Url="html/03baadd5-7996-783e-bce3-7f85c555ebfa.htm" />
+  <HelpKINode Title="ExtendResponsePdu class">
+    <HelpKINode Title="ExtendResponsePdu Class" Url="html/ec04051b-f76c-41b7-c3ff-c48c39d0b4f1.htm" />
+    <HelpKINode Title="about ExtendResponsePdu class" Url="html/ec04051b-f76c-41b7-c3ff-c48c39d0b4f1.htm" />
+    <HelpKINode Title="constructor" Url="html/46e1282a-6731-5975-3441-a63bca319125.htm" />
+    <HelpKINode Title="fields" Url="html/e6426320-76bc-b059-dd02-7b2a7b08524f.htm" />
+    <HelpKINode Title="methods" Url="html/4e21437b-ea30-43e2-dff8-a74741acea0c.htm" />
+    <HelpKINode Title="properties" Url="html/83a36730-0ad1-985f-46a1-79ffccad8cf4.htm" />
+  </HelpKINode>
+  <HelpKINode Title="ExtendResponsePdu.ExtendResponsePdu constructor" Url="html/46e1282a-6731-5975-3441-a63bca319125.htm" />
+  <HelpKINode Title="ExtendResponsePdu.GetExtendErrorPayload method" Url="html/30a32086-ba71-b85b-241d-388097b99590.htm" />
+  <HelpKINode Title="ExtendResponsePdu.GetExtendResponsePayload method" Url="html/6c9910da-9097-9e60-5a04-92574acc2584.htm" />
   <HelpKINode Title="Fail enumeration member" Url="html/2a77bc15-ba6d-bdc4-52d5-741af5a5ee15.htm" />
   <HelpKINode Title="FileBeginningMagicBytes field" Url="html/aa039cc8-6bae-cffa-2261-504450baa044.htm" />
   <HelpKINode Title="FindCertificateById method">
@@ -1052,10 +1174,18 @@
   <HelpKINode Title="ForwardFlag field" Url="html/00a7fcf5-ba10-6d5c-5f6a-005fb142ae93.htm" />
   <HelpKINode Title="Gen01 field" Url="html/a4e00215-f279-2c2c-5bdb-0d5205ecfc78.htm" />
   <HelpKINode Title="Gen02 field" Url="html/c52024c9-ff11-8a2f-4e6b-8d8375edd271.htm" />
+  <HelpKINode Title="GenerateRequestId method" Url="html/210427bd-6102-e893-0363-9262aa286d4d.htm" />
   <HelpKINode Title="Get method">
     <HelpKINode Title="KsiMultiSignature.Get Method " Url="html/2aa2bd23-b294-17f0-650f-e25f010c4e25.htm" />
     <HelpKINode Title="MultiValueDataHolder(TKey, TValue).Get Method " Url="html/995cfee7-b9b4-ab41-227a-3be9f2ae2b6d.htm" />
   </HelpKINode>
+  <HelpKINode Title="GetAggregationConfig method">
+    <HelpKINode Title="IKsiService.GetAggregationConfig Method " Url="html/c53a8ab9-4dd3-4383-6600-a59b52ff04e1.htm" />
+    <HelpKINode Title="Ksi.GetAggregationConfig Method " Url="html/062df91e-b9e4-149d-b02a-82bf18100720.htm" />
+    <HelpKINode Title="KsiService.GetAggregationConfig Method " Url="html/f9448505-ec45-c69e-fbd6-cbcf05fc5709.htm" />
+  </HelpKINode>
+  <HelpKINode Title="GetAggregationConfigResponsePayload method" Url="html/7da6d354-61c4-db1d-2b98-7d46ea15953a.htm" />
+  <HelpKINode Title="GetAggregationErrorPayload method" Url="html/cf93317d-1887-10f8-65d1-3416362f33bf.htm" />
   <HelpKINode Title="GetAggregationHashChain method" Url="html/1709dbe7-98ca-ba14-0273-31814b5ddb58.htm" />
   <HelpKINode Title="GetAggregationHashChainRootHash method">
     <HelpKINode Title="IKsiSignature.GetAggregationHashChainRootHash Method " Url="html/ac3ce415-c883-7519-baf9-dc08346c704d.htm" />
@@ -1066,6 +1196,7 @@
     <HelpKINode Title="KsiSignature.GetAggregationHashChains Method " Url="html/56d0cf0c-fe43-11fd-c93f-71a79632f3b1.htm" />
     <HelpKINode Title="VerificationRule.GetAggregationHashChains Method " Url="html/4d0b6504-9399-4cd2-9fee-497340d28de9.htm" />
   </HelpKINode>
+  <HelpKINode Title="GetAggregationResponsePayload method" Url="html/8c8e94d7-10ed-7b0d-ab7b-3ffd8e3f2924.htm" />
   <HelpKINode Title="GetAllTags method" Url="html/c49dfa07-30e8-b638-6ee2-3c5c82c3bdb2.htm" />
   <HelpKINode Title="GetAllValues method" Url="html/24caca30-0a23-ccc2-6255-b702879f447a.htm" />
   <HelpKINode Title="GetById method" Url="html/9d5dea66-493b-5366-08ab-5b0699535a87.htm" />
@@ -1081,6 +1212,7 @@
   <HelpKINode Title="GetChainLinks method" Url="html/61459439-ed8b-343b-6bde-97ce65e96104.htm" />
   <HelpKINode Title="GetCryptoSignatureVerifierByOid method" Url="html/1afbb69e-b5ad-663a-7fb3-06351355c4f3.htm" />
   <HelpKINode Title="GetDigest method" Url="html/3a934c6a-eecd-6f66-489f-da504452bc11.htm" />
+  <HelpKINode Title="GetEmptyHashMacTag method" Url="html/2a597428-2022-4eb6-4904-d56b9a0b2324.htm" />
   <HelpKINode Title="GetEnumerator method" Url="html/e421b2b5-12b2-5840-4d6d-b41621bcf36a.htm" />
   <HelpKINode Title="GetExtendedLatestCalendarHashChain method">
     <HelpKINode Title="IVerificationContext.GetExtendedLatestCalendarHashChain Method " Url="html/8ff2db01-03c6-f512-e9b8-0954529eb0d8.htm" />
@@ -1091,12 +1223,14 @@
     <HelpKINode Title="VerificationContext.GetExtendedTimeCalendarHashChain Method " Url="html/6aaec314-2a0e-ea26-7dce-89fade59fc8b.htm" />
     <HelpKINode Title="VerificationRule.GetExtendedTimeCalendarHashChain Method " Url="html/24477c43-a1a3-c0a0-1cbf-fae8c59217e3.htm" />
   </HelpKINode>
+  <HelpKINode Title="GetExtendErrorPayload method" Url="html/30a32086-ba71-b85b-241d-388097b99590.htm" />
+  <HelpKINode Title="GetExtendResponsePayload method" Url="html/6c9910da-9097-9e60-5a04-92574acc2584.htm" />
   <HelpKINode Title="GetGreatestCommonDivisor method" Url="html/eb0821e6-edc1-e6c6-d4bb-d32f797c6740.htm" />
   <HelpKINode Title="GetHash method">
     <HelpKINode Title="DataHasher.GetHash Method " Url="html/82143431-fd2c-f143-9569-e7b6b2b83d84.htm" />
     <HelpKINode Title="DataHasher.GetHash Method " Url="html/f35db092-223e-599c-d6bd-577486cf3a52.htm" />
-    <HelpKINode Title="HmacHasher.GetHash Method " Url="html/1088c985-4a04-59ab-5c0e-a685f60b9f3f.htm" />
     <HelpKINode Title="HmacHasher.GetHash Method " Url="html/35e1590e-294e-7390-0369-dc97172db375.htm" />
+    <HelpKINode Title="HmacHasher.GetHash Method " Url="html/1088c985-4a04-59ab-5c0e-a685f60b9f3f.htm" />
     <HelpKINode Title="IDataHasher.GetHash Method " Url="html/e915be68-a0f3-67e2-06b2-62c35cb2cce8.htm" />
     <HelpKINode Title="IHmacHasher.GetHash Method " Url="html/a6180819-3f92-d73c-e949-8d469d281334.htm" />
   </HelpKINode>
@@ -1111,7 +1245,7 @@
     <HelpKINode Title="StringTag.GetHashCode Method " Url="html/5bff1948-5e11-44f2-01ab-3784771200a3.htm" />
     <HelpKINode Title="TlvTag.GetHashCode Method " Url="html/5600ec5e-676d-7a0d-a89b-a58e65e5ffa3.htm" />
   </HelpKINode>
-  <HelpKINode Title="GetHashMacTag method" Url="html/073a729f-6835-d9c9-29e9-3444f13b8c2f.htm" />
+  <HelpKINode Title="GetHashMacTag method" Url="html/d36b931a-54fc-06c3-0c79-9f5a8483fc5e.htm" />
   <HelpKINode Title="GetIdentity method" Url="html/9985cce4-7582-c39e-5e61-213a84e44116.htm" />
   <HelpKINode Title="GetInputData method" Url="html/12e866f9-edf4-30c2-e26f-22990d314671.htm" />
   <HelpKINode Title="GetLatestPublication method">
@@ -1129,6 +1263,10 @@
     <HelpKINode Title="AggregationHashChain.GetOutputHash Method " Url="html/fb7e71c9-8c27-66a2-0bbd-0d47ec0c8176.htm" />
     <HelpKINode Title="Rfc3161Record.GetOutputHash Method " Url="html/150f11ae-a023-b6e4-08e0-63a4d5354349.htm" />
   </HelpKINode>
+  <HelpKINode Title="GetPayload(Of T) method" Url="html/7d503051-436d-0169-c0ba-00690a5740aa.htm" />
+  <HelpKINode Title="GetPayload&lt;T&gt; method" Url="html/7d503051-436d-0169-c0ba-00690a5740aa.htm" />
+  <HelpKINode Title="GetPayloads(Of T) method" Url="html/82d4d29c-5f62-5e85-1112-a1cb4bc29424.htm" />
+  <HelpKINode Title="GetPayloads&lt;T&gt; method" Url="html/82d4d29c-5f62-5e85-1112-a1cb4bc29424.htm" />
   <HelpKINode Title="GetPublicationDate method" Url="html/03de7f19-874c-969f-fa17-2539db0aea93.htm" />
   <HelpKINode Title="GetPublicationRecord method" Url="html/2a27248f-28ed-6129-459f-d557b818e9b9.htm" />
   <HelpKINode Title="GetPublicationsFile method">
@@ -1154,25 +1292,33 @@
   <HelpKINode Title="GetUserPublication method" Url="html/a6aa9002-8e30-4e6d-025d-d1d4f88c430e.htm" />
   <HelpKINode Title="Guardtime.KSI namespace" Url="html/7130fca7-18fc-e8df-f48e-4dd121779c36.htm" />
   <HelpKINode Title="Guardtime.KSI.Constants class" Url="html/907092fb-98ea-0735-9155-55db81829485.htm" />
+  <HelpKINode Title="Guardtime.KSI.Constants.AggregationAcknowledgmentResponsePayload class" Url="html/2247adf6-c515-970d-c1be-b98235a3294e.htm" />
   <HelpKINode Title="Guardtime.KSI.Constants.AggregationAuthenticationRecord class" Url="html/e59e5dfc-6be1-23af-b0f5-543945c75e5e.htm" />
+  <HelpKINode Title="Guardtime.KSI.Constants.AggregationConfigRequestPayload class" Url="html/45176f5f-0376-b58e-ecf8-3d183dda5f9b.htm" />
+  <HelpKINode Title="Guardtime.KSI.Constants.AggregationConfigResponsePayload class" Url="html/9df2dd5e-8c5a-8aa9-234a-3a1e0d908684.htm" />
   <HelpKINode Title="Guardtime.KSI.Constants.AggregationErrorPayload class" Url="html/a71eb764-96c7-2ed1-b94e-d4d362db9c78.htm" />
   <HelpKINode Title="Guardtime.KSI.Constants.AggregationHashChain class" Url="html/4a49e36b-3ceb-3015-40b2-fff60254f287.htm" />
   <HelpKINode Title="Guardtime.KSI.Constants.AggregationHashChain.Link class" Url="html/381e6b32-3281-7db8-c596-2184ab875ada.htm" />
   <HelpKINode Title="Guardtime.KSI.Constants.AggregationHashChain.Metadata class" Url="html/be1c8b8b-5fcb-bfc4-a2d8-9aa1c7a43677.htm" />
-  <HelpKINode Title="Guardtime.KSI.Constants.AggregationPdu class" Url="html/95335238-179e-8ba1-4645-0222bd98c5f1.htm" />
   <HelpKINode Title="Guardtime.KSI.Constants.AggregationRequestPayload class" Url="html/c57515c3-edce-e1ef-35c0-a0afeaa5ea53.htm" />
+  <HelpKINode Title="Guardtime.KSI.Constants.AggregationRequestPdu class" Url="html/b8d712f8-7298-037e-b2ef-c3afb7751536.htm" />
   <HelpKINode Title="Guardtime.KSI.Constants.AggregationResponsePayload class" Url="html/1440428e-82ad-5b4d-8eb6-6d853ef9739f.htm" />
+  <HelpKINode Title="Guardtime.KSI.Constants.AggregationResponsePdu class" Url="html/adc3b86f-3da3-370c-4cd6-27b251be659b.htm" />
   <HelpKINode Title="Guardtime.KSI.Constants.CalendarAuthenticationRecord class" Url="html/fde0b618-b338-d657-1029-3a025ffc4340.htm" />
   <HelpKINode Title="Guardtime.KSI.Constants.CalendarHashChain class" Url="html/172fea5e-ae19-bd4d-b313-832032de4958.htm" />
   <HelpKINode Title="Guardtime.KSI.Constants.CertificateRecord class" Url="html/c22a4b58-15ca-a8d6-a395-1d14dcd4afb2.htm" />
+  <HelpKINode Title="Guardtime.KSI.Constants.ExtendConfigResponsePayload class" Url="html/cecc86b1-0a94-dc8f-f714-439ce28b33a8.htm" />
   <HelpKINode Title="Guardtime.KSI.Constants.ExtendErrorPayload class" Url="html/52415862-3569-315f-56b7-5a45dc0e062b.htm" />
-  <HelpKINode Title="Guardtime.KSI.Constants.ExtendPdu class" Url="html/9d554001-9ef1-9b55-691e-0d80cb949ff3.htm" />
   <HelpKINode Title="Guardtime.KSI.Constants.ExtendRequestPayload class" Url="html/17891c3b-07f6-27c4-17a8-5b36a1571343.htm" />
+  <HelpKINode Title="Guardtime.KSI.Constants.ExtendRequestPdu class" Url="html/e301f5a8-e139-965e-f63d-d01c972f30d0.htm" />
   <HelpKINode Title="Guardtime.KSI.Constants.ExtendResponsePayload class" Url="html/7616cf27-6ce1-6ba5-1ff6-0082ba364b96.htm" />
+  <HelpKINode Title="Guardtime.KSI.Constants.ExtendResponsePdu class" Url="html/2c1a86c9-c718-e2a7-0283-32d124e58c2f.htm" />
   <HelpKINode Title="Guardtime.KSI.Constants.KsiPdu class" Url="html/46ca2847-6bcb-866e-25d2-bb80670d59d0.htm" />
   <HelpKINode Title="Guardtime.KSI.Constants.KsiPduHeader class" Url="html/7437c995-1fa5-2774-f68c-c91e8ed1f1c9.htm" />
   <HelpKINode Title="Guardtime.KSI.Constants.KsiPduPayload class" Url="html/86fa9052-48fb-8bee-5d02-06b7f61a0210.htm" />
   <HelpKINode Title="Guardtime.KSI.Constants.KsiSignature class" Url="html/a9cd368f-418a-d84d-141e-e339e1fd25ed.htm" />
+  <HelpKINode Title="Guardtime.KSI.Constants.LegacyAggregationPdu class" Url="html/bcf764ef-8427-725c-f2f0-cb0c4c5614dd.htm" />
+  <HelpKINode Title="Guardtime.KSI.Constants.LegacyExtendPdu class" Url="html/617d1089-9d42-0955-6126-27eebd8c2812.htm" />
   <HelpKINode Title="Guardtime.KSI.Constants.PublicationData class" Url="html/82350006-6a02-2691-e568-34a4a3dedddc.htm" />
   <HelpKINode Title="Guardtime.KSI.Constants.PublicationRecord class" Url="html/c72ee727-a804-8d83-ef1b-f9d2ebe143bc.htm" />
   <HelpKINode Title="Guardtime.KSI.Constants.PublicationsFile class" Url="html/193d9da3-3c36-7d49-df15-5dbf3f7e41fb.htm" />
@@ -1208,6 +1354,7 @@
   <HelpKINode Title="Guardtime.KSI.Exceptions namespace" Url="html/3800d177-c5c3-002c-9b7a-ee6c28c882c5.htm" />
   <HelpKINode Title="Guardtime.KSI.Exceptions.BlockSigningException class" Url="html/1cad73d9-174e-b677-9ec7-65ae87bee365.htm" />
   <HelpKINode Title="Guardtime.KSI.Exceptions.HashingException class" Url="html/8e5389aa-43d5-7d43-02e3-d01f0247b1f0.htm" />
+  <HelpKINode Title="Guardtime.KSI.Exceptions.InvalidRequestFormatException class" Url="html/d40d97a7-9686-59da-7ed8-99dcf6e5e7ee.htm" />
   <HelpKINode Title="Guardtime.KSI.Exceptions.KsiException class" Url="html/c7fc9024-fb21-bff5-c9e0-ba3c7d8fa0f7.htm" />
   <HelpKINode Title="Guardtime.KSI.Exceptions.KsiMultiSignatureException class" Url="html/9bcf5f86-bd59-86be-73c7-625b89f974f1.htm" />
   <HelpKINode Title="Guardtime.KSI.Exceptions.KsiMultiSignatureInvalidHashException class" Url="html/5f047170-a875-b953-c898-8d5dee0d3789.htm" />
@@ -1252,16 +1399,20 @@
   <HelpKINode Title="Guardtime.KSI.Publication.PublicationsFileFactory class" Url="html/727b4bc0-1747-9515-63ac-cbac3cd77ac6.htm" />
   <HelpKINode Title="Guardtime.KSI.Publication.PublicationsFileHeader class" Url="html/a2407898-13ab-a32d-e939-103d9a792a70.htm" />
   <HelpKINode Title="Guardtime.KSI.Service namespace" Url="html/6c3d4a3a-c200-4dd2-34fe-54591d3059fb.htm" />
+  <HelpKINode Title="Guardtime.KSI.Service.AggregationConfigRequestPayload class" Url="html/8d37e9a1-2376-5a26-ac12-fd25e1887f7c.htm" />
+  <HelpKINode Title="Guardtime.KSI.Service.AggregationConfigResponsePayload class" Url="html/606c3140-c848-c667-3f0a-b019717fd794.htm" />
   <HelpKINode Title="Guardtime.KSI.Service.AggregationErrorPayload class" Url="html/e29c4909-e8d0-2cf8-bc31-58636a5b1a6e.htm" />
-  <HelpKINode Title="Guardtime.KSI.Service.AggregationPdu class" Url="html/1bf70549-6f48-c53e-637b-ee3ef84c15b7.htm" />
   <HelpKINode Title="Guardtime.KSI.Service.AggregationRequestPayload class" Url="html/6ab15b26-efb6-c1b6-e877-8130e44e4637.htm" />
+  <HelpKINode Title="Guardtime.KSI.Service.AggregationRequestPdu class" Url="html/c1ec8259-a344-953e-5ae6-62f6d9e1a262.htm" />
   <HelpKINode Title="Guardtime.KSI.Service.AggregationResponsePayload class" Url="html/d0b4ec7d-8abc-8e03-54ac-3edc14e2a08d.htm" />
+  <HelpKINode Title="Guardtime.KSI.Service.AggregationResponsePdu class" Url="html/315af5e7-7690-c935-11c6-f93f8c16716b.htm" />
   <HelpKINode Title="Guardtime.KSI.Service.BlockSigner class" Url="html/5bbc9c58-1beb-3f81-2fb2-bc27894f58be.htm" />
   <HelpKINode Title="Guardtime.KSI.Service.ErrorPayload class" Url="html/65cc859c-561b-f242-a60a-b235f2691037.htm" />
   <HelpKINode Title="Guardtime.KSI.Service.ExtendErrorPayload class" Url="html/4abd77bc-343c-a797-40e1-a9a25b2fd435.htm" />
-  <HelpKINode Title="Guardtime.KSI.Service.ExtendPdu class" Url="html/404257c5-c50f-96d1-35b9-ff75f901a72c.htm" />
   <HelpKINode Title="Guardtime.KSI.Service.ExtendRequestPayload class" Url="html/b3d0ca89-cff7-6bb4-61f2-1ffb2e4039e9.htm" />
+  <HelpKINode Title="Guardtime.KSI.Service.ExtendRequestPdu class" Url="html/405a9368-981b-2f75-eec5-30b4342b0206.htm" />
   <HelpKINode Title="Guardtime.KSI.Service.ExtendResponsePayload class" Url="html/950e896a-7031-4977-fefe-c8df666de67e.htm" />
+  <HelpKINode Title="Guardtime.KSI.Service.ExtendResponsePdu class" Url="html/ec04051b-f76c-41b7-c3ff-c48c39d0b4f1.htm" />
   <HelpKINode Title="Guardtime.KSI.Service.HttpKsiServiceProtocol class" Url="html/8fc5eae1-1449-3ab9-3677-8f213eb09c70.htm" />
   <HelpKINode Title="Guardtime.KSI.Service.IKsiExtendingServiceProtocol interface" Url="html/973dbbb4-2e75-f708-3aa9-29afb3d6908b.htm" />
   <HelpKINode Title="Guardtime.KSI.Service.IKsiPublicationsFileServiceProtocol interface" Url="html/20b0062e-6708-1600-0072-0685cb4bf723.htm" />
@@ -1272,6 +1423,16 @@
   <HelpKINode Title="Guardtime.KSI.Service.KsiPduHeader class" Url="html/6b3d308e-6da6-0f54-806f-f6b0bf2e87d0.htm" />
   <HelpKINode Title="Guardtime.KSI.Service.KsiPduPayload class" Url="html/92d9916a-efd8-a842-cbdc-75a2fd74d0df.htm" />
   <HelpKINode Title="Guardtime.KSI.Service.KsiService class" Url="html/ca2c884d-b796-629c-fc1a-b7fa95848182.htm" />
+  <HelpKINode Title="Guardtime.KSI.Service.LegacyAggregationErrorPayload class" Url="html/f0263be5-70ff-5118-35bb-bb1ab8bdff33.htm" />
+  <HelpKINode Title="Guardtime.KSI.Service.LegacyAggregationPdu class" Url="html/321010a4-673e-2eaa-ea08-ebe8b538551a.htm" />
+  <HelpKINode Title="Guardtime.KSI.Service.LegacyAggregationRequestPayload class" Url="html/08e8107d-b596-bb1b-0a26-9d740b76703e.htm" />
+  <HelpKINode Title="Guardtime.KSI.Service.LegacyAggregationResponsePayload class" Url="html/7c44c771-b101-c19b-8435-eef3c45af10a.htm" />
+  <HelpKINode Title="Guardtime.KSI.Service.LegacyExtendErrorPayload class" Url="html/2d3c1686-175b-f681-e2d8-64ed8d9b9642.htm" />
+  <HelpKINode Title="Guardtime.KSI.Service.LegacyExtendPdu class" Url="html/97a717ed-45c9-d664-507a-3c7f81efabc3.htm" />
+  <HelpKINode Title="Guardtime.KSI.Service.LegacyExtendRequestPayload class" Url="html/4d06dc9d-5b64-4b4f-b577-d7b67757313b.htm" />
+  <HelpKINode Title="Guardtime.KSI.Service.LegacyExtendResponsePayload class" Url="html/ca319427-1879-965d-8393-e40fd2d30b58.htm" />
+  <HelpKINode Title="Guardtime.KSI.Service.LegacyKsiPdu class" Url="html/8361c308-b919-fd55-c685-e14ab7518319.htm" />
+  <HelpKINode Title="Guardtime.KSI.Service.PduVersion enumeration" Url="html/6f2890e3-920a-078d-3693-8e2ee681bff1.htm" />
   <HelpKINode Title="Guardtime.KSI.Service.ServiceCredentials class" Url="html/541356bd-3a18-c757-ae6d-d12b3b2f4ceb.htm" />
   <HelpKINode Title="Guardtime.KSI.Service.TcpKsiServiceProtocol class" Url="html/66b3c392-c3b4-b0eb-ed92-c8a4f28e90b0.htm" />
   <HelpKINode Title="Guardtime.KSI.Service.TreeNode class" Url="html/6570ed0e-f1c3-d6f4-0048-608c745eace0.htm" />
@@ -1336,6 +1497,8 @@
   <HelpKINode Title="Guardtime.KSI.Signature.Verification.Rule.PublicationsFileExtendedSignatureInputHashRule class" Url="html/fcae3295-15aa-8352-38ce-9c226f9e1f86.htm" />
   <HelpKINode Title="Guardtime.KSI.Signature.Verification.Rule.PublicationsFilePublicationHashMatchesExtenderResponseRule class" Url="html/f90d41f5-ca86-9611-cb77-a93d6bf934b0.htm" />
   <HelpKINode Title="Guardtime.KSI.Signature.Verification.Rule.PublicationsFilePublicationTimeMatchesExtenderResponseRule class" Url="html/a90c04df-23ad-099d-c398-fa4847064a82.htm" />
+  <HelpKINode Title="Guardtime.KSI.Signature.Verification.Rule.Rfc3161RecordAggregationTimeRule class" Url="html/e28add20-1bed-7928-3fde-8522a9fe6be9.htm" />
+  <HelpKINode Title="Guardtime.KSI.Signature.Verification.Rule.Rfc3161RecordChainIndexRule class" Url="html/727b98ea-7d3a-af27-bf2d-adef88709e24.htm" />
   <HelpKINode Title="Guardtime.KSI.Signature.Verification.Rule.SignaturePublicationRecordExistenceRule class" Url="html/8c4dc68a-6311-06d5-28c7-8828238b56b3.htm" />
   <HelpKINode Title="Guardtime.KSI.Signature.Verification.Rule.SignaturePublicationRecordPublicationHashRule class" Url="html/1566074f-f928-0041-e6ec-c1e927906fc8.htm" />
   <HelpKINode Title="Guardtime.KSI.Signature.Verification.Rule.SignaturePublicationRecordPublicationTimeRule class" Url="html/4e2ecc48-b9a5-b70b-12be-abddd0d0814f.htm" />
@@ -1398,19 +1561,20 @@
   </HelpKINode>
   <HelpKINode Title="HashingException.HashingException constructor" Url="html/a821bfcf-1056-efda-7710-451ccc739cc2.htm" />
   <HelpKINode Title="HasKnownValue method" Url="html/992a118a-8c2d-50ca-9c18-1303ecef4bad.htm" />
+  <HelpKINode Title="Header property" Url="html/00842802-1355-da87-fea1-f813ea3df23c.htm" />
   <HelpKINode Title="HmacHasher class">
     <HelpKINode Title="HmacHasher Class" Url="html/e5608714-bc00-7575-11f1-1af04a98de2f.htm" />
     <HelpKINode Title="HmacHasher Class" Url="html/878fc824-1e0c-d1a0-c77c-26aa83f049dc.htm" />
-    <HelpKINode Title="about HmacHasher class" Url="html/e5608714-bc00-7575-11f1-1af04a98de2f.htm" />
     <HelpKINode Title="about HmacHasher class" Url="html/878fc824-1e0c-d1a0-c77c-26aa83f049dc.htm" />
+    <HelpKINode Title="about HmacHasher class" Url="html/e5608714-bc00-7575-11f1-1af04a98de2f.htm" />
     <HelpKINode Title="constructor" Url="html/3cc8695e-7e0d-9f15-a141-be7aee391ace.htm" />
     <HelpKINode Title="constructor" Url="html/fff58ce8-1f39-6310-2a8a-f167e03c200f.htm" />
-    <HelpKINode Title="methods" Url="html/518e3f69-c64f-30cb-f451-4176c21127b0.htm" />
     <HelpKINode Title="methods" Url="html/6a4b3bdf-11f8-854a-c138-f33ff9186089.htm" />
+    <HelpKINode Title="methods" Url="html/518e3f69-c64f-30cb-f451-4176c21127b0.htm" />
   </HelpKINode>
   <HelpKINode Title="HmacHasher.GetHash method">
-    <HelpKINode Title="HmacHasher.GetHash Method " Url="html/35e1590e-294e-7390-0369-dc97172db375.htm" />
     <HelpKINode Title="HmacHasher.GetHash Method " Url="html/1088c985-4a04-59ab-5c0e-a685f60b9f3f.htm" />
+    <HelpKINode Title="HmacHasher.GetHash Method " Url="html/35e1590e-294e-7390-0369-dc97172db375.htm" />
   </HelpKINode>
   <HelpKINode Title="HmacHasher.HmacHasher constructor">
     <HelpKINode Title="HmacHasher Constructor " Url="html/fff58ce8-1f39-6310-2a8a-f167e03c200f.htm" />
@@ -1498,12 +1662,15 @@
     <HelpKINode Title="methods" Url="html/710b99b0-2a9c-06f2-18ce-4a8755b86391.htm" />
   </HelpKINode>
   <HelpKINode Title="IKsiService.BeginExtend method" Url="html/7db751c9-e3ec-c43e-4a14-77ccc48a94fe.htm" />
+  <HelpKINode Title="IKsiService.BeginGetAggregationConfig method" Url="html/d2ad38c7-5797-126b-8217-afde21f6eb57.htm" />
   <HelpKINode Title="IKsiService.BeginGetPublicationsFile method" Url="html/6a2a322e-48fb-5cb4-89ec-1f77111a5491.htm" />
   <HelpKINode Title="IKsiService.BeginSign method" Url="html/3f6caaa5-1c0b-900d-d639-b06abe1b2469.htm" />
   <HelpKINode Title="IKsiService.EndExtend method" Url="html/4bdeaff1-99b5-cc17-71d8-80da482ba44d.htm" />
+  <HelpKINode Title="IKsiService.EndGetAggregationConfig method" Url="html/ebd05414-5d74-1025-dc2e-616024a89268.htm" />
   <HelpKINode Title="IKsiService.EndGetPublicationsFile method" Url="html/e3792440-4d2f-641a-e255-41241ca8dd1c.htm" />
   <HelpKINode Title="IKsiService.EndSign method" Url="html/29be0343-22e7-20b4-544b-af720eb8c762.htm" />
   <HelpKINode Title="IKsiService.Extend method" Url="html/d942179b-c807-010e-e9ef-3b3a25424abd.htm" />
+  <HelpKINode Title="IKsiService.GetAggregationConfig method" Url="html/c53a8ab9-4dd3-4383-6600-a59b52ff04e1.htm" />
   <HelpKINode Title="IKsiService.GetPublicationsFile method" Url="html/16db2c1c-bcd7-27cb-6f70-e4bf79263cb1.htm" />
   <HelpKINode Title="IKsiService.Sign method" Url="html/94d3bc47-15d6-248a-6fbc-0d5871c5a368.htm" />
   <HelpKINode Title="IKsiSignature interface">
@@ -1608,6 +1775,15 @@
     <HelpKINode Title="methods" Url="html/536121c8-2b2a-b4b8-315b-0a8a2f742bc8.htm" />
   </HelpKINode>
   <HelpKINode Title="InternalVerificationPolicy.InternalVerificationPolicy constructor" Url="html/36afd2d5-ba06-1260-f5c4-a3c759a62338.htm" />
+  <HelpKINode Title="InvalidRequestFormatException class">
+    <HelpKINode Title="InvalidRequestFormatException Class" Url="html/d40d97a7-9686-59da-7ed8-99dcf6e5e7ee.htm" />
+    <HelpKINode Title="about InvalidRequestFormatException class" Url="html/d40d97a7-9686-59da-7ed8-99dcf6e5e7ee.htm" />
+    <HelpKINode Title="constructor" Url="html/253cccb2-e258-12a1-739e-03adfeae0c59.htm" />
+    <HelpKINode Title="events" Url="html/876cd775-e1ca-ae2a-6f6f-90cfda8b5719.htm" />
+    <HelpKINode Title="methods" Url="html/c9d3518f-2911-9a39-7b39-2d20104358ec.htm" />
+    <HelpKINode Title="properties" Url="html/020adafd-2ac3-4073-368e-8c831e00e871.htm" />
+  </HelpKINode>
+  <HelpKINode Title="InvalidRequestFormatException.InvalidRequestFormatException constructor" Url="html/253cccb2-e258-12a1-739e-03adfeae0c59.htm" />
   <HelpKINode Title="IPkiTrustProvider interface">
     <HelpKINode Title="IPkiTrustProvider Interface" Url="html/421212fe-fbea-8173-08e1-56124dda9b11.htm" />
     <HelpKINode Title="about IPkiTrustProvider interface" Url="html/421212fe-fbea-8173-08e1-56124dda9b11.htm" />
@@ -1629,7 +1805,7 @@
   </HelpKINode>
   <HelpKINode Title="IPublicationsFileFactory.Create method" Url="html/4a5fd32e-25cc-b30f-c7ad-b515cf6248ce.htm" />
   <HelpKINode Title="IsArrayEqual method" Url="html/c45fda42-2675-06b0-87bb-1733a86e801d.htm" />
-  <HelpKINode Title="IsConfigRequested property" Url="html/e36fb53c-2849-c77e-b237-e62390dcfc16.htm" />
+  <HelpKINode Title="IsConfigRequested property" Url="html/1aca0ecd-c5a5-23cd-c241-df044761d7d7.htm" />
   <HelpKINode Title="IServiceCredentials interface">
     <HelpKINode Title="IServiceCredentials Interface" Url="html/4a78658f-bab0-0824-f97a-7fd5a7c62b77.htm" />
     <HelpKINode Title="about IServiceCredentials interface" Url="html/4a78658f-bab0-0824-f97a-7fd5a7c62b77.htm" />
@@ -1648,8 +1824,8 @@
   <HelpKINode Title="IsInvalidAlgorithm method" Url="html/53c861d9-d641-a6b8-a464-e4bed6886f66.htm" />
   <HelpKINode Title="IsLeftNode property" Url="html/55f40041-e5c5-ed9f-7a47-c58da3c7d622.htm" />
   <HelpKINode Title="IsMatch method">
-    <HelpKINode Title="CertificateSubjectRdnSelector.IsMatch Method " Url="html/e6deb03b-5e15-6a9c-3d2b-290daa8411a1.htm" />
     <HelpKINode Title="CertificateSubjectRdnSelector.IsMatch Method " Url="html/7209bb20-4670-a754-5672-10f7d06ff751.htm" />
+    <HelpKINode Title="CertificateSubjectRdnSelector.IsMatch Method " Url="html/e6deb03b-5e15-6a9c-3d2b-290daa8411a1.htm" />
     <HelpKINode Title="ICertificateSubjectRdnSelector.IsMatch Method " Url="html/09111342-dd43-e572-bfed-00bd3fa04438.htm" />
   </HelpKINode>
   <HelpKINode Title="IsOneValueEqualTo(Of T) method" Url="html/12e2d2dc-8074-2293-19dd-c627996b6a56.htm" />
@@ -1707,6 +1883,7 @@
     <HelpKINode Title="methods" Url="html/68b95448-536f-f593-7fa4-4d41bd050091.htm" />
   </HelpKINode>
   <HelpKINode Title="Ksi.Extend method" Url="html/dce6499d-da47-92d8-6387-1a663331de13.htm" />
+  <HelpKINode Title="Ksi.GetAggregationConfig method" Url="html/062df91e-b9e4-149d-b02a-82bf18100720.htm" />
   <HelpKINode Title="Ksi.GetPublicationsFile method" Url="html/72067549-f297-d1af-7085-d495364e3496.htm" />
   <HelpKINode Title="Ksi.Ksi constructor" Url="html/b45b3cf4-2571-0d74-761c-41ac2ddca6fe.htm" />
   <HelpKINode Title="Ksi.Sign method" Url="html/24fdc146-bc27-6adc-d824-b17ed68881ad.htm" />
@@ -1760,9 +1937,15 @@
     <HelpKINode Title="methods" Url="html/0a5205e3-751a-cd23-d87c-1dfa463d8b86.htm" />
     <HelpKINode Title="properties" Url="html/5503e043-8be7-8075-b740-a43cf6c06f07.htm" />
   </HelpKINode>
-  <HelpKINode Title="KsiPdu.GetHashMacTag method" Url="html/073a729f-6835-d9c9-29e9-3444f13b8c2f.htm" />
+  <HelpKINode Title="KsiPdu.GetEmptyHashMacTag method" Url="html/2a597428-2022-4eb6-4904-d56b9a0b2324.htm" />
+  <HelpKINode Title="KsiPdu.GetPayload(Of T) method" Url="html/7d503051-436d-0169-c0ba-00690a5740aa.htm" />
+  <HelpKINode Title="KsiPdu.GetPayload&lt;T&gt; method" Url="html/7d503051-436d-0169-c0ba-00690a5740aa.htm" />
+  <HelpKINode Title="KsiPdu.GetPayloads(Of T) method" Url="html/82d4d29c-5f62-5e85-1112-a1cb4bc29424.htm" />
+  <HelpKINode Title="KsiPdu.GetPayloads&lt;T&gt; method" Url="html/82d4d29c-5f62-5e85-1112-a1cb4bc29424.htm" />
+  <HelpKINode Title="KsiPdu.Header property" Url="html/00842802-1355-da87-fea1-f813ea3df23c.htm" />
   <HelpKINode Title="KsiPdu.KsiPdu constructor" Url="html/dee1e47c-cbac-24f7-a11c-62dbaa13dcbf.htm" />
-  <HelpKINode Title="KsiPdu.Payload property" Url="html/8d593bc0-420a-addf-9479-f13cadd73179.htm" />
+  <HelpKINode Title="KsiPdu.Payloads property" Url="html/69b417c7-880e-1fd8-0e70-799d07b64edc.htm" />
+  <HelpKINode Title="KsiPdu.SetHmacValue method" Url="html/3703cd84-2156-5982-2785-67d159405fe3.htm" />
   <HelpKINode Title="KsiPdu.ValidateMac method" Url="html/03ff2492-4ddd-0c36-9a43-57a97aa12e82.htm" />
   <HelpKINode Title="KsiPduHeader class">
     <HelpKINode Title="KsiPduHeader Class" Url="html/6b3d308e-6da6-0f54-806f-f6b0bf2e87d0.htm" />
@@ -1802,20 +1985,26 @@
     <HelpKINode Title="about KsiService class" Url="html/ca2c884d-b796-629c-fc1a-b7fa95848182.htm" />
     <HelpKINode Title="constructor" Url="html/10f9c00d-1b9c-8286-7405-f97f59de5439.htm" />
     <HelpKINode Title="methods" Url="html/7e4a705b-11bc-3891-9ce5-f452776f79fd.htm" />
+    <HelpKINode Title="properties" Url="html/ee72632c-6dd4-f083-d3ca-52b009eac85e.htm" />
   </HelpKINode>
   <HelpKINode Title="KsiService property">
     <HelpKINode Title="IVerificationContext.KsiService Property " Url="html/f649b12e-1991-a64e-1c9c-4152f1be182f.htm" />
     <HelpKINode Title="VerificationContext.KsiService Property " Url="html/6a454c99-87bc-084a-9b53-a4712ad90480.htm" />
   </HelpKINode>
   <HelpKINode Title="KsiService.BeginExtend method" Url="html/83afa12b-15fe-e6c7-ec41-ba010e2fad57.htm" />
+  <HelpKINode Title="KsiService.BeginGetAggregationConfig method" Url="html/8bfc8fcf-27d6-e9a1-aaf7-4a3de0bf5207.htm" />
   <HelpKINode Title="KsiService.BeginGetPublicationsFile method" Url="html/9fd8bb96-a98b-41ef-a2f8-0edb5aeee23e.htm" />
   <HelpKINode Title="KsiService.BeginSign method" Url="html/936305a1-31dd-b6a5-8193-16e86deccd9e.htm" />
   <HelpKINode Title="KsiService.EndExtend method" Url="html/71c7d89c-6146-f347-d8bf-fa9638075ecc.htm" />
+  <HelpKINode Title="KsiService.EndGetAggregationConfig method" Url="html/bb2add7b-36d2-d246-2d86-1f7d93f3fa58.htm" />
   <HelpKINode Title="KsiService.EndGetPublicationsFile method" Url="html/93d92c60-ab02-7220-8672-1bf3db81c4d7.htm" />
   <HelpKINode Title="KsiService.EndSign method" Url="html/5334df44-bac8-f37b-8ffd-d722d07af02f.htm" />
   <HelpKINode Title="KsiService.Extend method" Url="html/10ec01c7-eb4a-faef-de1c-ca6f8d83d286.htm" />
+  <HelpKINode Title="KsiService.GenerateRequestId method" Url="html/210427bd-6102-e893-0363-9262aa286d4d.htm" />
+  <HelpKINode Title="KsiService.GetAggregationConfig method" Url="html/f9448505-ec45-c69e-fbd6-cbcf05fc5709.htm" />
   <HelpKINode Title="KsiService.GetPublicationsFile method" Url="html/c15c0e26-26b8-8abf-f4db-e123ca085160.htm" />
   <HelpKINode Title="KsiService.KsiService constructor" Url="html/10f9c00d-1b9c-8286-7405-f97f59de5439.htm" />
+  <HelpKINode Title="KsiService.PduVersion property" Url="html/4a9e71b8-7b7f-e6ad-1a2f-13e9f89950a4.htm" />
   <HelpKINode Title="KsiService.Sign method" Url="html/3109551b-6e4d-d43a-a620-5bb3a8bb5363.htm" />
   <HelpKINode Title="KsiServiceException class">
     <HelpKINode Title="KsiServiceException Class" Url="html/d001a62c-2785-237d-58bc-75886d06cd80.htm" />
@@ -1885,11 +2074,112 @@
     <HelpKINode Title="properties" Url="html/5a9305ca-a7dc-90a3-157f-92d18ee8af47.htm" />
   </HelpKINode>
   <HelpKINode Title="KsiVerificationException.KsiVerificationException constructor" Url="html/de2c7e94-7269-6f14-ad12-a5c6b34f3b3b.htm" />
-  <HelpKINode Title="LastTime property" Url="html/100dd80c-5634-9e6b-b44a-b05c3b0f8be9.htm" />
   <HelpKINode Title="LastTimeTagType field" Url="html/01e2b5ca-c823-2cb1-90bb-5acbba4d2687.htm" />
   <HelpKINode Title="Left enumeration member" Url="html/d3bd15cf-6c07-1ee2-9970-824b45111ede.htm" />
   <HelpKINode Title="Left property" Url="html/6d821567-2673-05ba-7b74-af4268c96a2e.htm" />
+  <HelpKINode Title="LegacyAggregationErrorPayload class">
+    <HelpKINode Title="LegacyAggregationErrorPayload Class" Url="html/f0263be5-70ff-5118-35bb-bb1ab8bdff33.htm" />
+    <HelpKINode Title="about LegacyAggregationErrorPayload class" Url="html/f0263be5-70ff-5118-35bb-bb1ab8bdff33.htm" />
+    <HelpKINode Title="constructor" Url="html/dcfd2feb-81d4-c210-086a-fd841ff2cccd.htm" />
+    <HelpKINode Title="methods" Url="html/916bd0df-799c-8b25-4eb6-bad81017b72c.htm" />
+    <HelpKINode Title="properties" Url="html/507a17d2-cb64-a3ff-646f-1e24be148f8c.htm" />
+  </HelpKINode>
+  <HelpKINode Title="LegacyAggregationErrorPayload.LegacyAggregationErrorPayload constructor" Url="html/dcfd2feb-81d4-c210-086a-fd841ff2cccd.htm" />
+  <HelpKINode Title="LegacyAggregationPdu class">
+    <HelpKINode Title="LegacyAggregationPdu Class" Url="html/321010a4-673e-2eaa-ea08-ebe8b538551a.htm" />
+    <HelpKINode Title="about LegacyAggregationPdu class" Url="html/321010a4-673e-2eaa-ea08-ebe8b538551a.htm" />
+    <HelpKINode Title="constructor" Url="html/779f7047-2f02-4026-5115-60376a10c1bb.htm" />
+    <HelpKINode Title="fields" Url="html/c35bf21c-d32d-dc81-8841-f4820ad08ce6.htm" />
+    <HelpKINode Title="methods" Url="html/bb1dbd17-e951-be32-8491-057a48d12e5b.htm" />
+    <HelpKINode Title="properties" Url="html/89545c7d-91ee-b44d-9987-7edca8df506b.htm" />
+  </HelpKINode>
+  <HelpKINode Title="LegacyAggregationPdu.LegacyAggregationPdu constructor" Url="html/779f7047-2f02-4026-5115-60376a10c1bb.htm" />
+  <HelpKINode Title="LegacyAggregationPdu.Payload property" Url="html/381795b6-f156-4382-f9b0-cdd0af8253e8.htm" />
+  <HelpKINode Title="LegacyAggregationRequestPayload class">
+    <HelpKINode Title="LegacyAggregationRequestPayload Class" Url="html/08e8107d-b596-bb1b-0a26-9d740b76703e.htm" />
+    <HelpKINode Title="about LegacyAggregationRequestPayload class" Url="html/08e8107d-b596-bb1b-0a26-9d740b76703e.htm" />
+    <HelpKINode Title="constructor" Url="html/07f80801-ca8b-4d96-df73-47143cf65852.htm" />
+    <HelpKINode Title="methods" Url="html/b7ae7eeb-e6d6-87d3-4f73-eefe676e71fe.htm" />
+    <HelpKINode Title="properties" Url="html/355ed2ab-4ba1-ca71-9496-aa26284ae661.htm" />
+  </HelpKINode>
+  <HelpKINode Title="LegacyAggregationRequestPayload.IsConfigRequested property" Url="html/1aca0ecd-c5a5-23cd-c241-df044761d7d7.htm" />
+  <HelpKINode Title="LegacyAggregationRequestPayload.LegacyAggregationRequestPayload constructor" Url="html/07f80801-ca8b-4d96-df73-47143cf65852.htm" />
+  <HelpKINode Title="LegacyAggregationRequestPayload.RequestHash property" Url="html/c55489d2-a014-0e51-4e0f-9a6272908e44.htm" />
+  <HelpKINode Title="LegacyAggregationRequestPayload.RequestId property" Url="html/3f29a828-019b-e2d2-8283-85705c826f86.htm" />
+  <HelpKINode Title="LegacyAggregationRequestPayload.RequestLevel property" Url="html/913c80c3-a3a9-13d7-6c1d-bab66dd82e48.htm" />
+  <HelpKINode Title="LegacyAggregationResponsePayload class">
+    <HelpKINode Title="LegacyAggregationResponsePayload Class" Url="html/7c44c771-b101-c19b-8435-eef3c45af10a.htm" />
+    <HelpKINode Title="about LegacyAggregationResponsePayload class" Url="html/7c44c771-b101-c19b-8435-eef3c45af10a.htm" />
+    <HelpKINode Title="constructor" Url="html/c39cef61-3920-c5e5-a3b3-7c75383aaf8b.htm" />
+    <HelpKINode Title="methods" Url="html/9d8d5c56-41bc-8bb6-9f86-48d848de78dd.htm" />
+    <HelpKINode Title="properties" Url="html/7aec45d1-9b34-e0e4-af90-42233c3ed0f8.htm" />
+  </HelpKINode>
+  <HelpKINode Title="LegacyAggregationResponsePayload.ErrorMessage property" Url="html/01038229-eabe-beb2-e842-e5966eb591c2.htm" />
+  <HelpKINode Title="LegacyAggregationResponsePayload.LegacyAggregationResponsePayload constructor" Url="html/c39cef61-3920-c5e5-a3b3-7c75383aaf8b.htm" />
+  <HelpKINode Title="LegacyAggregationResponsePayload.RequestId property" Url="html/fb816685-0335-c234-89bf-254a8eb41c16.htm" />
+  <HelpKINode Title="LegacyAggregationResponsePayload.Status property" Url="html/2912651b-4977-4b6f-002c-ccfbdb077c51.htm" />
+  <HelpKINode Title="LegacyExtendErrorPayload class">
+    <HelpKINode Title="LegacyExtendErrorPayload Class" Url="html/2d3c1686-175b-f681-e2d8-64ed8d9b9642.htm" />
+    <HelpKINode Title="about LegacyExtendErrorPayload class" Url="html/2d3c1686-175b-f681-e2d8-64ed8d9b9642.htm" />
+    <HelpKINode Title="constructor" Url="html/d46eb1db-0256-6e2a-2f6e-98faf7adfacc.htm" />
+    <HelpKINode Title="methods" Url="html/abbacf05-796f-d65a-0b5b-fba162776ca0.htm" />
+    <HelpKINode Title="properties" Url="html/1e1313b5-1550-f437-6f9d-6e20b6ae8226.htm" />
+  </HelpKINode>
+  <HelpKINode Title="LegacyExtendErrorPayload.LegacyExtendErrorPayload constructor" Url="html/d46eb1db-0256-6e2a-2f6e-98faf7adfacc.htm" />
+  <HelpKINode Title="LegacyExtendPdu class">
+    <HelpKINode Title="LegacyExtendPdu Class" Url="html/97a717ed-45c9-d664-507a-3c7f81efabc3.htm" />
+    <HelpKINode Title="about LegacyExtendPdu class" Url="html/97a717ed-45c9-d664-507a-3c7f81efabc3.htm" />
+    <HelpKINode Title="constructor" Url="html/8496ab61-2f76-c926-61a9-e1522857668a.htm" />
+    <HelpKINode Title="fields" Url="html/fd33988e-062d-cadb-6569-cd93f936af52.htm" />
+    <HelpKINode Title="methods" Url="html/656e0000-6b46-228b-c4be-8c692c1b2224.htm" />
+    <HelpKINode Title="properties" Url="html/8e0a37e5-bc7b-7500-85df-584c7baa151d.htm" />
+  </HelpKINode>
+  <HelpKINode Title="LegacyExtendPdu.LegacyExtendPdu constructor" Url="html/8496ab61-2f76-c926-61a9-e1522857668a.htm" />
+  <HelpKINode Title="LegacyExtendPdu.Payload property" Url="html/0ddee43a-4ba0-f202-502a-c8329f912116.htm" />
+  <HelpKINode Title="LegacyExtendRequestPayload class">
+    <HelpKINode Title="LegacyExtendRequestPayload Class" Url="html/4d06dc9d-5b64-4b4f-b577-d7b67757313b.htm" />
+    <HelpKINode Title="about LegacyExtendRequestPayload class" Url="html/4d06dc9d-5b64-4b4f-b577-d7b67757313b.htm" />
+    <HelpKINode Title="constructor" Url="html/49d387ff-6583-f694-7a1a-db31069c9196.htm" />
+    <HelpKINode Title="methods" Url="html/68e1adc3-be01-0a2f-d691-754c76137129.htm" />
+    <HelpKINode Title="properties" Url="html/b4f90261-efd7-eadb-fa23-4e741b55e416.htm" />
+  </HelpKINode>
+  <HelpKINode Title="LegacyExtendRequestPayload.AggregationTime property" Url="html/d7d461bd-7fca-0412-fc90-88fc69bda1d8.htm" />
+  <HelpKINode Title="LegacyExtendRequestPayload.LegacyExtendRequestPayload constructor" Url="html/49d387ff-6583-f694-7a1a-db31069c9196.htm" />
+  <HelpKINode Title="LegacyExtendRequestPayload.PublicationTime property" Url="html/f910716c-8e4d-73fb-d0fd-748074123a59.htm" />
+  <HelpKINode Title="LegacyExtendRequestPayload.RequestId property" Url="html/e2af6c98-ce76-b564-ae69-2f11bde2694a.htm" />
+  <HelpKINode Title="LegacyExtendResponsePayload class">
+    <HelpKINode Title="LegacyExtendResponsePayload Class" Url="html/ca319427-1879-965d-8393-e40fd2d30b58.htm" />
+    <HelpKINode Title="about LegacyExtendResponsePayload class" Url="html/ca319427-1879-965d-8393-e40fd2d30b58.htm" />
+    <HelpKINode Title="constructor" Url="html/fe13da55-c2c3-cb60-e4e4-3fd00a7377d5.htm" />
+    <HelpKINode Title="methods" Url="html/9dcedd32-4f6b-c9c4-8a2d-f72043345ee0.htm" />
+    <HelpKINode Title="properties" Url="html/cca81e4d-e1c5-0239-9731-7f632d6f7a6c.htm" />
+  </HelpKINode>
+  <HelpKINode Title="LegacyExtendResponsePayload.CalendarHashChain property" Url="html/b0c8d3ad-fa46-835c-8536-47ffa182722d.htm" />
+  <HelpKINode Title="LegacyExtendResponsePayload.CalendarLastTime property" Url="html/f9ac9ca9-841f-f5ca-de10-9817d6c76822.htm" />
+  <HelpKINode Title="LegacyExtendResponsePayload.ErrorMessage property" Url="html/fb36df0b-2210-a120-5b2e-4dd8d81635e5.htm" />
+  <HelpKINode Title="LegacyExtendResponsePayload.LegacyExtendResponsePayload constructor" Url="html/fe13da55-c2c3-cb60-e4e4-3fd00a7377d5.htm" />
+  <HelpKINode Title="LegacyExtendResponsePayload.RequestId property" Url="html/be8e1f00-b380-f1f3-46bc-adf5ade35791.htm" />
+  <HelpKINode Title="LegacyExtendResponsePayload.Status property" Url="html/a9bb88db-6d66-7332-c8fb-28a04ba8aa28.htm" />
   <HelpKINode Title="LegacyId field" Url="html/eee8cb4a-52f5-c729-f869-a55b3650c00d.htm" />
+  <HelpKINode Title="LegacyKsiPdu class">
+    <HelpKINode Title="LegacyKsiPdu Class" Url="html/8361c308-b919-fd55-c685-e14ab7518319.htm" />
+    <HelpKINode Title="about LegacyKsiPdu class" Url="html/8361c308-b919-fd55-c685-e14ab7518319.htm" />
+    <HelpKINode Title="constructor" Url="html/814be8c9-1706-68ac-169c-437d6d9b6e11.htm" />
+    <HelpKINode Title="methods" Url="html/2d6e67a9-a0bb-762c-e5c9-74310880eee9.htm" />
+    <HelpKINode Title="properties" Url="html/899f4835-f5f9-3633-a856-c400ab99e13f.htm" />
+  </HelpKINode>
+  <HelpKINode Title="LegacyKsiPdu.GetHashMacTag method" Url="html/d36b931a-54fc-06c3-0c79-9f5a8483fc5e.htm" />
+  <HelpKINode Title="LegacyKsiPdu.LegacyKsiPdu constructor" Url="html/814be8c9-1706-68ac-169c-437d6d9b6e11.htm" />
+  <HelpKINode Title="LegacyKsiPdu.Payload property" Url="html/2b570102-144e-c896-c354-b4727f04edf6.htm" />
+  <HelpKINode Title="LegacyKsiPdu.ValidateMac method" Url="html/926a3d17-21d3-aff4-55c9-57b576d04a9c.htm" />
+  <HelpKINode Title="LegacyTagType field">
+    <HelpKINode Title="Constants.AggregationErrorPayload.LegacyTagType Field" Url="html/415b8aad-e56d-efc8-b470-4145f4cdbd77.htm" />
+    <HelpKINode Title="Constants.AggregationRequestPayload.LegacyTagType Field" Url="html/7f271b09-fda2-28b6-b009-74cfbc5d3336.htm" />
+    <HelpKINode Title="Constants.AggregationResponsePayload.LegacyTagType Field" Url="html/951529d8-8df7-9cae-603f-9ac9633270b3.htm" />
+    <HelpKINode Title="Constants.ExtendErrorPayload.LegacyTagType Field" Url="html/2bb661ca-d89d-b136-402e-65f334b1ce22.htm" />
+    <HelpKINode Title="Constants.ExtendRequestPayload.LegacyTagType Field" Url="html/894596a3-cf4f-0129-df70-ff4131ac1ce2.htm" />
+    <HelpKINode Title="Constants.ExtendResponsePayload.LegacyTagType Field" Url="html/33f2e925-15f1-e5ad-83da-c8e18152e230.htm" />
+  </HelpKINode>
   <HelpKINode Title="Length property" Url="html/1f781fdf-de4a-fa81-9409-bffc9b71d316.htm" />
   <HelpKINode Title="Level property">
     <HelpKINode Title="AggregationHashChainResult.Level Property " Url="html/4285e969-7747-6422-bc7d-b948bc894c40.htm" />
@@ -1922,6 +2212,10 @@
     <HelpKINode Title="CertificateSubjectRdnSelector.Match Method " Url="html/abd96a6a-913b-cf40-669a-4b94ff00f71b.htm" />
     <HelpKINode Title="CertificateSubjectRdnSelector.Match Method " Url="html/6b6a1cff-363e-861e-7559-813df688f540.htm" />
   </HelpKINode>
+  <HelpKINode Title="MaxLevel property" Url="html/197af0a1-102e-b137-a7d6-1757745c9aaf.htm" />
+  <HelpKINode Title="MaxLevelTagType field" Url="html/3fed3e6b-0cfc-ac7a-a3b8-546dcd8a4751.htm" />
+  <HelpKINode Title="MaxRequests property" Url="html/72166e9a-0b19-f64b-de95-21cce73af33f.htm" />
+  <HelpKINode Title="MaxRequestsTagType field" Url="html/a94190f7-b51c-4728-8352-dc08444eb8dd.htm" />
   <HelpKINode Title="MaxType field" Url="html/22b88bea-a7b4-043e-c592-148ffb767d56.htm" />
   <HelpKINode Title="Message property" Url="html/7bce523b-50e0-dae8-c7a0-ed97eb56c49f.htm" />
   <HelpKINode Title="MessageId property" Url="html/b2651e5c-5da7-b6fb-d9b8-03414882a335.htm" />
@@ -1997,29 +2291,34 @@
   </HelpKINode>
   <HelpKINode Title="PaddingTagType field" Url="html/03667873-6126-e68c-eed3-a8f6733de610.htm" />
   <HelpKINode Title="Parent property" Url="html/3ff5afb8-f337-d58a-212d-add021f9f776.htm" />
+  <HelpKINode Title="ParentsUris property" Url="html/cde4804a-0c9a-e819-f14c-2202edec1429.htm" />
+  <HelpKINode Title="ParentUriTagType field" Url="html/1a1896e7-21c7-7591-ed53-0cb4b4ab0666.htm" />
   <HelpKINode Title="Payload property">
-    <HelpKINode Title="AggregationPdu.Payload Property " Url="html/0264d54e-7ccc-4140-4c4e-fc2980294bc2.htm" />
-    <HelpKINode Title="ExtendPdu.Payload Property " Url="html/d1679a29-981d-5e14-dbd1-65d9b0ba19fb.htm" />
-    <HelpKINode Title="KsiPdu.Payload Property " Url="html/8d593bc0-420a-addf-9479-f13cadd73179.htm" />
+    <HelpKINode Title="LegacyAggregationPdu.Payload Property " Url="html/381795b6-f156-4382-f9b0-cdd0af8253e8.htm" />
+    <HelpKINode Title="LegacyExtendPdu.Payload Property " Url="html/0ddee43a-4ba0-f202-502a-c8329f912116.htm" />
+    <HelpKINode Title="LegacyKsiPdu.Payload Property " Url="html/2b570102-144e-c896-c354-b4727f04edf6.htm" />
   </HelpKINode>
+  <HelpKINode Title="Payloads property" Url="html/69b417c7-880e-1fd8-0e70-799d07b64edc.htm" />
+  <HelpKINode Title="PduVersion enumeration" Url="html/6f2890e3-920a-078d-3693-8e2ee681bff1.htm" />
+  <HelpKINode Title="PduVersion property" Url="html/4a9e71b8-7b7f-e6ad-1a2f-13e9f89950a4.htm" />
   <HelpKINode Title="Pkcs7CryptoSignatureVerifier class">
-    <HelpKINode Title="Pkcs7CryptoSignatureVerifier Class" Url="html/adac00b2-e625-c03a-e5a6-4bcef831dabf.htm" />
     <HelpKINode Title="Pkcs7CryptoSignatureVerifier Class" Url="html/52eab78f-8755-218f-6257-a30ec8f5d884.htm" />
-    <HelpKINode Title="about Pkcs7CryptoSignatureVerifier class" Url="html/adac00b2-e625-c03a-e5a6-4bcef831dabf.htm" />
+    <HelpKINode Title="Pkcs7CryptoSignatureVerifier Class" Url="html/adac00b2-e625-c03a-e5a6-4bcef831dabf.htm" />
     <HelpKINode Title="about Pkcs7CryptoSignatureVerifier class" Url="html/52eab78f-8755-218f-6257-a30ec8f5d884.htm" />
+    <HelpKINode Title="about Pkcs7CryptoSignatureVerifier class" Url="html/adac00b2-e625-c03a-e5a6-4bcef831dabf.htm" />
     <HelpKINode Title="constructor" Url="html/a9ac7882-53db-9c72-6eaf-f50eaeaef4a7.htm" />
     <HelpKINode Title="constructor" Url="html/7889c044-ed6c-39c0-64c8-2b7e219611df.htm" />
-    <HelpKINode Title="methods" Url="html/3ad8d27f-fefd-bd91-6d45-7067fc1d0969.htm" />
     <HelpKINode Title="methods" Url="html/b04f7161-4bf7-6113-a49f-0d40a56b3531.htm" />
+    <HelpKINode Title="methods" Url="html/3ad8d27f-fefd-bd91-6d45-7067fc1d0969.htm" />
   </HelpKINode>
   <HelpKINode Title="Pkcs7CryptoSignatureVerifier.Pkcs7CryptoSignatureVerifier constructor">
-    <HelpKINode Title="Pkcs7CryptoSignatureVerifier Constructor " Url="html/a9ac7882-53db-9c72-6eaf-f50eaeaef4a7.htm" />
     <HelpKINode Title="Pkcs7CryptoSignatureVerifier Constructor " Url="html/7889c044-ed6c-39c0-64c8-2b7e219611df.htm" />
+    <HelpKINode Title="Pkcs7CryptoSignatureVerifier Constructor " Url="html/a9ac7882-53db-9c72-6eaf-f50eaeaef4a7.htm" />
   </HelpKINode>
   <HelpKINode Title="Pkcs7CryptoSignatureVerifier.ValidateCertPath method" Url="html/930cd4d6-3f32-2849-fdce-7ae652666b0c.htm" />
   <HelpKINode Title="Pkcs7CryptoSignatureVerifier.Verify method">
-    <HelpKINode Title="Pkcs7CryptoSignatureVerifier.Verify Method " Url="html/fbee9809-059c-3631-fd10-d32bf0e9f870.htm" />
     <HelpKINode Title="Pkcs7CryptoSignatureVerifier.Verify Method " Url="html/190e1600-71b3-befe-cd08-3e60ee5008e0.htm" />
+    <HelpKINode Title="Pkcs7CryptoSignatureVerifier.Verify Method " Url="html/fbee9809-059c-3631-fd10-d32bf0e9f870.htm" />
   </HelpKINode>
   <HelpKINode Title="PkiTrustStoreProvider class">
     <HelpKINode Title="PkiTrustStoreProvider Class" Url="html/d4bcdded-6f52-1512-dc6f-764b2100aa48.htm" />
@@ -2137,8 +2436,8 @@
     <HelpKINode Title="PublicationsFile Class" Url="html/3cc14b95-fda0-fd51-cb5e-b76759c1952c.htm" />
     <HelpKINode Title="about PublicationsFile class" Url="html/3cc14b95-fda0-fd51-cb5e-b76759c1952c.htm" />
     <HelpKINode Title="constructor" Url="html/1e0c4c8a-5917-162e-0fec-5299c3274420.htm" />
-    <HelpKINode Title="fields" Url="html/b874533f-afb8-6a65-fcf4-876ced4005b5.htm" />
     <HelpKINode Title="fields" Url="html/f51ba8a2-8881-702a-a5c8-e7f3e46268bd.htm" />
+    <HelpKINode Title="fields" Url="html/b874533f-afb8-6a65-fcf4-876ced4005b5.htm" />
     <HelpKINode Title="methods" Url="html/8cbe8b32-0c7a-391f-a984-cfaf12833516.htm" />
     <HelpKINode Title="properties" Url="html/b1da587f-921f-ba74-2db7-fed0d1cff79f.htm" />
   </HelpKINode>
@@ -2219,6 +2518,7 @@
   <HelpKINode Title="PublicationTime property">
     <HelpKINode Title="CalendarHashChain.PublicationTime Property " Url="html/3308ee84-557e-18d1-0b1a-e97a1daadfe7.htm" />
     <HelpKINode Title="ExtendRequestPayload.PublicationTime Property " Url="html/40bd694e-2fc3-add0-b729-4d8528001db0.htm" />
+    <HelpKINode Title="LegacyExtendRequestPayload.PublicationTime Property " Url="html/f910716c-8e4d-73fb-d0fd-748074123a59.htm" />
     <HelpKINode Title="PublicationData.PublicationTime Property " Url="html/2a0f2bd9-8b49-64be-14f7-f5e6c4001fed.htm" />
   </HelpKINode>
   <HelpKINode Title="PublicationTimeTagType field">
@@ -2251,13 +2551,20 @@
   </HelpKINode>
   <HelpKINode Title="RepositoryUriTagType field" Url="html/350044b8-baab-2f17-8338-898814876cde.htm" />
   <HelpKINode Title="RequestAcknowledgmentTagType field" Url="html/5d90c85a-511a-f014-22f4-57f4ba34b623.htm" />
-  <HelpKINode Title="RequestHash property" Url="html/0293fbe0-6724-422b-b778-b86cc7601f4f.htm" />
+  <HelpKINode Title="RequestHash property">
+    <HelpKINode Title="AggregationRequestPayload.RequestHash Property " Url="html/0293fbe0-6724-422b-b778-b86cc7601f4f.htm" />
+    <HelpKINode Title="LegacyAggregationRequestPayload.RequestHash Property " Url="html/c55489d2-a014-0e51-4e0f-9a6272908e44.htm" />
+  </HelpKINode>
   <HelpKINode Title="RequestHashTagType field" Url="html/b3e0701d-43d0-30c0-3b05-41826aa4890c.htm" />
   <HelpKINode Title="RequestId property">
     <HelpKINode Title="AggregationRequestPayload.RequestId Property " Url="html/1693be5d-f62a-b2a0-508e-ec4b3c3aa6d1.htm" />
     <HelpKINode Title="AggregationResponsePayload.RequestId Property " Url="html/efbffcaa-ae1d-e8a9-5e2a-2b767866a89a.htm" />
     <HelpKINode Title="ExtendRequestPayload.RequestId Property " Url="html/3243fa08-1b33-bcc5-4010-e279082c2ac0.htm" />
     <HelpKINode Title="ExtendResponsePayload.RequestId Property " Url="html/b7e7e583-d267-a02e-c02f-591b37f298f8.htm" />
+    <HelpKINode Title="LegacyAggregationRequestPayload.RequestId Property " Url="html/3f29a828-019b-e2d2-8283-85705c826f86.htm" />
+    <HelpKINode Title="LegacyAggregationResponsePayload.RequestId Property " Url="html/fb816685-0335-c234-89bf-254a8eb41c16.htm" />
+    <HelpKINode Title="LegacyExtendRequestPayload.RequestId Property " Url="html/e2af6c98-ce76-b564-ae69-2f11bde2694a.htm" />
+    <HelpKINode Title="LegacyExtendResponsePayload.RequestId Property " Url="html/be8e1f00-b380-f1f3-46bc-adf5ade35791.htm" />
   </HelpKINode>
   <HelpKINode Title="RequestIdTagType field">
     <HelpKINode Title="Constants.AggregationRequestPayload.RequestIdTagType Field" Url="html/72974bc9-4bda-bc3a-4840-67328aaf5212.htm" />
@@ -2265,13 +2572,16 @@
     <HelpKINode Title="Constants.ExtendRequestPayload.RequestIdTagType Field" Url="html/bd7c4775-adc3-8109-ddcc-88de98feb0a4.htm" />
     <HelpKINode Title="Constants.ExtendResponsePayload.RequestIdTagType Field" Url="html/8b484c47-31f3-7ca8-5bd0-f2ca62355d40.htm" />
   </HelpKINode>
-  <HelpKINode Title="RequestLevel property" Url="html/46e21e04-8a9b-142f-15d3-f8d35243a1da.htm" />
+  <HelpKINode Title="RequestLevel property">
+    <HelpKINode Title="AggregationRequestPayload.RequestLevel Property " Url="html/46e21e04-8a9b-142f-15d3-f8d35243a1da.htm" />
+    <HelpKINode Title="LegacyAggregationRequestPayload.RequestLevel Property " Url="html/913c80c3-a3a9-13d7-6c1d-bab66dd82e48.htm" />
+  </HelpKINode>
   <HelpKINode Title="RequestLevelTagType field" Url="html/13df7685-4b74-a1b4-aa70-59388c934480.htm" />
   <HelpKINode Title="RequestTime property" Url="html/75415b04-a918-37e3-27e4-613d01d49d8a.htm" />
   <HelpKINode Title="RequestTimeTagType field" Url="html/ea9b79da-3cd7-5a88-31d9-1e69f7144202.htm" />
   <HelpKINode Title="Reset method">
-    <HelpKINode Title="DataHasher.Reset Method " Url="html/375ee68e-ad85-aed3-c412-2ed9ebf2a9c3.htm" />
     <HelpKINode Title="DataHasher.Reset Method " Url="html/6ee7477b-f3d9-14a1-01d5-b695c4155699.htm" />
+    <HelpKINode Title="DataHasher.Reset Method " Url="html/375ee68e-ad85-aed3-c412-2ed9ebf2a9c3.htm" />
     <HelpKINode Title="IDataHasher.Reset Method " Url="html/d41b5768-01b1-5668-24df-eb89df4bfc50.htm" />
   </HelpKINode>
   <HelpKINode Title="ResultCode property" Url="html/53a5fa06-5844-e1e5-d390-77d4337a09b5.htm" />
@@ -2292,6 +2602,22 @@
   <HelpKINode Title="Rfc3161Record.GetOutputHash method" Url="html/150f11ae-a023-b6e4-08e0-63a4d5354349.htm" />
   <HelpKINode Title="Rfc3161Record.InputHash property" Url="html/bd306670-220e-ea3e-f2d4-16666ec2f57b.htm" />
   <HelpKINode Title="Rfc3161Record.Rfc3161Record constructor" Url="html/7a07090d-244a-8540-6178-322da3094dc1.htm" />
+  <HelpKINode Title="Rfc3161RecordAggregationTimeRule class">
+    <HelpKINode Title="Rfc3161RecordAggregationTimeRule Class" Url="html/e28add20-1bed-7928-3fde-8522a9fe6be9.htm" />
+    <HelpKINode Title="about Rfc3161RecordAggregationTimeRule class" Url="html/e28add20-1bed-7928-3fde-8522a9fe6be9.htm" />
+    <HelpKINode Title="constructor" Url="html/3a3f6edc-8fd4-d056-ba47-600f27710c88.htm" />
+    <HelpKINode Title="methods" Url="html/256e4dda-198d-71fb-be17-decbd75e4c5b.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Rfc3161RecordAggregationTimeRule.Rfc3161RecordAggregationTimeRule constructor" Url="html/3a3f6edc-8fd4-d056-ba47-600f27710c88.htm" />
+  <HelpKINode Title="Rfc3161RecordAggregationTimeRule.Verify method" Url="html/a638272d-523b-b9a8-3e06-ae9afc621c57.htm" />
+  <HelpKINode Title="Rfc3161RecordChainIndexRule class">
+    <HelpKINode Title="Rfc3161RecordChainIndexRule Class" Url="html/727b98ea-7d3a-af27-bf2d-adef88709e24.htm" />
+    <HelpKINode Title="about Rfc3161RecordChainIndexRule class" Url="html/727b98ea-7d3a-af27-bf2d-adef88709e24.htm" />
+    <HelpKINode Title="constructor" Url="html/e86db4cb-f3f1-c61a-29ef-8ea05e528989.htm" />
+    <HelpKINode Title="methods" Url="html/6ae0826b-b4b4-d40d-fc83-43aacf9058b5.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Rfc3161RecordChainIndexRule.Rfc3161RecordChainIndexRule constructor" Url="html/e86db4cb-f3f1-c61a-29ef-8ea05e528989.htm" />
+  <HelpKINode Title="Rfc3161RecordChainIndexRule.Verify method" Url="html/c972a3cf-61be-ac8e-7271-41d6d0264128.htm" />
   <HelpKINode Title="Rfc3161RecordHolder class">
     <HelpKINode Title="Rfc3161RecordHolder Class" Url="html/47ca0504-8611-5c0c-4263-b1ee9d9f0d8f.htm" />
     <HelpKINode Title="about Rfc3161RecordHolder class" Url="html/47ca0504-8611-5c0c-4263-b1ee9d9f0d8f.htm" />
@@ -2306,10 +2632,10 @@
   <HelpKINode Title="Ripemd160 field" Url="html/50210687-0ec8-8090-e622-6796c9a77dcb.htm" />
   <HelpKINode Title="RootSignature field" Url="html/0211ad0c-b7d7-829c-8fe7-6a44e7177887.htm" />
   <HelpKINode Title="RsaCryptoSignatureVerifier class">
-    <HelpKINode Title="RsaCryptoSignatureVerifier Class" Url="html/9d53c71e-0a4c-45ae-02d5-51681f19eaf3.htm" />
     <HelpKINode Title="RsaCryptoSignatureVerifier Class" Url="html/ab9007f8-db05-4753-b3f2-0511a0cbac2c.htm" />
-    <HelpKINode Title="about RsaCryptoSignatureVerifier class" Url="html/ab9007f8-db05-4753-b3f2-0511a0cbac2c.htm" />
+    <HelpKINode Title="RsaCryptoSignatureVerifier Class" Url="html/9d53c71e-0a4c-45ae-02d5-51681f19eaf3.htm" />
     <HelpKINode Title="about RsaCryptoSignatureVerifier class" Url="html/9d53c71e-0a4c-45ae-02d5-51681f19eaf3.htm" />
+    <HelpKINode Title="about RsaCryptoSignatureVerifier class" Url="html/ab9007f8-db05-4753-b3f2-0511a0cbac2c.htm" />
     <HelpKINode Title="constructor" Url="html/66db3171-7aef-194b-7b0a-ca82a6bdc5ed.htm" />
     <HelpKINode Title="constructor" Url="html/541677a2-971d-7ac4-a566-03d026ac5745.htm" />
     <HelpKINode Title="methods" Url="html/4cd0041d-8b8e-211b-97a0-5456097e1782.htm" />
@@ -2337,6 +2663,7 @@
   <HelpKINode Title="ServiceCredentials.LoginKey property" Url="html/db9662b4-01af-b3d7-bcf2-5ec1cfd5873e.htm" />
   <HelpKINode Title="ServiceCredentials.ServiceCredentials constructor" Url="html/b7773882-7009-ab0c-4547-767b494b31b9.htm" />
   <HelpKINode Title="SetCryptoProvider method" Url="html/7c576f93-cc19-de2b-6492-1778785f58a6.htm" />
+  <HelpKINode Title="SetHmacValue method" Url="html/3703cd84-2156-5982-2785-67d159405fe3.htm" />
   <HelpKINode Title="Sha1 field" Url="html/873edbe8-fd5c-14df-c7a3-bad66166a271.htm" />
   <HelpKINode Title="Sha2256 field" Url="html/163b777e-4f0a-2717-f26d-4c4a90e0458a.htm" />
   <HelpKINode Title="Sha2384 field" Url="html/8cce9664-5fc1-6088-8e07-a0a0ff2cd419.htm" />
@@ -2410,6 +2737,8 @@
     <HelpKINode Title="ErrorPayload.Status Property " Url="html/e24074ed-e96f-27ba-1277-f0c3b98bbb66.htm" />
     <HelpKINode Title="ExtendResponsePayload.Status Property " Url="html/03baadd5-7996-783e-bce3-7f85c555ebfa.htm" />
     <HelpKINode Title="HashAlgorithm.Status Property " Url="html/0ebc2254-c10f-c940-dc4e-7d6e8fdcd9ba.htm" />
+    <HelpKINode Title="LegacyAggregationResponsePayload.Status Property " Url="html/2912651b-4977-4b6f-002c-ccfbdb077c51.htm" />
+    <HelpKINode Title="LegacyExtendResponsePayload.Status Property " Url="html/a9bb88db-6d66-7332-c8fb-28a04ba8aa28.htm" />
   </HelpKINode>
   <HelpKINode Title="StatusTagType field" Url="html/44695514-8153-5aa6-b996-11074d47f073.htm" />
   <HelpKINode Title="StringTag class">
@@ -2426,22 +2755,30 @@
   <HelpKINode Title="StringTag.Value property" Url="html/918b0aef-cd59-340a-bac0-aec89b34d246.htm" />
   <HelpKINode Title="TabPrefixString method" Url="html/34ac722f-aaa4-daff-ce7d-899a8f76a902.htm" />
   <HelpKINode Title="TagType field">
+    <HelpKINode Title="Constants.AggregationAcknowledgmentResponsePayload.TagType Field" Url="html/9278082a-8226-bdf6-67db-d4dee3fbc631.htm" />
     <HelpKINode Title="Constants.AggregationAuthenticationRecord.TagType Field" Url="html/eee45367-bba8-7a99-7d49-8945b68cddc5.htm" />
+    <HelpKINode Title="Constants.AggregationConfigRequestPayload.TagType Field" Url="html/ed2d88bd-5099-c920-9aac-a6d60c2b7dda.htm" />
+    <HelpKINode Title="Constants.AggregationConfigResponsePayload.TagType Field" Url="html/5d2bd7c6-d928-1b21-ee5d-66ea5673cd29.htm" />
     <HelpKINode Title="Constants.AggregationErrorPayload.TagType Field" Url="html/fd626c2a-91f0-2e0e-aaf8-369d8c97b52f.htm" />
     <HelpKINode Title="Constants.AggregationHashChain.Metadata.TagType Field" Url="html/461ba72f-8c96-6148-1368-faa3988e0fe4.htm" />
     <HelpKINode Title="Constants.AggregationHashChain.TagType Field" Url="html/763c3160-0803-bb7e-7d4b-b8ffb27ce3e2.htm" />
-    <HelpKINode Title="Constants.AggregationPdu.TagType Field" Url="html/47ccc880-c34b-7b94-672c-ca0eb3baae29.htm" />
     <HelpKINode Title="Constants.AggregationRequestPayload.TagType Field" Url="html/6d67c173-a40d-1a7d-38df-c4b156eb8001.htm" />
+    <HelpKINode Title="Constants.AggregationRequestPdu.TagType Field" Url="html/c46a56dc-b64f-5d7f-4f38-0408d9365274.htm" />
     <HelpKINode Title="Constants.AggregationResponsePayload.TagType Field" Url="html/7d403f02-a5b0-91e5-a69a-3e4ba0a43a16.htm" />
+    <HelpKINode Title="Constants.AggregationResponsePdu.TagType Field" Url="html/6159d330-4a64-4756-4fe4-f35b215957b7.htm" />
     <HelpKINode Title="Constants.CalendarAuthenticationRecord.TagType Field" Url="html/fbb35c6b-4c4a-352c-b3f4-1b2241ff04e1.htm" />
     <HelpKINode Title="Constants.CalendarHashChain.TagType Field" Url="html/de1c9df0-483c-ced8-e11d-362e3fb4f509.htm" />
     <HelpKINode Title="Constants.CertificateRecord.TagType Field" Url="html/7f569d3b-a44d-c079-5b3f-f1ba5519d7b3.htm" />
+    <HelpKINode Title="Constants.ExtendConfigResponsePayload.TagType Field" Url="html/4a332580-015d-210c-4d80-0dd170585933.htm" />
     <HelpKINode Title="Constants.ExtendErrorPayload.TagType Field" Url="html/85521098-0e02-52d1-08df-01a0feb4b907.htm" />
-    <HelpKINode Title="Constants.ExtendPdu.TagType Field" Url="html/f5764798-ace0-1197-230e-76f57e6f23f9.htm" />
     <HelpKINode Title="Constants.ExtendRequestPayload.TagType Field" Url="html/5a1e1909-363c-61e5-c8c7-fff98833b3c3.htm" />
+    <HelpKINode Title="Constants.ExtendRequestPdu.TagType Field" Url="html/fb3cf7f6-eda5-b6a6-1e9b-96bfa980ffa6.htm" />
     <HelpKINode Title="Constants.ExtendResponsePayload.TagType Field" Url="html/5d420e79-f13b-da84-8e7e-f9070c375a3c.htm" />
+    <HelpKINode Title="Constants.ExtendResponsePdu.TagType Field" Url="html/2b567940-7905-1701-2269-3ac89c995600.htm" />
     <HelpKINode Title="Constants.KsiPduHeader.TagType Field" Url="html/14c5ae34-65f3-0950-1a3f-bdb2efee8994.htm" />
     <HelpKINode Title="Constants.KsiSignature.TagType Field" Url="html/1749f419-a2ab-4084-be74-13c42c3e3f44.htm" />
+    <HelpKINode Title="Constants.LegacyAggregationPdu.TagType Field" Url="html/8938d9af-4622-73c0-79e4-1a6d52dee614.htm" />
+    <HelpKINode Title="Constants.LegacyExtendPdu.TagType Field" Url="html/637d7480-8cad-72de-35b7-c2f025afed56.htm" />
     <HelpKINode Title="Constants.PublicationData.TagType Field" Url="html/51d8c842-6eac-721f-b2eb-79999e0c969f.htm" />
     <HelpKINode Title="Constants.PublicationsFileHeader.TagType Field" Url="html/60280243-2255-df9b-0b27-ae11bc934a8f.htm" />
     <HelpKINode Title="Constants.Rfc3161Record.TagType Field" Url="html/0e235b7a-5115-b689-6750-d2c6f3dc7441.htm" />
@@ -2623,8 +2960,13 @@
   <HelpKINode Title="Util.IsOneValueEqualTo(Of T) method" Url="html/12e2d2dc-8074-2293-19dd-c627996b6a56.htm" />
   <HelpKINode Title="Util.IsOneValueEqualTo&lt;T&gt; method" Url="html/12e2d2dc-8074-2293-19dd-c627996b6a56.htm" />
   <HelpKINode Title="Util.TabPrefixString method" Url="html/34ac722f-aaa4-daff-ce7d-899a8f76a902.htm" />
+  <HelpKINode Title="v1 enumeration member" Url="html/6f2890e3-920a-078d-3693-8e2ee681bff1.htm" />
+  <HelpKINode Title="v2 enumeration member" Url="html/6f2890e3-920a-078d-3693-8e2ee681bff1.htm" />
   <HelpKINode Title="ValidateCertPath method" Url="html/930cd4d6-3f32-2849-fdce-7ae652666b0c.htm" />
-  <HelpKINode Title="ValidateMac method" Url="html/03ff2492-4ddd-0c36-9a43-57a97aa12e82.htm" />
+  <HelpKINode Title="ValidateMac method">
+    <HelpKINode Title="KsiPdu.ValidateMac Method " Url="html/03ff2492-4ddd-0c36-9a43-57a97aa12e82.htm" />
+    <HelpKINode Title="LegacyKsiPdu.ValidateMac Method " Url="html/926a3d17-21d3-aff4-55c9-57b576d04a9c.htm" />
+  </HelpKINode>
   <HelpKINode Title="Value property">
     <HelpKINode Title="CertificateSubjectRdn.Value Property " Url="html/15d0b41c-5e16-e729-ddc7-c5b8ca5d8bc6.htm" />
     <HelpKINode Title="DataHash.Value Property " Url="html/1c55c6eb-9fe1-528a-80e0-9fa609565dff.htm" />
@@ -2752,15 +3094,17 @@
     <HelpKINode Title="ExtendingPermittedVerificationRule.Verify Method " Url="html/91e75db0-8667-8a62-c5eb-434bc8dc5fdb.htm" />
     <HelpKINode Title="ICryptoSignatureVerifier.Verify Method " Url="html/990ad2d2-4090-e3fe-b62c-b23374e0be5c.htm" />
     <HelpKINode Title="IPkiTrustProvider.Verify Method " Url="html/952d00c2-74be-15c3-e0ed-c280c6feeb78.htm" />
-    <HelpKINode Title="Pkcs7CryptoSignatureVerifier.Verify Method " Url="html/190e1600-71b3-befe-cd08-3e60ee5008e0.htm" />
     <HelpKINode Title="Pkcs7CryptoSignatureVerifier.Verify Method " Url="html/fbee9809-059c-3631-fd10-d32bf0e9f870.htm" />
+    <HelpKINode Title="Pkcs7CryptoSignatureVerifier.Verify Method " Url="html/190e1600-71b3-befe-cd08-3e60ee5008e0.htm" />
     <HelpKINode Title="PkiTrustStoreProvider.Verify Method " Url="html/7bfdacdd-2cdd-8dfb-617e-15a2eb865712.htm" />
     <HelpKINode Title="PublicationsFileContainsSignaturePublicationRule.Verify Method " Url="html/7ca6d04f-3714-0a73-f9f9-12d3d7fcb7d5.htm" />
     <HelpKINode Title="PublicationsFileExtendedSignatureInputHashRule.Verify Method " Url="html/23225517-fe5b-803d-5256-febb19115cf7.htm" />
     <HelpKINode Title="PublicationsFilePublicationHashMatchesExtenderResponseRule.Verify Method " Url="html/87edb9b6-93d4-1369-55f2-ea995f6f7da2.htm" />
     <HelpKINode Title="PublicationsFilePublicationTimeMatchesExtenderResponseRule.Verify Method " Url="html/a33bf0b4-b083-d5e8-7330-9f9cfc008b65.htm" />
-    <HelpKINode Title="RsaCryptoSignatureVerifier.Verify Method " Url="html/f6565c33-7c05-8479-1fb9-96999cd97103.htm" />
+    <HelpKINode Title="Rfc3161RecordAggregationTimeRule.Verify Method " Url="html/a638272d-523b-b9a8-3e06-ae9afc621c57.htm" />
+    <HelpKINode Title="Rfc3161RecordChainIndexRule.Verify Method " Url="html/c972a3cf-61be-ac8e-7271-41d6d0264128.htm" />
     <HelpKINode Title="RsaCryptoSignatureVerifier.Verify Method " Url="html/c2b01f2e-af28-ef29-41e8-0567e3c338b0.htm" />
+    <HelpKINode Title="RsaCryptoSignatureVerifier.Verify Method " Url="html/f6565c33-7c05-8479-1fb9-96999cd97103.htm" />
     <HelpKINode Title="SignaturePublicationRecordExistenceRule.Verify Method " Url="html/ab1cfd69-eee7-7f94-16f0-f3299cf100c1.htm" />
     <HelpKINode Title="SignaturePublicationRecordPublicationHashRule.Verify Method " Url="html/c739c3c8-60c7-d579-bac9-2bcd7194375c.htm" />
     <HelpKINode Title="SignaturePublicationRecordPublicationTimeRule.Verify Method " Url="html/59c1bd40-a526-d12e-3bb3-e86ccaa5db70.htm" />
