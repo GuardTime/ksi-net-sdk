@@ -19,7 +19,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Crypto.BouncyCastle;
 using Guardtime.KSI.Crypto.Microsoft;
@@ -41,11 +40,11 @@ namespace Guardtime.KSI.Test.Crypto
                     return _providerType;
                 }
 
-                string providerTypeString = ConfigurationManager.AppSettings["CryptoProviderType"];
+                string providerTypeString = Properties.Settings.Default.CryptoProviderType;
 
                 if (string.IsNullOrEmpty(providerTypeString))
                 {
-                    throw new Exception("Missing crypto provider type.");
+                    throw new Exception("Missing crypto provider type in config file.");
                 }
 
                 if (!Enum.TryParse(providerTypeString, out _providerType))

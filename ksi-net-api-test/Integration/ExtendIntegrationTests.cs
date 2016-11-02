@@ -23,6 +23,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
+using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
@@ -41,12 +42,12 @@ namespace Guardtime.KSI.Test.Integration
             {
                 IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
 
-                Exception ex = Assert.Throws<KsiException>(delegate
+                Exception ex = Assert.Throws<KsiServiceException>(delegate
                 {
                     ksi.Extend(ksiSignature);
                 });
 
-                Assert.AreEqual("Error occured during extending: The request could not be authenticated.", ex.Message);
+                Assert.AreEqual("Error occured during extending. Status: 258; Message: The request could not be authenticated.", ex.Message);
             }
         }
 
@@ -338,6 +339,23 @@ namespace Guardtime.KSI.Test.Integration
             }
 
             Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " All done.");
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void ExtendInvalidPduFormatTest(Ksi ksi)
+        {
+            KsiService service = GetHttpKsiService(PduVersion.v2);
+
+            try
+            {
+                service.Extend(1455494400);
+            }
+                // if new aggregator then no exception
+            catch (Exception ex)
+            {
+                Assert.That(ex.Message.StartsWith("Received PDU v1 response to PDU v2 request. Configure the SDK to use PDU v1 format for the given Extender"),
+                    "Unexpected exception message: " + ex.Message);
+            }
         }
     }
 }

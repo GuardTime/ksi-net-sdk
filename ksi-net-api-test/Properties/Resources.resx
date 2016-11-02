@@ -435,6 +435,12 @@
   <data name="Rfc3161Record_Invalid_Multiple_TstInfo_Suffix" xml:space="preserve">
     <value>resources/signature/rfc3161-record/rfc3161-record-invalid-multiple-tstinfo-suffix.tlv</value>
   </data>
+  <data name="KsiSignatureDo_Invalid_Rfc3161_Aggregation_Time_Mismatch" xml:space="preserve">
+    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-rfc3161-aggregation-time-mismatch.tlv</value>
+  </data>
+  <data name="KsiSignatureDo_Invalid_Rfc3161_Chain_Index_Mismatch" xml:space="preserve">
+    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-chain-index-mismatch.tlv</value>
+  </data>
   <data name="SignatureData_Invalid_Certificate_Id_Missing" xml:space="preserve">
     <value>resources/signature/signaturedata/signature-data-invalid-certificate-id-missing.tlv</value>
   </data>
@@ -581,5 +587,47 @@
   </data>
   <data name="Signature_Wrong_Cert_ID" xml:space="preserve">
     <value>resources/signature/integration-test-signatures/NewSignature-CalAuth-WrongCertID.ksig</value>
+  </data>
+  <data name="KsiService_AggregationResponsePdu" xml:space="preserve">
+    <value>resources/service/aggregation-response-pdu.tlv</value>
+  </data>
+  <data name="KsiService_AggregationResponsePdu_Invalid_Signature" xml:space="preserve">
+    <value>resources/service/aggregation-response-pdu-invalid-signature.tlv</value>
+  </data>
+  <data name="KsiService_AggregationResponsePdu_Multi_Payloads" xml:space="preserve">
+    <value>resources/service/aggregation-response-pdu-multi-payloads.tlv</value>
+  </data>
+  <data name="KsiService_AggregationConfigResponsePdu" xml:space="preserve">
+    <value>resources/service/aggregation-config-response-pdu.tlv</value>
+  </data>
+  <data name="KsiService_ExtendResponsePdu" xml:space="preserve">
+    <value>resources/service/extend-response-pdu.tlv</value>
+  </data>
+  <data name="KsiService_ExtendResponsePdu_Invalid_Signature" xml:space="preserve">
+    <value>resources/service/extend-response-pdu-invalid-signature.tlv</value>
+  </data>
+  <data name="KsiService_ExtendResponsePdu_Multi_Payloads" xml:space="preserve">
+    <value>resources/service/extend-response-pdu-multi-payloads.tlv</value>
+  </data>
+  <data name="KsiService_ExtendResponsePdu_NonZeroPayloadStatus" xml:space="preserve">
+    <value>resources/service/extend-response-pdu-status-17.tlv</value>
+  </data>
+  <data name="KsiService_LegacyExtendResponsePdu_NonZeroPayloadStatus" xml:space="preserve">
+    <value>resources/service/legacy-extend-response-pdu-status-17.tlv</value>
+  </data>
+  <data name="KsiService_LegacyExtendResponsePdu" xml:space="preserve">
+    <value>resources/service/legacy-extend-response-pdu.tlv</value>
+  </data>
+  <data name="KsiService_AggregationResponsePdu_Multi_Payloads_Including_ErrorPayload" xml:space="preserve">
+    <value>resources/service/aggregation-response-pdu-multi-payloads-including-error.tlv</value>
+  </data>
+  <data name="KsiService_ExtendResponsePdu_Multi_Payloads_Including_ErrorPayload" xml:space="preserve">
+    <value>resources/service/extend-response-pdu-multi-payloads-including-error.tlv</value>
+  </data>
+  <data name="KsiService_AggregatorResponsePdu_ErrorPayload" xml:space="preserve">
+    <value>resources/service/aggregator-response-pdu-error-payload.tlv</value>
+  </data>
+  <data name="KsiService_ExtenderResponsePdu_ErrorPayload" xml:space="preserve">
+    <value>resources/service/extender-response-pdu-error-payload.tlv</value>
   </data>
 </root>

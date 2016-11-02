@@ -736,6 +736,132 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/service/aggregation-config-response-pdu.tlv.
+        /// </summary>
+        internal static string KsiService_AggregationConfigResponsePdu {
+            get {
+                return ResourceManager.GetString("KsiService_AggregationConfigResponsePdu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/aggregation-response-pdu.tlv.
+        /// </summary>
+        internal static string KsiService_AggregationResponsePdu {
+            get {
+                return ResourceManager.GetString("KsiService_AggregationResponsePdu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/aggregation-response-pdu-invalid-signature.tlv.
+        /// </summary>
+        internal static string KsiService_AggregationResponsePdu_Invalid_Signature {
+            get {
+                return ResourceManager.GetString("KsiService_AggregationResponsePdu_Invalid_Signature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/aggregation-response-pdu-multi-payloads.tlv.
+        /// </summary>
+        internal static string KsiService_AggregationResponsePdu_Multi_Payloads {
+            get {
+                return ResourceManager.GetString("KsiService_AggregationResponsePdu_Multi_Payloads", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/aggregation-response-pdu-multi-payloads-including-error.tlv.
+        /// </summary>
+        internal static string KsiService_AggregationResponsePdu_Multi_Payloads_Including_ErrorPayload {
+            get {
+                return ResourceManager.GetString("KsiService_AggregationResponsePdu_Multi_Payloads_Including_ErrorPayload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/aggregator-response-pdu-error-payload.tlv.
+        /// </summary>
+        internal static string KsiService_AggregatorResponsePdu_ErrorPayload {
+            get {
+                return ResourceManager.GetString("KsiService_AggregatorResponsePdu_ErrorPayload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/extender-response-pdu-error-payload.tlv.
+        /// </summary>
+        internal static string KsiService_ExtenderResponsePdu_ErrorPayload {
+            get {
+                return ResourceManager.GetString("KsiService_ExtenderResponsePdu_ErrorPayload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/extend-response-pdu.tlv.
+        /// </summary>
+        internal static string KsiService_ExtendResponsePdu {
+            get {
+                return ResourceManager.GetString("KsiService_ExtendResponsePdu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/extend-response-pdu-invalid-signature.tlv.
+        /// </summary>
+        internal static string KsiService_ExtendResponsePdu_Invalid_Signature {
+            get {
+                return ResourceManager.GetString("KsiService_ExtendResponsePdu_Invalid_Signature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/extend-response-pdu-multi-payloads.tlv.
+        /// </summary>
+        internal static string KsiService_ExtendResponsePdu_Multi_Payloads {
+            get {
+                return ResourceManager.GetString("KsiService_ExtendResponsePdu_Multi_Payloads", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/extend-response-pdu-multi-payloads-including-error.tlv.
+        /// </summary>
+        internal static string KsiService_ExtendResponsePdu_Multi_Payloads_Including_ErrorPayload {
+            get {
+                return ResourceManager.GetString("KsiService_ExtendResponsePdu_Multi_Payloads_Including_ErrorPayload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/extend-response-pdu-status-17.tlv.
+        /// </summary>
+        internal static string KsiService_ExtendResponsePdu_NonZeroPayloadStatus {
+            get {
+                return ResourceManager.GetString("KsiService_ExtendResponsePdu_NonZeroPayloadStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/legacy-extend-response-pdu.tlv.
+        /// </summary>
+        internal static string KsiService_LegacyExtendResponsePdu {
+            get {
+                return ResourceManager.GetString("KsiService_LegacyExtendResponsePdu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/legacy-extend-response-pdu-status-17.tlv.
+        /// </summary>
+        internal static string KsiService_LegacyExtendResponsePdu_NonZeroPayloadStatus {
+            get {
+                return ResourceManager.GetString("KsiService_LegacyExtendResponsePdu_NonZeroPayloadStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/multi-signature/infile_2015-05-05.tlv.
         /// </summary>
         internal static string KsiSignature_InputForMulti_20150505_Ok {
@@ -1012,6 +1138,24 @@ namespace Guardtime.KSI.Test.Properties {
         internal static string KsiSignatureDo_Invalid_Multiple_Rfc_3161_Records {
             get {
                 return ResourceManager.GetString("KsiSignatureDo_Invalid_Multiple_Rfc_3161_Records", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-rfc3161-aggregation-time-mismatch.tlv.
+        /// </summary>
+        internal static string KsiSignatureDo_Invalid_Rfc3161_Aggregation_Time_Mismatch {
+            get {
+                return ResourceManager.GetString("KsiSignatureDo_Invalid_Rfc3161_Aggregation_Time_Mismatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-chain-index-mismatch.tlv.
+        /// </summary>
+        internal static string KsiSignatureDo_Invalid_Rfc3161_Chain_Index_Mismatch {
+            get {
+                return ResourceManager.GetString("KsiSignatureDo_Invalid_Rfc3161_Chain_Index_Mismatch", resourceCulture);
             }
         }
         

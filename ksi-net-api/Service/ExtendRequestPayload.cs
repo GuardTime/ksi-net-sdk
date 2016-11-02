@@ -19,7 +19,6 @@
 
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
-using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Service
 {
@@ -87,11 +86,12 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Create extend request payload from aggregation time and publication time.
         /// </summary>
+        /// <param name="requestId">Request ID</param>
         /// <param name="aggregationTime">aggregation time</param>
         /// <param name="publicationTime">publication time</param>
-        public ExtendRequestPayload(ulong aggregationTime, ulong publicationTime) : base(Constants.ExtendRequestPayload.TagType, false, false, new ITlvTag[]
+        public ExtendRequestPayload(ulong requestId, ulong aggregationTime, ulong publicationTime) : base(Constants.ExtendRequestPayload.TagType, false, false, new ITlvTag[]
         {
-            new IntegerTag(Constants.ExtendRequestPayload.RequestIdTagType, false, false, Util.GetRandomUnsignedLong()),
+            new IntegerTag(Constants.ExtendRequestPayload.RequestIdTagType, false, false, requestId),
             new IntegerTag(Constants.ExtendRequestPayload.AggregationTimeTagType, false, false, aggregationTime),
             new IntegerTag(Constants.ExtendRequestPayload.PublicationTimeTagType, false, false, publicationTime)
         })
@@ -104,10 +104,11 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Create extend request payload from aggregation time.
         /// </summary>
+        /// <param name="requestId">Request ID</param>
         /// <param name="aggregationTime">aggregation time</param>
-        public ExtendRequestPayload(ulong aggregationTime) : base(Constants.ExtendRequestPayload.TagType, false, false, new ITlvTag[]
+        public ExtendRequestPayload(ulong requestId, ulong aggregationTime) : base(Constants.ExtendRequestPayload.TagType, false, false, new ITlvTag[]
         {
-            new IntegerTag(Constants.ExtendRequestPayload.RequestIdTagType, false, false, Util.GetRandomUnsignedLong()),
+            new IntegerTag(Constants.ExtendRequestPayload.RequestIdTagType, false, false, requestId),
             new IntegerTag(Constants.ExtendRequestPayload.AggregationTimeTagType, false, false, aggregationTime)
         })
         {

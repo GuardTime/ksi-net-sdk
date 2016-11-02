@@ -1,4 +1,5 @@
 # KSI .NET SDK #
+
 Guardtime Keyless Signature Infrastructure (KSI) is an industrial scale blockchain platform that cryptographically 
 ensures data integrity and proves time of existence. Its keyless signatures, based on hash chains, link data to global 
 calendar blockchain. The checkpoints of the blockchain, published in newspapers and electronic media, enable long term 
@@ -39,6 +40,31 @@ var ksiService = new KsiService(
             new CertificateSubjectRdnSelector("E=publications@guardtime.com"))));
 ```
 
+**Creating ksiService and setting PDU version**:
+
+```cs
+// Set crypto provider to bouncycastle or microsoft 
+KsiProvider.SetCryptoProvider(new MicrosoftCryptoProvider()); 
+//KsiProvider.SetCryptoProvider(new BouncyCastleCryptoProvider()); 
+
+// Create HTTP KSI service protocol
+var httpKsiServiceProtocol = new HttpKsiServiceProtocol("http://signingservice_url", "http://extendingservice_url", "http://publicationsfile_url");
+// Create new KSI service
+var ksiService = new KsiService(
+    httpKsiServiceProtocol, new ServiceCredentials("anon", "anon"),
+    httpKsiServiceProtocol, new ServiceCredentials("anon", "anon"),
+    httpKsiServiceProtocol,
+    new PublicationsFileFactory(
+        new PkiTrustStoreProvider(
+            new X509Store(StoreName.Root), 
+            new CertificateSubjectRdnSelector("E=publications@guardtime.com")))
+	PduVersion.v1);
+```
+
+If PDU version is not given then version v1 is used by default (expected to change to v2 in the future).
+
+If different PDU versions are needed for aggregating and extending then separate KsiServices should be used.
+
 There are 2 ways to use KSI service, with and without simple API wrapper.
 
 **Example using simple wrapper**:
@@ -74,10 +100,6 @@ var extendedSignature = signature.Extend(calendarHashChain, publicationRecord);
 
 The API full reference is available here [http://guardtime.github.io/ksi-net-sdk/](http://guardtime.github.io/ksi-net-sdk/).
 
-## License ##
-
-See LICENSE file.
-
 ## Dependencies ##
 
 | **Dependency**                     | **Version** | **License**                                                        | **Notes**                                                                |
@@ -89,3 +111,11 @@ See LICENSE file.
 ## Compatibility ##
 
 .NET 2.0 or newer
+
+## Contributing ##
+
+See [CONTRIBUTING.md](https://github.com/guardtime/ksi-net-sdk/blob/master/CONTRIBUTING.md) file.
+
+## License ##
+
+See [LICENSE](https://github.com/guardtime/ksi-net-sdk/blob/master/LICENSE) file.

@@ -29,7 +29,7 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Async begin extend signature.
         /// </summary>
-        /// <param name="data">extension request bytes</param>
+        /// <param name="data">extend request bytes</param>
         /// <param name="requestId">request id</param>
         /// <param name="callback">callback when response is ready</param>
         /// <param name="asyncState">async state object</param>
@@ -40,7 +40,7 @@ namespace Guardtime.KSI.Service
         ///     Async end extend signature.
         /// </summary>
         /// <param name="asyncResult">async result</param>
-        /// <returns>extension response bytes</returns>
+        /// <returns>extend response bytes</returns>
         byte[] EndExtend(IAsyncResult asyncResult);
     }
 }

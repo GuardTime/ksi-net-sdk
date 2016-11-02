@@ -17,6 +17,8 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
+using System.Collections.Generic;
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
@@ -29,13 +31,17 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public abstract class KsiPdu : CompositeTag
     {
-        private readonly KsiPduHeader _header;
-        private readonly ImprintTag _mac;
+        private ImprintTag _mac;
 
         /// <summary>
-        ///     Get PDU payload.
+        /// List on payloads
         /// </summary>
-        public abstract KsiPduPayload Payload { get; }
+        protected List<KsiPduPayload> Payloads { get; } = new List<KsiPduPayload>();
+
+        /// <summary>
+        ///     Get and set PDU header
+        /// </summary>
+        public KsiPduHeader Header { get; private set; }
 
         /// <summary>
         ///     Create KSI PDU from TLV element.
@@ -43,76 +49,208 @@ namespace Guardtime.KSI.Service
         /// <param name="tag">TLV element</param>
         protected KsiPdu(ITlvTag tag) : base(tag)
         {
+            int headerCount = 0;
+            int headerIndex = 0;
+            int payloadCount = 0;
+            int macCount = 0;
+            int macIndex = 0;
+            bool hasErrorPayload = false;
+
+            for (int i = 0; i < Count; i++)
+            {
+                ITlvTag childTag = this[i];
+
+                if (childTag.Type == Constants.AggregationErrorPayload.TagType || childTag.Type == Constants.ExtendErrorPayload.TagType)
+                {
+                    hasErrorPayload = true;
+                    payloadCount++;
+                }
+                else if (childTag.Type == Constants.AggregationRequestPayload.TagType || childTag.Type == Constants.AggregationResponsePayload.TagType ||
+                         childTag.Type == Constants.AggregationConfigRequestPayload.TagType || childTag.Type == Constants.AggregationConfigResponsePayload.TagType ||
+                         childTag.Type == Constants.ExtendRequestPayload.TagType || childTag.Type == Constants.ExtendResponsePayload.TagType)
+                {
+                    payloadCount++;
+                }
+                else if (childTag.Type == Constants.KsiPduHeader.TagType)
+                {
+                    this[i] = Header = new KsiPduHeader(childTag);
+                    headerCount++;
+                    headerIndex = i;
+                }
+                else if (childTag.Type == Constants.KsiPdu.MacTagType)
+                {
+                    this[i] = _mac = new ImprintTag(childTag);
+                    macCount++;
+                    macIndex = i;
+                }
+            }
+
+            if (payloadCount == 0)
+            {
+                throw new TlvException("Payloads are missing in KSI PDU.");
+            }
+
+            if (!hasErrorPayload)
+            {
+                if (headerCount != 1)
+                {
+                    throw new TlvException("Exactly one header must exist in KSI PDU.");
+                }
+
+                if (headerIndex != 0)
+                {
+                    throw new TlvException("Header must be the first element in KSI PDU.");
+                }
+
+                if (macCount != 1)
+                {
+                    throw new TlvException("Exactly one HMAC must exist in KSI PDU");
+                }
+
+                if (macIndex != Count - 1)
+                {
+                    throw new TlvException("HMAC must be the last element in KSI PDU");
+                }
+            }
+        }
+
+        /// <summary>
+        ///     Create aggregation pdu TLV element from KSI header and payload.
+        /// </summary>
+        /// <param name="tagType">PDU TLV tag type</param>
+        /// <param name="header">KSI PDU header</param>
+        /// <param name="payload">aggregation payload</param>
+        /// <param name="hmacAlgorithm">HMAC algorithm</param>
+        /// <param name="key">hmac key</param>
+        protected KsiPdu(uint tagType, KsiPduHeader header, KsiPduPayload payload, HashAlgorithm hmacAlgorithm, byte[] key)
+            : base(tagType, false, false, new ITlvTag[] { header, payload, GetEmptyHashMacTag(hmacAlgorithm) })
+        {
+            if (header == null)
+            {
+                throw new TlvException("Invalid header TLV: null.");
+            }
+
+            if (payload == null)
+            {
+                throw new TlvException("Invalid payload TLV: null.");
+            }
+
+            if (hmacAlgorithm == null)
+            {
+                throw new TlvException("Invalid HMAC algorithm: null.");
+            }
+
+            Header = header;
+            SetHmacValue(hmacAlgorithm, key);
+        }
+
+        /// <summary>
+        ///     Create KSI PDU from PDU header and data.
+        /// </summary>
+        /// <param name="type">TLV type</param>
+        /// <param name="nonCritical">Is TLV element non critical</param>
+        /// <param name="forward">Is TLV element forwarded</param>
+        /// <param name="value">TLV element list</param>
+        protected KsiPdu(uint type, bool nonCritical, bool forward, ITlvTag[] value)
+            : base(type, nonCritical, forward, value)
+        {
+        }
+
+        /// <summary>
+        /// Get payload of a given type
+        /// </summary>
+        /// <typeparam name="T">KSI PDU payload type</typeparam>
+        /// <returns></returns>
+        protected T GetPayload<T>() where T : KsiPduPayload
+        {
+            foreach (KsiPduPayload payload in Payloads)
+            {
+                T p = payload as T;
+                if (p != null)
+                {
+                    return p;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Get payloads of a given type
+        /// </summary>
+        /// <typeparam name="T">KSI PDU payload type</typeparam>
+        /// <returns></returns>
+        protected IEnumerable<T> GetPayloads<T>() where T : KsiPduPayload
+        {
+            foreach (KsiPduPayload payload in Payloads)
+            {
+                T p = payload as T;
+                if (p != null)
+                {
+                    yield return p;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Set HMAC tag value
+        /// </summary>
+        /// <param name="hmacAlgorithm"></param>
+        /// <param name="key"></param>
+        protected void SetHmacValue(HashAlgorithm hmacAlgorithm, byte[] key)
+        {
             for (int i = 0; i < Count; i++)
             {
                 ITlvTag childTag = this[i];
 
                 switch (childTag.Type)
                 {
-                    case Constants.KsiPduHeader.TagType:
-                        this[i] = _header = new KsiPduHeader(childTag);
-                        break;
                     case Constants.KsiPdu.MacTagType:
-                        this[i] = _mac = new ImprintTag(childTag);
+                        this[i] = _mac = CreateHashMacTag(CalcHashMacValue(hmacAlgorithm, key));
                         break;
                 }
             }
         }
 
         /// <summary>
-        ///     Create KSI PDU from PDU header and data.
-        /// </summary>
-        /// <param name="header">KSI PDU header</param>
-        /// <param name="mac">KSI pdu hmac</param>
-        /// <param name="type">TLV type</param>
-        /// <param name="nonCritical">Is TLV element non critical</param>
-        /// <param name="forward">Is TLV element forwarded</param>
-        /// <param name="value">TLV element list</param>
-        protected KsiPdu(KsiPduHeader header, ImprintTag mac, uint type, bool nonCritical, bool forward, ITlvTag[] value)
-            : base(type, nonCritical, forward, value)
-        {
-            if (header == null)
-            {
-                throw new TlvException("Invalid TLV header: null.");
-            }
-
-            if (mac == null)
-            {
-                throw new TlvException("Invalid hashmac hash: null");
-            }
-
-            _header = header;
-            _mac = mac;
-        }
-
-        /// <summary>
-        ///     Calculate MAC and attach it to PDU.
+        ///     Calculate HMAC value.
         /// </summary>
         /// <param name="hmacAlgorithm">HMAC algorithm</param>
-        /// <param name="key">hmac key</param>
-        /// <param name="header">KSI header</param>
-        /// <param name="payload">KSI payload</param>
-        public static ImprintTag GetHashMacTag(HashAlgorithm hmacAlgorithm, byte[] key, KsiPduHeader header, KsiPduPayload payload)
+        /// <param name="key">HMAC key</param>
+        private DataHash CalcHashMacValue(HashAlgorithm hmacAlgorithm, byte[] key)
         {
-            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
+            MemoryStream stream = new MemoryStream();
+            using (TlvWriter writer = new TlvWriter(stream))
             {
-                writer.WriteTag(header);
-                writer.WriteTag(payload);
-                return new ImprintTag(Constants.KsiPdu.MacTagType, false, false, CalculateMac(hmacAlgorithm, key, ((MemoryStream)writer.BaseStream).ToArray()));
+                writer.WriteTag(this);
+                byte[] target = new byte[stream.Length - hmacAlgorithm.Length];
+                Array.Copy(stream.ToArray(), 0, target, 0, target.Length);
+
+                IHmacHasher hasher = KsiProvider.CreateHmacHasher(hmacAlgorithm);
+                return hasher.GetHash(key, target);
             }
         }
 
         /// <summary>
-        ///     Calculate HMAC for data with given key.
+        /// Returns HMAC tag containing given data hash value
+        /// </summary>
+        /// <param name="dataHash">Data hash</param>
+        /// <returns></returns>
+        private static ImprintTag CreateHashMacTag(DataHash dataHash)
+        {
+            return new ImprintTag(Constants.KsiPdu.MacTagType, false, false, dataHash);
+        }
+
+        /// <summary>
+        /// Get HMAC tag that has hash algorithm set, but hash value is a byte array containing zeros.
         /// </summary>
         /// <param name="hmacAlgorithm">HMAC algorithm</param>
-        /// <param name="key">hmac key</param>
-        /// <param name="data">hmac calculation data</param>
-        /// <returns>hmac data hash</returns>
-        private static DataHash CalculateMac(HashAlgorithm hmacAlgorithm, byte[] key, byte[] data)
+        /// <returns></returns>
+        protected static ImprintTag GetEmptyHashMacTag(HashAlgorithm hmacAlgorithm)
         {
-            IHmacHasher hmac = KsiProvider.CreateHmacHasher(hmacAlgorithm);
-            return hmac.GetHash(key, data);
+            byte[] imprintBytes = new byte[hmacAlgorithm.Length + 1];
+            imprintBytes[0] = hmacAlgorithm.Id;
+            return CreateHashMacTag(new DataHash(imprintBytes));
         }
 
         /// <summary>
@@ -127,14 +265,7 @@ namespace Guardtime.KSI.Service
                 return false;
             }
 
-            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
-            {
-                writer.WriteTag(_header);
-                writer.WriteTag(Payload);
-
-                DataHash hash = CalculateMac(_mac.Value.Algorithm, key, ((MemoryStream)writer.BaseStream).ToArray());
-                return hash.Equals(_mac.Value);
-            }
+            return CalcHashMacValue(_mac.Value.Algorithm, key).Equals(_mac.Value);
         }
     }
 }

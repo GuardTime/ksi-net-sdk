@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 
 #pragma warning disable 1591
 
@@ -142,20 +143,29 @@ namespace Guardtime.KSI
             public const uint ErrorMessageTagType = 0x5;
         }
 
-        public static class AggregationErrorPayload
-        {
-            /// <summary>
-            ///     Aggregation error payload TLV type.
-            /// </summary>
-            public const uint TagType = 0x203;
-        }
-
-        public static class AggregationPdu
+        [Obsolete]
+        public static class LegacyAggregationPdu
         {
             /// <summary>
             ///     Aggregation PDU TLV type.
             /// </summary>
             public const uint TagType = 0x200;
+        }
+
+        public static class AggregationRequestPdu
+        {
+            /// <summary>
+            ///     Aggregation request PDU TLV type.
+            /// </summary>
+            public const uint TagType = 0x220;
+        }
+
+        public static class AggregationResponsePdu
+        {
+            /// <summary>
+            ///     Aggregation response PDU TLV type.
+            /// </summary>
+            public const uint TagType = 0x221;
         }
 
         public static class AggregationRequestPayload
@@ -164,11 +174,16 @@ namespace Guardtime.KSI
             /// <summary>
             ///     Aggregation request TLV type.
             /// </summary>
-            public const uint TagType = 0x201;
+            public const uint TagType = 0x2;
+
+            [Obsolete]
+            public const uint LegacyTagType = 0x201;
 
             public const uint RequestIdTagType = 0x1;
             public const uint RequestHashTagType = 0x2;
             public const uint RequestLevelTagType = 0x3;
+
+            [Obsolete]
             public const uint ConfigTagType = 0x10;
         }
 
@@ -177,22 +192,67 @@ namespace Guardtime.KSI
             /// <summary>
             ///     Aggregation response payload TLV type.
             /// </summary>
-            public const uint TagType = 0x202;
+            public const uint TagType = 0x2;
+
+            [Obsolete]
+            public const uint LegacyTagType = 0x202;
 
             public const uint RequestIdTagType = 0x1;
+
+            [Obsolete]
             public const uint ConfigTagType = 0x10;
+
+            [Obsolete]
             public const uint RequestAcknowledgmentTagType = 0x11;
         }
 
-        public static class ExtendErrorPayload
+        public static class AggregationErrorPayload
         {
             /// <summary>
-            ///     Extension error payload TLV type.
+            ///     Aggregation error payload TLV type.
             /// </summary>
-            public const uint TagType = 0x303;
+            public const uint TagType = 0x3;
+
+            [Obsolete]
+            public const uint LegacyTagType = 0x203;
         }
 
-        public static class ExtendPdu
+        public static class AggregationConfigRequestPayload
+        {
+            /// <summary>
+            ///     Aggregation config request TLV type.
+            /// </summary>
+            public const uint TagType = 0x4;
+        }
+
+        public static class AggregationConfigResponsePayload
+        {
+            /// <summary>
+            ///     Aggregation config response payload TLV type.
+            /// </summary>
+            public const uint TagType = 0x4;
+
+            public const uint MaxLevelTagType = 0x1;
+
+            public const uint AggregationAlgorithmTagType = 0x2;
+
+            public const uint AggregationPeriodTagType = 0x3;
+
+            public const uint MaxRequestsTagType = 0x4;
+
+            public const uint ParentUriTagType = 0x10;
+        }
+
+        public static class AggregationAcknowledgmentResponsePayload
+        {
+            /// <summary>
+            ///     Aggregation acknowledgment response payload TLV type.
+            /// </summary>
+            public const uint TagType = 0x5;
+        }
+
+        [Obsolete]
+        public static class LegacyExtendPdu
         {
             /// <summary>
             ///     Extension PDU TLV type.
@@ -200,12 +260,31 @@ namespace Guardtime.KSI
             public const uint TagType = 0x300;
         }
 
+        public static class ExtendRequestPdu
+        {
+            /// <summary>
+            ///     Extend request PDU TLV type.
+            /// </summary>
+            public const uint TagType = 0x320;
+        }
+
+        public static class ExtendResponsePdu
+        {
+            /// <summary>
+            ///     Extend response PDU TLV type.
+            /// </summary>
+            public const uint TagType = 0x321;
+        }
+
         public static class ExtendRequestPayload
         {
             /// <summary>
             ///     Extend request payload TLV type.
             /// </summary>
-            public const uint TagType = 0x301;
+            public const uint TagType = 0x2;
+
+            [Obsolete]
+            public const uint LegacyTagType = 0x301;
 
             public const uint RequestIdTagType = 0x1;
             public const uint AggregationTimeTagType = 0x2;
@@ -215,12 +294,38 @@ namespace Guardtime.KSI
         public static class ExtendResponsePayload
         {
             /// <summary>
-            ///     Extension response payload TLV type.
+            ///     Extend response payload TLV type.
             /// </summary>
-            public const uint TagType = 0x302;
+            public const uint TagType = 0x2;
+
+            [Obsolete]
+            public const uint LegacyTagType = 0x302;
 
             public const uint RequestIdTagType = 0x1;
+
+            [Obsolete]
             public const uint LastTimeTagType = 0x10;
+
+            public const uint CalendarLastTimeTagType = 0x12;
+        }
+
+        public static class ExtendErrorPayload
+        {
+            /// <summary>
+            ///     Extend error payload TLV type.
+            /// </summary>
+            public const uint TagType = 0x3;
+
+            [Obsolete]
+            public const uint LegacyTagType = 0x303;
+        }
+
+        public static class ExtendConfigResponsePayload
+        {
+            /// <summary>
+            ///     Extender config response payload TLV type.
+            /// </summary>
+            public const uint TagType = 0x4;
         }
 
         public static class KsiPduHeader

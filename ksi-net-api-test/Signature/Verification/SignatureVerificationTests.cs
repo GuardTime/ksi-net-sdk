@@ -23,11 +23,11 @@ using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Publication;
-using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
 using Guardtime.KSI.Test.Crypto;
+using Guardtime.KSI.Test.Integration;
 using Guardtime.KSI.Test.Properties;
 using Guardtime.KSI.Trust;
 using NUnit.Framework;
@@ -42,18 +42,6 @@ namespace Guardtime.KSI.Test.Signature.Verification
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok), FileMode.Open))
             {
-                HttpKsiServiceProtocol serviceProtocol = new HttpKsiServiceProtocol(
-                    Settings.Default.HttpSigningServiceUrl,
-                    Settings.Default.HttpExtendingServiceUrl,
-                    Settings.Default.HttpPublicationsFileUrl);
-
-                KsiService ksiService = new KsiService(
-                    serviceProtocol, new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
-                    serviceProtocol, new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
-                    serviceProtocol,
-                    new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))));
-
                 VerificationContext context = new VerificationContext(new KsiSignatureFactory().Create(stream))
                 {
                     DocumentHash =
@@ -66,7 +54,7 @@ namespace Guardtime.KSI.Test.Signature.Verification
                         }),
                     //UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K"),
                     IsExtendingAllowed = true,
-                    KsiService = ksiService,
+                    KsiService = IntegrationTests.HttpKsiService,
                     PublicationsFile =
                         new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                             CryptoTestFactory.CreateCertificateSubjectRdnSelector(new List<CertificateSubjectRdn>

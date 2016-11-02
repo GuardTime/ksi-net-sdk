@@ -29,5 +29,8 @@
     <Setting Name="TcpSigningServicePort" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">1234</Value>
     </Setting>
+    <Setting Name="PduVersion" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

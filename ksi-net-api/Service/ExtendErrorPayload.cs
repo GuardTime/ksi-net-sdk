@@ -22,7 +22,7 @@ using Guardtime.KSI.Parser;
 namespace Guardtime.KSI.Service
 {
     /// <summary>
-    ///     Extension error payload.
+    ///     Extend error payload.
     /// </summary>
     public sealed class ExtendErrorPayload : ErrorPayload
     {

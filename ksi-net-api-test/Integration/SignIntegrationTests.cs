@@ -25,6 +25,7 @@ using System.Text;
 using System.Threading;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
+using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
@@ -94,7 +95,7 @@ namespace Guardtime.KSI.Test.Integration
                 SignHash(ksi);
             });
 
-            Assert.AreEqual("Error occured during aggregation: The request could not be authenticated.", ex.Message);
+            Assert.AreEqual("Error occured during aggregation. Status: 258; Message: The request could not be authenticated.", ex.Message);
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidSigningUrl))]
@@ -141,7 +142,7 @@ namespace Guardtime.KSI.Test.Integration
             {
                 SignHash(ksi);
             });
-            Assert.AreEqual("Error occured during aggregation: The request could not be authenticated.", ex.Message);
+            Assert.AreEqual("Error occured during aggregation. Status: 258; Message: The request could not be authenticated.", ex.Message);
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCasesInvalidUrl))]
@@ -281,6 +282,48 @@ namespace Guardtime.KSI.Test.Integration
             }
 
             Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " All done.");
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void HttpGetAggregationConfigTest(Ksi ksi)
+        {
+            if (TestSetup.PduVersion == PduVersion.v1)
+            {
+                Exception ex = Assert.Throws<KsiServiceException>(delegate
+                {
+                    ksi.GetAggregationConfig();
+                });
+
+                Assert.That(ex.Message.StartsWith("Config request is not supported using PDU version v1"), "Unexpected exception message: " + ex.Message);
+            }
+            else
+            {
+                ksi.GetAggregationConfig();
+            }
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void HttpSignInvalidPduFormatTest(Ksi ksi)
+        {
+            KsiService service = GetHttpKsiService(PduVersion.v2);
+
+            try
+            {
+                service.Sign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
+            }
+                // if new aggregator then no exception
+            catch (Exception ex)
+            {
+                Assert.That(ex.Message.StartsWith("Received PDU v1 response to PDU v2 request. Configure the SDK to use PDU v1 format for the given Aggregator"),
+                    "Unexpected exception message: " + ex.Message);
+            }
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void HttpSignDefaultPduFormatTest(Ksi ksi)
+        {
+            KsiService service = GetHttpKsiServiceWithDefaultPduVersion();
+            service.Sign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
         }
     }
 }
