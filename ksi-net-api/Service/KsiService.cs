@@ -373,10 +373,10 @@ namespace Guardtime.KSI.Service
                         throw new KsiServiceException("Invalid aggregation response payload: " + legacyPdu.Payload);
                     }
 
-                    if (legacyPayload == null || legacyPayload.Status != 0)
+                    if (errorPayload != null || legacyPayload.Status != 0)
                     {
-                        ulong status = legacyPayload?.Status ?? errorPayload.Status;
-                        string errorMessage = legacyPayload == null ? errorPayload.ErrorMessage : legacyPayload.ErrorMessage;
+                        ulong status = errorPayload?.Status ?? legacyPayload.Status;
+                        string errorMessage = errorPayload != null ? errorPayload.ErrorMessage : legacyPayload.ErrorMessage;
                         throw new KsiServiceException("Error occured during aggregation. Status: " + status + "; Message: " + errorMessage + ".");
                     }
 
@@ -399,10 +399,10 @@ namespace Guardtime.KSI.Service
                         throw new KsiServiceException("Invalid aggregation response PDU. Could not find a valid payload. PDU: " + pdu);
                     }
 
-                    if (payload == null || payload.Status != 0)
+                    if (errorPayload != null || payload.Status != 0)
                     {
-                        ulong status = payload?.Status ?? errorPayload.Status;
-                        string errorMessage = payload == null ? errorPayload.ErrorMessage : payload.ErrorMessage;
+                        ulong status = errorPayload?.Status ?? payload.Status;
+                        string errorMessage = errorPayload != null ? errorPayload.ErrorMessage : payload.ErrorMessage;
                         throw new KsiServiceException("Error occured during aggregation. Status: " + status + "; Message: " + errorMessage + ".");
                     }
 
@@ -546,10 +546,10 @@ namespace Guardtime.KSI.Service
                     throw new KsiServiceException("Invalid aggregation config response PDU. Could not find a valid payload. PDU: " + pdu);
                 }
 
-                if (payload == null)
+                if (errorPayload != null)
                 {
-                    throw new KsiServiceException("Error occured during aggregation config request. Status: " + errorPayload.Status + "; Message: " + errorPayload.ErrorMessage +
-                                                  ".");
+                    throw new KsiServiceException("Error occured during aggregation config request. Status: " + errorPayload.Status + 
+                        "; Message: " + errorPayload.ErrorMessage +".");
                 }
 
                 if (!pdu.ValidateMac(_signingServiceCredentials.LoginKey))
@@ -778,10 +778,10 @@ namespace Guardtime.KSI.Service
                         throw new KsiServiceException("Invalid extend response payload: null.");
                     }
 
-                    if (legacyPayload == null || legacyPayload.Status != 0)
+                    if (errorPayload != null || legacyPayload.Status != 0)
                     {
-                        ulong status = legacyPayload?.Status ?? errorPayload.Status;
-                        string errorMessage = legacyPayload == null ? errorPayload.ErrorMessage : legacyPayload.ErrorMessage;
+                        ulong status = errorPayload?.Status ?? legacyPayload.Status;
+                        string errorMessage = errorPayload != null ? errorPayload.ErrorMessage : legacyPayload.ErrorMessage;
                         throw new KsiServiceException("Error occured during extending. Status: " + status + "; Message: " + errorMessage + ".");
                     }
 
@@ -809,10 +809,10 @@ namespace Guardtime.KSI.Service
                         throw new KsiServiceException("Invalid extend response PDU. Could not find a valid payload. PDU: " + pdu);
                     }
 
-                    if (payload == null || payload.Status != 0)
+                    if (errorPayload != null || payload.Status != 0)
                     {
-                        ulong status = payload?.Status ?? errorPayload.Status;
-                        string errorMessage = payload == null ? errorPayload.ErrorMessage : payload.ErrorMessage;
+                        ulong status = errorPayload?.Status ?? payload.Status;
+                        string errorMessage = errorPayload != null ? errorPayload.ErrorMessage : payload.ErrorMessage;
                         throw new KsiServiceException("Error occured during extending. Status: " + status + "; Message: " + errorMessage + ".");
                     }
 

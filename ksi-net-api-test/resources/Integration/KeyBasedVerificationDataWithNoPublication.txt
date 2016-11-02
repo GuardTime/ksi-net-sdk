@@ -43,6 +43,8 @@ resources/signature/integration-test-signatures/NewSignature-AggrHashGW-WrongAgg
 resources/signature/integration-test-signatures/NewSignature-AggrHashCore-WrongAggrTime.ksig;false;Fail; ; ;AggregationHashChainTimeConsistencyRule
 resources/signature/integration-test-signatures/NewSignature-AggrHashCore-NoAggrTime.ksig;false;Fail; ; ;AggregationHashChainTimeConsistencyRule
 resources/signature/integration-test-signatures/signature-with-invalid-calendar-authentication-record-hash.ksig;false;Fail; ; ;CalendarAuthenticationRecordAggregationHashRule
+resources/signature/ksi-signature-do/ksi-signature-invalid-chain-index-mismatch.tlv;false;Fail; ;Chain index mismatch;Rfc3161RecordChainIndexRule
+resources/signature/ksi-signature-do/ksi-signature-invalid-rfc3161-aggregation-time-mismatch.tlv;false;Fail; ;Chain index mismatch;Rfc3161RecordAggregationTimeRule
 #
 # key based ver; Resutl is Na
 #
