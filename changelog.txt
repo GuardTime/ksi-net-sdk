@@ -1,6 +1,6 @@
 Version 3.6
 
-2016-11-02 3.6.X
+2016-11-02 3.6.188
 
 * IMPROVEMENT: Added RFC 3161 record aggregation time and hash chain index verification (KSINETAPI-84)
 * BUGFIX: Allow extend response payload to contain calendar hash chain when status is not 0 (KSINETAPI-91)
