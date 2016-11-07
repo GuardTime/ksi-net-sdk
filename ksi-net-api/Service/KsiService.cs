@@ -373,21 +373,24 @@ namespace Guardtime.KSI.Service
                         throw new KsiServiceException("Invalid aggregation response payload: " + legacyPdu.Payload);
                     }
 
-                    if (legacyPayload != null && legacyPayload.RequestId != serviceAsyncResult.RequestId)
+                    if (errorPayload != null)
                     {
-                        throw new KsiServiceException("Unknown request ID: " + legacyPayload.RequestId);
-                    }
-
-                    if (errorPayload != null || legacyPayload.Status != 0)
-                    {
-                        ulong status = errorPayload?.Status ?? legacyPayload.Status;
-                        string errorMessage = errorPayload != null ? errorPayload.ErrorMessage : legacyPayload.ErrorMessage;
-                        throw new KsiServiceException("Error occured during aggregation. Status: " + status + "; Message: " + errorMessage + ".");
+                        throw new KsiServiceException(GetSigningErrorMessage(errorPayload.Status, errorPayload.ErrorMessage));
                     }
 
                     if (!legacyPdu.ValidateMac(_signingServiceCredentials.LoginKey))
                     {
                         throw new KsiServiceException("Invalid HMAC in aggregation response PDU.");
+                    }
+
+                    if (legacyPayload.RequestId != serviceAsyncResult.RequestId)
+                    {
+                        throw new KsiServiceException("Unknown request ID: " + legacyPayload.RequestId);
+                    }
+
+                    if (legacyPayload.Status != 0)
+                    {
+                        throw new KsiServiceException(GetSigningErrorMessage(legacyPayload.Status, legacyPayload.ErrorMessage));
                     }
 
                     signature = _ksiSignatureFactory.Create(legacyPayload, serviceAsyncResult.DocumentHash, serviceAsyncResult.Level);
@@ -404,16 +407,18 @@ namespace Guardtime.KSI.Service
                         throw new KsiServiceException("Invalid aggregation response PDU. Could not find a valid payload. PDU: " + pdu);
                     }
 
-                    if (errorPayload != null || payload.Status != 0)
+                    if (errorPayload != null)
                     {
-                        ulong status = errorPayload?.Status ?? payload.Status;
-                        string errorMessage = errorPayload != null ? errorPayload.ErrorMessage : payload.ErrorMessage;
-                        throw new KsiServiceException("Error occured during aggregation. Status: " + status + "; Message: " + errorMessage + ".");
+                        throw new KsiServiceException(GetSigningErrorMessage(errorPayload.Status, errorPayload.ErrorMessage));
                     }
 
                     if (!pdu.ValidateMac(_signingServiceCredentials.LoginKey))
                     {
                         throw new KsiServiceException("Invalid HMAC in aggregation response PDU.");
+                    }
+                    if (payload.Status != 0)
+                    {
+                        throw new KsiServiceException(GetSigningErrorMessage(payload.Status, payload.ErrorMessage));
                     }
 
                     signature = _ksiSignatureFactory.Create(payload, serviceAsyncResult.DocumentHash, serviceAsyncResult.Level);
@@ -434,6 +439,11 @@ namespace Guardtime.KSI.Service
                 Logger.Warn("End sign request failed (request id: {0}): {1}{2}{3}", serviceAsyncResult.RequestId, e, Environment.NewLine, legacyPdu ?? pdu ?? (ITlvTag)rawTag);
                 throw;
             }
+        }
+
+        private static string GetSigningErrorMessage(ulong status, string errorMessage)
+        {
+            return "Error occured during aggregation. Status: " + status + "; Message: " + errorMessage + ".";
         }
 
         /// <summary>
@@ -783,21 +793,24 @@ namespace Guardtime.KSI.Service
                         throw new KsiServiceException("Invalid extend response payload: null.");
                     }
 
-                    if (legacyPayload != null && legacyPayload.RequestId != serviceAsyncResult.RequestId)
+                    if (errorPayload != null)
                     {
-                        throw new KsiServiceException("Unknown request ID: " + legacyPayload.RequestId);
-                    }
-
-                    if (errorPayload != null || legacyPayload.Status != 0)
-                    {
-                        ulong status = errorPayload?.Status ?? legacyPayload.Status;
-                        string errorMessage = errorPayload != null ? errorPayload.ErrorMessage : legacyPayload.ErrorMessage;
-                        throw new KsiServiceException("Error occured during extending. Status: " + status + "; Message: " + errorMessage + ".");
+                        throw new KsiServiceException(GetExtendingErrorMessage(errorPayload.Status, errorPayload.ErrorMessage));
                     }
 
                     if (!legacyPdu.ValidateMac(_extendingServiceCredentials.LoginKey))
                     {
                         throw new KsiServiceException("Invalid HMAC in extend response PDU.");
+                    }
+
+                    if (legacyPayload.RequestId != serviceAsyncResult.RequestId)
+                    {
+                        throw new KsiServiceException("Unknown request ID: " + legacyPayload.RequestId);
+                    }
+
+                    if (legacyPayload.Status != 0)
+                    {
+                        throw new KsiServiceException(GetExtendingErrorMessage(legacyPayload.Status, legacyPayload.ErrorMessage));
                     }
 
                     if (legacyPayload.CalendarHashChain == null)
@@ -818,17 +831,19 @@ namespace Guardtime.KSI.Service
                     {
                         throw new KsiServiceException("Invalid extend response PDU. Could not find a valid payload. PDU: " + pdu);
                     }
-
-                    if (errorPayload != null || payload.Status != 0)
+                    if (errorPayload != null)
                     {
-                        ulong status = errorPayload?.Status ?? payload.Status;
-                        string errorMessage = errorPayload != null ? errorPayload.ErrorMessage : payload.ErrorMessage;
-                        throw new KsiServiceException("Error occured during extending. Status: " + status + "; Message: " + errorMessage + ".");
+                        throw new KsiServiceException(GetExtendingErrorMessage(errorPayload.Status, errorPayload.ErrorMessage));
                     }
 
                     if (!pdu.ValidateMac(_extendingServiceCredentials.LoginKey))
                     {
                         throw new KsiServiceException("Invalid HMAC in extend response PDU.");
+                    }
+
+                    if (payload.Status != 0)
+                    {
+                        throw new KsiServiceException(GetExtendingErrorMessage(payload.Status, payload.ErrorMessage));
                     }
 
                     if (payload.CalendarHashChain == null)
@@ -852,6 +867,11 @@ namespace Guardtime.KSI.Service
                 Logger.Warn("End extend request failed (request id: {0}): {1}{2}{3}", serviceAsyncResult.RequestId, e, Environment.NewLine, legacyPdu ?? pdu ?? (ITlvTag)rawTag);
                 throw;
             }
+        }
+
+        private static string GetExtendingErrorMessage(ulong status, string errorMessage)
+        {
+            return "Error occured during extending. Status: " + status + "; Message: " + errorMessage + ".";
         }
 
         /// <summary>
