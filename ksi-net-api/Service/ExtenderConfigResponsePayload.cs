@@ -93,16 +93,6 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        /// Aggregation time of the oldest calendar record the extender has
-        /// </summary>
-        public ulong? CalendarFirstTime => _calendarFirstTime?.Value;
-
-        /// <summary>
-        /// Aggregation time of the newest calendar record the extender has
-        /// </summary>
-        public ulong? CalendarLastTime => _calendarLastTime?.Value;
-
-        /// <summary>
         /// Maximum number of requests the client is allowed to send within one second
         /// </summary>
         public ulong? MaxRequests => _maxRequests?.Value;
@@ -111,5 +101,15 @@ namespace Guardtime.KSI.Service
         /// Parent server URI (may be several parent servers)
         /// </summary>
         public IList<string> ParentsUris { get; } = new List<string>();
+
+        /// <summary>
+        /// Aggregation time of the oldest calendar record the extender has
+        /// </summary>
+        public ulong? CalendarFirstTime => _calendarFirstTime?.Value;
+
+        /// <summary>
+        /// Aggregation time of the newest calendar record the extender has
+        /// </summary>
+        public ulong? CalendarLastTime => _calendarLastTime?.Value;
     }
 }

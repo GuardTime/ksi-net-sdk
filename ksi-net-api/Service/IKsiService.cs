@@ -136,7 +136,7 @@ namespace Guardtime.KSI.Service
         /// Get additional extender configuration data (sync)
         /// </summary>
         /// <returns>Extender configuration response payload</returns>
-        ExtenderConfigResponsePayload GetExtenderConfig();
+        ExtenderConfig GetExtenderConfig();
 
         /// <summary>
         /// Begin get additional extender configuration data (async)
@@ -151,7 +151,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="asyncResult"></param>
         /// <returns>Extender configuration response payload</returns>
-        ExtenderConfigResponsePayload EndGetExtenderConfig(IAsyncResult asyncResult);
+        ExtenderConfig EndGetExtenderConfig(IAsyncResult asyncResult);
 
         /// <summary>
         ///     Get publications file (sync).

@@ -43,7 +43,7 @@ namespace Guardtime.KSI.Test.Service
         {
             Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtenderConfigResponsePdu)));
 
-            ExtenderConfigResponsePayload config = ksi.GetExtenderConfig();
+            ExtenderConfig config = ksi.GetExtenderConfig();
 
             Assert.AreEqual(273, config.MaxRequests, "Unexpected max requests value");
             Assert.AreEqual(1455478441, config.CalendarFirstTime, "Unexpected calendar first time value");
@@ -59,7 +59,7 @@ namespace Guardtime.KSI.Test.Service
             // Response has multiple payloads (including a payload containing invalid signature and a configuration payload)
             Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_Multi_Payloads)));
 
-            ExtenderConfigResponsePayload config = ksi.GetExtenderConfig();
+            ExtenderConfig config = ksi.GetExtenderConfig();
 
             Assert.AreEqual(273, config.MaxRequests, "Unexpected max requests value");
             Assert.AreEqual(1455478441, config.CalendarFirstTime, "Unexpected calendar first time value");

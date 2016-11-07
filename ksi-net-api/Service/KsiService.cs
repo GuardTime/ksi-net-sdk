@@ -839,7 +839,7 @@ namespace Guardtime.KSI.Service
         /// Get additional extender configuration data (sync)
         /// </summary>
         /// <returns>Extender configuration response payload</returns>
-        public ExtenderConfigResponsePayload GetExtenderConfig()
+        public ExtenderConfig GetExtenderConfig()
         {
             return EndGetExtenderConfig(BeginGetExtenderConfig(null, null));
         }
@@ -885,7 +885,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="asyncResult"></param>
         /// <returns>Extender configuration response payload</returns>
-        public ExtenderConfigResponsePayload EndGetExtenderConfig(IAsyncResult asyncResult)
+        public ExtenderConfig EndGetExtenderConfig(IAsyncResult asyncResult)
         {
             if (_extendingServiceProtocol == null)
             {
@@ -953,7 +953,7 @@ namespace Guardtime.KSI.Service
                 }
                 Logger.Debug("End get extender config successful (request id: {0}){1}{2}", serviceAsyncResult.RequestId, Environment.NewLine, pdu);
 
-                return payload;
+                return new ExtenderConfig(payload);
             }
             catch (TlvException e)
             {
