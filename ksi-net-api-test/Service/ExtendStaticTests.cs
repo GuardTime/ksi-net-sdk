@@ -160,6 +160,28 @@ namespace Guardtime.KSI.Test.Service
             Assert.That(ex.Message.StartsWith("Error occured during extending. Status: 17; Message: No error."), "Unexpected exception message: " + ex.Message);
         }
 
+
+
+        /// <summary>
+        /// Test extending with PDU v1. Response payload has invalid request ID.
+        /// </summary>
+        [Test]
+        public void LegacyExtendStaticInvalidRequestIdTest()
+        {
+            IKsiSignature signature = new KsiSignatureFactory().Create(
+                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok)));
+
+            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_LegacyExtendResponsePdu)), 0, null,
+                PduVersion.v1);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                ksi.Extend(signature);
+            });
+
+            Assert.That(ex.Message.StartsWith("Unknown request ID:"), "Unexpected exception message: " + ex.Message);
+        }
+
         private static Ksi GetKsi(byte[] requestResult, ulong requestId, IKsiSignatureFactory ksiSignatureFactory = null, PduVersion pduVersion = PduVersion.v2)
         {
             TestKsiServiceProtocol protocol = new TestKsiServiceProtocol

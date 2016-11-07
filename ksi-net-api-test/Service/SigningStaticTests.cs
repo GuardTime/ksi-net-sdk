@@ -95,6 +95,22 @@ namespace Guardtime.KSI.Test.Service
             Assert.AreEqual(VerificationError.Int01.Code, ex.VerificationResult.VerificationError.Code);
         }
 
+        /// <summary>
+        /// Test signing with PDU v1. Response payload has invalid request ID.
+        /// </summary>
+        [Test]
+        public void LegacySignStaticInvalidRequestIdTest()
+        {
+            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_LegacyAggregationResponsePdu)), 0, PduVersion.v1);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                ksi.Sign(new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")));
+            });
+
+            Assert.That(ex.Message.StartsWith("Unknown request ID:"), "Unexpected exception message: " + ex.Message);
+        }
+
         private static Ksi GetKsi(byte[] requestResult, ulong requestId, PduVersion pduVersion = PduVersion.v2)
         {
             TestKsiServiceProtocol protocol = new TestKsiServiceProtocol
