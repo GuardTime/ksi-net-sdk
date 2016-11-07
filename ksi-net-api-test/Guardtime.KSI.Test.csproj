@@ -186,7 +186,6 @@
     <Compile Include="Service\TestBlockSigner.cs" />
     <Compile Include="Service\TestKsiService.cs" />
     <Compile Include="Service\TestKsiServiceProtocol.cs" />
-    <Compile Include="Signature\KsiMultiSignatureTests.cs" />
     <Compile Include="Signature\KsiSignatureUsingReflectionTests.cs" />
     <Compile Include="Signature\Verification\EmptyVerificationPolicy.cs" />
     <Compile Include="Signature\Verification\Rule\Rfc3161RecordAggregationTimeRuleTests.cs" />
@@ -1059,58 +1058,7 @@
     <None Include="resources\signature\integration-test-signatures\ok-sig-extended-2014-05-15.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\multi-signature\infile_2015-05-05.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\multi-signature\infile_2015-05-28.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\multi-signature\infile_2015-06-22.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\multi-signature\ksi-multi-signature-padding-ok.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\multi-signature\ksi-multi-signature-padding-tlv16-invalid.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\multi-signature\ksi-multi-signature-ok.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\multi-signature\ksi-sha2-384.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\multi-signature\ksi-sha2-512.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\multi-signature\multi-signature-5.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="resources\signature\ksi-signature-do\ksi-signature-level-3-ok.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\multi-signature\signature_data_1_agg_time_1437657023.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\multi-signature\signature_data_2_agg_time_1437657023.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\multi-signature\signature_data_3_agg_time_1437657023.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\multi-signature\TestData.png.2015-02.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\multi-signature\TestData.png.2015-04.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\multi-signature\TestData.txt.2013-03.extended.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\multi-signature\TestData.txt.2015-02.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\multi-signature\TestData.txt.2015-05.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-rfc3161-aggregation-time-mismatch.tlv">

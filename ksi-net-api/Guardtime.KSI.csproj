@@ -92,8 +92,6 @@
     <Compile Include="Exceptions\HashingException.cs" />
     <Compile Include="Exceptions\InvalidRequestFormatException.cs" />
     <Compile Include="Exceptions\KsiSignatureInvalidContentException.cs" />
-    <Compile Include="Exceptions\KsiMultiSignatureInvalidHashException.cs" />
-    <Compile Include="Exceptions\KsiMultiSignatureException.cs" />
     <Compile Include="Exceptions\KsiException.cs" />
     <Compile Include="Exceptions\KsiServiceException.cs" />
     <Compile Include="Exceptions\KsiServiceProtocolException.cs" />
@@ -158,16 +156,6 @@
     <Compile Include="Signature\Verification\Rule\Rfc3161RecordAggregationTimeRule.cs" />
     <Compile Include="Signature\Verification\Rule\Rfc3161RecordChainIndexRule.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainMetadataRule.cs" />
-    <Compile Include="Signature\MultiSignature\AggregationHashChainHolder.cs" />
-    <Compile Include="Signature\MultiSignature\AggregationHashChainKey.cs" />
-    <Compile Include="Signature\MultiSignature\CalendarAuthenticationRecordHolder.cs" />
-    <Compile Include="Signature\MultiSignature\CalendarHashChainHolder.cs" />
-    <Compile Include="Signature\MultiSignature\DataHolder.cs" />
-    <Compile Include="Signature\MultiSignature\FirstAggregationHashChainsHolder.cs" />
-    <Compile Include="Signature\MultiSignature\KsiMultiSignature.cs" />
-    <Compile Include="Signature\MultiSignature\MultiValueDataHolder.cs" />
-    <Compile Include="Signature\MultiSignature\PublicationRecordHolder.cs" />
-    <Compile Include="Signature\MultiSignature\Rfc3161RecordHolder.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainIndexRule.cs" />
     <Compile Include="Service\TreeNode.cs" />
     <Compile Include="Utils\Base16.cs" />
