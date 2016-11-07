@@ -447,21 +447,21 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        /// Get additional aggregation configuration data (sync)
+        /// Get additional aggregator configuration data (sync)
         /// </summary>
-        /// <returns>Aggregation configuration response payload</returns>
-        public AggregationConfigResponsePayload GetAggregationConfig()
+        /// <returns>Aggregator configuration data</returns>
+        public AggregatorConfig GetAggregatorConfig()
         {
-            return EndGetAggregationConfig(BeginGetAggregationConfig(null, null));
+            return EndGetAggregatorConfig(BeginGetAggregatorConfig(null, null));
         }
 
         /// <summary>
-        /// Begin get additional aggregation configuration data (async)
+        /// Begin get additional aggregator configuration data (async)
         /// </summary>
         /// <param name="callback"></param>
         /// <param name="asyncState"></param>
         /// <returns>async result</returns>
-        public IAsyncResult BeginGetAggregationConfig(AsyncCallback callback, object asyncState)
+        public IAsyncResult BeginGetAggregatorConfig(AsyncCallback callback, object asyncState)
         {
             if (IsLegacyPduVersion)
             {
@@ -479,16 +479,16 @@ namespace Guardtime.KSI.Service
             }
 
             KsiPduHeader header = new KsiPduHeader(_signingServiceCredentials.LoginId);
-            AggregationConfigRequestPayload payload = new AggregationConfigRequestPayload();
+            AggregatorConfigRequestPayload payload = new AggregatorConfigRequestPayload();
             AggregationRequestPdu pdu = new AggregationRequestPdu(header, payload, _hmacAlgorithm, _signingServiceCredentials.LoginKey);
 
             ulong requestId = GenerateRequestId();
 
-            Logger.Debug("Begin get aggregation config (request id: {0}){1}{2}", requestId, Environment.NewLine, pdu);
+            Logger.Debug("Begin get aggregator config (request id: {0}){1}{2}", requestId, Environment.NewLine, pdu);
 
             IAsyncResult serviceProtocolAsyncResult = _sigingServiceProtocol.BeginSign(pdu.Encode(), requestId, callback, asyncState);
 
-            return new AggregationConfigKsiServiceAsyncResult(requestId, serviceProtocolAsyncResult, asyncState);
+            return new AggregatorConfigKsiServiceAsyncResult(requestId, serviceProtocolAsyncResult, asyncState);
         }
 
         /// <summary>
@@ -501,11 +501,11 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        /// End get additional aggregation configuration data (async)
+        /// End get additional aggregator configuration data (async)
         /// </summary>
         /// <param name="asyncResult"></param>
-        /// <returns>Aggregation configuration response payload</returns>
-        public AggregationConfigResponsePayload EndGetAggregationConfig(IAsyncResult asyncResult)
+        /// <returns>Aggregator configuration data</returns>
+        public AggregatorConfig EndGetAggregatorConfig(IAsyncResult asyncResult)
         {
             if (_sigingServiceProtocol == null)
             {
@@ -517,7 +517,7 @@ namespace Guardtime.KSI.Service
                 throw new KsiServiceException("Invalid IAsyncResult: null.");
             }
 
-            AggregationConfigKsiServiceAsyncResult serviceAsyncResult = asyncResult as AggregationConfigKsiServiceAsyncResult;
+            AggregatorConfigKsiServiceAsyncResult serviceAsyncResult = asyncResult as AggregatorConfigKsiServiceAsyncResult;
             if (serviceAsyncResult == null)
             {
                 throw new KsiServiceException("Invalid IAsyncResult, could not cast to correct object.");
@@ -536,7 +536,7 @@ namespace Guardtime.KSI.Service
             {
                 if (data == null)
                 {
-                    throw new KsiServiceException("Invalid aggregation config response PDU: null.");
+                    throw new KsiServiceException("Invalid aggregator config response PDU: null.");
                 }
 
                 RawTag rawTag;
@@ -553,37 +553,37 @@ namespace Guardtime.KSI.Service
 
                 pdu = new AggregationResponsePdu(rawTag);
 
-                AggregationConfigResponsePayload payload = pdu.GetAggregationConfigResponsePayload();
+                AggregatorConfigResponsePayload payload = pdu.GetAggregatorConfigResponsePayload();
                 AggregationErrorPayload errorPayload = pdu.GetAggregationErrorPayload();
 
                 if (payload == null && errorPayload == null)
                 {
-                    throw new KsiServiceException("Invalid aggregation config response PDU. Could not find a valid payload. PDU: " + pdu);
+                    throw new KsiServiceException("Invalid aggregator config response PDU. Could not find a valid payload. PDU: " + pdu);
                 }
 
                 if (errorPayload != null)
                 {
-                    throw new KsiServiceException("Error occured during aggregation config request. Status: " + errorPayload.Status +
+                    throw new KsiServiceException("Error occured during aggregator config request. Status: " + errorPayload.Status +
                                                   "; Message: " + errorPayload.ErrorMessage + ".");
                 }
 
                 if (!pdu.ValidateMac(_signingServiceCredentials.LoginKey))
                 {
-                    throw new KsiServiceException("Invalid HMAC in aggregation config response PDU.");
+                    throw new KsiServiceException("Invalid HMAC in aggregator config response PDU.");
                 }
-                Logger.Debug("End get aggregation config successful (request id: {0}){1}{2}", serviceAsyncResult.RequestId, Environment.NewLine, pdu);
+                Logger.Debug("End get aggregator config successful (request id: {0}){1}{2}", serviceAsyncResult.RequestId, Environment.NewLine, pdu);
 
-                return payload;
+                return new AggregatorConfig(payload);
             }
             catch (TlvException e)
             {
                 KsiException ksiException = new KsiServiceException("Could not parse response message: " + Base16.Encode(data), e);
-                Logger.Warn("End aggregation config request failed (request id: {0}): {1}", serviceAsyncResult.RequestId, ksiException);
+                Logger.Warn("End aggregator config request failed (request id: {0}): {1}", serviceAsyncResult.RequestId, ksiException);
                 throw ksiException;
             }
             catch (KsiException e)
             {
-                Logger.Warn("End aggregation config request failed (request id: {0}): {1}{2}{3}", serviceAsyncResult.RequestId, e, Environment.NewLine, pdu);
+                Logger.Warn("End aggregator config request failed (request id: {0}): {1}{2}{3}", serviceAsyncResult.RequestId, e, Environment.NewLine, pdu);
 
                 throw;
             }
@@ -955,9 +955,9 @@ namespace Guardtime.KSI.Service
             public uint Level { get; }
         }
 
-        private class AggregationConfigKsiServiceAsyncResult : KsiServiceAsyncResult
+        private class AggregatorConfigKsiServiceAsyncResult : KsiServiceAsyncResult
         {
-            public AggregationConfigKsiServiceAsyncResult(ulong requestId, IAsyncResult serviceProtocolAsyncResult, object asyncState)
+            public AggregatorConfigKsiServiceAsyncResult(ulong requestId, IAsyncResult serviceProtocolAsyncResult, object asyncState)
                 : base(serviceProtocolAsyncResult, asyncState)
             {
                 RequestId = requestId;

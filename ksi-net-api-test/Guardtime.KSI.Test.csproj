@@ -181,7 +181,7 @@
     <Compile Include="Service\ExtendStaticTests.cs" />
     <Compile Include="Service\KsiPduHeaderTests.cs" />
     <Compile Include="Service\PublicationsFileStaticTest.cs" />
-    <Compile Include="Service\AggregationConfigRequestStaticTests.cs" />
+    <Compile Include="Service\AggregatorConfigRequestStaticTests.cs" />
     <Compile Include="Service\SigningStaticTests.cs" />
     <Compile Include="Service\TestBlockSigner.cs" />
     <Compile Include="Service\TestKsiService.cs" />
@@ -290,7 +290,7 @@
     <None Include="resources\publication\publicationsfile\ksi-publications.bin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\service\aggregation-config-response-pdu.tlv">
+    <None Include="resources\service\aggregator-config-response-pdu.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\service\aggregation-response-pdu-invalid-signature.tlv">
@@ -305,7 +305,7 @@
     <None Include="resources\service\aggregation-response-pdu.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\service\aggregator-response-pdu-error-payload.tlv">
+    <None Include="resources\service\aggregation-response-pdu-error-payload.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\service\extend-response-pdu-invalid-signature.tlv">

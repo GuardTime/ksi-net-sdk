@@ -217,18 +217,18 @@ namespace Guardtime.KSI
             public const uint LegacyTagType = 0x203;
         }
 
-        public static class AggregationConfigRequestPayload
+        public static class AggregatorConfigRequestPayload
         {
             /// <summary>
-            ///     Aggregation config request TLV type.
+            ///     Aggregator config request payload TLV type.
             /// </summary>
             public const uint TagType = 0x4;
         }
 
-        public static class AggregationConfigResponsePayload
+        public static class AggregatorConfigResponsePayload
         {
             /// <summary>
-            ///     Aggregation config response payload TLV type.
+            ///     Aggregator config response payload TLV type.
             /// </summary>
             public const uint TagType = 0x4;
 

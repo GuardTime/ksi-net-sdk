@@ -50,10 +50,10 @@ namespace Guardtime.KSI.Service
                         this[i] = aggregationErrorPayload;
                         Payloads.Add(aggregationErrorPayload);
                         break;
-                    case Constants.AggregationConfigResponsePayload.TagType:
-                        AggregationConfigResponsePayload aggregationConfigResponsePayload = new AggregationConfigResponsePayload(childTag);
-                        this[i] = aggregationConfigResponsePayload;
-                        Payloads.Add(aggregationConfigResponsePayload);
+                    case Constants.AggregatorConfigResponsePayload.TagType:
+                        AggregatorConfigResponsePayload aggregatorConfigResponsePayload = new AggregatorConfigResponsePayload(childTag);
+                        this[i] = aggregatorConfigResponsePayload;
+                        Payloads.Add(aggregatorConfigResponsePayload);
                         break;
                     case Constants.AggregationAcknowledgmentResponsePayload.TagType:
                     case Constants.KsiPduHeader.TagType:
@@ -94,12 +94,12 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        /// Get aggregation configuration response payload
+        /// Get aggregator configuration response payload
         /// </summary>
         /// <returns></returns>
-        public AggregationConfigResponsePayload GetAggregationConfigResponsePayload()
+        public AggregatorConfigResponsePayload GetAggregatorConfigResponsePayload()
         {
-            return GetPayload<AggregationConfigResponsePayload>();
+            return GetPayload<AggregatorConfigResponsePayload>();
         }
     }
 }

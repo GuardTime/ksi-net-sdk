@@ -736,20 +736,20 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/service/aggregation-config-response-pdu.tlv.
-        /// </summary>
-        internal static string KsiService_AggregationConfigResponsePdu {
-            get {
-                return ResourceManager.GetString("KsiService_AggregationConfigResponsePdu", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to resources/service/aggregation-response-pdu.tlv.
         /// </summary>
         internal static string KsiService_AggregationResponsePdu {
             get {
                 return ResourceManager.GetString("KsiService_AggregationResponsePdu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/aggregation-response-pdu-error-payload.tlv.
+        /// </summary>
+        internal static string KsiService_AggregationResponsePdu_ErrorPayload {
+            get {
+                return ResourceManager.GetString("KsiService_AggregationResponsePdu_ErrorPayload", resourceCulture);
             }
         }
         
@@ -781,11 +781,11 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/service/aggregator-response-pdu-error-payload.tlv.
+        ///   Looks up a localized string similar to resources/service/aggregator-config-response-pdu.tlv.
         /// </summary>
-        internal static string KsiService_AggregatorResponsePdu_ErrorPayload {
+        internal static string KsiService_AggregatorConfigResponsePdu {
             get {
-                return ResourceManager.GetString("KsiService_AggregatorResponsePdu_ErrorPayload", resourceCulture);
+                return ResourceManager.GetString("KsiService_AggregatorConfigResponsePdu", resourceCulture);
             }
         }
         
@@ -809,16 +809,6 @@ namespace Guardtime.KSI.Test.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to resources/service/extend-response-pdu-invalid-signature.tlv.
-        ///   Looks up a localized string similar to resources/service/legacy-aggregation-response-pdu.tlv.
-        /// </summary>
-        internal static string KsiService_LegacyAggregationResponsePdu {
-            get {
-                return ResourceManager.GetString("KsiService_LegacyAggregationResponsePdu", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/service/legacy-extend-response-pdu.tlv.
         /// </summary>
         internal static string KsiService_ExtendResponsePdu_Invalid_Signature {
             get {
@@ -850,6 +840,15 @@ namespace Guardtime.KSI.Test.Properties {
         internal static string KsiService_ExtendResponsePdu_NonZeroPayloadStatus {
             get {
                 return ResourceManager.GetString("KsiService_ExtendResponsePdu_NonZeroPayloadStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/legacy-aggregation-response-pdu.tlv.
+        /// </summary>
+        internal static string KsiService_LegacyAggregationResponsePdu {
+            get {
+                return ResourceManager.GetString("KsiService_LegacyAggregationResponsePdu", resourceCulture);
             }
         }
         

@@ -46,10 +46,10 @@ namespace Guardtime.KSI.Service
                         this[i] = aggregationRequestPayload;
                         Payloads.Add(aggregationRequestPayload);
                         break;
-                    case Constants.AggregationConfigRequestPayload.TagType:
-                        AggregationConfigRequestPayload aggregationConfigRequestPayload = new AggregationConfigRequestPayload(childTag);
-                        this[i] = aggregationConfigRequestPayload;
-                        Payloads.Add(aggregationConfigRequestPayload);
+                    case Constants.AggregatorConfigRequestPayload.TagType:
+                        AggregatorConfigRequestPayload aggregatorConfigRequestPayload = new AggregatorConfigRequestPayload(childTag);
+                        this[i] = aggregatorConfigRequestPayload;
+                        Payloads.Add(aggregatorConfigRequestPayload);
                         break;
                     case Constants.KsiPduHeader.TagType:
                     case Constants.KsiPdu.MacTagType:

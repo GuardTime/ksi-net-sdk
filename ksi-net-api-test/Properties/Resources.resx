@@ -546,8 +546,8 @@
   <data name="KsiService_AggregationResponsePdu_Multi_Payloads" xml:space="preserve">
     <value>resources/service/aggregation-response-pdu-multi-payloads.tlv</value>
   </data>
-  <data name="KsiService_AggregationConfigResponsePdu" xml:space="preserve">
-    <value>resources/service/aggregation-config-response-pdu.tlv</value>
+  <data name="KsiService_AggregatorConfigResponsePdu" xml:space="preserve">
+    <value>resources/service/aggregator-config-response-pdu.tlv</value>
   </data>
   <data name="KsiService_ExtendResponsePdu" xml:space="preserve">
     <value>resources/service/extend-response-pdu.tlv</value>
@@ -573,8 +573,8 @@
   <data name="KsiService_ExtendResponsePdu_Multi_Payloads_Including_ErrorPayload" xml:space="preserve">
     <value>resources/service/extend-response-pdu-multi-payloads-including-error.tlv</value>
   </data>
-  <data name="KsiService_AggregatorResponsePdu_ErrorPayload" xml:space="preserve">
-    <value>resources/service/aggregator-response-pdu-error-payload.tlv</value>
+  <data name="KsiService_AggregationResponsePdu_ErrorPayload" xml:space="preserve">
+    <value>resources/service/aggregation-response-pdu-error-payload.tlv</value>
   </data>
   <data name="KsiService_ExtenderResponsePdu_ErrorPayload" xml:space="preserve">
     <value>resources/service/extender-response-pdu-error-payload.tlv</value>

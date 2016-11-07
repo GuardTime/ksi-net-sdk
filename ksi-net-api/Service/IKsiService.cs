@@ -71,25 +71,25 @@ namespace Guardtime.KSI.Service
         IKsiSignature EndSign(IAsyncResult asyncResult);
 
         /// <summary>
-        /// Get additional aggregation configuration data (sync)
+        /// Get additional aggregator configuration data (sync)
         /// </summary>
-        /// <returns>Aggregation configuration response payload</returns>
-        AggregationConfigResponsePayload GetAggregationConfig();
+        /// <returns>Aggregator configuration data</returns>
+        AggregatorConfig GetAggregatorConfig();
 
         /// <summary>
-        /// Begin get additional aggregation configuration data (async)
+        /// Begin get additional aggregator configuration data (async)
         /// </summary>
         /// <param name="callback"></param>
         /// <param name="asyncState"></param>
         /// <returns>async result</returns>
-        IAsyncResult BeginGetAggregationConfig(AsyncCallback callback, object asyncState);
+        IAsyncResult BeginGetAggregatorConfig(AsyncCallback callback, object asyncState);
 
         /// <summary>
-        /// End get additional aggregation configuration data (async)
+        /// End get additional aggregator configuration data (async)
         /// </summary>
         /// <param name="asyncResult"></param>
-        /// <returns>Aggregation configuration response payload</returns>
-        AggregationConfigResponsePayload EndGetAggregationConfig(IAsyncResult asyncResult);
+        /// <returns>Aggregator configuration data</returns>
+        AggregatorConfig EndGetAggregatorConfig(IAsyncResult asyncResult);
 
         /// <summary>
         ///     Extend signature to latest publication (sync).

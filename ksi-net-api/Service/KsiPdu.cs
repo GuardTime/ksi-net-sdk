@@ -66,7 +66,7 @@ namespace Guardtime.KSI.Service
                     payloadCount++;
                 }
                 else if (childTag.Type == Constants.AggregationRequestPayload.TagType || childTag.Type == Constants.AggregationResponsePayload.TagType ||
-                         childTag.Type == Constants.AggregationConfigRequestPayload.TagType || childTag.Type == Constants.AggregationConfigResponsePayload.TagType ||
+                         childTag.Type == Constants.AggregatorConfigRequestPayload.TagType || childTag.Type == Constants.AggregatorConfigResponsePayload.TagType ||
                          childTag.Type == Constants.ExtendRequestPayload.TagType || childTag.Type == Constants.ExtendResponsePayload.TagType)
                 {
                     payloadCount++;

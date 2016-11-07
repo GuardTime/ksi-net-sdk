@@ -117,7 +117,7 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void SignStaticErrorPayloadTest()
         {
-            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregatorResponsePdu_ErrorPayload)), 2);
+            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_ErrorPayload)), 2);
 
             KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
             {

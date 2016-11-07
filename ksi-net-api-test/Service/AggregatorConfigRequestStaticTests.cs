@@ -30,20 +30,20 @@ using NUnit.Framework;
 namespace Guardtime.KSI.Test.Service
 {
     /// <summary>
-    /// Aggregation configuration tests with static response
+    /// Aggregator configuration tests with static response
     /// </summary>
     [TestFixture]
-    public class AggregationConfigRequestStaticTests
+    public class AggregatorConfigRequestStaticTests
     {
         /// <summary>
-        /// Test aggregation configuration request
+        /// Test aggregator configuration request
         /// </summary>
         [Test]
-        public void AggregationConfigRequestStaticTest()
+        public void AggregatorConfigRequestStaticTest()
         {
-            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationConfigResponsePdu)));
+            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregatorConfigResponsePdu)));
 
-            AggregationConfigResponsePayload config = ksi.GetAggregationConfig();
+            AggregatorConfig config = ksi.GetAggregatorConfig();
 
             Assert.AreEqual(17, config.MaxLevel, "Unexpected max level value");
             Assert.AreEqual(1, config.AggregationAlgorithm, "Unexpected algorithm value");
@@ -52,15 +52,15 @@ namespace Guardtime.KSI.Test.Service
         }
 
         /// <summary>
-        /// Test aggregation configuration request
+        /// Test aggregator configuration request
         /// </summary>
         [Test]
-        public void AggregationConfigRequestWithMultiPayloadsResponseStaticTest()
+        public void AggregatorConfigRequestWithMultiPayloadsResponseStaticTest()
         {
             // Response has multiple payloads (including a payload containing invalid signature and a configuration payload)
             Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_Multi_Payloads)));
 
-            AggregationConfigResponsePayload config = ksi.GetAggregationConfig();
+            AggregatorConfig config = ksi.GetAggregatorConfig();
 
             Assert.AreEqual(17, config.MaxLevel, "Unexpected max level value");
             Assert.AreEqual(1, config.AggregationAlgorithm, "Unexpected algorithm value");
@@ -69,20 +69,20 @@ namespace Guardtime.KSI.Test.Service
         }
 
         /// <summary>
-        /// Test aggregation configuration request fail.
+        /// Test aggregator configuration request fail.
         /// </summary>
         [Test]
-        public void AggregationConfigRequestInvalidStaticTest()
+        public void AggregatorConfigRequestInvalidStaticTest()
         {
-            // pdu does not contain aggregation config payload
+            // pdu does not contain aggregator config payload
             Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu)));
 
             KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
             {
-                ksi.GetAggregationConfig();
+                ksi.GetAggregatorConfig();
             });
 
-            Assert.That(ex.Message.StartsWith("Invalid aggregation config response PDU. Could not find a valid payload."), "Unexpected exception message: " + ex.Message);
+            Assert.That(ex.Message.StartsWith("Invalid aggregator config response PDU. Could not find a valid payload."), "Unexpected exception message: " + ex.Message);
         }
 
         private static Ksi GetKsi(byte[] requestResult)

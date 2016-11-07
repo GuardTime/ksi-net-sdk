@@ -24,9 +24,9 @@ using Guardtime.KSI.Parser;
 namespace Guardtime.KSI.Service
 {
     /// <summary>
-    ///     Aggregation configuration response payload.
+    ///     Aggregator configuration response payload.
     /// </summary>
-    public sealed class AggregationConfigResponsePayload : KsiPduPayload
+    public sealed class AggregatorConfigResponsePayload : KsiPduPayload
     {
         private readonly IntegerTag _aggregationPeriod;
         private readonly IntegerTag _aggregationAlgorithm;
@@ -34,12 +34,12 @@ namespace Guardtime.KSI.Service
         private readonly IntegerTag _maxRequests;
 
         /// <summary>
-        ///     Create aggregation configuration response payload from TLV element.
+        ///     Create aggregator configuration response payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        public AggregationConfigResponsePayload(ITlvTag tag) : base(tag)
+        public AggregatorConfigResponsePayload(ITlvTag tag) : base(tag)
         {
-            CheckTagType(Constants.AggregationConfigResponsePayload.TagType);
+            CheckTagType(Constants.AggregatorConfigResponsePayload.TagType);
 
             int aggregationPeriodCount = 0;
             int aggregationAlgorithmCount = 0;
@@ -52,23 +52,23 @@ namespace Guardtime.KSI.Service
 
                 switch (childTag.Type)
                 {
-                    case Constants.AggregationConfigResponsePayload.MaxLevelTagType:
+                    case Constants.AggregatorConfigResponsePayload.MaxLevelTagType:
                         this[i] = _maxLevel = new IntegerTag(childTag);
                         maxLevelCount++;
                         break;
-                    case Constants.AggregationConfigResponsePayload.AggregationAlgorithmTagType:
+                    case Constants.AggregatorConfigResponsePayload.AggregationAlgorithmTagType:
                         this[i] = _aggregationAlgorithm = new IntegerTag(childTag);
                         aggregationAlgorithmCount++;
                         break;
-                    case Constants.AggregationConfigResponsePayload.AggregationPeriodTagType:
+                    case Constants.AggregatorConfigResponsePayload.AggregationPeriodTagType:
                         this[i] = _aggregationPeriod = new IntegerTag(childTag);
                         aggregationPeriodCount++;
                         break;
-                    case Constants.AggregationConfigResponsePayload.MaxRequestsTagType:
+                    case Constants.AggregatorConfigResponsePayload.MaxRequestsTagType:
                         this[i] = _maxRequests = new IntegerTag(childTag);
                         maxRequestsCount++;
                         break;
-                    case Constants.AggregationConfigResponsePayload.ParentUriTagType:
+                    case Constants.AggregatorConfigResponsePayload.ParentUriTagType:
                         StringTag uriTag = new StringTag(childTag);
                         ParentsUris.Add(uriTag.Value);
                         this[i] = uriTag;
@@ -81,29 +81,29 @@ namespace Guardtime.KSI.Service
 
             if (aggregationPeriodCount > 1)
             {
-                throw new TlvException("Only one aggregation period tag is allowed in aggregation config response payload.");
+                throw new TlvException("Only one aggregation period tag is allowed in aggregator config response payload.");
             }
 
             if (aggregationAlgorithmCount > 1)
             {
-                throw new TlvException("Only one aggregation algorithm tag is allowed in aggregation config response payload.");
+                throw new TlvException("Only one aggregation algorithm tag is allowed in aggregator config response payload.");
             }
 
             if (maxLevelCount > 1)
             {
-                throw new TlvException("Only one max level tag is allowed in aggregation config response payload.");
+                throw new TlvException("Only one max level tag is allowed in aggregator config response payload.");
             }
 
             if (maxRequestsCount > 1)
             {
-                throw new TlvException("Only one max requests tag is allowed in aggregation config response payload.");
+                throw new TlvException("Only one max requests tag is allowed in aggregator config response payload.");
             }
         }
 
         /// <summary>
-        /// Recommended duration of client's aggregation round, in milliseconds
+        /// Maximum level value that the nodes in the client's aggregation tree are allowed to have
         /// </summary>
-        public ulong? AggregationPeriod => _aggregationPeriod?.Value;
+        public ulong? MaxLevel => _maxLevel?.Value;
 
         /// <summary>
         /// Identifier of the hash function that the client is recommended to use in its aggregation trees
@@ -111,9 +111,9 @@ namespace Guardtime.KSI.Service
         public ulong? AggregationAlgorithm => _aggregationAlgorithm?.Value;
 
         /// <summary>
-        /// Maximum level value that the nodes in the client's aggregation tree are allowed to have
+        /// Recommended duration of client's aggregation round, in milliseconds
         /// </summary>
-        public ulong? MaxLevel => _maxLevel?.Value;
+        public ulong? AggregationPeriod => _aggregationPeriod?.Value;
 
         /// <summary>
         /// Maximum number of requests the client is allowed to send within one parent server's aggregation round

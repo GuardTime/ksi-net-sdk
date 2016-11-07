@@ -285,20 +285,20 @@ namespace Guardtime.KSI.Test.Integration
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
-        public void HttpGetAggregationConfigTest(Ksi ksi)
+        public void HttpGetAggregatorConfigTest(Ksi ksi)
         {
             if (TestSetup.PduVersion == PduVersion.v1)
             {
                 Exception ex = Assert.Throws<KsiServiceException>(delegate
                 {
-                    ksi.GetAggregationConfig();
+                    ksi.GetAggregatorConfig();
                 });
 
                 Assert.That(ex.Message.StartsWith("Config request is not supported using PDU version v1"), "Unexpected exception message: " + ex.Message);
             }
             else
             {
-                ksi.GetAggregationConfig();
+                ksi.GetAggregatorConfig();
             }
         }
 
