@@ -809,6 +809,16 @@ namespace Guardtime.KSI.Test.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to resources/service/extend-response-pdu-invalid-signature.tlv.
+        ///   Looks up a localized string similar to resources/service/legacy-aggregation-response-pdu.tlv.
+        /// </summary>
+        internal static string KsiService_LegacyAggregationResponsePdu {
+            get {
+                return ResourceManager.GetString("KsiService_LegacyAggregationResponsePdu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/legacy-extend-response-pdu.tlv.
         /// </summary>
         internal static string KsiService_ExtendResponsePdu_Invalid_Signature {
             get {

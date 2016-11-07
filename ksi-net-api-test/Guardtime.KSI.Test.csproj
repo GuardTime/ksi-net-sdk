@@ -326,6 +326,9 @@
     <None Include="resources\service\extender-response-pdu-error-payload.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="resources\service\legacy-aggregation-response-pdu.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="resources\service\legacy-extend-response-pdu-status-17.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -135,7 +135,7 @@ namespace Guardtime.KSI.Test.Service
             IKsiSignature signature = new KsiSignatureFactory().Create(
                 File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok)));
 
-            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_LegacyExtendResponsePdu)), 0, null, PduVersion.v1);
+            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_LegacyExtendResponsePdu)), 3491956840, null, PduVersion.v1);
 
             ksi.Extend(signature);
         }
@@ -149,7 +149,7 @@ namespace Guardtime.KSI.Test.Service
             IKsiSignature signature = new KsiSignatureFactory().Create(
                 File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok)));
 
-            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_LegacyExtendResponsePdu_NonZeroPayloadStatus)), 0, null,
+            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_LegacyExtendResponsePdu_NonZeroPayloadStatus)), 768278381, null,
                 PduVersion.v1);
 
             KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
@@ -197,6 +197,28 @@ namespace Guardtime.KSI.Test.Service
 
             Assert.That(ex.Message.StartsWith("Error occured during extending. Status: 258; Message: The request could not be authenticated."),
                 "Unexpected exception message: " + ex.Message);
+        }
+
+
+
+        /// <summary>
+        /// Test extending with PDU v1. Response payload has invalid request ID.
+        /// </summary>
+        [Test]
+        public void LegacyExtendStaticInvalidRequestIdTest()
+        {
+            IKsiSignature signature = new KsiSignatureFactory().Create(
+                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok)));
+
+            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_LegacyExtendResponsePdu)), 0, null,
+                PduVersion.v1);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                ksi.Extend(signature);
+            });
+
+            Assert.That(ex.Message.StartsWith("Unknown request ID:"), "Unexpected exception message: " + ex.Message);
         }
 
         private static Ksi GetKsi(byte[] requestResult, ulong requestId, IKsiSignatureFactory ksiSignatureFactory = null, PduVersion pduVersion = PduVersion.v2)
