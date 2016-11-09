@@ -124,6 +124,6 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Get status code.
         /// </summary>
-        public ulong Status => _status?.Value ?? 0;
+        public ulong Status => _status.Value;
     }
 }
