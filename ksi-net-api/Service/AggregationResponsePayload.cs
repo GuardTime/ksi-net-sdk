@@ -78,8 +78,7 @@ namespace Guardtime.KSI.Service
                 throw new TlvException("Exactly one request id must exist in aggregation response payload.");
             }
 
-            // TODO: Should be mandatory element, but server side is broken.
-            if (statusCount > 1)
+            if (statusCount != 1)
             {
                 throw new TlvException("Exactly one status code must exist in aggregation response payload.");
             }
