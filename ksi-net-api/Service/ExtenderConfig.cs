@@ -19,8 +19,6 @@
 
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Service
 {

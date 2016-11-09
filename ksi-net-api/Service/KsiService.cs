@@ -868,7 +868,7 @@ namespace Guardtime.KSI.Service
         /// <summary>
         /// Get additional extender configuration data (sync)
         /// </summary>
-        /// <returns>Extender configuration response payload</returns>
+        /// <returns>Extender configuration data</returns>
         public ExtenderConfig GetExtenderConfig()
         {
             return EndGetExtenderConfig(BeginGetExtenderConfig(null, null));
@@ -914,7 +914,7 @@ namespace Guardtime.KSI.Service
         /// End get additional extender configuration data (async)
         /// </summary>
         /// <param name="asyncResult"></param>
-        /// <returns>Extender configuration response payload</returns>
+        /// <returns>Extender configuration data</returns>
         public ExtenderConfig EndGetExtenderConfig(IAsyncResult asyncResult)
         {
             if (_extendingServiceProtocol == null)
@@ -981,6 +981,7 @@ namespace Guardtime.KSI.Service
                 {
                     throw new KsiServiceException("Invalid HMAC in extender config response PDU.");
                 }
+
                 Logger.Debug("End get extender config successful (request id: {0}){1}{2}", serviceAsyncResult.RequestId, Environment.NewLine, pdu);
 
                 return new ExtenderConfig(payload);
