@@ -790,6 +790,15 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/service/extender-config-response-pdu.tlv.
+        /// </summary>
+        internal static string KsiService_ExtenderConfigResponsePdu {
+            get {
+                return ResourceManager.GetString("KsiService_ExtenderConfigResponsePdu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/service/extender-response-pdu-error-payload.tlv.
         /// </summary>
         internal static string KsiService_ExtenderResponsePdu_ErrorPayload {

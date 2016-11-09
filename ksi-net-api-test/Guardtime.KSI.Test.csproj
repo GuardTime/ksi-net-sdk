@@ -168,6 +168,7 @@
     <Compile Include="Publication\PublicationDataTests.cs" />
     <Compile Include="Publication\PublicationsFileTests.cs" />
     <Compile Include="Publication\TestPublicationsfile.cs" />
+    <Compile Include="Service\ExtenderConfigRequestStaticTests.cs" />
     <Compile Include="Service\BlockSignerTreeNodeVisualizer.cs" />
     <Compile Include="Service\ExtendErrorPayloadTests.cs" />
     <Compile Include="Integration\BlockSignerTests.cs" />
@@ -327,6 +328,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\service\legacy-aggregation-response-pdu.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\service\extender-config-response-pdu.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\service\legacy-extend-response-pdu-status-17.tlv">

@@ -133,6 +133,27 @@ namespace Guardtime.KSI.Service
         CalendarHashChain EndExtend(IAsyncResult asyncResult);
 
         /// <summary>
+        /// Get additional extender configuration data (sync)
+        /// </summary>
+        /// <returns>Extender configuration response payload</returns>
+        ExtenderConfig GetExtenderConfig();
+
+        /// <summary>
+        /// Begin get additional extender configuration data (async)
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <param name="asyncState"></param>
+        /// <returns>async result</returns>
+        IAsyncResult BeginGetExtenderConfig(AsyncCallback callback, object asyncState);
+
+        /// <summary>
+        /// End get additional extender configuration data (async)
+        /// </summary>
+        /// <param name="asyncResult"></param>
+        /// <returns>Extender configuration response payload</returns>
+        ExtenderConfig EndGetExtenderConfig(IAsyncResult asyncResult);
+
+        /// <summary>
         ///     Get publications file (sync).
         /// </summary>
         /// <returns>Publications file</returns>

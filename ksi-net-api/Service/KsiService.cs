@@ -40,7 +40,7 @@ namespace Guardtime.KSI.Service
         private static readonly HashAlgorithm DefaultHmacAlgorithm = HashAlgorithm.Sha2256;
         private const PduVersion DefaultPduVersion = PduVersion.v1;
 
-        private readonly IKsiSigningServiceProtocol _sigingServiceProtocol;
+        private readonly IKsiSigningServiceProtocol _signingServiceProtocol;
         private readonly IKsiExtendingServiceProtocol _extendingServiceProtocol;
         private readonly IKsiSignatureFactory _ksiSignatureFactory;
         private readonly IPublicationsFileFactory _publicationsFileFactory;
@@ -171,7 +171,7 @@ namespace Guardtime.KSI.Service
                 throw new KsiServiceException("Invalid publications file factory: null.");
             }
 
-            _sigingServiceProtocol = signingServiceProtocol;
+            _signingServiceProtocol = signingServiceProtocol;
             _signingServiceCredentials = signingServiceCredentials;
             _extendingServiceProtocol = extendingServiceProtocol;
             _extendingServiceCredentials = extendingServiceCredentials;
@@ -232,7 +232,7 @@ namespace Guardtime.KSI.Service
         /// <returns>async result</returns>
         public IAsyncResult BeginSign(DataHash hash, uint level, AsyncCallback callback, object asyncState)
         {
-            if (_sigingServiceProtocol == null)
+            if (_signingServiceProtocol == null)
             {
                 throw new KsiServiceException("Signing service protocol is missing from service.");
             }
@@ -253,7 +253,7 @@ namespace Guardtime.KSI.Service
             AggregationRequestPdu pdu = new AggregationRequestPdu(header, payload, _hmacAlgorithm, _signingServiceCredentials.LoginKey);
 
             Logger.Debug("Begin sign (request id: {0}){1}{2}", requestId, Environment.NewLine, pdu);
-            IAsyncResult serviceProtocolAsyncResult = _sigingServiceProtocol.BeginSign(pdu.Encode(), requestId, callback, asyncState);
+            IAsyncResult serviceProtocolAsyncResult = _signingServiceProtocol.BeginSign(pdu.Encode(), requestId, callback, asyncState);
 
             return new CreateSignatureKsiServiceAsyncResult(hash, level, requestId, serviceProtocolAsyncResult, asyncState);
         }
@@ -277,7 +277,7 @@ namespace Guardtime.KSI.Service
             LegacyAggregationPdu pdu = new LegacyAggregationPdu(header, payload, LegacyKsiPdu.GetHashMacTag(_hmacAlgorithm, _signingServiceCredentials.LoginKey, header, payload));
 
             Logger.Debug("Begin legacy sign (request id: {0}){1}{2}", requestId, Environment.NewLine, pdu);
-            IAsyncResult serviceProtocolAsyncResult = _sigingServiceProtocol.BeginSign(pdu.Encode(), requestId, callback, asyncState);
+            IAsyncResult serviceProtocolAsyncResult = _signingServiceProtocol.BeginSign(pdu.Encode(), requestId, callback, asyncState);
 
             return new CreateSignatureKsiServiceAsyncResult(hash, level, requestId, serviceProtocolAsyncResult, asyncState);
         }
@@ -289,7 +289,7 @@ namespace Guardtime.KSI.Service
         /// <returns>KSI signature</returns>
         public IKsiSignature EndSign(IAsyncResult asyncResult)
         {
-            if (_sigingServiceProtocol == null)
+            if (_signingServiceProtocol == null)
             {
                 throw new KsiServiceException("Signing service protocol is missing from service.");
             }
@@ -310,7 +310,7 @@ namespace Guardtime.KSI.Service
                 serviceAsyncResult.AsyncWaitHandle.WaitOne();
             }
 
-            byte[] data = _sigingServiceProtocol.EndSign(serviceAsyncResult.ServiceProtocolAsyncResult);
+            byte[] data = _signingServiceProtocol.EndSign(serviceAsyncResult.ServiceProtocolAsyncResult);
             return ParseSignRequestResponse(data, serviceAsyncResult);
         }
 
@@ -465,10 +465,10 @@ namespace Guardtime.KSI.Service
         {
             if (IsLegacyPduVersion)
             {
-                throw new KsiServiceException("Config request is not supported using PDU version v1. Configure the SDK to use PDU v2 format for the given Aggregator.");
+                throw new KsiServiceException("Aggregator config request is not supported using PDU version v1. Configure the SDK to use PDU v2 format for the given Aggregator.");
             }
 
-            if (_sigingServiceProtocol == null)
+            if (_signingServiceProtocol == null)
             {
                 throw new KsiServiceException("Signing service protocol is missing from service.");
             }
@@ -486,18 +486,9 @@ namespace Guardtime.KSI.Service
 
             Logger.Debug("Begin get aggregator config (request id: {0}){1}{2}", requestId, Environment.NewLine, pdu);
 
-            IAsyncResult serviceProtocolAsyncResult = _sigingServiceProtocol.BeginSign(pdu.Encode(), requestId, callback, asyncState);
+            IAsyncResult serviceProtocolAsyncResult = _signingServiceProtocol.BeginSign(pdu.Encode(), requestId, callback, asyncState);
 
             return new AggregatorConfigKsiServiceAsyncResult(requestId, serviceProtocolAsyncResult, asyncState);
-        }
-
-        /// <summary>
-        /// Generate new request ID
-        /// </summary>
-        /// <returns></returns>
-        protected virtual ulong GenerateRequestId()
-        {
-            return Util.GetRandomUnsignedLong();
         }
 
         /// <summary>
@@ -507,7 +498,7 @@ namespace Guardtime.KSI.Service
         /// <returns>Aggregator configuration data</returns>
         public AggregatorConfig EndGetAggregatorConfig(IAsyncResult asyncResult)
         {
-            if (_sigingServiceProtocol == null)
+            if (_signingServiceProtocol == null)
             {
                 throw new KsiServiceException("Signing service protocol is missing from service.");
             }
@@ -528,7 +519,7 @@ namespace Guardtime.KSI.Service
                 serviceAsyncResult.AsyncWaitHandle.WaitOne();
             }
 
-            byte[] data = _sigingServiceProtocol.EndSign(serviceAsyncResult.ServiceProtocolAsyncResult);
+            byte[] data = _signingServiceProtocol.EndSign(serviceAsyncResult.ServiceProtocolAsyncResult);
 
             AggregationResponsePdu pdu = null;
 
@@ -875,6 +866,140 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
+        /// Get additional extender configuration data (sync)
+        /// </summary>
+        /// <returns>Extender configuration response payload</returns>
+        public ExtenderConfig GetExtenderConfig()
+        {
+            return EndGetExtenderConfig(BeginGetExtenderConfig(null, null));
+        }
+
+        /// <summary>
+        /// Begin get additional extender configuration data (async)
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <param name="asyncState"></param>
+        /// <returns>async result</returns>
+        public IAsyncResult BeginGetExtenderConfig(AsyncCallback callback, object asyncState)
+        {
+            if (IsLegacyPduVersion)
+            {
+                throw new KsiServiceException("Extender config request is not supported using PDU version v1. Configure the SDK to use PDU v2 format for the given Extender.");
+            }
+
+            if (_extendingServiceProtocol == null)
+            {
+                throw new KsiServiceException("Extending service protocol is missing from service.");
+            }
+
+            if (_extendingServiceCredentials == null)
+            {
+                throw new KsiServiceException("Extending service credentials are missing.");
+            }
+
+            KsiPduHeader header = new KsiPduHeader(_extendingServiceCredentials.LoginId);
+            ExtenderConfigRequestPayload payload = new ExtenderConfigRequestPayload();
+            ExtendRequestPdu pdu = new ExtendRequestPdu(header, payload, _hmacAlgorithm, _extendingServiceCredentials.LoginKey);
+
+            ulong requestId = GenerateRequestId();
+
+            Logger.Debug("Begin get extender config (request id: {0}){1}{2}", requestId, Environment.NewLine, pdu);
+
+            IAsyncResult serviceProtocolAsyncResult = _extendingServiceProtocol.BeginExtend(pdu.Encode(), requestId, callback, asyncState);
+
+            return new ExtenderConfigKsiServiceAsyncResult(requestId, serviceProtocolAsyncResult, asyncState);
+        }
+
+        /// <summary>
+        /// End get additional extender configuration data (async)
+        /// </summary>
+        /// <param name="asyncResult"></param>
+        /// <returns>Extender configuration response payload</returns>
+        public ExtenderConfig EndGetExtenderConfig(IAsyncResult asyncResult)
+        {
+            if (_extendingServiceProtocol == null)
+            {
+                throw new KsiServiceException("Extending service protocol is missing from service.");
+            }
+
+            if (asyncResult == null)
+            {
+                throw new KsiException("Invalid IAsyncResult: null.");
+            }
+
+            ExtenderConfigKsiServiceAsyncResult serviceAsyncResult = asyncResult as ExtenderConfigKsiServiceAsyncResult;
+            if (serviceAsyncResult == null)
+            {
+                throw new KsiServiceException("Invalid IAsyncResult, could not cast to correct object.");
+            }
+
+            if (!serviceAsyncResult.IsCompleted)
+            {
+                serviceAsyncResult.AsyncWaitHandle.WaitOne();
+            }
+
+            byte[] data = _extendingServiceProtocol.EndExtend(serviceAsyncResult.ServiceProtocolAsyncResult);
+
+            ExtendResponsePdu pdu = null;
+
+            try
+            {
+                if (data == null)
+                {
+                    throw new KsiException("Invalid extender config response payload: null.");
+                }
+
+                RawTag rawTag;
+
+                using (TlvReader reader = new TlvReader(new MemoryStream(data)))
+                {
+                    rawTag = new RawTag(reader.ReadTag());
+                }
+
+                if (rawTag.Type == Constants.LegacyExtendPdu.TagType)
+                {
+                    throw new InvalidRequestFormatException("Received PDU v1 response to PDU v2 request.");
+                }
+
+                pdu = new ExtendResponsePdu(rawTag);
+
+                ExtenderConfigResponsePayload payload = pdu.GetExtenderConfigResponsePayload();
+                ExtendErrorPayload errorPayload = pdu.GetExtendErrorPayload();
+
+                if (payload == null && errorPayload == null)
+                {
+                    throw new KsiServiceException("Invalid extender config response PDU. Could not find a valid payload. PDU: " + pdu);
+                }
+
+                if (errorPayload != null)
+                {
+                    throw new KsiServiceException("Error occured during extender config request. Status: " + errorPayload.Status + "; Message: " + errorPayload.ErrorMessage +
+                                                  ".");
+                }
+
+                if (!pdu.ValidateMac(_extendingServiceCredentials.LoginKey))
+                {
+                    throw new KsiServiceException("Invalid HMAC in extender config response PDU.");
+                }
+                Logger.Debug("End get extender config successful (request id: {0}){1}{2}", serviceAsyncResult.RequestId, Environment.NewLine, pdu);
+
+                return new ExtenderConfig(payload);
+            }
+            catch (TlvException e)
+            {
+                KsiException ksiException = new KsiException("Could not parse response message: " + Base16.Encode(data), e);
+                Logger.Warn("End extender config request failed (request id: {0}): {1}", serviceAsyncResult.RequestId, ksiException);
+                throw ksiException;
+            }
+            catch (KsiException e)
+            {
+                Logger.Warn("End extender config request failed (request id: {0}): {1}{2}{3}", serviceAsyncResult.RequestId, e, Environment.NewLine, pdu);
+
+                throw;
+            }
+        }
+
+        /// <summary>
         ///     Get publications file (sync).
         /// </summary>
         /// <returns>Publications file</returns>
@@ -933,6 +1058,15 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
+        /// Generate new request ID
+        /// </summary>
+        /// <returns></returns>
+        protected virtual ulong GenerateRequestId()
+        {
+            return Util.GetRandomUnsignedLong();
+        }
+
+        /// <summary>
         ///     Create signature KSI service async result.
         /// </summary>
         private class CreateSignatureKsiServiceAsyncResult : KsiServiceAsyncResult
@@ -958,6 +1092,17 @@ namespace Guardtime.KSI.Service
         private class AggregatorConfigKsiServiceAsyncResult : KsiServiceAsyncResult
         {
             public AggregatorConfigKsiServiceAsyncResult(ulong requestId, IAsyncResult serviceProtocolAsyncResult, object asyncState)
+                : base(serviceProtocolAsyncResult, asyncState)
+            {
+                RequestId = requestId;
+            }
+
+            public ulong RequestId { get; }
+        }
+
+        private class ExtenderConfigKsiServiceAsyncResult : KsiServiceAsyncResult
+        {
+            public ExtenderConfigKsiServiceAsyncResult(ulong requestId, IAsyncResult serviceProtocolAsyncResult, object asyncState)
                 : base(serviceProtocolAsyncResult, asyncState)
             {
                 RequestId = requestId;

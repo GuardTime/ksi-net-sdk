@@ -50,7 +50,11 @@ namespace Guardtime.KSI.Service
                         this[i] = extendErrorPayload;
                         Payloads.Add(extendErrorPayload);
                         break;
-                    case Constants.ExtendConfigResponsePayload.TagType:
+                    case Constants.ExtenderConfigResponsePayload.TagType:
+                        ExtenderConfigResponsePayload configResponsePayload = new ExtenderConfigResponsePayload(childTag);
+                        this[i] = configResponsePayload;
+                        Payloads.Add(configResponsePayload);
+                        break;
                     case Constants.KsiPduHeader.TagType:
                     case Constants.KsiPdu.MacTagType:
                         break;
@@ -86,6 +90,15 @@ namespace Guardtime.KSI.Service
         public ExtendErrorPayload GetExtendErrorPayload()
         {
             return GetPayload<ExtendErrorPayload>();
+        }
+
+        /// <summary>
+        /// Get aggregation configuration response payload
+        /// </summary>
+        /// <returns></returns>
+        public ExtenderConfigResponsePayload GetExtenderConfigResponsePayload()
+        {
+            return GetPayload<ExtenderConfigResponsePayload>();
         }
     }
 }

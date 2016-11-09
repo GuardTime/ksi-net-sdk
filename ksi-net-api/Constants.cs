@@ -320,12 +320,25 @@ namespace Guardtime.KSI
             public const uint LegacyTagType = 0x303;
         }
 
-        public static class ExtendConfigResponsePayload
+        public static class ExtenderConfigRequestPayload
+        {
+            /// <summary>
+            ///     Extender config request payload TLV type.
+            /// </summary>
+            public const uint TagType = 0x4;
+        }
+
+        public static class ExtenderConfigResponsePayload
         {
             /// <summary>
             ///     Extender config response payload TLV type.
             /// </summary>
             public const uint TagType = 0x4;
+
+            public const uint MaxRequestsTagType = 0x4;
+            public const uint ParentUriTagType = 0x10;
+            public const uint CalendarFirstTimeTagType = 0x11;
+            public const uint CalendarLastTimeTagType = 0x12;
         }
 
         public static class KsiPduHeader

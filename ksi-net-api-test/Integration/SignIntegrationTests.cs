@@ -294,7 +294,7 @@ namespace Guardtime.KSI.Test.Integration
                     ksi.GetAggregatorConfig();
                 });
 
-                Assert.That(ex.Message.StartsWith("Config request is not supported using PDU version v1"), "Unexpected exception message: " + ex.Message);
+                Assert.That(ex.Message.StartsWith("Aggregator config request is not supported using PDU version v1"), "Unexpected exception message: " + ex.Message);
             }
             else
             {
