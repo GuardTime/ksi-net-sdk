@@ -136,6 +136,9 @@
     <Compile Include="Service\ExtenderConfigRequestPayload.cs" />
     <Compile Include="Service\ExtenderConfig.cs" />
     <Compile Include="Service\ExtenderConfigResponsePayload.cs" />
+    <Compile Include="Service\KsiService.PublicationsFile.cs" />
+    <Compile Include="Service\KsiService.Extend.cs" />
+    <Compile Include="Service\KsiService.Aggregate.cs" />
     <Compile Include="Service\LegacyAggregationErrorPayload.cs" />
     <Compile Include="Service\LegacyAggregationRequestPayload.cs" />
     <Compile Include="Service\LegacyAggregationResponsePayload.cs" />
