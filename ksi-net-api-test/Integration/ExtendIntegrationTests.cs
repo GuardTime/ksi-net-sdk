@@ -47,7 +47,7 @@ namespace Guardtime.KSI.Test.Integration
                     ksi.Extend(ksiSignature);
                 });
 
-                Assert.AreEqual("Error occured during extending. Status: 258; Message: The request could not be authenticated.", ex.Message);
+                Assert.AreEqual("Server responded with error message. Status: 258; Message: The request could not be authenticated.", ex.Message);
             }
         }
 

@@ -68,7 +68,7 @@ namespace Guardtime.KSI.Test.Service
                 ksi.Extend(signature);
             });
 
-            Assert.That(ex.Message.StartsWith("Error occured during extending. Status: 17; Message: No error."), "Unexpected exception message: " + ex.Message);
+            Assert.That(ex.Message.StartsWith("Server responded with error message. Status: 17; Message: No error."), "Unexpected exception message: " + ex.Message);
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace Guardtime.KSI.Test.Service
                 ksi.Extend(signature);
             });
 
-            Assert.That(ex.Message.StartsWith("Error occured during extending. Status: 17; Message: No error."), "Unexpected exception message: " + ex.Message);
+            Assert.That(ex.Message.StartsWith("Server responded with error message. Status: 17; Message: No error."), "Unexpected exception message: " + ex.Message);
         }
 
         /// <summary>
@@ -176,7 +176,7 @@ namespace Guardtime.KSI.Test.Service
                 ksi.Extend(signature);
             });
 
-            Assert.That(ex.Message.StartsWith("Error occured during extending. Status: 418464624128; Message: anon"), "Unexpected inner exception message: " + ex.Message);
+            Assert.That(ex.Message.StartsWith("Server responded with error message. Status: 418464624128; Message: anon"), "Unexpected inner exception message: " + ex.Message);
         }
 
         /// <summary>
@@ -195,11 +195,9 @@ namespace Guardtime.KSI.Test.Service
                 ksi.Extend(signature);
             });
 
-            Assert.That(ex.Message.StartsWith("Error occured during extending. Status: 258; Message: The request could not be authenticated."),
+            Assert.That(ex.Message.StartsWith("Server responded with error message. Status: 258; Message: The request could not be authenticated."),
                 "Unexpected exception message: " + ex.Message);
         }
-
-
 
         /// <summary>
         /// Test extending with PDU v1. Response payload has invalid request ID.

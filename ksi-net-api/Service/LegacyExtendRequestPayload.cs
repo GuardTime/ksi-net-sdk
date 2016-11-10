@@ -51,7 +51,7 @@ namespace Guardtime.KSI.Service
 
                 switch (childTag.Type)
                 {
-                    case Constants.ExtendRequestPayload.RequestIdTagType:
+                    case Constants.KsiPduPayload.RequestIdTagType:
                         this[i] = _requestId = new IntegerTag(childTag);
                         requestIdCount++;
                         break;
@@ -94,7 +94,7 @@ namespace Guardtime.KSI.Service
         public LegacyExtendRequestPayload(ulong requestId, ulong aggregationTime, ulong publicationTime)
             : base(Constants.ExtendRequestPayload.LegacyTagType, false, false, new ITlvTag[]
             {
-                new IntegerTag(Constants.ExtendRequestPayload.RequestIdTagType, false, false, requestId),
+                new IntegerTag(Constants.KsiPduPayload.RequestIdTagType, false, false, requestId),
                 new IntegerTag(Constants.ExtendRequestPayload.AggregationTimeTagType, false, false, aggregationTime),
                 new IntegerTag(Constants.ExtendRequestPayload.PublicationTimeTagType, false, false, publicationTime)
             })
@@ -111,7 +111,7 @@ namespace Guardtime.KSI.Service
         /// <param name="aggregationTime">aggregation time</param>
         public LegacyExtendRequestPayload(ulong requestId, ulong aggregationTime) : base(Constants.ExtendRequestPayload.LegacyTagType, false, false, new ITlvTag[]
         {
-            new IntegerTag(Constants.ExtendRequestPayload.RequestIdTagType, false, false, requestId),
+            new IntegerTag(Constants.KsiPduPayload.RequestIdTagType, false, false, requestId),
             new IntegerTag(Constants.ExtendRequestPayload.AggregationTimeTagType, false, false, aggregationTime)
         })
         {

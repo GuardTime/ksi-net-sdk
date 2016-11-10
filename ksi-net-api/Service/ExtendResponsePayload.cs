@@ -26,24 +26,16 @@ namespace Guardtime.KSI.Service
     /// <summary>
     ///     Extend response payload.
     /// </summary>
-    public sealed class ExtendResponsePayload : KsiPduPayload
+    public sealed class ExtendResponsePayload : ResponsePayloadExtended
     {
-        private readonly StringTag _errorMessage;
         private readonly IntegerTag _calendarLastTime;
-        private readonly IntegerTag _requestId;
-        private readonly IntegerTag _status;
 
         /// <summary>
         ///     Create extend response payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        public ExtendResponsePayload(ITlvTag tag) : base(tag)
+        public ExtendResponsePayload(ITlvTag tag) : base(tag, Constants.ExtendResponsePayload.TagType)
         {
-            CheckTagType(Constants.ExtendResponsePayload.TagType);
-
-            int requestIdCount = 0;
-            int statusCount = 0;
-            int errorMessageCount = 0;
             int calendarLastTimeCount = 0;
             int calendarHashChainCount = 0;
 
@@ -53,17 +45,10 @@ namespace Guardtime.KSI.Service
 
                 switch (childTag.Type)
                 {
-                    case Constants.ExtendResponsePayload.RequestIdTagType:
-                        this[i] = _requestId = new IntegerTag(childTag);
-                        requestIdCount++;
-                        break;
+                    // following fields will be checked in the base class
+                    case Constants.KsiPduPayload.RequestIdTagType:
                     case Constants.KsiPduPayload.StatusTagType:
-                        this[i] = _status = new IntegerTag(childTag);
-                        statusCount++;
-                        break;
                     case Constants.KsiPduPayload.ErrorMessageTagType:
-                        this[i] = _errorMessage = new StringTag(childTag);
-                        errorMessageCount++;
                         break;
                     case Constants.ExtendResponsePayload.CalendarLastTimeTagType:
                         this[i] = _calendarLastTime = new IntegerTag(childTag);
@@ -79,27 +64,12 @@ namespace Guardtime.KSI.Service
                 }
             }
 
-            if (requestIdCount != 1)
-            {
-                throw new TlvException("Exactly one request id must exist in extend response payload.");
-            }
-
-            if (statusCount != 1)
-            {
-                throw new TlvException("Exactly one status code must exist in extend response payload.");
-            }
-
-            if (errorMessageCount > 1)
-            {
-                throw new TlvException("Only one error message is allowed in extend response payload.");
-            }
-
             if (calendarLastTimeCount > 1)
             {
                 throw new TlvException("Only one calendar last time is allowed in extend response payload.");
             }
 
-            if (_status.Value == 0 && calendarHashChainCount != 1)
+            if (Status == 0 && calendarHashChainCount != 1)
             {
                 throw new TlvException("Exactly one calendar hash chain must exist in extend response payload.");
             }
@@ -111,23 +81,8 @@ namespace Guardtime.KSI.Service
         public CalendarHashChain CalendarHashChain { get; }
 
         /// <summary>
-        ///     Get error message if it exists.
-        /// </summary>
-        public string ErrorMessage => _errorMessage?.Value;
-
-        /// <summary>
         ///     Get aggregation time of the newest calendar record the extender has
         /// </summary>
         public ulong? CalendarLastTime => _calendarLastTime?.Value;
-
-        /// <summary>
-        ///     Get request ID.
-        /// </summary>
-        public ulong RequestId => _requestId.Value;
-
-        /// <summary>
-        ///     Get status code.
-        /// </summary>
-        public ulong Status => _status.Value;
     }
 }

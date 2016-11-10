@@ -95,7 +95,7 @@ namespace Guardtime.KSI.Test.Integration
                 SignHash(ksi);
             });
 
-            Assert.AreEqual("Error occured during aggregation. Status: 258; Message: The request could not be authenticated.", ex.Message);
+            Assert.AreEqual("Server responded with error message. Status: 258; Message: The request could not be authenticated.", ex.Message);
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidSigningUrl))]
@@ -142,7 +142,7 @@ namespace Guardtime.KSI.Test.Integration
             {
                 SignHash(ksi);
             });
-            Assert.AreEqual("Error occured during aggregation. Status: 258; Message: The request could not be authenticated.", ex.Message);
+            Assert.AreEqual("Server responded with error message. Status: 258; Message: The request could not be authenticated.", ex.Message);
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCasesInvalidUrl))]

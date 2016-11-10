@@ -45,7 +45,7 @@ namespace Guardtime.KSI.Service
                         this[i] = extendResponsePayload;
                         Payloads.Add(extendResponsePayload);
                         break;
-                    case Constants.ExtendErrorPayload.TagType:
+                    case Constants.ErrorPayload.TagType:
                         ExtendErrorPayload extendErrorPayload = new ExtendErrorPayload(childTag);
                         this[i] = extendErrorPayload;
                         Payloads.Add(extendErrorPayload);

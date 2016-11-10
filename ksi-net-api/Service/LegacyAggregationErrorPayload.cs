@@ -32,7 +32,7 @@ namespace Guardtime.KSI.Service
         ///     Create aggregation error payload TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        public LegacyAggregationErrorPayload(ITlvTag tag) : base(tag, Constants.AggregationErrorPayload.LegacyTagType)
+        public LegacyAggregationErrorPayload(ITlvTag tag) : base(tag, Constants.LegacyAggregationErrorPayload.TagType)
         {
         }
     }

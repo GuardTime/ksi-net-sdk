@@ -61,7 +61,7 @@ namespace Guardtime.KSI.Service
                         this[i] = Payload = new LegacyExtendResponsePayload(childTag);
                         payloadCount++;
                         break;
-                    case Constants.ExtendErrorPayload.LegacyTagType:
+                    case Constants.LegacyExtendErrorPayload.TagType:
                         this[i] = Payload = new LegacyExtendErrorPayload(childTag);
                         payloadCount++;
                         break;
@@ -82,14 +82,17 @@ namespace Guardtime.KSI.Service
                 throw new TlvException("Exactly one payload must exist in KSI PDU.");
             }
 
-            if (Payload.Type != Constants.ExtendErrorPayload.TagType && Payload.Type != Constants.ExtendErrorPayload.LegacyTagType && headerCount != 1)
+            if (Payload.Type != Constants.LegacyExtendErrorPayload.TagType)
             {
-                throw new TlvException("Exactly one header must exist in KSI PDU.");
-            }
+                if (headerCount != 1)
+                {
+                    throw new TlvException("Exactly one header must exist in KSI PDU.");
+                }
 
-            if (Payload.Type != Constants.ExtendErrorPayload.TagType && Payload.Type != Constants.ExtendErrorPayload.LegacyTagType && macCount != 1)
-            {
-                throw new TlvException("Exactly one mac must exist in KSI PDU.");
+                if (macCount != 1)
+                {
+                    throw new TlvException("Exactly one mac must exist in KSI PDU.");
+                }
             }
         }
 

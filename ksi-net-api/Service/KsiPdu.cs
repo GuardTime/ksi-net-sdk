@@ -60,14 +60,12 @@ namespace Guardtime.KSI.Service
             {
                 ITlvTag childTag = this[i];
 
-                if (childTag.Type == Constants.AggregationErrorPayload.TagType || childTag.Type == Constants.ExtendErrorPayload.TagType)
+                if (childTag.Type == Constants.ErrorPayload.TagType)
                 {
                     hasErrorPayload = true;
                     payloadCount++;
                 }
-                else if (childTag.Type == Constants.AggregationRequestPayload.TagType || childTag.Type == Constants.AggregationResponsePayload.TagType ||
-                         childTag.Type == Constants.AggregatorConfigRequestPayload.TagType || childTag.Type == Constants.AggregatorConfigResponsePayload.TagType ||
-                         childTag.Type == Constants.ExtendRequestPayload.TagType || childTag.Type == Constants.ExtendResponsePayload.TagType)
+                else if (Constants.PayloadTypes.Contains(childTag.Type))
                 {
                     payloadCount++;
                 }

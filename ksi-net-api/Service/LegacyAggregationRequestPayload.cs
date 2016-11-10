@@ -54,7 +54,7 @@ namespace Guardtime.KSI.Service
 
                 switch (childTag.Type)
                 {
-                    case Constants.AggregationRequestPayload.RequestIdTagType:
+                    case Constants.KsiPduPayload.RequestIdTagType:
                         this[i] = _requestId = new IntegerTag(childTag);
                         requestIdCount++;
                         break;
@@ -104,7 +104,7 @@ namespace Guardtime.KSI.Service
         /// <param name="hash">data hash</param>
         public LegacyAggregationRequestPayload(ulong requestId, DataHash hash) : base(Constants.AggregationRequestPayload.LegacyTagType, false, false, new ITlvTag[]
         {
-            new IntegerTag(Constants.AggregationRequestPayload.RequestIdTagType, false, false, requestId),
+            new IntegerTag(Constants.KsiPduPayload.RequestIdTagType, false, false, requestId),
             new ImprintTag(Constants.AggregationRequestPayload.RequestHashTagType, false, false, hash)
         })
         {
@@ -120,7 +120,7 @@ namespace Guardtime.KSI.Service
         /// <param name="level">the level value of the aggregation tree node</param>
         public LegacyAggregationRequestPayload(ulong requestId, DataHash hash, uint level) : base(Constants.AggregationRequestPayload.LegacyTagType, false, false, new ITlvTag[]
         {
-            new IntegerTag(Constants.AggregationRequestPayload.RequestIdTagType, false, false, requestId),
+            new IntegerTag(Constants.KsiPduPayload.RequestIdTagType, false, false, requestId),
             new ImprintTag(Constants.AggregationRequestPayload.RequestHashTagType, false, false, hash),
             new IntegerTag(Constants.AggregationRequestPayload.RequestLevelTagType, false, false, level)
         })

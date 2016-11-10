@@ -45,7 +45,7 @@ namespace Guardtime.KSI.Service
                         this[i] = aggregationResponsePayload;
                         Payloads.Add(aggregationResponsePayload);
                         break;
-                    case Constants.AggregationErrorPayload.TagType:
+                    case Constants.ErrorPayload.TagType:
                         AggregationErrorPayload aggregationErrorPayload = new AggregationErrorPayload(childTag);
                         this[i] = aggregationErrorPayload;
                         Payloads.Add(aggregationErrorPayload);

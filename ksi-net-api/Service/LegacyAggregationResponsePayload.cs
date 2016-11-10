@@ -27,23 +27,14 @@ namespace Guardtime.KSI.Service
     ///     Aggregation response payload.
     /// </summary>
     [Obsolete]
-    public sealed class LegacyAggregationResponsePayload : KsiPduPayload
+    public sealed class LegacyAggregationResponsePayload : ResponsePayloadExtended
     {
-        private readonly StringTag _errorMessage;
-        private readonly IntegerTag _requestId;
-        private readonly IntegerTag _status;
-
         /// <summary>
         ///     Create aggregation response payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        public LegacyAggregationResponsePayload(ITlvTag tag) : base(tag)
+        public LegacyAggregationResponsePayload(ITlvTag tag) : base(tag, Constants.AggregationResponsePayload.LegacyTagType)
         {
-            CheckTagType(Constants.AggregationResponsePayload.LegacyTagType);
-
-            int requestIdCount = 0;
-            int statusCount = 0;
-            int errorMessageCount = 0;
             int configCount = 0;
             int requestAcknowledgmentCount = 0;
 
@@ -53,17 +44,9 @@ namespace Guardtime.KSI.Service
 
                 switch (childTag.Type)
                 {
-                    case Constants.AggregationResponsePayload.RequestIdTagType:
-                        this[i] = _requestId = new IntegerTag(childTag);
-                        requestIdCount++;
-                        break;
+                    case Constants.KsiPduPayload.RequestIdTagType:
                     case Constants.KsiPduPayload.StatusTagType:
-                        this[i] = _status = new IntegerTag(childTag);
-                        statusCount++;
-                        break;
                     case Constants.KsiPduPayload.ErrorMessageTagType:
-                        this[i] = _errorMessage = new StringTag(childTag);
-                        errorMessageCount++;
                         break;
                     case Constants.AggregationResponsePayload.ConfigTagType:
                         this[i] = new RawTag(childTag);
@@ -85,21 +68,6 @@ namespace Guardtime.KSI.Service
                 }
             }
 
-            if (requestIdCount != 1)
-            {
-                throw new TlvException("Exactly one request id must exist in aggregation response payload.");
-            }
-
-            if (statusCount != 1)
-            {
-                throw new TlvException("Exactly one status code must exist in aggregation response payload.");
-            }
-
-            if (errorMessageCount > 1)
-            {
-                throw new TlvException("Only one error message is allowed in aggregation response payload.");
-            }
-
             if (configCount > 1)
             {
                 throw new TlvException("Only one config is allowed in aggregation response payload.");
@@ -110,20 +78,5 @@ namespace Guardtime.KSI.Service
                 throw new TlvException("Only one request acknowledgment is allowed in aggregation response payload.");
             }
         }
-
-        /// <summary>
-        ///     Get error message if it exists.
-        /// </summary>
-        public string ErrorMessage => _errorMessage?.Value;
-
-        /// <summary>
-        ///     Get request ID.
-        /// </summary>
-        public ulong RequestId => _requestId.Value;
-
-        /// <summary>
-        ///     Get status code.
-        /// </summary>
-        public ulong Status => _status.Value;
     }
 }

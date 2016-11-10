@@ -23,17 +23,43 @@ using Guardtime.KSI.Parser;
 namespace Guardtime.KSI.Service
 {
     /// <summary>
-    ///     Aggregation Error payload TLV element.
+    ///     KSI PDU response payload. Contains additional payload fields.
     /// </summary>
-    public abstract class ErrorPayload : ResponsePayload
+    public abstract class ResponsePayloadExtended : ResponsePayload
     {
+        private readonly IntegerTag _requestId;
+
         /// <summary>
-        ///     Create aggregation error payload TLV element from TLV element.
+        ///     Create KSI PDU extended response payload TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         /// <param name="expectedTagType">expected tag type</param>
-        protected ErrorPayload(ITlvTag tag, uint expectedTagType) : base(tag, expectedTagType)
+        protected ResponsePayloadExtended(ITlvTag tag, uint expectedTagType) : base(tag, expectedTagType)
         {
+            int requestIdCount = 0;
+
+            for (int i = 0; i < Count; i++)
+            {
+                ITlvTag childTag = this[i];
+
+                switch (childTag.Type)
+                {
+                    case Constants.KsiPduPayload.RequestIdTagType:
+                        this[i] = _requestId = new IntegerTag(childTag);
+                        requestIdCount++;
+                        break;
+                }
+            }
+
+            if (requestIdCount != 1)
+            {
+                throw new TlvException("Exactly one request id must exist in response payload.");
+            }
         }
+
+        /// <summary>
+        ///     Get request ID.
+        /// </summary>
+        public ulong RequestId => _requestId.Value;
     }
 }
