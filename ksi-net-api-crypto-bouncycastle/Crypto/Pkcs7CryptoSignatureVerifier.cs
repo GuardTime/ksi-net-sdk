@@ -197,6 +197,7 @@ namespace Guardtime.KSI.Crypto.BouncyCastle.Crypto
             StringBuilder sb = new StringBuilder();
             foreach (object c in _trustAnchors)
             {
+                sb.AppendLine("------------------ Trust anchor --------------------");
                 sb.AppendLine(c.ToString());
             }
 

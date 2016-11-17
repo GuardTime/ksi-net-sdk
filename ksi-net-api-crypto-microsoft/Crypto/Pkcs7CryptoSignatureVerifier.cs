@@ -119,6 +119,8 @@ namespace Guardtime.KSI.Crypto.Microsoft.Crypto
             }
             catch (Exception e)
             {
+                Logger.Warn("Failed to verify PKCS#7 signature. " + e + GetCertInfoString());
+
                 throw new PkiVerificationFailedException("Failed to verify PKCS#7 signature.", e);
             }
 
@@ -169,15 +171,20 @@ namespace Guardtime.KSI.Crypto.Microsoft.Crypto
             throw new PkiVerificationFailedException("Trust chain did not complete to the known authority anchor. Thumbprints did not match.");
         }
 
-        private string GetCertInfoString(X509ChainElementCollection chainElements)
+        private string GetCertInfoString(X509ChainElementCollection chainElements = null)
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine();
-            sb.AppendLine("Chain elements: ");
 
-            foreach (X509ChainElement chainElement in chainElements)
+            if (chainElements != null)
             {
-                sb.AppendLine(chainElement.Certificate.ToString());
+                sb.AppendLine();
+                sb.AppendLine("Chain elements: ");
+
+                foreach (X509ChainElement chainElement in chainElements)
+                {
+                    sb.AppendLine("------------------- Chain element -------------------");
+                    sb.AppendLine(chainElement.Certificate.ToString());
+                }
             }
 
             sb.AppendLine();
@@ -185,6 +192,7 @@ namespace Guardtime.KSI.Crypto.Microsoft.Crypto
 
             foreach (X509Certificate2 cert in _trustAnchors)
             {
+                sb.AppendLine("------------------ Trust anchor --------------------");
                 sb.AppendLine(cert.ToString());
             }
 
