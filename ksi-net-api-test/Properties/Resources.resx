@@ -585,4 +585,19 @@
   <data name="KsiService_LegacyAggregationResponsePdu" xml:space="preserve">
     <value>resources/service/legacy-aggregation-response-pdu.tlv</value>
   </data>
+  <data name="PkiTrustProvider_CustomCertInvalid" xml:space="preserve">
+    <value>resources/trust/pkitrustprovider/custom-cert-invalid.pem</value>
+  </data>
+  <data name="PkiTrustProvider_CustomCert" xml:space="preserve">
+    <value>resources/trust/pkitrustprovider/custom-cert.pem</value>
+  </data>
+  <data name="PkiTrustProvider_PubsFileCustomCert" xml:space="preserve">
+    <value>resources/trust/pkitrustprovider/pubs-file-custom-cert.bin</value>
+  </data>
+  <data name="PkiTrustProvider_PubsFileSymantecCert" xml:space="preserve">
+    <value>resources/trust/pkitrustprovider/pubs-file-symantec.bin</value>
+  </data>
+  <data name="PkiTrustProvider_SymantecCert" xml:space="preserve">
+    <value>resources/trust/pkitrustprovider/symantec.cer</value>
+  </data>
 </root>
