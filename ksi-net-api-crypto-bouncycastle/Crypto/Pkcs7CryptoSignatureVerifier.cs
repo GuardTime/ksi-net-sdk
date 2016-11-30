@@ -173,7 +173,7 @@ namespace Guardtime.KSI.Crypto.BouncyCastle.Crypto
             }
             catch (PkixCertPathBuilderException e)
             {
-                throw new PkiVerificationFailedException("Could not building certificate path.", e);
+                throw new PkiVerificationFailedException("Could not build certificate path.", e);
             }
 
             // Create pkix parameteres

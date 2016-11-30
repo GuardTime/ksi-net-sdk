@@ -70,7 +70,7 @@ namespace Guardtime.KSI.Test.Trust
 
             // separate error messages for Microsoft and Bouncy Castle
             Assert.That(ex.Message.StartsWith("Trust chain did not complete to the known authority anchor. Thumbprints did not match.") ||
-                        (ex.Message.StartsWith("Could not building certificate path") &&
+                        (ex.Message.StartsWith("Could not build certificate path") &&
                          ex.InnerException.Message.StartsWith("No issuer certificate for certificate in certification path found.")),
                 "Unexpected exception message: " + ex.Message);
         }
@@ -103,7 +103,7 @@ namespace Guardtime.KSI.Test.Trust
 
             // separate error messages for Microsoft and Bouncy Castle
             Assert.That(ex.Message.StartsWith("Trust chain did not complete to the known authority anchor. Thumbprints did not match.") ||
-                        ex.Message.StartsWith("Could not building certificate path"),
+                        ex.Message.StartsWith("Could not build certificate path"),
                 "Unexpected exception message: " + ex.Message);
         }
 
@@ -136,7 +136,7 @@ namespace Guardtime.KSI.Test.Trust
 
             // separate error messages for Microsoft and Bouncy Castle
             Assert.That(ex.Message.StartsWith("Trust chain did not complete to the known authority anchor. Thumbprints did not match.") ||
-                        ex.Message.StartsWith("Could not building certificate path"),
+                        ex.Message.StartsWith("Could not build certificate path"),
                 "Unexpected exception message: " + ex.Message);
         }
 
@@ -156,7 +156,7 @@ namespace Guardtime.KSI.Test.Trust
 
             // separate error messages for Microsoft and Bouncy Castle
             Assert.That(ex.Message.StartsWith("Trust chain did not complete to the known authority anchor. Thumbprints did not match.") ||
-                        ex.Message.StartsWith("Could not building certificate path"),
+                        ex.Message.StartsWith("Could not build certificate path"),
                 "Unexpected exception message: " + ex.Message);
         }
 
