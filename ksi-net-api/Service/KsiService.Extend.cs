@@ -240,7 +240,7 @@ namespace Guardtime.KSI.Service
                         throw new KsiServiceException(GetExtendingErrorMessage(errorPayload.Status, errorPayload.ErrorMessage));
                     }
 
-                    if (!legacyPdu.ValidateMac(_extendingServiceCredentials.LoginKey))
+                    if (!LegacyKsiPdu.ValidateMac(data, legacyPdu.Mac, _extendingServiceCredentials.LoginKey))
                     {
                         throw new KsiServiceException("Invalid HMAC in extend response PDU.");
                     }
@@ -278,7 +278,7 @@ namespace Guardtime.KSI.Service
                         throw new KsiServiceException(GetExtendingErrorMessage(errorPayload.Status, errorPayload.ErrorMessage));
                     }
 
-                    if (!pdu.ValidateMac(_extendingServiceCredentials.LoginKey))
+                    if (!KsiPdu.ValidateMac(data, pdu.Mac, _extendingServiceCredentials.LoginKey))
                     {
                         throw new KsiServiceException("Invalid HMAC in extend response PDU.");
                     }
@@ -428,7 +428,7 @@ namespace Guardtime.KSI.Service
                                                   ".");
                 }
 
-                if (!pdu.ValidateMac(_extendingServiceCredentials.LoginKey))
+                if (!KsiPdu.ValidateMac(data, pdu.Mac, _extendingServiceCredentials.LoginKey))
                 {
                     throw new KsiServiceException("Invalid HMAC in extender config response PDU.");
                 }

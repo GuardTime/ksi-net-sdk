@@ -22,6 +22,7 @@ using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
+using NLog;
 
 namespace Guardtime.KSI.Service
 {
@@ -31,8 +32,8 @@ namespace Guardtime.KSI.Service
     [Obsolete]
     public abstract class LegacyKsiPdu : CompositeTag
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly KsiPduHeader _header;
-        private readonly ImprintTag _mac;
 
         /// <summary>
         ///     Get PDU payload.
@@ -56,7 +57,7 @@ namespace Guardtime.KSI.Service
                         this[i] = _header = new KsiPduHeader(childTag);
                         break;
                     case Constants.KsiPdu.MacTagType:
-                        this[i] = _mac = new ImprintTag(childTag);
+                        this[i] = Mac = new ImprintTag(childTag);
                         break;
                 }
             }
@@ -86,8 +87,13 @@ namespace Guardtime.KSI.Service
             }
 
             _header = header;
-            _mac = mac;
+            Mac = mac;
         }
+
+        /// <summary>
+        /// MAC
+        /// </summary>
+        public ImprintTag Mac { get; }
 
         /// <summary>
         ///     Calculate MAC and attach it to PDU.
@@ -122,23 +128,57 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Validate mac attached to KSI PDU.
         /// </summary>
+        /// <param name="pduBytes">PDU encoded as byte array</param>
+        /// <param name="mac">MAC</param>
         /// <param name="key">message key</param>
         /// <returns>true if MAC is valid</returns>
-        public bool ValidateMac(byte[] key)
+        public static bool ValidateMac(byte[] pduBytes, ImprintTag mac, byte[] key)
         {
-            if (_mac == null)
+            if (pduBytes == null)
             {
+                throw new ArgumentNullException(nameof(pduBytes));
+            }
+
+            if (mac == null)
+            {
+                throw new ArgumentNullException(nameof(mac));
+            }
+
+            if (pduBytes.Length < 1)
+            {
+                Logger.Warn("PDU MAC validation failed. PDU bytes array is empty.");
                 return false;
             }
 
-            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
-            {
-                writer.WriteTag(_header);
-                writer.WriteTag(Payload);
+            // We will use only header and payload for mac calculation.
+            // It is assumed that mac tag is the last one.
 
-                DataHash hash = CalculateMac(_mac.Value.Algorithm, key, ((MemoryStream)writer.BaseStream).ToArray());
-                return hash.Equals(_mac.Value);
+            HashAlgorithm hashAlgorithm = mac.Value.Algorithm;
+            int macTagLength = 3 + hashAlgorithm.Length; // tlv-8 header bytes + algorithm type byte + algorithm value
+
+            bool tlv16 = (pduBytes[0] & Constants.Tlv.Tlv16Flag) != 0;
+
+            int startFrom = tlv16 ? 4 : 2;
+            int calcDataLength = pduBytes.Length - startFrom - macTagLength;
+
+            if (calcDataLength < 0)
+            {
+                Logger.Warn("PDU MAC validation failed. PDU bytes array is too short to contain given MAC.");
+                return false;
             }
+
+            byte[] target = new byte[calcDataLength];
+            Array.Copy(pduBytes, startFrom, target, 0, target.Length);
+
+            DataHash calculatedMac = CalculateMac(hashAlgorithm, key, target);
+
+            if (!calculatedMac.Equals(mac.Value))
+            {
+                Logger.Warn("PDU MAC validation failed. Calculated MAC and given MAC do no match.");
+                return false;
+            }
+
+            return true;
         }
     }
 }

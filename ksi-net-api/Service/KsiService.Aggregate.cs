@@ -221,7 +221,7 @@ namespace Guardtime.KSI.Service
                         throw new KsiServiceException(GetSigningErrorMessage(errorPayload.Status, errorPayload.ErrorMessage));
                     }
 
-                    if (!legacyPdu.ValidateMac(_signingServiceCredentials.LoginKey))
+                    if (!LegacyKsiPdu.ValidateMac(legacyPdu.Encode(), legacyPdu.Mac, _signingServiceCredentials.LoginKey))
                     {
                         throw new KsiServiceException("Invalid HMAC in aggregation response PDU.");
                     }
@@ -255,7 +255,7 @@ namespace Guardtime.KSI.Service
                         throw new KsiServiceException(GetSigningErrorMessage(errorPayload.Status, errorPayload.ErrorMessage));
                     }
 
-                    if (!pdu.ValidateMac(_signingServiceCredentials.LoginKey))
+                    if (!KsiPdu.ValidateMac(data, pdu.Mac, _signingServiceCredentials.LoginKey))
                     {
                         throw new KsiServiceException("Invalid HMAC in aggregation response PDU.");
                     }
@@ -401,10 +401,11 @@ namespace Guardtime.KSI.Service
                                                   "; Message: " + errorPayload.ErrorMessage + ".");
                 }
 
-                if (!pdu.ValidateMac(_signingServiceCredentials.LoginKey))
+                if (!KsiPdu.ValidateMac(data, pdu.Mac, _signingServiceCredentials.LoginKey))
                 {
                     throw new KsiServiceException("Invalid HMAC in aggregator config response PDU.");
                 }
+
                 Logger.Debug("End get aggregator config successful (request id: {0}){1}{2}", serviceAsyncResult.RequestId, Environment.NewLine, pdu);
 
                 return new AggregatorConfig(payload);

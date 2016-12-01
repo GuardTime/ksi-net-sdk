@@ -18,13 +18,9 @@
  */
 
 using System.IO;
-using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
-using Guardtime.KSI.Test.Crypto;
 using Guardtime.KSI.Test.Properties;
-using Guardtime.KSI.Trust;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Service
@@ -33,7 +29,7 @@ namespace Guardtime.KSI.Test.Service
     /// Extender configuration tests with static response
     /// </summary>
     [TestFixture]
-    public class EtenderConfigRequestStaticTests
+    public class EtenderConfigRequestStaticTests : StaticServiceTestsBase
     {
         /// <summary>
         /// Test extender configuration request
@@ -41,7 +37,7 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void ExtenderConfigRequestStaticTest()
         {
-            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtenderConfigResponsePdu)));
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtenderConfigResponsePdu)));
 
             ExtenderConfig config = ksi.GetExtenderConfig();
 
@@ -57,7 +53,7 @@ namespace Guardtime.KSI.Test.Service
         public void ExtenderConfigRequestWithMultiPayloadsResponseStaticTest()
         {
             // Response has multiple payloads (including a payload containing invalid signature and a configuration payload)
-            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_Multi_Payloads)));
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_Multi_Payloads)));
 
             ExtenderConfig config = ksi.GetExtenderConfig();
 
@@ -73,7 +69,7 @@ namespace Guardtime.KSI.Test.Service
         public void ExtenderConfigRequestInvalidStaticTest()
         {
             // pdu does not contain extender config payload
-            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu)));
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu)));
 
             KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
             {
@@ -81,19 +77,6 @@ namespace Guardtime.KSI.Test.Service
             });
 
             Assert.That(ex.Message.StartsWith("Invalid extender config response PDU. Could not find a valid payload."), "Unexpected exception message: " + ex.Message);
-        }
-
-        private static Ksi GetKsi(byte[] requestResult)
-        {
-            TestKsiServiceProtocol protocol = new TestKsiServiceProtocol
-            {
-                RequestResult = requestResult
-            };
-
-            return new Ksi(new TestKsiService(protocol, new ServiceCredentials("anon", "anon"), protocol, new ServiceCredentials("anon", "anon"), protocol,
-                new PublicationsFileFactory(
-                    new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))), 0, PduVersion.v2));
         }
     }
 }
