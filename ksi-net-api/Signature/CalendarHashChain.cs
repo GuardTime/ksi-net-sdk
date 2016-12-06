@@ -30,10 +30,10 @@ namespace Guardtime.KSI.Signature
     /// </summary>
     public sealed class CalendarHashChain : CompositeTag
     {
-        private readonly IntegerTag _aggregationTime;
+        private IntegerTag _aggregationTime;
         private readonly List<Link> _chain = new List<Link>();
-        private readonly ImprintTag _inputHash;
-        private readonly IntegerTag _publicationTime;
+        private ImprintTag _inputHash;
+        private IntegerTag _publicationTime;
         private DataHash _outputHash;
         private PublicationData _publicationData;
 
@@ -43,7 +43,16 @@ namespace Guardtime.KSI.Signature
         /// <param name="tag">TLV element</param>
         public CalendarHashChain(ITlvTag tag) : base(tag)
         {
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
             CheckTagType(Constants.CalendarHashChain.TagType);
+
+            base.Validate();
 
             int publicationTimeCount = 0;
             int aggregationTimeCount = 0;
@@ -115,7 +124,7 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         ///     Get registration time.
         /// </summary>
-        public ulong RegistrationTime { get; }
+        public ulong RegistrationTime { get; private set; }
 
         /// <summary>
         ///     Get input hash.

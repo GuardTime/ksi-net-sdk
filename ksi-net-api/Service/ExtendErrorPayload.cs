@@ -30,8 +30,17 @@ namespace Guardtime.KSI.Service
         ///     Create extend error payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        public ExtendErrorPayload(ITlvTag tag) : base(tag, Constants.ErrorPayload.TagType)
+        public ExtendErrorPayload(ITlvTag tag) : base(tag)
         {
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
+            CheckTagType(Constants.ErrorPayload.TagType);
+            base.Validate();
         }
     }
 }

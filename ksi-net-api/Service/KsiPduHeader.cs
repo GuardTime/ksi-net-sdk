@@ -27,9 +27,9 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public sealed class KsiPduHeader : CompositeTag
     {
-        private readonly IntegerTag _instanceId;
-        private readonly StringTag _loginId;
-        private readonly IntegerTag _messageId;
+        private IntegerTag _instanceId;
+        private StringTag _loginId;
+        private IntegerTag _messageId;
 
         /// <summary>
         ///     Create KSI PDU header from TLV element.
@@ -37,7 +37,16 @@ namespace Guardtime.KSI.Service
         /// <param name="tag">TLV element</param>
         public KsiPduHeader(ITlvTag tag) : base(tag)
         {
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
             CheckTagType(Constants.KsiPduHeader.TagType);
+
+            base.Validate();
 
             int loginIdCount = 0;
             int instanceIdCount = 0;

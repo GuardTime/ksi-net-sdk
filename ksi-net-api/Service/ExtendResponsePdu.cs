@@ -32,7 +32,15 @@ namespace Guardtime.KSI.Service
         /// <param name="tag">TLV element</param>
         public ExtendResponsePdu(ITlvTag tag) : base(tag)
         {
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
             CheckTagType(Constants.ExtendResponsePdu.TagType);
+            base.Validate();
 
             for (int i = 0; i < Count; i++)
             {

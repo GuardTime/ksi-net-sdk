@@ -27,17 +27,23 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public abstract class ResponsePayload : KsiPduPayload
     {
-        private readonly StringTag _errorMessage;
-        private readonly IntegerTag _status;
+        private StringTag _errorMessage;
+        private IntegerTag _status;
 
         /// <summary>
         ///     Create KSI PDU response payload TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        /// <param name="expectedTagType">expected tag type</param>
-        protected ResponsePayload(ITlvTag tag, uint expectedTagType) : base(tag)
+        protected ResponsePayload(ITlvTag tag) : base(tag)
         {
-            CheckTagType(expectedTagType);
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
+            base.Validate();
 
             int statusCount = 0;
             int errorMessageCount = 0;

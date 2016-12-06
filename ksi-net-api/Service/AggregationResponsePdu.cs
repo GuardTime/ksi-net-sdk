@@ -32,7 +32,15 @@ namespace Guardtime.KSI.Service
         /// <param name="tag">TLV element</param>
         public AggregationResponsePdu(ITlvTag tag) : base(tag)
         {
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
             CheckTagType(Constants.AggregationResponsePdu.TagType);
+            base.Validate();
 
             for (int i = 0; i < Count; i++)
             {

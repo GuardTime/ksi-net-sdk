@@ -28,9 +28,9 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public sealed class ExtenderConfigResponsePayload : KsiPduPayload
     {
-        private readonly IntegerTag _maxRequests;
-        private readonly IntegerTag _calendarFirstTime;
-        private readonly IntegerTag _calendarLastTime;
+        private IntegerTag _maxRequests;
+        private IntegerTag _calendarFirstTime;
+        private IntegerTag _calendarLastTime;
 
         /// <summary>
         ///     Create extender configuration response payload from TLV element.
@@ -38,10 +38,15 @@ namespace Guardtime.KSI.Service
         /// <param name="tag">TLV element</param>
         public ExtenderConfigResponsePayload(ITlvTag tag) : base(tag)
         {
-            if (Type != Constants.ExtenderConfigResponsePayload.TagType)
-            {
-                throw new TlvException("Invalid extender configuration response payload type(" + Type + ").");
-            }
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
+            CheckTagType(Constants.ExtenderConfigResponsePayload.TagType);
+            base.Validate();
 
             int maxRequestsCount = 0;
             int calendarFirstTimeCount = 0;

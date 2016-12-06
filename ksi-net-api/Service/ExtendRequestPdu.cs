@@ -33,7 +33,16 @@ namespace Guardtime.KSI.Service
         /// <param name="tag">TLV element</param>
         public ExtendRequestPdu(ITlvTag tag) : base(tag)
         {
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
             CheckTagType(Constants.ExtendRequestPdu.TagType);
+
+            base.Validate();
 
             for (int i = 0; i < Count; i++)
             {
@@ -45,6 +54,11 @@ namespace Guardtime.KSI.Service
                         ExtendRequestPayload extendRequestPayload = new ExtendRequestPayload(childTag);
                         this[i] = extendRequestPayload;
                         Payloads.Add(extendRequestPayload);
+                        break;
+                    case Constants.ExtenderConfigRequestPayload.TagType:
+                        ExtenderConfigRequestPayload configRequestPayload = new ExtenderConfigRequestPayload(childTag);
+                        this[i] = configRequestPayload;
+                        Payloads.Add(configRequestPayload);
                         break;
                     case Constants.KsiPduHeader.TagType:
                     case Constants.KsiPdu.MacTagType:
@@ -66,7 +80,6 @@ namespace Guardtime.KSI.Service
         public ExtendRequestPdu(KsiPduHeader header, KsiPduPayload payload, HashAlgorithm hmacAlgorithm, byte[] key)
             : base(Constants.ExtendRequestPdu.TagType, header, payload, hmacAlgorithm, key)
         {
-            Payloads.Add(payload);
         }
     }
 }

@@ -34,12 +34,20 @@ namespace Guardtime.KSI.Parser
         private readonly List<ITlvTag> _value = new List<ITlvTag>();
 
         /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected virtual void Validate()
+        {
+        }
+
+        /// <summary>
         ///     Create new composite TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         protected CompositeTag(ITlvTag tag) : base(tag)
         {
             DecodeValue(tag.EncodeValue());
+            Validate();
         }
 
         /// <summary>
@@ -66,6 +74,8 @@ namespace Guardtime.KSI.Parser
 
                 _value.Add(tag);
             }
+
+            Validate();
         }
 
         /// <summary>

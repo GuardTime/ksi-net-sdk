@@ -27,9 +27,9 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public sealed class ExtendRequestPayload : KsiPduPayload
     {
-        private readonly IntegerTag _aggregationTime;
-        private readonly IntegerTag _publicationTime;
-        private readonly IntegerTag _requestId;
+        private IntegerTag _aggregationTime;
+        private IntegerTag _publicationTime;
+        private IntegerTag _requestId;
 
         /// <summary>
         ///     Create extend request payload from TLV element.
@@ -37,7 +37,16 @@ namespace Guardtime.KSI.Service
         /// <param name="tag">TLV element</param>
         public ExtendRequestPayload(ITlvTag tag) : base(tag)
         {
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
             CheckTagType(Constants.ExtendRequestPayload.TagType);
+
+            base.Validate();
 
             int requestIdCount = 0;
             int aggregationTimeCount = 0;

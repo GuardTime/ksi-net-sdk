@@ -28,10 +28,10 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public sealed class AggregatorConfigResponsePayload : KsiPduPayload
     {
-        private readonly IntegerTag _aggregationPeriod;
-        private readonly IntegerTag _aggregationAlgorithm;
-        private readonly IntegerTag _maxLevel;
-        private readonly IntegerTag _maxRequests;
+        private IntegerTag _aggregationPeriod;
+        private IntegerTag _aggregationAlgorithm;
+        private IntegerTag _maxLevel;
+        private IntegerTag _maxRequests;
 
         /// <summary>
         ///     Create aggregator configuration response payload from TLV element.
@@ -39,7 +39,15 @@ namespace Guardtime.KSI.Service
         /// <param name="tag">TLV element</param>
         public AggregatorConfigResponsePayload(ITlvTag tag) : base(tag)
         {
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
             CheckTagType(Constants.AggregatorConfigResponsePayload.TagType);
+            base.Validate();
 
             int aggregationPeriodCount = 0;
             int aggregationAlgorithmCount = 0;

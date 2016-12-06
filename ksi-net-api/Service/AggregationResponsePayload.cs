@@ -17,7 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Service
@@ -25,14 +24,25 @@ namespace Guardtime.KSI.Service
     /// <summary>
     ///     Aggregation response payload.
     /// </summary>
-    public sealed class AggregationResponsePayload : ResponsePayloadExtended
+    public sealed class AggregationResponsePayload : RequestResponsePayload
     {
         /// <summary>
         ///     Create aggregation response payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        public AggregationResponsePayload(ITlvTag tag) : base(tag, Constants.AggregationResponsePayload.TagType)
+        public AggregationResponsePayload(ITlvTag tag) : base(tag)
         {
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
+            CheckTagType(Constants.AggregationResponsePayload.TagType);
+
+            base.Validate();
+
             for (int i = 0; i < Count; i++)
             {
                 ITlvTag childTag = this[i];

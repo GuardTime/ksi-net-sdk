@@ -30,8 +30,8 @@ namespace Guardtime.KSI.Publication
     /// </summary>
     public sealed class PublicationData : CompositeTag
     {
-        private readonly ImprintTag _publicationHash;
-        private readonly IntegerTag _publicationTime;
+        private ImprintTag _publicationHash;
+        private IntegerTag _publicationTime;
 
         /// <summary>
         ///     Create new publication data TLV element from TLV element.
@@ -39,7 +39,16 @@ namespace Guardtime.KSI.Publication
         /// <param name="tag">TLV element</param>
         public PublicationData(ITlvTag tag) : base(tag)
         {
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
             CheckTagType(Constants.PublicationData.TagType);
+
+            base.Validate();
 
             int publicationTimeCount = 0;
             int publicationHashCount = 0;

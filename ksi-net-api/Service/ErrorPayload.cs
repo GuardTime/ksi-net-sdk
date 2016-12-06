@@ -17,7 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Service
@@ -31,8 +30,7 @@ namespace Guardtime.KSI.Service
         ///     Create aggregation error payload TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        /// <param name="expectedTagType">expected tag type</param>
-        protected ErrorPayload(ITlvTag tag, uint expectedTagType) : base(tag, expectedTagType)
+        protected ErrorPayload(ITlvTag tag) : base(tag)
         {
         }
     }

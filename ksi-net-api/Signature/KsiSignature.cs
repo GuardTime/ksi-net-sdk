@@ -44,7 +44,16 @@ namespace Guardtime.KSI.Signature
         /// <param name="tag">TLV element</param>
         public KsiSignature(ITlvTag tag) : base(tag)
         {
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
             CheckTagType(Constants.KsiSignature.TagType);
+
+            base.Validate();
 
             int calendarChainCount = 0;
             int publicationRecordCount = 0;
@@ -162,12 +171,12 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         ///     Get aggregation authentication record if it exists.
         /// </summary>
-        public AggregationAuthenticationRecord AggregationAuthenticationRecord { get; }
+        public AggregationAuthenticationRecord AggregationAuthenticationRecord { get; private set; }
 
         /// <summary>
         ///     Get RFC 3161 record
         /// </summary>
-        public Rfc3161Record Rfc3161Record { get; }
+        public Rfc3161Record Rfc3161Record { get; private set; }
 
         /// <summary>
         ///     Is signature RFC 3161 format
@@ -177,17 +186,17 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         ///     Get calendar hash chain.
         /// </summary>
-        public CalendarHashChain CalendarHashChain { get; }
+        public CalendarHashChain CalendarHashChain { get; private set; }
 
         /// <summary>
         ///     Get calendar authentication record.
         /// </summary>
-        public CalendarAuthenticationRecord CalendarAuthenticationRecord { get; }
+        public CalendarAuthenticationRecord CalendarAuthenticationRecord { get; private set; }
 
         /// <summary>
         ///     Get publication record.
         /// </summary>
-        public PublicationRecordInSignature PublicationRecord { get; }
+        public PublicationRecordInSignature PublicationRecord { get; private set; }
 
         /// <summary>
         /// Get the identity of the signature.

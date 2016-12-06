@@ -29,10 +29,12 @@ namespace Guardtime.KSI.Service
     [Obsolete]
     public sealed class LegacyAggregationPdu : LegacyKsiPdu
     {
+        KsiPduPayload _payload;
+
         /// <summary>
         ///     Get PDU payload.
         /// </summary>
-        public override KsiPduPayload Payload { get; }
+        public override KsiPduPayload Payload => _payload;
 
         /// <summary>
         ///     Create aggregation pdu TLV element from TLV element.
@@ -41,7 +43,15 @@ namespace Guardtime.KSI.Service
         [Obsolete]
         public LegacyAggregationPdu(ITlvTag tag) : base(tag)
         {
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
             CheckTagType(Constants.LegacyAggregationPdu.TagType);
+            base.Validate();
 
             int headerCount = 0;
             int payloadCount = 0;
@@ -54,15 +64,15 @@ namespace Guardtime.KSI.Service
                 switch (childTag.Type)
                 {
                     case Constants.AggregationRequestPayload.LegacyTagType:
-                        this[i] = Payload = new LegacyAggregationRequestPayload(childTag);
+                        this[i] = _payload = new LegacyAggregationRequestPayload(childTag);
                         payloadCount++;
                         break;
                     case Constants.AggregationResponsePayload.LegacyTagType:
-                        this[i] = Payload = new LegacyAggregationResponsePayload(childTag);
+                        this[i] = _payload = new LegacyAggregationResponsePayload(childTag);
                         payloadCount++;
                         break;
                     case Constants.LegacyAggregationErrorPayload.TagType:
-                        this[i] = Payload = new LegacyAggregationErrorPayload(childTag);
+                        this[i] = _payload = new LegacyAggregationErrorPayload(childTag);
                         payloadCount++;
                         break;
                     case Constants.KsiPduHeader.TagType:
@@ -107,7 +117,6 @@ namespace Guardtime.KSI.Service
         public LegacyAggregationPdu(KsiPduHeader header, KsiPduPayload payload, ImprintTag mac)
             : base(header, mac, Constants.LegacyAggregationPdu.TagType, false, false, new ITlvTag[] { header, payload, mac })
         {
-            Payload = payload;
         }
     }
 }

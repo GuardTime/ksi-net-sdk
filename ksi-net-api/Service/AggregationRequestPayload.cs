@@ -28,9 +28,9 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public sealed class AggregationRequestPayload : KsiPduPayload
     {
-        private readonly ImprintTag _requestHash;
-        private readonly IntegerTag _requestId;
-        private readonly IntegerTag _requestLevel;
+        private ImprintTag _requestHash;
+        private IntegerTag _requestId;
+        private IntegerTag _requestLevel;
 
         /// <summary>
         ///     Create aggregation request payload from TLV element.
@@ -38,7 +38,16 @@ namespace Guardtime.KSI.Service
         /// <param name="tag">TLV element</param>
         public AggregationRequestPayload(ITlvTag tag) : base(tag)
         {
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
             CheckTagType(Constants.AggregationRequestPayload.TagType);
+
+            base.Validate();
 
             int requestIdCount = 0;
             int requestHashCount = 0;

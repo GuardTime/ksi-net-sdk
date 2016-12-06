@@ -29,10 +29,12 @@ namespace Guardtime.KSI.Service
     [Obsolete]
     public sealed class LegacyExtendPdu : LegacyKsiPdu
     {
+        KsiPduPayload _payload;
+
         /// <summary>
         ///     Get PDU payload.
         /// </summary>
-        public override KsiPduPayload Payload { get; }
+        public override KsiPduPayload Payload => _payload;
 
         /// <summary>
         ///     Create extend PDU from TLV element.
@@ -41,7 +43,15 @@ namespace Guardtime.KSI.Service
         [Obsolete]
         public LegacyExtendPdu(ITlvTag tag) : base(tag)
         {
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
             CheckTagType(Constants.LegacyExtendPdu.TagType);
+            base.Validate();
 
             int headerCount = 0;
             int payloadCount = 0;
@@ -54,15 +64,15 @@ namespace Guardtime.KSI.Service
                 switch (childTag.Type)
                 {
                     case Constants.ExtendRequestPayload.LegacyTagType:
-                        this[i] = Payload = new LegacyExtendRequestPayload(childTag);
+                        this[i] = _payload = new LegacyExtendRequestPayload(childTag);
                         payloadCount++;
                         break;
                     case Constants.ExtendResponsePayload.LegacyTagType:
-                        this[i] = Payload = new LegacyExtendResponsePayload(childTag);
+                        this[i] = _payload = new LegacyExtendResponsePayload(childTag);
                         payloadCount++;
                         break;
                     case Constants.LegacyExtendErrorPayload.TagType:
-                        this[i] = Payload = new LegacyExtendErrorPayload(childTag);
+                        this[i] = _payload = new LegacyExtendErrorPayload(childTag);
                         payloadCount++;
                         break;
                     case Constants.KsiPduHeader.TagType:
@@ -106,7 +116,6 @@ namespace Guardtime.KSI.Service
         public LegacyExtendPdu(KsiPduHeader header, KsiPduPayload payload, ImprintTag mac)
             : base(header, mac, Constants.LegacyExtendPdu.TagType, false, false, new ITlvTag[] { header, payload, mac })
         {
-            Payload = payload;
         }
     }
 }

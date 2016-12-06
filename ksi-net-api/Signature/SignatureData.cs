@@ -27,11 +27,11 @@ namespace Guardtime.KSI.Signature
     /// </summary>
     public sealed class SignatureData : CompositeTag
     {
-        private readonly RawTag _certificateId;
-        private readonly StringTag _certificateRepositoryUri;
+        private RawTag _certificateId;
+        private StringTag _certificateRepositoryUri;
 
-        private readonly StringTag _signatureType;
-        private readonly RawTag _signatureValue;
+        private StringTag _signatureType;
+        private RawTag _signatureValue;
 
         /// <summary>
         ///     Create new signature data TLV element from TLV element
@@ -39,7 +39,16 @@ namespace Guardtime.KSI.Signature
         /// <param name="tag">TLV element</param>
         public SignatureData(ITlvTag tag) : base(tag)
         {
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
             CheckTagType(Constants.SignatureData.TagType);
+
+            base.Validate();
 
             int signatureTypeCount = 0;
             int signatureValueCount = 0;

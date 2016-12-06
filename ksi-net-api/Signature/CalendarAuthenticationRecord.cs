@@ -34,7 +34,16 @@ namespace Guardtime.KSI.Signature
         /// <param name="tag">TLV element</param>
         public CalendarAuthenticationRecord(ITlvTag tag) : base(tag)
         {
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
             CheckTagType(Constants.CalendarAuthenticationRecord.TagType);
+
+            base.Validate();
 
             int publicationDataCount = 0;
             int signatureDataCount = 0;
@@ -73,11 +82,11 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         ///     Get publication data.
         /// </summary>
-        public PublicationData PublicationData { get; }
+        public PublicationData PublicationData { get; private set; }
 
         /// <summary>
         ///     Get signature data.
         /// </summary>
-        public SignatureData SignatureData { get; }
+        public SignatureData SignatureData { get; private set; }
     }
 }

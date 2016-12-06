@@ -32,12 +32,12 @@ namespace Guardtime.KSI.Signature
     /// </summary>
     public sealed partial class AggregationHashChain : CompositeTag
     {
-        private readonly IntegerTag _aggrAlgorithmId;
-        private readonly IntegerTag _aggregationTime;
+        private IntegerTag _aggrAlgorithmId;
+        private IntegerTag _aggregationTime;
         private readonly List<Link> _links = new List<Link>();
         private readonly List<IntegerTag> _chainIndex = new List<IntegerTag>();
-        private readonly RawTag _inputData;
-        private readonly ImprintTag _inputHash;
+        private RawTag _inputData;
+        private ImprintTag _inputHash;
         private Dictionary<AggregationHashChainResult, AggregationHashChainResult> _aggregationHashChainResultCache;
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace Guardtime.KSI.Signature
         /// <param name="aggregationAlgorithmId"></param>
         /// <param name="chainLinks"></param>
         public AggregationHashChain(ulong aggreationTime, ulong[] chainIndex, DataHash inputHash, ulong aggregationAlgorithmId, Link[] chainLinks)
-            : this(new AggregationHashChain(BuildChildTags(aggreationTime, chainIndex, inputHash, aggregationAlgorithmId, chainLinks)))
+            : base(Constants.AggregationHashChain.TagType, false, false, BuildChildTags(aggreationTime, chainIndex, inputHash, aggregationAlgorithmId, chainLinks))
         {
         }
 
@@ -59,7 +59,16 @@ namespace Guardtime.KSI.Signature
         /// <param name="tag">TLV element</param>
         public AggregationHashChain(ITlvTag tag) : base(tag)
         {
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
             CheckTagType(Constants.AggregationHashChain.TagType);
+
+            base.Validate();
 
             int aggregationTimeCount = 0;
             int inputDataCount = 0;
@@ -95,7 +104,7 @@ namespace Guardtime.KSI.Signature
                         break;
                     case (uint)LinkDirection.Left:
                     case (uint)LinkDirection.Right:
-                        Link linkTag = childTag as Link ?? new Link(childTag, (LinkDirection)childTag.Type);
+                        Link linkTag = childTag as Link ?? new Link(childTag);
                         _links.Add(linkTag);
                         this[i] = linkTag;
                         break;
@@ -134,14 +143,6 @@ namespace Guardtime.KSI.Signature
             {
                 throw new TlvException("Links are missing in aggregation hash chain.");
             }
-        }
-
-        /// <summary>
-        /// Create new aggregation hash chain TLV element from child TLV elements.
-        /// </summary>
-        /// <param name="childTags">Child TLV elements</param>
-        private AggregationHashChain(ITlvTag[] childTags) : base(Constants.AggregationHashChain.TagType, false, false, childTags)
-        {
         }
 
         /// <summary>

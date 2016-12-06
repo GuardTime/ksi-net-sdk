@@ -49,6 +49,15 @@ namespace Guardtime.KSI.Service
         /// <param name="tag">TLV element</param>
         protected KsiPdu(ITlvTag tag) : base(tag)
         {
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
+            base.Validate();
+
             int headerCount = 0;
             int headerIndex = 0;
             int payloadCount = 0;

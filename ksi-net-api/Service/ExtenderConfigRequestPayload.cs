@@ -17,7 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Service
@@ -33,10 +32,15 @@ namespace Guardtime.KSI.Service
         /// <param name="tag">TLV element</param>
         public ExtenderConfigRequestPayload(ITlvTag tag) : base(tag)
         {
-            if (Type != Constants.ExtenderConfigRequestPayload.TagType)
-            {
-                throw new TlvException("Invalid extender configuration request payload type(" + Type + ").");
-            }
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
+            CheckTagType(Constants.ExtenderConfigRequestPayload.TagType);
+            base.Validate();
         }
 
         /// <summary>

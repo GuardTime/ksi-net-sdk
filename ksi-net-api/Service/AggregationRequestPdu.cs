@@ -33,7 +33,16 @@ namespace Guardtime.KSI.Service
         /// <param name="tag">TLV element</param>
         public AggregationRequestPdu(ITlvTag tag) : base(tag)
         {
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
             CheckTagType(Constants.AggregationRequestPdu.TagType);
+
+            base.Validate();
 
             for (int i = 0; i < Count; i++)
             {
@@ -71,7 +80,6 @@ namespace Guardtime.KSI.Service
         public AggregationRequestPdu(KsiPduHeader header, KsiPduPayload payload, HashAlgorithm hmacAlgorithm, byte[] key)
             : base(Constants.AggregationRequestPdu.TagType, header, payload, hmacAlgorithm, key)
         {
-            Payloads.Add(payload);
         }
     }
 }

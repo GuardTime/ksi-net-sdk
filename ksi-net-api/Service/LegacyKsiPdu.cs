@@ -31,8 +31,8 @@ namespace Guardtime.KSI.Service
     [Obsolete]
     public abstract class LegacyKsiPdu : CompositeTag
     {
-        private readonly KsiPduHeader _header;
-        private readonly ImprintTag _mac;
+        private KsiPduHeader _header;
+        private ImprintTag _mac;
 
         /// <summary>
         ///     Get PDU payload.
@@ -46,6 +46,15 @@ namespace Guardtime.KSI.Service
         [Obsolete]
         protected LegacyKsiPdu(ITlvTag tag) : base(tag)
         {
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
+            base.Validate();
+
             for (int i = 0; i < Count; i++)
             {
                 ITlvTag childTag = this[i];

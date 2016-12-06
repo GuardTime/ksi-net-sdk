@@ -32,7 +32,15 @@ namespace Guardtime.KSI.Service
         /// <param name="tag">TLV element</param>
         public AggregatorConfigRequestPayload(ITlvTag tag) : base(tag)
         {
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
             CheckTagType(Constants.AggregatorConfigRequestPayload.TagType);
+            base.Validate();
         }
 
         /// <summary>

@@ -32,7 +32,7 @@ namespace Guardtime.KSI.Test
             return (T)GetCompositeTag(typeof(T), type, values);
         }
 
-        public static ITlvTag GetCompositeTag(Type type, uint tagType, ITlvTag[] values, params object[] constructorArgument)
+        public static ITlvTag GetCompositeTag(Type type, uint tagType, ITlvTag[] values)
         {
             RawTag raw;
 
@@ -45,10 +45,7 @@ namespace Guardtime.KSI.Test
 
                 raw = new RawTag(tagType, false, false, ((MemoryStream)writer.BaseStream).ToArray());
             }
-            object[] args = new object[constructorArgument.Length + 1];
-
-            args[0] = raw;
-            Array.Copy(constructorArgument, 0, args, 1, constructorArgument.Length);
+            object[] args = new object[] { raw };
 
             ITlvTag value = (ITlvTag)Activator.CreateInstance(type, args);
 

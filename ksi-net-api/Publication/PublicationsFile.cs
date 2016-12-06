@@ -38,9 +38,9 @@ namespace Guardtime.KSI.Publication
         public static readonly byte[] FileBeginningMagicBytes = { 0x4b, 0x53, 0x49, 0x50, 0x55, 0x42, 0x4c, 0x46 };
 
         private readonly List<CertificateRecord> _certificateRecordList = new List<CertificateRecord>();
-        private readonly RawTag _cmsSignature;
+        private RawTag _cmsSignature;
         private readonly List<PublicationRecordInPublicationFile> _publicationRecordList = new List<PublicationRecordInPublicationFile>();
-        private readonly PublicationsFileHeader _publicationsHeader;
+        private PublicationsFileHeader _publicationsHeader;
 
         /// <summary>
         ///     Create new publications file TLV element from TLV element.
@@ -48,6 +48,15 @@ namespace Guardtime.KSI.Publication
         /// <param name="tag">TLV element</param>
         public PublicationsFile(ITlvTag tag) : base(tag)
         {
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
+            base.Validate();
+
             int publicationsHeaderCount = 0;
             int cmsSignatureCount = 0;
 

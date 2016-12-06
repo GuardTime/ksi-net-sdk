@@ -33,7 +33,16 @@ namespace Guardtime.KSI.Publication
         /// <param name="tag">TLV element</param>
         public CertificateRecord(ITlvTag tag) : base(tag)
         {
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
             CheckTagType(Constants.CertificateRecord.TagType);
+
+            base.Validate();
 
             int certificateIdCount = 0;
             int x509CertificateCount = 0;
@@ -72,11 +81,11 @@ namespace Guardtime.KSI.Publication
         /// <summary>
         ///     Get certificate ID.
         /// </summary>
-        public RawTag CertificateId { get; }
+        public RawTag CertificateId { get; private set; }
 
         /// <summary>
         ///     Get X509 certificate.
         /// </summary>
-        public RawTag X509Certificate { get; }
+        public RawTag X509Certificate { get; private set; }
     }
 }

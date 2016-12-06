@@ -26,16 +26,26 @@ namespace Guardtime.KSI.Service
     /// <summary>
     ///     Extend response payload.
     /// </summary>
-    public sealed class ExtendResponsePayload : ResponsePayloadExtended
+    public sealed class ExtendResponsePayload : RequestResponsePayload
     {
-        private readonly IntegerTag _calendarLastTime;
+        private IntegerTag _calendarLastTime;
 
         /// <summary>
         ///     Create extend response payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        public ExtendResponsePayload(ITlvTag tag) : base(tag, Constants.ExtendResponsePayload.TagType)
+        public ExtendResponsePayload(ITlvTag tag) : base(tag)
         {
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
+            CheckTagType(Constants.ExtendResponsePayload.TagType);
+            base.Validate();
+
             int calendarLastTimeCount = 0;
             int calendarHashChainCount = 0;
 
@@ -78,7 +88,7 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Get calendar hash chain.
         /// </summary>
-        public CalendarHashChain CalendarHashChain { get; }
+        public CalendarHashChain CalendarHashChain { get; private set; }
 
         /// <summary>
         ///     Get aggregation time of the newest calendar record the extender has

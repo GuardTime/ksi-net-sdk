@@ -29,9 +29,9 @@ namespace Guardtime.KSI.Signature
     /// </summary>
     public sealed class AggregationAuthenticationRecord : CompositeTag
     {
-        private readonly IntegerTag _aggregationTime;
+        private IntegerTag _aggregationTime;
         private readonly List<IntegerTag> _chainIndex = new List<IntegerTag>();
-        private readonly ImprintTag _inputHash;
+        private ImprintTag _inputHash;
 
         /// <summary>
         ///     Create new aggregation authentication record TLV element from TLV element
@@ -39,7 +39,16 @@ namespace Guardtime.KSI.Signature
         /// <param name="tag">TLV element</param>
         public AggregationAuthenticationRecord(ITlvTag tag) : base(tag)
         {
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
             CheckTagType(Constants.AggregationAuthenticationRecord.TagType);
+
+            base.Validate();
 
             int aggregationTimeCount = 0;
             int inputHashCount = 0;
@@ -108,6 +117,6 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         ///     Get signature data.
         /// </summary>
-        public SignatureData SignatureData { get; }
+        public SignatureData SignatureData { get; private set; }
     }
 }

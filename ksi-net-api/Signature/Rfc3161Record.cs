@@ -29,17 +29,17 @@ namespace Guardtime.KSI.Signature
     /// </summary>
     public sealed class Rfc3161Record : CompositeTag
     {
-        private readonly IntegerTag _aggregationTime;
+        private IntegerTag _aggregationTime;
         private readonly List<IntegerTag> _chainIndex = new List<IntegerTag>();
-        private readonly ImprintTag _inputHash;
-        private readonly IntegerTag _signedAttributesAlgorithm;
+        private ImprintTag _inputHash;
+        private IntegerTag _signedAttributesAlgorithm;
 
-        private readonly RawTag _signedAttributesPrefix;
-        private readonly RawTag _signedAttributesSuffix;
-        private readonly IntegerTag _tstInfoAlgorithm;
+        private RawTag _signedAttributesPrefix;
+        private RawTag _signedAttributesSuffix;
+        private IntegerTag _tstInfoAlgorithm;
 
-        private readonly RawTag _tstInfoPrefix;
-        private readonly RawTag _tstInfoSuffix;
+        private RawTag _tstInfoPrefix;
+        private RawTag _tstInfoSuffix;
 
         /// <summary>
         ///     Create new RFC3161 record TLV element from TLV element
@@ -47,7 +47,16 @@ namespace Guardtime.KSI.Signature
         /// <param name="tag">TLV element</param>
         public Rfc3161Record(ITlvTag tag) : base(tag)
         {
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
             CheckTagType(Constants.Rfc3161Record.TagType);
+
+            base.Validate();
 
             int aggregationTimeCount = 0;
             int inputHashCount = 0;

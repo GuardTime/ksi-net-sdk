@@ -34,6 +34,15 @@ namespace Guardtime.KSI.Publication
         /// <param name="tag">TLV element</param>
         protected PublicationRecord(ITlvTag tag) : base(tag)
         {
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
+            base.Validate();
+
             int publicationDataCount = 0;
 
             for (int i = 0; i < Count; i++)
@@ -69,20 +78,9 @@ namespace Guardtime.KSI.Publication
         }
 
         /// <summary>
-        ///     Create new publication record TLV element from TLV element.
-        /// </summary>
-        /// <param name="type">TLV type</param>
-        /// <param name="nonCritical">Is TLV element non critical</param>
-        /// <param name="forward">Is TLV element forwarded</param>
-        /// <param name="value">child TLV element list</param>
-        protected PublicationRecord(uint type, bool nonCritical, bool forward, ITlvTag[] value) : base(type, nonCritical, forward, value)
-        {
-        }
-
-        /// <summary>
         ///     Get publication data.
         /// </summary>
-        public PublicationData PublicationData { get; }
+        public PublicationData PublicationData { get; private set; }
 
         /// <summary>
         ///     Get publication references.

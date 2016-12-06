@@ -23,19 +23,26 @@ using Guardtime.KSI.Parser;
 namespace Guardtime.KSI.Service
 {
     /// <summary>
-    ///     KSI PDU response payload. Contains additional payload fields.
+    ///     KSI PDU request response payload. Contains request ID.
     /// </summary>
-    public abstract class ResponsePayloadExtended : ResponsePayload
+    public abstract class RequestResponsePayload : ResponsePayload
     {
-        private readonly IntegerTag _requestId;
+        private IntegerTag _requestId;
 
         /// <summary>
-        ///     Create KSI PDU extended response payload TLV element from TLV element.
+        ///     Create KSI PDU request response payload TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        /// <param name="expectedTagType">expected tag type</param>
-        protected ResponsePayloadExtended(ITlvTag tag, uint expectedTagType) : base(tag, expectedTagType)
+        protected RequestResponsePayload(ITlvTag tag) : base(tag)
         {
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
+            base.Validate();
             int requestIdCount = 0;
 
             for (int i = 0; i < Count; i++)

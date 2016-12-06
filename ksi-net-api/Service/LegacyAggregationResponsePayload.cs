@@ -27,14 +27,24 @@ namespace Guardtime.KSI.Service
     ///     Aggregation response payload.
     /// </summary>
     [Obsolete]
-    public sealed class LegacyAggregationResponsePayload : ResponsePayloadExtended
+    public sealed class LegacyAggregationResponsePayload : RequestResponsePayload
     {
         /// <summary>
         ///     Create aggregation response payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        public LegacyAggregationResponsePayload(ITlvTag tag) : base(tag, Constants.AggregationResponsePayload.LegacyTagType)
+        public LegacyAggregationResponsePayload(ITlvTag tag) : base(tag)
         {
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
+            CheckTagType(Constants.AggregationResponsePayload.LegacyTagType);
+            base.Validate();
+
             int configCount = 0;
             int requestAcknowledgmentCount = 0;
 

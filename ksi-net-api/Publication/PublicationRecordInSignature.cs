@@ -32,7 +32,15 @@ namespace Guardtime.KSI.Publication
         /// <param name="tag">TLV element the publication record will be created from</param>
         public PublicationRecordInSignature(ITlvTag tag) : base(tag)
         {
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
             CheckTagType(Constants.PublicationRecord.TagTypeInSignature);
+            base.Validate();
         }
 
         /// <summary>

@@ -31,10 +31,10 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         public class Metadata : CompositeTag
         {
-            private readonly StringTag _clientId;
-            private readonly StringTag _machineId;
-            private readonly IntegerTag _sequenceNumber;
-            private readonly IntegerTag _requestTime;
+            private StringTag _clientId;
+            private StringTag _machineId;
+            private IntegerTag _sequenceNumber;
+            private IntegerTag _requestTime;
 
             /// <summary>
             /// Create new aggregation hash chain link metadata TLV element
@@ -52,7 +52,7 @@ namespace Guardtime.KSI.Signature
             /// <param name="requestTime">Request time</param>
             /// <param name="sequenceNumber">Sequence number</param>
             public Metadata(string clientId, string machineId, ulong? sequenceNumber = null, ulong? requestTime = null)
-                : this(new Metadata(BuildChildTags(clientId, machineId, sequenceNumber, requestTime)))
+                : base(Constants.AggregationHashChain.Metadata.TagType, false, false, BuildChildTags(clientId, machineId, sequenceNumber, requestTime))
             {
             }
 
@@ -62,7 +62,16 @@ namespace Guardtime.KSI.Signature
             /// <param name="tag">TLV element</param>
             public Metadata(ITlvTag tag) : base(tag)
             {
+            }
+
+            /// <summary>
+            /// Validate the tag
+            /// </summary>
+            protected override void Validate()
+            {
                 CheckTagType(Constants.AggregationHashChain.Metadata.TagType);
+
+                base.Validate();
 
                 int clientIdCount = 0;
                 int machineIdCount = 0;
@@ -133,10 +142,6 @@ namespace Guardtime.KSI.Signature
                 }
             }
 
-            private Metadata(ITlvTag[] value) : base(Constants.AggregationHashChain.Metadata.TagType, false, false, value)
-            {
-            }
-
             /// <summary>
             /// Create child TLV element list
             /// </summary>
@@ -184,7 +189,7 @@ namespace Guardtime.KSI.Signature
             /// <summary>
             /// Padding element
             /// </summary>
-            public PaddingTag Padding { get; }
+            public PaddingTag Padding { get; private set; }
 
             /// <summary>
             /// Client identifier

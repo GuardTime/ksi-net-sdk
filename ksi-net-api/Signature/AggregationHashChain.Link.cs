@@ -36,11 +36,11 @@ namespace Guardtime.KSI.Signature
             private const byte LegacyIdFirstOctet = 0x3;
             private const byte LegacyIdLength = 29;
 
-            private readonly IntegerTag _levelCorrection;
-            private readonly Metadata _metadata;
-            private readonly ImprintTag _siblingHash;
-            private readonly RawTag _legacyId;
-            private readonly string _legacyIdString;
+            private IntegerTag _levelCorrection;
+            private Metadata _metadata;
+            private ImprintTag _siblingHash;
+            private RawTag _legacyId;
+            private string _legacyIdString;
 
             /// <summary>
             /// Create new aggregation hash chain link TLV element.
@@ -50,7 +50,7 @@ namespace Guardtime.KSI.Signature
             /// <param name="metadata">Metadata element</param>
             /// <param name="levelCorrection">Level correction</param>
             public Link(LinkDirection direction, DataHash siblingHash, Metadata metadata, ulong levelCorrection)
-                : this(new Link(BuildChildTags(siblingHash, metadata, levelCorrection), direction), direction)
+                : base((uint)direction, false, false, BuildChildTags(siblingHash, metadata, levelCorrection))
             {
             }
 
@@ -58,10 +58,18 @@ namespace Guardtime.KSI.Signature
             /// Create new aggregation hash chain link TLV element from TLV element.
             /// </summary>
             /// <param name="tag">TLV element</param>
-            /// <param name="direction">Direction</param>
-            public Link(ITlvTag tag, LinkDirection direction) : base(tag)
+            public Link(ITlvTag tag) : base(tag)
+            {
+            }
+
+            /// <summary>
+            /// Validate the tag
+            /// </summary>
+            protected override void Validate()
             {
                 CheckTagType((uint)LinkDirection.Right, (uint)LinkDirection.Left);
+
+                base.Validate();
 
                 int levelCorrectionCount = 0;
                 int siblingHashCount = 0;
@@ -107,11 +115,7 @@ namespace Guardtime.KSI.Signature
                     throw new TlvException("Exactly one of three from sibling hash, legacy id or metadata must exist in aggregation hash chain link.");
                 }
 
-                Direction = direction;
-            }
-
-            private Link(ITlvTag[] value, LinkDirection direction) : base((uint)direction, false, false, value)
-            {
+                Direction = (LinkDirection)Type;
             }
 
             /// <summary>
@@ -150,7 +154,7 @@ namespace Guardtime.KSI.Signature
             /// <summary>
             ///     Get direction
             /// </summary>
-            public LinkDirection Direction { get; }
+            public LinkDirection Direction { get; private set; }
 
             /// <summary>
             /// Metadata element

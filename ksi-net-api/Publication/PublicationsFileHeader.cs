@@ -28,9 +28,9 @@ namespace Guardtime.KSI.Publication
     /// </summary>
     public sealed class PublicationsFileHeader : CompositeTag
     {
-        private readonly IntegerTag _creationTime;
-        private readonly StringTag _repositoryUri;
-        private readonly IntegerTag _version;
+        private IntegerTag _creationTime;
+        private StringTag _repositoryUri;
+        private IntegerTag _version;
 
         /// <summary>
         ///     Create publications file header TLV element from TLV element.
@@ -38,7 +38,16 @@ namespace Guardtime.KSI.Publication
         /// <param name="tag">TLV element</param>
         public PublicationsFileHeader(ITlvTag tag) : base(tag)
         {
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate()
+        {
             CheckTagType(Constants.PublicationsFileHeader.TagType);
+
+            base.Validate();
 
             int versionCount = 0;
             int creationTimeCount = 0;
