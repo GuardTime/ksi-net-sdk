@@ -29,6 +29,11 @@ namespace Guardtime.KSI.Signature
     public sealed class CalendarAuthenticationRecord : CompositeTag
     {
         /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.CalendarAuthenticationRecord.TagType;
+
+        /// <summary>
         ///     Create new calendar authentication record TLV element from TLV element
         /// </summary>
         /// <param name="tag">TLV element</param>
@@ -37,43 +42,34 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
+            {
+                case Constants.PublicationData.TagType:
+                    return PublicationData = childTag as PublicationData ?? new PublicationData(childTag);
+                case Constants.SignatureData.TagType:
+                    return SignatureData = childTag as SignatureData ?? new SignatureData(childTag);
+                default:
+                    return base.ParseChild(childTag);
+            }
+        }
+
+        /// <summary>
         /// Validate the tag
         /// </summary>
-        protected override void Validate()
+        protected override void Validate(TagCounter tagCounter)
         {
-            CheckTagType(Constants.CalendarAuthenticationRecord.TagType);
+            base.Validate(tagCounter);
 
-            base.Validate();
-
-            int publicationDataCount = 0;
-            int signatureDataCount = 0;
-
-            for (int i = 0; i < Count; i++)
-            {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.PublicationData.TagType:
-                        this[i] = PublicationData = new PublicationData(childTag);
-                        publicationDataCount++;
-                        break;
-                    case Constants.SignatureData.TagType:
-                        this[i] = SignatureData = new SignatureData(childTag);
-                        signatureDataCount++;
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
-            }
-
-            if (publicationDataCount != 1)
+            if (tagCounter[Constants.PublicationData.TagType] != 1)
             {
                 throw new TlvException("Exactly one publication data must exist in calendar authentication record.");
             }
 
-            if (signatureDataCount != 1)
+            if (tagCounter[Constants.SignatureData.TagType] != 1)
             {
                 throw new TlvException("Exactly one signature data must exist in calendar authentication record.");
             }

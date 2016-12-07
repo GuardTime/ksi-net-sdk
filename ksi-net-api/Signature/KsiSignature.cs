@@ -39,91 +39,83 @@ namespace Guardtime.KSI.Signature
         private DataHash _aggregationHashChainRootHash;
 
         /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.KsiSignature.TagType;
+
+        /// <summary>
         ///     Create new KSI signature TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         public KsiSignature(ITlvTag tag) : base(tag)
         {
+            SortAggregationHashChains();
+        }
+
+        /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
+            {
+                case Constants.AggregationHashChain.TagType:
+                    AggregationHashChain aggregationChainTag = childTag as AggregationHashChain ?? new AggregationHashChain(childTag);
+                    _aggregationHashChains.Add(aggregationChainTag);
+                    return aggregationChainTag;
+
+                case Constants.CalendarHashChain.TagType:
+                    return CalendarHashChain = childTag as CalendarHashChain ?? new CalendarHashChain(childTag);
+
+                case Constants.PublicationRecord.TagTypeInSignature:
+                    return PublicationRecord = childTag as PublicationRecordInSignature ?? new PublicationRecordInSignature(childTag);
+
+                case Constants.AggregationAuthenticationRecord.TagType:
+                    return AggregationAuthenticationRecord = childTag as AggregationAuthenticationRecord ?? new AggregationAuthenticationRecord(childTag);
+
+                case Constants.CalendarAuthenticationRecord.TagType:
+                    return CalendarAuthenticationRecord = childTag as CalendarAuthenticationRecord ?? new CalendarAuthenticationRecord(childTag);
+                case Constants.Rfc3161Record.TagType:
+                    return Rfc3161Record = childTag as Rfc3161Record ?? new Rfc3161Record(childTag);
+                default:
+                    return base.ParseChild(childTag);
+            }
         }
 
         /// <summary>
         /// Validate the tag
         /// </summary>
-        protected override void Validate()
+        protected override void Validate(TagCounter tagCounter)
         {
-            CheckTagType(Constants.KsiSignature.TagType);
-
-            base.Validate();
-
-            int calendarChainCount = 0;
-            int publicationRecordCount = 0;
-            int calendarAuthenticationRecordCount = 0;
-            int rfc3161RecordCount = 0;
-
-            for (int i = 0; i < Count; i++)
-            {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.AggregationHashChain.TagType:
-                        AggregationHashChain aggregationChainTag = childTag as AggregationHashChain ?? new AggregationHashChain(childTag);
-                        _aggregationHashChains.Add(aggregationChainTag);
-                        this[i] = aggregationChainTag;
-                        break;
-                    case Constants.CalendarHashChain.TagType:
-                        this[i] = CalendarHashChain = new CalendarHashChain(childTag);
-                        calendarChainCount++;
-                        break;
-                    case Constants.PublicationRecord.TagTypeInSignature:
-                        this[i] = PublicationRecord = new PublicationRecordInSignature(childTag);
-                        publicationRecordCount++;
-                        break;
-                    case Constants.AggregationAuthenticationRecord.TagType:
-                        this[i] = AggregationAuthenticationRecord = new AggregationAuthenticationRecord(childTag);
-                        break;
-                    case Constants.CalendarAuthenticationRecord.TagType:
-                        this[i] = CalendarAuthenticationRecord = new CalendarAuthenticationRecord(childTag);
-                        calendarAuthenticationRecordCount++;
-                        break;
-                    case Constants.Rfc3161Record.TagType:
-                        this[i] = Rfc3161Record = new Rfc3161Record(childTag);
-                        rfc3161RecordCount++;
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
-            }
+            base.Validate(tagCounter);
 
             if (_aggregationHashChains.Count == 0)
             {
                 throw new TlvException("Aggregation hash chains must exist in KSI signature.");
             }
 
-            if (calendarChainCount > 1)
+            if (tagCounter[Constants.CalendarHashChain.TagType] > 1)
             {
                 throw new TlvException("Only one calendar hash chain is allowed in KSI signature.");
             }
 
-            if (calendarChainCount == 0 && (publicationRecordCount != 0 || calendarAuthenticationRecordCount != 0))
+            if (tagCounter[Constants.CalendarHashChain.TagType] == 0 &&
+                (tagCounter[Constants.PublicationRecord.TagTypeInSignature] != 0 || tagCounter[Constants.CalendarAuthenticationRecord.TagType] != 0))
             {
                 throw new TlvException("No publication record or calendar authentication record is allowed in KSI signature if there is no calendar hash chain.");
             }
 
-            if ((publicationRecordCount == 1 && calendarAuthenticationRecordCount == 1) ||
-                publicationRecordCount > 1 ||
-                calendarAuthenticationRecordCount > 1)
+            if ((tagCounter[Constants.PublicationRecord.TagTypeInSignature] == 1 && tagCounter[Constants.CalendarAuthenticationRecord.TagType] == 1) ||
+                tagCounter[Constants.PublicationRecord.TagTypeInSignature] > 1 ||
+                tagCounter[Constants.CalendarAuthenticationRecord.TagType] > 1)
             {
                 throw new TlvException("Only one from publication record or calendar authentication record is allowed in KSI signature.");
             }
 
-            if (rfc3161RecordCount > 1)
+            if (tagCounter[Constants.Rfc3161Record.TagType] > 1)
             {
                 throw new TlvException("Only one RFC 3161 record is allowed in KSI signature.");
             }
-
-            SortAggregationHashChains();
         }
 
         private void SortAggregationHashChains()

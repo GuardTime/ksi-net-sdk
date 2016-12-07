@@ -34,6 +34,11 @@ namespace Guardtime.KSI.Service
         private IntegerTag _maxRequests;
 
         /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.AggregatorConfigResponsePayload.TagType;
+
+        /// <summary>
         ///     Create aggregator configuration response payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
@@ -42,67 +47,52 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
+            {
+                case Constants.AggregatorConfigResponsePayload.MaxLevelTagType:
+                    return _maxLevel = GetIntegerTag(childTag);
+                case Constants.AggregatorConfigResponsePayload.AggregationAlgorithmTagType:
+                    return _aggregationAlgorithm = GetIntegerTag(childTag);
+                case Constants.AggregatorConfigResponsePayload.AggregationPeriodTagType:
+                    return _aggregationPeriod = GetIntegerTag(childTag);
+                case Constants.AggregatorConfigResponsePayload.MaxRequestsTagType:
+                    return _maxRequests = GetIntegerTag(childTag);
+                case Constants.AggregatorConfigResponsePayload.ParentUriTagType:
+                    StringTag uriTag = GetStringTag(childTag);
+                    ParentsUris.Add(uriTag.Value);
+                    return uriTag;
+                default:
+                    return base.ParseChild(childTag);
+            }
+        }
+
+        /// <summary>
         /// Validate the tag
         /// </summary>
-        protected override void Validate()
+        protected override void Validate(TagCounter tagCounter)
         {
-            CheckTagType(Constants.AggregatorConfigResponsePayload.TagType);
-            base.Validate();
+            base.Validate(tagCounter);
 
-            int aggregationPeriodCount = 0;
-            int aggregationAlgorithmCount = 0;
-            int maxLevelCount = 0;
-            int maxRequestsCount = 0;
-
-            for (int i = 0; i < Count; i++)
-            {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.AggregatorConfigResponsePayload.MaxLevelTagType:
-                        this[i] = _maxLevel = new IntegerTag(childTag);
-                        maxLevelCount++;
-                        break;
-                    case Constants.AggregatorConfigResponsePayload.AggregationAlgorithmTagType:
-                        this[i] = _aggregationAlgorithm = new IntegerTag(childTag);
-                        aggregationAlgorithmCount++;
-                        break;
-                    case Constants.AggregatorConfigResponsePayload.AggregationPeriodTagType:
-                        this[i] = _aggregationPeriod = new IntegerTag(childTag);
-                        aggregationPeriodCount++;
-                        break;
-                    case Constants.AggregatorConfigResponsePayload.MaxRequestsTagType:
-                        this[i] = _maxRequests = new IntegerTag(childTag);
-                        maxRequestsCount++;
-                        break;
-                    case Constants.AggregatorConfigResponsePayload.ParentUriTagType:
-                        StringTag uriTag = new StringTag(childTag);
-                        ParentsUris.Add(uriTag.Value);
-                        this[i] = uriTag;
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
-            }
-
-            if (aggregationPeriodCount > 1)
-            {
-                throw new TlvException("Only one aggregation period tag is allowed in aggregator config response payload.");
-            }
-
-            if (aggregationAlgorithmCount > 1)
-            {
-                throw new TlvException("Only one aggregation algorithm tag is allowed in aggregator config response payload.");
-            }
-
-            if (maxLevelCount > 1)
+            if (tagCounter[Constants.AggregatorConfigResponsePayload.MaxLevelTagType] > 1)
             {
                 throw new TlvException("Only one max level tag is allowed in aggregator config response payload.");
             }
 
-            if (maxRequestsCount > 1)
+            if (tagCounter[Constants.AggregatorConfigResponsePayload.AggregationAlgorithmTagType] > 1)
+            {
+                throw new TlvException("Only one aggregation algorithm tag is allowed in aggregator config response payload.");
+            }
+
+            if (tagCounter[Constants.AggregatorConfigResponsePayload.AggregationPeriodTagType] > 1)
+            {
+                throw new TlvException("Only one aggregation period tag is allowed in aggregator config response payload.");
+            }
+
+            if (tagCounter[Constants.AggregatorConfigResponsePayload.MaxRequestsTagType] > 1)
             {
                 throw new TlvException("Only one max requests tag is allowed in aggregator config response payload.");
             }

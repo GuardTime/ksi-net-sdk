@@ -42,6 +42,11 @@ namespace Guardtime.KSI.Signature
         private RawTag _tstInfoSuffix;
 
         /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.Rfc3161Record.TagType;
+
+        /// <summary>
         ///     Create new RFC3161 record TLV element from TLV element
         /// </summary>
         /// <param name="tag">TLV element</param>
@@ -50,73 +55,51 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
+            {
+                case Constants.Rfc3161Record.AggregationTimeTagType:
+                    return _aggregationTime = GetIntegerTag(childTag);
+                case Constants.Rfc3161Record.ChainIndexTagType:
+                    IntegerTag chainTag = GetIntegerTag(childTag);
+                    _chainIndex.Add(chainTag);
+                    return chainTag;
+                case Constants.Rfc3161Record.InputHashTagType:
+                    return _inputHash = GetImprintTag(childTag);
+
+                case Constants.Rfc3161Record.TstInfoPrefixTagType:
+                    return _tstInfoPrefix = GetRawTag(childTag);
+
+                case Constants.Rfc3161Record.TstInfoSuffixTagType:
+                    return _tstInfoSuffix = GetRawTag(childTag);
+
+                case Constants.Rfc3161Record.TstInfoAlgorithmTagType:
+                    return _tstInfoAlgorithm = GetIntegerTag(childTag);
+
+                case Constants.Rfc3161Record.SignedAttributesPrefixTagType:
+                    return _signedAttributesPrefix = GetRawTag(childTag);
+
+                case Constants.Rfc3161Record.SignedAttributesSuffixTagType:
+                    return _signedAttributesSuffix = GetRawTag(childTag);
+
+                case Constants.Rfc3161Record.SignedAttributesAlgorithmTagType:
+                    return _signedAttributesAlgorithm = GetIntegerTag(childTag);
+                default:
+                    return base.ParseChild(childTag);
+            }
+        }
+
+        /// <summary>
         /// Validate the tag
         /// </summary>
-        protected override void Validate()
+        protected override void Validate(TagCounter tagCounter)
         {
-            CheckTagType(Constants.Rfc3161Record.TagType);
+            base.Validate(tagCounter);
 
-            base.Validate();
-
-            int aggregationTimeCount = 0;
-            int inputHashCount = 0;
-            int tstInfoPrefixCount = 0;
-            int tstInfoSuffixCount = 0;
-            int tstInfoAlgorithmCount = 0;
-            int signedAttributesPrefixCount = 0;
-            int signedAttributesSuffixCount = 0;
-            int signedAttributesAlgorithmCount = 0;
-
-            for (int i = 0; i < Count; i++)
-            {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.Rfc3161Record.AggregationTimeTagType:
-                        this[i] = _aggregationTime = new IntegerTag(childTag);
-                        aggregationTimeCount++;
-                        break;
-                    case Constants.Rfc3161Record.ChainIndexTagType:
-                        IntegerTag chainTag = new IntegerTag(childTag);
-                        _chainIndex.Add(chainTag);
-                        this[i] = chainTag;
-                        break;
-                    case Constants.Rfc3161Record.InputHashTagType:
-                        this[i] = _inputHash = new ImprintTag(childTag);
-                        inputHashCount++;
-                        break;
-                    case Constants.Rfc3161Record.TstInfoPrefixTagType:
-                        this[i] = _tstInfoPrefix = new RawTag(childTag);
-                        tstInfoPrefixCount++;
-                        break;
-                    case Constants.Rfc3161Record.TstInfoSuffixTagType:
-                        this[i] = _tstInfoSuffix = new RawTag(childTag);
-                        tstInfoSuffixCount++;
-                        break;
-                    case Constants.Rfc3161Record.TstInfoAlgorithmTagType:
-                        this[i] = _tstInfoAlgorithm = new IntegerTag(childTag);
-                        tstInfoAlgorithmCount++;
-                        break;
-                    case Constants.Rfc3161Record.SignedAttributesPrefixTagType:
-                        this[i] = _signedAttributesPrefix = new RawTag(childTag);
-                        signedAttributesPrefixCount++;
-                        break;
-                    case Constants.Rfc3161Record.SignedAttributesSuffixTagType:
-                        this[i] = _signedAttributesSuffix = new RawTag(childTag);
-                        signedAttributesSuffixCount++;
-                        break;
-                    case Constants.Rfc3161Record.SignedAttributesAlgorithmTagType:
-                        this[i] = _signedAttributesAlgorithm = new IntegerTag(childTag);
-                        signedAttributesAlgorithmCount++;
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
-            }
-
-            if (aggregationTimeCount != 1)
+            if (tagCounter[Constants.Rfc3161Record.AggregationTimeTagType] != 1)
             {
                 throw new TlvException("Exactly one aggregation time must exist in RFC#3161 record.");
             }
@@ -126,37 +109,37 @@ namespace Guardtime.KSI.Signature
                 throw new TlvException("Chain indexes must exist in RFC#3161 record.");
             }
 
-            if (inputHashCount != 1)
+            if (tagCounter[Constants.Rfc3161Record.InputHashTagType] != 1)
             {
                 throw new TlvException("Exactly one input hash must exist in RFC#3161 record.");
             }
 
-            if (tstInfoPrefixCount != 1)
+            if (tagCounter[Constants.Rfc3161Record.TstInfoPrefixTagType] != 1)
             {
                 throw new TlvException("Exactly one tstInfo prefix must exist in RFC#3161 record.");
             }
 
-            if (tstInfoSuffixCount != 1)
+            if (tagCounter[Constants.Rfc3161Record.TstInfoSuffixTagType] != 1)
             {
                 throw new TlvException("Exactly one tstInfo suffix must exist in RFC#3161 record.");
             }
 
-            if (tstInfoAlgorithmCount != 1)
+            if (tagCounter[Constants.Rfc3161Record.TstInfoAlgorithmTagType] != 1)
             {
                 throw new TlvException("Exactly one tstInfo algorithm must exist in RFC#3161 record.");
             }
 
-            if (signedAttributesPrefixCount != 1)
+            if (tagCounter[Constants.Rfc3161Record.SignedAttributesPrefixTagType] != 1)
             {
                 throw new TlvException("Exactly one signed attributes prefix must exist in RFC#3161 record.");
             }
 
-            if (signedAttributesSuffixCount != 1)
+            if (tagCounter[Constants.Rfc3161Record.SignedAttributesSuffixTagType] != 1)
             {
                 throw new TlvException("Exactly one signed attributes suffix must exist in RFC#3161 record.");
             }
 
-            if (signedAttributesAlgorithmCount != 1)
+            if (tagCounter[Constants.Rfc3161Record.SignedAttributesAlgorithmTagType] != 1)
             {
                 throw new TlvException("Exactly one signed attributes algorithm must exist in RFC#3161 record.");
             }

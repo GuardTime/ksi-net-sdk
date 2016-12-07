@@ -27,6 +27,11 @@ namespace Guardtime.KSI.Service
     public sealed class AggregationResponsePayload : RequestResponsePayload
     {
         /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.AggregationResponsePayload.TagType;
+
+        /// <summary>
         ///     Create aggregation response payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
@@ -35,36 +40,21 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        /// Validate the tag
+        /// Parse child tag
         /// </summary>
-        protected override void Validate()
+        protected override ITlvTag ParseChild(ITlvTag childTag)
         {
-            CheckTagType(Constants.AggregationResponsePayload.TagType);
-
-            base.Validate();
-
-            for (int i = 0; i < Count; i++)
+            switch (childTag.Type)
             {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    // following fields will be checked in the base class
-                    case Constants.KsiPduPayload.RequestIdTagType:
-                    case Constants.KsiPduPayload.StatusTagType:
-                    case Constants.KsiPduPayload.ErrorMessageTagType:
-                        break;
-                    // following fields will be used to create KSI signature
-                    case Constants.AggregationHashChain.TagType:
-                    case Constants.CalendarHashChain.TagType:
-                    case Constants.PublicationRecord.TagTypeInSignature:
-                    case Constants.AggregationAuthenticationRecord.TagType:
-                    case Constants.CalendarAuthenticationRecord.TagType:
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
+                // following fields will be used to create KSI signature and parsed when creating the signature
+                case Constants.AggregationHashChain.TagType:
+                case Constants.CalendarHashChain.TagType:
+                case Constants.PublicationRecord.TagTypeInSignature:
+                case Constants.AggregationAuthenticationRecord.TagType:
+                case Constants.CalendarAuthenticationRecord.TagType:
+                    return childTag;
+                default:
+                    return base.ParseChild(childTag);
             }
         }
     }

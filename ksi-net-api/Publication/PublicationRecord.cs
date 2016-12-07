@@ -37,41 +37,46 @@ namespace Guardtime.KSI.Publication
         }
 
         /// <summary>
+        ///     Create new publication record TLV element.
+        /// </summary>
+        /// <param name="type">TLV type</param>
+        /// <param name="nonCritical">Is TLV element non critical</param>
+        /// <param name="forward">Is TLV element forwarded</param>
+        /// <param name="value">child TLV element list</param>
+        protected PublicationRecord(uint type, bool nonCritical, bool forward, ITlvTag[] value) : base(type, nonCritical, forward, value)
+        {
+        }
+
+        /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
+            {
+                case Constants.PublicationData.TagType:
+                    return PublicationData = childTag as PublicationData ?? new PublicationData(childTag);
+                case Constants.PublicationRecord.PublicationReferencesTagType:
+                    StringTag refTag = GetStringTag(childTag);
+                    PublicationReferences.Add(refTag.Value);
+                    return refTag;
+                case Constants.PublicationRecord.PublicationRepositoryUriTagType:
+                    StringTag uriTag = GetStringTag(childTag);
+                    RepositoryUri.Add(uriTag.Value);
+                    return uriTag;
+                default:
+                    return base.ParseChild(childTag);
+            }
+        }
+
+        /// <summary>
         /// Validate the tag
         /// </summary>
-        protected override void Validate()
+        protected override void Validate(TagCounter tagCounter)
         {
-            base.Validate();
+            base.Validate(tagCounter);
 
-            int publicationDataCount = 0;
-
-            for (int i = 0; i < Count; i++)
-            {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.PublicationData.TagType:
-                        this[i] = PublicationData = new PublicationData(childTag);
-                        publicationDataCount++;
-                        break;
-                    case Constants.PublicationRecord.PublicationReferencesTagType:
-                        StringTag refTag = new StringTag(childTag);
-                        PublicationReferences.Add(refTag.Value);
-                        this[i] = refTag;
-                        break;
-                    case Constants.PublicationRecord.PublicationRepositoryUriTagType:
-                        StringTag uriTag = new StringTag(childTag);
-                        RepositoryUri.Add(uriTag.Value);
-                        this[i] = uriTag;
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
-            }
-
-            if (publicationDataCount != 1)
+            if (tagCounter[Constants.PublicationData.TagType] != 1)
             {
                 throw new TlvException("Exactly one publication data must exist in publication record.");
             }

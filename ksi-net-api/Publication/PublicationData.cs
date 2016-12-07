@@ -34,6 +34,11 @@ namespace Guardtime.KSI.Publication
         private IntegerTag _publicationTime;
 
         /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.PublicationData.TagType;
+
+        /// <summary>
         ///     Create new publication data TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
@@ -42,43 +47,34 @@ namespace Guardtime.KSI.Publication
         }
 
         /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
+            {
+                case Constants.PublicationData.PublicationTimeTagType:
+                    return _publicationTime = GetIntegerTag(childTag);
+                case Constants.PublicationData.PublicationHashTagType:
+                    return _publicationHash = GetImprintTag(childTag);
+                default:
+                    return base.ParseChild(childTag);
+            }
+        }
+
+        /// <summary>
         /// Validate the tag
         /// </summary>
-        protected override void Validate()
+        protected override void Validate(TagCounter tagCounter)
         {
-            CheckTagType(Constants.PublicationData.TagType);
+            base.Validate(tagCounter);
 
-            base.Validate();
-
-            int publicationTimeCount = 0;
-            int publicationHashCount = 0;
-
-            for (int i = 0; i < Count; i++)
-            {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.PublicationData.PublicationTimeTagType:
-                        this[i] = _publicationTime = new IntegerTag(childTag);
-                        publicationTimeCount++;
-                        break;
-                    case Constants.PublicationData.PublicationHashTagType:
-                        this[i] = _publicationHash = new ImprintTag(childTag);
-                        publicationHashCount++;
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
-            }
-
-            if (publicationTimeCount != 1)
+            if (tagCounter[Constants.PublicationData.PublicationTimeTagType] != 1)
             {
                 throw new TlvException("Exactly one publication time must exist in publication data.");
             }
 
-            if (publicationHashCount != 1)
+            if (tagCounter[Constants.PublicationData.PublicationHashTagType] != 1)
             {
                 throw new TlvException("Exactly one publication hash must exist in publication data.");
             }

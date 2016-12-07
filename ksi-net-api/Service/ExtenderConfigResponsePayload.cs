@@ -33,6 +33,11 @@ namespace Guardtime.KSI.Service
         private IntegerTag _calendarLastTime;
 
         /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.ExtenderConfigResponsePayload.TagType;
+
+        /// <summary>
         ///     Create extender configuration response payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
@@ -41,57 +46,45 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
+            {
+                case Constants.ExtenderConfigResponsePayload.MaxRequestsTagType:
+                    return _maxRequests = GetIntegerTag(childTag);
+                case Constants.ExtenderConfigResponsePayload.ParentUriTagType:
+                    StringTag uriTag = GetStringTag(childTag);
+                    ParentsUris.Add(uriTag.Value);
+                    return uriTag;
+                case Constants.ExtenderConfigResponsePayload.CalendarFirstTimeTagType:
+                    return _calendarFirstTime = GetIntegerTag(childTag);
+                case Constants.ExtenderConfigResponsePayload.CalendarLastTimeTagType:
+                    return _calendarLastTime = GetIntegerTag(childTag);
+                default:
+                    return base.ParseChild(childTag);
+            }
+        }
+
+        /// <summary>
         /// Validate the tag
         /// </summary>
-        protected override void Validate()
+        protected override void Validate(TagCounter tagCounter)
         {
-            CheckTagType(Constants.ExtenderConfigResponsePayload.TagType);
-            base.Validate();
+            base.Validate(tagCounter);
 
-            int maxRequestsCount = 0;
-            int calendarFirstTimeCount = 0;
-            int calendarLastTimeCount = 0;
-
-            for (int i = 0; i < Count; i++)
-            {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.ExtenderConfigResponsePayload.MaxRequestsTagType:
-                        this[i] = _maxRequests = new IntegerTag(childTag);
-                        maxRequestsCount++;
-                        break;
-                    case Constants.ExtenderConfigResponsePayload.ParentUriTagType:
-                        StringTag uriTag = new StringTag(childTag);
-                        ParentsUris.Add(uriTag.Value);
-                        this[i] = uriTag;
-                        break;
-                    case Constants.ExtenderConfigResponsePayload.CalendarFirstTimeTagType:
-                        this[i] = _calendarFirstTime = new IntegerTag(childTag);
-                        calendarFirstTimeCount++;
-                        break;
-                    case Constants.ExtenderConfigResponsePayload.CalendarLastTimeTagType:
-                        this[i] = _calendarLastTime = new IntegerTag(childTag);
-                        calendarLastTimeCount++;
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
-            }
-
-            if (maxRequestsCount > 1)
+            if (tagCounter[Constants.ExtenderConfigResponsePayload.MaxRequestsTagType] > 1)
             {
                 throw new TlvException("Only one max request tag is allowed in extender config response payload.");
             }
 
-            if (calendarFirstTimeCount > 1)
+            if (tagCounter[Constants.ExtenderConfigResponsePayload.CalendarFirstTimeTagType] > 1)
             {
                 throw new TlvException("Only one calendar first time tag is allowed in extender config response payload.");
             }
 
-            if (calendarLastTimeCount > 1)
+            if (tagCounter[Constants.ExtenderConfigResponsePayload.CalendarLastTimeTagType] > 1)
             {
                 throw new TlvException("Only one calendar last time tag is allowed in extender config response payload.");
             }

@@ -30,6 +30,11 @@ namespace Guardtime.KSI.Service
     public sealed class LegacyAggregationResponsePayload : RequestResponsePayload
     {
         /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.AggregationResponsePayload.LegacyTagType;
+
+        /// <summary>
         ///     Create aggregation response payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
@@ -38,52 +43,41 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
+            {
+                case Constants.AggregationResponsePayload.ConfigTagType:
+                    return GetRawTag(childTag);
+                case Constants.AggregationResponsePayload.RequestAcknowledgmentTagType:
+                    return GetRawTag(childTag);
+                // following fields will be used to create KSI signature and parsed when creating the signature
+                case Constants.AggregationHashChain.TagType:
+                case Constants.CalendarHashChain.TagType:
+                case Constants.PublicationRecord.TagTypeInSignature:
+                case Constants.AggregationAuthenticationRecord.TagType:
+                case Constants.CalendarAuthenticationRecord.TagType:
+                    return childTag;
+                default:
+                    return base.ParseChild(childTag);
+            }
+        }
+
+        /// <summary>
         /// Validate the tag
         /// </summary>
-        protected override void Validate()
+        protected override void Validate(TagCounter tagCounter)
         {
-            CheckTagType(Constants.AggregationResponsePayload.LegacyTagType);
-            base.Validate();
+            base.Validate(tagCounter);
 
-            int configCount = 0;
-            int requestAcknowledgmentCount = 0;
-
-            for (int i = 0; i < Count; i++)
-            {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.KsiPduPayload.RequestIdTagType:
-                    case Constants.KsiPduPayload.StatusTagType:
-                    case Constants.KsiPduPayload.ErrorMessageTagType:
-                        break;
-                    case Constants.AggregationResponsePayload.ConfigTagType:
-                        this[i] = new RawTag(childTag);
-                        configCount++;
-                        break;
-                    case Constants.AggregationResponsePayload.RequestAcknowledgmentTagType:
-                        this[i] = new RawTag(childTag);
-                        requestAcknowledgmentCount++;
-                        break;
-                    case Constants.AggregationHashChain.TagType:
-                    case Constants.CalendarHashChain.TagType:
-                    case Constants.PublicationRecord.TagTypeInSignature:
-                    case Constants.AggregationAuthenticationRecord.TagType:
-                    case Constants.CalendarAuthenticationRecord.TagType:
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
-            }
-
-            if (configCount > 1)
+            if (tagCounter[Constants.AggregationResponsePayload.ConfigTagType] > 1)
             {
                 throw new TlvException("Only one config is allowed in aggregation response payload.");
             }
 
-            if (requestAcknowledgmentCount > 1)
+            if (tagCounter[Constants.AggregationResponsePayload.RequestAcknowledgmentTagType] > 1)
             {
                 throw new TlvException("Only one request acknowledgment is allowed in aggregation response payload.");
             }

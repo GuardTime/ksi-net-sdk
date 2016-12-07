@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System.Collections.Generic;
 using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Publication
@@ -27,6 +28,11 @@ namespace Guardtime.KSI.Publication
     public sealed class PublicationRecordInPublicationFile : PublicationRecord
     {
         /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.PublicationRecord.TagTypeInPublicationsFile;
+
+        /// <summary>
         ///     Create new publication record TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
@@ -35,21 +41,19 @@ namespace Guardtime.KSI.Publication
         }
 
         /// <summary>
-        /// Validate the tag
-        /// </summary>
-        protected override void Validate()
-        {
-            CheckTagType(Constants.PublicationRecord.TagTypeInPublicationsFile);
-            base.Validate();
-        }
-
-        /// <summary>
         /// Convert current publication record to PublicationRecordInSignature
         /// </summary>
         /// <returns></returns>
         public PublicationRecordInSignature ConvertToPublicationRecordInSignature()
         {
-            return new PublicationRecordInSignature(NonCritical, Forward, EncodeValue());
+            List<ITlvTag> list = new List<ITlvTag>();
+
+            foreach (ITlvTag tag in this)
+            {
+                list.Add(tag);
+            }
+
+            return new PublicationRecordInSignature(NonCritical, Forward, list.ToArray());
         }
     }
 }

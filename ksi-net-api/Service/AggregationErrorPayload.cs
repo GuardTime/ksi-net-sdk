@@ -33,14 +33,5 @@ namespace Guardtime.KSI.Service
         public AggregationErrorPayload(ITlvTag tag) : base(tag)
         {
         }
-
-        /// <summary>
-        /// Validate the tag
-        /// </summary>
-        protected override void Validate()
-        {
-            CheckTagType(Constants.ErrorPayload.TagType);
-            base.Validate();
-        }
     }
 }

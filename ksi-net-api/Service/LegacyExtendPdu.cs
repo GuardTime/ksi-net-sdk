@@ -18,7 +18,6 @@
  */
 
 using System;
-using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Service
@@ -29,12 +28,10 @@ namespace Guardtime.KSI.Service
     [Obsolete]
     public sealed class LegacyExtendPdu : LegacyKsiPdu
     {
-        KsiPduPayload _payload;
-
         /// <summary>
-        ///     Get PDU payload.
+        /// Expected tag type
         /// </summary>
-        public override KsiPduPayload Payload => _payload;
+        protected override uint ExpectedTagType => Constants.LegacyExtendPdu.TagType;
 
         /// <summary>
         ///     Create extend PDU from TLV element.
@@ -46,63 +43,20 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        /// Validate the tag
+        /// Parse child tag
         /// </summary>
-        protected override void Validate()
+        protected override ITlvTag ParseChild(ITlvTag childTag)
         {
-            CheckTagType(Constants.LegacyExtendPdu.TagType);
-            base.Validate();
-
-            int headerCount = 0;
-            int payloadCount = 0;
-            int macCount = 0;
-
-            for (int i = 0; i < Count; i++)
+            switch (childTag.Type)
             {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.ExtendRequestPayload.LegacyTagType:
-                        this[i] = _payload = new LegacyExtendRequestPayload(childTag);
-                        payloadCount++;
-                        break;
-                    case Constants.ExtendResponsePayload.LegacyTagType:
-                        this[i] = _payload = new LegacyExtendResponsePayload(childTag);
-                        payloadCount++;
-                        break;
-                    case Constants.LegacyExtendErrorPayload.TagType:
-                        this[i] = _payload = new LegacyExtendErrorPayload(childTag);
-                        payloadCount++;
-                        break;
-                    case Constants.KsiPduHeader.TagType:
-                        headerCount++;
-                        break;
-                    case Constants.KsiPdu.MacTagType:
-                        macCount++;
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
-            }
-
-            if (payloadCount != 1)
-            {
-                throw new TlvException("Exactly one payload must exist in KSI PDU.");
-            }
-
-            if (Payload.Type != Constants.LegacyExtendErrorPayload.TagType)
-            {
-                if (headerCount != 1)
-                {
-                    throw new TlvException("Exactly one header must exist in KSI PDU.");
-                }
-
-                if (macCount != 1)
-                {
-                    throw new TlvException("Exactly one mac must exist in KSI PDU.");
-                }
+                case Constants.ExtendRequestPayload.LegacyTagType:
+                    return Payload = childTag as LegacyExtendRequestPayload ?? new LegacyExtendRequestPayload(childTag);
+                case Constants.ExtendResponsePayload.LegacyTagType:
+                    return Payload = childTag as LegacyExtendResponsePayload ?? new LegacyExtendResponsePayload(childTag);
+                case Constants.LegacyExtendErrorPayload.TagType:
+                    return ErrorPayload = childTag as LegacyExtendErrorPayload ?? new LegacyExtendErrorPayload(childTag);
+                default:
+                    return base.ParseChild(childTag);
             }
         }
 

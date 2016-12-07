@@ -28,6 +28,11 @@ namespace Guardtime.KSI.Service
     public sealed class AggregationRequestPdu : KsiPdu
     {
         /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.AggregationRequestPdu.TagType;
+
+        /// <summary>
         ///     Create aggregation request pdu TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
@@ -36,37 +41,22 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        /// Validate the tag
+        /// Parse child tag
         /// </summary>
-        protected override void Validate()
+        protected override ITlvTag ParseChild(ITlvTag childTag)
         {
-            CheckTagType(Constants.AggregationRequestPdu.TagType);
-
-            base.Validate();
-
-            for (int i = 0; i < Count; i++)
+            switch (childTag.Type)
             {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.AggregationRequestPayload.TagType:
-                        AggregationRequestPayload aggregationRequestPayload = new AggregationRequestPayload(childTag);
-                        this[i] = aggregationRequestPayload;
-                        Payloads.Add(aggregationRequestPayload);
-                        break;
-                    case Constants.AggregatorConfigRequestPayload.TagType:
-                        AggregatorConfigRequestPayload aggregatorConfigRequestPayload = new AggregatorConfigRequestPayload(childTag);
-                        this[i] = aggregatorConfigRequestPayload;
-                        Payloads.Add(aggregatorConfigRequestPayload);
-                        break;
-                    case Constants.KsiPduHeader.TagType:
-                    case Constants.KsiPdu.MacTagType:
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
+                case Constants.AggregationRequestPayload.TagType:
+                    AggregationRequestPayload aggregationRequestPayload = childTag as AggregationRequestPayload ?? new AggregationRequestPayload(childTag);
+                    Payloads.Add(aggregationRequestPayload);
+                    return aggregationRequestPayload;
+                case Constants.AggregatorConfigRequestPayload.TagType:
+                    AggregatorConfigRequestPayload aggregatorConfigRequestPayload = childTag as AggregatorConfigRequestPayload ?? new AggregatorConfigRequestPayload(childTag);
+                    Payloads.Add(aggregatorConfigRequestPayload);
+                    return aggregatorConfigRequestPayload;
+                default:
+                    return base.ParseChild(childTag);
             }
         }
 

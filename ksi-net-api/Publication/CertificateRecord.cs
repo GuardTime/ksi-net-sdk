@@ -28,6 +28,11 @@ namespace Guardtime.KSI.Publication
     public sealed class CertificateRecord : CompositeTag
     {
         /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.CertificateRecord.TagType;
+
+        /// <summary>
         ///     Create new certificate record TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
@@ -36,43 +41,34 @@ namespace Guardtime.KSI.Publication
         }
 
         /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
+            {
+                case Constants.CertificateRecord.CertificateIdTagType:
+                    return CertificateId = GetRawTag(childTag);
+                case Constants.CertificateRecord.X509CertificateTagType:
+                    return X509Certificate = GetRawTag(childTag);
+                default:
+                    return base.ParseChild(childTag);
+            }
+        }
+
+        /// <summary>
         /// Validate the tag
         /// </summary>
-        protected override void Validate()
+        protected override void Validate(TagCounter tagCounter)
         {
-            CheckTagType(Constants.CertificateRecord.TagType);
+            base.Validate(tagCounter);
 
-            base.Validate();
-
-            int certificateIdCount = 0;
-            int x509CertificateCount = 0;
-
-            for (int i = 0; i < Count; i++)
-            {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.CertificateRecord.CertificateIdTagType:
-                        this[i] = CertificateId = new RawTag(childTag);
-                        certificateIdCount++;
-                        break;
-                    case Constants.CertificateRecord.X509CertificateTagType:
-                        this[i] = X509Certificate = new RawTag(childTag);
-                        x509CertificateCount++;
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
-            }
-
-            if (certificateIdCount != 1)
+            if (tagCounter[Constants.CertificateRecord.CertificateIdTagType] != 1)
             {
                 throw new TlvException("Exactly one certificate id must exist in certificate record.");
             }
 
-            if (x509CertificateCount != 1)
+            if (tagCounter[Constants.CertificateRecord.X509CertificateTagType] != 1)
             {
                 throw new TlvException("Exactly one certificate must exist in certificate record.");
             }

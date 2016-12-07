@@ -28,6 +28,11 @@ namespace Guardtime.KSI.Service
     public sealed class ExtendRequestPdu : KsiPdu
     {
         /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.ExtendRequestPdu.TagType;
+
+        /// <summary>
         ///     Create extend request PDU from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
@@ -36,37 +41,22 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        /// Validate the tag
+        /// Parse child tag
         /// </summary>
-        protected override void Validate()
+        protected override ITlvTag ParseChild(ITlvTag childTag)
         {
-            CheckTagType(Constants.ExtendRequestPdu.TagType);
-
-            base.Validate();
-
-            for (int i = 0; i < Count; i++)
+            switch (childTag.Type)
             {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.ExtendRequestPayload.TagType:
-                        ExtendRequestPayload extendRequestPayload = new ExtendRequestPayload(childTag);
-                        this[i] = extendRequestPayload;
-                        Payloads.Add(extendRequestPayload);
-                        break;
-                    case Constants.ExtenderConfigRequestPayload.TagType:
-                        ExtenderConfigRequestPayload configRequestPayload = new ExtenderConfigRequestPayload(childTag);
-                        this[i] = configRequestPayload;
-                        Payloads.Add(configRequestPayload);
-                        break;
-                    case Constants.KsiPduHeader.TagType:
-                    case Constants.KsiPdu.MacTagType:
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
+                case Constants.ExtendRequestPayload.TagType:
+                    ExtendRequestPayload extendRequestPayload = childTag as ExtendRequestPayload ?? new ExtendRequestPayload(childTag);
+                    Payloads.Add(extendRequestPayload);
+                    return extendRequestPayload;
+                case Constants.ExtenderConfigRequestPayload.TagType:
+                    ExtenderConfigRequestPayload configRequestPayload = childTag as ExtenderConfigRequestPayload ?? new ExtenderConfigRequestPayload(childTag);
+                    Payloads.Add(configRequestPayload);
+                    return configRequestPayload;
+                default:
+                    return base.ParseChild(childTag);
             }
         }
 

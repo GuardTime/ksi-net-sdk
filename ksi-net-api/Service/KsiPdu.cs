@@ -33,10 +33,18 @@ namespace Guardtime.KSI.Service
     {
         private ImprintTag _mac;
 
+        int _headerIndex;
+        int _macIndex;
+
         /// <summary>
         /// List on payloads
         /// </summary>
         protected List<KsiPduPayload> Payloads { get; } = new List<KsiPduPayload>();
+
+        /// <summary>
+        /// Error payload
+        /// </summary>
+        protected KsiPduPayload ErrorPayload { get; set; }
 
         /// <summary>
         ///     Get and set PDU header
@@ -52,69 +60,60 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            if (Constants.PayloadTypes.Contains(childTag.Type))
+            {
+                return childTag;
+            }
+
+            if (childTag.Type == Constants.KsiPduHeader.TagType)
+            {
+                _headerIndex = Count;
+                return Header = childTag as KsiPduHeader ?? new KsiPduHeader(childTag);
+            }
+
+            if (childTag.Type == Constants.KsiPdu.MacTagType)
+            {
+                _macIndex = Count;
+                return _mac = GetImprintTag(childTag);
+            }
+
+            return base.ParseChild(childTag);
+        }
+
+        /// <summary>
         /// Validate the tag
         /// </summary>
-        protected override void Validate()
+        protected override void Validate(TagCounter tagCounter)
         {
-            base.Validate();
+            base.Validate(tagCounter);
 
-            int headerCount = 0;
-            int headerIndex = 0;
-            int payloadCount = 0;
-            int macCount = 0;
-            int macIndex = 0;
-            bool hasErrorPayload = false;
-
-            for (int i = 0; i < Count; i++)
+            if (ErrorPayload == null)
             {
-                ITlvTag childTag = this[i];
+                if (Payloads.Count == 0)
+                {
+                    throw new TlvException("Payloads are missing in KSI PDU.");
+                }
 
-                if (childTag.Type == Constants.ErrorPayload.TagType)
-                {
-                    hasErrorPayload = true;
-                    payloadCount++;
-                }
-                else if (Constants.PayloadTypes.Contains(childTag.Type))
-                {
-                    payloadCount++;
-                }
-                else if (childTag.Type == Constants.KsiPduHeader.TagType)
-                {
-                    this[i] = Header = new KsiPduHeader(childTag);
-                    headerCount++;
-                    headerIndex = i;
-                }
-                else if (childTag.Type == Constants.KsiPdu.MacTagType)
-                {
-                    this[i] = _mac = new ImprintTag(childTag);
-                    macCount++;
-                    macIndex = i;
-                }
-            }
-
-            if (payloadCount == 0)
-            {
-                throw new TlvException("Payloads are missing in KSI PDU.");
-            }
-
-            if (!hasErrorPayload)
-            {
-                if (headerCount != 1)
+                if (tagCounter[Constants.KsiPduHeader.TagType] != 1)
                 {
                     throw new TlvException("Exactly one header must exist in KSI PDU.");
                 }
 
-                if (headerIndex != 0)
+                if (_headerIndex != 0)
                 {
                     throw new TlvException("Header must be the first element in KSI PDU.");
                 }
 
-                if (macCount != 1)
+                if (tagCounter[Constants.KsiPdu.MacTagType] != 1)
                 {
                     throw new TlvException("Exactly one HMAC must exist in KSI PDU");
                 }
 
-                if (macIndex != Count - 1)
+                if (_macIndex != Count - 1)
                 {
                     throw new TlvException("HMAC must be the last element in KSI PDU");
                 }

@@ -27,6 +27,11 @@ namespace Guardtime.KSI.Publication
     public sealed class PublicationRecordInSignature : PublicationRecord
     {
         /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.PublicationRecord.TagTypeInSignature;
+
+        /// <summary>
         ///     Create new publication record TLV element to be used in signature.
         /// </summary>
         /// <param name="tag">TLV element the publication record will be created from</param>
@@ -35,22 +40,13 @@ namespace Guardtime.KSI.Publication
         }
 
         /// <summary>
-        /// Validate the tag
-        /// </summary>
-        protected override void Validate()
-        {
-            CheckTagType(Constants.PublicationRecord.TagTypeInSignature);
-            base.Validate();
-        }
-
-        /// <summary>
         /// Create new publication record TLV element to be used in signature.
         /// </summary>
         /// <param name="nonCritical">Is TLV element non critical</param>
         /// <param name="forward">Is TLV element forwarded</param>
-        /// <param name="value">value byte array</param>
-        public PublicationRecordInSignature(bool nonCritical, bool forward, byte[] value)
-            : base(new RawTag(Constants.PublicationRecord.TagTypeInSignature, nonCritical, forward, value))
+        /// <param name="value">child TLV element list</param>
+        public PublicationRecordInSignature(bool nonCritical, bool forward, ITlvTag[] value)
+            : base(Constants.PublicationRecord.TagTypeInSignature, nonCritical, forward, value)
         {
         }
 
@@ -61,7 +57,7 @@ namespace Guardtime.KSI.Publication
         /// <param name="forward">Is TLV element forwarded</param>
         /// <param name="publicationData">Publication data</param>
         public PublicationRecordInSignature(bool nonCritical, bool forward, PublicationData publicationData)
-            : base(new RawTag(Constants.PublicationRecord.TagTypeInSignature, nonCritical, forward, publicationData.Encode()))
+            : this(nonCritical, forward, new ITlvTag[] { publicationData })
         {
         }
     }

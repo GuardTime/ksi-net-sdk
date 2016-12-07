@@ -27,20 +27,16 @@ namespace Guardtime.KSI.Service
     public sealed class AggregatorConfigRequestPayload : KsiPduPayload
     {
         /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.AggregatorConfigRequestPayload.TagType;
+
+        /// <summary>
         ///     Create aggregator configuration request payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         public AggregatorConfigRequestPayload(ITlvTag tag) : base(tag)
         {
-        }
-
-        /// <summary>
-        /// Validate the tag
-        /// </summary>
-        protected override void Validate()
-        {
-            CheckTagType(Constants.AggregatorConfigRequestPayload.TagType);
-            base.Validate();
         }
 
         /// <summary>

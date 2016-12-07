@@ -33,11 +33,35 @@ namespace Guardtime.KSI.Service
     {
         private KsiPduHeader _header;
         private ImprintTag _mac;
+        private KsiPduPayload _payload;
+        private int _payloadCount;
+        private ErrorPayload _errorPayload;
 
         /// <summary>
         ///     Get PDU payload.
         /// </summary>
-        public abstract KsiPduPayload Payload { get; }
+        public KsiPduPayload Payload
+        {
+            get { return _payload; }
+            protected set
+            {
+                _payload = value;
+                _payloadCount++;
+            }
+        }
+
+        /// <summary>
+        /// Error payload
+        /// </summary>
+        public ErrorPayload ErrorPayload
+        {
+            get { return _errorPayload; }
+            protected set
+            {
+                _errorPayload = value;
+                _payloadCount++;
+            }
+        }
 
         /// <summary>
         ///     Create KSI PDU from TLV element.
@@ -49,24 +73,44 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
+            {
+                case Constants.KsiPduHeader.TagType:
+                    return _header = childTag as KsiPduHeader ?? new KsiPduHeader(childTag);
+                case Constants.KsiPdu.MacTagType:
+                    return _mac = GetImprintTag(childTag);
+                default:
+                    return base.ParseChild(childTag);
+            }
+        }
+
+        /// <summary>
         /// Validate the tag
         /// </summary>
-        protected override void Validate()
+        protected override void Validate(TagCounter tagCounter)
         {
-            base.Validate();
+            base.Validate(tagCounter);
 
-            for (int i = 0; i < Count; i++)
+            if (_payloadCount != 1)
             {
-                ITlvTag childTag = this[i];
+                throw new TlvException("Exactly one payload must exist in KSI PDU.");
+            }
 
-                switch (childTag.Type)
+            if (ErrorPayload == null)
+            {
+                if (tagCounter[Constants.KsiPduHeader.TagType] != 1)
+
                 {
-                    case Constants.KsiPduHeader.TagType:
-                        this[i] = _header = new KsiPduHeader(childTag);
-                        break;
-                    case Constants.KsiPdu.MacTagType:
-                        this[i] = _mac = new ImprintTag(childTag);
-                        break;
+                    throw new TlvException("Exactly one header must exist in KSI PDU.");
+                }
+
+                if (tagCounter[Constants.KsiPdu.MacTagType] != 1)
+                {
+                    throw new TlvException("Exactly one mac must exist in KSI PDU");
                 }
             }
         }

@@ -38,67 +38,60 @@ namespace Guardtime.KSI.Signature
         private PublicationData _publicationData;
 
         /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.CalendarHashChain.TagType;
+
+        /// <summary>
         ///     Create new calendar hash chain TLV element from TLV element
         /// </summary>
         /// <param name="tag">TLV element</param>
         public CalendarHashChain(ITlvTag tag) : base(tag)
         {
+            RegistrationTime = CalculateRegistrationTime();
+        }
+
+        /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
+            {
+                case Constants.CalendarHashChain.PublicationTimeTagType:
+                    return _publicationTime = GetIntegerTag(childTag);
+                case Constants.CalendarHashChain.AggregationTimeTagType:
+                    return _aggregationTime = GetIntegerTag(childTag);
+                case Constants.CalendarHashChain.InputHashTagType:
+                    return _inputHash = GetImprintTag(childTag);
+                case (uint)LinkDirection.Left:
+                case (uint)LinkDirection.Right:
+                    Link chainTag = childTag as Link ?? new Link(childTag);
+                    _chain.Add(chainTag);
+                    return chainTag;
+                default:
+                    return base.ParseChild(childTag);
+            }
         }
 
         /// <summary>
         /// Validate the tag
         /// </summary>
-        protected override void Validate()
+        protected override void Validate(TagCounter tagCounter)
         {
-            CheckTagType(Constants.CalendarHashChain.TagType);
+            base.Validate(tagCounter);
 
-            base.Validate();
-
-            int publicationTimeCount = 0;
-            int aggregationTimeCount = 0;
-            int inputHashCount = 0;
-
-            for (int i = 0; i < Count; i++)
-            {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.CalendarHashChain.PublicationTimeTagType:
-                        this[i] = _publicationTime = new IntegerTag(childTag);
-                        publicationTimeCount++;
-                        break;
-                    case Constants.CalendarHashChain.AggregationTimeTagType:
-                        this[i] = _aggregationTime = new IntegerTag(childTag);
-                        aggregationTimeCount++;
-                        break;
-                    case Constants.CalendarHashChain.InputHashTagType:
-                        this[i] = _inputHash = new ImprintTag(childTag);
-                        inputHashCount++;
-                        break;
-                    case (uint)LinkDirection.Left:
-                    case (uint)LinkDirection.Right:
-                        Link chainTag = new Link(childTag);
-                        _chain.Add(chainTag);
-                        this[i] = chainTag;
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
-            }
-
-            if (publicationTimeCount != 1)
+            if (tagCounter[Constants.CalendarHashChain.PublicationTimeTagType] != 1)
             {
                 throw new TlvException("Exactly one publication time must exist in calendar hash chain.");
             }
 
-            if (aggregationTimeCount > 1)
+            if (tagCounter[Constants.CalendarHashChain.AggregationTimeTagType] > 1)
             {
                 throw new TlvException("Only one aggregation time is allowed in calendar hash chain.");
             }
 
-            if (inputHashCount != 1)
+            if (tagCounter[Constants.CalendarHashChain.InputHashTagType] != 1)
             {
                 throw new TlvException("Exactly one input hash must exist in calendar hash chain.");
             }
@@ -107,8 +100,6 @@ namespace Guardtime.KSI.Signature
             {
                 throw new TlvException("Links are missing in calendar hash chain.");
             }
-
-            RegistrationTime = CalculateRegistrationTime();
         }
 
         /// <summary>

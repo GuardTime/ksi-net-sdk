@@ -38,27 +38,27 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
+            {
+                case Constants.KsiPduPayload.RequestIdTagType:
+                    return _requestId = GetIntegerTag(childTag);
+                default:
+                    return base.ParseChild(childTag);
+            }
+        }
+
+        /// <summary>
         /// Validate the tag
         /// </summary>
-        protected override void Validate()
+        protected override void Validate(TagCounter tagCounter)
         {
-            base.Validate();
-            int requestIdCount = 0;
+            base.Validate(tagCounter);
 
-            for (int i = 0; i < Count; i++)
-            {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.KsiPduPayload.RequestIdTagType:
-                        this[i] = _requestId = new IntegerTag(childTag);
-                        requestIdCount++;
-                        break;
-                }
-            }
-
-            if (requestIdCount != 1)
+            if (tagCounter[Constants.KsiPduPayload.RequestIdTagType] != 1)
             {
                 throw new TlvException("Exactly one request id must exist in response payload.");
             }

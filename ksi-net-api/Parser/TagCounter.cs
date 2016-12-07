@@ -17,26 +17,36 @@
  * reserves and retains all trademark rights.
  */
 
-using Guardtime.KSI.Parser;
+using System.Collections.Generic;
 
-namespace Guardtime.KSI.Service
+namespace Guardtime.KSI.Parser
 {
     /// <summary>
-    ///     Aggregation Error payload TLV element.
+    /// Class for holding child tag count values.
     /// </summary>
-    public abstract class ErrorPayload : ResponsePayload
+    public class TagCounter
     {
-        /// <summary>
-        /// Expected tag type
-        /// </summary>
-        protected override uint ExpectedTagType => Constants.ErrorPayload.TagType;
+        readonly Dictionary<uint, int> _values = new Dictionary<uint, int>();
 
         /// <summary>
-        ///     Create aggregation error payload TLV element from TLV element.
+        ///     Get or set count values
         /// </summary>
-        /// <param name="tag">TLV element</param>
-        protected ErrorPayload(ITlvTag tag) : base(tag)
+        /// <param name="key">count key</param>
+        /// <returns>count value corresponding to the given key</returns>
+        public int this[uint key]
         {
+            get { return _values.ContainsKey(key) ? _values[key] : 0; }
+            set
+            {
+                if (_values.ContainsKey(key))
+                {
+                    _values[key] += value;
+                }
+                else
+                {
+                    _values.Add(key, value);
+                }
+            }
         }
     }
 }

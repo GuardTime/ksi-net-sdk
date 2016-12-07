@@ -34,6 +34,11 @@ namespace Guardtime.KSI.Signature
         private ImprintTag _inputHash;
 
         /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.AggregationAuthenticationRecord.TagType;
+
+        /// <summary>
         ///     Create new aggregation authentication record TLV element from TLV element
         /// </summary>
         /// <param name="tag">TLV element</param>
@@ -42,48 +47,35 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
+            {
+                case Constants.AggregationAuthenticationRecord.AggregationTimeTagType:
+                    return _aggregationTime = GetIntegerTag(childTag);
+                case Constants.AggregationAuthenticationRecord.ChainIndexTagType:
+                    IntegerTag chainIndexTag = GetIntegerTag(childTag);
+                    _chainIndex.Add(chainIndexTag);
+                    return chainIndexTag;
+                case Constants.AggregationAuthenticationRecord.InputHashTagType:
+                    return _inputHash = GetImprintTag(childTag);
+                case Constants.SignatureData.TagType:
+                    return SignatureData = childTag as SignatureData ?? new SignatureData(childTag);
+                default:
+                    return base.ParseChild(childTag);
+            }
+        }
+
+        /// <summary>
         /// Validate the tag
         /// </summary>
-        protected override void Validate()
+        protected override void Validate(TagCounter tagCounter)
         {
-            CheckTagType(Constants.AggregationAuthenticationRecord.TagType);
+            base.Validate(tagCounter);
 
-            base.Validate();
-
-            int aggregationTimeCount = 0;
-            int inputHashCount = 0;
-            int signatureDataCount = 0;
-
-            for (int i = 0; i < Count; i++)
-            {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.AggregationAuthenticationRecord.AggregationTimeTagType:
-                        this[i] = _aggregationTime = new IntegerTag(childTag);
-                        aggregationTimeCount++;
-                        break;
-                    case Constants.AggregationAuthenticationRecord.ChainIndexTagType:
-                        IntegerTag chainIndexTag = new IntegerTag(childTag);
-                        _chainIndex.Add(chainIndexTag);
-                        this[i] = chainIndexTag;
-                        break;
-                    case Constants.AggregationAuthenticationRecord.InputHashTagType:
-                        this[i] = _inputHash = new ImprintTag(childTag);
-                        inputHashCount++;
-                        break;
-                    case Constants.SignatureData.TagType:
-                        this[i] = SignatureData = new SignatureData(childTag);
-                        signatureDataCount++;
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
-            }
-
-            if (aggregationTimeCount != 1)
+            if (tagCounter[Constants.AggregationAuthenticationRecord.AggregationTimeTagType] != 1)
             {
                 throw new TlvException("Exactly one aggregation time must exist in aggregation authentication record.");
             }
@@ -93,12 +85,12 @@ namespace Guardtime.KSI.Signature
                 throw new TlvException("Chain indexes must exist in aggregation authentication record.");
             }
 
-            if (inputHashCount != 1)
+            if (tagCounter[Constants.AggregationAuthenticationRecord.InputHashTagType] != 1)
             {
                 throw new TlvException("Exactly one input hash must exist in aggregation authentication record.");
             }
 
-            if (signatureDataCount != 1)
+            if (tagCounter[Constants.SignatureData.TagType] != 1)
             {
                 throw new TlvException("Exactly one signature data must exist in aggregation authentication record.");
             }

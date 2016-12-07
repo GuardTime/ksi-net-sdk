@@ -27,6 +27,11 @@ namespace Guardtime.KSI.Service
     public sealed class ExtendResponsePdu : KsiPdu
     {
         /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.ExtendResponsePdu.TagType;
+
+        /// <summary>
         ///     Create extend response PDU from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
@@ -35,41 +40,24 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        /// Validate the tag
+        /// Parse child tag
         /// </summary>
-        protected override void Validate()
+        protected override ITlvTag ParseChild(ITlvTag childTag)
         {
-            CheckTagType(Constants.ExtendResponsePdu.TagType);
-            base.Validate();
-
-            for (int i = 0; i < Count; i++)
+            switch (childTag.Type)
             {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.ExtendResponsePayload.TagType:
-                        ExtendResponsePayload extendResponsePayload = new ExtendResponsePayload(childTag);
-                        this[i] = extendResponsePayload;
-                        Payloads.Add(extendResponsePayload);
-                        break;
-                    case Constants.ErrorPayload.TagType:
-                        ExtendErrorPayload extendErrorPayload = new ExtendErrorPayload(childTag);
-                        this[i] = extendErrorPayload;
-                        Payloads.Add(extendErrorPayload);
-                        break;
-                    case Constants.ExtenderConfigResponsePayload.TagType:
-                        ExtenderConfigResponsePayload configResponsePayload = new ExtenderConfigResponsePayload(childTag);
-                        this[i] = configResponsePayload;
-                        Payloads.Add(configResponsePayload);
-                        break;
-                    case Constants.KsiPduHeader.TagType:
-                    case Constants.KsiPdu.MacTagType:
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
+                case Constants.ExtendResponsePayload.TagType:
+                    ExtendResponsePayload extendResponsePayload = childTag as ExtendResponsePayload ?? new ExtendResponsePayload(childTag);
+                    Payloads.Add(extendResponsePayload);
+                    return extendResponsePayload;
+                case Constants.ErrorPayload.TagType:
+                    return ErrorPayload = childTag as ExtendErrorPayload ?? new ExtendErrorPayload(childTag);
+                case Constants.ExtenderConfigResponsePayload.TagType:
+                    ExtenderConfigResponsePayload configResponsePayload = childTag as ExtenderConfigResponsePayload ?? new ExtenderConfigResponsePayload(childTag);
+                    Payloads.Add(configResponsePayload);
+                    return configResponsePayload;
+                default:
+                    return base.ParseChild(childTag);
             }
         }
 
@@ -97,7 +85,7 @@ namespace Guardtime.KSI.Service
         /// <returns></returns>
         public ExtendErrorPayload GetExtendErrorPayload()
         {
-            return GetPayload<ExtendErrorPayload>();
+            return ErrorPayload as ExtendErrorPayload;
         }
 
         /// <summary>

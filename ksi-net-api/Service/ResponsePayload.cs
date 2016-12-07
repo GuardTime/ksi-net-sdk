@@ -39,38 +39,34 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
+            {
+                case Constants.KsiPduPayload.StatusTagType:
+                    return _status = GetIntegerTag(childTag);
+                case Constants.KsiPduPayload.ErrorMessageTagType:
+                    return _errorMessage = GetStringTag(childTag);
+                default:
+                    return base.ParseChild(childTag);
+            }
+        }
+
+        /// <summary>
         /// Validate the tag
         /// </summary>
-        protected override void Validate()
+        protected override void Validate(TagCounter tagCounter)
         {
-            base.Validate();
+            base.Validate(tagCounter);
 
-            int statusCount = 0;
-            int errorMessageCount = 0;
-
-            for (int i = 0; i < Count; i++)
-            {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.KsiPduPayload.StatusTagType:
-                        this[i] = _status = new IntegerTag(childTag);
-                        statusCount++;
-                        break;
-                    case Constants.KsiPduPayload.ErrorMessageTagType:
-                        this[i] = _errorMessage = new StringTag(childTag);
-                        errorMessageCount++;
-                        break;
-                }
-            }
-
-            if (statusCount != 1)
+            if (tagCounter[Constants.KsiPduPayload.StatusTagType] != 1)
             {
                 throw new TlvException("Exactly one status code must exist in reponse payload.");
             }
 
-            if (errorMessageCount > 1)
+            if (tagCounter[Constants.KsiPduPayload.ErrorMessageTagType] > 1)
             {
                 throw new TlvException("Only one error message is allowed in response payload.");
             }

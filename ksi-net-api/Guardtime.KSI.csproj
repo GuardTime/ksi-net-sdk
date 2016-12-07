@@ -114,6 +114,7 @@
     <Compile Include="Parser\StringTag.cs" />
     <Compile Include="Parser\CompositeTag.cs" />
     <Compile Include="Parser\ITlvTag.cs" />
+    <Compile Include="Parser\TagCounter.cs" />
     <Compile Include="Parser\TlvTag.cs" />
     <Compile Include="Parser\TlvReader.cs" />
     <Compile Include="Parser\TlvWriter.cs" />

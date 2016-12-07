@@ -41,6 +41,10 @@ namespace Guardtime.KSI.Publication
         private RawTag _cmsSignature;
         private readonly List<PublicationRecordInPublicationFile> _publicationRecordList = new List<PublicationRecordInPublicationFile>();
         private PublicationsFileHeader _publicationsHeader;
+        private int _headerIndex;
+        private int _lastCertRecordIndex;
+        private int _firstPublicationRecordIndex;
+        private int _cmsSignatureIndex;
 
         /// <summary>
         ///     Create new publications file TLV element from TLV element.
@@ -51,64 +55,64 @@ namespace Guardtime.KSI.Publication
         }
 
         /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
+            {
+                case Constants.PublicationsFileHeader.TagType:
+                    _headerIndex = Count;
+                    return _publicationsHeader = childTag as PublicationsFileHeader ?? new PublicationsFileHeader(childTag);
+                case Constants.CertificateRecord.TagType:
+                    _lastCertRecordIndex = Count;
+                    CertificateRecord certificateRecord = childTag as CertificateRecord ?? new CertificateRecord(childTag);
+                    _certificateRecordList.Add(certificateRecord);
+                    return certificateRecord;
+                case Constants.PublicationRecord.TagTypeInPublicationsFile:
+                    if (_firstPublicationRecordIndex == 0)
+                    {
+                        _firstPublicationRecordIndex = Count;
+                    }
+                    PublicationRecordInPublicationFile publicationRecord = childTag as PublicationRecordInPublicationFile ?? new PublicationRecordInPublicationFile(childTag);
+                    _publicationRecordList.Add(publicationRecord);
+                    return publicationRecord;
+                case Constants.PublicationsFile.CmsSignatureTagType:
+                    _cmsSignatureIndex = Count;
+                    return _cmsSignature = GetRawTag(childTag);
+                default:
+                    return base.ParseChild(childTag);
+            }
+        }
+
+        /// <summary>
         /// Validate the tag
         /// </summary>
-        protected override void Validate()
+        protected override void Validate(TagCounter tagCounter)
         {
-            base.Validate();
+            base.Validate(tagCounter);
 
-            int publicationsHeaderCount = 0;
-            int cmsSignatureCount = 0;
-
-            for (int i = 0; i < Count; i++)
+            if (_headerIndex != 0)
             {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.PublicationsFileHeader.TagType:
-                        this[i] = _publicationsHeader = new PublicationsFileHeader(childTag);
-                        publicationsHeaderCount++;
-                        if (i != 0)
-                        {
-                            throw new PublicationsFileException("Publications file header should be the first element in publications file.");
-                        }
-                        break;
-                    case Constants.CertificateRecord.TagType:
-                        CertificateRecord certificateRecord = new CertificateRecord(childTag);
-                        _certificateRecordList.Add(certificateRecord);
-                        if (_publicationRecordList.Count != 0)
-                        {
-                            throw new PublicationsFileException("Certificate records should be before publication records.");
-                        }
-                        this[i] = certificateRecord;
-                        break;
-                    case Constants.PublicationRecord.TagTypeInPublicationsFile:
-                        PublicationRecordInPublicationFile publicationRecord = new PublicationRecordInPublicationFile(childTag);
-                        _publicationRecordList.Add(publicationRecord);
-                        this[i] = publicationRecord;
-                        break;
-                    case Constants.PublicationsFile.CmsSignatureTagType:
-                        this[i] = _cmsSignature = new RawTag(childTag);
-                        cmsSignatureCount++;
-                        if (i != Count - 1)
-                        {
-                            throw new PublicationsFileException("Cms signature should be last element in publications file.");
-                        }
-
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
+                throw new PublicationsFileException("Publications file header should be the first element in publications file.");
             }
 
-            if (publicationsHeaderCount != 1)
+            if (_firstPublicationRecordIndex < _lastCertRecordIndex)
+            {
+                throw new PublicationsFileException("Certificate records should be before publication records.");
+            }
+
+            if (_cmsSignatureIndex != Count - 1)
+            {
+                throw new PublicationsFileException("Cms signature should be last element in publications file.");
+            }
+
+            if (tagCounter[Constants.PublicationsFileHeader.TagType] != 1)
             {
                 throw new PublicationsFileException("Exactly one publications file header must exist in publications file.");
             }
 
-            if (cmsSignatureCount != 1)
+            if (tagCounter[Constants.PublicationsFile.CmsSignatureTagType] != 1)
             {
                 throw new PublicationsFileException("Exactly one signature must exist in publications file.");
             }
