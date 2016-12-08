@@ -65,7 +65,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             // Check signature without calendar chain which will fail
             using (
                 FileStream stream =
-                    new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record),
+                    new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record),
                         FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
@@ -86,7 +86,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             ExtendedSignatureCalendarChainAggregationTimeRule rule = new ExtendedSignatureCalendarChainAggregationTimeRule();
 
             // Check invalid extended calendar chain with invalid context functions
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 TestVerificationContextFaultyFunctions context = new TestVerificationContextFaultyFunctions()
                 {
@@ -106,7 +106,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             ExtendedSignatureCalendarChainAggregationTimeRule rule = new ExtendedSignatureCalendarChainAggregationTimeRule();
 
             // Check legacy signature calendar hash chain aggregation time
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Legacy_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -128,7 +128,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             ExtendedSignatureCalendarChainAggregationTimeRule rule = new ExtendedSignatureCalendarChainAggregationTimeRule();
 
             // Check signature calendar hash chain aggregation time
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -151,7 +151,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             ExtendedSignatureCalendarChainAggregationTimeRule rule = new ExtendedSignatureCalendarChainAggregationTimeRule();
 
             // Check invalid signature with invalid aggregation time
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_With_Publication_Record), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {

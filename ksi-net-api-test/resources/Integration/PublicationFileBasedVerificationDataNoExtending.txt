@@ -9,7 +9,7 @@ resources/signature/integration-test-signatures/ok-sig-2014-06-2-extended-extra-
 #
 # Na because extending is not allowedF
 #
-resources/signature/ksi-signature-do/ksi-signature-ok.tlv;false;Na; ; ;ExtendingPermittedVerificationRule
+resources/signature/ksi-signature/ksi-signature-ok.tlv;false;Na; ; ;ExtendingPermittedVerificationRule
 resources/signature/integration-test-signatures/ok-sig-2014-06-2-extra-element-in-aggregation.ksig;false;Na; ; ;ExtendingPermittedVerificationRule
 resources/signature/integration-test-signatures/ok-sig-2014-06-2-extra-element-in-aggregation-lvl2.ksig;false;Na; ; ;ExtendingPermittedVerificationRule
 resources/signature/integration-test-signatures/ok-sig-2014-06-2-extra-element-in-calendar-authentication-lvl1.ksig;false;Na; ; ;ExtendingPermittedVerificationRule

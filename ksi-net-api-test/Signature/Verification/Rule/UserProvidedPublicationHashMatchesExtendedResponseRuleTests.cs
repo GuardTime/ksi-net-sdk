@@ -64,7 +64,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             UserProvidedPublicationHashMatchesExtendedResponseRule rule = new UserProvidedPublicationHashMatchesExtendedResponseRule();
 
             // Check signature without user publication
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -84,7 +84,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             UserProvidedPublicationHashMatchesExtendedResponseRule rule = new UserProvidedPublicationHashMatchesExtendedResponseRule();
 
             // Check invalid extended calendar chain from context extension function
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 TestVerificationContextFaultyFunctions context = new TestVerificationContextFaultyFunctions()
                 {
@@ -105,7 +105,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             UserProvidedPublicationHashMatchesExtendedResponseRule rule = new UserProvidedPublicationHashMatchesExtendedResponseRule();
 
             // Check legacy signature with publication record
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Legacy_Ok_With_Publication_Record), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok_With_Publication_Record), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -128,7 +128,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             UserProvidedPublicationHashMatchesExtendedResponseRule rule = new UserProvidedPublicationHashMatchesExtendedResponseRule();
 
             // Check signature with publication record
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_With_Publication_Record), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -150,7 +150,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         {
             UserProvidedPublicationHashMatchesExtendedResponseRule rule = new UserProvidedPublicationHashMatchesExtendedResponseRule();
 
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {

@@ -33,7 +33,7 @@ namespace Guardtime.KSI.Test.Publication
         [Test]
         public void PublicationDataContentTest()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_Extended), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_Extended), FileMode.Open))
             {
                 IKsiSignature signature = new KsiSignatureFactory().Create(stream);
                 PublicationRecordInSignature publicationRecord = signature.PublicationRecord;

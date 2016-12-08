@@ -2,7 +2,7 @@
 #
 # Fail because there is no publication file form where to take certs for verification.
 #
-resources/signature/ksi-signature-do/ksi-signature-ok.tlv;false;Fail;KsiVerificationException;Invalid publications file in context; null; 
+resources/signature/ksi-signature/ksi-signature-ok.tlv;false;Fail;KsiVerificationException;Invalid publications file in context; null; 
 #
 # Failed.
 #
@@ -43,8 +43,8 @@ resources/signature/integration-test-signatures/NewSignature-AggrHashGW-WrongAgg
 resources/signature/integration-test-signatures/NewSignature-AggrHashCore-WrongAggrTime.ksig;false;Fail; ; ;AggregationHashChainTimeConsistencyRule
 resources/signature/integration-test-signatures/NewSignature-AggrHashCore-NoAggrTime.ksig;false;Fail; ; ;AggregationHashChainTimeConsistencyRule
 resources/signature/integration-test-signatures/signature-with-invalid-calendar-authentication-record-hash.ksig;false;Fail; ; ;CalendarAuthenticationRecordAggregationHashRule
-resources/signature/ksi-signature-do/ksi-signature-invalid-chain-index-mismatch.tlv;false;Fail; ;Chain index mismatch;Rfc3161RecordChainIndexRule
-resources/signature/ksi-signature-do/ksi-signature-invalid-rfc3161-aggregation-time-mismatch.tlv;false;Fail; ;Chain index mismatch;Rfc3161RecordAggregationTimeRule
+resources/signature/ksi-signature/ksi-signature-invalid-chain-index-mismatch.tlv;false;Fail; ;Chain index mismatch;Rfc3161RecordChainIndexRule
+resources/signature/ksi-signature/ksi-signature-invalid-rfc3161-aggregation-time-mismatch.tlv;false;Fail; ;Chain index mismatch;Rfc3161RecordAggregationTimeRule
 #
 # key based ver; Resutl is Na
 #
@@ -86,7 +86,7 @@ resources/signature/integration-test-signatures/ok-sig-extended-2014-05-15_inval
 #
 # Unknown type
 #
-resources/signature/ksi-signature-do/ksi-signature-invalid-extra-tag.tlv;true;Fail;TlvException;Unknown tag type; 
+resources/signature/ksi-signature/ksi-signature-invalid-extra-tag.tlv;true;Fail;TlvException;Unknown tag type; 
 resources/signature/integration-test-signatures/ok-sig-2014-06-2-extra-critical-element-in-aggregation.ksig;true;Fail;TlvException;Unknown tag type; 
 resources/signature/integration-test-signatures/ok-sig-2014-06-2-extra-critical-element-in-aggregation-lvl1.ksig;true;Fail;TlvException;Unknown tag type; 
 resources/signature/integration-test-signatures/ok-sig-2014-06-2-extra-critical-element-in-aggregation-lvl2.ksig;true;Fail;TlvException;Unknown tag type; 
