@@ -232,7 +232,7 @@ namespace Guardtime.KSI.Utils
         {
             byte[] bytes = new byte[8];
             Random.NextBytes(bytes);
-            return BitConverter.ToUInt32(bytes, 0);
+            return BitConverter.ToUInt64(bytes, 0);
         }
 
         /// <summary>
