@@ -206,7 +206,7 @@ namespace Guardtime.KSI.Service
                 {
                     if (IsLegacyPduVersion)
                     {
-                        throw new InvalidRequestFormatException("Received PDU v2 response to PDU v1 request. Configure the SDK to use PDU v2 format for the given Extender.");
+                        throw new KsiServiceInvalidRequestFormatException("Received PDU v2 response to PDU v1 request. Configure the SDK to use PDU v2 format for the given Extender.");
                     }
 
                     pdu = new ExtendResponsePdu(rawTag);
@@ -215,7 +215,7 @@ namespace Guardtime.KSI.Service
                 {
                     if (!IsLegacyPduVersion)
                     {
-                        throw new InvalidRequestFormatException("Received PDU v1 response to PDU v2 request. Configure the SDK to use PDU v1 format for the given Extender.");
+                        throw new KsiServiceInvalidRequestFormatException("Received PDU v1 response to PDU v2 request. Configure the SDK to use PDU v1 format for the given Extender.");
                     }
 
                     legacyPdu = new LegacyExtendPdu(rawTag);
@@ -361,7 +361,7 @@ namespace Guardtime.KSI.Service
 
                 if (rawTag.Type == Constants.LegacyExtendPdu.TagType)
                 {
-                    throw new InvalidRequestFormatException("Received PDU v1 response to PDU v2 request.");
+                    throw new KsiServiceInvalidRequestFormatException("Received PDU v1 response to PDU v2 request.");
                 }
 
                 pdu = new ExtendResponsePdu(rawTag);

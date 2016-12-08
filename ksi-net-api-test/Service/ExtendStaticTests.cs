@@ -82,7 +82,7 @@ namespace Guardtime.KSI.Test.Service
 
             Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu)), 1043101455, null, PduVersion.v1);
 
-            InvalidRequestFormatException ex = Assert.Throws<InvalidRequestFormatException>(delegate
+            KsiServiceInvalidRequestFormatException ex = Assert.Throws<KsiServiceInvalidRequestFormatException>(delegate
             {
                 ksi.Extend(signature);
             });
