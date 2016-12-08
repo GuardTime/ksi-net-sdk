@@ -359,7 +359,7 @@ namespace Guardtime.KSI.Test.Integration
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
-        public void HttpGetExtenderConfig(Ksi ksi)
+        public void GetExtenderConfig(Ksi ksi)
         {
             if (TestSetup.PduVersion == PduVersion.v1)
             {
@@ -373,6 +373,30 @@ namespace Guardtime.KSI.Test.Integration
             else
             {
                 ksi.GetExtenderConfig();
+            }
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidSigningUrl))]
+        public void GetExtenderConfigSuccessWithInvalidSigningUrlTest(Ksi ksi)
+        {
+            if (TestSetup.PduVersion != PduVersion.v1)
+            {
+                Assert.DoesNotThrow(delegate
+                {
+                    ksi.GetExtenderConfig();
+                }, "Invalid signing url should not prevent getting extnder config.");
+            }
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidSigningPass))]
+        public void GetExtenderConfigSuccessWithInvalidSigningPassTest(Ksi ksi)
+        {
+            if (TestSetup.PduVersion != PduVersion.v1)
+            {
+                Assert.DoesNotThrow(delegate
+                {
+                    ksi.GetExtenderConfig();
+                }, "Invalid signing pass should not prevent getting extnder config.");
             }
         }
     }
