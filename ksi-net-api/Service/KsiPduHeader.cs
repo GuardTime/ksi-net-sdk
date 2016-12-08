@@ -107,9 +107,7 @@ namespace Guardtime.KSI.Service
                 new IntegerTag(Constants.KsiPduHeader.MessageIdTagType, false, false, messageId)
             })
         {
-            _loginId = (StringTag)this[0];
-            _instanceId = (IntegerTag)this[1];
-            _messageId = (IntegerTag)this[2];
+
         }
 
         /// <summary>

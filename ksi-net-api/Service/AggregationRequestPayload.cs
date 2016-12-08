@@ -97,8 +97,7 @@ namespace Guardtime.KSI.Service
             new ImprintTag(Constants.AggregationRequestPayload.RequestHashTagType, false, false, hash)
         })
         {
-            _requestId = (IntegerTag)this[0];
-            _requestHash = (ImprintTag)this[1];
+
         }
 
         /// <summary>
@@ -114,9 +113,7 @@ namespace Guardtime.KSI.Service
             new IntegerTag(Constants.AggregationRequestPayload.RequestLevelTagType, false, false, level)
         })
         {
-            _requestId = (IntegerTag)this[0];
-            _requestHash = (ImprintTag)this[1];
-            _requestLevel = (IntegerTag)this[2];
+
         }
 
         /// <summary>

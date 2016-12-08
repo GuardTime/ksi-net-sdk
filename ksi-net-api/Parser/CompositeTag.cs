@@ -33,7 +33,7 @@ namespace Guardtime.KSI.Parser
     [SuppressMessage("ReSharper", "VirtualMemberCallInContructor")]
     public abstract class CompositeTag : TlvTag, ICompositeTag
     {
-        private readonly List<ITlvTag> _value = new List<ITlvTag>();
+        private readonly List<ITlvTag> _childTags = new List<ITlvTag>();
 
         /// <summary>
         /// Expected tag type
@@ -67,27 +67,27 @@ namespace Guardtime.KSI.Parser
         /// <param name="type">TLV type</param>
         /// <param name="nonCritical">Is TLV element non critical</param>
         /// <param name="forward">Is TLV element forwarded</param>
-        /// <param name="value">child TLV element list</param>
-        protected CompositeTag(uint type, bool nonCritical, bool forward, ITlvTag[] value)
+        /// <param name="childTags">child TLV element list</param>
+        protected CompositeTag(uint type, bool nonCritical, bool forward, ITlvTag[] childTags)
             : base(type, nonCritical, forward)
         {
             CheckTagType();
 
-            if (value == null)
+            if (childTags == null)
             {
                 throw new TlvException("Invalid TLV element list: null.");
             }
 
             TagCounter tagCounter = new TagCounter();
 
-            foreach (ITlvTag tag in value)
+            foreach (ITlvTag tag in childTags)
             {
                 if (tag == null)
                 {
                     throw new TlvException("Invalid TLV in element list: null.");
                 }
 
-                _value.Add(ParseChild(tag) ?? tag);
+                _childTags.Add(ParseChild(tag) ?? tag);
                 tagCounter[tag.Type]++;
             }
 
@@ -101,14 +101,14 @@ namespace Guardtime.KSI.Parser
         /// <returns>TLV element at given position</returns>
         public ITlvTag this[int i]
         {
-            get { return _value[i]; }
-            protected set { _value[i] = value; }
+            get { return _childTags[i]; }
+            protected set { _childTags[i] = value; }
         }
 
         /// <summary>
         ///     Get TLV element list size
         /// </summary>
-        public int Count => _value.Count;
+        public int Count => _childTags.Count;
 
         /// <summary>
         ///     Get Enumerator for TLV composite element.
@@ -116,7 +116,7 @@ namespace Guardtime.KSI.Parser
         /// <returns>TLV composite elemnet enumerator.</returns>
         public IEnumerator<ITlvTag> GetEnumerator()
         {
-            return _value.GetEnumerator();
+            return _childTags.GetEnumerator();
         }
 
         /// <summary>
@@ -196,7 +196,7 @@ namespace Guardtime.KSI.Parser
                 while (tlvReader.BaseStream.Position < tlvReader.BaseStream.Length)
                 {
                     RawTag tag = tlvReader.ReadTag();
-                    _value.Add(ParseChild(tag) ?? tag);
+                    _childTags.Add(ParseChild(tag) ?? tag);
                     tagCounter[tag.Type]++;
                 }
             }
@@ -212,7 +212,7 @@ namespace Guardtime.KSI.Parser
         {
             using (TlvWriter writer = new TlvWriter(new MemoryStream()))
             {
-                foreach (ITlvTag tag in _value)
+                foreach (ITlvTag tag in _childTags)
                 {
                     writer.WriteTag(tag);
                 }
@@ -247,13 +247,22 @@ namespace Guardtime.KSI.Parser
             unchecked
             {
                 int res = 1;
-                foreach (ITlvTag tag in _value)
+                foreach (ITlvTag tag in _childTags)
                 {
                     res = 31 * res + tag.GetHashCode();
                 }
 
                 return res + Type.GetHashCode() + Forward.GetHashCode() + NonCritical.GetHashCode();
             }
+        }
+
+        /// <summary>
+        /// Returns all child objects as an array
+        /// </summary>
+        /// <returns></returns>
+        public ITlvTag[] GetChildrenArray()
+        {
+            return _childTags.ToArray();
         }
 
         /// <summary>
@@ -279,7 +288,7 @@ namespace Guardtime.KSI.Parser
 
             for (int i = 0; i < Count; i++)
             {
-                builder.Append(Util.TabPrefixString(_value[i].ToString()));
+                builder.Append(Util.TabPrefixString(_childTags[i].ToString()));
                 if (i < Count - 1)
                 {
                     builder.AppendLine();

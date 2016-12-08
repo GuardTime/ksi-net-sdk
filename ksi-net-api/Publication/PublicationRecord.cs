@@ -42,8 +42,8 @@ namespace Guardtime.KSI.Publication
         /// <param name="type">TLV type</param>
         /// <param name="nonCritical">Is TLV element non critical</param>
         /// <param name="forward">Is TLV element forwarded</param>
-        /// <param name="value">child TLV element list</param>
-        protected PublicationRecord(uint type, bool nonCritical, bool forward, ITlvTag[] value) : base(type, nonCritical, forward, value)
+        /// <param name="childTags">List of child TLV elements</param>
+        protected PublicationRecord(uint type, bool nonCritical, bool forward, ITlvTag[] childTags) : base(type, nonCritical, forward, childTags)
         {
         }
 

@@ -17,7 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using System.Collections.Generic;
 using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Publication
@@ -46,14 +45,7 @@ namespace Guardtime.KSI.Publication
         /// <returns></returns>
         public PublicationRecordInSignature ConvertToPublicationRecordInSignature()
         {
-            List<ITlvTag> list = new List<ITlvTag>();
-
-            foreach (ITlvTag tag in this)
-            {
-                list.Add(tag);
-            }
-
-            return new PublicationRecordInSignature(NonCritical, Forward, list.ToArray());
+            return new PublicationRecordInSignature(NonCritical, Forward, GetChildrenArray());
         }
     }
 }

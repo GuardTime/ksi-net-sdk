@@ -103,8 +103,6 @@ namespace Guardtime.KSI.Publication
                 new ImprintTag(Constants.PublicationData.PublicationHashTagType, false, false, publicationHash)
             })
         {
-            _publicationTime = (IntegerTag)this[0];
-            _publicationHash = (ImprintTag)this[1];
         }
 
         /// <summary>
@@ -124,8 +122,6 @@ namespace Guardtime.KSI.Publication
         public PublicationData(string publicationString, bool nonCritical, bool forward)
             : base(Constants.PublicationData.TagType, nonCritical, forward, DecodePublicationString(publicationString))
         {
-            _publicationTime = (IntegerTag)this[0];
-            _publicationHash = (ImprintTag)this[1];
         }
 
         private static ITlvTag[] DecodePublicationString(string publicationString)

@@ -40,9 +40,9 @@ namespace Guardtime.KSI.Service
         /// <param name="type">TLV type</param>
         /// <param name="nonCritical">is TLV non critical</param>
         /// <param name="forward">is TLV forwarded</param>
-        /// <param name="value">TLV element list</param>
-        protected KsiPduPayload(uint type, bool nonCritical, bool forward, ITlvTag[] value)
-            : base(type, nonCritical, forward, value)
+        /// <param name="childTags">List of child TLV elements</param>
+        protected KsiPduPayload(uint type, bool nonCritical, bool forward, ITlvTag[] childTags)
+            : base(type, nonCritical, forward, childTags)
         {
         }
     }

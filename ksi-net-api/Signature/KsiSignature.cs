@@ -53,6 +53,18 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
+        /// Create new KSI signature TLV element.
+        /// </summary>
+        /// <param name="nonCritical">Is TLV element non critical</param>
+        /// <param name="forward">Is TLV element forwarded</param>
+        /// <param name="childTags">child TLV element list</param>
+        public KsiSignature(bool nonCritical, bool forward, ITlvTag[] childTags)
+            : base(Constants.KsiSignature.TagType, nonCritical, forward, childTags)
+        {
+            SortAggregationHashChains();
+        }
+
+        /// <summary>
         /// Parse child tag
         /// </summary>
         protected override ITlvTag ParseChild(ITlvTag childTag)
@@ -63,16 +75,12 @@ namespace Guardtime.KSI.Signature
                     AggregationHashChain aggregationChainTag = childTag as AggregationHashChain ?? new AggregationHashChain(childTag);
                     _aggregationHashChains.Add(aggregationChainTag);
                     return aggregationChainTag;
-
                 case Constants.CalendarHashChain.TagType:
                     return CalendarHashChain = childTag as CalendarHashChain ?? new CalendarHashChain(childTag);
-
                 case Constants.PublicationRecord.TagTypeInSignature:
                     return PublicationRecord = childTag as PublicationRecordInSignature ?? new PublicationRecordInSignature(childTag);
-
                 case Constants.AggregationAuthenticationRecord.TagType:
                     return AggregationAuthenticationRecord = childTag as AggregationAuthenticationRecord ?? new AggregationAuthenticationRecord(childTag);
-
                 case Constants.CalendarAuthenticationRecord.TagType:
                     return CalendarAuthenticationRecord = childTag as CalendarAuthenticationRecord ?? new CalendarAuthenticationRecord(childTag);
                 case Constants.Rfc3161Record.TagType:

@@ -98,9 +98,6 @@ namespace Guardtime.KSI.Service
             new IntegerTag(Constants.ExtendRequestPayload.PublicationTimeTagType, false, false, publicationTime)
         })
         {
-            _requestId = (IntegerTag)this[0];
-            _aggregationTime = (IntegerTag)this[1];
-            _publicationTime = (IntegerTag)this[2];
         }
 
         /// <summary>
@@ -114,8 +111,6 @@ namespace Guardtime.KSI.Service
             new IntegerTag(Constants.ExtendRequestPayload.AggregationTimeTagType, false, false, aggregationTime)
         })
         {
-            _requestId = (IntegerTag)this[0];
-            _aggregationTime = (IntegerTag)this[1];
         }
 
         /// <summary>

@@ -197,8 +197,8 @@ namespace Guardtime.KSI.Test.Parser
                 BuildStructure();
             }
 
-            public CompositeTestTag(uint type, bool nonCritical, bool forward, ITlvTag[] value)
-                : base(type, nonCritical, forward, value)
+            public CompositeTestTag(uint type, bool nonCritical, bool forward, ITlvTag[] childTags)
+                : base(type, nonCritical, forward, childTags)
             {
                 BuildStructure();
             }
@@ -232,7 +232,7 @@ namespace Guardtime.KSI.Test.Parser
 
         private class ChildCompositeTestTag : CompositeTestTag
         {
-            public ChildCompositeTestTag(uint type, bool nonCritical, bool forward, ITlvTag[] value) : base(type, nonCritical, forward, value)
+            public ChildCompositeTestTag(uint type, bool nonCritical, bool forward, ITlvTag[] childTags) : base(type, nonCritical, forward, childTags)
             {
             }
         }

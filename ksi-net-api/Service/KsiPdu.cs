@@ -131,35 +131,7 @@ namespace Guardtime.KSI.Service
         protected KsiPdu(uint tagType, KsiPduHeader header, KsiPduPayload payload, HashAlgorithm hmacAlgorithm, byte[] key)
             : base(tagType, false, false, new ITlvTag[] { header, payload, GetEmptyHashMacTag(hmacAlgorithm) })
         {
-            if (header == null)
-            {
-                throw new TlvException("Invalid header TLV: null.");
-            }
-
-            if (payload == null)
-            {
-                throw new TlvException("Invalid payload TLV: null.");
-            }
-
-            if (hmacAlgorithm == null)
-            {
-                throw new TlvException("Invalid HMAC algorithm: null.");
-            }
-
-            Header = header;
             SetHmacValue(hmacAlgorithm, key);
-        }
-
-        /// <summary>
-        ///     Create KSI PDU from PDU header and data.
-        /// </summary>
-        /// <param name="type">TLV type</param>
-        /// <param name="nonCritical">Is TLV element non critical</param>
-        /// <param name="forward">Is TLV element forwarded</param>
-        /// <param name="value">TLV element list</param>
-        protected KsiPdu(uint type, bool nonCritical, bool forward, ITlvTag[] value)
-            : base(type, nonCritical, forward, value)
-        {
         }
 
         /// <summary>
@@ -209,11 +181,10 @@ namespace Guardtime.KSI.Service
             {
                 ITlvTag childTag = this[i];
 
-                switch (childTag.Type)
+                if (childTag.Type == Constants.KsiPdu.MacTagType)
                 {
-                    case Constants.KsiPdu.MacTagType:
-                        this[i] = _mac = CreateHashMacTag(CalcHashMacValue(hmacAlgorithm, key));
-                        break;
+                    this[i] = _mac = CreateHashMacTag(CalcHashMacValue(hmacAlgorithm, key));
+                    break;
                 }
             }
         }
@@ -254,6 +225,11 @@ namespace Guardtime.KSI.Service
         /// <returns></returns>
         protected static ImprintTag GetEmptyHashMacTag(HashAlgorithm hmacAlgorithm)
         {
+            if (hmacAlgorithm == null)
+            {
+                throw new TlvException("Invalid HMAC algorithm: null.");
+            }
+
             byte[] imprintBytes = new byte[hmacAlgorithm.Length + 1];
             imprintBytes[0] = hmacAlgorithm.Id;
             return CreateHashMacTag(new DataHash(imprintBytes));

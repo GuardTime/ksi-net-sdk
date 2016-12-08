@@ -118,28 +118,14 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Create KSI PDU from PDU header and data.
         /// </summary>
-        /// <param name="header">KSI PDU header</param>
-        /// <param name="mac">KSI pdu hmac</param>
         /// <param name="type">TLV type</param>
         /// <param name="nonCritical">Is TLV element non critical</param>
         /// <param name="forward">Is TLV element forwarded</param>
-        /// <param name="value">TLV element list</param>
+        /// <param name="childTags">List of child TLV elements</param>
         [Obsolete]
-        protected LegacyKsiPdu(KsiPduHeader header, ImprintTag mac, uint type, bool nonCritical, bool forward, ITlvTag[] value)
-            : base(type, nonCritical, forward, value)
+        protected LegacyKsiPdu(uint type, bool nonCritical, bool forward, ITlvTag[] childTags)
+            : base(type, nonCritical, forward, childTags)
         {
-            if (header == null)
-            {
-                throw new TlvException("Invalid TLV header: null.");
-            }
-
-            if (mac == null)
-            {
-                throw new TlvException("Invalid hashmac hash: null");
-            }
-
-            _header = header;
-            _mac = mac;
         }
 
         /// <summary>
