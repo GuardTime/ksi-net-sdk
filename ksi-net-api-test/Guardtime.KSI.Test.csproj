@@ -1173,13 +1173,22 @@
     <None Include="resources\testdata.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\trust\pkitrustprovider\data.bin">
+    <None Include="resources\trust\pkitrustprovider\custom-cert-invalid.pem">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\trust\pkitrustprovider\sigbytes.bin">
+    <None Include="resources\trust\pkitrustprovider\custom-cert.pem">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-calendar-hash-chain-input-hash.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\trust\pkitrustprovider\pubs-file-custom-cert.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\trust\pkitrustprovider\pubs-file-symantec.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\trust\pkitrustprovider\symantec.cer">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

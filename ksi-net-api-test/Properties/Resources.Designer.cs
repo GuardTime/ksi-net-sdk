@@ -1178,6 +1178,51 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/trust/pkitrustprovider/custom-cert.pem.
+        /// </summary>
+        internal static string PkiTrustProvider_CustomCert {
+            get {
+                return ResourceManager.GetString("PkiTrustProvider_CustomCert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/trust/pkitrustprovider/custom-cert-invalid.pem.
+        /// </summary>
+        internal static string PkiTrustProvider_CustomCertInvalid {
+            get {
+                return ResourceManager.GetString("PkiTrustProvider_CustomCertInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/trust/pkitrustprovider/pubs-file-custom-cert.bin.
+        /// </summary>
+        internal static string PkiTrustProvider_PubsFileCustomCert {
+            get {
+                return ResourceManager.GetString("PkiTrustProvider_PubsFileCustomCert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/trust/pkitrustprovider/pubs-file-symantec.bin.
+        /// </summary>
+        internal static string PkiTrustProvider_PubsFileSymantecCert {
+            get {
+                return ResourceManager.GetString("PkiTrustProvider_PubsFileSymantecCert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/trust/pkitrustprovider/symantec.cer.
+        /// </summary>
+        internal static string PkiTrustProvider_SymantecCert {
+            get {
+                return ResourceManager.GetString("PkiTrustProvider_SymantecCert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/rfc3161-record/rfc3161-record-invalid-extra-tag.tlv.
         /// </summary>
         internal static string Rfc3161Record_Invalid_Extra_Tag {

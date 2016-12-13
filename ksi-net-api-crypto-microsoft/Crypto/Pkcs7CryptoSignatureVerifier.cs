@@ -18,9 +18,12 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Security.Cryptography.Pkcs;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using Guardtime.KSI.Exceptions;
+using NLog;
 
 namespace Guardtime.KSI.Crypto.Microsoft.Crypto
 {
@@ -29,6 +32,8 @@ namespace Guardtime.KSI.Crypto.Microsoft.Crypto
     /// </summary>
     public class Pkcs7CryptoSignatureVerifier : ICryptoSignatureVerifier
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         private readonly X509Certificate2Collection _trustAnchors;
         private readonly ICertificateSubjectRdnSelector _certificateRdnSelector;
 
@@ -110,12 +115,88 @@ namespace Guardtime.KSI.Crypto.Microsoft.Crypto
 
             try
             {
-                signedCms.CheckSignature(_trustAnchors, false);
+                signedCms.CheckSignature(_trustAnchors, true);
             }
             catch (Exception e)
             {
+                Logger.Warn("Failed to verify PKCS#7 signature. " + e + GetCertInfoString());
+
                 throw new PkiVerificationFailedException("Failed to verify PKCS#7 signature.", e);
             }
+
+            ValidateCertPath(certificate);
+        }
+
+        private void ValidateCertPath(X509Certificate2 certificate)
+        {
+            X509Chain chain = new X509Chain { ChainPolicy = { VerificationFlags = X509VerificationFlags.AllowUnknownCertificateAuthority } };
+
+            //chain.ChainPolicy.ExtraStore.AddRange(_trustAnchors);
+
+            bool isChainValid = chain.Build(certificate);
+
+            if (!isChainValid)
+            {
+                List<string> errors = new List<string>();
+
+                foreach (X509ChainStatus status in chain.ChainStatus)
+                {
+                    errors.Add(string.Format("{0} ({1})", status.StatusInformation, status.Status));
+                }
+
+                string certificateErrorsString = "Unknown errors.";
+
+                if (errors.Count > 0)
+                {
+                    certificateErrorsString = string.Join(", ", errors.ToArray());
+                }
+
+                throw new PkiVerificationFailedException("Trust chain did not complete to the known authority anchor. Errors: " + certificateErrorsString);
+            }
+
+            foreach (X509ChainElement chainElement in chain.ChainElements)
+            {
+                foreach (X509Certificate2 cert in _trustAnchors)
+                {
+                    if (chainElement.Certificate.Thumbprint == cert.Thumbprint)
+                    {
+                        return;
+                    }
+                }
+            }
+
+            Logger.Warn("Trust chain did not complete to the known authority anchor. Thumbprints did not match." +
+                        GetCertInfoString(chain.ChainElements));
+
+            throw new PkiVerificationFailedException("Trust chain did not complete to the known authority anchor. Thumbprints did not match.");
+        }
+
+        private string GetCertInfoString(X509ChainElementCollection chainElements = null)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            if (chainElements != null)
+            {
+                sb.AppendLine();
+                sb.AppendLine("Chain elements: ");
+
+                foreach (X509ChainElement chainElement in chainElements)
+                {
+                    sb.AppendLine("------------------- Chain element -------------------");
+                    sb.AppendLine(chainElement.Certificate.ToString());
+                }
+            }
+
+            sb.AppendLine();
+            sb.AppendLine("Trust anchors: ");
+
+            foreach (X509Certificate2 cert in _trustAnchors)
+            {
+                sb.AppendLine("------------------ Trust anchor --------------------");
+                sb.AppendLine(cert.ToString());
+            }
+
+            return sb.ToString();
         }
     }
 }
