@@ -18,15 +18,11 @@
  */
 
 using System.IO;
-using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
-using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature.Verification;
-using Guardtime.KSI.Test.Crypto;
 using Guardtime.KSI.Test.Properties;
-using Guardtime.KSI.Trust;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
@@ -36,7 +32,7 @@ namespace Guardtime.KSI.Test.Service
     /// Signing tests with static response
     /// </summary>
     [TestFixture]
-    public class SigningStaticTests
+    public class SigningStaticTests : StaticServiceTestsBase
     {
         /// <summary>
         /// Test signing.
@@ -44,7 +40,7 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void SignStaticTest()
         {
-            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu)), 1584727637);
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu)), 1584727637);
 
             ksi.Sign(new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
         }
@@ -55,7 +51,7 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void SignStaticInvalidPduResponseVersionTest()
         {
-            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu)), 1584727637, PduVersion.v1);
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu)), 1584727637, null, PduVersion.v1);
 
             KsiServiceInvalidRequestFormatException ex = Assert.Throws<KsiServiceInvalidRequestFormatException>(delegate
             {
@@ -72,7 +68,7 @@ namespace Guardtime.KSI.Test.Service
         public void SignStaticWithMultiPayloadsResponseTest()
         {
             // Response has multiple payloads (including a payload containing invalid signature, a configuration payload and an acknowledgment payload)
-            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_Multi_Payloads)), 1584727637);
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_Multi_Payloads)), 1584727637);
 
             ksi.Sign(new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
         }
@@ -83,7 +79,7 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void SignStaticInvalidSignatureTest()
         {
-            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_Invalid_Signature)), 2);
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_Invalid_Signature)), 2);
 
             KsiSignatureInvalidContentException ex = Assert.Throws<KsiSignatureInvalidContentException>(delegate
             {
@@ -101,7 +97,7 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void SignStaticMultiPayloadsResponseIncludingErrorPayloadTest()
         {
-            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_Multi_Payloads_Including_ErrorPayload)), 2);
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_Multi_Payloads_Including_ErrorPayload)), 2);
 
             KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
             {
@@ -117,7 +113,7 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void SignStaticErrorPayloadTest()
         {
-            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_ErrorPayload)), 2);
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_ErrorPayload)), 2);
 
             KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
             {
@@ -134,7 +130,7 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void LegacySignStaticInvalidRequestIdTest()
         {
-            Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_LegacyAggregationResponsePdu)), 0, PduVersion.v1);
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_LegacyAggregationResponsePdu)), 0, null, PduVersion.v1);
 
             KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
             {
@@ -142,19 +138,6 @@ namespace Guardtime.KSI.Test.Service
             });
 
             Assert.That(ex.Message.StartsWith("Unknown request ID:"), "Unexpected exception message: " + ex.Message);
-        }
-
-        private static Ksi GetKsi(byte[] requestResult, ulong requestId, PduVersion pduVersion = PduVersion.v2)
-        {
-            TestKsiServiceProtocol protocol = new TestKsiServiceProtocol
-            {
-                RequestResult = requestResult
-            };
-
-            return new Ksi(new TestKsiService(protocol, new ServiceCredentials("anon", "anon"), protocol, new ServiceCredentials("anon", "anon"), protocol,
-                new PublicationsFileFactory(
-                    new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))), requestId, pduVersion));
         }
     }
 }

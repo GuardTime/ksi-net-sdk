@@ -222,7 +222,7 @@ namespace Guardtime.KSI.Service
                     AggregationResponsePayload payload = pdu.GetAggregationResponsePayload(serviceAsyncResult.RequestId);
                     AggregationErrorPayload errorPayload = pdu.GetAggregationErrorPayload();
 
-                    ValidateResponse(pdu, payload, errorPayload, _signingServiceCredentials);
+                    ValidateResponse(data, pdu, payload, errorPayload, _signingServiceCredentials);
 
                     signature = _ksiSignatureFactory.Create(payload, serviceAsyncResult.DocumentHash, serviceAsyncResult.Level);
                 }
@@ -345,9 +345,7 @@ namespace Guardtime.KSI.Service
                 AggregatorConfigResponsePayload payload = pdu.GetAggregatorConfigResponsePayload();
                 AggregationErrorPayload errorPayload = pdu.GetAggregationErrorPayload();
 
-                ValidateResponse(pdu, payload, errorPayload, _signingServiceCredentials);
-
-                Logger.Debug("End get aggregator config successful (request id: {0}){1}{2}", serviceAsyncResult.RequestId, Environment.NewLine, pdu);
+                ValidateResponse(data, pdu, payload, errorPayload, _signingServiceCredentials);
 
                 return new AggregatorConfig(payload);
             }

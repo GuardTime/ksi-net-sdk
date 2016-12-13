@@ -206,7 +206,8 @@ namespace Guardtime.KSI.Service
                 {
                     if (IsLegacyPduVersion)
                     {
-                        throw new KsiServiceInvalidRequestFormatException("Received PDU v2 response to PDU v1 request. Configure the SDK to use PDU v2 format for the given Extender.");
+                        throw new KsiServiceInvalidRequestFormatException(
+                            "Received PDU v2 response to PDU v1 request. Configure the SDK to use PDU v2 format for the given Extender.");
                     }
 
                     pdu = new ExtendResponsePdu(rawTag);
@@ -215,7 +216,8 @@ namespace Guardtime.KSI.Service
                 {
                     if (!IsLegacyPduVersion)
                     {
-                        throw new KsiServiceInvalidRequestFormatException("Received PDU v1 response to PDU v2 request. Configure the SDK to use PDU v1 format for the given Extender.");
+                        throw new KsiServiceInvalidRequestFormatException(
+                            "Received PDU v1 response to PDU v2 request. Configure the SDK to use PDU v1 format for the given Extender.");
                     }
 
                     legacyPdu = new LegacyExtendPdu(rawTag);
@@ -241,7 +243,7 @@ namespace Guardtime.KSI.Service
                     ExtendResponsePayload payload = pdu.GetExtendResponsePayload(serviceAsyncResult.RequestId);
                     ExtendErrorPayload errorPayload = pdu.GetExtendErrorPayload();
 
-                    ValidateResponse(pdu, payload, errorPayload, _extendingServiceCredentials);
+                    ValidateResponse(data, pdu, payload, errorPayload, _extendingServiceCredentials);
 
                     calendarHashChain = payload.CalendarHashChain;
                 }
@@ -369,9 +371,7 @@ namespace Guardtime.KSI.Service
                 ExtenderConfigResponsePayload payload = pdu.GetExtenderConfigResponsePayload();
                 ExtendErrorPayload errorPayload = pdu.GetExtendErrorPayload();
 
-                ValidateResponse(pdu, payload, errorPayload, _extendingServiceCredentials);
-
-                Logger.Debug("End get extender config successful (request id: {0}){1}{2}", serviceAsyncResult.RequestId, Environment.NewLine, pdu);
+                ValidateResponse(data, pdu, payload, errorPayload, _extendingServiceCredentials);
 
                 return new ExtenderConfig(payload);
             }

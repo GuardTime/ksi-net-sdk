@@ -790,6 +790,15 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/service/aggregator-config-response-pdu-0x0-int.tlv.
+        /// </summary>
+        internal static string KsiService_AggregatorConfigResponsePdu_0x0_Int {
+            get {
+                return ResourceManager.GetString("KsiService_AggregatorConfigResponsePdu_0x0_Int", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/service/extender-config-response-pdu.tlv.
         /// </summary>
         internal static string KsiService_ExtenderConfigResponsePdu {
@@ -858,6 +867,15 @@ namespace Guardtime.KSI.Test.Properties {
         internal static string KsiService_LegacyAggregationResponsePdu {
             get {
                 return ResourceManager.GetString("KsiService_LegacyAggregationResponsePdu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/legacy-aggregation-response-pdu-0x0-int.tlv.
+        /// </summary>
+        internal static string KsiService_LegacyAggregationResponsePdu_0x0_Int {
+            get {
+                return ResourceManager.GetString("KsiService_LegacyAggregationResponsePdu_0x0_Int", resourceCulture);
             }
         }
         

@@ -23,6 +23,7 @@ using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
+using NLog;
 
 namespace Guardtime.KSI.Service
 {
@@ -31,7 +32,7 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public abstract class KsiPdu : CompositeTag
     {
-        private ImprintTag _mac;
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         int _headerIndex;
         int _macIndex;
@@ -81,7 +82,7 @@ namespace Guardtime.KSI.Service
             if (childTag.Type == Constants.KsiPdu.MacTagType)
             {
                 _macIndex = Count;
-                return _mac = GetImprintTag(childTag);
+                return Mac = GetImprintTag(childTag);
             }
 
             return base.ParseChild(childTag);
@@ -138,6 +139,11 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
+        /// MAC
+        /// </summary>
+        public ImprintTag Mac { get; private set; }
+
+        /// <summary>
         /// Get payload of a given type
         /// </summary>
         /// <typeparam name="T">KSI PDU payload type</typeparam>
@@ -186,7 +192,7 @@ namespace Guardtime.KSI.Service
 
                 if (childTag.Type == Constants.KsiPdu.MacTagType)
                 {
-                    this[i] = _mac = CreateHashMacTag(CalcHashMacValue(hmacAlgorithm, key));
+                    this[i] = Mac = CreateHashMacTag(CalcHashMacValue(hmacAlgorithm, key));
                     break;
                 }
             }
@@ -203,12 +209,24 @@ namespace Guardtime.KSI.Service
             using (TlvWriter writer = new TlvWriter(stream))
             {
                 writer.WriteTag(this);
-                byte[] target = new byte[stream.Length - hmacAlgorithm.Length];
-                Array.Copy(stream.ToArray(), 0, target, 0, target.Length);
 
-                IHmacHasher hasher = KsiProvider.CreateHmacHasher(hmacAlgorithm);
-                return hasher.GetHash(key, target);
+                return CalcHashMacValue(stream.ToArray(), hmacAlgorithm, key);
             }
+        }
+
+        /// <summary>
+        ///     Calculate HMAC value.
+        /// </summary>
+        /// <param name="pduBytes">PDU encoded as byte array</param>
+        /// <param name="hmacAlgorithm">HMAC algorithm</param>
+        /// <param name="key">HMAC key</param>
+        private static DataHash CalcHashMacValue(byte[] pduBytes, HashAlgorithm hmacAlgorithm, byte[] key)
+        {
+            byte[] target = pduBytes.Length < hmacAlgorithm.Length ? new byte[0] : new byte[pduBytes.Length - hmacAlgorithm.Length];
+            Array.Copy(pduBytes, 0, target, 0, target.Length);
+
+            IHmacHasher hasher = KsiProvider.CreateHmacHasher(hmacAlgorithm);
+            return hasher.GetHash(key, target);
         }
 
         /// <summary>
@@ -239,18 +257,44 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        ///     Validate mac attached to KSI PDU.
+        ///     Validate KSI PDU against given MAC.
         /// </summary>
+        /// <param name="pduBytes">PDU encoded as byte array</param>
+        /// <param name="mac">MAC</param>
         /// <param name="key">message key</param>
         /// <returns>true if MAC is valid</returns>
-        public bool ValidateMac(byte[] key)
+        public static bool ValidateMac(byte[] pduBytes, ImprintTag mac, byte[] key)
         {
-            if (_mac == null)
+            if (pduBytes == null || mac == null)
             {
                 return false;
             }
 
-            return CalcHashMacValue(_mac.Value.Algorithm, key).Equals(_mac.Value);
+            if (pduBytes == null)
+            {
+                throw new ArgumentNullException(nameof(pduBytes));
+            }
+
+            if (mac == null)
+            {
+                throw new ArgumentNullException(nameof(mac));
+            }
+
+            if (pduBytes.Length < mac.Value.Algorithm.Length)
+            {
+                Logger.Warn("PDU MAC validation failed. PDU bytes array is too short to contain given MAC.");
+                return false;
+            }
+
+            DataHash calculatedMac = CalcHashMacValue(pduBytes, mac.Value.Algorithm, key);
+
+            if (!calculatedMac.Equals(mac.Value))
+            {
+                Logger.Warn("PDU MAC validation failed. Calculated MAC and given MAC do no match.");
+                return false;
+            }
+
+            return true;
         }
     }
 }
