@@ -57,7 +57,7 @@ namespace Guardtime.KSI.Test.Service
         {
             Ksi ksi = GetKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu)), 1584727637, PduVersion.v1);
 
-            InvalidRequestFormatException ex = Assert.Throws<InvalidRequestFormatException>(delegate
+            KsiServiceInvalidRequestFormatException ex = Assert.Throws<KsiServiceInvalidRequestFormatException>(delegate
             {
                 ksi.Sign(new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")));
             });
@@ -108,7 +108,7 @@ namespace Guardtime.KSI.Test.Service
                 ksi.Sign(new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")));
             });
 
-            Assert.That(ex.Message.StartsWith("Error occured during aggregation. Status: 418464624128; Message: anon"), "Unexpected inner exception message: " + ex.Message);
+            Assert.That(ex.Message.StartsWith("Server responded with error message. Status: 418464624128; Message: anon"), "Unexpected inner exception message: " + ex.Message);
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace Guardtime.KSI.Test.Service
                 ksi.Sign(new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")));
             });
 
-            Assert.That(ex.Message.StartsWith("Error occured during aggregation. Status: 258; Message: The request could not be authenticated."),
+            Assert.That(ex.Message.StartsWith("Server responded with error message. Status: 258; Message: The request could not be authenticated."),
                 "Unexpected exception message: " + ex.Message);
         }
 

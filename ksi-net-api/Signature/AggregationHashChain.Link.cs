@@ -36,11 +36,11 @@ namespace Guardtime.KSI.Signature
             private const byte LegacyIdFirstOctet = 0x3;
             private const byte LegacyIdLength = 29;
 
-            private readonly IntegerTag _levelCorrection;
-            private readonly Metadata _metadata;
-            private readonly ImprintTag _siblingHash;
-            private readonly RawTag _legacyId;
-            private readonly string _legacyIdString;
+            private IntegerTag _levelCorrection;
+            private Metadata _metadata;
+            private ImprintTag _siblingHash;
+            private RawTag _legacyId;
+            private string _legacyIdString;
 
             /// <summary>
             /// Create new aggregation hash chain link TLV element.
@@ -50,7 +50,7 @@ namespace Guardtime.KSI.Signature
             /// <param name="metadata">Metadata element</param>
             /// <param name="levelCorrection">Level correction</param>
             public Link(LinkDirection direction, DataHash siblingHash, Metadata metadata, ulong levelCorrection)
-                : this(new Link(BuildChildTags(siblingHash, metadata, levelCorrection), direction), direction)
+                : base((uint)direction, false, false, BuildChildTags(siblingHash, metadata, levelCorrection))
             {
             }
 
@@ -58,60 +58,58 @@ namespace Guardtime.KSI.Signature
             /// Create new aggregation hash chain link TLV element from TLV element.
             /// </summary>
             /// <param name="tag">TLV element</param>
-            /// <param name="direction">Direction</param>
-            public Link(ITlvTag tag, LinkDirection direction) : base(tag)
+            public Link(ITlvTag tag) : base(tag)
+            {
+            }
+
+            /// <summary>
+            /// Check tag type
+            /// </summary>
+            protected override void CheckTagType()
             {
                 CheckTagType((uint)LinkDirection.Right, (uint)LinkDirection.Left);
+            }
 
-                int levelCorrectionCount = 0;
-                int siblingHashCount = 0;
-                int legacyIdCount = 0;
-                int metadataCount = 0;
-
-                for (int i = 0; i < Count; i++)
+            /// <summary>
+            /// Parse child element
+            /// </summary>
+            protected override ITlvTag ParseChild(ITlvTag childTag)
+            {
+                switch (childTag.Type)
                 {
-                    ITlvTag childTag = this[i];
+                    case Constants.AggregationHashChain.Link.LevelCorrectionTagType:
+                        return _levelCorrection = GetIntegerTag(childTag);
+                    case Constants.AggregationHashChain.Link.SiblingHashTagType:
+                        return _siblingHash = GetImprintTag(childTag);
+                    case Constants.AggregationHashChain.Link.LegacyId:
+                        _legacyId = GetRawTag(childTag);
+                        _legacyIdString = GetLegacyIdString(_legacyId.Value);
+                        return _legacyId;
+                    case Constants.AggregationHashChain.Metadata.TagType:
+                        return _metadata = childTag as Metadata ?? new Metadata(childTag);
 
-                    switch (childTag.Type)
-                    {
-                        case Constants.AggregationHashChain.Link.LevelCorrectionTagType:
-                            this[i] = _levelCorrection = new IntegerTag(childTag);
-                            levelCorrectionCount++;
-                            break;
-                        case Constants.AggregationHashChain.Link.SiblingHashTagType:
-                            this[i] = _siblingHash = new ImprintTag(childTag);
-                            siblingHashCount++;
-                            break;
-                        case Constants.AggregationHashChain.Link.LegacyId:
-                            this[i] = _legacyId = new RawTag(childTag);
-                            _legacyIdString = GetLegacyIdString(_legacyId.Value);
-                            legacyIdCount++;
-                            break;
-                        case Constants.AggregationHashChain.Metadata.TagType:
-                            this[i] = _metadata = childTag as Metadata ?? new Metadata(childTag);
-                            metadataCount++;
-                            break;
-                        default:
-                            VerifyUnknownTag(childTag);
-                            break;
-                    }
+                    default:
+                        return base.ParseChild(childTag);
                 }
+            }
 
-                if (levelCorrectionCount > 1)
+            /// <summary>
+            /// Validate the tag
+            /// </summary>
+            protected override void Validate(TagCounter tagCounter)
+            {
+                base.Validate(tagCounter);
+
+                if (tagCounter[Constants.AggregationHashChain.Link.LevelCorrectionTagType] > 1)
                 {
                     throw new TlvException("Only one levelcorrection value is allowed in aggregation hash chain link.");
                 }
 
-                if (!Util.IsOneValueEqualTo(1, siblingHashCount, legacyIdCount, metadataCount))
+                if (!Util.IsOneValueEqualTo(1, tagCounter[Constants.AggregationHashChain.Link.SiblingHashTagType], tagCounter[Constants.AggregationHashChain.Link.LegacyId],
+                    tagCounter[Constants.AggregationHashChain.Metadata.TagType]))
                 {
                     throw new TlvException("Exactly one of three from sibling hash, legacy id or metadata must exist in aggregation hash chain link.");
                 }
-
-                Direction = direction;
-            }
-
-            private Link(ITlvTag[] value, LinkDirection direction) : base((uint)direction, false, false, value)
-            {
             }
 
             /// <summary>
@@ -150,7 +148,7 @@ namespace Guardtime.KSI.Signature
             /// <summary>
             ///     Get direction
             /// </summary>
-            public LinkDirection Direction { get; }
+            public LinkDirection Direction => (LinkDirection)Type;
 
             /// <summary>
             /// Metadata element

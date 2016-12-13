@@ -17,28 +17,23 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Service
 {
     /// <summary>
-    ///     Aggregation response payload.
+    ///     KSI PDU request response payload. Contains request ID.
     /// </summary>
-    [Obsolete]
-    public sealed class LegacyAggregationResponsePayload : RequestResponsePayload
+    public abstract class RequestResponsePayload : ResponsePayload
     {
-        /// <summary>
-        /// Expected tag type
-        /// </summary>
-        protected override uint ExpectedTagType => Constants.AggregationResponsePayload.LegacyTagType;
+        private IntegerTag _requestId;
 
         /// <summary>
-        ///     Create aggregation response payload from TLV element.
+        ///     Create KSI PDU request response payload TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        public LegacyAggregationResponsePayload(ITlvTag tag) : base(tag)
+        protected RequestResponsePayload(ITlvTag tag) : base(tag)
         {
         }
 
@@ -49,17 +44,8 @@ namespace Guardtime.KSI.Service
         {
             switch (childTag.Type)
             {
-                case Constants.AggregationResponsePayload.ConfigTagType:
-                    return GetRawTag(childTag);
-                case Constants.AggregationResponsePayload.RequestAcknowledgmentTagType:
-                    return GetRawTag(childTag);
-                // following fields will be used to create KSI signature and parsed when creating the signature
-                case Constants.AggregationHashChain.TagType:
-                case Constants.CalendarHashChain.TagType:
-                case Constants.PublicationRecord.TagTypeInSignature:
-                case Constants.AggregationAuthenticationRecord.TagType:
-                case Constants.CalendarAuthenticationRecord.TagType:
-                    return childTag;
+                case Constants.KsiPduPayload.RequestIdTagType:
+                    return _requestId = GetIntegerTag(childTag);
                 default:
                     return base.ParseChild(childTag);
             }
@@ -72,15 +58,15 @@ namespace Guardtime.KSI.Service
         {
             base.Validate(tagCounter);
 
-            if (tagCounter[Constants.AggregationResponsePayload.ConfigTagType] > 1)
+            if (tagCounter[Constants.KsiPduPayload.RequestIdTagType] != 1)
             {
-                throw new TlvException("Only one config is allowed in aggregation response payload.");
-            }
-
-            if (tagCounter[Constants.AggregationResponsePayload.RequestAcknowledgmentTagType] > 1)
-            {
-                throw new TlvException("Only one request acknowledgment is allowed in aggregation response payload.");
+                throw new TlvException("Exactly one request id must exist in response payload.");
             }
         }
+
+        /// <summary>
+        ///     Get request ID.
+        /// </summary>
+        public ulong RequestId => _requestId.Value;
     }
 }

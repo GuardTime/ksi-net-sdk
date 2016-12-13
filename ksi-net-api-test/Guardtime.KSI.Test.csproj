@@ -196,7 +196,7 @@
     <Compile Include="TestSetup.cs" />
     <Compile Include="Signature\CalendarAuthenticationRecordTests.cs" />
     <Compile Include="Signature\AggregationAuthenticationRecordTests.cs" />
-    <Compile Include="Signature\KsiSignatureDoTests.cs" />
+    <Compile Include="Signature\KsiSignatureTests.cs" />
     <Compile Include="Signature\AggregationHashChainTests.cs" />
     <Compile Include="Signature\CalendarHashChainTests.cs" />
     <Compile Include="Signature\KsiSignatureFactoryTests.cs" />
@@ -969,94 +969,94 @@
     <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-MissingCalHash.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-aggregation-chain-aggregation-time-mismatch.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-aggregation-chain-aggregation-time-mismatch.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-aggregation-chain-index-mismatch.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-aggregation-chain-index-mismatch.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-aggregation-chain-input-hash.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-aggregation-chain-input-hash.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-aggregation-root-hash.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-aggregation-root-hash.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-calendar-authentication-record-invalid-publication-hash.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-calendar-authentication-record-invalid-publication-hash.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-calendar-authentication-record-invalid-publication-time.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-calendar-authentication-record-invalid-publication-time.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-calendar-authentication-record-invalid-signature.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-calendar-authentication-record-invalid-signature.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-calendar-hash-chain-publication-time.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-calendar-hash-chain-publication-time.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-contain-both-publication-record-and-calendar-authentication-record.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-contain-both-publication-record-and-calendar-authentication-record.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-extra-tag.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-extra-tag.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-hash-algorithm.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-hash-algorithm.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-missing-aggregation-hash-chains.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-missing-aggregation-hash-chains.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-with-invalid-publication-record.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-with-invalid-publication-record.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-ok-extended.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-ok-extended.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-calendar-chain-invalid-aggregation-time.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-calendar-chain-invalid-aggregation-time.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-missing-calendar-auth-record.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-missing-calendar-auth-record.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-missing-calendar-hash-chain.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-missing-calendar-hash-chain.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-ok-identity.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-ok-identity.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-ok-missing-publication-record-and-calendar-authentication-record.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-ok-missing-publication-record-and-calendar-authentication-record.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-multiple-calendar-authentication-records.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-multiple-calendar-authentication-records.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-multiple-calendar-hash-chains.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-multiple-calendar-hash-chains.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-multiple-publication-records.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-multiple-publication-records.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-multiple-rfc3161-records.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-multiple-rfc3161-records.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-type.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-type.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-ok-new.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-ok-new.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-ok-with-publication-record.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-ok-with-publication-record.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-ok.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-ok.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-ok-with-mixed-aggregation-chains.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-ok-with-mixed-aggregation-chains.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\legacy-ksi-signature-ok-with-publication-record.tlv">
+    <None Include="resources\signature\ksi-signature\legacy-ksi-signature-ok-with-publication-record.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\legacy-ksi-signature-ok.tlv">
+    <None Include="resources\signature\ksi-signature\legacy-ksi-signature-ok.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\integration-test-signatures\another-core-response-with-only-cal-chain.tlv">
@@ -1065,13 +1065,13 @@
     <None Include="resources\signature\integration-test-signatures\ok-sig-extended-2014-05-15.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-level-3-ok.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-level-3-ok.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-rfc3161-aggregation-time-mismatch.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-rfc3161-aggregation-time-mismatch.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-chain-index-mismatch.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-chain-index-mismatch.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\rfc3161-record\rfc3161-record-invalid-extra-tag.tlv">
@@ -1179,7 +1179,7 @@
     <None Include="resources\trust\pkitrustprovider\custom-cert.pem">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature-do\ksi-signature-invalid-calendar-hash-chain-input-hash.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-calendar-hash-chain-input-hash.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\trust\pkitrustprovider\pubs-file-custom-cert.bin">

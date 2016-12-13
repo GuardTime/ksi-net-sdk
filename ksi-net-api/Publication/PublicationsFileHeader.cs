@@ -19,7 +19,6 @@
 
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
-using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Publication
 {
@@ -28,9 +27,14 @@ namespace Guardtime.KSI.Publication
     /// </summary>
     public sealed class PublicationsFileHeader : CompositeTag
     {
-        private readonly IntegerTag _creationTime;
-        private readonly StringTag _repositoryUri;
-        private readonly IntegerTag _version;
+        private IntegerTag _creationTime;
+        private StringTag _repositoryUri;
+        private IntegerTag _version;
+
+        /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.PublicationsFileHeader.TagType;
 
         /// <summary>
         ///     Create publications file header TLV element from TLV element.
@@ -38,48 +42,44 @@ namespace Guardtime.KSI.Publication
         /// <param name="tag">TLV element</param>
         public PublicationsFileHeader(ITlvTag tag) : base(tag)
         {
-            CheckTagType(Constants.PublicationsFileHeader.TagType);
+        }
 
-            int versionCount = 0;
-            int creationTimeCount = 0;
-            int repositoryUriCount = 0;
-
-            for (int i = 0; i < Count; i++)
+        /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
             {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.PublicationsFileHeader.VersionTagType:
-                        this[i] = _version = new IntegerTag(childTag);
-                        versionCount++;
-                        break;
-                    case Constants.PublicationsFileHeader.CreationTimeTagType:
-                        this[i] = _creationTime =
-                            new IntegerTag(childTag.Type, childTag.NonCritical, childTag.Forward, Util.DecodeUnsignedLong(childTag.EncodeValue(), 0, childTag.EncodeValue().Length));
-                        creationTimeCount++;
-                        break;
-                    case Constants.PublicationsFileHeader.RepositoryUriTagType:
-                        this[i] = _repositoryUri = new StringTag(childTag);
-                        repositoryUriCount++;
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
+                case Constants.PublicationsFileHeader.VersionTagType:
+                    return _version = GetIntegerTag(childTag);
+                case Constants.PublicationsFileHeader.CreationTimeTagType:
+                    return _creationTime = GetIntegerTag(childTag);
+                case Constants.PublicationsFileHeader.RepositoryUriTagType:
+                    return _repositoryUri = GetStringTag(childTag);
+                default:
+                    return base.ParseChild(childTag);
             }
+        }
 
-            if (versionCount != 1)
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate(TagCounter tagCounter)
+        {
+            base.Validate(tagCounter);
+
+            if (tagCounter[Constants.PublicationsFileHeader.VersionTagType] != 1)
             {
                 throw new TlvException("Exactly one version must exist in publications file header.");
             }
 
-            if (creationTimeCount != 1)
+            if (tagCounter[Constants.PublicationsFileHeader.CreationTimeTagType] != 1)
             {
                 throw new TlvException("Exactly one creation time must exist in publications file header.");
             }
 
-            if (repositoryUriCount > 1)
+            if (tagCounter[Constants.PublicationsFileHeader.RepositoryUriTagType] > 1)
             {
                 throw new TlvException("Only one repository uri is allowed in publications file header.");
             }

@@ -185,7 +185,8 @@ namespace Guardtime.KSI.Service
                 {
                     if (IsLegacyPduVersion)
                     {
-                        throw new InvalidRequestFormatException("Received PDU v2 response to PDU v1 request. Configure the SDK to use PDU v2 format for the given Aggregator.");
+                        throw new KsiServiceInvalidRequestFormatException(
+                            "Received PDU v2 response to PDU v1 request. Configure the SDK to use PDU v2 format for the given Aggregator.");
                     }
 
                     pdu = new AggregationResponsePdu(rawTag);
@@ -194,7 +195,8 @@ namespace Guardtime.KSI.Service
                 {
                     if (!IsLegacyPduVersion)
                     {
-                        throw new InvalidRequestFormatException("Received PDU v1 response to PDU v2 request. Configure the SDK to use PDU v1 format for the given Aggregator.");
+                        throw new KsiServiceInvalidRequestFormatException(
+                            "Received PDU v1 response to PDU v2 request. Configure the SDK to use PDU v1 format for the given Aggregator.");
                     }
 
                     legacyPdu = new LegacyAggregationPdu(rawTag);
@@ -209,65 +211,23 @@ namespace Guardtime.KSI.Service
                 if (legacyPdu != null)
                 {
                     LegacyAggregationResponsePayload legacyPayload = legacyPdu.Payload as LegacyAggregationResponsePayload;
-                    LegacyAggregationErrorPayload errorPayload = legacyPdu.Payload as LegacyAggregationErrorPayload;
+                    LegacyAggregationErrorPayload errorPayload = legacyPdu.ErrorPayload as LegacyAggregationErrorPayload;
 
-                    if (legacyPayload == null && errorPayload == null)
-                    {
-                        throw new KsiServiceException("Invalid aggregation response payload: " + legacyPdu.Payload);
-                    }
-
-                    if (errorPayload != null)
-                    {
-                        throw new KsiServiceException(GetSigningErrorMessage(errorPayload.Status, errorPayload.ErrorMessage));
-                    }
-
-                    if (!legacyPdu.ValidateMac(_signingServiceCredentials.LoginKey))
-                    {
-                        throw new KsiServiceException("Invalid HMAC in aggregation response PDU.");
-                    }
-
-                    if (legacyPayload.RequestId != serviceAsyncResult.RequestId)
-                    {
-                        throw new KsiServiceException("Unknown request ID: " + legacyPayload.RequestId);
-                    }
-
-                    if (legacyPayload.Status != 0)
-                    {
-                        throw new KsiServiceException(GetSigningErrorMessage(legacyPayload.Status, legacyPayload.ErrorMessage));
-                    }
+                    ValidateLegacyResponse(legacyPdu, legacyPayload, errorPayload, serviceAsyncResult.RequestId, _signingServiceCredentials);
 
                     signature = _ksiSignatureFactory.Create(legacyPayload, serviceAsyncResult.DocumentHash, serviceAsyncResult.Level);
-
-                    Logger.Debug("End sign successful (request id: {0}){1}{2}", serviceAsyncResult.RequestId, Environment.NewLine, signature);
                 }
                 else
                 {
                     AggregationResponsePayload payload = pdu.GetAggregationResponsePayload(serviceAsyncResult.RequestId);
                     AggregationErrorPayload errorPayload = pdu.GetAggregationErrorPayload();
 
-                    if (payload == null && errorPayload == null)
-                    {
-                        throw new KsiServiceException("Invalid aggregation response PDU. Could not find a valid payload. PDU: " + pdu);
-                    }
-
-                    if (errorPayload != null)
-                    {
-                        throw new KsiServiceException(GetSigningErrorMessage(errorPayload.Status, errorPayload.ErrorMessage));
-                    }
-
-                    if (!pdu.ValidateMac(_signingServiceCredentials.LoginKey))
-                    {
-                        throw new KsiServiceException("Invalid HMAC in aggregation response PDU.");
-                    }
-                    if (payload.Status != 0)
-                    {
-                        throw new KsiServiceException(GetSigningErrorMessage(payload.Status, payload.ErrorMessage));
-                    }
+                    ValidateResponse(pdu, payload, errorPayload, _signingServiceCredentials);
 
                     signature = _ksiSignatureFactory.Create(payload, serviceAsyncResult.DocumentHash, serviceAsyncResult.Level);
-
-                    Logger.Debug("End sign successful (request id: {0}){1}{2}", serviceAsyncResult.RequestId, Environment.NewLine, signature);
                 }
+
+                Logger.Debug("End sign successful (request id: {0}){1}{2}", serviceAsyncResult.RequestId, Environment.NewLine, signature);
 
                 return signature;
             }
@@ -282,11 +242,6 @@ namespace Guardtime.KSI.Service
                 Logger.Warn("End sign request failed (request id: {0}): {1}{2}{3}", serviceAsyncResult.RequestId, e, Environment.NewLine, legacyPdu ?? pdu ?? (ITlvTag)rawTag);
                 throw;
             }
-        }
-
-        private static string GetSigningErrorMessage(ulong status, string errorMessage)
-        {
-            return "Error occured during aggregation. Status: " + status + "; Message: " + errorMessage + ".";
         }
 
         /// <summary>
@@ -382,7 +337,7 @@ namespace Guardtime.KSI.Service
 
                 if (rawTag.Type == Constants.LegacyAggregationPdu.TagType)
                 {
-                    throw new InvalidRequestFormatException("Received PDU v1 response to PDU v2 request.");
+                    throw new KsiServiceInvalidRequestFormatException("Received PDU v1 response to PDU v2 request.");
                 }
 
                 pdu = new AggregationResponsePdu(rawTag);
@@ -390,21 +345,8 @@ namespace Guardtime.KSI.Service
                 AggregatorConfigResponsePayload payload = pdu.GetAggregatorConfigResponsePayload();
                 AggregationErrorPayload errorPayload = pdu.GetAggregationErrorPayload();
 
-                if (payload == null && errorPayload == null)
-                {
-                    throw new KsiServiceException("Invalid aggregator config response PDU. Could not find a valid payload. PDU: " + pdu);
-                }
+                ValidateResponse(pdu, payload, errorPayload, _signingServiceCredentials);
 
-                if (errorPayload != null)
-                {
-                    throw new KsiServiceException("Error occured during aggregator config request. Status: " + errorPayload.Status +
-                                                  "; Message: " + errorPayload.ErrorMessage + ".");
-                }
-
-                if (!pdu.ValidateMac(_signingServiceCredentials.LoginKey))
-                {
-                    throw new KsiServiceException("Invalid HMAC in aggregator config response PDU.");
-                }
                 Logger.Debug("End get aggregator config successful (request id: {0}){1}{2}", serviceAsyncResult.RequestId, Environment.NewLine, pdu);
 
                 return new AggregatorConfig(payload);

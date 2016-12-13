@@ -62,7 +62,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             SignaturePublicationRecordExistenceRule rule = new SignaturePublicationRecordExistenceRule();
 
             // Check legacy signature
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Legacy_Ok_With_Publication_Record), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Legacy_Ok_With_Publication_Record), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext
                 {
@@ -80,7 +80,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             SignaturePublicationRecordExistenceRule rule = new SignaturePublicationRecordExistenceRule();
 
             // Check signature
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok_With_Publication_Record), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok_With_Publication_Record), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext
                 {
@@ -98,7 +98,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             SignaturePublicationRecordExistenceRule rule = new SignaturePublicationRecordExistenceRule();
 
             // Check invalid signature without publication record
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext
                 {

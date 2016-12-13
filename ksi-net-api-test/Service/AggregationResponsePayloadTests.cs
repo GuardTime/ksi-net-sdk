@@ -31,7 +31,7 @@ namespace Guardtime.KSI.Test.Service
         {
             AggregationResponsePayload tag = TestUtil.GetCompositeTag<AggregationResponsePayload>(Constants.AggregationResponsePayload.TagType, new ITlvTag[]
             {
-                new IntegerTag(Constants.AggregationResponsePayload.RequestIdTagType, false, false, 2),
+                new IntegerTag(Constants.KsiPduPayload.RequestIdTagType, false, false, 2),
                 new IntegerTag(Constants.KsiPduPayload.StatusTagType, false, false, 1),
                 new StringTag(Constants.KsiPduPayload.ErrorMessageTagType, false, false, "Test error message."),
             });

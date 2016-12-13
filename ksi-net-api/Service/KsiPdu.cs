@@ -33,10 +33,18 @@ namespace Guardtime.KSI.Service
     {
         private ImprintTag _mac;
 
+        int _headerIndex;
+        int _macIndex;
+
         /// <summary>
         /// List on payloads
         /// </summary>
         protected List<KsiPduPayload> Payloads { get; } = new List<KsiPduPayload>();
+
+        /// <summary>
+        /// Error payload
+        /// </summary>
+        protected KsiPduPayload ErrorPayload { get; set; }
 
         /// <summary>
         ///     Get and set PDU header
@@ -49,65 +57,66 @@ namespace Guardtime.KSI.Service
         /// <param name="tag">TLV element</param>
         protected KsiPdu(ITlvTag tag) : base(tag)
         {
-            int headerCount = 0;
-            int headerIndex = 0;
-            int payloadCount = 0;
-            int macCount = 0;
-            int macIndex = 0;
-            bool hasErrorPayload = false;
+        }
 
-            for (int i = 0; i < Count; i++)
+        /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            foreach (uint tagType in Constants.AllPayloadTypes)
             {
-                ITlvTag childTag = this[i];
-
-                if (childTag.Type == Constants.AggregationErrorPayload.TagType || childTag.Type == Constants.ExtendErrorPayload.TagType)
+                if (tagType == childTag.Type)
                 {
-                    hasErrorPayload = true;
-                    payloadCount++;
-                }
-                else if (childTag.Type == Constants.AggregationRequestPayload.TagType || childTag.Type == Constants.AggregationResponsePayload.TagType ||
-                         childTag.Type == Constants.AggregatorConfigRequestPayload.TagType || childTag.Type == Constants.AggregatorConfigResponsePayload.TagType ||
-                         childTag.Type == Constants.ExtendRequestPayload.TagType || childTag.Type == Constants.ExtendResponsePayload.TagType)
-                {
-                    payloadCount++;
-                }
-                else if (childTag.Type == Constants.KsiPduHeader.TagType)
-                {
-                    this[i] = Header = new KsiPduHeader(childTag);
-                    headerCount++;
-                    headerIndex = i;
-                }
-                else if (childTag.Type == Constants.KsiPdu.MacTagType)
-                {
-                    this[i] = _mac = new ImprintTag(childTag);
-                    macCount++;
-                    macIndex = i;
+                    return childTag;
                 }
             }
 
-            if (payloadCount == 0)
+            if (childTag.Type == Constants.KsiPduHeader.TagType)
             {
-                throw new TlvException("Payloads are missing in KSI PDU.");
+                _headerIndex = Count;
+                return Header = childTag as KsiPduHeader ?? new KsiPduHeader(childTag);
             }
 
-            if (!hasErrorPayload)
+            if (childTag.Type == Constants.KsiPdu.MacTagType)
             {
-                if (headerCount != 1)
+                _macIndex = Count;
+                return _mac = GetImprintTag(childTag);
+            }
+
+            return base.ParseChild(childTag);
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate(TagCounter tagCounter)
+        {
+            base.Validate(tagCounter);
+
+            if (ErrorPayload == null)
+            {
+                if (Payloads.Count == 0)
+                {
+                    throw new TlvException("Payloads are missing in KSI PDU.");
+                }
+
+                if (tagCounter[Constants.KsiPduHeader.TagType] != 1)
                 {
                     throw new TlvException("Exactly one header must exist in KSI PDU.");
                 }
 
-                if (headerIndex != 0)
+                if (_headerIndex != 0)
                 {
                     throw new TlvException("Header must be the first element in KSI PDU.");
                 }
 
-                if (macCount != 1)
+                if (tagCounter[Constants.KsiPdu.MacTagType] != 1)
                 {
                     throw new TlvException("Exactly one HMAC must exist in KSI PDU");
                 }
 
-                if (macIndex != Count - 1)
+                if (_macIndex != Count - 1)
                 {
                     throw new TlvException("HMAC must be the last element in KSI PDU");
                 }
@@ -125,35 +134,7 @@ namespace Guardtime.KSI.Service
         protected KsiPdu(uint tagType, KsiPduHeader header, KsiPduPayload payload, HashAlgorithm hmacAlgorithm, byte[] key)
             : base(tagType, false, false, new ITlvTag[] { header, payload, GetEmptyHashMacTag(hmacAlgorithm) })
         {
-            if (header == null)
-            {
-                throw new TlvException("Invalid header TLV: null.");
-            }
-
-            if (payload == null)
-            {
-                throw new TlvException("Invalid payload TLV: null.");
-            }
-
-            if (hmacAlgorithm == null)
-            {
-                throw new TlvException("Invalid HMAC algorithm: null.");
-            }
-
-            Header = header;
             SetHmacValue(hmacAlgorithm, key);
-        }
-
-        /// <summary>
-        ///     Create KSI PDU from PDU header and data.
-        /// </summary>
-        /// <param name="type">TLV type</param>
-        /// <param name="nonCritical">Is TLV element non critical</param>
-        /// <param name="forward">Is TLV element forwarded</param>
-        /// <param name="value">TLV element list</param>
-        protected KsiPdu(uint type, bool nonCritical, bool forward, ITlvTag[] value)
-            : base(type, nonCritical, forward, value)
-        {
         }
 
         /// <summary>
@@ -203,11 +184,10 @@ namespace Guardtime.KSI.Service
             {
                 ITlvTag childTag = this[i];
 
-                switch (childTag.Type)
+                if (childTag.Type == Constants.KsiPdu.MacTagType)
                 {
-                    case Constants.KsiPdu.MacTagType:
-                        this[i] = _mac = CreateHashMacTag(CalcHashMacValue(hmacAlgorithm, key));
-                        break;
+                    this[i] = _mac = CreateHashMacTag(CalcHashMacValue(hmacAlgorithm, key));
+                    break;
                 }
             }
         }
@@ -248,6 +228,11 @@ namespace Guardtime.KSI.Service
         /// <returns></returns>
         protected static ImprintTag GetEmptyHashMacTag(HashAlgorithm hmacAlgorithm)
         {
+            if (hmacAlgorithm == null)
+            {
+                throw new TlvException("Invalid HMAC algorithm: null.");
+            }
+
             byte[] imprintBytes = new byte[hmacAlgorithm.Length + 1];
             imprintBytes[0] = hmacAlgorithm.Id;
             return CreateHashMacTag(new DataHash(imprintBytes));

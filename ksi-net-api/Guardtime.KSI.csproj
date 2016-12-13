@@ -90,7 +90,7 @@
     <Compile Include="Crypto\CertificateSubjectRdn.cs" />
     <Compile Include="Exceptions\BlockSigningException.cs" />
     <Compile Include="Exceptions\HashingException.cs" />
-    <Compile Include="Exceptions\InvalidRequestFormatException.cs" />
+    <Compile Include="Exceptions\KsiServiceInvalidRequestFormatException.cs" />
     <Compile Include="Exceptions\KsiSignatureInvalidContentException.cs" />
     <Compile Include="Exceptions\KsiException.cs" />
     <Compile Include="Exceptions\KsiServiceException.cs" />
@@ -114,6 +114,7 @@
     <Compile Include="Parser\StringTag.cs" />
     <Compile Include="Parser\CompositeTag.cs" />
     <Compile Include="Parser\ITlvTag.cs" />
+    <Compile Include="Parser\TagCounter.cs" />
     <Compile Include="Parser\TlvTag.cs" />
     <Compile Include="Parser\TlvReader.cs" />
     <Compile Include="Parser\TlvWriter.cs" />
@@ -136,6 +137,8 @@
     <Compile Include="Service\ExtenderConfigRequestPayload.cs" />
     <Compile Include="Service\ExtenderConfig.cs" />
     <Compile Include="Service\ExtenderConfigResponsePayload.cs" />
+    <Compile Include="Service\RequestResponsePayload.cs" />
+    <Compile Include="Service\ResponsePayload.cs" />
     <Compile Include="Service\KsiService.PublicationsFile.cs" />
     <Compile Include="Service\KsiService.Extend.cs" />
     <Compile Include="Service\KsiService.Aggregate.cs" />

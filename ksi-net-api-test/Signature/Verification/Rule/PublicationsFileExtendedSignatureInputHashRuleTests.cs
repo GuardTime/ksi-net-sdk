@@ -65,7 +65,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             PublicationsFileExtendedSignatureInputHashRule rule = new PublicationsFileExtendedSignatureInputHashRule();
 
             // Invalid publications file in context: null
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -87,7 +87,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             // Check invalid publications record in signature: null
             using (
                 FileStream stream =
-                    new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record),
+                    new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record),
                         FileMode.Open))
             {
                 TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
@@ -111,7 +111,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             PublicationsFileExtendedSignatureInputHashRule rule = new PublicationsFileExtendedSignatureInputHashRule();
 
             // Check invalid extended calendar chain from context function: null
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
 
@@ -134,7 +134,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             PublicationsFileExtendedSignatureInputHashRule rule = new PublicationsFileExtendedSignatureInputHashRule();
 
             // Check no publication found after current signature
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_New), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_New), FileMode.Open))
             {
                 TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
 
@@ -161,7 +161,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             PublicationsFileExtendedSignatureInputHashRule rule = new PublicationsFileExtendedSignatureInputHashRule();
 
             // Check legacy signature
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Legacy_Ok_With_Publication_Record), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok_With_Publication_Record), FileMode.Open))
             {
                 TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
                 testPublicationsFile.NearestPublications.Add(1401915603,
@@ -189,7 +189,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             PublicationsFileExtendedSignatureInputHashRule rule = new PublicationsFileExtendedSignatureInputHashRule();
 
             // Check signature
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_With_Publication_Record), FileMode.Open))
             {
                 TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
                 testPublicationsFile.NearestPublications.Add(1439577241,
@@ -218,7 +218,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
 
             // Check invalid signature
             using (FileStream stream =
-                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Invalid_With_Invalid_Publication_Record), FileMode.Open))
+                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Invalid_With_Invalid_Publication_Record), FileMode.Open))
             {
                 TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
                 testPublicationsFile.NearestPublications.Add(1457984041,

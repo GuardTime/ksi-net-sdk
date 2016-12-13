@@ -43,7 +43,7 @@ namespace Guardtime.KSI.Test.Service
                         }),
                     TestUtil.GetCompositeTag<AggregationRequestPayload>(Constants.AggregationRequestPayload.TagType, new ITlvTag[]
                     {
-                        new IntegerTag(Constants.AggregationRequestPayload.RequestIdTagType, false, false, 1),
+                        new IntegerTag(Constants.KsiPduPayload.RequestIdTagType, false, false, 1),
                         new ImprintTag(Constants.AggregationRequestPayload.RequestHashTagType, false, false,
                             new DataHash(HashAlgorithm.Sha2256,
                                 new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
@@ -74,7 +74,7 @@ namespace Guardtime.KSI.Test.Service
                         }),
                     TestUtil.GetCompositeTag<AggregationResponsePayload>(Constants.AggregationResponsePayload.TagType, new ITlvTag[]
                     {
-                        new IntegerTag(Constants.AggregationResponsePayload.RequestIdTagType, false, false, 2),
+                        new IntegerTag(Constants.KsiPduPayload.RequestIdTagType, false, false, 2),
                         new IntegerTag(Constants.KsiPduPayload.StatusTagType, false, false, 1),
                         new StringTag(Constants.KsiPduPayload.ErrorMessageTagType, false, false, "Test error message."),
                     }),
@@ -94,7 +94,7 @@ namespace Guardtime.KSI.Test.Service
             AggregationResponsePdu tag = TestUtil.GetCompositeTag<AggregationResponsePdu>(Constants.AggregationResponsePdu.TagType,
                 new ITlvTag[]
                 {
-                    TestUtil.GetCompositeTag<AggregationErrorPayload>(Constants.AggregationErrorPayload.TagType, new ITlvTag[]
+                    TestUtil.GetCompositeTag<AggregationErrorPayload>(Constants.ErrorPayload.TagType, new ITlvTag[]
                     {
                         new IntegerTag(Constants.KsiPduPayload.StatusTagType, false, false, 1),
                         new StringTag(Constants.KsiPduPayload.ErrorMessageTagType, false, false, "Test Error message")
@@ -116,7 +116,7 @@ namespace Guardtime.KSI.Test.Service
                     {
                         TestUtil.GetCompositeTag<AggregationResponsePayload>(Constants.AggregationResponsePayload.TagType, new ITlvTag[]
                         {
-                            new IntegerTag(Constants.AggregationResponsePayload.RequestIdTagType, false, false, 2),
+                            new IntegerTag(Constants.KsiPduPayload.RequestIdTagType, false, false, 2),
                             new IntegerTag(Constants.KsiPduPayload.StatusTagType, false, false, 1),
                             new StringTag(Constants.KsiPduPayload.ErrorMessageTagType, false, false, "Test error message."),
                         }),
@@ -155,7 +155,7 @@ namespace Guardtime.KSI.Test.Service
                                 new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
                         TestUtil.GetCompositeTag<AggregationResponsePayload>(Constants.AggregationResponsePayload.TagType, new ITlvTag[]
                         {
-                            new IntegerTag(Constants.AggregationResponsePayload.RequestIdTagType, false, false, 2),
+                            new IntegerTag(Constants.KsiPduPayload.RequestIdTagType, false, false, 2),
                             new IntegerTag(Constants.KsiPduPayload.StatusTagType, false, false, 1),
                             new StringTag(Constants.KsiPduPayload.ErrorMessageTagType, false, false, "Test error message."),
                         }),

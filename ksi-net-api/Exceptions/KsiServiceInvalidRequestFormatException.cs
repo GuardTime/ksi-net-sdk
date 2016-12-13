@@ -20,15 +20,15 @@
 namespace Guardtime.KSI.Exceptions
 {
     /// <summary>
-    /// Invalid request format exception
+    /// Invalid KSI service request format exception. Used when wrong PDU format is used.
     /// </summary>
-    public class InvalidRequestFormatException : KsiServiceException
+    public class KsiServiceInvalidRequestFormatException : KsiServiceException
     {
         /// <summary>
-        /// Create invalid request format exception
+        /// Create invalid request format exception.
         /// </summary>
         /// <param name="message"></param>
-        public InvalidRequestFormatException(string message) : base(message)
+        public KsiServiceInvalidRequestFormatException(string message) : base(message)
         {
         }
     }

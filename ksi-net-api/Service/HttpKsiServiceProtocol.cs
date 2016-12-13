@@ -369,7 +369,7 @@ namespace Guardtime.KSI.Service
 
             HttpKsiServiceProtocolAsyncResult httpAsyncResult = new HttpKsiServiceProtocolAsyncResult(request, data, requestId, callback, asyncState);
 
-            Logger.Debug("Begin sign http brequest (request id: {0}).", httpAsyncResult.RequestId);
+            Logger.Debug("Begin sign http request (request id: {0}).", httpAsyncResult.RequestId);
 
             request.BeginGetRequestStream(GetRequestStreamCallback, httpAsyncResult);
             ThreadPool.RegisterWaitForSingleObject(httpAsyncResult.BeginWaitHandle, EndBeginCallback, httpAsyncResult, _requestTimeOut, true);

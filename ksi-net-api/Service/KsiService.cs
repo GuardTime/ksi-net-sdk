@@ -195,6 +195,65 @@ namespace Guardtime.KSI.Service
             return Util.GetRandomUnsignedLong();
         }
 
+        private static void ValidateLegacyResponse(LegacyKsiPdu pdu, RequestResponsePayload payload,
+                                                   ErrorPayload errorPayload, ulong requestId, IServiceCredentials serviceCredentials)
+        {
+            if (payload == null && errorPayload == null)
+            {
+                throw new KsiServiceException("Invalid response payload: null.");
+            }
+
+            if (errorPayload != null)
+            {
+                throw new KsiServiceException(FormatErrorStatus(errorPayload.Status, errorPayload.ErrorMessage));
+            }
+
+            if (!pdu.ValidateMac(serviceCredentials.LoginKey))
+            {
+                throw new KsiServiceException("Invalid HMAC in response PDU.");
+            }
+
+            if (payload.RequestId != requestId)
+            {
+                throw new KsiServiceException("Unknown request ID: " + payload.RequestId);
+            }
+
+            if (payload.Status != 0)
+            {
+                throw new KsiServiceException(FormatErrorStatus(payload.Status, payload.ErrorMessage));
+            }
+        }
+
+        private static void ValidateResponse(KsiPdu pdu, KsiPduPayload payload, ErrorPayload errorPayload, IServiceCredentials serviceCredentials)
+        {
+            if (payload == null && errorPayload == null)
+            {
+                throw new KsiServiceException("Invalid response PDU. Could not find a valid payload. PDU: " + pdu);
+            }
+
+            if (errorPayload != null)
+            {
+                throw new KsiServiceException(FormatErrorStatus(errorPayload.Status, errorPayload.ErrorMessage));
+            }
+
+            if (!pdu.ValidateMac(serviceCredentials.LoginKey))
+            {
+                throw new KsiServiceException("Invalid HMAC in response PDU.");
+            }
+
+            ResponsePayload responsePayload = payload as ResponsePayload;
+
+            if (responsePayload != null && responsePayload.Status != 0)
+            {
+                throw new KsiServiceException(FormatErrorStatus(responsePayload.Status, responsePayload.ErrorMessage));
+            }
+        }
+
+        private static string FormatErrorStatus(ulong status, string errorMessage)
+        {
+            return "Server responded with error message. Status: " + status + "; Message: " + errorMessage + ".";
+        }
+
         /// <summary>
         ///     Abstract KSI service async result.
         /// </summary>

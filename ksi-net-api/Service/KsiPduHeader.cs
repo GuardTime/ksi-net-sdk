@@ -27,9 +27,14 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public sealed class KsiPduHeader : CompositeTag
     {
-        private readonly IntegerTag _instanceId;
-        private readonly StringTag _loginId;
-        private readonly IntegerTag _messageId;
+        private IntegerTag _instanceId;
+        private StringTag _loginId;
+        private IntegerTag _messageId;
+
+        /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.KsiPduHeader.TagType;
 
         /// <summary>
         ///     Create KSI PDU header from TLV element.
@@ -37,47 +42,44 @@ namespace Guardtime.KSI.Service
         /// <param name="tag">TLV element</param>
         public KsiPduHeader(ITlvTag tag) : base(tag)
         {
-            CheckTagType(Constants.KsiPduHeader.TagType);
+        }
 
-            int loginIdCount = 0;
-            int instanceIdCount = 0;
-            int messageIdCount = 0;
-
-            for (int i = 0; i < Count; i++)
+        /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
             {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.KsiPduHeader.LoginIdTagType:
-                        this[i] = _loginId = new StringTag(childTag);
-                        loginIdCount++;
-                        break;
-                    case Constants.KsiPduHeader.InstanceIdTagType:
-                        this[i] = _instanceId = new IntegerTag(childTag);
-                        instanceIdCount++;
-                        break;
-                    case Constants.KsiPduHeader.MessageIdTagType:
-                        this[i] = _messageId = new IntegerTag(childTag);
-                        messageIdCount++;
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
+                case Constants.KsiPduHeader.LoginIdTagType:
+                    return _loginId = GetStringTag(childTag);
+                case Constants.KsiPduHeader.InstanceIdTagType:
+                    return _instanceId = GetIntegerTag(childTag);
+                case Constants.KsiPduHeader.MessageIdTagType:
+                    return _messageId = GetIntegerTag(childTag);
+                default:
+                    return base.ParseChild(childTag);
             }
+        }
 
-            if (loginIdCount != 1)
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate(TagCounter tagCounter)
+        {
+            base.Validate(tagCounter);
+
+            if (tagCounter[Constants.KsiPduHeader.LoginIdTagType] != 1)
             {
                 throw new TlvException("Exactly one login id must exist in KSI PDU header.");
             }
 
-            if (instanceIdCount > 1)
+            if (tagCounter[Constants.KsiPduHeader.InstanceIdTagType] > 1)
             {
                 throw new TlvException("Only one instance id is allowed in KSI PDU header.");
             }
 
-            if (messageIdCount > 1)
+            if (tagCounter[Constants.KsiPduHeader.MessageIdTagType] > 1)
             {
                 throw new TlvException("Only one message id is allowed in KSI PDU header.");
             }
@@ -105,9 +107,7 @@ namespace Guardtime.KSI.Service
                 new IntegerTag(Constants.KsiPduHeader.MessageIdTagType, false, false, messageId)
             })
         {
-            _loginId = (StringTag)this[0];
-            _instanceId = (IntegerTag)this[1];
-            _messageId = (IntegerTag)this[2];
+
         }
 
         /// <summary>

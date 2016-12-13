@@ -206,7 +206,7 @@ namespace Guardtime.KSI.Service
                 {
                     if (IsLegacyPduVersion)
                     {
-                        throw new InvalidRequestFormatException("Received PDU v2 response to PDU v1 request. Configure the SDK to use PDU v2 format for the given Extender.");
+                        throw new KsiServiceInvalidRequestFormatException("Received PDU v2 response to PDU v1 request. Configure the SDK to use PDU v2 format for the given Extender.");
                     }
 
                     pdu = new ExtendResponsePdu(rawTag);
@@ -215,7 +215,7 @@ namespace Guardtime.KSI.Service
                 {
                     if (!IsLegacyPduVersion)
                     {
-                        throw new InvalidRequestFormatException("Received PDU v1 response to PDU v2 request. Configure the SDK to use PDU v1 format for the given Extender.");
+                        throw new KsiServiceInvalidRequestFormatException("Received PDU v1 response to PDU v2 request. Configure the SDK to use PDU v1 format for the given Extender.");
                     }
 
                     legacyPdu = new LegacyExtendPdu(rawTag);
@@ -225,82 +225,39 @@ namespace Guardtime.KSI.Service
                     throw new KsiServiceException("Unknown response PDU tag type: " + rawTag.Type.ToString("X"));
                 }
 
+                CalendarHashChain calendarHashChain;
+
                 if (legacyPdu != null)
                 {
                     LegacyExtendResponsePayload legacyPayload = legacyPdu.Payload as LegacyExtendResponsePayload;
-                    LegacyExtendErrorPayload errorPayload = legacyPdu.Payload as LegacyExtendErrorPayload;
+                    LegacyExtendErrorPayload errorPayload = legacyPdu.ErrorPayload as LegacyExtendErrorPayload;
 
-                    if (legacyPayload == null && errorPayload == null)
-                    {
-                        throw new KsiServiceException("Invalid extend response payload: null.");
-                    }
+                    ValidateLegacyResponse(legacyPdu, legacyPayload, errorPayload, serviceAsyncResult.RequestId, _extendingServiceCredentials);
 
-                    if (errorPayload != null)
-                    {
-                        throw new KsiServiceException(GetExtendingErrorMessage(errorPayload.Status, errorPayload.ErrorMessage));
-                    }
-
-                    if (!legacyPdu.ValidateMac(_extendingServiceCredentials.LoginKey))
-                    {
-                        throw new KsiServiceException("Invalid HMAC in extend response PDU.");
-                    }
-
-                    if (legacyPayload.RequestId != serviceAsyncResult.RequestId)
-                    {
-                        throw new KsiServiceException("Unknown request ID: " + legacyPayload.RequestId);
-                    }
-
-                    if (legacyPayload.Status != 0)
-                    {
-                        throw new KsiServiceException(GetExtendingErrorMessage(legacyPayload.Status, legacyPayload.ErrorMessage));
-                    }
-
-                    if (legacyPayload.CalendarHashChain == null)
-                    {
-                        throw new KsiServiceException("No calendar hash chain in payload.");
-                    }
-
-                    Logger.Debug("End extend successful (request id: {0}) {1}{2}", serviceAsyncResult.RequestId, Environment.NewLine, legacyPdu);
-
-                    return legacyPayload.CalendarHashChain;
+                    calendarHashChain = legacyPayload.CalendarHashChain;
                 }
                 else
                 {
                     ExtendResponsePayload payload = pdu.GetExtendResponsePayload(serviceAsyncResult.RequestId);
                     ExtendErrorPayload errorPayload = pdu.GetExtendErrorPayload();
 
-                    if (payload == null && errorPayload == null)
-                    {
-                        throw new KsiServiceException("Invalid extend response PDU. Could not find a valid payload. PDU: " + pdu);
-                    }
-                    if (errorPayload != null)
-                    {
-                        throw new KsiServiceException(GetExtendingErrorMessage(errorPayload.Status, errorPayload.ErrorMessage));
-                    }
+                    ValidateResponse(pdu, payload, errorPayload, _extendingServiceCredentials);
 
-                    if (!pdu.ValidateMac(_extendingServiceCredentials.LoginKey))
-                    {
-                        throw new KsiServiceException("Invalid HMAC in extend response PDU.");
-                    }
-
-                    if (payload.Status != 0)
-                    {
-                        throw new KsiServiceException(GetExtendingErrorMessage(payload.Status, payload.ErrorMessage));
-                    }
-
-                    if (payload.CalendarHashChain == null)
-                    {
-                        throw new KsiServiceException("No calendar hash chain in payload.");
-                    }
-
-                    Logger.Debug("End extend successful (request id: {0}) {1}{2}", serviceAsyncResult.RequestId, Environment.NewLine, pdu);
-
-                    return payload.CalendarHashChain;
+                    calendarHashChain = payload.CalendarHashChain;
                 }
+
+                if (calendarHashChain == null)
+                {
+                    throw new KsiServiceException("No calendar hash chain in payload.");
+                }
+
+                Logger.Debug("End extend successful (request id: {0}) {1}{2}", serviceAsyncResult.RequestId, Environment.NewLine, legacyPdu);
+
+                return calendarHashChain;
             }
             catch (TlvException e)
             {
-                KsiException ksiException = new KsiServiceException("Could not parse response message: " + Base16.Encode(data), e);
+                KsiException ksiException = new KsiServiceException("Could not parse extend response message: " + Base16.Encode(data), e);
                 Logger.Warn("End extend request failed (request id: {0}): {1}", serviceAsyncResult.RequestId, ksiException);
                 throw ksiException;
             }
@@ -309,11 +266,6 @@ namespace Guardtime.KSI.Service
                 Logger.Warn("End extend request failed (request id: {0}): {1}{2}{3}", serviceAsyncResult.RequestId, e, Environment.NewLine, legacyPdu ?? pdu ?? (ITlvTag)rawTag);
                 throw;
             }
-        }
-
-        private static string GetExtendingErrorMessage(ulong status, string errorMessage)
-        {
-            return "Error occured during extending. Status: " + status + "; Message: " + errorMessage + ".";
         }
 
         /// <summary>
@@ -409,7 +361,7 @@ namespace Guardtime.KSI.Service
 
                 if (rawTag.Type == Constants.LegacyExtendPdu.TagType)
                 {
-                    throw new InvalidRequestFormatException("Received PDU v1 response to PDU v2 request.");
+                    throw new KsiServiceInvalidRequestFormatException("Received PDU v1 response to PDU v2 request.");
                 }
 
                 pdu = new ExtendResponsePdu(rawTag);
@@ -417,21 +369,7 @@ namespace Guardtime.KSI.Service
                 ExtenderConfigResponsePayload payload = pdu.GetExtenderConfigResponsePayload();
                 ExtendErrorPayload errorPayload = pdu.GetExtendErrorPayload();
 
-                if (payload == null && errorPayload == null)
-                {
-                    throw new KsiServiceException("Invalid extender config response PDU. Could not find a valid payload. PDU: " + pdu);
-                }
-
-                if (errorPayload != null)
-                {
-                    throw new KsiServiceException("Error occured during extender config request. Status: " + errorPayload.Status + "; Message: " + errorPayload.ErrorMessage +
-                                                  ".");
-                }
-
-                if (!pdu.ValidateMac(_extendingServiceCredentials.LoginKey))
-                {
-                    throw new KsiServiceException("Invalid HMAC in extender config response PDU.");
-                }
+                ValidateResponse(pdu, payload, errorPayload, _extendingServiceCredentials);
 
                 Logger.Debug("End get extender config successful (request id: {0}){1}{2}", serviceAsyncResult.RequestId, Environment.NewLine, pdu);
 
@@ -439,7 +377,7 @@ namespace Guardtime.KSI.Service
             }
             catch (TlvException e)
             {
-                KsiException ksiException = new KsiException("Could not parse response message: " + Base16.Encode(data), e);
+                KsiException ksiException = new KsiException("Could not parse extender config response message: " + Base16.Encode(data), e);
                 Logger.Warn("End extender config request failed (request id: {0}): {1}", serviceAsyncResult.RequestId, ksiException);
                 throw ksiException;
             }

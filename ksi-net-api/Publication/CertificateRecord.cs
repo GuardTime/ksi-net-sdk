@@ -28,42 +28,47 @@ namespace Guardtime.KSI.Publication
     public sealed class CertificateRecord : CompositeTag
     {
         /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.CertificateRecord.TagType;
+
+        /// <summary>
         ///     Create new certificate record TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         public CertificateRecord(ITlvTag tag) : base(tag)
         {
-            CheckTagType(Constants.CertificateRecord.TagType);
+        }
 
-            int certificateIdCount = 0;
-            int x509CertificateCount = 0;
-
-            for (int i = 0; i < Count; i++)
+        /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
             {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.CertificateRecord.CertificateIdTagType:
-                        this[i] = CertificateId = new RawTag(childTag);
-                        certificateIdCount++;
-                        break;
-                    case Constants.CertificateRecord.X509CertificateTagType:
-                        this[i] = X509Certificate = new RawTag(childTag);
-                        x509CertificateCount++;
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
+                case Constants.CertificateRecord.CertificateIdTagType:
+                    return CertificateId = GetRawTag(childTag);
+                case Constants.CertificateRecord.X509CertificateTagType:
+                    return X509Certificate = GetRawTag(childTag);
+                default:
+                    return base.ParseChild(childTag);
             }
+        }
 
-            if (certificateIdCount != 1)
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate(TagCounter tagCounter)
+        {
+            base.Validate(tagCounter);
+
+            if (tagCounter[Constants.CertificateRecord.CertificateIdTagType] != 1)
             {
                 throw new TlvException("Exactly one certificate id must exist in certificate record.");
             }
 
-            if (x509CertificateCount != 1)
+            if (tagCounter[Constants.CertificateRecord.X509CertificateTagType] != 1)
             {
                 throw new TlvException("Exactly one certificate must exist in certificate record.");
             }
@@ -72,11 +77,11 @@ namespace Guardtime.KSI.Publication
         /// <summary>
         ///     Get certificate ID.
         /// </summary>
-        public RawTag CertificateId { get; }
+        public RawTag CertificateId { get; private set; }
 
         /// <summary>
         ///     Get X509 certificate.
         /// </summary>
-        public RawTag X509Certificate { get; }
+        public RawTag X509Certificate { get; private set; }
     }
 }

@@ -25,6 +25,16 @@ namespace Guardtime.KSI
 {
     public static class Constants
     {
+        public static uint[] AllPayloadTypes = new[]
+        {
+            AggregationRequestPayload.TagType,
+            AggregationResponsePayload.TagType,
+            AggregatorConfigRequestPayload.TagType,
+            AggregatorConfigResponsePayload.TagType,
+            ExtendRequestPayload.TagType,
+            ExtendResponsePayload.TagType
+        };
+
         /// <summary>
         ///     Bits in byte
         /// </summary>
@@ -132,6 +142,8 @@ namespace Guardtime.KSI
 
         public static class KsiPduPayload
         {
+            public const uint RequestIdTagType = 0x1;
+
             /// <summary>
             ///     Status TLV element type.
             /// </summary>
@@ -179,7 +191,6 @@ namespace Guardtime.KSI
             [Obsolete]
             public const uint LegacyTagType = 0x201;
 
-            public const uint RequestIdTagType = 0x1;
             public const uint RequestHashTagType = 0x2;
             public const uint RequestLevelTagType = 0x3;
 
@@ -197,8 +208,6 @@ namespace Guardtime.KSI
             [Obsolete]
             public const uint LegacyTagType = 0x202;
 
-            public const uint RequestIdTagType = 0x1;
-
             [Obsolete]
             public const uint ConfigTagType = 0x10;
 
@@ -206,15 +215,18 @@ namespace Guardtime.KSI
             public const uint RequestAcknowledgmentTagType = 0x11;
         }
 
-        public static class AggregationErrorPayload
+        public static class ErrorPayload
         {
             /// <summary>
-            ///     Aggregation error payload TLV type.
+            ///     Error payload TLV type.
             /// </summary>
             public const uint TagType = 0x3;
+        }
 
-            [Obsolete]
-            public const uint LegacyTagType = 0x203;
+        [Obsolete]
+        public static class LegacyAggregationErrorPayload
+        {
+            public const uint TagType = 0x203;
         }
 
         public static class AggregatorConfigRequestPayload
@@ -286,7 +298,6 @@ namespace Guardtime.KSI
             [Obsolete]
             public const uint LegacyTagType = 0x301;
 
-            public const uint RequestIdTagType = 0x1;
             public const uint AggregationTimeTagType = 0x2;
             public const uint PublicationTimeTagType = 0x3;
         }
@@ -301,23 +312,16 @@ namespace Guardtime.KSI
             [Obsolete]
             public const uint LegacyTagType = 0x302;
 
-            public const uint RequestIdTagType = 0x1;
-
             [Obsolete]
             public const uint LastTimeTagType = 0x10;
 
             public const uint CalendarLastTimeTagType = 0x12;
         }
 
-        public static class ExtendErrorPayload
+        [Obsolete]
+        public static class LegacyExtendErrorPayload
         {
-            /// <summary>
-            ///     Extend error payload TLV type.
-            /// </summary>
-            public const uint TagType = 0x3;
-
-            [Obsolete]
-            public const uint LegacyTagType = 0x303;
+            public const uint TagType = 0x303;
         }
 
         public static class ExtenderConfigRequestPayload

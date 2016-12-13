@@ -300,80 +300,80 @@
   <data name="DataHasher_TestString" xml:space="preserve">
     <value>LongString1ReallyLongString2EvenLongerString3</value>
   </data>
-  <data name="KsiSignatureDo_Ok" xml:space="preserve">
-    <value>resources/signature/ksi-signature-do/ksi-signature-ok.tlv</value>
+  <data name="KsiSignature_Ok" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-ok.tlv</value>
   </data>
-  <data name="KsiSignatureDo_Ok_New" xml:space="preserve">
-    <value>resources/signature/ksi-signature-do/ksi-signature-ok-new.tlv</value>
+  <data name="KsiSignature_Ok_New" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-ok-new.tlv</value>
   </data>
-  <data name="KsiSignatureDo_Ok_With_Publication_Record" xml:space="preserve">
-    <value>resources/signature/ksi-signature-do/ksi-signature-ok-with-publication-record.tlv</value>
+  <data name="KsiSignature_Ok_With_Publication_Record" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-ok-with-publication-record.tlv</value>
   </data>
-  <data name="KsiSignatureDo_Legacy_Ok" xml:space="preserve">
-    <value>resources/signature/ksi-signature-do/legacy-ksi-signature-ok.tlv</value>
+  <data name="KsiSignature_Legacy_Ok" xml:space="preserve">
+    <value>resources/signature/ksi-signature/legacy-ksi-signature-ok.tlv</value>
   </data>
-  <data name="KsiSignatureDo_Legacy_Ok_With_Publication_Record" xml:space="preserve">
-    <value>resources/signature/ksi-signature-do/legacy-ksi-signature-ok-with-publication-record.tlv</value>
+  <data name="KsiSignature_Legacy_Ok_With_Publication_Record" xml:space="preserve">
+    <value>resources/signature/ksi-signature/legacy-ksi-signature-ok-with-publication-record.tlv</value>
   </data>
-  <data name="KsiSignatureDo_Invalid_Missing_Calendar_Hash_Chain" xml:space="preserve">
-    <value>resources/signature/ksi-signature-do/ksi-signature-Invalid-Missing-calendar-hash-chain.tlv</value>
+  <data name="KsiSignature_Invalid_Missing_Calendar_Hash_Chain" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-Invalid-Missing-calendar-hash-chain.tlv</value>
   </data>
-  <data name="KsiSignatureDo_Invalid_Type" xml:space="preserve">
-    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-type.tlv</value>
+  <data name="KsiSignature_Invalid_Type" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-type.tlv</value>
   </data>
-  <data name="KsiSignatureDo_Invalid_Extra_Tag" xml:space="preserve">
-    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-extra-tag.tlv</value>
+  <data name="KsiSignature_Invalid_Extra_Tag" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-extra-tag.tlv</value>
   </data>
-  <data name="KsiSignatureDo_Invalid_Contain_Publication_Record_And_Calendar_Authentication_Record" xml:space="preserve">
-    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-contain-both-publication-record-and-calendar-authentication-record.tlv</value>
+  <data name="KsiSignature_Invalid_Contain_Publication_Record_And_Calendar_Authentication_Record" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-contain-both-publication-record-and-calendar-authentication-record.tlv</value>
   </data>
-  <data name="KsiSignatureDo_Invalid_Missing_Aggregation_Hash_Chain" xml:space="preserve">
-    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-missing-aggregation-hash-chains.tlv</value>
+  <data name="KsiSignature_Invalid_Missing_Aggregation_Hash_Chain" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-missing-aggregation-hash-chains.tlv</value>
   </data>
-  <data name="KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record" xml:space="preserve">
-    <value>resources/signature/ksi-signature-do/ksi-signature-ok-Missing-publication-record-and-calendar-authentication-record.tlv</value>
+  <data name="KsiSignature_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-ok-Missing-publication-record-and-calendar-authentication-record.tlv</value>
   </data>
-  <data name="KsiSignatureDo_Invalid_Multiple_Calendar_Authentication_Records" xml:space="preserve">
-    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-multiple-calendar-authentication-records.tlv</value>
+  <data name="KsiSignature_Invalid_Multiple_Calendar_Authentication_Records" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-multiple-calendar-authentication-records.tlv</value>
   </data>
-  <data name="KsiSignatureDo_Invalid_Multiple_Calendar_Hash_Chains" xml:space="preserve">
-    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-multiple-calendar-hash-chains.tlv</value>
+  <data name="KsiSignature_Invalid_Multiple_Calendar_Hash_Chains" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-multiple-calendar-hash-chains.tlv</value>
   </data>
-  <data name="KsiSignatureDo_Invalid_Multiple_Publication_Records" xml:space="preserve">
-    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-multiple-publication-records.tlv</value>
+  <data name="KsiSignature_Invalid_Multiple_Publication_Records" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-multiple-publication-records.tlv</value>
   </data>
-  <data name="KsiSignatureDo_Invalid_Multiple_Rfc_3161_Records" xml:space="preserve">
-    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-multiple-rfc3161-records.tlv</value>
+  <data name="KsiSignature_Invalid_Multiple_Rfc_3161_Records" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-multiple-rfc3161-records.tlv</value>
   </data>
-  <data name="KsiSignatureDo_Invalid_Aggregation_Chain_Input_Hash" xml:space="preserve">
-    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-aggregation-chain-input-hash.tlv</value>
+  <data name="KsiSignature_Invalid_Aggregation_Chain_Input_Hash" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-aggregation-chain-input-hash.tlv</value>
   </data>
-  <data name="KsiSignatureDo_Invalid_Aggregation_Chain_Aggregation_Time_Mismatch" xml:space="preserve">
-    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-aggregation-chain-aggregation-time-mismatch.tlv</value>
+  <data name="KsiSignature_Invalid_Aggregation_Chain_Aggregation_Time_Mismatch" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-aggregation-chain-aggregation-time-mismatch.tlv</value>
   </data>
-  <data name="KsiSignatureDo_Invalid_Aggregation_Chain_Index_Mismatch" xml:space="preserve">
-    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-aggregation-chain-index-mismatch.tlv</value>
+  <data name="KsiSignature_Invalid_Aggregation_Chain_Index_Mismatch" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-aggregation-chain-index-mismatch.tlv</value>
   </data>
-  <data name="KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Publication_Hash" xml:space="preserve">
-    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-calendar-authentication-record-invalid-publication-hash.tlv</value>
+  <data name="KsiSignature_Invalid_Calendar_Authentication_Record_Invalid_Publication_Hash" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-calendar-authentication-record-invalid-publication-hash.tlv</value>
   </data>
-  <data name="KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Publication_Time" xml:space="preserve">
-    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-calendar-authentication-record-invalid-publication-time.tlv</value>
+  <data name="KsiSignature_Invalid_Calendar_Authentication_Record_Invalid_Publication_Time" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-calendar-authentication-record-invalid-publication-time.tlv</value>
   </data>
-  <data name="KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Signature" xml:space="preserve">
-    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-calendar-authentication-record-invalid-signature.tlv</value>
+  <data name="KsiSignature_Invalid_Calendar_Authentication_Record_Invalid_Signature" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-calendar-authentication-record-invalid-signature.tlv</value>
   </data>
-  <data name="KsiSignatureDo_Invalid_Calendar_Chain_Input_Hash" xml:space="preserve">
-    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-calendar-hash-chain-input-hash.tlv</value>
+  <data name="KsiSignature_Invalid_Calendar_Chain_Input_Hash" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-calendar-hash-chain-input-hash.tlv</value>
   </data>
-  <data name="KsiSignatureDo_Invalid_Calendar_Chain_Publication_Time" xml:space="preserve">
-    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-calendar-hash-chain-publication-time.tlv</value>
+  <data name="KsiSignature_Invalid_Calendar_Chain_Publication_Time" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-calendar-hash-chain-publication-time.tlv</value>
   </data>
-  <data name="KsiSignatureDo_Invalid_With_Invalid_Publication_Record" xml:space="preserve">
-    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-with-invalid-publication-record.tlv</value>
+  <data name="KsiSignature_Invalid_With_Invalid_Publication_Record" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-with-invalid-publication-record.tlv</value>
   </data>
-  <data name="KsiSignatureDo_Invalid_With_Invalid_Aggregation_Root_Hash" xml:space="preserve">
-    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-aggregation-root-hash.tlv</value>
+  <data name="KsiSignature_Invalid_With_Invalid_Aggregation_Root_Hash" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-aggregation-root-hash.tlv</value>
   </data>
   <data name="Rfc3161Record_Ok" xml:space="preserve">
     <value>resources/signature/rfc3161-record/rfc3161-record-ok.tlv</value>
@@ -435,11 +435,11 @@
   <data name="Rfc3161Record_Invalid_Multiple_TstInfo_Suffix" xml:space="preserve">
     <value>resources/signature/rfc3161-record/rfc3161-record-invalid-multiple-tstinfo-suffix.tlv</value>
   </data>
-  <data name="KsiSignatureDo_Invalid_Rfc3161_Aggregation_Time_Mismatch" xml:space="preserve">
-    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-rfc3161-aggregation-time-mismatch.tlv</value>
+  <data name="KsiSignature_Invalid_Rfc3161_Aggregation_Time_Mismatch" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-rfc3161-aggregation-time-mismatch.tlv</value>
   </data>
-  <data name="KsiSignatureDo_Invalid_Rfc3161_Chain_Index_Mismatch" xml:space="preserve">
-    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-chain-index-mismatch.tlv</value>
+  <data name="KsiSignature_Invalid_Rfc3161_Chain_Index_Mismatch" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-chain-index-mismatch.tlv</value>
   </data>
   <data name="SignatureData_Invalid_Certificate_Id_Missing" xml:space="preserve">
     <value>resources/signature/signaturedata/signature-data-invalid-certificate-id-missing.tlv</value>
@@ -474,23 +474,23 @@
   <data name="SignatureData_Ok_No_Uri" xml:space="preserve">
     <value>resources/signature/signaturedata/signature-data-ok-no-uri.tlv</value>
   </data>
-  <data name="KsiSignatureDo_Ok_With_Mixed_Aggregation_Chains" xml:space="preserve">
-    <value>resources/signature/ksi-signature-do/ksi-signature-ok-with-mixed-aggregation-chains.tlv</value>
+  <data name="KsiSignature_Ok_With_Mixed_Aggregation_Chains" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-ok-with-mixed-aggregation-chains.tlv</value>
   </data>
-  <data name="KsiSignatureDo_Ok_Extended" xml:space="preserve">
-    <value>resources/signature/ksi-signature-do/ksi-signature-ok-extended.tlv</value>
+  <data name="KsiSignature_Ok_Extended" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-ok-extended.tlv</value>
   </data>
-  <data name="KsiSignatureDo_Invalid_Missing_Calendar_Authentication_Record" xml:space="preserve">
-    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-missing-calendar-auth-record.tlv</value>
+  <data name="KsiSignature_Invalid_Missing_Calendar_Authentication_Record" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-missing-calendar-auth-record.tlv</value>
   </data>
-  <data name="KsiSignatureDo_Ok_Identity" xml:space="preserve">
-    <value>resources/signature/ksi-signature-do/ksi-signature-ok-identity.tlv</value>
+  <data name="KsiSignature_Ok_Identity" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-ok-identity.tlv</value>
   </data>
-  <data name="KsiSignatureDo_Invalid_Hash_Algorithm" xml:space="preserve">
-    <value>resources/signature/ksi-signature-do/ksi-signature-invalid-hash-algorithm.tlv</value>
+  <data name="KsiSignature_Invalid_Hash_Algorithm" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-hash-algorithm.tlv</value>
   </data>
-  <data name="KsiSignatureDo_Ok_Level3" xml:space="preserve">
-    <value>resources/signature/ksi-signature-do/ksi-signature-level-3-ok.tlv</value>
+  <data name="KsiSignature_Ok_Level3" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-level-3-ok.tlv</value>
   </data>
   <data name="AggregationHashChainMetadataInvalidPaddingFail" xml:space="preserve">
     <value>resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataInvalidPaddingFail.ksig</value>

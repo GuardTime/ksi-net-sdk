@@ -34,55 +34,58 @@ namespace Guardtime.KSI.Publication
         /// <param name="tag">TLV element</param>
         protected PublicationRecord(ITlvTag tag) : base(tag)
         {
-            int publicationDataCount = 0;
+        }
 
-            for (int i = 0; i < Count; i++)
+        /// <summary>
+        ///     Create new publication record TLV element.
+        /// </summary>
+        /// <param name="type">TLV type</param>
+        /// <param name="nonCritical">Is TLV element non critical</param>
+        /// <param name="forward">Is TLV element forwarded</param>
+        /// <param name="childTags">List of child TLV elements</param>
+        protected PublicationRecord(uint type, bool nonCritical, bool forward, ITlvTag[] childTags) : base(type, nonCritical, forward, childTags)
+        {
+        }
+
+        /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
             {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.PublicationData.TagType:
-                        this[i] = PublicationData = new PublicationData(childTag);
-                        publicationDataCount++;
-                        break;
-                    case Constants.PublicationRecord.PublicationReferencesTagType:
-                        StringTag refTag = new StringTag(childTag);
-                        PublicationReferences.Add(refTag.Value);
-                        this[i] = refTag;
-                        break;
-                    case Constants.PublicationRecord.PublicationRepositoryUriTagType:
-                        StringTag uriTag = new StringTag(childTag);
-                        RepositoryUri.Add(uriTag.Value);
-                        this[i] = uriTag;
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
+                case Constants.PublicationData.TagType:
+                    return PublicationData = childTag as PublicationData ?? new PublicationData(childTag);
+                case Constants.PublicationRecord.PublicationReferencesTagType:
+                    StringTag refTag = GetStringTag(childTag);
+                    PublicationReferences.Add(refTag.Value);
+                    return refTag;
+                case Constants.PublicationRecord.PublicationRepositoryUriTagType:
+                    StringTag uriTag = GetStringTag(childTag);
+                    RepositoryUri.Add(uriTag.Value);
+                    return uriTag;
+                default:
+                    return base.ParseChild(childTag);
             }
+        }
 
-            if (publicationDataCount != 1)
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate(TagCounter tagCounter)
+        {
+            base.Validate(tagCounter);
+
+            if (tagCounter[Constants.PublicationData.TagType] != 1)
             {
                 throw new TlvException("Exactly one publication data must exist in publication record.");
             }
         }
 
         /// <summary>
-        ///     Create new publication record TLV element from TLV element.
-        /// </summary>
-        /// <param name="type">TLV type</param>
-        /// <param name="nonCritical">Is TLV element non critical</param>
-        /// <param name="forward">Is TLV element forwarded</param>
-        /// <param name="value">child TLV element list</param>
-        protected PublicationRecord(uint type, bool nonCritical, bool forward, ITlvTag[] value) : base(type, nonCritical, forward, value)
-        {
-        }
-
-        /// <summary>
         ///     Get publication data.
         /// </summary>
-        public PublicationData PublicationData { get; }
+        public PublicationData PublicationData { get; private set; }
 
         /// <summary>
         ///     Get publication references.

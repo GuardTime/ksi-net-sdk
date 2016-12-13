@@ -17,28 +17,24 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Service
 {
     /// <summary>
-    ///     Aggregation response payload.
+    ///     KSI PDU response payload.
     /// </summary>
-    [Obsolete]
-    public sealed class LegacyAggregationResponsePayload : RequestResponsePayload
+    public abstract class ResponsePayload : KsiPduPayload
     {
-        /// <summary>
-        /// Expected tag type
-        /// </summary>
-        protected override uint ExpectedTagType => Constants.AggregationResponsePayload.LegacyTagType;
+        private StringTag _errorMessage;
+        private IntegerTag _status;
 
         /// <summary>
-        ///     Create aggregation response payload from TLV element.
+        ///     Create KSI PDU response payload TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        public LegacyAggregationResponsePayload(ITlvTag tag) : base(tag)
+        protected ResponsePayload(ITlvTag tag) : base(tag)
         {
         }
 
@@ -49,17 +45,10 @@ namespace Guardtime.KSI.Service
         {
             switch (childTag.Type)
             {
-                case Constants.AggregationResponsePayload.ConfigTagType:
-                    return GetRawTag(childTag);
-                case Constants.AggregationResponsePayload.RequestAcknowledgmentTagType:
-                    return GetRawTag(childTag);
-                // following fields will be used to create KSI signature and parsed when creating the signature
-                case Constants.AggregationHashChain.TagType:
-                case Constants.CalendarHashChain.TagType:
-                case Constants.PublicationRecord.TagTypeInSignature:
-                case Constants.AggregationAuthenticationRecord.TagType:
-                case Constants.CalendarAuthenticationRecord.TagType:
-                    return childTag;
+                case Constants.KsiPduPayload.StatusTagType:
+                    return _status = GetIntegerTag(childTag);
+                case Constants.KsiPduPayload.ErrorMessageTagType:
+                    return _errorMessage = GetStringTag(childTag);
                 default:
                     return base.ParseChild(childTag);
             }
@@ -72,15 +61,25 @@ namespace Guardtime.KSI.Service
         {
             base.Validate(tagCounter);
 
-            if (tagCounter[Constants.AggregationResponsePayload.ConfigTagType] > 1)
+            if (tagCounter[Constants.KsiPduPayload.StatusTagType] != 1)
             {
-                throw new TlvException("Only one config is allowed in aggregation response payload.");
+                throw new TlvException("Exactly one status code must exist in reponse payload.");
             }
 
-            if (tagCounter[Constants.AggregationResponsePayload.RequestAcknowledgmentTagType] > 1)
+            if (tagCounter[Constants.KsiPduPayload.ErrorMessageTagType] > 1)
             {
-                throw new TlvException("Only one request acknowledgment is allowed in aggregation response payload.");
+                throw new TlvException("Only one error message is allowed in response payload.");
             }
         }
+
+        /// <summary>
+        ///     Get status code.
+        /// </summary>
+        public ulong Status => _status.Value;
+
+        /// <summary>
+        ///     Get error message if it exists.
+        /// </summary>
+        public string ErrorMessage => _errorMessage?.Value;
     }
 }

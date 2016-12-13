@@ -60,7 +60,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         {
             Rfc3161RecordAggregationTimeRule rule = new Rfc3161RecordAggregationTimeRule();
 
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Legacy_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok), FileMode.Open))
             {
                 Rfc3161Record rfc3161Record = new KsiSignatureFactory().Create(stream).Rfc3161Record;
 
@@ -82,7 +82,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         {
             Rfc3161RecordAggregationTimeRule rule = new Rfc3161RecordAggregationTimeRule();
 
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Legacy_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -100,7 +100,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             Rfc3161RecordAggregationTimeRule rule = new Rfc3161RecordAggregationTimeRule();
 
             using (FileStream stream =
-                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Invalid_Rfc3161_Aggregation_Time_Mismatch), FileMode.Open))
+                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Invalid_Rfc3161_Aggregation_Time_Mismatch), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {

@@ -49,7 +49,7 @@ namespace Guardtime.KSI.Test.Signature
         [Test]
         public void CreateFromStreamTest()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok), FileMode.Open))
             {
                 new KsiSignatureFactory().Create(stream);
             }
@@ -58,7 +58,7 @@ namespace Guardtime.KSI.Test.Signature
         [Test]
         public void CreateFromStreamAndVerifyInvalidSignatureTest()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Invalid_Aggregation_Chain_Input_Hash), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Invalid_Aggregation_Chain_Input_Hash), FileMode.Open))
             {
                 KsiSignatureInvalidContentException ex = Assert.Throws<KsiSignatureInvalidContentException>(delegate
                 {
@@ -73,7 +73,7 @@ namespace Guardtime.KSI.Test.Signature
         [Test]
         public void CreateFromStreamAndVerifyWithLevel3Test()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok_Level3), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok_Level3), FileMode.Open))
             {
                 new KsiSignatureFactory().Create(stream, null, 3);
             }
@@ -84,7 +84,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             IKsiSignature signature;
 
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok_With_Publication_Record), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok_With_Publication_Record), FileMode.Open))
             {
                 signature = new KsiSignatureFactory().Create(stream);
             }
@@ -98,7 +98,7 @@ namespace Guardtime.KSI.Test.Signature
             KsiSignatureInvalidContentException ex = Assert.Throws<KsiSignatureInvalidContentException>(delegate
             {
                 // Check invalid signature
-                using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok_With_Publication_Record), FileMode.Open))
+                using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok_With_Publication_Record), FileMode.Open))
                 {
                     signature = signatureFactory.Create(stream);
                 }
@@ -113,7 +113,7 @@ namespace Guardtime.KSI.Test.Signature
             IKsiSignature signature;
 
             // Check invalid signature
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Invalid_Aggregation_Chain_Index_Mismatch), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Invalid_Aggregation_Chain_Index_Mismatch), FileMode.Open))
             {
                 signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream);
             }
@@ -144,7 +144,7 @@ namespace Guardtime.KSI.Test.Signature
             KsiSignatureFactory signatureFactory = new KsiSignatureFactory();
             IKsiSignature signature;
 
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok), FileMode.Open))
             {
                 signature = new KsiSignatureFactory().Create(stream);
             }

@@ -29,42 +29,47 @@ namespace Guardtime.KSI.Signature
     public sealed class CalendarAuthenticationRecord : CompositeTag
     {
         /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.CalendarAuthenticationRecord.TagType;
+
+        /// <summary>
         ///     Create new calendar authentication record TLV element from TLV element
         /// </summary>
         /// <param name="tag">TLV element</param>
         public CalendarAuthenticationRecord(ITlvTag tag) : base(tag)
         {
-            CheckTagType(Constants.CalendarAuthenticationRecord.TagType);
+        }
 
-            int publicationDataCount = 0;
-            int signatureDataCount = 0;
-
-            for (int i = 0; i < Count; i++)
+        /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
             {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.PublicationData.TagType:
-                        this[i] = PublicationData = new PublicationData(childTag);
-                        publicationDataCount++;
-                        break;
-                    case Constants.SignatureData.TagType:
-                        this[i] = SignatureData = new SignatureData(childTag);
-                        signatureDataCount++;
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
+                case Constants.PublicationData.TagType:
+                    return PublicationData = childTag as PublicationData ?? new PublicationData(childTag);
+                case Constants.SignatureData.TagType:
+                    return SignatureData = childTag as SignatureData ?? new SignatureData(childTag);
+                default:
+                    return base.ParseChild(childTag);
             }
+        }
 
-            if (publicationDataCount != 1)
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate(TagCounter tagCounter)
+        {
+            base.Validate(tagCounter);
+
+            if (tagCounter[Constants.PublicationData.TagType] != 1)
             {
                 throw new TlvException("Exactly one publication data must exist in calendar authentication record.");
             }
 
-            if (signatureDataCount != 1)
+            if (tagCounter[Constants.SignatureData.TagType] != 1)
             {
                 throw new TlvException("Exactly one signature data must exist in calendar authentication record.");
             }
@@ -73,11 +78,11 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         ///     Get publication data.
         /// </summary>
-        public PublicationData PublicationData { get; }
+        public PublicationData PublicationData { get; private set; }
 
         /// <summary>
         ///     Get signature data.
         /// </summary>
-        public SignatureData SignatureData { get; }
+        public SignatureData SignatureData { get; private set; }
     }
 }

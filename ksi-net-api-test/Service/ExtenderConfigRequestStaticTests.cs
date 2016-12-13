@@ -33,7 +33,7 @@ namespace Guardtime.KSI.Test.Service
     /// Extender configuration tests with static response
     /// </summary>
     [TestFixture]
-    public class EtenderConfigRequestStaticTests
+    public class ExtenderConfigRequestStaticTests
     {
         /// <summary>
         /// Test extender configuration request
@@ -80,7 +80,7 @@ namespace Guardtime.KSI.Test.Service
                 ksi.GetExtenderConfig();
             });
 
-            Assert.That(ex.Message.StartsWith("Invalid extender config response PDU. Could not find a valid payload."), "Unexpected exception message: " + ex.Message);
+            Assert.That(ex.Message.StartsWith("Invalid response PDU. Could not find a valid payload."), "Unexpected exception message: " + ex.Message);
         }
 
         private static Ksi GetKsi(byte[] requestResult)

@@ -82,7 +82,8 @@ namespace Guardtime.KSI.Test.Service
                 ksi.GetAggregatorConfig();
             });
 
-            Assert.That(ex.Message.StartsWith("Invalid aggregator config response PDU. Could not find a valid payload."), "Unexpected exception message: " + ex.Message);
+            Assert.That(ex.Message.StartsWith("Invalid response PDU. Could not find a valid payload."),
+                "Unexpected exception message: " + ex.Message);
         }
 
         private static Ksi GetKsi(byte[] requestResult)
