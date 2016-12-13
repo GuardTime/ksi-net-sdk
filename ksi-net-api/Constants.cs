@@ -18,7 +18,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 
 #pragma warning disable 1591
 
@@ -26,42 +25,15 @@ namespace Guardtime.KSI
 {
     public static class Constants
     {
-        public static List<uint> PayloadTypes { get; }
-
-        static Constants()
+        public static uint[] AllPayloadTypes = new[]
         {
-            PayloadTypes = new List<uint>();
-
-            if (!PayloadTypes.Contains(AggregationRequestPayload.TagType))
-            {
-                PayloadTypes.Add(AggregationRequestPayload.TagType);
-            }
-
-            if (!PayloadTypes.Contains(AggregationResponsePayload.TagType))
-            {
-                PayloadTypes.Add(AggregationResponsePayload.TagType);
-            }
-
-            if (!PayloadTypes.Contains(AggregatorConfigRequestPayload.TagType))
-            {
-                PayloadTypes.Add(AggregatorConfigRequestPayload.TagType);
-            }
-
-            if (!PayloadTypes.Contains(AggregatorConfigResponsePayload.TagType))
-            {
-                PayloadTypes.Add(AggregatorConfigResponsePayload.TagType);
-            }
-
-            if (!PayloadTypes.Contains(ExtendRequestPayload.TagType))
-            {
-                PayloadTypes.Add(ExtendRequestPayload.TagType);
-            }
-
-            if (!PayloadTypes.Contains(ExtendResponsePayload.TagType))
-            {
-                PayloadTypes.Add(ExtendResponsePayload.TagType);
-            }
-        }
+            AggregationRequestPayload.TagType,
+            AggregationResponsePayload.TagType,
+            AggregatorConfigRequestPayload.TagType,
+            AggregatorConfigResponsePayload.TagType,
+            ExtendRequestPayload.TagType,
+            ExtendResponsePayload.TagType
+        };
 
         /// <summary>
         ///     Bits in byte

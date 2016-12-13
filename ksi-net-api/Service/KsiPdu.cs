@@ -64,9 +64,12 @@ namespace Guardtime.KSI.Service
         /// </summary>
         protected override ITlvTag ParseChild(ITlvTag childTag)
         {
-            if (Constants.PayloadTypes.Contains(childTag.Type))
+            foreach (uint tagType in Constants.AllPayloadTypes)
             {
-                return childTag;
+                if (tagType == childTag.Type)
+                {
+                    return childTag;
+                }
             }
 
             if (childTag.Type == Constants.KsiPduHeader.TagType)
