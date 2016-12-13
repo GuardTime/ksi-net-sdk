@@ -29,10 +29,15 @@ namespace Guardtime.KSI.Service
     public sealed class LegacyExtendErrorPayload : ErrorPayload
     {
         /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.LegacyExtendErrorPayload.TagType;
+
+        /// <summary>
         ///     Create extend error payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        public LegacyExtendErrorPayload(ITlvTag tag) : base(tag, Constants.LegacyExtendErrorPayload.TagType)
+        public LegacyExtendErrorPayload(ITlvTag tag) : base(tag)
         {
         }
     }

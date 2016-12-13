@@ -30,10 +30,15 @@ namespace Guardtime.KSI.Service
     [Obsolete]
     public sealed class LegacyAggregationRequestPayload : KsiPduPayload
     {
-        private readonly RawTag _config;
-        private readonly ImprintTag _requestHash;
-        private readonly IntegerTag _requestId;
-        private readonly IntegerTag _requestLevel;
+        private RawTag _config;
+        private ImprintTag _requestHash;
+        private IntegerTag _requestId;
+        private IntegerTag _requestLevel;
+
+        /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.AggregationRequestPayload.LegacyTagType;
 
         /// <summary>
         ///     Create aggregation request payload from TLV element.
@@ -41,57 +46,51 @@ namespace Guardtime.KSI.Service
         /// <param name="tag">TLV element</param>
         public LegacyAggregationRequestPayload(ITlvTag tag) : base(tag)
         {
-            CheckTagType(Constants.AggregationRequestPayload.LegacyTagType);
+        }
 
-            int requestIdCount = 0;
-            int requestHashCount = 0;
-            int requestLevelCount = 0;
-            int configCount = 0;
-
-            for (int i = 0; i < Count; i++)
+        /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
             {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.KsiPduPayload.RequestIdTagType:
-                        this[i] = _requestId = new IntegerTag(childTag);
-                        requestIdCount++;
-                        break;
-                    case Constants.AggregationRequestPayload.RequestHashTagType:
-                        this[i] = _requestHash = new ImprintTag(childTag);
-                        requestHashCount++;
-                        break;
-                    case Constants.AggregationRequestPayload.RequestLevelTagType:
-                        this[i] = _requestLevel = new IntegerTag(childTag);
-                        requestLevelCount++;
-                        break;
-                    case Constants.AggregationRequestPayload.ConfigTagType:
-                        this[i] = _config = new RawTag(childTag);
-                        configCount++;
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
+                case Constants.KsiPduPayload.RequestIdTagType:
+                    return _requestId = GetIntegerTag(childTag);
+                case Constants.AggregationRequestPayload.RequestHashTagType:
+                    return _requestHash = GetImprintTag(childTag);
+                case Constants.AggregationRequestPayload.RequestLevelTagType:
+                    return _requestLevel = GetIntegerTag(childTag);
+                case Constants.AggregationRequestPayload.ConfigTagType:
+                    return _config = GetRawTag(childTag);
+                default:
+                    return base.ParseChild(childTag);
             }
+        }
 
-            if (requestIdCount != 1)
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate(TagCounter tagCounter)
+        {
+            base.Validate(tagCounter);
+
+            if (tagCounter[Constants.KsiPduPayload.RequestIdTagType] != 1)
             {
                 throw new TlvException("Exactly one request id must exist in aggregation request payload.");
             }
 
-            if (requestHashCount != 1)
+            if (tagCounter[Constants.AggregationRequestPayload.RequestHashTagType] != 1)
             {
                 throw new TlvException("Exactly one request hash must exist in aggregation request payload.");
             }
 
-            if (requestLevelCount > 1)
+            if (tagCounter[Constants.AggregationRequestPayload.RequestLevelTagType] > 1)
             {
                 throw new TlvException("Only one request level is allowed in aggregation request payload.");
             }
 
-            if (configCount > 1)
+            if (tagCounter[Constants.AggregationRequestPayload.ConfigTagType] > 1)
             {
                 throw new TlvException("Only one config tag is allowed in aggregation request payload.");
             }
@@ -108,8 +107,7 @@ namespace Guardtime.KSI.Service
             new ImprintTag(Constants.AggregationRequestPayload.RequestHashTagType, false, false, hash)
         })
         {
-            _requestId = (IntegerTag)this[0];
-            _requestHash = (ImprintTag)this[1];
+
         }
 
         /// <summary>
@@ -125,9 +123,7 @@ namespace Guardtime.KSI.Service
             new IntegerTag(Constants.AggregationRequestPayload.RequestLevelTagType, false, false, level)
         })
         {
-            _requestId = (IntegerTag)this[0];
-            _requestHash = (ImprintTag)this[1];
-            _requestLevel = (IntegerTag)this[2];
+
         }
 
         /// <summary>

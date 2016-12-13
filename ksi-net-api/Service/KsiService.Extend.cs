@@ -230,7 +230,7 @@ namespace Guardtime.KSI.Service
                 if (legacyPdu != null)
                 {
                     LegacyExtendResponsePayload legacyPayload = legacyPdu.Payload as LegacyExtendResponsePayload;
-                    LegacyExtendErrorPayload errorPayload = legacyPdu.Payload as LegacyExtendErrorPayload;
+                    LegacyExtendErrorPayload errorPayload = legacyPdu.ErrorPayload as LegacyExtendErrorPayload;
 
                     ValidateLegacyResponse(legacyPdu, legacyPayload, errorPayload, serviceAsyncResult.RequestId, _extendingServiceCredentials);
 

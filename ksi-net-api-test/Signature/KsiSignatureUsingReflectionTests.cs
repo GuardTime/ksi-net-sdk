@@ -69,8 +69,7 @@ namespace Guardtime.KSI.Test.Signature
                                             new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
                                             new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                         })
-                                },
-                                LinkDirection.Left)
+                                })
                         }),
                     TestUtil.GetCompositeTag<CalendarHashChain>(Constants.CalendarHashChain.TagType,
                         new ITlvTag[]
@@ -223,8 +222,7 @@ namespace Guardtime.KSI.Test.Signature
                                             new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
                                             new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                         })
-                                },
-                                LinkDirection.Left)
+                                })
                         }),
                     TestUtil.GetCompositeTag<CalendarHashChain>(Constants.CalendarHashChain.TagType,
                         new ITlvTag[]
@@ -382,8 +380,7 @@ namespace Guardtime.KSI.Test.Signature
                                             new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
                                             new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                         })
-                                },
-                                LinkDirection.Left)
+                                })
                         })
                 });
 
@@ -435,8 +432,7 @@ namespace Guardtime.KSI.Test.Signature
                                             new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
                                             new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                         })
-                                },
-                                LinkDirection.Left)
+                                })
                         }),
                     TestUtil.GetCompositeTag<AggregationHashChain>(Constants.AggregationHashChain.TagType,
                         new ITlvTag[]
@@ -460,8 +456,7 @@ namespace Guardtime.KSI.Test.Signature
                                             new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
                                             new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                         })
-                                },
-                                LinkDirection.Left)
+                                })
                         })
                 });
 
@@ -514,8 +509,7 @@ namespace Guardtime.KSI.Test.Signature
                                             new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
                                             new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                         })
-                                },
-                                LinkDirection.Left)
+                                })
                         }),
                     TestUtil.GetCompositeTag<CalendarHashChain>(Constants.CalendarHashChain.TagType,
                         new ITlvTag[]
@@ -583,8 +577,7 @@ namespace Guardtime.KSI.Test.Signature
                                                 new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
                                                 new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                             })
-                                    },
-                                    LinkDirection.Left)
+                                    })
                             }),
                         TestUtil.GetCompositeTag<CalendarHashChain>(Constants.CalendarHashChain.TagType,
                             new ITlvTag[]
@@ -652,8 +645,7 @@ namespace Guardtime.KSI.Test.Signature
                                             new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
                                             new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                         })
-                                },
-                                LinkDirection.Left)
+                                })
                         }),
                     TestUtil.GetCompositeTag<Rfc3161Record>(Constants.Rfc3161Record.TagType,
                         new ITlvTag[]
@@ -722,8 +714,7 @@ namespace Guardtime.KSI.Test.Signature
                                                 new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
                                                 new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                             })
-                                    },
-                                    LinkDirection.Left)
+                                    })
                             }),
                         TestUtil.GetCompositeTag<Rfc3161Record>(Constants.Rfc3161Record.TagType,
                             new ITlvTag[]
@@ -798,8 +789,7 @@ namespace Guardtime.KSI.Test.Signature
                                                 new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
                                                 new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                             })
-                                    },
-                                    LinkDirection.Left)
+                                    })
                             }),
                         TestUtil.GetCompositeTag<CalendarHashChain>(Constants.CalendarHashChain.TagType,
                             new ITlvTag[]
@@ -891,8 +881,7 @@ namespace Guardtime.KSI.Test.Signature
                                             new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
                                             new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                         })
-                                },
-                                LinkDirection.Left)
+                                })
                         }),
                     TestUtil.GetCompositeTag<CalendarHashChain>(Constants.CalendarHashChain.TagType,
                         new ITlvTag[]
@@ -974,8 +963,7 @@ namespace Guardtime.KSI.Test.Signature
                                             new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
                                             new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                         })
-                                },
-                                LinkDirection.Left)
+                                })
                         }),
                     TestUtil.GetCompositeTag<CalendarHashChain>(Constants.CalendarHashChain.TagType,
                         new ITlvTag[]
@@ -1061,8 +1049,7 @@ namespace Guardtime.KSI.Test.Signature
                                             new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
                                             new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                         })
-                                },
-                                LinkDirection.Left)
+                                })
                         }),
                     TestUtil.GetCompositeTag<CalendarHashChain>(Constants.CalendarHashChain.TagType,
                         new ITlvTag[]
@@ -1130,8 +1117,7 @@ namespace Guardtime.KSI.Test.Signature
                                                 new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
                                                 new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                             })
-                                    },
-                                    LinkDirection.Left)
+                                    })
                             }),
                         TestUtil.GetCompositeTag<CalendarHashChain>(Constants.CalendarHashChain.TagType,
                             new ITlvTag[]
@@ -1255,8 +1241,7 @@ namespace Guardtime.KSI.Test.Signature
                                             new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
                                             new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                         })
-                                },
-                                LinkDirection.Left)
+                                })
                         }),
                     TestUtil.GetCompositeTag<CalendarHashChain>(Constants.CalendarHashChain.TagType,
                         new ITlvTag[]
@@ -1374,8 +1359,7 @@ namespace Guardtime.KSI.Test.Signature
                                             new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
                                             new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                         })
-                                },
-                                LinkDirection.Left)
+                                })
                         }),
                     TestUtil.GetCompositeTag<CalendarHashChain>(Constants.CalendarHashChain.TagType,
                         new ITlvTag[]
@@ -1488,8 +1472,7 @@ namespace Guardtime.KSI.Test.Signature
                                             new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
                                             new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                         })
-                                },
-                                LinkDirection.Left)
+                                })
                         }),
                     TestUtil.GetCompositeTag<AggregationAuthenticationRecord>(Constants.AggregationAuthenticationRecord.TagType,
                         new ITlvTag[]
@@ -1558,8 +1541,7 @@ namespace Guardtime.KSI.Test.Signature
                                             new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
                                             new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                         })
-                                },
-                                LinkDirection.Left)
+                                })
                         }),
                     TestUtil.GetCompositeTag<AggregationAuthenticationRecord>(Constants.AggregationAuthenticationRecord.TagType,
                         new ITlvTag[]

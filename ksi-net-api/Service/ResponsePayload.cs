@@ -27,44 +27,46 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public abstract class ResponsePayload : KsiPduPayload
     {
-        private readonly StringTag _errorMessage;
-        private readonly IntegerTag _status;
+        private StringTag _errorMessage;
+        private IntegerTag _status;
 
         /// <summary>
         ///     Create KSI PDU response payload TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        /// <param name="expectedTagType">expected tag type</param>
-        protected ResponsePayload(ITlvTag tag, uint expectedTagType) : base(tag)
+        protected ResponsePayload(ITlvTag tag) : base(tag)
         {
-            CheckTagType(expectedTagType);
+        }
 
-            int statusCount = 0;
-            int errorMessageCount = 0;
-
-            for (int i = 0; i < Count; i++)
+        /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
             {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.KsiPduPayload.StatusTagType:
-                        this[i] = _status = new IntegerTag(childTag);
-                        statusCount++;
-                        break;
-                    case Constants.KsiPduPayload.ErrorMessageTagType:
-                        this[i] = _errorMessage = new StringTag(childTag);
-                        errorMessageCount++;
-                        break;
-                }
+                case Constants.KsiPduPayload.StatusTagType:
+                    return _status = GetIntegerTag(childTag);
+                case Constants.KsiPduPayload.ErrorMessageTagType:
+                    return _errorMessage = GetStringTag(childTag);
+                default:
+                    return base.ParseChild(childTag);
             }
+        }
 
-            if (statusCount != 1)
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate(TagCounter tagCounter)
+        {
+            base.Validate(tagCounter);
+
+            if (tagCounter[Constants.KsiPduPayload.StatusTagType] != 1)
             {
                 throw new TlvException("Exactly one status code must exist in reponse payload.");
             }
 
-            if (errorMessageCount > 1)
+            if (tagCounter[Constants.KsiPduPayload.ErrorMessageTagType] > 1)
             {
                 throw new TlvException("Only one error message is allowed in response payload.");
             }

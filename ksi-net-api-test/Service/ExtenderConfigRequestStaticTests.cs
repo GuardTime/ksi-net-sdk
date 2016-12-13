@@ -33,7 +33,7 @@ namespace Guardtime.KSI.Test.Service
     /// Extender configuration tests with static response
     /// </summary>
     [TestFixture]
-    public class EtenderConfigRequestStaticTests
+    public class ExtenderConfigRequestStaticTests
     {
         /// <summary>
         /// Test extender configuration request

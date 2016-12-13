@@ -195,7 +195,7 @@ namespace Guardtime.KSI.Service
             return Util.GetRandomUnsignedLong();
         }
 
-        private static void ValidateLegacyResponse(LegacyKsiPdu pdu, ResponsePayloadExtended payload,
+        private static void ValidateLegacyResponse(LegacyKsiPdu pdu, RequestResponsePayload payload,
                                                    ErrorPayload errorPayload, ulong requestId, IServiceCredentials serviceCredentials)
         {
             if (payload == null && errorPayload == null)

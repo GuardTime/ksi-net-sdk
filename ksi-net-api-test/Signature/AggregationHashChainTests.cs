@@ -37,10 +37,29 @@ namespace Guardtime.KSI.Test.Signature
     public class AggregationHashChainTests
     {
         [Test]
-        public void TestAggregationHashChainOk()
+        public void TestAggregationHashChainCreateOk()
         {
             AggregationHashChain aggregationHashChain = GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Ok);
             Assert.AreEqual(9, aggregationHashChain.Count, "Invalid amount of child TLV objects");
+        }
+
+        [Test]
+        public void TestAggregationHashChainCreateWithLinksOk()
+        {
+            AggregationHashChain aggregationHashChain = GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Ok);
+
+            new AggregationHashChain(1, new ulong[] { 1 }, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE")),
+                1, aggregationHashChain.GetChainLinks().ToArray());
+        }
+
+        [Test]
+        public void TestAggregationHashChainCreateInvalid()
+        {
+            Assert.That(delegate
+            {
+                new AggregationHashChain(1, new ulong[] { 1 }, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE")),
+                    1, new AggregationHashChain.Link[] { });
+            }, Throws.TypeOf<TlvException>().With.Message.StartWith("Links are missing in aggregation hash chain"));
         }
 
         [Test]
@@ -417,8 +436,7 @@ namespace Guardtime.KSI.Test.Signature
                                     new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
                                     new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
                                 })
-                        },
-                        LinkDirection.Left)
+                        })
                 });
 
             AggregationHashChain tag2 = new AggregationHashChain(tag);
@@ -516,8 +534,7 @@ namespace Guardtime.KSI.Test.Signature
                             new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, 0),
                             new RawTag(Constants.AggregationHashChain.Link.LegacyId, false, false,
                                 legacyIdValue),
-                        },
-                        LinkDirection.Left)
+                        })
                 });
         }
 

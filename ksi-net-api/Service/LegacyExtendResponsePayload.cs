@@ -28,50 +28,52 @@ namespace Guardtime.KSI.Service
     ///     Extend response payload.
     /// </summary>
     [Obsolete]
-    public sealed class LegacyExtendResponsePayload : ResponsePayloadExtended
+    public sealed class LegacyExtendResponsePayload : RequestResponsePayload
     {
-        private readonly IntegerTag _calendarLastTime;
+        private IntegerTag _calendarLastTime;
+
+        /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.ExtendResponsePayload.LegacyTagType;
 
         /// <summary>
         ///     Create extend response payload from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        public LegacyExtendResponsePayload(ITlvTag tag) : base(tag, Constants.ExtendResponsePayload.LegacyTagType)
+        public LegacyExtendResponsePayload(ITlvTag tag) : base(tag)
         {
-            int calendarLastTimeCount = 0;
-            int calendarHashChainCount = 0;
+        }
 
-            for (int i = 0; i < Count; i++)
+        /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
             {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.KsiPduPayload.RequestIdTagType:
-                    case Constants.KsiPduPayload.StatusTagType:
-                    case Constants.KsiPduPayload.ErrorMessageTagType:
-                        break;
-                    case Constants.ExtendResponsePayload.LastTimeTagType:
-                    case Constants.ExtendResponsePayload.CalendarLastTimeTagType:
-                        this[i] = _calendarLastTime = new IntegerTag(childTag);
-                        calendarLastTimeCount++;
-                        break;
-                    case Constants.CalendarHashChain.TagType:
-                        this[i] = CalendarHashChain = new CalendarHashChain(childTag);
-                        calendarHashChainCount++;
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
+                case Constants.ExtendResponsePayload.LastTimeTagType:
+                    return _calendarLastTime = GetIntegerTag(childTag);
+                case Constants.CalendarHashChain.TagType:
+                    return CalendarHashChain = childTag as CalendarHashChain ?? new CalendarHashChain(childTag);
+                default:
+                    return base.ParseChild(childTag);
             }
+        }
 
-            if (calendarLastTimeCount > 1)
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate(TagCounter tagCounter)
+        {
+            base.Validate(tagCounter);
+
+            if (tagCounter[Constants.ExtendResponsePayload.LastTimeTagType] > 1)
             {
                 throw new TlvException("Only one calendar last time is allowed in extend response payload.");
             }
 
-            if (Status == 0 && calendarHashChainCount != 1)
+            if (Status == 0 && tagCounter[Constants.CalendarHashChain.TagType] != 1)
             {
                 throw new TlvException("Exactly one calendar hash chain must exist in extend response payload.");
             }
@@ -80,7 +82,7 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Get calendar hash chain.
         /// </summary>
-        public CalendarHashChain CalendarHashChain { get; }
+        public CalendarHashChain CalendarHashChain { get; private set; }
 
         /// <summary>
         ///     Get aggregation time of the newest calendar record the extender has

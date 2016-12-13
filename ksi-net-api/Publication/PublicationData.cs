@@ -30,8 +30,13 @@ namespace Guardtime.KSI.Publication
     /// </summary>
     public sealed class PublicationData : CompositeTag
     {
-        private readonly ImprintTag _publicationHash;
-        private readonly IntegerTag _publicationTime;
+        private ImprintTag _publicationHash;
+        private IntegerTag _publicationTime;
+
+        /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.PublicationData.TagType;
 
         /// <summary>
         ///     Create new publication data TLV element from TLV element.
@@ -39,37 +44,37 @@ namespace Guardtime.KSI.Publication
         /// <param name="tag">TLV element</param>
         public PublicationData(ITlvTag tag) : base(tag)
         {
-            CheckTagType(Constants.PublicationData.TagType);
+        }
 
-            int publicationTimeCount = 0;
-            int publicationHashCount = 0;
-
-            for (int i = 0; i < Count; i++)
+        /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
             {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.PublicationData.PublicationTimeTagType:
-                        this[i] = _publicationTime = new IntegerTag(childTag);
-                        publicationTimeCount++;
-                        break;
-                    case Constants.PublicationData.PublicationHashTagType:
-                        this[i] = _publicationHash = new ImprintTag(childTag);
-                        publicationHashCount++;
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
+                case Constants.PublicationData.PublicationTimeTagType:
+                    return _publicationTime = GetIntegerTag(childTag);
+                case Constants.PublicationData.PublicationHashTagType:
+                    return _publicationHash = GetImprintTag(childTag);
+                default:
+                    return base.ParseChild(childTag);
             }
+        }
 
-            if (publicationTimeCount != 1)
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate(TagCounter tagCounter)
+        {
+            base.Validate(tagCounter);
+
+            if (tagCounter[Constants.PublicationData.PublicationTimeTagType] != 1)
             {
                 throw new TlvException("Exactly one publication time must exist in publication data.");
             }
 
-            if (publicationHashCount != 1)
+            if (tagCounter[Constants.PublicationData.PublicationHashTagType] != 1)
             {
                 throw new TlvException("Exactly one publication hash must exist in publication data.");
             }
@@ -98,8 +103,6 @@ namespace Guardtime.KSI.Publication
                 new ImprintTag(Constants.PublicationData.PublicationHashTagType, false, false, publicationHash)
             })
         {
-            _publicationTime = (IntegerTag)this[0];
-            _publicationHash = (ImprintTag)this[1];
         }
 
         /// <summary>
@@ -119,8 +122,6 @@ namespace Guardtime.KSI.Publication
         public PublicationData(string publicationString, bool nonCritical, bool forward)
             : base(Constants.PublicationData.TagType, nonCritical, forward, DecodePublicationString(publicationString))
         {
-            _publicationTime = (IntegerTag)this[0];
-            _publicationHash = (ImprintTag)this[1];
         }
 
         private static ITlvTag[] DecodePublicationString(string publicationString)

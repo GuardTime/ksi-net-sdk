@@ -18,7 +18,6 @@
  */
 
 using System;
-using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Service
@@ -30,9 +29,9 @@ namespace Guardtime.KSI.Service
     public sealed class LegacyAggregationPdu : LegacyKsiPdu
     {
         /// <summary>
-        ///     Get PDU payload.
+        /// Expected tag type
         /// </summary>
-        public override KsiPduPayload Payload { get; }
+        protected override uint ExpectedTagType => Constants.LegacyAggregationPdu.TagType;
 
         /// <summary>
         ///     Create aggregation pdu TLV element from TLV element.
@@ -41,59 +40,23 @@ namespace Guardtime.KSI.Service
         [Obsolete]
         public LegacyAggregationPdu(ITlvTag tag) : base(tag)
         {
-            CheckTagType(Constants.LegacyAggregationPdu.TagType);
+        }
 
-            int headerCount = 0;
-            int payloadCount = 0;
-            int macCount = 0;
-
-            for (int i = 0; i < Count; i++)
+        /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
             {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.AggregationRequestPayload.LegacyTagType:
-                        this[i] = Payload = new LegacyAggregationRequestPayload(childTag);
-                        payloadCount++;
-                        break;
-                    case Constants.AggregationResponsePayload.LegacyTagType:
-                        this[i] = Payload = new LegacyAggregationResponsePayload(childTag);
-                        payloadCount++;
-                        break;
-                    case Constants.LegacyAggregationErrorPayload.TagType:
-                        this[i] = Payload = new LegacyAggregationErrorPayload(childTag);
-                        payloadCount++;
-                        break;
-                    case Constants.KsiPduHeader.TagType:
-                        headerCount++;
-                        break;
-                    case Constants.KsiPdu.MacTagType:
-                        macCount++;
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
-            }
-
-            if (payloadCount != 1)
-            {
-                throw new TlvException("Exactly one payload must exist in KSI PDU.");
-            }
-
-            if (Payload.Type != Constants.LegacyAggregationErrorPayload.TagType)
-            {
-                if (headerCount != 1)
-
-                {
-                    throw new TlvException("Exactly one header must exist in KSI PDU.");
-                }
-
-                if (macCount != 1)
-                {
-                    throw new TlvException("Exactly one mac must exist in KSI PDU");
-                }
+                case Constants.AggregationRequestPayload.LegacyTagType:
+                    return Payload = childTag as LegacyAggregationRequestPayload ?? new LegacyAggregationRequestPayload(childTag);
+                case Constants.AggregationResponsePayload.LegacyTagType:
+                    return Payload = childTag as LegacyAggregationResponsePayload ?? new LegacyAggregationResponsePayload(childTag);
+                case Constants.LegacyAggregationErrorPayload.TagType:
+                    return ErrorPayload = childTag as LegacyAggregationErrorPayload ?? new LegacyAggregationErrorPayload(childTag);
+                default:
+                    return base.ParseChild(childTag);
             }
         }
 
@@ -105,9 +68,8 @@ namespace Guardtime.KSI.Service
         /// <param name="mac">pdu message hmac</param>
         [Obsolete]
         public LegacyAggregationPdu(KsiPduHeader header, KsiPduPayload payload, ImprintTag mac)
-            : base(header, mac, Constants.LegacyAggregationPdu.TagType, false, false, new ITlvTag[] { header, payload, mac })
+            : base(Constants.LegacyAggregationPdu.TagType, false, false, new ITlvTag[] { header, payload, mac })
         {
-            Payload = payload;
         }
     }
 }

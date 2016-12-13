@@ -211,7 +211,7 @@ namespace Guardtime.KSI.Service
                 if (legacyPdu != null)
                 {
                     LegacyAggregationResponsePayload legacyPayload = legacyPdu.Payload as LegacyAggregationResponsePayload;
-                    LegacyAggregationErrorPayload errorPayload = legacyPdu.Payload as LegacyAggregationErrorPayload;
+                    LegacyAggregationErrorPayload errorPayload = legacyPdu.ErrorPayload as LegacyAggregationErrorPayload;
 
                     ValidateLegacyResponse(legacyPdu, legacyPayload, errorPayload, serviceAsyncResult.RequestId, _signingServiceCredentials);
 

@@ -18,7 +18,6 @@
  */
 
 using System;
-using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Service
@@ -30,9 +29,9 @@ namespace Guardtime.KSI.Service
     public sealed class LegacyExtendPdu : LegacyKsiPdu
     {
         /// <summary>
-        ///     Get PDU payload.
+        /// Expected tag type
         /// </summary>
-        public override KsiPduPayload Payload { get; }
+        protected override uint ExpectedTagType => Constants.LegacyExtendPdu.TagType;
 
         /// <summary>
         ///     Create extend PDU from TLV element.
@@ -41,58 +40,23 @@ namespace Guardtime.KSI.Service
         [Obsolete]
         public LegacyExtendPdu(ITlvTag tag) : base(tag)
         {
-            CheckTagType(Constants.LegacyExtendPdu.TagType);
+        }
 
-            int headerCount = 0;
-            int payloadCount = 0;
-            int macCount = 0;
-
-            for (int i = 0; i < Count; i++)
+        /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
             {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.ExtendRequestPayload.LegacyTagType:
-                        this[i] = Payload = new LegacyExtendRequestPayload(childTag);
-                        payloadCount++;
-                        break;
-                    case Constants.ExtendResponsePayload.LegacyTagType:
-                        this[i] = Payload = new LegacyExtendResponsePayload(childTag);
-                        payloadCount++;
-                        break;
-                    case Constants.LegacyExtendErrorPayload.TagType:
-                        this[i] = Payload = new LegacyExtendErrorPayload(childTag);
-                        payloadCount++;
-                        break;
-                    case Constants.KsiPduHeader.TagType:
-                        headerCount++;
-                        break;
-                    case Constants.KsiPdu.MacTagType:
-                        macCount++;
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
-            }
-
-            if (payloadCount != 1)
-            {
-                throw new TlvException("Exactly one payload must exist in KSI PDU.");
-            }
-
-            if (Payload.Type != Constants.LegacyExtendErrorPayload.TagType)
-            {
-                if (headerCount != 1)
-                {
-                    throw new TlvException("Exactly one header must exist in KSI PDU.");
-                }
-
-                if (macCount != 1)
-                {
-                    throw new TlvException("Exactly one mac must exist in KSI PDU.");
-                }
+                case Constants.ExtendRequestPayload.LegacyTagType:
+                    return Payload = childTag as LegacyExtendRequestPayload ?? new LegacyExtendRequestPayload(childTag);
+                case Constants.ExtendResponsePayload.LegacyTagType:
+                    return Payload = childTag as LegacyExtendResponsePayload ?? new LegacyExtendResponsePayload(childTag);
+                case Constants.LegacyExtendErrorPayload.TagType:
+                    return ErrorPayload = childTag as LegacyExtendErrorPayload ?? new LegacyExtendErrorPayload(childTag);
+                default:
+                    return base.ParseChild(childTag);
             }
         }
 
@@ -104,9 +68,8 @@ namespace Guardtime.KSI.Service
         /// <param name="mac">Extend pdu hmac</param>
         [Obsolete]
         public LegacyExtendPdu(KsiPduHeader header, KsiPduPayload payload, ImprintTag mac)
-            : base(header, mac, Constants.LegacyExtendPdu.TagType, false, false, new ITlvTag[] { header, payload, mac })
+            : base(Constants.LegacyExtendPdu.TagType, false, false, new ITlvTag[] { header, payload, mac })
         {
-            Payload = payload;
         }
     }
 }

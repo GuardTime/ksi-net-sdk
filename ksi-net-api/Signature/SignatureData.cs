@@ -27,11 +27,16 @@ namespace Guardtime.KSI.Signature
     /// </summary>
     public sealed class SignatureData : CompositeTag
     {
-        private readonly RawTag _certificateId;
-        private readonly StringTag _certificateRepositoryUri;
+        private RawTag _certificateId;
+        private StringTag _certificateRepositoryUri;
 
-        private readonly StringTag _signatureType;
-        private readonly RawTag _signatureValue;
+        private StringTag _signatureType;
+        private RawTag _signatureValue;
+
+        /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.SignatureData.TagType;
 
         /// <summary>
         ///     Create new signature data TLV element from TLV element
@@ -39,57 +44,51 @@ namespace Guardtime.KSI.Signature
         /// <param name="tag">TLV element</param>
         public SignatureData(ITlvTag tag) : base(tag)
         {
-            CheckTagType(Constants.SignatureData.TagType);
+        }
 
-            int signatureTypeCount = 0;
-            int signatureValueCount = 0;
-            int certificateIdCount = 0;
-            int certificateRepositoryUriCount = 0;
-
-            for (int i = 0; i < Count; i++)
+        /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
             {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.SignatureData.SignatureTypeTagType:
-                        this[i] = _signatureType = new StringTag(childTag);
-                        signatureTypeCount++;
-                        break;
-                    case Constants.SignatureData.SignatureValueTagType:
-                        this[i] = _signatureValue = new RawTag(childTag);
-                        signatureValueCount++;
-                        break;
-                    case Constants.SignatureData.CertificateIdTagType:
-                        this[i] = _certificateId = new RawTag(childTag);
-                        certificateIdCount++;
-                        break;
-                    case Constants.SignatureData.CertificateRepositoryUriTagType:
-                        this[i] = _certificateRepositoryUri = new StringTag(childTag);
-                        certificateRepositoryUriCount++;
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
+                case Constants.SignatureData.SignatureTypeTagType:
+                    return _signatureType = GetStringTag(childTag);
+                case Constants.SignatureData.SignatureValueTagType:
+                    return _signatureValue = GetRawTag(childTag);
+                case Constants.SignatureData.CertificateIdTagType:
+                    return _certificateId = GetRawTag(childTag);
+                case Constants.SignatureData.CertificateRepositoryUriTagType:
+                    return _certificateRepositoryUri = GetStringTag(childTag);
+                default:
+                    return base.ParseChild(childTag);
             }
+        }
 
-            if (signatureTypeCount != 1)
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate(TagCounter tagCounter)
+        {
+            base.Validate(tagCounter);
+
+            if (tagCounter[Constants.SignatureData.SignatureTypeTagType] != 1)
             {
                 throw new TlvException("Exactly one signature type must exist in signature data.");
             }
 
-            if (signatureValueCount != 1)
+            if (tagCounter[Constants.SignatureData.SignatureValueTagType] != 1)
             {
                 throw new TlvException("Exactly one signature value must exist in signature data.");
             }
 
-            if (certificateIdCount != 1)
+            if (tagCounter[Constants.SignatureData.CertificateIdTagType] != 1)
             {
                 throw new TlvException("Exactly one certificate id must exist in signature data.");
             }
 
-            if (certificateRepositoryUriCount > 1)
+            if (tagCounter[Constants.SignatureData.CertificateRepositoryUriTagType] > 1)
             {
                 throw new TlvException("Only one certificate repository uri is allowed in signature data.");
             }

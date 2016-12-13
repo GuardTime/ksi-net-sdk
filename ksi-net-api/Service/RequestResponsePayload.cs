@@ -23,35 +23,42 @@ using Guardtime.KSI.Parser;
 namespace Guardtime.KSI.Service
 {
     /// <summary>
-    ///     KSI PDU response payload. Contains additional payload fields.
+    ///     KSI PDU request response payload. Contains request ID.
     /// </summary>
-    public abstract class ResponsePayloadExtended : ResponsePayload
+    public abstract class RequestResponsePayload : ResponsePayload
     {
-        private readonly IntegerTag _requestId;
+        private IntegerTag _requestId;
 
         /// <summary>
-        ///     Create KSI PDU extended response payload TLV element from TLV element.
+        ///     Create KSI PDU request response payload TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        /// <param name="expectedTagType">expected tag type</param>
-        protected ResponsePayloadExtended(ITlvTag tag, uint expectedTagType) : base(tag, expectedTagType)
+        protected RequestResponsePayload(ITlvTag tag) : base(tag)
         {
-            int requestIdCount = 0;
+        }
 
-            for (int i = 0; i < Count; i++)
+        /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
             {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.KsiPduPayload.RequestIdTagType:
-                        this[i] = _requestId = new IntegerTag(childTag);
-                        requestIdCount++;
-                        break;
-                }
+                case Constants.KsiPduPayload.RequestIdTagType:
+                    return _requestId = GetIntegerTag(childTag);
+                default:
+                    return base.ParseChild(childTag);
             }
+        }
 
-            if (requestIdCount != 1)
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate(TagCounter tagCounter)
+        {
+            base.Validate(tagCounter);
+
+            if (tagCounter[Constants.KsiPduPayload.RequestIdTagType] != 1)
             {
                 throw new TlvException("Exactly one request id must exist in response payload.");
             }
