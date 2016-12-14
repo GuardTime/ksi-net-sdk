@@ -122,7 +122,7 @@ namespace Guardtime.KSI.Test.Parser
                               "    TLV[0x1,N]:0x0809";
             Assert.AreEqual(expected, tag.ToString(), "1. Tag string representation should be correct");
 
-            tag = new CompositeTestTag(tag);
+            tag = new CompositeTestTag(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 
             Assert.AreEqual(expected, tag.ToString(), "2. Tag string representation should be correct");
         }
@@ -212,7 +212,7 @@ namespace Guardtime.KSI.Test.Parser
                     switch (childTag.Type)
                     {
                         case 0x5:
-                            this[i] = CompositeTestTagValue = new CompositeTestTag(childTag);
+                            this[i] = CompositeTestTagValue = childTag as CompositeTestTag ?? new CompositeTestTag(childTag);
                             break;
                         case 0x2:
                         case 0x1:

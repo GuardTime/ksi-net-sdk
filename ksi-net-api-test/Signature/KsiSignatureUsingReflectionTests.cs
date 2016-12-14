@@ -134,7 +134,7 @@ namespace Guardtime.KSI.Test.Signature
                         })
                 });
 
-            KsiSignature tag2 = new KsiSignature(tag);
+            KsiSignature tag2 = new KsiSignature(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 
             Assert.AreEqual(tag.ToString(), tag2.ToString(), "Signatures' strings should match.");
 
@@ -291,7 +291,7 @@ namespace Guardtime.KSI.Test.Signature
                         })
                 });
 
-            KsiSignature tag2 = new KsiSignature(tag);
+            KsiSignature tag2 = new KsiSignature(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 
             Assert.AreEqual(tag.ToString(), tag2.ToString(), "Signatures' strings should match.");
 

@@ -268,7 +268,7 @@ namespace Guardtime.KSI.Test.Publication
                         new RawTag(Constants.PublicationsFile.CmsSignatureTagType, false, false, new byte[] { 0x3 }),
                     });
 
-            PublicationsFile tag2 = new PublicationsFile(tag);
+            PublicationsFile tag2 = new PublicationsFile(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 
             Assert.AreEqual(tag.ToString(), tag2.ToString(), "PublicationsFiles' strings should match");
 

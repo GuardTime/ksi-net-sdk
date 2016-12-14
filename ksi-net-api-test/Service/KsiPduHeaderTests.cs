@@ -37,7 +37,7 @@ namespace Guardtime.KSI.Test.Service
                     new IntegerTag(Constants.KsiPduHeader.MessageIdTagType, false, false, 2)
                 });
 
-            KsiPduHeader tag2 = new KsiPduHeader(tag);
+            KsiPduHeader tag2 = new KsiPduHeader(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
 

@@ -55,7 +55,7 @@ namespace Guardtime.KSI.Test.Service
                             new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
                 });
 
-            ExtendRequestPdu tag2 = new ExtendRequestPdu(tag);
+            ExtendRequestPdu tag2 = new ExtendRequestPdu(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
         }
@@ -101,7 +101,7 @@ namespace Guardtime.KSI.Test.Service
                             new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
                 });
 
-            ExtendResponsePdu tag2 = new ExtendResponsePdu(tag);
+            ExtendResponsePdu tag2 = new ExtendResponsePdu(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
         }
@@ -129,7 +129,7 @@ namespace Guardtime.KSI.Test.Service
                             new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
                 });
 
-            ExtendResponsePdu tag2 = new ExtendResponsePdu(tag);
+            ExtendResponsePdu tag2 = new ExtendResponsePdu(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
         }

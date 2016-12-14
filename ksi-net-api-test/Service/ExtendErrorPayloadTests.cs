@@ -35,7 +35,7 @@ namespace Guardtime.KSI.Test.Service
                 new StringTag(Constants.KsiPduPayload.ErrorMessageTagType, false, false, "Test Error message")
             });
 
-            ExtendErrorPayload tag2 = new ExtendErrorPayload(tag);
+            ExtendErrorPayload tag2 = new ExtendErrorPayload(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
         }

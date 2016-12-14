@@ -439,7 +439,7 @@ namespace Guardtime.KSI.Test.Signature
                         })
                 });
 
-            AggregationHashChain tag2 = new AggregationHashChain(tag);
+            AggregationHashChain tag2 = new AggregationHashChain(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
         }

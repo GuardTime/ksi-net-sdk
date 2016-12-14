@@ -54,7 +54,7 @@ namespace Guardtime.KSI.Test.Service
                             new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
                 });
 
-            AggregationRequestPdu tag2 = new AggregationRequestPdu(tag);
+            AggregationRequestPdu tag2 = new AggregationRequestPdu(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
         }
@@ -83,7 +83,7 @@ namespace Guardtime.KSI.Test.Service
                             new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
                 });
 
-            AggregationResponsePdu tag2 = new AggregationResponsePdu(tag);
+            AggregationResponsePdu tag2 = new AggregationResponsePdu(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
         }
@@ -101,7 +101,7 @@ namespace Guardtime.KSI.Test.Service
                     })
                 });
 
-            AggregationResponsePdu tag2 = new AggregationResponsePdu(tag);
+            AggregationResponsePdu tag2 = new AggregationResponsePdu(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
         }

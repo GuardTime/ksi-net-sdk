@@ -19,7 +19,6 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
 using Guardtime.KSI.Exceptions;
@@ -30,7 +29,6 @@ namespace Guardtime.KSI.Parser
     /// <summary>
     ///     TLV element containing other TLV elements.
     /// </summary>
-    [SuppressMessage("ReSharper", "VirtualMemberCallInContructor")]
     public abstract class CompositeTag : TlvTag, ICompositeTag
     {
         private readonly List<ITlvTag> _childTags = new List<ITlvTag>();
@@ -57,8 +55,7 @@ namespace Guardtime.KSI.Parser
         /// <param name="tag">TLV element</param>
         protected CompositeTag(ITlvTag tag) : base(tag)
         {
-            CheckTagType();
-            DecodeValue(tag.EncodeValue());
+            ParseAndValidate(tag);
         }
 
         /// <summary>
@@ -71,6 +68,25 @@ namespace Guardtime.KSI.Parser
         protected CompositeTag(uint type, bool nonCritical, bool forward, ITlvTag[] childTags)
             : base(type, nonCritical, forward)
         {
+            ParseAndValidate(childTags);
+        }
+
+        /// <summary>
+        /// Parse and validate the current tags.
+        /// </summary>
+        /// <param name="tag">TLV element that current TLV element is created from.</param>
+        private void ParseAndValidate(ITlvTag tag)
+        {
+            CheckTagType();
+            ParseAndValidateChildTags(DecodeChildTags(tag.EncodeValue()));
+        }
+
+        /// <summary>
+        /// Parse and validate the current TLV element.
+        /// </summary>
+        /// <param name="childTags">Child TLV elements.</param>
+        private void ParseAndValidate(ITlvTag[] childTags)
+        {
             CheckTagType();
 
             if (childTags == null)
@@ -78,6 +94,15 @@ namespace Guardtime.KSI.Parser
                 throw new TlvException("Invalid TLV element list: null.");
             }
 
+            ParseAndValidateChildTags(childTags);
+        }
+
+        /// <summary>
+        /// Parse and validate child TLV elements.
+        /// </summary>
+        /// <param name="childTags">Child TLV elements</param>
+        private void ParseAndValidateChildTags(IEnumerable<ITlvTag> childTags)
+        {
             TagCounter tagCounter = new TagCounter();
 
             foreach (ITlvTag tag in childTags)
@@ -92,6 +117,22 @@ namespace Guardtime.KSI.Parser
             }
 
             Validate(tagCounter);
+        }
+
+        /// <summary>
+        /// Decode child TLV elements from byte array.
+        /// </summary>
+        /// <param name="bytes">Byte array containing child TLV elements.</param>
+        /// <returns></returns>
+        private IEnumerable<ITlvTag> DecodeChildTags(byte[] bytes)
+        {
+            using (TlvReader tlvReader = new TlvReader(new MemoryStream(bytes)))
+            {
+                while (tlvReader.BaseStream.Position < tlvReader.BaseStream.Length)
+                {
+                    yield return tlvReader.ReadTag();
+                }
+            }
         }
 
         /// <summary>
@@ -181,27 +222,6 @@ namespace Guardtime.KSI.Parser
         protected static ImprintTag GetImprintTag(ITlvTag tag)
         {
             return tag as ImprintTag ?? new ImprintTag(tag);
-        }
-
-        /// <summary>
-        ///     Decode bytes to TLV list.
-        /// </summary>
-        /// <param name="bytes">TLV bytes</param>
-        private void DecodeValue(byte[] bytes)
-        {
-            TagCounter tagCounter = new TagCounter();
-
-            using (TlvReader tlvReader = new TlvReader(new MemoryStream(bytes)))
-            {
-                while (tlvReader.BaseStream.Position < tlvReader.BaseStream.Length)
-                {
-                    RawTag tag = tlvReader.ReadTag();
-                    _childTags.Add(ParseChild(tag) ?? tag);
-                    tagCounter[tag.Type]++;
-                }
-            }
-
-            Validate(tagCounter);
         }
 
         /// <summary>

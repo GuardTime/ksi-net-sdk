@@ -35,7 +35,7 @@ namespace Guardtime.KSI.Test.Service
                 new StringTag(Constants.KsiPduPayload.ErrorMessageTagType, false, false, "Test Error message")
             });
 
-            AggregationErrorPayload tag2 = new AggregationErrorPayload(tag);
+            AggregationErrorPayload tag2 = new AggregationErrorPayload(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
         }

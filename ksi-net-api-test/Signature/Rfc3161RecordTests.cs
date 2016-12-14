@@ -235,7 +235,7 @@ namespace Guardtime.KSI.Test.Signature
                     new IntegerTag(Constants.Rfc3161Record.SignedAttributesAlgorithmTagType, false, false, 1),
                 });
 
-            Rfc3161Record tag2 = new Rfc3161Record(tag);
+            Rfc3161Record tag2 = new Rfc3161Record(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
         }

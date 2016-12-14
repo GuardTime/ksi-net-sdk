@@ -57,7 +57,7 @@ namespace Guardtime.KSI.Test.Service
                     })
             });
 
-            ExtendResponsePayload tag2 = new ExtendResponsePayload(tag);
+            ExtendResponsePayload tag2 = new ExtendResponsePayload(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
         }

@@ -39,7 +39,7 @@ namespace Guardtime.KSI.Test.Service
                 new IntegerTag(Constants.AggregationRequestPayload.RequestLevelTagType, false, false, 0),
             });
 
-            AggregationRequestPayload tag2 = new AggregationRequestPayload(tag);
+            AggregationRequestPayload tag2 = new AggregationRequestPayload(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
         }
