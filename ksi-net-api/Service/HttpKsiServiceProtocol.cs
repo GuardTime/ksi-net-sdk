@@ -35,7 +35,7 @@ namespace Guardtime.KSI.Service
         private readonly int _bufferSize = 8192;
         private readonly string _extendingUrl;
         private readonly string _publicationsFileUrl;
-        private readonly int _requestTimeOut = 2000;
+        private readonly int _requestTimeOut = 10000;
         private readonly string _signingUrl;
         private readonly string _proxyUrl;
         private readonly NetworkCredential _proxyCredential;

@@ -32,7 +32,7 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public class TcpKsiServiceProtocol : IKsiSigningServiceProtocol
     {
-        private readonly int _requestTimeOut = 2000;
+        private readonly int _requestTimeOut = 10000;
         private readonly int _bufferSize = 8192;
         private readonly string _signingUrl;
         private readonly int _signingPort;

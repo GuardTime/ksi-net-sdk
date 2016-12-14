@@ -33,19 +33,19 @@ namespace Guardtime.KSI.Test.Integration
     public class IntegrationTests
     {
         private static readonly HttpKsiServiceProtocol HttpKsiServiceProtocol =
-            new HttpKsiServiceProtocol(Settings.Default.HttpSigningServiceUrl, Settings.Default.HttpExtendingServiceUrl, Settings.Default.HttpPublicationsFileUrl, 100000);
+            new HttpKsiServiceProtocol(Settings.Default.HttpSigningServiceUrl, Settings.Default.HttpExtendingServiceUrl, Settings.Default.HttpPublicationsFileUrl, 10000);
 
         private static readonly HttpKsiServiceProtocol HttpKsiServiceProtocolInvalidUrls =
             new HttpKsiServiceProtocol("http://invalid.signing.service.url", "http://invalid.extending.service.url",
-                "http://invalid.publications.file.url", 100000);
+                "http://invalid.publications.file.url", 10000);
 
         private static readonly TcpKsiServiceProtocol TcpKsiServiceProtocol = new TcpKsiServiceProtocol(Settings.Default.TcpSigningServiceUrl,
-            Settings.Default.TcpSigningServicePort, 100000);
+            Settings.Default.TcpSigningServicePort, 10000);
 
         private static readonly TcpKsiServiceProtocol TcpKsiServiceProtocolInvalidUrl = new TcpKsiServiceProtocol("tcp.invalid.service.url",
-            Settings.Default.TcpSigningServicePort, 100000);
+            Settings.Default.TcpSigningServicePort, 10000);
 
-        private static readonly TcpKsiServiceProtocol TcpKsiServiceProtocolInvalidPort = new TcpKsiServiceProtocol(Settings.Default.TcpSigningServiceUrl, 2847, 100000);
+        private static readonly TcpKsiServiceProtocol TcpKsiServiceProtocolInvalidPort = new TcpKsiServiceProtocol(Settings.Default.TcpSigningServiceUrl, 2847, 10000);
 
         public static KsiService HttpKsiService = GetHttpKsiService();
 
