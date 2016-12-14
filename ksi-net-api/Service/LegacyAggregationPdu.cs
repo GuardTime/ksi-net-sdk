@@ -43,6 +43,18 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
+        ///     Create aggregation pdu TLV element from KSI header and payload.
+        /// </summary>
+        /// <param name="header">PDU header</param>
+        /// <param name="payload">aggregation payload</param>
+        /// <param name="mac">pdu message hmac</param>
+        [Obsolete]
+        public LegacyAggregationPdu(PduHeader header, PduPayload payload, ImprintTag mac)
+            : base(Constants.LegacyAggregationPdu.TagType, false, false, new ITlvTag[] { header, payload, mac })
+        {
+        }
+
+        /// <summary>
         /// Parse child tag
         /// </summary>
         protected override ITlvTag ParseChild(ITlvTag childTag)
@@ -58,18 +70,6 @@ namespace Guardtime.KSI.Service
                 default:
                     return base.ParseChild(childTag);
             }
-        }
-
-        /// <summary>
-        ///     Create aggregation pdu TLV element from KSI header and payload.
-        /// </summary>
-        /// <param name="header">PDU header</param>
-        /// <param name="payload">aggregation payload</param>
-        /// <param name="mac">pdu message hmac</param>
-        [Obsolete]
-        public LegacyAggregationPdu(PduHeader header, PduPayload payload, ImprintTag mac)
-            : base(Constants.LegacyAggregationPdu.TagType, false, false, new ITlvTag[] { header, payload, mac })
-        {
         }
     }
 }

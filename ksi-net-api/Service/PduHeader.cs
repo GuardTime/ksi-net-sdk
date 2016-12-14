@@ -45,6 +45,33 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
+        ///     Create PDU header from login ID.
+        /// </summary>
+        /// <param name="loginId">login ID</param>
+        public PduHeader(string loginId) : base(Constants.PduHeader.TagType, false, false, new ITlvTag[]
+        {
+            new StringTag(Constants.PduHeader.LoginIdTagType, false, false, loginId)
+        })
+        {
+        }
+
+        /// <summary>
+        ///     Create PDU header from login ID, instance ID, message ID.
+        /// </summary>
+        /// <param name="loginId">login ID</param>
+        /// <param name="instanceId">instance ID</param>
+        /// <param name="messageId">message ID</param>
+        public PduHeader(string loginId, ulong instanceId, ulong messageId)
+            : base(Constants.PduHeader.TagType, false, false, new ITlvTag[]
+            {
+                new StringTag(Constants.PduHeader.LoginIdTagType, false, false, loginId),
+                new IntegerTag(Constants.PduHeader.InstanceIdTagType, false, false, instanceId),
+                new IntegerTag(Constants.PduHeader.MessageIdTagType, false, false, messageId)
+            })
+        {
+        }
+
+        /// <summary>
         /// Parse child tag
         /// </summary>
         protected override ITlvTag ParseChild(ITlvTag childTag)
@@ -83,30 +110,6 @@ namespace Guardtime.KSI.Service
             {
                 throw new TlvException("Only one message id is allowed in PDU header.");
             }
-        }
-
-        /// <summary>
-        ///     Create PDU header from login ID.
-        /// </summary>
-        /// <param name="loginId">login ID</param>
-        public PduHeader(string loginId) : this(loginId, 0, 0)
-        {
-        }
-
-        /// <summary>
-        ///     Create PDU header from login ID, instance ID, message ID.
-        /// </summary>
-        /// <param name="loginId">login ID</param>
-        /// <param name="instanceId">instance ID</param>
-        /// <param name="messageId">message ID</param>
-        public PduHeader(string loginId, ulong instanceId, ulong messageId)
-            : base(Constants.PduHeader.TagType, false, false, new ITlvTag[]
-            {
-                new StringTag(Constants.PduHeader.LoginIdTagType, false, false, loginId),
-                new IntegerTag(Constants.PduHeader.InstanceIdTagType, false, false, instanceId),
-                new IntegerTag(Constants.PduHeader.MessageIdTagType, false, false, messageId)
-            })
-        {
         }
 
         /// <summary>

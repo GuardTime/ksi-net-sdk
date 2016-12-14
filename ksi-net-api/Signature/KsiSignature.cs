@@ -126,6 +126,9 @@ namespace Guardtime.KSI.Signature
             }
         }
 
+        /// <summary>
+        /// Sorts aggregation hash chains and checks hash chain indexes.
+        /// </summary>
         private void SortAggregationHashChains()
         {
             _aggregationHashChains.Sort(new AggregationHashChain.ChainIndexOrdering());

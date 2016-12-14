@@ -47,6 +47,35 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
+        ///     Create extend request payload from aggregation time and publication time.
+        /// </summary>
+        /// <param name="requestId">Request ID</param>
+        /// <param name="aggregationTime">aggregation time</param>
+        /// <param name="publicationTime">publication time</param>
+        public LegacyExtendRequestPayload(ulong requestId, ulong aggregationTime, ulong publicationTime)
+            : base(Constants.ExtendRequestPayload.LegacyTagType, false, false, new ITlvTag[]
+            {
+                new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, requestId),
+                new IntegerTag(Constants.ExtendRequestPayload.AggregationTimeTagType, false, false, aggregationTime),
+                new IntegerTag(Constants.ExtendRequestPayload.PublicationTimeTagType, false, false, publicationTime)
+            })
+        {
+        }
+
+        /// <summary>
+        ///     Create extend request payload from aggregation time.
+        /// </summary>
+        /// <param name="requestId">Request ID</param>
+        /// <param name="aggregationTime">aggregation time</param>
+        public LegacyExtendRequestPayload(ulong requestId, ulong aggregationTime) : base(Constants.ExtendRequestPayload.LegacyTagType, false, false, new ITlvTag[]
+        {
+            new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, requestId),
+            new IntegerTag(Constants.ExtendRequestPayload.AggregationTimeTagType, false, false, aggregationTime)
+        })
+        {
+        }
+
+        /// <summary>
         /// Parse child tag
         /// </summary>
         protected override ITlvTag ParseChild(ITlvTag childTag)
@@ -85,35 +114,6 @@ namespace Guardtime.KSI.Service
             {
                 throw new TlvException("Only one publication time is allowed in extend request payload.");
             }
-        }
-
-        /// <summary>
-        ///     Create extend request payload from aggregation time and publication time.
-        /// </summary>
-        /// <param name="requestId">Request ID</param>
-        /// <param name="aggregationTime">aggregation time</param>
-        /// <param name="publicationTime">publication time</param>
-        public LegacyExtendRequestPayload(ulong requestId, ulong aggregationTime, ulong publicationTime)
-            : base(Constants.ExtendRequestPayload.LegacyTagType, false, false, new ITlvTag[]
-            {
-                new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, requestId),
-                new IntegerTag(Constants.ExtendRequestPayload.AggregationTimeTagType, false, false, aggregationTime),
-                new IntegerTag(Constants.ExtendRequestPayload.PublicationTimeTagType, false, false, publicationTime)
-            })
-        {
-        }
-
-        /// <summary>
-        ///     Create extend request payload from aggregation time.
-        /// </summary>
-        /// <param name="requestId">Request ID</param>
-        /// <param name="aggregationTime">aggregation time</param>
-        public LegacyExtendRequestPayload(ulong requestId, ulong aggregationTime) : base(Constants.ExtendRequestPayload.LegacyTagType, false, false, new ITlvTag[]
-        {
-            new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, requestId),
-            new IntegerTag(Constants.ExtendRequestPayload.AggregationTimeTagType, false, false, aggregationTime)
-        })
-        {
         }
 
         /// <summary>

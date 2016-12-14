@@ -49,6 +49,35 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
+        ///     Create aggregation request payload from data hash.
+        /// </summary>
+        /// <param name="requestId">Request ID</param>
+        /// <param name="hash">data hash</param>
+        public LegacyAggregationRequestPayload(ulong requestId, DataHash hash) : base(Constants.AggregationRequestPayload.LegacyTagType, false, false, new ITlvTag[]
+        {
+            new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, requestId),
+            new ImprintTag(Constants.AggregationRequestPayload.RequestHashTagType, false, false, hash)
+        })
+        {
+
+        }
+
+        /// <summary>
+        ///     Create aggregation request payload from data hash.
+        /// </summary>
+        /// <param name="requestId">Request ID</param>
+        /// <param name="hash">data hash</param>
+        /// <param name="level">the level value of the aggregation tree node</param>
+        public LegacyAggregationRequestPayload(ulong requestId, DataHash hash, uint level) : base(Constants.AggregationRequestPayload.LegacyTagType, false, false, new ITlvTag[]
+        {
+            new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, requestId),
+            new ImprintTag(Constants.AggregationRequestPayload.RequestHashTagType, false, false, hash),
+            new IntegerTag(Constants.AggregationRequestPayload.RequestLevelTagType, false, false, level)
+        })
+        {
+
+        }
+        /// <summary>
         /// Parse child tag
         /// </summary>
         protected override ITlvTag ParseChild(ITlvTag childTag)
@@ -96,35 +125,7 @@ namespace Guardtime.KSI.Service
             }
         }
 
-        /// <summary>
-        ///     Create aggregation request payload from data hash.
-        /// </summary>
-        /// <param name="requestId">Request ID</param>
-        /// <param name="hash">data hash</param>
-        public LegacyAggregationRequestPayload(ulong requestId, DataHash hash) : base(Constants.AggregationRequestPayload.LegacyTagType, false, false, new ITlvTag[]
-        {
-            new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, requestId),
-            new ImprintTag(Constants.AggregationRequestPayload.RequestHashTagType, false, false, hash)
-        })
-        {
 
-        }
-
-        /// <summary>
-        ///     Create aggregation request payload from data hash.
-        /// </summary>
-        /// <param name="requestId">Request ID</param>
-        /// <param name="hash">data hash</param>
-        /// <param name="level">the level value of the aggregation tree node</param>
-        public LegacyAggregationRequestPayload(ulong requestId, DataHash hash, uint level) : base(Constants.AggregationRequestPayload.LegacyTagType, false, false, new ITlvTag[]
-        {
-            new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, requestId),
-            new ImprintTag(Constants.AggregationRequestPayload.RequestHashTagType, false, false, hash),
-            new IntegerTag(Constants.AggregationRequestPayload.RequestLevelTagType, false, false, level)
-        })
-        {
-
-        }
 
         /// <summary>
         ///     Get request hash.

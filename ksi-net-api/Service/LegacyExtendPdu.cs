@@ -43,6 +43,18 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
+        ///     Create extend pdu from KSI header and extend pdu payload.
+        /// </summary>
+        /// <param name="header">KSI header</param>
+        /// <param name="payload">Extend pdu payload</param>
+        /// <param name="mac">Extend pdu hmac</param>
+        [Obsolete]
+        public LegacyExtendPdu(PduHeader header, PduPayload payload, ImprintTag mac)
+            : base(Constants.LegacyExtendPdu.TagType, false, false, new ITlvTag[] { header, payload, mac })
+        {
+        }
+
+        /// <summary>
         /// Parse child tag
         /// </summary>
         protected override ITlvTag ParseChild(ITlvTag childTag)
@@ -58,18 +70,6 @@ namespace Guardtime.KSI.Service
                 default:
                     return base.ParseChild(childTag);
             }
-        }
-
-        /// <summary>
-        ///     Create extend pdu from KSI header and extend pdu payload.
-        /// </summary>
-        /// <param name="header">KSI header</param>
-        /// <param name="payload">Extend pdu payload</param>
-        /// <param name="mac">Extend pdu hmac</param>
-        [Obsolete]
-        public LegacyExtendPdu(PduHeader header, PduPayload payload, ImprintTag mac)
-            : base(Constants.LegacyExtendPdu.TagType, false, false, new ITlvTag[] { header, payload, mac })
-        {
         }
     }
 }

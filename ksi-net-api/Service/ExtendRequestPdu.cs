@@ -41,6 +41,18 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
+        ///     Create extend request pdu from KSI header and extend pdu payload.
+        /// </summary>
+        /// <param name="header">KSI header</param>
+        /// <param name="payload">Extend pdu payload</param>
+        /// <param name="hmacAlgorithm">HMAC algorithm</param>
+        /// <param name="key">hmac key</param>
+        public ExtendRequestPdu(PduHeader header, PduPayload payload, HashAlgorithm hmacAlgorithm, byte[] key)
+            : base(Constants.ExtendRequestPdu.TagType, header, payload, hmacAlgorithm, key)
+        {
+        }
+
+        /// <summary>
         /// Parse child tag
         /// </summary>
         protected override ITlvTag ParseChild(ITlvTag childTag)
@@ -60,16 +72,6 @@ namespace Guardtime.KSI.Service
             }
         }
 
-        /// <summary>
-        ///     Create extend request pdu from KSI header and extend pdu payload.
-        /// </summary>
-        /// <param name="header">KSI header</param>
-        /// <param name="payload">Extend pdu payload</param>
-        /// <param name="hmacAlgorithm">HMAC algorithm</param>
-        /// <param name="key">hmac key</param>
-        public ExtendRequestPdu(PduHeader header, PduPayload payload, HashAlgorithm hmacAlgorithm, byte[] key)
-            : base(Constants.ExtendRequestPdu.TagType, header, payload, hmacAlgorithm, key)
-        {
-        }
+
     }
 }
