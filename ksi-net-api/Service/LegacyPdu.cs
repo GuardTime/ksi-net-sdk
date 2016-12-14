@@ -137,31 +137,31 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Calculate MAC and attach it to PDU.
         /// </summary>
-        /// <param name="hmacAlgorithm">HMAC algorithm</param>
+        /// <param name="macAlgorithm">MAC algorithm</param>
         /// <param name="key">hmac key</param>
         /// <param name="header">KSI header</param>
         /// <param name="payload">KSI payload</param>
-        public static ImprintTag GetHashMacTag(HashAlgorithm hmacAlgorithm, byte[] key, PduHeader header, PduPayload payload)
+        public static ImprintTag GetMacTag(HashAlgorithm macAlgorithm, byte[] key, PduHeader header, PduPayload payload)
         {
             using (TlvWriter writer = new TlvWriter(new MemoryStream()))
             {
                 writer.WriteTag(header);
                 writer.WriteTag(payload);
-                return new ImprintTag(Constants.Pdu.MacTagType, false, false, CalculateMac(hmacAlgorithm, key, ((MemoryStream)writer.BaseStream).ToArray()));
+                return new ImprintTag(Constants.Pdu.MacTagType, false, false, CalculateMac(macAlgorithm, key, ((MemoryStream)writer.BaseStream).ToArray()));
             }
         }
 
         /// <summary>
-        ///     Calculate HMAC for data with given key.
+        ///     Calculate MAC for data with given key.
         /// </summary>
-        /// <param name="hmacAlgorithm">HMAC algorithm</param>
+        /// <param name="macAlgorithm">MAC algorithm</param>
         /// <param name="key">hmac key</param>
-        /// <param name="data">hmac calculation data</param>
-        /// <returns>hmac data hash</returns>
-        private static DataHash CalculateMac(HashAlgorithm hmacAlgorithm, byte[] key, byte[] data)
+        /// <param name="data">data to calculate MAC from</param>
+        /// <returns>mac data hash</returns>
+        private static DataHash CalculateMac(HashAlgorithm macAlgorithm, byte[] key, byte[] data)
         {
-            IHmacHasher hmac = KsiProvider.CreateHmacHasher(hmacAlgorithm);
-            return hmac.GetHash(key, data);
+            IHmacHasher hasher = KsiProvider.CreateHmacHasher(macAlgorithm);
+            return hasher.GetHash(key, data);
         }
 
         /// <summary>

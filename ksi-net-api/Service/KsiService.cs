@@ -34,7 +34,7 @@ namespace Guardtime.KSI.Service
     public partial class KsiService : IKsiService
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private static readonly HashAlgorithm DefaultHmacAlgorithm = HashAlgorithm.Sha2256;
+        private static readonly HashAlgorithm DefaultMacAlgorithm = HashAlgorithm.Sha2256;
         private const PduVersion DefaultPduVersion = PduVersion.v1;
 
         private readonly IKsiSigningServiceProtocol _signingServiceProtocol;
@@ -44,7 +44,7 @@ namespace Guardtime.KSI.Service
         private readonly IKsiPublicationsFileServiceProtocol _publicationsFileServiceProtocol;
         private readonly IServiceCredentials _signingServiceCredentials;
         private readonly IServiceCredentials _extendingServiceCredentials;
-        private readonly HashAlgorithm _hmacAlgorithm;
+        private readonly HashAlgorithm _macAlgorithm;
 
         /// <summary>
         ///     Create KSI service with service protocol and service settings.
@@ -71,7 +71,7 @@ namespace Guardtime.KSI.Service
                     publicationsFileServiceProtocol,
                     publicationsFileFactory,
                     new KsiSignatureFactory(),
-                    DefaultHmacAlgorithm,
+                    DefaultMacAlgorithm,
                     pduVersion)
         {
         }
@@ -103,7 +103,7 @@ namespace Guardtime.KSI.Service
                     publicationsFileServiceProtocol,
                     publicationsFileFactory,
                     ksiSignatureFactory,
-                    DefaultHmacAlgorithm,
+                    DefaultMacAlgorithm,
                     pduVersion)
         {
         }
@@ -117,7 +117,7 @@ namespace Guardtime.KSI.Service
         /// <param name="extendingServiceCredentials">extending service credentials</param>
         /// <param name="publicationsFileServiceProtocol">publications file protocol</param>
         /// <param name="publicationsFileFactory">publications file factory</param>
-        /// <param name="hmacAlgorithm">HMAC algorithm</param>
+        /// <param name="macAlgorithm">MAC algorithm</param>
         /// <param name="pduVersion">PDU version</param>
         public KsiService(IKsiSigningServiceProtocol signingServiceProtocol,
                           IServiceCredentials signingServiceCredentials,
@@ -125,7 +125,7 @@ namespace Guardtime.KSI.Service
                           IServiceCredentials extendingServiceCredentials,
                           IKsiPublicationsFileServiceProtocol publicationsFileServiceProtocol,
                           IPublicationsFileFactory publicationsFileFactory,
-                          HashAlgorithm hmacAlgorithm,
+                          HashAlgorithm macAlgorithm,
                           PduVersion pduVersion = DefaultPduVersion)
             :
                 this(signingServiceProtocol,
@@ -135,7 +135,7 @@ namespace Guardtime.KSI.Service
                     publicationsFileServiceProtocol,
                     publicationsFileFactory,
                     new KsiSignatureFactory(),
-                    hmacAlgorithm,
+                    macAlgorithm,
                     pduVersion)
         {
         }
@@ -150,7 +150,7 @@ namespace Guardtime.KSI.Service
         /// <param name="publicationsFileServiceProtocol">publications file protocol</param>
         /// <param name="publicationsFileFactory">publications file factory</param>
         /// <param name="ksiSignatureFactory">ksi signature factory</param>
-        /// <param name="hmacAlgorithm">HMAC algorithm</param>
+        /// <param name="macAlgorithm">MAC algorithm</param>
         /// <param name="pduVersion">PDU version</param>
         public KsiService(IKsiSigningServiceProtocol signingServiceProtocol,
                           IServiceCredentials signingServiceCredentials,
@@ -159,7 +159,7 @@ namespace Guardtime.KSI.Service
                           IKsiPublicationsFileServiceProtocol publicationsFileServiceProtocol,
                           IPublicationsFileFactory publicationsFileFactory,
                           IKsiSignatureFactory ksiSignatureFactory,
-                          HashAlgorithm hmacAlgorithm,
+                          HashAlgorithm macAlgorithm,
                           PduVersion pduVersion = DefaultPduVersion)
 
         {
@@ -175,7 +175,7 @@ namespace Guardtime.KSI.Service
             _publicationsFileServiceProtocol = publicationsFileServiceProtocol;
             _publicationsFileFactory = publicationsFileFactory;
             _ksiSignatureFactory = ksiSignatureFactory;
-            _hmacAlgorithm = hmacAlgorithm;
+            _macAlgorithm = macAlgorithm;
             PduVersion = pduVersion;
         }
 
@@ -211,7 +211,7 @@ namespace Guardtime.KSI.Service
             if (!LegacyPdu.ValidateMac(pdu.Encode(), pdu.Mac, serviceCredentials.LoginKey))
 
             {
-                throw new KsiServiceException("Invalid HMAC in response PDU.");
+                throw new KsiServiceException("Invalid MAC in response PDU.");
             }
 
             if (payload.RequestId != requestId)
@@ -240,7 +240,7 @@ namespace Guardtime.KSI.Service
             if (!Pdu.ValidateMac(data, pdu.Mac, serviceCredentials.LoginKey))
 
             {
-                throw new KsiServiceException("Invalid HMAC in response PDU.");
+                throw new KsiServiceException("Invalid MAC in response PDU.");
             }
 
             ResponsePayload responsePayload = payload as ResponsePayload;

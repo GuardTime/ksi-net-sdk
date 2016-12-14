@@ -47,7 +47,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="header">PDU header</param>
         /// <param name="payload">aggregation payload</param>
-        /// <param name="mac">pdu message hmac</param>
+        /// <param name="mac">pdu mac</param>
         [Obsolete]
         public LegacyAggregationPdu(PduHeader header, PduPayload payload, ImprintTag mac)
             : base(Constants.LegacyAggregationPdu.TagType, false, false, new ITlvTag[] { header, payload, mac })

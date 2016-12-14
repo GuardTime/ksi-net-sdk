@@ -107,7 +107,7 @@ namespace Guardtime.KSI.Service
             }
 
             PduHeader header = new PduHeader(_extendingServiceCredentials.LoginId);
-            ExtendRequestPdu pdu = new ExtendRequestPdu(header, payload, _hmacAlgorithm, _extendingServiceCredentials.LoginKey);
+            ExtendRequestPdu pdu = new ExtendRequestPdu(header, payload, _macAlgorithm, _extendingServiceCredentials.LoginKey);
 
             Logger.Debug("Begin extend. (request id: {0}){1}{2}", payload.RequestId, Environment.NewLine, pdu);
             IAsyncResult serviceProtocolAsyncResult = _extendingServiceProtocol.BeginExtend(pdu.Encode(), payload.RequestId, callback, asyncState);
@@ -142,7 +142,7 @@ namespace Guardtime.KSI.Service
             }
 
             PduHeader header = new PduHeader(_extendingServiceCredentials.LoginId);
-            LegacyExtendPdu pdu = new LegacyExtendPdu(header, payload, LegacyPdu.GetHashMacTag(_hmacAlgorithm, _extendingServiceCredentials.LoginKey, header, payload));
+            LegacyExtendPdu pdu = new LegacyExtendPdu(header, payload, LegacyPdu.GetMacTag(_macAlgorithm, _extendingServiceCredentials.LoginKey, header, payload));
 
             Logger.Debug("Begin legacy extend. (request id: {0}){1}{2}", payload.RequestId, Environment.NewLine, pdu);
             IAsyncResult serviceProtocolAsyncResult = _extendingServiceProtocol.BeginExtend(pdu.Encode(), payload.RequestId, callback, asyncState);
@@ -304,7 +304,7 @@ namespace Guardtime.KSI.Service
 
             PduHeader header = new PduHeader(_extendingServiceCredentials.LoginId);
             ExtenderConfigRequestPayload payload = new ExtenderConfigRequestPayload();
-            ExtendRequestPdu pdu = new ExtendRequestPdu(header, payload, _hmacAlgorithm, _extendingServiceCredentials.LoginKey);
+            ExtendRequestPdu pdu = new ExtendRequestPdu(header, payload, _macAlgorithm, _extendingServiceCredentials.LoginKey);
 
             ulong requestId = GenerateRequestId();
 

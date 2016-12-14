@@ -136,7 +136,7 @@ namespace Guardtime.KSI.Test.Service
         }
 
         [Test]
-        public void InvalidAggregationPduHmacNotLast()
+        public void InvalidAggregationPduMacNotLast()
         {
             Assert.That(delegate
             {
@@ -160,8 +160,8 @@ namespace Guardtime.KSI.Test.Service
                             new StringTag(Constants.PduPayload.ErrorMessageTagType, false, false, "Test error message."),
                         }),
                     });
-            }, Throws.Exception.InnerException.TypeOf<TlvException>().With.InnerException.Message.StartWith("HMAC must be the last element"),
-                "Creating AggregationPdu should fail when hmac is not the last element.");
+            }, Throws.Exception.InnerException.TypeOf<TlvException>().With.InnerException.Message.StartWith("MAC must be the last element"),
+                "Creating AggregationPdu should fail when mac is not the last element.");
         }
     }
 }

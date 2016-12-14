@@ -181,7 +181,7 @@ namespace Guardtime.KSI.Test.Service
         }
 
         [Test]
-        public void InvalidExtendPduHmacNotLast()
+        public void InvalidExtendPduMacNotLast()
         {
             Assembly assembly = typeof(AggregationHashChain).Assembly;
             Type linkType = assembly.GetType("Guardtime.KSI.Signature.CalendarHashChain+Link");
@@ -222,8 +222,8 @@ namespace Guardtime.KSI.Test.Service
                                 })
                         }),
                     });
-            }, Throws.Exception.InnerException.TypeOf<TlvException>().With.InnerException.Message.StartWith("HMAC must be the last element"),
-                "Creating ExtendPdu should fail when hmac is not the last element.");
+            }, Throws.Exception.InnerException.TypeOf<TlvException>().With.InnerException.Message.StartWith("MAC must be the last element"),
+                "Creating ExtendPdu should fail when mac is not the last element.");
         }
     }
 }

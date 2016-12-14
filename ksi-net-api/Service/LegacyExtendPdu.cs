@@ -47,7 +47,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="header">KSI header</param>
         /// <param name="payload">Extend pdu payload</param>
-        /// <param name="mac">Extend pdu hmac</param>
+        /// <param name="mac">Extend pdu mac</param>
         [Obsolete]
         public LegacyExtendPdu(PduHeader header, PduPayload payload, ImprintTag mac)
             : base(Constants.LegacyExtendPdu.TagType, false, false, new ITlvTag[] { header, payload, mac })

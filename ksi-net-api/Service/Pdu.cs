@@ -114,12 +114,12 @@ namespace Guardtime.KSI.Service
 
                 if (tagCounter[Constants.Pdu.MacTagType] != 1)
                 {
-                    throw new TlvException("Exactly one HMAC must exist in PDU");
+                    throw new TlvException("Exactly one MAC must exist in PDU");
                 }
 
                 if (_macIndex != Count - 1)
                 {
-                    throw new TlvException("HMAC must be the last element in PDU");
+                    throw new TlvException("MAC must be the last element in PDU");
                 }
             }
         }
@@ -130,12 +130,12 @@ namespace Guardtime.KSI.Service
         /// <param name="tagType">PDU TLV tag type</param>
         /// <param name="header">PDU header</param>
         /// <param name="payload">aggregation payload</param>
-        /// <param name="hmacAlgorithm">HMAC algorithm</param>
+        /// <param name="macAlgorithm">MAC algorithm</param>
         /// <param name="key">hmac key</param>
-        protected Pdu(uint tagType, PduHeader header, PduPayload payload, HashAlgorithm hmacAlgorithm, byte[] key)
-            : base(tagType, false, false, new ITlvTag[] { header, payload, GetEmptyHashMacTag(hmacAlgorithm) })
+        protected Pdu(uint tagType, PduHeader header, PduPayload payload, HashAlgorithm macAlgorithm, byte[] key)
+            : base(tagType, false, false, new ITlvTag[] { header, payload, GetEmptyMacTag(macAlgorithm) })
         {
-            SetHmacValue(hmacAlgorithm, key);
+            SetMacValue(macAlgorithm, key);
         }
 
         /// <summary>
@@ -180,11 +180,11 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        /// Set HMAC tag value
+        /// Set MAC tag value
         /// </summary>
-        /// <param name="hmacAlgorithm"></param>
-        /// <param name="key"></param>
-        protected void SetHmacValue(HashAlgorithm hmacAlgorithm, byte[] key)
+        /// <param name="macAlgorithm"></param>
+        /// <param name="key">HMAC key</param>
+        protected void SetMacValue(HashAlgorithm macAlgorithm, byte[] key)
         {
             for (int i = 0; i < Count; i++)
             {
@@ -192,68 +192,68 @@ namespace Guardtime.KSI.Service
 
                 if (childTag.Type == Constants.Pdu.MacTagType)
                 {
-                    this[i] = Mac = CreateHashMacTag(CalcHashMacValue(hmacAlgorithm, key));
+                    this[i] = Mac = CreateMacTag(CalcMacValue(macAlgorithm, key));
                     break;
                 }
             }
         }
 
         /// <summary>
-        ///     Calculate HMAC value.
+        ///     Calculate MAC value.
         /// </summary>
-        /// <param name="hmacAlgorithm">HMAC algorithm</param>
+        /// <param name="macAlgorithm">MAC algorithm</param>
         /// <param name="key">HMAC key</param>
-        private DataHash CalcHashMacValue(HashAlgorithm hmacAlgorithm, byte[] key)
+        private DataHash CalcMacValue(HashAlgorithm macAlgorithm, byte[] key)
         {
             MemoryStream stream = new MemoryStream();
             using (TlvWriter writer = new TlvWriter(stream))
             {
                 writer.WriteTag(this);
 
-                return CalcHashMacValue(stream.ToArray(), hmacAlgorithm, key);
+                return CalcMacValue(stream.ToArray(), macAlgorithm, key);
             }
         }
 
         /// <summary>
-        ///     Calculate HMAC value.
+        ///     Calculate MAC value.
         /// </summary>
         /// <param name="pduBytes">PDU encoded as byte array</param>
-        /// <param name="hmacAlgorithm">HMAC algorithm</param>
+        /// <param name="macAlgorithm">MAC algorithm</param>
         /// <param name="key">HMAC key</param>
-        private static DataHash CalcHashMacValue(byte[] pduBytes, HashAlgorithm hmacAlgorithm, byte[] key)
+        private static DataHash CalcMacValue(byte[] pduBytes, HashAlgorithm macAlgorithm, byte[] key)
         {
-            byte[] target = pduBytes.Length < hmacAlgorithm.Length ? new byte[0] : new byte[pduBytes.Length - hmacAlgorithm.Length];
+            byte[] target = pduBytes.Length < macAlgorithm.Length ? new byte[0] : new byte[pduBytes.Length - macAlgorithm.Length];
             Array.Copy(pduBytes, 0, target, 0, target.Length);
 
-            IHmacHasher hasher = KsiProvider.CreateHmacHasher(hmacAlgorithm);
+            IHmacHasher hasher = KsiProvider.CreateHmacHasher(macAlgorithm);
             return hasher.GetHash(key, target);
         }
 
         /// <summary>
-        /// Returns HMAC tag containing given data hash value
+        /// Returns MAC tag containing given data hash value
         /// </summary>
         /// <param name="dataHash">Data hash</param>
         /// <returns></returns>
-        private static ImprintTag CreateHashMacTag(DataHash dataHash)
+        private static ImprintTag CreateMacTag(DataHash dataHash)
         {
             return new ImprintTag(Constants.Pdu.MacTagType, false, false, dataHash);
         }
 
         /// <summary>
-        /// Get HMAC tag that has hash algorithm set, but hash value is a byte array containing zeros.
+        /// Get MAC tag that has hash algorithm set, but hash value is a byte array containing zeros.
         /// </summary>
-        /// <param name="hmacAlgorithm">HMAC algorithm</param>
+        /// <param name="macAlgorithm">MAC algorithm</param>
         /// <returns></returns>
-        protected static ImprintTag GetEmptyHashMacTag(HashAlgorithm hmacAlgorithm)
+        protected static ImprintTag GetEmptyMacTag(HashAlgorithm macAlgorithm)
         {
-            if (hmacAlgorithm == null)
+            if (macAlgorithm == null)
             {
-                throw new TlvException("Invalid HMAC algorithm: null.");
+                throw new TlvException("Invalid MAC algorithm: null.");
             }
 
-            byte[] imprintBytes = new byte[hmacAlgorithm.Length + 1];
-            imprintBytes[0] = hmacAlgorithm.Id;
-            return CreateHashMacTag(new DataHash(imprintBytes));
+            byte[] imprintBytes = new byte[macAlgorithm.Length + 1];
+            imprintBytes[0] = macAlgorithm.Id;
+            return CreateMacTag(new DataHash(imprintBytes));
         }
 
         /// <summary>
@@ -286,7 +286,7 @@ namespace Guardtime.KSI.Service
                 return false;
             }
 
-            DataHash calculatedMac = CalcHashMacValue(pduBytes, mac.Value.Algorithm, key);
+            DataHash calculatedMac = CalcMacValue(pduBytes, mac.Value.Algorithm, key);
 
             if (!calculatedMac.Equals(mac.Value))
             {
