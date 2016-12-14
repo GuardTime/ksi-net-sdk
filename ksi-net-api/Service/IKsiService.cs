@@ -92,14 +92,14 @@ namespace Guardtime.KSI.Service
         AggregatorConfig EndGetAggregatorConfig(IAsyncResult asyncResult);
 
         /// <summary>
-        ///     Extend signature to latest publication (sync).
+        ///     Extend to latest publication (sync).
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
         /// <returns>extended calendar hash chain</returns>
         CalendarHashChain Extend(ulong aggregationTime);
 
         /// <summary>
-        ///     Extend signature to given publication (sync).
+        ///     Extend to given publication (sync).
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
         /// <param name="publicationTime">publication time</param>
@@ -107,7 +107,7 @@ namespace Guardtime.KSI.Service
         CalendarHashChain Extend(ulong aggregationTime, ulong publicationTime);
 
         /// <summary>
-        ///     Begin extend signature to latest publication (async).
+        ///     Begin extend to latest publication (async).
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
         /// <param name="callback">callback when extending signature is finished</param>
@@ -116,7 +116,7 @@ namespace Guardtime.KSI.Service
         IAsyncResult BeginExtend(ulong aggregationTime, AsyncCallback callback, object asyncState);
 
         /// <summary>
-        ///     Begin extend signature to given publication (async).
+        ///     Begin extend to given publication (async).
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
         /// <param name="publicationTime">publication time</param>
@@ -126,7 +126,7 @@ namespace Guardtime.KSI.Service
         IAsyncResult BeginExtend(ulong aggregationTime, ulong publicationTime, AsyncCallback callback, object asyncState);
 
         /// <summary>
-        ///     End extend signature (async).
+        ///     End extend (async).
         /// </summary>
         /// <param name="asyncResult">async result</param>
         /// <returns>extended calendar hash chain</returns>

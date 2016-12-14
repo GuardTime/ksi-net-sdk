@@ -139,7 +139,7 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        ///     Begin extend signature.
+        ///     Begin extend.
         /// </summary>
         /// <param name="data">extending request bytes</param>
         /// <param name="requestId">request id</param>
@@ -212,7 +212,7 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        ///     End extend signature.
+        ///     End extend.
         /// </summary>
         /// <param name="asyncResult">HTTP KSI service protocol async result</param>
         /// <returns>extending response bytes</returns>

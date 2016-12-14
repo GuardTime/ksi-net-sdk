@@ -32,7 +32,7 @@ namespace Guardtime.KSI.Service
     public partial class KsiService
     {
         /// <summary>
-        ///     Extend signature to latest publication (sync).
+        ///     Extend to latest publication (sync).
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
         /// <returns>extended calendar hash chain</returns>
@@ -42,7 +42,7 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        ///     Extend signature to given publication (sync).
+        ///     Extend to given publication (sync).
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
         /// <param name="publicationTime">publication time</param>
@@ -53,7 +53,7 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        ///     Begin extend signature to latest publication (async).
+        ///     Begin extend to latest publication (async).
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
         /// <param name="callback">callback when extending signature is finished</param>
@@ -69,7 +69,7 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        ///     Begin extend signature to given publication (async).
+        ///     Begin extend to given publication (async).
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
         /// <param name="publicationTime">publication time</param>
@@ -88,7 +88,7 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        ///     Begin extend with payload.
+        ///     Begin extend.
         /// </summary>
         /// <param name="payload">extend request payload</param>
         /// <param name="callback">callback when extending signature is finished</param>
@@ -112,7 +112,7 @@ namespace Guardtime.KSI.Service
             Logger.Debug("Begin extend. (request id: {0}){1}{2}", payload.RequestId, Environment.NewLine, pdu);
             IAsyncResult serviceProtocolAsyncResult = _extendingServiceProtocol.BeginExtend(pdu.Encode(), payload.RequestId, callback, asyncState);
 
-            return new ExtendSignatureKsiServiceAsyncResult(payload.RequestId, serviceProtocolAsyncResult, asyncState);
+            return new ExtendKsiServiceAsyncResult(payload.RequestId, serviceProtocolAsyncResult, asyncState);
         }
 
         [Obsolete]
@@ -147,11 +147,11 @@ namespace Guardtime.KSI.Service
             Logger.Debug("Begin legacy extend. (request id: {0}){1}{2}", payload.RequestId, Environment.NewLine, pdu);
             IAsyncResult serviceProtocolAsyncResult = _extendingServiceProtocol.BeginExtend(pdu.Encode(), payload.RequestId, callback, asyncState);
 
-            return new ExtendSignatureKsiServiceAsyncResult(payload.RequestId, serviceProtocolAsyncResult, asyncState);
+            return new ExtendKsiServiceAsyncResult(payload.RequestId, serviceProtocolAsyncResult, asyncState);
         }
 
         /// <summary>
-        ///     End extend signature (async).
+        ///     End extend (async).
         /// </summary>
         /// <param name="asyncResult">async result</param>
         /// <returns>extended calendar hash chain</returns>
@@ -167,7 +167,7 @@ namespace Guardtime.KSI.Service
                 throw new KsiServiceException("Invalid IAsyncResult: null.");
             }
 
-            ExtendSignatureKsiServiceAsyncResult serviceAsyncResult = asyncResult as ExtendSignatureKsiServiceAsyncResult;
+            ExtendKsiServiceAsyncResult serviceAsyncResult = asyncResult as ExtendKsiServiceAsyncResult;
 
             if (serviceAsyncResult == null)
             {
@@ -184,7 +184,7 @@ namespace Guardtime.KSI.Service
             return ParseExtendRequestResponse(data, serviceAsyncResult);
         }
 
-        private CalendarHashChain ParseExtendRequestResponse(byte[] data, ExtendSignatureKsiServiceAsyncResult serviceAsyncResult)
+        private CalendarHashChain ParseExtendRequestResponse(byte[] data, ExtendKsiServiceAsyncResult serviceAsyncResult)
         {
             RawTag rawTag = null;
             ExtendResponsePdu pdu = null;
@@ -401,11 +401,11 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        ///     Extend signature KSI service async result.
+        ///     Extend KSI service async result.
         /// </summary>
-        private class ExtendSignatureKsiServiceAsyncResult : KsiServiceAsyncResult
+        private class ExtendKsiServiceAsyncResult : KsiServiceAsyncResult
         {
-            public ExtendSignatureKsiServiceAsyncResult(ulong requestId, IAsyncResult serviceProtocolAsyncResult, object asyncState)
+            public ExtendKsiServiceAsyncResult(ulong requestId, IAsyncResult serviceProtocolAsyncResult, object asyncState)
                 : base(serviceProtocolAsyncResult, asyncState)
             {
                 RequestId = requestId;

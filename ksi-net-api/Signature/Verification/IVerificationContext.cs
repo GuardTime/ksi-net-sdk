@@ -74,6 +74,6 @@ namespace Guardtime.KSI.Signature.Verification
         /// </summary>
         /// <param name="publicationTime">publication time</param>
         /// <returns>extended calendar hash chain</returns>
-        CalendarHashChain GetExtendedTimeCalendarHashChain(ulong? publicationTime);
+        CalendarHashChain GetExtendedCalendarHashChain(ulong? publicationTime);
     }
 }

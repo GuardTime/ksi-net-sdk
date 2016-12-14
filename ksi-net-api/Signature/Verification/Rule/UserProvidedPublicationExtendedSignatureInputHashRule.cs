@@ -28,7 +28,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         public override VerificationResult Verify(IVerificationContext context)
         {
             ulong publicationTime = GetUserPublication(context).PublicationTime;
-            CalendarHashChain extendedTimeCalendarHashChain = GetExtendedTimeCalendarHashChain(context, publicationTime);
+            CalendarHashChain extendedTimeCalendarHashChain = GetExtendedCalendarHashChain(context, publicationTime);
 
             return extendedTimeCalendarHashChain.InputHash != GetSignature(context).GetAggregationHashChainRootHash(context.Level)
                 ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Pub03)

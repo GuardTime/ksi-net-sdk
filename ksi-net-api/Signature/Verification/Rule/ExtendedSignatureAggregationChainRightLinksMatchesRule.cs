@@ -30,7 +30,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         {
             IKsiSignature signature = GetSignature(context);
             ulong publicationTime = GetCalendarHashChain(signature).PublicationData.PublicationTime;
-            CalendarHashChain extendedCalendarHashChain = GetExtendedTimeCalendarHashChain(context, publicationTime);
+            CalendarHashChain extendedCalendarHashChain = GetExtendedCalendarHashChain(context, publicationTime);
 
             return !GetCalendarHashChain(signature).AreRightLinksEqual(extendedCalendarHashChain)
                 ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Cal04)

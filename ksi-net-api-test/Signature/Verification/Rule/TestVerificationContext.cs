@@ -45,7 +45,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
 
         public CalendarHashChain ExtendedCalendarHashChain;
 
-        public CalendarHashChain GetExtendedTimeCalendarHashChain(ulong? publicationTime)
+        public CalendarHashChain GetExtendedCalendarHashChain(ulong? publicationTime)
         {
             return ExtendedCalendarHashChain;
         }

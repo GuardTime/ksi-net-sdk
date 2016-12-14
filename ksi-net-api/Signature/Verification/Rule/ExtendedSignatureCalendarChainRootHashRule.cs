@@ -30,7 +30,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         public override VerificationResult Verify(IVerificationContext context)
         {
             CalendarHashChain calendarHashChain = GetCalendarHashChain(GetSignature(context));
-            CalendarHashChain extendedSignatureCalendarHashChain = GetExtendedTimeCalendarHashChain(context, calendarHashChain.PublicationTime);
+            CalendarHashChain extendedSignatureCalendarHashChain = GetExtendedCalendarHashChain(context, calendarHashChain.PublicationTime);
 
             return calendarHashChain.OutputHash != extendedSignatureCalendarHashChain.OutputHash
                 ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Cal01)
