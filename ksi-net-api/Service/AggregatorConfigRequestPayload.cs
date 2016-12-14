@@ -24,7 +24,7 @@ namespace Guardtime.KSI.Service
     /// <summary>
     ///     Aggregator configuration request payload.
     /// </summary>
-    public sealed class AggregatorConfigRequestPayload : KsiPduPayload
+    public sealed class AggregatorConfigRequestPayload : PduPayload
     {
         /// <summary>
         /// Expected tag type

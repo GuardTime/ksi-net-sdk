@@ -24,7 +24,7 @@ namespace Guardtime.KSI.Service
     /// <summary>
     ///     Extend response PDU.
     /// </summary>
-    public sealed class ExtendResponsePdu : KsiPdu
+    public sealed class ExtendResponsePdu : Pdu
     {
         /// <summary>
         /// Expected tag type

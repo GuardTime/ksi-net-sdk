@@ -26,7 +26,7 @@ namespace Guardtime.KSI.Service
     /// <summary>
     ///     Aggregator configuration response payload.
     /// </summary>
-    public sealed class AggregatorConfigResponsePayload : KsiPduPayload
+    public sealed class AggregatorConfigResponsePayload : PduPayload
     {
         private IntegerTag _aggregationPeriod;
         private IntegerTag _aggregationAlgorithm;

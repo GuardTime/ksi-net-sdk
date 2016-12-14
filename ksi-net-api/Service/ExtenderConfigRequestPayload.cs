@@ -24,7 +24,7 @@ namespace Guardtime.KSI.Service
     /// <summary>
     ///     Extender configuration request payload.
     /// </summary>
-    public sealed class ExtenderConfigRequestPayload : KsiPduPayload
+    public sealed class ExtenderConfigRequestPayload : PduPayload
     {
         /// <summary>
         /// Expected tag type

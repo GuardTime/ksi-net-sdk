@@ -26,7 +26,7 @@ namespace Guardtime.KSI.Service
     /// <summary>
     ///     Extender configuration response payload.
     /// </summary>
-    public sealed class ExtenderConfigResponsePayload : KsiPduPayload
+    public sealed class ExtenderConfigResponsePayload : PduPayload
     {
         private IntegerTag _maxRequests;
         private IntegerTag _calendarFirstTime;

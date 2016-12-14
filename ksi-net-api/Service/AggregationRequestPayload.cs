@@ -26,7 +26,7 @@ namespace Guardtime.KSI.Service
     /// <summary>
     ///     Aggregation request payload.
     /// </summary>
-    public sealed class AggregationRequestPayload : KsiPduPayload
+    public sealed class AggregationRequestPayload : PduPayload
     {
         private ImprintTag _requestHash;
         private IntegerTag _requestId;
@@ -52,7 +52,7 @@ namespace Guardtime.KSI.Service
         {
             switch (childTag.Type)
             {
-                case Constants.KsiPduPayload.RequestIdTagType:
+                case Constants.PduPayload.RequestIdTagType:
                     return _requestId = GetIntegerTag(childTag);
                 case Constants.AggregationRequestPayload.RequestHashTagType:
                     return _requestHash = GetImprintTag(childTag);
@@ -70,7 +70,7 @@ namespace Guardtime.KSI.Service
         {
             base.Validate(tagCounter);
 
-            if (tagCounter[Constants.KsiPduPayload.RequestIdTagType] != 1)
+            if (tagCounter[Constants.PduPayload.RequestIdTagType] != 1)
             {
                 throw new TlvException("Exactly one request id must exist in aggregation request payload.");
             }
@@ -93,7 +93,7 @@ namespace Guardtime.KSI.Service
         /// <param name="hash">data hash</param>
         public AggregationRequestPayload(ulong requestId, DataHash hash) : base(Constants.AggregationRequestPayload.TagType, false, false, new ITlvTag[]
         {
-            new IntegerTag(Constants.KsiPduPayload.RequestIdTagType, false, false, requestId),
+            new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, requestId),
             new ImprintTag(Constants.AggregationRequestPayload.RequestHashTagType, false, false, hash)
         })
         {
@@ -108,7 +108,7 @@ namespace Guardtime.KSI.Service
         /// <param name="level">the level value of the aggregation tree node</param>
         public AggregationRequestPayload(ulong requestId, DataHash hash, uint level) : base(Constants.AggregationRequestPayload.TagType, false, false, new ITlvTag[]
         {
-            new IntegerTag(Constants.KsiPduPayload.RequestIdTagType, false, false, requestId),
+            new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, requestId),
             new ImprintTag(Constants.AggregationRequestPayload.RequestHashTagType, false, false, hash),
             new IntegerTag(Constants.AggregationRequestPayload.RequestLevelTagType, false, false, level)
         })

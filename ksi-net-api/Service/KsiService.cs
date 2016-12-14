@@ -195,7 +195,7 @@ namespace Guardtime.KSI.Service
             return Util.GetRandomUnsignedLong();
         }
 
-        private static void ValidateLegacyResponse(LegacyKsiPdu pdu, RequestResponsePayload payload,
+        private static void ValidateLegacyResponse(LegacyPdu pdu, RequestResponsePayload payload,
                                                    ErrorPayload errorPayload, ulong requestId, IServiceCredentials serviceCredentials)
         {
             if (payload == null && errorPayload == null)
@@ -208,7 +208,7 @@ namespace Guardtime.KSI.Service
                 throw new KsiServiceException(FormatErrorStatus(errorPayload.Status, errorPayload.ErrorMessage));
             }
 
-            if (!LegacyKsiPdu.ValidateMac(pdu.Encode(), pdu.Mac, serviceCredentials.LoginKey))
+            if (!LegacyPdu.ValidateMac(pdu.Encode(), pdu.Mac, serviceCredentials.LoginKey))
 
             {
                 throw new KsiServiceException("Invalid HMAC in response PDU.");
@@ -225,7 +225,7 @@ namespace Guardtime.KSI.Service
             }
         }
 
-        private static void ValidateResponse(byte[] data, KsiPdu pdu, KsiPduPayload payload, ErrorPayload errorPayload, IServiceCredentials serviceCredentials)
+        private static void ValidateResponse(byte[] data, Pdu pdu, PduPayload payload, ErrorPayload errorPayload, IServiceCredentials serviceCredentials)
         {
             if (payload == null && errorPayload == null)
             {
@@ -237,7 +237,7 @@ namespace Guardtime.KSI.Service
                 throw new KsiServiceException(FormatErrorStatus(errorPayload.Status, errorPayload.ErrorMessage));
             }
 
-            if (!KsiPdu.ValidateMac(data, pdu.Mac, serviceCredentials.LoginKey))
+            if (!Pdu.ValidateMac(data, pdu.Mac, serviceCredentials.LoginKey))
 
             {
                 throw new KsiServiceException("Invalid HMAC in response PDU.");

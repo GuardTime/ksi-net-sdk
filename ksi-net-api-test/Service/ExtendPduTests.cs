@@ -37,20 +37,20 @@ namespace Guardtime.KSI.Test.Service
             ExtendRequestPdu tag = TestUtil.GetCompositeTag<ExtendRequestPdu>(Constants.ExtendRequestPdu.TagType,
                 new ITlvTag[]
                 {
-                    TestUtil.GetCompositeTag<KsiPduHeader>(Constants.KsiPduHeader.TagType,
+                    TestUtil.GetCompositeTag<PduHeader>(Constants.PduHeader.TagType,
                         new ITlvTag[]
                         {
-                            new StringTag(Constants.KsiPduHeader.LoginIdTagType, false, false, "Test Login Id"),
-                            new IntegerTag(Constants.KsiPduHeader.InstanceIdTagType, false, false, 1),
-                            new IntegerTag(Constants.KsiPduHeader.MessageIdTagType, false, false, 2)
+                            new StringTag(Constants.PduHeader.LoginIdTagType, false, false, "Test Login Id"),
+                            new IntegerTag(Constants.PduHeader.InstanceIdTagType, false, false, 1),
+                            new IntegerTag(Constants.PduHeader.MessageIdTagType, false, false, 2)
                         }),
                     TestUtil.GetCompositeTag<ExtendRequestPayload>(Constants.ExtendRequestPayload.TagType, new ITlvTag[]
                     {
-                        new IntegerTag(Constants.KsiPduPayload.RequestIdTagType, false, false, 1),
+                        new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 1),
                         new IntegerTag(Constants.ExtendRequestPayload.AggregationTimeTagType, false, false, 2),
                         new IntegerTag(Constants.ExtendRequestPayload.PublicationTimeTagType, false, false, 3),
                     }),
-                    new ImprintTag(Constants.KsiPdu.MacTagType, false, false,
+                    new ImprintTag(Constants.Pdu.MacTagType, false, false,
                         new DataHash(HashAlgorithm.Sha2256,
                             new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
                 });
@@ -69,18 +69,18 @@ namespace Guardtime.KSI.Test.Service
             ExtendResponsePdu tag = TestUtil.GetCompositeTag<ExtendResponsePdu>(Constants.ExtendResponsePdu.TagType,
                 new ITlvTag[]
                 {
-                    TestUtil.GetCompositeTag<KsiPduHeader>(Constants.KsiPduHeader.TagType,
+                    TestUtil.GetCompositeTag<PduHeader>(Constants.PduHeader.TagType,
                         new ITlvTag[]
                         {
-                            new StringTag(Constants.KsiPduHeader.LoginIdTagType, false, false, "Test Login Id"),
-                            new IntegerTag(Constants.KsiPduHeader.InstanceIdTagType, false, false, 1),
-                            new IntegerTag(Constants.KsiPduHeader.MessageIdTagType, false, false, 2)
+                            new StringTag(Constants.PduHeader.LoginIdTagType, false, false, "Test Login Id"),
+                            new IntegerTag(Constants.PduHeader.InstanceIdTagType, false, false, 1),
+                            new IntegerTag(Constants.PduHeader.MessageIdTagType, false, false, 2)
                         }),
                     TestUtil.GetCompositeTag<ExtendResponsePayload>(Constants.ExtendResponsePayload.TagType, new ITlvTag[]
                     {
-                        new IntegerTag(Constants.KsiPduPayload.RequestIdTagType, false, false, 2),
-                        new IntegerTag(Constants.KsiPduPayload.StatusTagType, false, false, 0),
-                        new StringTag(Constants.KsiPduPayload.ErrorMessageTagType, false, false, "Test error message."),
+                        new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 2),
+                        new IntegerTag(Constants.PduPayload.StatusTagType, false, false, 0),
+                        new StringTag(Constants.PduPayload.ErrorMessageTagType, false, false, "Test error message."),
                         new IntegerTag(Constants.ExtendResponsePayload.CalendarLastTimeTagType, false, false, 1),
                         TestUtil.GetCompositeTag<CalendarHashChain>(Constants.CalendarHashChain.TagType,
                             new ITlvTag[]
@@ -96,7 +96,7 @@ namespace Guardtime.KSI.Test.Service
                                         new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })))
                             })
                     }),
-                    new ImprintTag(Constants.KsiPdu.MacTagType, false, false,
+                    new ImprintTag(Constants.Pdu.MacTagType, false, false,
                         new DataHash(HashAlgorithm.Sha2256,
                             new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
                 });
@@ -112,19 +112,19 @@ namespace Guardtime.KSI.Test.Service
             ExtendResponsePdu tag = TestUtil.GetCompositeTag<ExtendResponsePdu>(Constants.ExtendResponsePdu.TagType,
                 new ITlvTag[]
                 {
-                    TestUtil.GetCompositeTag<KsiPduHeader>(Constants.KsiPduHeader.TagType,
+                    TestUtil.GetCompositeTag<PduHeader>(Constants.PduHeader.TagType,
                         new ITlvTag[]
                         {
-                            new StringTag(Constants.KsiPduHeader.LoginIdTagType, false, false, "Test Login Id"),
-                            new IntegerTag(Constants.KsiPduHeader.InstanceIdTagType, false, false, 1),
-                            new IntegerTag(Constants.KsiPduHeader.MessageIdTagType, false, false, 2)
+                            new StringTag(Constants.PduHeader.LoginIdTagType, false, false, "Test Login Id"),
+                            new IntegerTag(Constants.PduHeader.InstanceIdTagType, false, false, 1),
+                            new IntegerTag(Constants.PduHeader.MessageIdTagType, false, false, 2)
                         }),
                     TestUtil.GetCompositeTag<ExtendErrorPayload>(Constants.ErrorPayload.TagType, new ITlvTag[]
                     {
-                        new IntegerTag(Constants.KsiPduPayload.StatusTagType, false, false, 1),
-                        new StringTag(Constants.KsiPduPayload.ErrorMessageTagType, false, false, "Test Error message")
+                        new IntegerTag(Constants.PduPayload.StatusTagType, false, false, 1),
+                        new StringTag(Constants.PduPayload.ErrorMessageTagType, false, false, "Test Error message")
                     }),
-                    new ImprintTag(Constants.KsiPdu.MacTagType, false, false,
+                    new ImprintTag(Constants.Pdu.MacTagType, false, false,
                         new DataHash(HashAlgorithm.Sha2256,
                             new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
                 });
@@ -147,9 +147,9 @@ namespace Guardtime.KSI.Test.Service
                     {
                         TestUtil.GetCompositeTag<ExtendResponsePayload>(Constants.ExtendResponsePayload.TagType, new ITlvTag[]
                         {
-                            new IntegerTag(Constants.KsiPduPayload.RequestIdTagType, false, false, 2),
-                            new IntegerTag(Constants.KsiPduPayload.StatusTagType, false, false, 0),
-                            new StringTag(Constants.KsiPduPayload.ErrorMessageTagType, false, false, "Test error message."),
+                            new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 2),
+                            new IntegerTag(Constants.PduPayload.StatusTagType, false, false, 0),
+                            new StringTag(Constants.PduPayload.ErrorMessageTagType, false, false, "Test error message."),
                             new IntegerTag(Constants.ExtendResponsePayload.CalendarLastTimeTagType, false, false, 1),
                             TestUtil.GetCompositeTag<CalendarHashChain>(Constants.CalendarHashChain.TagType,
                                 new ITlvTag[]
@@ -165,14 +165,14 @@ namespace Guardtime.KSI.Test.Service
                                             new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })))
                                 })
                         }),
-                        TestUtil.GetCompositeTag<KsiPduHeader>(Constants.KsiPduHeader.TagType,
+                        TestUtil.GetCompositeTag<PduHeader>(Constants.PduHeader.TagType,
                             new ITlvTag[]
                             {
-                                new StringTag(Constants.KsiPduHeader.LoginIdTagType, false, false, "Test Login Id"),
-                                new IntegerTag(Constants.KsiPduHeader.InstanceIdTagType, false, false, 1),
-                                new IntegerTag(Constants.KsiPduHeader.MessageIdTagType, false, false, 2)
+                                new StringTag(Constants.PduHeader.LoginIdTagType, false, false, "Test Login Id"),
+                                new IntegerTag(Constants.PduHeader.InstanceIdTagType, false, false, 1),
+                                new IntegerTag(Constants.PduHeader.MessageIdTagType, false, false, 2)
                             }),
-                        new ImprintTag(Constants.KsiPdu.MacTagType, false, false,
+                        new ImprintTag(Constants.Pdu.MacTagType, false, false,
                             new DataHash(HashAlgorithm.Sha2256,
                                 new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
                     });
@@ -191,21 +191,21 @@ namespace Guardtime.KSI.Test.Service
                 ExtendResponsePdu tag = TestUtil.GetCompositeTag<ExtendResponsePdu>(Constants.ExtendResponsePdu.TagType,
                     new ITlvTag[]
                     {
-                        TestUtil.GetCompositeTag<KsiPduHeader>(Constants.KsiPduHeader.TagType,
+                        TestUtil.GetCompositeTag<PduHeader>(Constants.PduHeader.TagType,
                             new ITlvTag[]
                             {
-                                new StringTag(Constants.KsiPduHeader.LoginIdTagType, false, false, "Test Login Id"),
-                                new IntegerTag(Constants.KsiPduHeader.InstanceIdTagType, false, false, 1),
-                                new IntegerTag(Constants.KsiPduHeader.MessageIdTagType, false, false, 2)
+                                new StringTag(Constants.PduHeader.LoginIdTagType, false, false, "Test Login Id"),
+                                new IntegerTag(Constants.PduHeader.InstanceIdTagType, false, false, 1),
+                                new IntegerTag(Constants.PduHeader.MessageIdTagType, false, false, 2)
                             }),
-                        new ImprintTag(Constants.KsiPdu.MacTagType, false, false,
+                        new ImprintTag(Constants.Pdu.MacTagType, false, false,
                             new DataHash(HashAlgorithm.Sha2256,
                                 new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
                         TestUtil.GetCompositeTag<ExtendResponsePayload>(Constants.ExtendResponsePayload.TagType, new ITlvTag[]
                         {
-                            new IntegerTag(Constants.KsiPduPayload.RequestIdTagType, false, false, 2),
-                            new IntegerTag(Constants.KsiPduPayload.StatusTagType, false, false, 0),
-                            new StringTag(Constants.KsiPduPayload.ErrorMessageTagType, false, false, "Test error message."),
+                            new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 2),
+                            new IntegerTag(Constants.PduPayload.StatusTagType, false, false, 0),
+                            new StringTag(Constants.PduPayload.ErrorMessageTagType, false, false, "Test error message."),
                             new IntegerTag(Constants.ExtendResponsePayload.CalendarLastTimeTagType, false, false, 1),
                             TestUtil.GetCompositeTag<CalendarHashChain>(Constants.CalendarHashChain.TagType,
                                 new ITlvTag[]

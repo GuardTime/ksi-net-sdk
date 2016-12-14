@@ -132,7 +132,7 @@ namespace Guardtime.KSI
             public const uint RepositoryUriTagType = 0x3;
         }
 
-        public static class KsiPdu
+        public static class Pdu
         {
             /// <summary>
             ///     Mac TLV type.
@@ -140,7 +140,7 @@ namespace Guardtime.KSI
             public const uint MacTagType = 0x1f;
         }
 
-        public static class KsiPduPayload
+        public static class PduPayload
         {
             public const uint RequestIdTagType = 0x1;
 
@@ -345,10 +345,10 @@ namespace Guardtime.KSI
             public const uint CalendarLastTimeTagType = 0x12;
         }
 
-        public static class KsiPduHeader
+        public static class PduHeader
         {
             /// <summary>
-            ///     KSI PDU header TLV type.
+            /// PDU header TLV type.
             /// </summary>
             public const uint TagType = 0x1;
 

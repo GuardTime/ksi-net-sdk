@@ -24,7 +24,7 @@ namespace Guardtime.KSI.Service
     /// <summary>
     ///     Aggregation response message PDU.
     /// </summary>
-    public sealed class AggregationResponsePdu : KsiPdu
+    public sealed class AggregationResponsePdu : Pdu
     {
         /// <summary>
         /// Expected tag type

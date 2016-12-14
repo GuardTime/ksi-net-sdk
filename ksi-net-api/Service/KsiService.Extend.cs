@@ -106,7 +106,7 @@ namespace Guardtime.KSI.Service
                 throw new KsiServiceException("Extending service credentials are missing.");
             }
 
-            KsiPduHeader header = new KsiPduHeader(_extendingServiceCredentials.LoginId);
+            PduHeader header = new PduHeader(_extendingServiceCredentials.LoginId);
             ExtendRequestPdu pdu = new ExtendRequestPdu(header, payload, _hmacAlgorithm, _extendingServiceCredentials.LoginKey);
 
             Logger.Debug("Begin extend. (request id: {0}){1}{2}", payload.RequestId, Environment.NewLine, pdu);
@@ -141,8 +141,8 @@ namespace Guardtime.KSI.Service
                 throw new KsiServiceException("Extending service credentials are missing.");
             }
 
-            KsiPduHeader header = new KsiPduHeader(_extendingServiceCredentials.LoginId);
-            LegacyExtendPdu pdu = new LegacyExtendPdu(header, payload, LegacyKsiPdu.GetHashMacTag(_hmacAlgorithm, _extendingServiceCredentials.LoginKey, header, payload));
+            PduHeader header = new PduHeader(_extendingServiceCredentials.LoginId);
+            LegacyExtendPdu pdu = new LegacyExtendPdu(header, payload, LegacyPdu.GetHashMacTag(_hmacAlgorithm, _extendingServiceCredentials.LoginKey, header, payload));
 
             Logger.Debug("Begin legacy extend. (request id: {0}){1}{2}", payload.RequestId, Environment.NewLine, pdu);
             IAsyncResult serviceProtocolAsyncResult = _extendingServiceProtocol.BeginExtend(pdu.Encode(), payload.RequestId, callback, asyncState);
@@ -302,7 +302,7 @@ namespace Guardtime.KSI.Service
                 throw new KsiServiceException("Extending service credentials are missing.");
             }
 
-            KsiPduHeader header = new KsiPduHeader(_extendingServiceCredentials.LoginId);
+            PduHeader header = new PduHeader(_extendingServiceCredentials.LoginId);
             ExtenderConfigRequestPayload payload = new ExtenderConfigRequestPayload();
             ExtendRequestPdu pdu = new ExtendRequestPdu(header, payload, _hmacAlgorithm, _extendingServiceCredentials.LoginKey);
 

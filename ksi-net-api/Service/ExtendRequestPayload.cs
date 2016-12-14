@@ -25,7 +25,7 @@ namespace Guardtime.KSI.Service
     /// <summary>
     ///     Extend request payload.
     /// </summary>
-    public sealed class ExtendRequestPayload : KsiPduPayload
+    public sealed class ExtendRequestPayload : PduPayload
     {
         private IntegerTag _aggregationTime;
         private IntegerTag _publicationTime;
@@ -51,7 +51,7 @@ namespace Guardtime.KSI.Service
         {
             switch (childTag.Type)
             {
-                case Constants.KsiPduPayload.RequestIdTagType:
+                case Constants.PduPayload.RequestIdTagType:
                     return _requestId = GetIntegerTag(childTag);
                 case Constants.ExtendRequestPayload.AggregationTimeTagType:
                     return _aggregationTime = GetIntegerTag(childTag);
@@ -69,7 +69,7 @@ namespace Guardtime.KSI.Service
         {
             base.Validate(tagCounter);
 
-            if (tagCounter[Constants.KsiPduPayload.RequestIdTagType] != 1)
+            if (tagCounter[Constants.PduPayload.RequestIdTagType] != 1)
             {
                 throw new TlvException("Exactly one request id must exist in extend request payload.");
             }
@@ -93,7 +93,7 @@ namespace Guardtime.KSI.Service
         /// <param name="publicationTime">publication time</param>
         public ExtendRequestPayload(ulong requestId, ulong aggregationTime, ulong publicationTime) : base(Constants.ExtendRequestPayload.TagType, false, false, new ITlvTag[]
         {
-            new IntegerTag(Constants.KsiPduPayload.RequestIdTagType, false, false, requestId),
+            new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, requestId),
             new IntegerTag(Constants.ExtendRequestPayload.AggregationTimeTagType, false, false, aggregationTime),
             new IntegerTag(Constants.ExtendRequestPayload.PublicationTimeTagType, false, false, publicationTime)
         })
@@ -107,7 +107,7 @@ namespace Guardtime.KSI.Service
         /// <param name="aggregationTime">aggregation time</param>
         public ExtendRequestPayload(ulong requestId, ulong aggregationTime) : base(Constants.ExtendRequestPayload.TagType, false, false, new ITlvTag[]
         {
-            new IntegerTag(Constants.KsiPduPayload.RequestIdTagType, false, false, requestId),
+            new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, requestId),
             new IntegerTag(Constants.ExtendRequestPayload.AggregationTimeTagType, false, false, aggregationTime)
         })
         {

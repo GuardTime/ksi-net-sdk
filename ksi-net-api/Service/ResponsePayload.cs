@@ -23,15 +23,15 @@ using Guardtime.KSI.Parser;
 namespace Guardtime.KSI.Service
 {
     /// <summary>
-    ///     KSI PDU response payload.
+    /// KSI service response payload.
     /// </summary>
-    public abstract class ResponsePayload : KsiPduPayload
+    public abstract class ResponsePayload : PduPayload
     {
         private StringTag _errorMessage;
         private IntegerTag _status;
 
         /// <summary>
-        ///     Create KSI PDU response payload TLV element from TLV element.
+        ///     Create response payload TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         protected ResponsePayload(ITlvTag tag) : base(tag)
@@ -45,9 +45,9 @@ namespace Guardtime.KSI.Service
         {
             switch (childTag.Type)
             {
-                case Constants.KsiPduPayload.StatusTagType:
+                case Constants.PduPayload.StatusTagType:
                     return _status = GetIntegerTag(childTag);
-                case Constants.KsiPduPayload.ErrorMessageTagType:
+                case Constants.PduPayload.ErrorMessageTagType:
                     return _errorMessage = GetStringTag(childTag);
                 default:
                     return base.ParseChild(childTag);
@@ -61,12 +61,12 @@ namespace Guardtime.KSI.Service
         {
             base.Validate(tagCounter);
 
-            if (tagCounter[Constants.KsiPduPayload.StatusTagType] != 1)
+            if (tagCounter[Constants.PduPayload.StatusTagType] != 1)
             {
                 throw new TlvException("Exactly one status code must exist in reponse payload.");
             }
 
-            if (tagCounter[Constants.KsiPduPayload.ErrorMessageTagType] > 1)
+            if (tagCounter[Constants.PduPayload.ErrorMessageTagType] > 1)
             {
                 throw new TlvException("Only one error message is allowed in response payload.");
             }

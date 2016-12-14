@@ -28,7 +28,7 @@ using NUnit.Framework;
 namespace Guardtime.KSI.Test.Service
 {
     [TestFixture]
-    public class LegacyKsiPduTests : StaticServiceTestsBase
+    public class LegacyPduTests : StaticServiceTestsBase
     {
         /// <summary>
         /// Test Legacy PDU MAC calculation. MAC is valid.
@@ -45,7 +45,7 @@ namespace Guardtime.KSI.Test.Service
                 mac = new LegacyAggregationPdu(tlvReader.ReadTag()).Mac;
             }
 
-            Assert.IsTrue(LegacyKsiPdu.ValidateMac(bytes, mac, Util.EncodeNullTerminatedUtf8String(Settings.Default.HttpSigningServicePass)), "MAC should be valid");
+            Assert.IsTrue(LegacyPdu.ValidateMac(bytes, mac, Util.EncodeNullTerminatedUtf8String(Settings.Default.HttpSigningServicePass)), "MAC should be valid");
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Guardtime.KSI.Test.Service
                         0x28, 0x29, 0x30, 0x31, 0x32
                     }));
 
-            Assert.IsFalse(LegacyKsiPdu.ValidateMac(bytes, mac, Util.EncodeNullTerminatedUtf8String(Settings.Default.HttpSigningServicePass)), "MAC should be invalid");
+            Assert.IsFalse(LegacyPdu.ValidateMac(bytes, mac, Util.EncodeNullTerminatedUtf8String(Settings.Default.HttpSigningServicePass)), "MAC should be invalid");
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace Guardtime.KSI.Test.Service
                 mac = new LegacyAggregationPdu(tlvReader.ReadTag()).Mac;
             }
 
-            Assert.IsTrue(LegacyKsiPdu.ValidateMac(bytes, mac, Util.EncodeNullTerminatedUtf8String(Settings.Default.HttpSigningServicePass)), "MAC should be valid");
+            Assert.IsTrue(LegacyPdu.ValidateMac(bytes, mac, Util.EncodeNullTerminatedUtf8String(Settings.Default.HttpSigningServicePass)), "MAC should be valid");
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace Guardtime.KSI.Test.Service
 
             // 0x0 value representing an integer is converted to an empty TLV, thus MAC check will fail.
             byte[] pduBytes = pdu.Encode();
-            Assert.IsFalse(LegacyKsiPdu.ValidateMac(pduBytes, pdu.Mac, Util.EncodeNullTerminatedUtf8String(Settings.Default.HttpSigningServicePass)), "MAC should be invalid");
+            Assert.IsFalse(LegacyPdu.ValidateMac(pduBytes, pdu.Mac, Util.EncodeNullTerminatedUtf8String(Settings.Default.HttpSigningServicePass)), "MAC should be invalid");
         }
     }
 }

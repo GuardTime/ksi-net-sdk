@@ -27,21 +27,21 @@ using NLog;
 namespace Guardtime.KSI.Service
 {
     /// <summary>
-    ///     KSI PDU.
+    /// Legacy Protocol Data Unit.
     /// </summary>
     [Obsolete]
-    public abstract class LegacyKsiPdu : CompositeTag
+    public abstract class LegacyPdu : CompositeTag
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private KsiPduHeader _header;
-        private KsiPduPayload _payload;
+        private PduHeader _header;
+        private PduPayload _payload;
         private int _payloadCount;
         private ErrorPayload _errorPayload;
 
         /// <summary>
         ///     Get PDU payload.
         /// </summary>
-        public KsiPduPayload Payload
+        public PduPayload Payload
         {
             get { return _payload; }
             protected set
@@ -65,11 +65,11 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        ///     Create KSI PDU from TLV element.
+        ///     Create PDU from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         [Obsolete]
-        protected LegacyKsiPdu(ITlvTag tag) : base(tag)
+        protected LegacyPdu(ITlvTag tag) : base(tag)
         {
         }
 
@@ -80,9 +80,9 @@ namespace Guardtime.KSI.Service
         {
             switch (childTag.Type)
             {
-                case Constants.KsiPduHeader.TagType:
-                    return _header = childTag as KsiPduHeader ?? new KsiPduHeader(childTag);
-                case Constants.KsiPdu.MacTagType:
+                case Constants.PduHeader.TagType:
+                    return _header = childTag as PduHeader ?? new PduHeader(childTag);
+                case Constants.Pdu.MacTagType:
                     return Mac = GetImprintTag(childTag);
                 default:
                     return base.ParseChild(childTag);
@@ -98,33 +98,33 @@ namespace Guardtime.KSI.Service
 
             if (_payloadCount != 1)
             {
-                throw new TlvException("Exactly one payload must exist in KSI PDU.");
+                throw new TlvException("Exactly one payload must exist in PDU.");
             }
 
             if (ErrorPayload == null)
             {
-                if (tagCounter[Constants.KsiPduHeader.TagType] != 1)
+                if (tagCounter[Constants.PduHeader.TagType] != 1)
 
                 {
-                    throw new TlvException("Exactly one header must exist in KSI PDU.");
+                    throw new TlvException("Exactly one header must exist in PDU.");
                 }
 
-                if (tagCounter[Constants.KsiPdu.MacTagType] != 1)
+                if (tagCounter[Constants.Pdu.MacTagType] != 1)
                 {
-                    throw new TlvException("Exactly one mac must exist in KSI PDU");
+                    throw new TlvException("Exactly one mac must exist in PDU");
                 }
             }
         }
 
         /// <summary>
-        ///     Create KSI PDU from PDU header and data.
+        ///     Create PDU from PDU header and data.
         /// </summary>
         /// <param name="type">TLV type</param>
         /// <param name="nonCritical">Is TLV element non critical</param>
         /// <param name="forward">Is TLV element forwarded</param>
         /// <param name="childTags">List of child TLV elements</param>
         [Obsolete]
-        protected LegacyKsiPdu(uint type, bool nonCritical, bool forward, ITlvTag[] childTags)
+        protected LegacyPdu(uint type, bool nonCritical, bool forward, ITlvTag[] childTags)
             : base(type, nonCritical, forward, childTags)
         {
         }
@@ -141,13 +141,13 @@ namespace Guardtime.KSI.Service
         /// <param name="key">hmac key</param>
         /// <param name="header">KSI header</param>
         /// <param name="payload">KSI payload</param>
-        public static ImprintTag GetHashMacTag(HashAlgorithm hmacAlgorithm, byte[] key, KsiPduHeader header, KsiPduPayload payload)
+        public static ImprintTag GetHashMacTag(HashAlgorithm hmacAlgorithm, byte[] key, PduHeader header, PduPayload payload)
         {
             using (TlvWriter writer = new TlvWriter(new MemoryStream()))
             {
                 writer.WriteTag(header);
                 writer.WriteTag(payload);
-                return new ImprintTag(Constants.KsiPdu.MacTagType, false, false, CalculateMac(hmacAlgorithm, key, ((MemoryStream)writer.BaseStream).ToArray()));
+                return new ImprintTag(Constants.Pdu.MacTagType, false, false, CalculateMac(hmacAlgorithm, key, ((MemoryStream)writer.BaseStream).ToArray()));
             }
         }
 
@@ -165,7 +165,7 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        ///     Validate mac attached to KSI PDU.
+        ///     Validate mac attached to PDU.
         /// </summary>
         /// <param name="pduBytes">PDU encoded as byte array</param>
         /// <param name="mac">MAC</param>

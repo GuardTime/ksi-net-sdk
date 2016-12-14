@@ -25,7 +25,7 @@ namespace Guardtime.KSI.Service
     /// <summary>
     ///     Extend request PDU.
     /// </summary>
-    public sealed class ExtendRequestPdu : KsiPdu
+    public sealed class ExtendRequestPdu : Pdu
     {
         /// <summary>
         /// Expected tag type
@@ -67,7 +67,7 @@ namespace Guardtime.KSI.Service
         /// <param name="payload">Extend pdu payload</param>
         /// <param name="hmacAlgorithm">HMAC algorithm</param>
         /// <param name="key">hmac key</param>
-        public ExtendRequestPdu(KsiPduHeader header, KsiPduPayload payload, HashAlgorithm hmacAlgorithm, byte[] key)
+        public ExtendRequestPdu(PduHeader header, PduPayload payload, HashAlgorithm hmacAlgorithm, byte[] key)
             : base(Constants.ExtendRequestPdu.TagType, header, payload, hmacAlgorithm, key)
         {
         }

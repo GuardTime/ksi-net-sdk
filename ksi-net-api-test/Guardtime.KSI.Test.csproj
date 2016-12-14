@@ -168,8 +168,8 @@
     <Compile Include="Publication\PublicationDataTests.cs" />
     <Compile Include="Publication\PublicationsFileTests.cs" />
     <Compile Include="Publication\TestPublicationsfile.cs" />
-    <Compile Include="Service\LegacyKsiPduTests.cs" />
-    <Compile Include="Service\KsiPduTests.cs" />
+    <Compile Include="Service\LegacyPduTests.cs" />
+    <Compile Include="Service\PduTests.cs" />
     <Compile Include="Service\ExtenderConfigRequestStaticTests.cs" />
     <Compile Include="Service\BlockSignerTreeNodeVisualizer.cs" />
     <Compile Include="Service\ExtendErrorPayloadTests.cs" />
@@ -182,7 +182,7 @@
     <Compile Include="Service\AggregationRequestPayloadTests.cs" />
     <Compile Include="Service\AggregationPduTests.cs" />
     <Compile Include="Service\ExtendStaticTests.cs" />
-    <Compile Include="Service\KsiPduHeaderTests.cs" />
+    <Compile Include="Service\PduHeaderTests.cs" />
     <Compile Include="Service\PublicationsFileStaticTest.cs" />
     <Compile Include="Service\AggregatorConfigRequestStaticTests.cs" />
     <Compile Include="Service\StaticServiceTestsBase.cs" />

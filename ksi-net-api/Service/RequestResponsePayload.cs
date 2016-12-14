@@ -23,14 +23,14 @@ using Guardtime.KSI.Parser;
 namespace Guardtime.KSI.Service
 {
     /// <summary>
-    ///     KSI PDU request response payload. Contains request ID.
+    /// KSI service request response payload. Contains request ID.
     /// </summary>
     public abstract class RequestResponsePayload : ResponsePayload
     {
         private IntegerTag _requestId;
 
         /// <summary>
-        ///     Create KSI PDU request response payload TLV element from TLV element.
+        ///     Create request response payload TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         protected RequestResponsePayload(ITlvTag tag) : base(tag)
@@ -44,7 +44,7 @@ namespace Guardtime.KSI.Service
         {
             switch (childTag.Type)
             {
-                case Constants.KsiPduPayload.RequestIdTagType:
+                case Constants.PduPayload.RequestIdTagType:
                     return _requestId = GetIntegerTag(childTag);
                 default:
                     return base.ParseChild(childTag);
@@ -58,7 +58,7 @@ namespace Guardtime.KSI.Service
         {
             base.Validate(tagCounter);
 
-            if (tagCounter[Constants.KsiPduPayload.RequestIdTagType] != 1)
+            if (tagCounter[Constants.PduPayload.RequestIdTagType] != 1)
             {
                 throw new TlvException("Exactly one request id must exist in response payload.");
             }

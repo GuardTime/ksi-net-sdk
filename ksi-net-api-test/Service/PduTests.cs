@@ -28,7 +28,7 @@ using NUnit.Framework;
 namespace Guardtime.KSI.Test.Service
 {
     [TestFixture]
-    public class KsiPduTests : StaticServiceTestsBase
+    public class PduTests : StaticServiceTestsBase
     {
         /// <summary>
         /// Test PDU MAC calculation. MAC is valid.
@@ -45,7 +45,7 @@ namespace Guardtime.KSI.Test.Service
                 mac = new AggregationResponsePdu(tlvReader.ReadTag()).Mac;
             }
 
-            Assert.IsTrue(KsiPdu.ValidateMac(bytes, mac, Util.EncodeNullTerminatedUtf8String(Settings.Default.HttpSigningServicePass)), "MAC should be valid");
+            Assert.IsTrue(Pdu.ValidateMac(bytes, mac, Util.EncodeNullTerminatedUtf8String(Settings.Default.HttpSigningServicePass)), "MAC should be valid");
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Guardtime.KSI.Test.Service
                         0x28, 0x29, 0x30, 0x31, 0x32
                     }));
 
-            Assert.IsFalse(KsiPdu.ValidateMac(bytes, mac, Util.EncodeNullTerminatedUtf8String(Settings.Default.HttpSigningServicePass)), "MAC should be invalid");
+            Assert.IsFalse(Pdu.ValidateMac(bytes, mac, Util.EncodeNullTerminatedUtf8String(Settings.Default.HttpSigningServicePass)), "MAC should be invalid");
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace Guardtime.KSI.Test.Service
                 mac = new AggregationResponsePdu(tlvReader.ReadTag()).Mac;
             }
 
-            Assert.IsTrue(KsiPdu.ValidateMac(bytes, mac, Util.EncodeNullTerminatedUtf8String(Settings.Default.HttpSigningServicePass)), "MAC should be valid");
+            Assert.IsTrue(Pdu.ValidateMac(bytes, mac, Util.EncodeNullTerminatedUtf8String(Settings.Default.HttpSigningServicePass)), "MAC should be valid");
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace Guardtime.KSI.Test.Service
 
             // 0x0 value representing an integer is converted to an empty TLV, thus MAC check will fail.
             byte[] pduBytes = pdu.Encode();
-            Assert.IsFalse(KsiPdu.ValidateMac(pduBytes, pdu.Mac, Util.EncodeNullTerminatedUtf8String(Settings.Default.HttpSigningServicePass)), "MAC should be invalid");
+            Assert.IsFalse(Pdu.ValidateMac(pduBytes, pdu.Mac, Util.EncodeNullTerminatedUtf8String(Settings.Default.HttpSigningServicePass)), "MAC should be invalid");
         }
     }
 }

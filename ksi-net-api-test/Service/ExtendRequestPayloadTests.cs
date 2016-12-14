@@ -31,7 +31,7 @@ namespace Guardtime.KSI.Test.Service
         {
             ExtendRequestPayload tag = TestUtil.GetCompositeTag<ExtendRequestPayload>(Constants.ExtendRequestPayload.TagType, new ITlvTag[]
             {
-                new IntegerTag(Constants.KsiPduPayload.RequestIdTagType, false, false, 1),
+                new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 1),
                 new IntegerTag(Constants.ExtendRequestPayload.AggregationTimeTagType, false, false, 2),
                 new IntegerTag(Constants.ExtendRequestPayload.PublicationTimeTagType, false, false, 3),
             });

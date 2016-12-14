@@ -25,7 +25,7 @@ namespace Guardtime.KSI.Service
     /// <summary>
     ///     Aggregation request message PDU.
     /// </summary>
-    public sealed class AggregationRequestPdu : KsiPdu
+    public sealed class AggregationRequestPdu : Pdu
     {
         /// <summary>
         /// Expected tag type
@@ -63,11 +63,11 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Create aggregation request pdu TLV element from KSI header and payload.
         /// </summary>
-        /// <param name="header">KSI PDU header</param>
+        /// <param name="header">PDU header</param>
         /// <param name="payload">aggregation payload</param>
         /// <param name="hmacAlgorithm">HMAC algorithm</param>
         /// <param name="key">hmac key</param>
-        public AggregationRequestPdu(KsiPduHeader header, KsiPduPayload payload, HashAlgorithm hmacAlgorithm, byte[] key)
+        public AggregationRequestPdu(PduHeader header, PduPayload payload, HashAlgorithm hmacAlgorithm, byte[] key)
             : base(Constants.AggregationRequestPdu.TagType, header, payload, hmacAlgorithm, key)
         {
         }

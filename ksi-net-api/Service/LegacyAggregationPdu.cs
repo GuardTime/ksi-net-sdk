@@ -26,7 +26,7 @@ namespace Guardtime.KSI.Service
     ///     Aggregation message PDU.
     /// </summary>
     [Obsolete]
-    public sealed class LegacyAggregationPdu : LegacyKsiPdu
+    public sealed class LegacyAggregationPdu : LegacyPdu
     {
         /// <summary>
         /// Expected tag type
@@ -63,11 +63,11 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Create aggregation pdu TLV element from KSI header and payload.
         /// </summary>
-        /// <param name="header">KSI PDU header</param>
+        /// <param name="header">PDU header</param>
         /// <param name="payload">aggregation payload</param>
         /// <param name="mac">pdu message hmac</param>
         [Obsolete]
-        public LegacyAggregationPdu(KsiPduHeader header, KsiPduPayload payload, ImprintTag mac)
+        public LegacyAggregationPdu(PduHeader header, PduPayload payload, ImprintTag mac)
             : base(Constants.LegacyAggregationPdu.TagType, false, false, new ITlvTag[] { header, payload, mac })
         {
         }

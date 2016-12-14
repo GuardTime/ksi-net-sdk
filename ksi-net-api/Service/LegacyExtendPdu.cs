@@ -26,7 +26,7 @@ namespace Guardtime.KSI.Service
     ///     Extend PDU.
     /// </summary>
     [Obsolete]
-    public sealed class LegacyExtendPdu : LegacyKsiPdu
+    public sealed class LegacyExtendPdu : LegacyPdu
     {
         /// <summary>
         /// Expected tag type
@@ -67,7 +67,7 @@ namespace Guardtime.KSI.Service
         /// <param name="payload">Extend pdu payload</param>
         /// <param name="mac">Extend pdu hmac</param>
         [Obsolete]
-        public LegacyExtendPdu(KsiPduHeader header, KsiPduPayload payload, ImprintTag mac)
+        public LegacyExtendPdu(PduHeader header, PduPayload payload, ImprintTag mac)
             : base(Constants.LegacyExtendPdu.TagType, false, false, new ITlvTag[] { header, payload, mac })
         {
         }

@@ -157,7 +157,7 @@
     <Compile Include="Service\AggregatorConfigResponsePayload.cs" />
     <Compile Include="Service\BlockSigner.cs" />
     <Compile Include="Service\LegacyExtendPdu.cs" />
-    <Compile Include="Service\LegacyKsiPdu.cs" />
+    <Compile Include="Service\LegacyPdu.cs" />
     <Compile Include="Service\PduVersion.cs" />
     <Compile Include="Service\TcpKsiServiceProtocol.cs" />
     <Compile Include="Signature\AggregationHashChain.Metadata.cs" />
@@ -194,10 +194,10 @@
     <Compile Include="Service\IKsiSigningServiceProtocol.cs" />
     <Compile Include="Service\IKsiExtendingServiceProtocol.cs" />
     <Compile Include="Service\IServiceCredentials.cs" />
-    <Compile Include="Service\KsiPduPayload.cs" />
-    <Compile Include="Service\KsiPdu.cs" />
+    <Compile Include="Service\PduPayload.cs" />
+    <Compile Include="Service\Pdu.cs" />
     <Compile Include="Service\KsiService.cs" />
-    <Compile Include="Service\KsiPduHeader.cs" />
+    <Compile Include="Service\PduHeader.cs" />
     <Compile Include="Service\ServiceCredentials.cs" />
     <Compile Include="Signature\AggregationAuthenticationRecord.cs" />
     <Compile Include="Signature\AggregationHashChain.cs" />

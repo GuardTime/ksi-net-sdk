@@ -18,26 +18,32 @@
  */
 
 using Guardtime.KSI.Parser;
-using Guardtime.KSI.Service;
-using NUnit.Framework;
 
-namespace Guardtime.KSI.Test.Service
+namespace Guardtime.KSI.Service
 {
-    [TestFixture]
-    public class AggregationErrorPayloadTests
+    /// <summary>
+    /// PDU payload.
+    /// </summary>
+    public abstract class PduPayload : CompositeTag
     {
-        [Test]
-        public void ToStringTest()
+        /// <summary>
+        ///     Create PDU payload from TLV element.
+        /// </summary>
+        /// <param name="tag">TLV element</param>
+        protected PduPayload(ITlvTag tag) : base(tag)
         {
-            AggregationErrorPayload tag = TestUtil.GetCompositeTag<AggregationErrorPayload>(Constants.ErrorPayload.TagType, new ITlvTag[]
-            {
-                new IntegerTag(Constants.PduPayload.StatusTagType, false, false, 1),
-                new StringTag(Constants.PduPayload.ErrorMessageTagType, false, false, "Test Error message")
-            });
+        }
 
-            AggregationErrorPayload tag2 = new AggregationErrorPayload(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
-
-            Assert.AreEqual(tag.ToString(), tag2.ToString());
+        /// <summary>
+        ///     Create PDU payload from data.
+        /// </summary>
+        /// <param name="type">TLV type</param>
+        /// <param name="nonCritical">is TLV non critical</param>
+        /// <param name="forward">is TLV forwarded</param>
+        /// <param name="childTags">List of child TLV elements</param>
+        protected PduPayload(uint type, bool nonCritical, bool forward, ITlvTag[] childTags)
+            : base(type, nonCritical, forward, childTags)
+        {
         }
     }
 }

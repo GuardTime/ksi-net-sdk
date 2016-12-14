@@ -24,24 +24,24 @@ using NUnit.Framework;
 namespace Guardtime.KSI.Test.Service
 {
     [TestFixture]
-    public class KsiPduHeaderTests
+    public class PduHeaderTests
     {
         [Test]
         public void ToStringTest()
         {
-            KsiPduHeader tag = TestUtil.GetCompositeTag<KsiPduHeader>(Constants.KsiPduHeader.TagType,
+            PduHeader tag = TestUtil.GetCompositeTag<PduHeader>(Constants.PduHeader.TagType,
                 new ITlvTag[]
                 {
-                    new StringTag(Constants.KsiPduHeader.LoginIdTagType, false, false, "Test Login Id"),
-                    new IntegerTag(Constants.KsiPduHeader.InstanceIdTagType, false, false, 1),
-                    new IntegerTag(Constants.KsiPduHeader.MessageIdTagType, false, false, 2)
+                    new StringTag(Constants.PduHeader.LoginIdTagType, false, false, "Test Login Id"),
+                    new IntegerTag(Constants.PduHeader.InstanceIdTagType, false, false, 1),
+                    new IntegerTag(Constants.PduHeader.MessageIdTagType, false, false, 2)
                 });
 
-            KsiPduHeader tag2 = new KsiPduHeader(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
+            PduHeader tag2 = new PduHeader(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
 
-            tag = new KsiPduHeader("Test Login Id", 1, 2);
+            tag = new PduHeader("Test Login Id", 1, 2);
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
         }

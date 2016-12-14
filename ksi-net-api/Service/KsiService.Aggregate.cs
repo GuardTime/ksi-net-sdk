@@ -90,7 +90,7 @@ namespace Guardtime.KSI.Service
                 return BeginLegacySign(hash, level, callback, asyncState);
             }
 
-            KsiPduHeader header = new KsiPduHeader(_signingServiceCredentials.LoginId);
+            PduHeader header = new PduHeader(_signingServiceCredentials.LoginId);
             ulong requestId = GenerateRequestId();
             AggregationRequestPayload payload = level == 0 ? new AggregationRequestPayload(requestId, hash) : new AggregationRequestPayload(requestId, hash, level);
             AggregationRequestPdu pdu = new AggregationRequestPdu(header, payload, _hmacAlgorithm, _signingServiceCredentials.LoginKey);
@@ -112,12 +112,12 @@ namespace Guardtime.KSI.Service
         [Obsolete]
         private IAsyncResult BeginLegacySign(DataHash hash, uint level, AsyncCallback callback, object asyncState)
         {
-            KsiPduHeader header = new KsiPduHeader(_signingServiceCredentials.LoginId);
+            PduHeader header = new PduHeader(_signingServiceCredentials.LoginId);
             ulong requestId = GenerateRequestId();
             LegacyAggregationRequestPayload payload = level == 0
                 ? new LegacyAggregationRequestPayload(requestId, hash)
                 : new LegacyAggregationRequestPayload(requestId, hash, level);
-            LegacyAggregationPdu pdu = new LegacyAggregationPdu(header, payload, LegacyKsiPdu.GetHashMacTag(_hmacAlgorithm, _signingServiceCredentials.LoginKey, header, payload));
+            LegacyAggregationPdu pdu = new LegacyAggregationPdu(header, payload, LegacyPdu.GetHashMacTag(_hmacAlgorithm, _signingServiceCredentials.LoginKey, header, payload));
 
             Logger.Debug("Begin legacy sign (request id: {0}){1}{2}", requestId, Environment.NewLine, pdu);
             IAsyncResult serviceProtocolAsyncResult = _signingServiceProtocol.BeginSign(pdu.Encode(), requestId, callback, asyncState);
@@ -276,7 +276,7 @@ namespace Guardtime.KSI.Service
                 throw new KsiServiceException("Signing service credentials are missing.");
             }
 
-            KsiPduHeader header = new KsiPduHeader(_signingServiceCredentials.LoginId);
+            PduHeader header = new PduHeader(_signingServiceCredentials.LoginId);
             AggregatorConfigRequestPayload payload = new AggregatorConfigRequestPayload();
             AggregationRequestPdu pdu = new AggregationRequestPdu(header, payload, _hmacAlgorithm, _signingServiceCredentials.LoginKey);
 
