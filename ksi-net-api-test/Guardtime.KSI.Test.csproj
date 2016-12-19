@@ -139,6 +139,7 @@
     <Compile Include="Integration\BlockSigner.PrintTreeTests.cs" />
     <Compile Include="Integration\CommonGetTestFilesAndResults.cs" />
     <Compile Include="Integration\CommonTestExecution.cs" />
+    <Compile Include="Integration\ConfigurationIntegrationTests.cs" />
     <Compile Include="Integration\DataHolderForIntegrationTests.cs" />
     <Compile Include="Integration\IntegrationTests.cs" />
     <Compile Include="Integration\ExtendIntegrationTests.cs" />

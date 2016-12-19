@@ -37,14 +37,14 @@ namespace Guardtime.KSI.Test.Signature
     public class AggregationHashChainTests
     {
         [Test]
-        public void TestAggregationHashChainCreateOk()
+        public void TestCreateAggregationHashChainOk()
         {
             AggregationHashChain aggregationHashChain = GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Ok);
             Assert.AreEqual(9, aggregationHashChain.Count, "Invalid amount of child TLV objects");
         }
 
         [Test]
-        public void TestAggregationHashChainCreateWithLinksOk()
+        public void TestCreateAggregationHashChainWithLinksOk()
         {
             AggregationHashChain aggregationHashChain = GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Ok);
 
@@ -53,7 +53,7 @@ namespace Guardtime.KSI.Test.Signature
         }
 
         [Test]
-        public void TestAggregationHashChainCreateInvalid()
+        public void TestCreateAggregationHashChainInvalid()
         {
             Assert.That(delegate
             {
