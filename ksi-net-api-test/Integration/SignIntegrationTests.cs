@@ -285,48 +285,6 @@ namespace Guardtime.KSI.Test.Integration
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
-        public void GetAggregatorConfigTest(Ksi ksi)
-        {
-            if (TestSetup.PduVersion == PduVersion.v1)
-            {
-                Exception ex = Assert.Throws<KsiServiceException>(delegate
-                {
-                    ksi.GetAggregatorConfig();
-                });
-
-                Assert.That(ex.Message.StartsWith("Aggregator config request is not supported using PDU version v1"), "Unexpected exception message: " + ex.Message);
-            }
-            else
-            {
-                ksi.GetAggregatorConfig();
-            }
-        }
-
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidExtendingUrl))]
-        public void GetAggregatorConfigSuccessWithInvalidSigningUrlTest(Ksi ksi)
-        {
-            if (TestSetup.PduVersion != PduVersion.v1)
-            {
-                Assert.DoesNotThrow(delegate
-                {
-                    ksi.GetAggregatorConfig();
-                }, "Invalid extending url should not prevent getting aggregator config.");
-            }
-        }
-
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidExtendingPass))]
-        public void GetAggregatorConfigSuccessWithInvalidSigningPassTest(Ksi ksi)
-        {
-            if (TestSetup.PduVersion != PduVersion.v1)
-            {
-                Assert.DoesNotThrow(delegate
-                {
-                    ksi.GetAggregatorConfig();
-                }, "Invalid extending pass should not prevent getting aggregator config.");
-            }
-        }
-
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void HttpSignInvalidPduFormatTest(Ksi ksi)
         {
             KsiService service = GetHttpKsiService(PduVersion.v2);
@@ -364,21 +322,15 @@ namespace Guardtime.KSI.Test.Integration
             IKsiSignature signature = null;
             IAsyncResult asyncResult = null;
             string asyncState = "test state";
-
-            Console.WriteLine("Begin signing.");
+            
 
             asyncResult = service.BeginSign(dataHash, delegate(IAsyncResult ar)
             {
-                Console.WriteLine("Async state: " + ar.AsyncState);
-                Console.WriteLine("Run EndSign.");
                 signature = service.EndSign(asyncResult);
-                Console.WriteLine("EndSign done.");
                 waitHandle.Set();
             }, asyncState);
-
-            Console.WriteLine("Wait for signature.");
+            
             waitHandle.WaitOne();
-            Console.WriteLine("Got signature.");
 
             Assert.IsNotNull(signature, "Signature should not be null.");
 
