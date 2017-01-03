@@ -94,7 +94,7 @@ namespace Guardtime.KSI.Signature.Verification
         /// <returns>extended calendar hash chain</returns>
         public CalendarHashChain GetExtendedLatestCalendarHashChain()
         {
-            return GetExtendedTimeCalendarHashChain(null);
+            return GetExtendedCalendarHashChain(null);
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace Guardtime.KSI.Signature.Verification
         /// </summary>
         /// <param name="publicationTime">publication time</param>
         /// <returns>extended calendar hash chain</returns>
-        public CalendarHashChain GetExtendedTimeCalendarHashChain(ulong? publicationTime)
+        public CalendarHashChain GetExtendedCalendarHashChain(ulong? publicationTime)
         {
             if (KsiService == null)
             {

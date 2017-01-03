@@ -31,12 +31,12 @@ namespace Guardtime.KSI.Test.Service
         {
             ExtendRequestPayload tag = TestUtil.GetCompositeTag<ExtendRequestPayload>(Constants.ExtendRequestPayload.TagType, new ITlvTag[]
             {
-                new IntegerTag(Constants.ExtendRequestPayload.RequestIdTagType, false, false, 1),
+                new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 1),
                 new IntegerTag(Constants.ExtendRequestPayload.AggregationTimeTagType, false, false, 2),
                 new IntegerTag(Constants.ExtendRequestPayload.PublicationTimeTagType, false, false, 3),
             });
 
-            ExtendRequestPayload tag2 = new ExtendRequestPayload(tag);
+            ExtendRequestPayload tag2 = new ExtendRequestPayload(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
         }

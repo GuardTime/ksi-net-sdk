@@ -99,7 +99,7 @@ namespace Guardtime.KSI.Parser
             unchecked
             {
                 int res = 1;
-                foreach (byte value in Value)
+                foreach (byte value in _value)
                 {
                     res = 31 * res + value;
                 }

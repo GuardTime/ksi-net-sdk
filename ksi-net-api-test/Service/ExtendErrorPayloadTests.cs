@@ -29,13 +29,13 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void ToStringTest()
         {
-            ExtendErrorPayload tag = TestUtil.GetCompositeTag<ExtendErrorPayload>(Constants.ExtendErrorPayload.TagType, new ITlvTag[]
+            ExtendErrorPayload tag = TestUtil.GetCompositeTag<ExtendErrorPayload>(Constants.ErrorPayload.TagType, new ITlvTag[]
             {
-                new IntegerTag(Constants.KsiPduPayload.StatusTagType, false, false, 1),
-                new StringTag(Constants.KsiPduPayload.ErrorMessageTagType, false, false, "Test Error message")
+                new IntegerTag(Constants.PduPayload.StatusTagType, false, false, 1),
+                new StringTag(Constants.PduPayload.ErrorMessageTagType, false, false, "Test Error message")
             });
 
-            ExtendErrorPayload tag2 = new ExtendErrorPayload(tag);
+            ExtendErrorPayload tag2 = new ExtendErrorPayload(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
         }

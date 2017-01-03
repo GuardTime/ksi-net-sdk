@@ -31,10 +31,15 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         public class Metadata : CompositeTag
         {
-            private readonly StringTag _clientId;
-            private readonly StringTag _machineId;
-            private readonly IntegerTag _sequenceNumber;
-            private readonly IntegerTag _requestTime;
+            private StringTag _clientId;
+            private StringTag _machineId;
+            private IntegerTag _sequenceNumber;
+            private IntegerTag _requestTime;
+
+            /// <summary>
+            /// Expected tag type
+            /// </summary>
+            protected override uint ExpectedTagType => Constants.AggregationHashChain.Metadata.TagType;
 
             /// <summary>
             /// Create new aggregation hash chain link metadata TLV element
@@ -52,7 +57,7 @@ namespace Guardtime.KSI.Signature
             /// <param name="requestTime">Request time</param>
             /// <param name="sequenceNumber">Sequence number</param>
             public Metadata(string clientId, string machineId, ulong? sequenceNumber = null, ulong? requestTime = null)
-                : this(new Metadata(BuildChildTags(clientId, machineId, sequenceNumber, requestTime)))
+                : base(Constants.AggregationHashChain.Metadata.TagType, false, false, BuildChildTags(clientId, machineId, sequenceNumber, requestTime))
             {
             }
 
@@ -62,79 +67,70 @@ namespace Guardtime.KSI.Signature
             /// <param name="tag">TLV element</param>
             public Metadata(ITlvTag tag) : base(tag)
             {
-                CheckTagType(Constants.AggregationHashChain.Metadata.TagType);
+            }
 
-                int clientIdCount = 0;
-                int machineIdCount = 0;
-                int sequenceNumberCount = 0;
-                int requestTimeCount = 0;
-
-                for (int i = 0; i < Count; i++)
+            /// <summary>
+            /// Parse child element
+            /// </summary>
+            protected override ITlvTag ParseChild(ITlvTag childTag)
+            {
+                switch (childTag.Type)
                 {
-                    ITlvTag childTag = this[i];
+                    case Constants.AggregationHashChain.Metadata.PaddingTagType:
+                        // ReSharper disable once CanBeReplacedWithTryCastAndCheckForNull
+                        if (childTag is PaddingTag)
+                        {
+                            Padding = (PaddingTag)childTag;
+                        }
+                        else if (childTag is RawTag)
+                        {
+                            Padding = new PaddingTag((RawTag)childTag, Count);
+                        }
+                        else
+                        {
+                            throw new TlvException("Invalid tag type for creating padding tag. Tag: " + childTag);
+                        }
+                        return Padding;
 
-                    switch (childTag.Type)
-                    {
-                        case Constants.AggregationHashChain.Metadata.PaddingTagType:
-                            if (childTag is PaddingTag)
-                            {
-                                Padding = childTag as PaddingTag;
-                            }
-                            else if (childTag is RawTag)
-                            {
-                                Padding = new PaddingTag(childTag as RawTag, i);
-                            }
-                            else
-                            {
-                                throw new TlvException("Invalid tag type for creating padding tag. Tag: " + childTag);
-                            }
-                            this[i] = Padding;
-                            break;
-                        case Constants.AggregationHashChain.Metadata.ClientIdTagType:
-                            this[i] = _clientId = new StringTag(childTag);
-                            clientIdCount++;
-                            break;
-                        case Constants.AggregationHashChain.Metadata.MachineIdTagType:
-                            this[i] = _machineId = new StringTag(childTag);
-                            machineIdCount++;
-                            break;
-                        case Constants.AggregationHashChain.Metadata.SequenceNumberTagType:
-                            this[i] = _sequenceNumber = new IntegerTag(childTag);
-                            sequenceNumberCount++;
-                            break;
-                        case Constants.AggregationHashChain.Metadata.RequestTimeTagType:
-                            this[i] = _requestTime = new IntegerTag(childTag);
-                            requestTimeCount++;
-                            break;
-                        default:
-                            VerifyUnknownTag(childTag);
-                            break;
-                    }
+                    case Constants.AggregationHashChain.Metadata.ClientIdTagType:
+                        return _clientId = GetStringTag(childTag);
+                    case Constants.AggregationHashChain.Metadata.MachineIdTagType:
+                        return _machineId = GetStringTag(childTag);
+                    case Constants.AggregationHashChain.Metadata.SequenceNumberTagType:
+                        return _sequenceNumber = GetIntegerTag(childTag);
+                    case Constants.AggregationHashChain.Metadata.RequestTimeTagType:
+                        return _requestTime = GetIntegerTag(childTag);
+                    default:
+                        return base.ParseChild(childTag);
                 }
+            }
 
-                if (clientIdCount != 1)
+            /// <summary>
+            /// Validate the tag
+            /// </summary>
+            protected override void Validate(TagCounter tagCounter)
+            {
+                base.Validate(tagCounter);
+
+                if (tagCounter[Constants.AggregationHashChain.Metadata.ClientIdTagType] != 1)
                 {
                     throw new TlvException("Exactly one client id must exist in aggregation hash chain link metadata.");
                 }
 
-                if (machineIdCount > 1)
+                if (tagCounter[Constants.AggregationHashChain.Metadata.MachineIdTagType] > 1)
                 {
                     throw new TlvException("Only one machine id is allowed in aggregation hash chain link metadata.");
                 }
 
-                if (sequenceNumberCount > 1)
+                if (tagCounter[Constants.AggregationHashChain.Metadata.SequenceNumberTagType] > 1)
                 {
                     throw new TlvException("Only one sequence number is allowed in aggregation hash chain link metadata.");
                 }
 
-                if (requestTimeCount > 1)
+                if (tagCounter[Constants.AggregationHashChain.Metadata.RequestTimeTagType] > 1)
                 {
                     throw new TlvException("Only one request time is allowed in aggregation hash chain link metadata.");
                 }
-            }
-
-            private Metadata(ITlvTag[] value) : base(Constants.AggregationHashChain.Metadata.TagType, false, false, value)
-            {
             }
 
             /// <summary>
@@ -184,7 +180,7 @@ namespace Guardtime.KSI.Signature
             /// <summary>
             /// Padding element
             /// </summary>
-            public PaddingTag Padding { get; }
+            public PaddingTag Padding { get; private set; }
 
             /// <summary>
             /// Client identifier

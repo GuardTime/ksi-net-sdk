@@ -61,7 +61,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             CalendarAuthenticationRecordAggregationHashRule rule = new CalendarAuthenticationRecordAggregationHashRule();
 
             // Check legacy signature for missing calendar hash chain and existing calendar authentication record
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Legacy_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok), FileMode.Open))
             {
                 Assert.Throws<KsiVerificationException>(delegate
                 {
@@ -85,7 +85,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             CalendarAuthenticationRecordAggregationHashRule rule = new CalendarAuthenticationRecordAggregationHashRule();
 
             // Check legacy signature for calendar authentication record hash
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Legacy_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -103,7 +103,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             CalendarAuthenticationRecordAggregationHashRule rule = new CalendarAuthenticationRecordAggregationHashRule();
 
             // Check signature for calendar authentication record hash
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -123,7 +123,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             // Check signature with no calendar authentication record
             using (
                 FileStream stream =
-                    new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record),
+                    new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record),
                         FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
@@ -144,7 +144,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             // Check invalid signature with invalid publication hash in calendar authentication record
             using (
                 FileStream stream =
-                    new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Publication_Hash),
+                    new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Invalid_Calendar_Authentication_Record_Invalid_Publication_Hash),
                         FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()

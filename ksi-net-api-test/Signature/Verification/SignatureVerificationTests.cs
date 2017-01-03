@@ -40,7 +40,7 @@ namespace Guardtime.KSI.Test.Signature.Verification
         [Test]
         public void TestVerifySignatureOk()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignatureDo_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok), FileMode.Open))
             {
                 VerificationContext context = new VerificationContext(new KsiSignatureFactory().Create(stream))
                 {

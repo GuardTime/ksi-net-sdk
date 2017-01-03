@@ -32,13 +32,18 @@ namespace Guardtime.KSI.Signature
     /// </summary>
     public sealed partial class AggregationHashChain : CompositeTag
     {
-        private readonly IntegerTag _aggrAlgorithmId;
-        private readonly IntegerTag _aggregationTime;
+        private IntegerTag _aggrAlgorithmId;
+        private IntegerTag _aggregationTime;
         private readonly List<Link> _links = new List<Link>();
         private readonly List<IntegerTag> _chainIndex = new List<IntegerTag>();
-        private readonly RawTag _inputData;
-        private readonly ImprintTag _inputHash;
+        private RawTag _inputData;
+        private ImprintTag _inputHash;
         private Dictionary<AggregationHashChainResult, AggregationHashChainResult> _aggregationHashChainResultCache;
+
+        /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.AggregationHashChain.TagType;
 
         /// <summary>
         ///  Create new aggregation hash chain TLV element from TLV element.
@@ -49,7 +54,7 @@ namespace Guardtime.KSI.Signature
         /// <param name="aggregationAlgorithmId"></param>
         /// <param name="chainLinks"></param>
         public AggregationHashChain(ulong aggreationTime, ulong[] chainIndex, DataHash inputHash, ulong aggregationAlgorithmId, Link[] chainLinks)
-            : this(new AggregationHashChain(BuildChildTags(aggreationTime, chainIndex, inputHash, aggregationAlgorithmId, chainLinks)))
+            : base(Constants.AggregationHashChain.TagType, false, false, BuildChildTags(aggreationTime, chainIndex, inputHash, aggregationAlgorithmId, chainLinks))
         {
         }
 
@@ -59,53 +64,45 @@ namespace Guardtime.KSI.Signature
         /// <param name="tag">TLV element</param>
         public AggregationHashChain(ITlvTag tag) : base(tag)
         {
-            CheckTagType(Constants.AggregationHashChain.TagType);
+        }
 
-            int aggregationTimeCount = 0;
-            int inputDataCount = 0;
-            int inputHashCount = 0;
-            int aggrAlgorithmIdCount = 0;
-
-            for (int i = 0; i < Count; i++)
+        /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
             {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.AggregationHashChain.AggregationTimeTagType:
-                        this[i] = _aggregationTime = new IntegerTag(childTag);
-                        aggregationTimeCount++;
-                        break;
-                    case Constants.AggregationHashChain.ChainIndexTagType:
-                        IntegerTag chainIndexTag = new IntegerTag(childTag);
-                        _chainIndex.Add(chainIndexTag);
-                        this[i] = chainIndexTag;
-                        break;
-                    case Constants.AggregationHashChain.InputDataTagType:
-                        this[i] = _inputData = new RawTag(childTag);
-                        inputDataCount++;
-                        break;
-                    case Constants.AggregationHashChain.InputHashTagType:
-                        this[i] = _inputHash = new ImprintTag(childTag);
-                        inputHashCount++;
-                        break;
-                    case Constants.AggregationHashChain.AggregationAlgorithmIdTagType:
-                        this[i] = _aggrAlgorithmId = new IntegerTag(childTag);
-                        aggrAlgorithmIdCount++;
-                        break;
-                    case (uint)LinkDirection.Left:
-                    case (uint)LinkDirection.Right:
-                        Link linkTag = childTag as Link ?? new Link(childTag, (LinkDirection)childTag.Type);
-                        _links.Add(linkTag);
-                        this[i] = linkTag;
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
+                case Constants.AggregationHashChain.AggregationTimeTagType:
+                    return _aggregationTime = GetIntegerTag(childTag);
+                case Constants.AggregationHashChain.ChainIndexTagType:
+                    IntegerTag chainIndexTag = GetIntegerTag(childTag);
+                    _chainIndex.Add(chainIndexTag);
+                    return chainIndexTag;
+                case Constants.AggregationHashChain.InputDataTagType:
+                    return _inputData = GetRawTag(childTag);
+                case Constants.AggregationHashChain.InputHashTagType:
+                    return _inputHash = GetImprintTag(childTag);
+                case Constants.AggregationHashChain.AggregationAlgorithmIdTagType:
+                    return _aggrAlgorithmId = GetIntegerTag(childTag);
+                case (uint)LinkDirection.Left:
+                case (uint)LinkDirection.Right:
+                    Link linkTag = childTag as Link ?? new Link(childTag);
+                    _links.Add(linkTag);
+                    return linkTag;
+                default:
+                    return base.ParseChild(childTag);
             }
+        }
 
-            if (aggregationTimeCount != 1)
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate(TagCounter tagCounter)
+        {
+            base.Validate(tagCounter);
+
+            if (tagCounter[Constants.AggregationHashChain.AggregationTimeTagType] != 1)
             {
                 throw new TlvException("Exactly one aggregation time must exist in aggregation hash chain.");
             }
@@ -115,17 +112,17 @@ namespace Guardtime.KSI.Signature
                 throw new TlvException("Chain index is missing in aggregation hash chain.");
             }
 
-            if (inputDataCount > 1)
+            if (tagCounter[Constants.AggregationHashChain.InputDataTagType] > 1)
             {
                 throw new TlvException("Only one input data value is allowed in aggregation hash chain.");
             }
 
-            if (inputHashCount != 1)
+            if (tagCounter[Constants.AggregationHashChain.InputHashTagType] != 1)
             {
                 throw new TlvException("Exactly one input hash must exist in aggregation hash chain.");
             }
 
-            if (aggrAlgorithmIdCount != 1)
+            if (tagCounter[Constants.AggregationHashChain.AggregationAlgorithmIdTagType] != 1)
             {
                 throw new TlvException("Exactly one algorithm must exist in aggregation hash chain.");
             }
@@ -134,14 +131,6 @@ namespace Guardtime.KSI.Signature
             {
                 throw new TlvException("Links are missing in aggregation hash chain.");
             }
-        }
-
-        /// <summary>
-        /// Create new aggregation hash chain TLV element from child TLV elements.
-        /// </summary>
-        /// <param name="childTags">Child TLV elements</param>
-        private AggregationHashChain(ITlvTag[] childTags) : base(Constants.AggregationHashChain.TagType, false, false, childTags)
-        {
         }
 
         /// <summary>

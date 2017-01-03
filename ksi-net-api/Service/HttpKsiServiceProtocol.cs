@@ -35,7 +35,7 @@ namespace Guardtime.KSI.Service
         private readonly int _bufferSize = 8192;
         private readonly string _extendingUrl;
         private readonly string _publicationsFileUrl;
-        private readonly int _requestTimeOut = 2000;
+        private readonly int _requestTimeOut = 10000;
         private readonly string _signingUrl;
         private readonly string _proxyUrl;
         private readonly NetworkCredential _proxyCredential;
@@ -139,7 +139,7 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        ///     Begin extend signature.
+        ///     Begin extend.
         /// </summary>
         /// <param name="data">extending request bytes</param>
         /// <param name="requestId">request id</param>
@@ -212,7 +212,7 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        ///     End extend signature.
+        ///     End extend.
         /// </summary>
         /// <param name="asyncResult">HTTP KSI service protocol async result</param>
         /// <returns>extending response bytes</returns>
@@ -369,7 +369,7 @@ namespace Guardtime.KSI.Service
 
             HttpKsiServiceProtocolAsyncResult httpAsyncResult = new HttpKsiServiceProtocolAsyncResult(request, data, requestId, callback, asyncState);
 
-            Logger.Debug("Begin sign http brequest (request id: {0}).", httpAsyncResult.RequestId);
+            Logger.Debug("Begin sign http request (request id: {0}).", httpAsyncResult.RequestId);
 
             request.BeginGetRequestStream(GetRequestStreamCallback, httpAsyncResult);
             ThreadPool.RegisterWaitForSingleObject(httpAsyncResult.BeginWaitHandle, EndBeginCallback, httpAsyncResult, _requestTimeOut, true);

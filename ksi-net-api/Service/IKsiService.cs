@@ -71,35 +71,35 @@ namespace Guardtime.KSI.Service
         IKsiSignature EndSign(IAsyncResult asyncResult);
 
         /// <summary>
-        /// Get additional aggregation configuration data (sync)
+        /// Get additional aggregator configuration data (sync)
         /// </summary>
-        /// <returns>Aggregation configuration response payload</returns>
-        AggregationConfigResponsePayload GetAggregationConfig();
+        /// <returns>Aggregator configuration data</returns>
+        AggregatorConfig GetAggregatorConfig();
 
         /// <summary>
-        /// Begin get additional aggregation configuration data (async)
+        /// Begin get additional aggregator configuration data (async)
         /// </summary>
         /// <param name="callback"></param>
         /// <param name="asyncState"></param>
         /// <returns>async result</returns>
-        IAsyncResult BeginGetAggregationConfig(AsyncCallback callback, object asyncState);
+        IAsyncResult BeginGetAggregatorConfig(AsyncCallback callback, object asyncState);
 
         /// <summary>
-        /// End get additional aggregation configuration data (async)
+        /// End get additional aggregator configuration data (async)
         /// </summary>
         /// <param name="asyncResult"></param>
-        /// <returns>Aggregation configuration response payload</returns>
-        AggregationConfigResponsePayload EndGetAggregationConfig(IAsyncResult asyncResult);
+        /// <returns>Aggregator configuration data</returns>
+        AggregatorConfig EndGetAggregatorConfig(IAsyncResult asyncResult);
 
         /// <summary>
-        ///     Extend signature to latest publication (sync).
+        ///     Extend to latest publication (sync).
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
         /// <returns>extended calendar hash chain</returns>
         CalendarHashChain Extend(ulong aggregationTime);
 
         /// <summary>
-        ///     Extend signature to given publication (sync).
+        ///     Extend to given publication (sync).
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
         /// <param name="publicationTime">publication time</param>
@@ -107,7 +107,7 @@ namespace Guardtime.KSI.Service
         CalendarHashChain Extend(ulong aggregationTime, ulong publicationTime);
 
         /// <summary>
-        ///     Begin extend signature to latest publication (async).
+        ///     Begin extend to latest publication (async).
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
         /// <param name="callback">callback when extending signature is finished</param>
@@ -116,7 +116,7 @@ namespace Guardtime.KSI.Service
         IAsyncResult BeginExtend(ulong aggregationTime, AsyncCallback callback, object asyncState);
 
         /// <summary>
-        ///     Begin extend signature to given publication (async).
+        ///     Begin extend to given publication (async).
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
         /// <param name="publicationTime">publication time</param>
@@ -126,11 +126,32 @@ namespace Guardtime.KSI.Service
         IAsyncResult BeginExtend(ulong aggregationTime, ulong publicationTime, AsyncCallback callback, object asyncState);
 
         /// <summary>
-        ///     End extend signature (async).
+        ///     End extend (async).
         /// </summary>
         /// <param name="asyncResult">async result</param>
         /// <returns>extended calendar hash chain</returns>
         CalendarHashChain EndExtend(IAsyncResult asyncResult);
+
+        /// <summary>
+        /// Get additional extender configuration data (sync)
+        /// </summary>
+        /// <returns>Extender configuration data</returns>
+        ExtenderConfig GetExtenderConfig();
+
+        /// <summary>
+        /// Begin get additional extender configuration data (async)
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <param name="asyncState"></param>
+        /// <returns>async result</returns>
+        IAsyncResult BeginGetExtenderConfig(AsyncCallback callback, object asyncState);
+
+        /// <summary>
+        /// End get additional extender configuration data (async)
+        /// </summary>
+        /// <param name="asyncResult"></param>
+        /// <returns>Extender configuration data</returns>
+        ExtenderConfig EndGetExtenderConfig(IAsyncResult asyncResult);
 
         /// <summary>
         ///     Get publications file (sync).

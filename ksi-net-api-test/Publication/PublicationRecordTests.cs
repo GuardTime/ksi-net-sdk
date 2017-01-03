@@ -48,7 +48,7 @@ namespace Guardtime.KSI.Test.Publication
                         new StringTag(Constants.PublicationRecord.PublicationRepositoryUriTagType, false, false, "Test publication repository uri 2"),
                     });
 
-            PublicationRecord tag2 = new PublicationRecordInPublicationFile(tag);
+            PublicationRecord tag2 = new PublicationRecordInPublicationFile(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
         }
@@ -74,7 +74,7 @@ namespace Guardtime.KSI.Test.Publication
                         new StringTag(Constants.PublicationRecord.PublicationRepositoryUriTagType, false, false, "Test publication repository uri 2"),
                     });
 
-            PublicationRecord tag2 = new PublicationRecordInSignature(tag);
+            PublicationRecord tag2 = new PublicationRecordInSignature(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
         }

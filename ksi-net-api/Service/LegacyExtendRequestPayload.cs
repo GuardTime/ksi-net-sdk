@@ -27,11 +27,16 @@ namespace Guardtime.KSI.Service
     ///     Extend request payload.
     /// </summary>
     [Obsolete]
-    public sealed class LegacyExtendRequestPayload : KsiPduPayload
+    public sealed class LegacyExtendRequestPayload : PduPayload
     {
-        private readonly IntegerTag _aggregationTime;
-        private readonly IntegerTag _publicationTime;
-        private readonly IntegerTag _requestId;
+        private IntegerTag _aggregationTime;
+        private IntegerTag _publicationTime;
+        private IntegerTag _requestId;
+
+        /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.ExtendRequestPayload.LegacyTagType;
 
         /// <summary>
         ///     Create extend request payload from TLV element.
@@ -39,50 +44,6 @@ namespace Guardtime.KSI.Service
         /// <param name="tag">TLV element</param>
         public LegacyExtendRequestPayload(ITlvTag tag) : base(tag)
         {
-            CheckTagType(Constants.ExtendRequestPayload.LegacyTagType);
-
-            int requestIdCount = 0;
-            int aggregationTimeCount = 0;
-            int publicationTimeCount = 0;
-
-            for (int i = 0; i < Count; i++)
-            {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.ExtendRequestPayload.RequestIdTagType:
-                        this[i] = _requestId = new IntegerTag(childTag);
-                        requestIdCount++;
-                        break;
-                    case Constants.ExtendRequestPayload.AggregationTimeTagType:
-                        this[i] = _aggregationTime = new IntegerTag(childTag);
-                        aggregationTimeCount++;
-                        break;
-                    case Constants.ExtendRequestPayload.PublicationTimeTagType:
-                        this[i] = _publicationTime = new IntegerTag(childTag);
-                        publicationTimeCount++;
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
-            }
-
-            if (requestIdCount != 1)
-            {
-                throw new TlvException("Exactly one request id must exist in extend request payload.");
-            }
-
-            if (aggregationTimeCount != 1)
-            {
-                throw new TlvException("Exactly one aggregation time must exist in extend request payload.");
-            }
-
-            if (publicationTimeCount > 1)
-            {
-                throw new TlvException("Only one publication time is allowed in extend request payload.");
-            }
         }
 
         /// <summary>
@@ -94,14 +55,11 @@ namespace Guardtime.KSI.Service
         public LegacyExtendRequestPayload(ulong requestId, ulong aggregationTime, ulong publicationTime)
             : base(Constants.ExtendRequestPayload.LegacyTagType, false, false, new ITlvTag[]
             {
-                new IntegerTag(Constants.ExtendRequestPayload.RequestIdTagType, false, false, requestId),
+                new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, requestId),
                 new IntegerTag(Constants.ExtendRequestPayload.AggregationTimeTagType, false, false, aggregationTime),
                 new IntegerTag(Constants.ExtendRequestPayload.PublicationTimeTagType, false, false, publicationTime)
             })
         {
-            _requestId = (IntegerTag)this[0];
-            _aggregationTime = (IntegerTag)this[1];
-            _publicationTime = (IntegerTag)this[2];
         }
 
         /// <summary>
@@ -111,12 +69,51 @@ namespace Guardtime.KSI.Service
         /// <param name="aggregationTime">aggregation time</param>
         public LegacyExtendRequestPayload(ulong requestId, ulong aggregationTime) : base(Constants.ExtendRequestPayload.LegacyTagType, false, false, new ITlvTag[]
         {
-            new IntegerTag(Constants.ExtendRequestPayload.RequestIdTagType, false, false, requestId),
+            new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, requestId),
             new IntegerTag(Constants.ExtendRequestPayload.AggregationTimeTagType, false, false, aggregationTime)
         })
         {
-            _requestId = (IntegerTag)this[0];
-            _aggregationTime = (IntegerTag)this[1];
+        }
+
+        /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
+            {
+                case Constants.PduPayload.RequestIdTagType:
+                    return _requestId = GetIntegerTag(childTag);
+                case Constants.ExtendRequestPayload.AggregationTimeTagType:
+                    return _aggregationTime = GetIntegerTag(childTag);
+                case Constants.ExtendRequestPayload.PublicationTimeTagType:
+                    return _publicationTime = GetIntegerTag(childTag);
+                default:
+                    return base.ParseChild(childTag);
+            }
+        }
+
+        /// <summary>
+        /// Validate the tag
+        /// </summary>
+        protected override void Validate(TagCounter tagCounter)
+        {
+            base.Validate(tagCounter);
+
+            if (tagCounter[Constants.PduPayload.RequestIdTagType] != 1)
+            {
+                throw new TlvException("Exactly one request id must exist in extend request payload.");
+            }
+
+            if (tagCounter[Constants.ExtendRequestPayload.AggregationTimeTagType] != 1)
+            {
+                throw new TlvException("Exactly one aggregation time must exist in extend request payload.");
+            }
+
+            if (tagCounter[Constants.ExtendRequestPayload.PublicationTimeTagType] > 1)
+            {
+                throw new TlvException("Only one publication time is allowed in extend request payload.");
+            }
         }
 
         /// <summary>

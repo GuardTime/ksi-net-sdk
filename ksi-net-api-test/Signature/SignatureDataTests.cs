@@ -143,7 +143,7 @@ namespace Guardtime.KSI.Test.Signature
                     new StringTag(Constants.SignatureData.CertificateRepositoryUriTagType, false, false, "Test CertificateRepositoryUri")
                 });
 
-            SignatureData tag2 = new SignatureData(tag);
+            SignatureData tag2 = new SignatureData(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
         }

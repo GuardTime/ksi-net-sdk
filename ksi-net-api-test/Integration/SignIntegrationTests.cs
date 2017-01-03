@@ -95,7 +95,7 @@ namespace Guardtime.KSI.Test.Integration
                 SignHash(ksi);
             });
 
-            Assert.AreEqual("Error occured during aggregation. Status: 258; Message: The request could not be authenticated.", ex.Message);
+            Assert.AreEqual("Server responded with error message. Status: 258; Message: The request could not be authenticated.", ex.Message);
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidSigningUrl))]
@@ -142,7 +142,7 @@ namespace Guardtime.KSI.Test.Integration
             {
                 SignHash(ksi);
             });
-            Assert.AreEqual("Error occured during aggregation. Status: 258; Message: The request could not be authenticated.", ex.Message);
+            Assert.AreEqual("Server responded with error message. Status: 258; Message: The request could not be authenticated.", ex.Message);
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCasesInvalidUrl))]
@@ -285,24 +285,6 @@ namespace Guardtime.KSI.Test.Integration
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
-        public void HttpGetAggregationConfigTest(Ksi ksi)
-        {
-            if (TestSetup.PduVersion == PduVersion.v1)
-            {
-                Exception ex = Assert.Throws<KsiServiceException>(delegate
-                {
-                    ksi.GetAggregationConfig();
-                });
-
-                Assert.That(ex.Message.StartsWith("Config request is not supported using PDU version v1"), "Unexpected exception message: " + ex.Message);
-            }
-            else
-            {
-                ksi.GetAggregationConfig();
-            }
-        }
-
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void HttpSignInvalidPduFormatTest(Ksi ksi)
         {
             KsiService service = GetHttpKsiService(PduVersion.v2);
@@ -324,6 +306,42 @@ namespace Guardtime.KSI.Test.Integration
         {
             KsiService service = GetHttpKsiServiceWithDefaultPduVersion();
             service.Sign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
+        }
+
+        [Test]
+        public void HttpAsyncSignHashTest()
+        {
+            byte[] data = Encoding.UTF8.GetBytes("This is my document");
+            KsiService service = GetHttpKsiService();
+
+            IDataHasher dataHasher = KsiProvider.CreateDataHasher();
+            dataHasher.AddData(data);
+            DataHash dataHash = dataHasher.GetHash();
+
+            ManualResetEvent waitHandle = new ManualResetEvent(false);
+            IKsiSignature signature = null;
+            IAsyncResult asyncResult = null;
+            string asyncState = "test state";
+            
+
+            asyncResult = service.BeginSign(dataHash, delegate(IAsyncResult ar)
+            {
+                signature = service.EndSign(asyncResult);
+                waitHandle.Set();
+            }, asyncState);
+            
+            waitHandle.WaitOne();
+
+            Assert.IsNotNull(signature, "Signature should not be null.");
+
+            VerificationContext verificationContext = new VerificationContext(signature)
+            {
+                DocumentHash = dataHash
+            };
+
+            InternalVerificationPolicy policy = new InternalVerificationPolicy();
+            VerificationResult verificationResult = policy.Verify(verificationContext);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode, "Signature should verify with internal policy");
         }
     }
 }

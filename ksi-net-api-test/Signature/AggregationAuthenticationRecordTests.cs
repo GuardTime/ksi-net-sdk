@@ -138,7 +138,7 @@ namespace Guardtime.KSI.Test.Signature
                         })
                 });
 
-            AggregationAuthenticationRecord tag2 = new AggregationAuthenticationRecord(tag);
+            AggregationAuthenticationRecord tag2 = new AggregationAuthenticationRecord(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
         }

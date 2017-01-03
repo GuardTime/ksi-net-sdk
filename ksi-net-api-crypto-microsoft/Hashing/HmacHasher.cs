@@ -45,7 +45,7 @@ namespace Guardtime.KSI.Crypto.Microsoft.Hashing
         ///     Calculate HMAC for data with given key.
         /// </summary>
         /// <param name="key">HMAC key</param>
-        /// <param name="data">HMAC calculation data</param>
+        /// <param name="data">data to calculate HMAC from</param>
         /// <returns>HMAC data hash</returns>
         public DataHash GetHash(byte[] key, byte[] data)
         {

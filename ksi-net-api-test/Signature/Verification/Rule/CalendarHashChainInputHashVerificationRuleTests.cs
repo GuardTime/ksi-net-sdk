@@ -61,7 +61,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             CalendarHashChainInputHashVerificationRule rule = new CalendarHashChainInputHashVerificationRule();
 
             // Check legacy signature calendar hash chain input hash
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Legacy_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -79,7 +79,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             CalendarHashChainInputHashVerificationRule rule = new CalendarHashChainInputHashVerificationRule();
 
             // Check signature calendar hash chain input hash
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -99,7 +99,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             // Check signature without calendar chain
             using (
                 FileStream stream =
-                    new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record),
+                    new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record),
                         FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
@@ -118,7 +118,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             CalendarHashChainInputHashVerificationRule rule = new CalendarHashChainInputHashVerificationRule();
 
             // Check invalid signature with invalid calendar chain input hash
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Invalid_Calendar_Chain_Input_Hash), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Invalid_Calendar_Chain_Input_Hash), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {

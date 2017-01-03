@@ -736,20 +736,20 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/service/aggregation-config-response-pdu.tlv.
-        /// </summary>
-        internal static string KsiService_AggregationConfigResponsePdu {
-            get {
-                return ResourceManager.GetString("KsiService_AggregationConfigResponsePdu", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to resources/service/aggregation-response-pdu.tlv.
         /// </summary>
         internal static string KsiService_AggregationResponsePdu {
             get {
                 return ResourceManager.GetString("KsiService_AggregationResponsePdu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/aggregation-response-pdu-error-payload.tlv.
+        /// </summary>
+        internal static string KsiService_AggregationResponsePdu_ErrorPayload {
+            get {
+                return ResourceManager.GetString("KsiService_AggregationResponsePdu_ErrorPayload", resourceCulture);
             }
         }
         
@@ -781,11 +781,29 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/service/aggregator-response-pdu-error-payload.tlv.
+        ///   Looks up a localized string similar to resources/service/aggregator-config-response-pdu.tlv.
         /// </summary>
-        internal static string KsiService_AggregatorResponsePdu_ErrorPayload {
+        internal static string KsiService_AggregatorConfigResponsePdu {
             get {
-                return ResourceManager.GetString("KsiService_AggregatorResponsePdu_ErrorPayload", resourceCulture);
+                return ResourceManager.GetString("KsiService_AggregatorConfigResponsePdu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/aggregator-config-response-pdu-0x0-int.tlv.
+        /// </summary>
+        internal static string KsiService_AggregatorConfigResponsePdu_0x0_Int {
+            get {
+                return ResourceManager.GetString("KsiService_AggregatorConfigResponsePdu_0x0_Int", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/extender-config-response-pdu.tlv.
+        /// </summary>
+        internal static string KsiService_ExtenderConfigResponsePdu {
+            get {
+                return ResourceManager.GetString("KsiService_ExtenderConfigResponsePdu", resourceCulture);
             }
         }
         
@@ -844,6 +862,24 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/service/legacy-aggregation-response-pdu.tlv.
+        /// </summary>
+        internal static string KsiService_LegacyAggregationResponsePdu {
+            get {
+                return ResourceManager.GetString("KsiService_LegacyAggregationResponsePdu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/legacy-aggregation-response-pdu-0x0-int.tlv.
+        /// </summary>
+        internal static string KsiService_LegacyAggregationResponsePdu_0x0_Int {
+            get {
+                return ResourceManager.GetString("KsiService_LegacyAggregationResponsePdu_0x0_Int", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/service/legacy-extend-response-pdu.tlv.
         /// </summary>
         internal static string KsiService_LegacyExtendResponsePdu {
@@ -862,453 +898,345 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/multi-signature/infile_2015-05-05.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-aggregation-chain-aggregation-time-mismatch.tlv.
         /// </summary>
-        internal static string KsiSignature_InputForMulti_20150505_Ok {
+        internal static string KsiSignature_Invalid_Aggregation_Chain_Aggregation_Time_Mismatch {
             get {
-                return ResourceManager.GetString("KsiSignature_InputForMulti_20150505_Ok", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Invalid_Aggregation_Chain_Aggregation_Time_Mismatch", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/multi-signature/infile_2015-05-28.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-aggregation-chain-index-mismatch.tlv.
         /// </summary>
-        internal static string KsiSignature_InputForMulti_20150528_Ok {
+        internal static string KsiSignature_Invalid_Aggregation_Chain_Index_Mismatch {
             get {
-                return ResourceManager.GetString("KsiSignature_InputForMulti_20150528_Ok", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Invalid_Aggregation_Chain_Index_Mismatch", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/multi-signature/infile_2015-06-22.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-aggregation-chain-input-hash.tlv.
         /// </summary>
-        internal static string KsiSignature_InputForMulti_20150622_Ok {
+        internal static string KsiSignature_Invalid_Aggregation_Chain_Input_Hash {
             get {
-                return ResourceManager.GetString("KsiSignature_InputForMulti_20150622_Ok", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Invalid_Aggregation_Chain_Input_Hash", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/multi-signature/TestData.png.2015-02.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-calendar-authentication-record-invalid-publication-hash.tlv.
         /// </summary>
-        internal static string KsiSignature_InputForMulti_Legacy_png_201502 {
+        internal static string KsiSignature_Invalid_Calendar_Authentication_Record_Invalid_Publication_Hash {
             get {
-                return ResourceManager.GetString("KsiSignature_InputForMulti_Legacy_png_201502", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Invalid_Calendar_Authentication_Record_Invalid_Publication_Hash", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/multi-signature/TestData.png.2015-04.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-calendar-authentication-record-invalid-publication-time.tlv.
         /// </summary>
-        internal static string KsiSignature_InputForMulti_Legacy_png_201504 {
+        internal static string KsiSignature_Invalid_Calendar_Authentication_Record_Invalid_Publication_Time {
             get {
-                return ResourceManager.GetString("KsiSignature_InputForMulti_Legacy_png_201504", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Invalid_Calendar_Authentication_Record_Invalid_Publication_Time", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/multi-signature/TestData.txt.2015-02.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-calendar-authentication-record-invalid-signature.tlv.
         /// </summary>
-        internal static string KsiSignature_InputForMulti_Legacy_txt_201502 {
+        internal static string KsiSignature_Invalid_Calendar_Authentication_Record_Invalid_Signature {
             get {
-                return ResourceManager.GetString("KsiSignature_InputForMulti_Legacy_txt_201502", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Invalid_Calendar_Authentication_Record_Invalid_Signature", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/multi-signature/TestData.txt.2015-05.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-calendar-hash-chain-input-hash.tlv.
         /// </summary>
-        internal static string KsiSignature_InputForMulti_Legacy_txt_201505 {
+        internal static string KsiSignature_Invalid_Calendar_Chain_Input_Hash {
             get {
-                return ResourceManager.GetString("KsiSignature_InputForMulti_Legacy_txt_201505", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Invalid_Calendar_Chain_Input_Hash", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/multi-signature/TestData.txt.2013-03.extended.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-calendar-hash-chain-publication-time.tlv.
         /// </summary>
-        internal static string KsiSignature_InputForMulti_Legacy_txt_extended_201303 {
+        internal static string KsiSignature_Invalid_Calendar_Chain_Publication_Time {
             get {
-                return ResourceManager.GetString("KsiSignature_InputForMulti_Legacy_txt_extended_201303", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Invalid_Calendar_Chain_Publication_Time", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/multi-signature/ksi-sha2-384.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-contain-both-publication-record-and-calendar-authentication-record.tlv.
         /// </summary>
-        internal static string KsiSignature_InputForMulti_sha2_384 {
+        internal static string KsiSignature_Invalid_Contain_Publication_Record_And_Calendar_Authentication_Record {
             get {
-                return ResourceManager.GetString("KsiSignature_InputForMulti_sha2_384", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Invalid_Contain_Publication_Record_And_Calendar_Authentication_Recor" +
+                        "d", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/multi-signature/ksi-sha2-512.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-extra-tag.tlv.
         /// </summary>
-        internal static string KsiSignature_InputForMulti_sha2_512 {
+        internal static string KsiSignature_Invalid_Extra_Tag {
             get {
-                return ResourceManager.GetString("KsiSignature_InputForMulti_sha2_512", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Invalid_Extra_Tag", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/multi-signature/signature_data_1_agg_time_1437657023.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-hash-algorithm.tlv.
         /// </summary>
-        internal static string KsiSignature_InputForMultiSameAggregationRound_1_Ok {
+        internal static string KsiSignature_Invalid_Hash_Algorithm {
             get {
-                return ResourceManager.GetString("KsiSignature_InputForMultiSameAggregationRound_1_Ok", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Invalid_Hash_Algorithm", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/multi-signature/signature_data_2_agg_time_1437657023.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-missing-aggregation-hash-chains.tlv.
         /// </summary>
-        internal static string KsiSignature_InputForMultiSameAggregationRound_2_Ok {
+        internal static string KsiSignature_Invalid_Missing_Aggregation_Hash_Chain {
             get {
-                return ResourceManager.GetString("KsiSignature_InputForMultiSameAggregationRound_2_Ok", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Invalid_Missing_Aggregation_Hash_Chain", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/multi-signature/signature_data_3_agg_time_1437657023.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-missing-calendar-auth-record.tlv.
         /// </summary>
-        internal static string KsiSignature_InputForMultiSameAggregationRound_3_Ok {
+        internal static string KsiSignature_Invalid_Missing_Calendar_Authentication_Record {
             get {
-                return ResourceManager.GetString("KsiSignature_InputForMultiSameAggregationRound_3_Ok", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Invalid_Missing_Calendar_Authentication_Record", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-aggregation-chain-aggregation-time-mismatch.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-Invalid-Missing-calendar-hash-chain.tlv.
         /// </summary>
-        internal static string KsiSignatureDo_Invalid_Aggregation_Chain_Aggregation_Time_Mismatch {
+        internal static string KsiSignature_Invalid_Missing_Calendar_Hash_Chain {
             get {
-                return ResourceManager.GetString("KsiSignatureDo_Invalid_Aggregation_Chain_Aggregation_Time_Mismatch", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Invalid_Missing_Calendar_Hash_Chain", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-aggregation-chain-index-mismatch.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-multiple-calendar-authentication-records.tlv.
         /// </summary>
-        internal static string KsiSignatureDo_Invalid_Aggregation_Chain_Index_Mismatch {
+        internal static string KsiSignature_Invalid_Multiple_Calendar_Authentication_Records {
             get {
-                return ResourceManager.GetString("KsiSignatureDo_Invalid_Aggregation_Chain_Index_Mismatch", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Invalid_Multiple_Calendar_Authentication_Records", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-aggregation-chain-input-hash.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-multiple-calendar-hash-chains.tlv.
         /// </summary>
-        internal static string KsiSignatureDo_Invalid_Aggregation_Chain_Input_Hash {
+        internal static string KsiSignature_Invalid_Multiple_Calendar_Hash_Chains {
             get {
-                return ResourceManager.GetString("KsiSignatureDo_Invalid_Aggregation_Chain_Input_Hash", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Invalid_Multiple_Calendar_Hash_Chains", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-calendar-authentication-record-invalid-publication-hash.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-multiple-publication-records.tlv.
         /// </summary>
-        internal static string KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Publication_Hash {
+        internal static string KsiSignature_Invalid_Multiple_Publication_Records {
             get {
-                return ResourceManager.GetString("KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Publication_Hash", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Invalid_Multiple_Publication_Records", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-calendar-authentication-record-invalid-publication-time.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-multiple-rfc3161-records.tlv.
         /// </summary>
-        internal static string KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Publication_Time {
+        internal static string KsiSignature_Invalid_Multiple_Rfc_3161_Records {
             get {
-                return ResourceManager.GetString("KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Publication_Time", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Invalid_Multiple_Rfc_3161_Records", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-calendar-authentication-record-invalid-signature.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-rfc3161-aggregation-time-mismatch.tlv.
         /// </summary>
-        internal static string KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Signature {
+        internal static string KsiSignature_Invalid_Rfc3161_Aggregation_Time_Mismatch {
             get {
-                return ResourceManager.GetString("KsiSignatureDo_Invalid_Calendar_Authentication_Record_Invalid_Signature", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Invalid_Rfc3161_Aggregation_Time_Mismatch", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-calendar-hash-chain-input-hash.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-chain-index-mismatch.tlv.
         /// </summary>
-        internal static string KsiSignatureDo_Invalid_Calendar_Chain_Input_Hash {
+        internal static string KsiSignature_Invalid_Rfc3161_Chain_Index_Mismatch {
             get {
-                return ResourceManager.GetString("KsiSignatureDo_Invalid_Calendar_Chain_Input_Hash", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Invalid_Rfc3161_Chain_Index_Mismatch", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-calendar-hash-chain-publication-time.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-type.tlv.
         /// </summary>
-        internal static string KsiSignatureDo_Invalid_Calendar_Chain_Publication_Time {
+        internal static string KsiSignature_Invalid_Type {
             get {
-                return ResourceManager.GetString("KsiSignatureDo_Invalid_Calendar_Chain_Publication_Time", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Invalid_Type", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-contain-both-publication-record-and-calendar-authentication-record.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-aggregation-root-hash.tlv.
         /// </summary>
-        internal static string KsiSignatureDo_Invalid_Contain_Publication_Record_And_Calendar_Authentication_Record {
+        internal static string KsiSignature_Invalid_With_Invalid_Aggregation_Root_Hash {
             get {
-                return ResourceManager.GetString("KsiSignatureDo_Invalid_Contain_Publication_Record_And_Calendar_Authentication_Rec" +
-                        "ord", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Invalid_With_Invalid_Aggregation_Root_Hash", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-extra-tag.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-with-invalid-publication-record.tlv.
         /// </summary>
-        internal static string KsiSignatureDo_Invalid_Extra_Tag {
+        internal static string KsiSignature_Invalid_With_Invalid_Publication_Record {
             get {
-                return ResourceManager.GetString("KsiSignatureDo_Invalid_Extra_Tag", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Invalid_With_Invalid_Publication_Record", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-hash-algorithm.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/legacy-ksi-signature-ok.tlv.
         /// </summary>
-        internal static string KsiSignatureDo_Invalid_Hash_Algorithm {
+        internal static string KsiSignature_Legacy_Ok {
             get {
-                return ResourceManager.GetString("KsiSignatureDo_Invalid_Hash_Algorithm", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Legacy_Ok", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-missing-aggregation-hash-chains.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/legacy-ksi-signature-ok-with-publication-record.tlv.
         /// </summary>
-        internal static string KsiSignatureDo_Invalid_Missing_Aggregation_Hash_Chain {
+        internal static string KsiSignature_Legacy_Ok_With_Publication_Record {
             get {
-                return ResourceManager.GetString("KsiSignatureDo_Invalid_Missing_Aggregation_Hash_Chain", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Legacy_Ok_With_Publication_Record", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-missing-calendar-auth-record.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-ok.tlv.
         /// </summary>
-        internal static string KsiSignatureDo_Invalid_Missing_Calendar_Authentication_Record {
+        internal static string KsiSignature_Ok {
             get {
-                return ResourceManager.GetString("KsiSignatureDo_Invalid_Missing_Calendar_Authentication_Record", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Ok", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-Invalid-Missing-calendar-hash-chain.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-ok-extended.tlv.
         /// </summary>
-        internal static string KsiSignatureDo_Invalid_Missing_Calendar_Hash_Chain {
+        internal static string KsiSignature_Ok_Extended {
             get {
-                return ResourceManager.GetString("KsiSignatureDo_Invalid_Missing_Calendar_Hash_Chain", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Ok_Extended", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-multiple-calendar-authentication-records.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-ok-identity.tlv.
         /// </summary>
-        internal static string KsiSignatureDo_Invalid_Multiple_Calendar_Authentication_Records {
+        internal static string KsiSignature_Ok_Identity {
             get {
-                return ResourceManager.GetString("KsiSignatureDo_Invalid_Multiple_Calendar_Authentication_Records", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Ok_Identity", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-multiple-calendar-hash-chains.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-level-3-ok.tlv.
         /// </summary>
-        internal static string KsiSignatureDo_Invalid_Multiple_Calendar_Hash_Chains {
+        internal static string KsiSignature_Ok_Level3 {
             get {
-                return ResourceManager.GetString("KsiSignatureDo_Invalid_Multiple_Calendar_Hash_Chains", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Ok_Level3", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-multiple-publication-records.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-ok-Missing-publication-record-and-calendar-authentication-record.tlv.
         /// </summary>
-        internal static string KsiSignatureDo_Invalid_Multiple_Publication_Records {
+        internal static string KsiSignature_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record {
             get {
-                return ResourceManager.GetString("KsiSignatureDo_Invalid_Multiple_Publication_Records", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-multiple-rfc3161-records.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-ok-new.tlv.
         /// </summary>
-        internal static string KsiSignatureDo_Invalid_Multiple_Rfc_3161_Records {
+        internal static string KsiSignature_Ok_New {
             get {
-                return ResourceManager.GetString("KsiSignatureDo_Invalid_Multiple_Rfc_3161_Records", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Ok_New", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-rfc3161-aggregation-time-mismatch.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-ok-with-mixed-aggregation-chains.tlv.
         /// </summary>
-        internal static string KsiSignatureDo_Invalid_Rfc3161_Aggregation_Time_Mismatch {
+        internal static string KsiSignature_Ok_With_Mixed_Aggregation_Chains {
             get {
-                return ResourceManager.GetString("KsiSignatureDo_Invalid_Rfc3161_Aggregation_Time_Mismatch", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Ok_With_Mixed_Aggregation_Chains", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-chain-index-mismatch.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-ok-with-publication-record.tlv.
         /// </summary>
-        internal static string KsiSignatureDo_Invalid_Rfc3161_Chain_Index_Mismatch {
+        internal static string KsiSignature_Ok_With_Publication_Record {
             get {
-                return ResourceManager.GetString("KsiSignatureDo_Invalid_Rfc3161_Chain_Index_Mismatch", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Ok_With_Publication_Record", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-type.tlv.
+        ///   Looks up a localized string similar to resources/trust/pkitrustprovider/custom-cert.pem.
         /// </summary>
-        internal static string KsiSignatureDo_Invalid_Type {
+        internal static string PkiTrustProvider_CustomCert {
             get {
-                return ResourceManager.GetString("KsiSignatureDo_Invalid_Type", resourceCulture);
+                return ResourceManager.GetString("PkiTrustProvider_CustomCert", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-aggregation-root-hash.tlv.
+        ///   Looks up a localized string similar to resources/trust/pkitrustprovider/custom-cert-invalid.pem.
         /// </summary>
-        internal static string KsiSignatureDo_Invalid_With_Invalid_Aggregation_Root_Hash {
+        internal static string PkiTrustProvider_CustomCertInvalid {
             get {
-                return ResourceManager.GetString("KsiSignatureDo_Invalid_With_Invalid_Aggregation_Root_Hash", resourceCulture);
+                return ResourceManager.GetString("PkiTrustProvider_CustomCertInvalid", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-invalid-with-invalid-publication-record.tlv.
+        ///   Looks up a localized string similar to resources/trust/pkitrustprovider/pubs-file-custom-cert.bin.
         /// </summary>
-        internal static string KsiSignatureDo_Invalid_With_Invalid_Publication_Record {
+        internal static string PkiTrustProvider_PubsFileCustomCert {
             get {
-                return ResourceManager.GetString("KsiSignatureDo_Invalid_With_Invalid_Publication_Record", resourceCulture);
+                return ResourceManager.GetString("PkiTrustProvider_PubsFileCustomCert", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/legacy-ksi-signature-ok.tlv.
+        ///   Looks up a localized string similar to resources/trust/pkitrustprovider/pubs-file-symantec.bin.
         /// </summary>
-        internal static string KsiSignatureDo_Legacy_Ok {
+        internal static string PkiTrustProvider_PubsFileSymantecCert {
             get {
-                return ResourceManager.GetString("KsiSignatureDo_Legacy_Ok", resourceCulture);
+                return ResourceManager.GetString("PkiTrustProvider_PubsFileSymantecCert", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/legacy-ksi-signature-ok-with-publication-record.tlv.
+        ///   Looks up a localized string similar to resources/trust/pkitrustprovider/symantec.cer.
         /// </summary>
-        internal static string KsiSignatureDo_Legacy_Ok_With_Publication_Record {
+        internal static string PkiTrustProvider_SymantecCert {
             get {
-                return ResourceManager.GetString("KsiSignatureDo_Legacy_Ok_With_Publication_Record", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-ok.tlv.
-        /// </summary>
-        internal static string KsiSignatureDo_Ok {
-            get {
-                return ResourceManager.GetString("KsiSignatureDo_Ok", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-ok-extended.tlv.
-        /// </summary>
-        internal static string KsiSignatureDo_Ok_Extended {
-            get {
-                return ResourceManager.GetString("KsiSignatureDo_Ok_Extended", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-ok-identity.tlv.
-        /// </summary>
-        internal static string KsiSignatureDo_Ok_Identity {
-            get {
-                return ResourceManager.GetString("KsiSignatureDo_Ok_Identity", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-level-3-ok.tlv.
-        /// </summary>
-        internal static string KsiSignatureDo_Ok_Level3 {
-            get {
-                return ResourceManager.GetString("KsiSignatureDo_Ok_Level3", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-ok-Missing-publication-record-and-calendar-authentication-record.tlv.
-        /// </summary>
-        internal static string KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record {
-            get {
-                return ResourceManager.GetString("KsiSignatureDo_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-ok-new.tlv.
-        /// </summary>
-        internal static string KsiSignatureDo_Ok_New {
-            get {
-                return ResourceManager.GetString("KsiSignatureDo_Ok_New", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-ok-with-mixed-aggregation-chains.tlv.
-        /// </summary>
-        internal static string KsiSignatureDo_Ok_With_Mixed_Aggregation_Chains {
-            get {
-                return ResourceManager.GetString("KsiSignatureDo_Ok_With_Mixed_Aggregation_Chains", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature-do/ksi-signature-ok-with-publication-record.tlv.
-        /// </summary>
-        internal static string KsiSignatureDo_Ok_With_Publication_Record {
-            get {
-                return ResourceManager.GetString("KsiSignatureDo_Ok_With_Publication_Record", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/signature/multi-signature/ksi-multi-signature-ok.tlv.
-        /// </summary>
-        internal static string MultiSignature_Ok {
-            get {
-                return ResourceManager.GetString("MultiSignature_Ok", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/signature/multi-signature/multi-signature-5.tlv.
-        /// </summary>
-        internal static string MultiSignatureWith5UniSignatures_Ok {
-            get {
-                return ResourceManager.GetString("MultiSignatureWith5UniSignatures_Ok", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/signature/multi-signature/ksi-multi-signature-padding-ok.tlv.
-        /// </summary>
-        internal static string MultiSignatureWithMetadataPadding_Ok {
-            get {
-                return ResourceManager.GetString("MultiSignatureWithMetadataPadding_Ok", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/signature/multi-signature/ksi-multi-signature-padding-tlv16-invalid.tlv.
-        /// </summary>
-        internal static string MultiSignatureWithMetadataPaddingTlv16_Invalid {
-            get {
-                return ResourceManager.GetString("MultiSignatureWithMetadataPaddingTlv16_Invalid", resourceCulture);
+                return ResourceManager.GetString("PkiTrustProvider_SymantecCert", resourceCulture);
             }
         }
         

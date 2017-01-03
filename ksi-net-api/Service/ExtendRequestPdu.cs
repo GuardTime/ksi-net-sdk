@@ -25,35 +25,19 @@ namespace Guardtime.KSI.Service
     /// <summary>
     ///     Extend request PDU.
     /// </summary>
-    public sealed class ExtendRequestPdu : KsiPdu
+    public sealed class ExtendRequestPdu : Pdu
     {
+        /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.ExtendRequestPdu.TagType;
+
         /// <summary>
         ///     Create extend request PDU from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         public ExtendRequestPdu(ITlvTag tag) : base(tag)
         {
-            CheckTagType(Constants.ExtendRequestPdu.TagType);
-
-            for (int i = 0; i < Count; i++)
-            {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.ExtendRequestPayload.TagType:
-                        ExtendRequestPayload extendRequestPayload = new ExtendRequestPayload(childTag);
-                        this[i] = extendRequestPayload;
-                        Payloads.Add(extendRequestPayload);
-                        break;
-                    case Constants.KsiPduHeader.TagType:
-                    case Constants.KsiPdu.MacTagType:
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
-            }
         }
 
         /// <summary>
@@ -61,12 +45,31 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="header">KSI header</param>
         /// <param name="payload">Extend pdu payload</param>
-        /// <param name="hmacAlgorithm">HMAC algorithm</param>
+        /// <param name="macAlgorithm">MAC algorithm</param>
         /// <param name="key">hmac key</param>
-        public ExtendRequestPdu(KsiPduHeader header, KsiPduPayload payload, HashAlgorithm hmacAlgorithm, byte[] key)
-            : base(Constants.ExtendRequestPdu.TagType, header, payload, hmacAlgorithm, key)
+        public ExtendRequestPdu(PduHeader header, PduPayload payload, HashAlgorithm macAlgorithm, byte[] key)
+            : base(Constants.ExtendRequestPdu.TagType, header, payload, macAlgorithm, key)
         {
-            Payloads.Add(payload);
+        }
+
+        /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
+            {
+                case Constants.ExtendRequestPayload.TagType:
+                    ExtendRequestPayload extendRequestPayload = childTag as ExtendRequestPayload ?? new ExtendRequestPayload(childTag);
+                    Payloads.Add(extendRequestPayload);
+                    return extendRequestPayload;
+                case Constants.ExtenderConfigRequestPayload.TagType:
+                    ExtenderConfigRequestPayload configRequestPayload = childTag as ExtenderConfigRequestPayload ?? new ExtenderConfigRequestPayload(childTag);
+                    Payloads.Add(configRequestPayload);
+                    return configRequestPayload;
+                default:
+                    return base.ParseChild(childTag);
+            }
         }
     }
 }

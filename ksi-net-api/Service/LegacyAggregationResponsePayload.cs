@@ -27,11 +27,12 @@ namespace Guardtime.KSI.Service
     ///     Aggregation response payload.
     /// </summary>
     [Obsolete]
-    public sealed class LegacyAggregationResponsePayload : KsiPduPayload
+    public sealed class LegacyAggregationResponsePayload : RequestResponsePayload
     {
-        private readonly StringTag _errorMessage;
-        private readonly IntegerTag _requestId;
-        private readonly IntegerTag _status;
+        /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.AggregationResponsePayload.LegacyTagType;
 
         /// <summary>
         ///     Create aggregation response payload from TLV element.
@@ -39,92 +40,47 @@ namespace Guardtime.KSI.Service
         /// <param name="tag">TLV element</param>
         public LegacyAggregationResponsePayload(ITlvTag tag) : base(tag)
         {
-            CheckTagType(Constants.AggregationResponsePayload.LegacyTagType);
+        }
 
-            int requestIdCount = 0;
-            int statusCount = 0;
-            int errorMessageCount = 0;
-            int configCount = 0;
-            int requestAcknowledgmentCount = 0;
-
-            for (int i = 0; i < Count; i++)
+        /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
             {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.AggregationResponsePayload.RequestIdTagType:
-                        this[i] = _requestId = new IntegerTag(childTag);
-                        requestIdCount++;
-                        break;
-                    case Constants.KsiPduPayload.StatusTagType:
-                        this[i] = _status = new IntegerTag(childTag);
-                        statusCount++;
-                        break;
-                    case Constants.KsiPduPayload.ErrorMessageTagType:
-                        this[i] = _errorMessage = new StringTag(childTag);
-                        errorMessageCount++;
-                        break;
-                    case Constants.AggregationResponsePayload.ConfigTagType:
-                        this[i] = new RawTag(childTag);
-                        configCount++;
-                        break;
-                    case Constants.AggregationResponsePayload.RequestAcknowledgmentTagType:
-                        this[i] = new RawTag(childTag);
-                        requestAcknowledgmentCount++;
-                        break;
-                    case Constants.AggregationHashChain.TagType:
-                    case Constants.CalendarHashChain.TagType:
-                    case Constants.PublicationRecord.TagTypeInSignature:
-                    case Constants.AggregationAuthenticationRecord.TagType:
-                    case Constants.CalendarAuthenticationRecord.TagType:
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
-            }
-
-            if (requestIdCount != 1)
-            {
-                throw new TlvException("Exactly one request id must exist in aggregation response payload.");
-            }
-
-            // TODO: Should be mandatory element, but server side is broken.
-            if (statusCount > 1)
-            {
-                throw new TlvException("Exactly one status code must exist in aggregation response payload.");
-            }
-
-            if (errorMessageCount > 1)
-            {
-                throw new TlvException("Only one error message is allowed in aggregation response payload.");
-            }
-
-            if (configCount > 1)
-            {
-                throw new TlvException("Only one config is allowed in aggregation response payload.");
-            }
-
-            if (requestAcknowledgmentCount > 1)
-            {
-                throw new TlvException("Only one request acknowledgment is allowed in aggregation response payload.");
+                case Constants.AggregationResponsePayload.ConfigTagType:
+                    return GetRawTag(childTag);
+                case Constants.AggregationResponsePayload.RequestAcknowledgmentTagType:
+                    return GetRawTag(childTag);
+                // following fields will be used to create KSI signature and parsed when creating the signature
+                case Constants.AggregationHashChain.TagType:
+                case Constants.CalendarHashChain.TagType:
+                case Constants.PublicationRecord.TagTypeInSignature:
+                case Constants.AggregationAuthenticationRecord.TagType:
+                case Constants.CalendarAuthenticationRecord.TagType:
+                    return childTag;
+                default:
+                    return base.ParseChild(childTag);
             }
         }
 
         /// <summary>
-        ///     Get error message if it exists.
+        /// Validate the tag
         /// </summary>
-        public string ErrorMessage => _errorMessage?.Value;
+        protected override void Validate(TagCounter tagCounter)
+        {
+            base.Validate(tagCounter);
 
-        /// <summary>
-        ///     Get request ID.
-        /// </summary>
-        public ulong RequestId => _requestId.Value;
+            if (tagCounter[Constants.AggregationResponsePayload.ConfigTagType] > 1)
+            {
+                throw new TlvException("Only one config is allowed in aggregation response payload.");
+            }
 
-        /// <summary>
-        ///     Get status code.
-        /// </summary>
-        public ulong Status => _status?.Value ?? 0;
+            if (tagCounter[Constants.AggregationResponsePayload.RequestAcknowledgmentTagType] > 1)
+            {
+                throw new TlvException("Only one request acknowledgment is allowed in aggregation response payload.");
+            }
+        }
     }
 }

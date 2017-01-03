@@ -129,12 +129,12 @@ namespace Guardtime.KSI
         }
 
         /// <summary>
-        /// Get additional aggregation configuration data
+        /// Get additional aggregator configuration data
         /// </summary>
-        /// <returns>Aggregation configuration response payload</returns>
-        public AggregationConfigResponsePayload GetAggregationConfig()
+        /// <returns>Aggregator configuration data</returns>
+        public AggregatorConfig GetAggregatorConfig()
         {
-            return _ksiService.GetAggregationConfig();
+            return _ksiService.GetAggregatorConfig();
         }
 
         /// <summary>
@@ -247,6 +247,15 @@ namespace Guardtime.KSI
             }
 
             return Extend(signature, publicationRecord);
+        }
+
+        /// <summary>
+        /// Get additional extender configuration data
+        /// </summary>
+        /// <returns>Extender configuration data</returns>
+        public ExtenderConfig GetExtenderConfig()
+        {
+            return _ksiService.GetExtenderConfig();
         }
 
         /// <summary>

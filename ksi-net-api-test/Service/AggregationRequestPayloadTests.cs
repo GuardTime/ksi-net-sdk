@@ -32,14 +32,14 @@ namespace Guardtime.KSI.Test.Service
         {
             AggregationRequestPayload tag = TestUtil.GetCompositeTag<AggregationRequestPayload>(Constants.AggregationRequestPayload.TagType, new ITlvTag[]
             {
-                new IntegerTag(Constants.AggregationRequestPayload.RequestIdTagType, false, false, 1),
+                new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 1),
                 new ImprintTag(Constants.AggregationRequestPayload.RequestHashTagType, false, false,
                     new DataHash(HashAlgorithm.Sha2256,
                         new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
                 new IntegerTag(Constants.AggregationRequestPayload.RequestLevelTagType, false, false, 0),
             });
 
-            AggregationRequestPayload tag2 = new AggregationRequestPayload(tag);
+            AggregationRequestPayload tag2 = new AggregationRequestPayload(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
         }

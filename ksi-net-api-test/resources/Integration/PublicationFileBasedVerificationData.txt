@@ -1,5 +1,5 @@
 #signature file location with full path;signature read-in fails(true / false);expected verification result code(ok, fail, na);expected exception class (" " if none);expected excpetion message (" " if none);expected rule that fails (" " if none)
-resources/signature/ksi-signature-do/ksi-signature-ok.tlv;false;Ok; ; ; 
+resources/signature/ksi-signature/ksi-signature-ok.tlv;false;Ok; ; ; 
 resources/signature/integration-test-signatures/ok-sig-2014-06-2-extra-element-in-aggregation.ksig;false;Ok; ; ; 
 resources/signature/integration-test-signatures/ok-sig-2014-06-2-extra-element-in-aggregation-lvl2.ksig;false;Ok; ; ; 
 resources/signature/integration-test-signatures/ok-sig-2014-06-2-extra-element-in-calendar-authentication-lvl1.ksig;false;Ok; ; ; 

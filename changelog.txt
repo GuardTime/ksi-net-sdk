@@ -1,3 +1,15 @@
+Version 3.7
+
+2017-01-04 3.7.X
+
+* BUGFIX: Fixed PKCS#7 signature verification (KSINETAPI-100)
+* BUGFIX: Fixed PDU HMAC calculation (KSINETAPI-98)
+* BUGFIX: Made status field mandatory in aggregation response payload (KSINETAPI-97)
+* IMPROVEMENT: Refactored KsiService and CompositeTag (and classes inheriting from it)
+* BUGFIX: Added HMAC check when payload contains an error message (KSINETAPI-93)
+* BUGFIX: Added response ID check to PDU v1 response (KSINETAPI-92)
+* IMPROVEMENT: Added functionality for requesting configuration from extender (KSINETAPI-86)
+
 Version 3.6
 
 2016-11-02 3.6.188

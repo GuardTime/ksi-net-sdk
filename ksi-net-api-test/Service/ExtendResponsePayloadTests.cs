@@ -38,9 +38,9 @@ namespace Guardtime.KSI.Test.Service
 
             ExtendResponsePayload tag = TestUtil.GetCompositeTag<ExtendResponsePayload>(Constants.ExtendResponsePayload.TagType, new ITlvTag[]
             {
-                new IntegerTag(Constants.ExtendResponsePayload.RequestIdTagType, false, false, 2),
-                new IntegerTag(Constants.KsiPduPayload.StatusTagType, false, false, 0),
-                new StringTag(Constants.KsiPduPayload.ErrorMessageTagType, false, false, "Test error message."),
+                new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 2),
+                new IntegerTag(Constants.PduPayload.StatusTagType, false, false, 0),
+                new StringTag(Constants.PduPayload.ErrorMessageTagType, false, false, "Test error message."),
                 new IntegerTag(Constants.ExtendResponsePayload.CalendarLastTimeTagType, false, false, 1),
                 TestUtil.GetCompositeTag<CalendarHashChain>(Constants.CalendarHashChain.TagType,
                     new ITlvTag[]
@@ -57,7 +57,7 @@ namespace Guardtime.KSI.Test.Service
                     })
             });
 
-            ExtendResponsePayload tag2 = new ExtendResponsePayload(tag);
+            ExtendResponsePayload tag2 = new ExtendResponsePayload(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
         }

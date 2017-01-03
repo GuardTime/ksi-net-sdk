@@ -27,12 +27,16 @@ namespace Guardtime.KSI.Publication
     public sealed class PublicationRecordInPublicationFile : PublicationRecord
     {
         /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.PublicationRecord.TagTypeInPublicationsFile;
+
+        /// <summary>
         ///     Create new publication record TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         public PublicationRecordInPublicationFile(ITlvTag tag) : base(tag)
         {
-            CheckTagType(Constants.PublicationRecord.TagTypeInPublicationsFile);
         }
 
         /// <summary>
@@ -41,7 +45,7 @@ namespace Guardtime.KSI.Publication
         /// <returns></returns>
         public PublicationRecordInSignature ConvertToPublicationRecordInSignature()
         {
-            return new PublicationRecordInSignature(NonCritical, Forward, EncodeValue());
+            return new PublicationRecordInSignature(NonCritical, Forward, GetChildrenArray());
         }
     }
 }

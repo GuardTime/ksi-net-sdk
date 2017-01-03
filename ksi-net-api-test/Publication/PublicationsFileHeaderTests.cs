@@ -38,7 +38,7 @@ namespace Guardtime.KSI.Test.Publication
                         new StringTag(Constants.PublicationsFileHeader.RepositoryUriTagType, false, false, "Test repository uri"),
                     });
 
-            PublicationsFileHeader tag2 = new PublicationsFileHeader(tag);
+            PublicationsFileHeader tag2 = new PublicationsFileHeader(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
         }

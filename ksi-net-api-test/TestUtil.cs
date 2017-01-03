@@ -27,40 +27,37 @@ namespace Guardtime.KSI.Test
 {
     public class TestUtil
     {
-        public static T GetCompositeTag<T>(uint type, ITlvTag[] values)
+        public static T GetCompositeTag<T>(uint type, ITlvTag[] childTags)
         {
-            return (T)GetCompositeTag(typeof(T), type, values);
+            return (T)GetCompositeTag(typeof(T), type, childTags);
         }
 
-        public static ITlvTag GetCompositeTag(Type type, uint tagType, ITlvTag[] values, params object[] constructorArgument)
+        public static ITlvTag GetCompositeTag(Type type, uint tagType, ITlvTag[] childTags)
         {
             RawTag raw;
 
             using (TlvWriter writer = new TlvWriter(new MemoryStream()))
             {
-                foreach (ITlvTag tag in values)
+                foreach (ITlvTag tag in childTags)
                 {
                     writer.WriteTag(tag);
                 }
 
                 raw = new RawTag(tagType, false, false, ((MemoryStream)writer.BaseStream).ToArray());
             }
-            object[] args = new object[constructorArgument.Length + 1];
-
-            args[0] = raw;
-            Array.Copy(constructorArgument, 0, args, 1, constructorArgument.Length);
+            object[] args = new object[] { raw };
 
             ITlvTag value = (ITlvTag)Activator.CreateInstance(type, args);
 
             // set _value inside CompositeTag
-            FieldInfo field = typeof(CompositeTag).GetField("_value", BindingFlags.Instance | BindingFlags.NonPublic);
+            FieldInfo field = typeof(CompositeTag).GetField("_childTags", BindingFlags.Instance | BindingFlags.NonPublic);
 
             if (field == null)
             {
                 throw new Exception("Cannot find field '_value' inside CompositeTag class.");
             }
 
-            field.SetValue(value, new List<ITlvTag>(values));
+            field.SetValue(value, new List<ITlvTag>(childTags));
 
             return value;
         }

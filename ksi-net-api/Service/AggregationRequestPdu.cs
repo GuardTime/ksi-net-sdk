@@ -25,53 +25,51 @@ namespace Guardtime.KSI.Service
     /// <summary>
     ///     Aggregation request message PDU.
     /// </summary>
-    public sealed class AggregationRequestPdu : KsiPdu
+    public sealed class AggregationRequestPdu : Pdu
     {
+        /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.AggregationRequestPdu.TagType;
+
         /// <summary>
         ///     Create aggregation request pdu TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         public AggregationRequestPdu(ITlvTag tag) : base(tag)
         {
-            CheckTagType(Constants.AggregationRequestPdu.TagType);
-
-            for (int i = 0; i < Count; i++)
-            {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.AggregationRequestPayload.TagType:
-                        AggregationRequestPayload aggregationRequestPayload = new AggregationRequestPayload(childTag);
-                        this[i] = aggregationRequestPayload;
-                        Payloads.Add(aggregationRequestPayload);
-                        break;
-                    case Constants.AggregationConfigRequestPayload.TagType:
-                        AggregationConfigRequestPayload aggregationConfigRequestPayload = new AggregationConfigRequestPayload(childTag);
-                        this[i] = aggregationConfigRequestPayload;
-                        Payloads.Add(aggregationConfigRequestPayload);
-                        break;
-                    case Constants.KsiPduHeader.TagType:
-                    case Constants.KsiPdu.MacTagType:
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
-            }
         }
 
         /// <summary>
         ///     Create aggregation request pdu TLV element from KSI header and payload.
         /// </summary>
-        /// <param name="header">KSI PDU header</param>
+        /// <param name="header">PDU header</param>
         /// <param name="payload">aggregation payload</param>
-        /// <param name="hmacAlgorithm">HMAC algorithm</param>
+        /// <param name="macAlgorithm">MAC algorithm</param>
         /// <param name="key">hmac key</param>
-        public AggregationRequestPdu(KsiPduHeader header, KsiPduPayload payload, HashAlgorithm hmacAlgorithm, byte[] key)
-            : base(Constants.AggregationRequestPdu.TagType, header, payload, hmacAlgorithm, key)
+        public AggregationRequestPdu(PduHeader header, PduPayload payload, HashAlgorithm macAlgorithm, byte[] key)
+            : base(Constants.AggregationRequestPdu.TagType, header, payload, macAlgorithm, key)
         {
-            Payloads.Add(payload);
+        }
+
+        /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
+            {
+                case Constants.AggregationRequestPayload.TagType:
+                    AggregationRequestPayload aggregationRequestPayload = childTag as AggregationRequestPayload ?? new AggregationRequestPayload(childTag);
+                    Payloads.Add(aggregationRequestPayload);
+                    return aggregationRequestPayload;
+                case Constants.AggregatorConfigRequestPayload.TagType:
+                    AggregatorConfigRequestPayload aggregatorConfigRequestPayload = childTag as AggregatorConfigRequestPayload ?? new AggregatorConfigRequestPayload(childTag);
+                    Payloads.Add(aggregatorConfigRequestPayload);
+                    return aggregatorConfigRequestPayload;
+                default:
+                    return base.ParseChild(childTag);
+            }
         }
     }
 }

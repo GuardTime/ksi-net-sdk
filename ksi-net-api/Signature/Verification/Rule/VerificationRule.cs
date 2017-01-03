@@ -237,9 +237,9 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         /// <param name="context">verification context</param>
         /// <param name="publicationTime">publication time</param>
         /// <returns></returns>
-        public static CalendarHashChain GetExtendedTimeCalendarHashChain(IVerificationContext context, ulong publicationTime)
+        public static CalendarHashChain GetExtendedCalendarHashChain(IVerificationContext context, ulong publicationTime)
         {
-            CalendarHashChain hashChain = context.GetExtendedTimeCalendarHashChain(publicationTime);
+            CalendarHashChain hashChain = context.GetExtendedCalendarHashChain(publicationTime);
 
             if (hashChain == null)
             {

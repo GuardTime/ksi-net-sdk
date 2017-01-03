@@ -18,8 +18,6 @@
  */
 
 using System.Collections.ObjectModel;
-using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Hashing;
 using NLog;
 
 namespace Guardtime.KSI.Signature.Verification.Rule

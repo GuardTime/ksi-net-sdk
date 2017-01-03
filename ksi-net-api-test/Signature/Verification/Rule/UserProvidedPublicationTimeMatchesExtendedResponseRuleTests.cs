@@ -67,7 +67,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             UserProvidedPublicationTimeMatchesExtendedResponseRule rule = new UserProvidedPublicationTimeMatchesExtendedResponseRule();
 
             // Check signature aggregation time with invalid registration time
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_With_Publication_Record), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -91,7 +91,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             UserProvidedPublicationTimeMatchesExtendedResponseRule rule = new UserProvidedPublicationTimeMatchesExtendedResponseRule();
 
             // Check publication record publication time with invalid publication time
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -115,7 +115,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             UserProvidedPublicationTimeMatchesExtendedResponseRule rule = new UserProvidedPublicationTimeMatchesExtendedResponseRule();
 
             // Check signature
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_With_Publication_Record), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_With_Publication_Record), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -139,7 +139,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             UserProvidedPublicationTimeMatchesExtendedResponseRule rule = new UserProvidedPublicationTimeMatchesExtendedResponseRule();
 
             // Check legacy signature
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Legacy_Ok_With_Publication_Record), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok_With_Publication_Record), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -162,7 +162,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             UserProvidedPublicationTimeMatchesExtendedResponseRule rule = new UserProvidedPublicationTimeMatchesExtendedResponseRule();
 
             // Check invalid extended calendar chain from context extension function
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 TestVerificationContextFaultyFunctions context = new TestVerificationContextFaultyFunctions()
                 {
@@ -183,7 +183,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             UserProvidedPublicationTimeMatchesExtendedResponseRule rule = new UserProvidedPublicationTimeMatchesExtendedResponseRule();
 
             // Check signature without user publication
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {

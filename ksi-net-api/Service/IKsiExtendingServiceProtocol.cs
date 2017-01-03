@@ -27,7 +27,7 @@ namespace Guardtime.KSI.Service
     public interface IKsiExtendingServiceProtocol
     {
         /// <summary>
-        ///     Async begin extend signature.
+        ///     Async begin extend.
         /// </summary>
         /// <param name="data">extend request bytes</param>
         /// <param name="requestId">request id</param>
@@ -37,7 +37,7 @@ namespace Guardtime.KSI.Service
         IAsyncResult BeginExtend(byte[] data, ulong requestId, AsyncCallback callback, object asyncState);
 
         /// <summary>
-        ///     Async end extend signature.
+        ///     Async end extend.
         /// </summary>
         /// <param name="asyncResult">async result</param>
         /// <returns>extend response bytes</returns>

@@ -38,7 +38,7 @@ namespace Guardtime.KSI.Test.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidExtendingPass))]
         public void ExtendInvalidPassTest(Ksi ksi)
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
 
@@ -47,14 +47,14 @@ namespace Guardtime.KSI.Test.Integration
                     ksi.Extend(ksiSignature);
                 });
 
-                Assert.AreEqual("Error occured during extending. Status: 258; Message: The request could not be authenticated.", ex.Message);
+                Assert.AreEqual("Server responded with error message. Status: 258; Message: The request could not be authenticated.", ex.Message);
             }
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidExtendingUrl))]
         public void ExtendInvalidUrlTest(Ksi ksi)
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
 
@@ -71,7 +71,7 @@ namespace Guardtime.KSI.Test.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidSigningUrl))]
         public void ExtendSuccessWithInvalidSigningUrlTest(Ksi ksi)
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
 
@@ -85,7 +85,7 @@ namespace Guardtime.KSI.Test.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidSigningPass))]
         public void ExtendSuccessWithInvalidSigningPassTest(Ksi ksi)
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
 
@@ -101,7 +101,7 @@ namespace Guardtime.KSI.Test.Integration
         {
             PublicationBasedVerificationPolicy rule = new PublicationBasedVerificationPolicy();
 
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
                 IKsiSignature extendedSignature = ksi.Extend(ksiSignature);
@@ -120,7 +120,7 @@ namespace Guardtime.KSI.Test.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void ExtendInvalidSignatureTest(Ksi ksi)
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Invalid_Aggregation_Chain_Input_Hash), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Invalid_Aggregation_Chain_Input_Hash), FileMode.Open))
             {
                 IKsiSignature ksiSignature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream);
 
@@ -140,7 +140,7 @@ namespace Guardtime.KSI.Test.Integration
         {
             PublicationBasedVerificationPolicy rule = new PublicationBasedVerificationPolicy();
 
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 PublicationData publicationData = new PublicationData("AAAAAA-CW45II-AAKWRK-F7FBNM-KB6FNV-DYYFW7-PJQN6F-JKZWBQ-3OQYZO-HCB7RA-YNYAGA-ODRL2V");
 
@@ -162,7 +162,7 @@ namespace Guardtime.KSI.Test.Integration
         {
             PublicationBasedVerificationPolicy rule = new PublicationBasedVerificationPolicy();
 
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 // publication data that is not included in publications file. Time: 2016-07-12 00:00:00 UTC
                 PublicationData publicationData = new PublicationData("AAAAAA-CXQQZQ-AAPGJF-HGNMUN-DXEIQW-NJZZOE-J76OK4-BV3FKY-AEAWIP-KSPZPW-EJKVAI-JPOOR7");
@@ -183,7 +183,7 @@ namespace Guardtime.KSI.Test.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void InvalidExtendAndVerifyToUserProvidedPublicationFromTestCoreTest(Ksi ksi)
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 // publication data from Test core, not included in publications file. Time: 2016-07-12 00:00:00 UTC
                 PublicationData publicationData = new PublicationData("AAAAAA-CXQQZQ-AAOSZH-ONCB4K-TFGPBW-R6S6TF-6EW4DU-4QMP7X-GI2VCO-TNGAZM-EV6AZR-464IOA");
@@ -204,7 +204,7 @@ namespace Guardtime.KSI.Test.Integration
         {
             PublicationBasedVerificationPolicy rule = new PublicationBasedVerificationPolicy();
 
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 // publication data from Test core. not included in publications file. Time: 2016-07-12 00:00:00 UTC
                 PublicationData publicationData = new PublicationData("AAAAAA-CXQQZQ-AAOSZH-ONCB4K-TFGPBW-R6S6TF-6EW4DU-4QMP7X-GI2VCO-TNGAZM-EV6AZR-464IOA");
@@ -227,7 +227,7 @@ namespace Guardtime.KSI.Test.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void InvalidExtendToUserProvidedPublicationTest(Ksi ksi)
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 // publication data with modified hash
                 PublicationData publicationData = new PublicationData("AAAAAA-CW45II-AAIYPA-UJ4GRT-HXMFBE-OTB4AB-XH3PT3-KNIKGV-PYCJXU-HL2TN4-RG6SCA-ZP3ZLX");
@@ -246,8 +246,8 @@ namespace Guardtime.KSI.Test.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void ExtendToOtherExtendedSignatureAndVerifyWithUserProvidedPublication(Ksi ksi)
         {
-            using (FileStream signatureToExtend = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open),
-                              signatureToGetPubRecord = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok_Extended), FileMode.Open))
+            using (FileStream signatureToExtend = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open),
+                              signatureToGetPubRecord = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_Extended), FileMode.Open))
             {
                 IKsiSignature ksiSignatureToExtend = new KsiSignatureFactory().Create(signatureToExtend);
                 IKsiSignature ksiSignatureForPublicationRecord = new KsiSignatureFactory().Create(signatureToGetPubRecord);
@@ -261,7 +261,7 @@ namespace Guardtime.KSI.Test.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void ExtendToNearestPublicationTest(Ksi ksi)
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
                 IKsiSignature extendedToLatest = ksi.Extend(ksiSignature, ksi.GetPublicationsFile().GetLatestPublication());
@@ -281,7 +281,7 @@ namespace Guardtime.KSI.Test.Integration
             string errorMessage = null;
             MemoryStream ms = new MemoryStream();
 
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignatureDo_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 stream.CopyTo(ms);
             }

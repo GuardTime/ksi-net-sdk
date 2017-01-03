@@ -29,10 +29,15 @@ namespace Guardtime.KSI.Service
     public sealed class LegacyAggregationErrorPayload : ErrorPayload
     {
         /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.LegacyAggregationErrorPayload.TagType;
+
+        /// <summary>
         ///     Create aggregation error payload TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        public LegacyAggregationErrorPayload(ITlvTag tag) : base(tag, Constants.AggregationErrorPayload.LegacyTagType)
+        public LegacyAggregationErrorPayload(ITlvTag tag) : base(tag)
         {
         }
     }

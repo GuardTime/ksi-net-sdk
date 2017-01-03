@@ -17,7 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Service
@@ -25,63 +24,19 @@ namespace Guardtime.KSI.Service
     /// <summary>
     ///     Aggregation Error payload TLV element.
     /// </summary>
-    public abstract class ErrorPayload : KsiPduPayload
+    public abstract class ErrorPayload : ResponsePayload
     {
+        /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.ErrorPayload.TagType;
+
         /// <summary>
         ///     Create aggregation error payload TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
-        /// <param name="expectedTagType">expected tag type</param>
-        protected ErrorPayload(ITlvTag tag, uint expectedTagType) : base(tag)
+        protected ErrorPayload(ITlvTag tag) : base(tag)
         {
-            CheckTagType(expectedTagType);
-
-            int statusCount = 0;
-            int errorMessageCount = 0;
-
-            for (int i = 0; i < Count; i++)
-            {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.KsiPduPayload.StatusTagType:
-                        IntegerTag statusTag = new IntegerTag(childTag);
-                        Status = statusTag.Value;
-                        statusCount++;
-                        this[i] = statusTag;
-                        break;
-                    case Constants.KsiPduPayload.ErrorMessageTagType:
-                        StringTag errorMessageTag = new StringTag(childTag);
-                        ErrorMessage = errorMessageTag.Value;
-                        errorMessageCount++;
-                        this[i] = errorMessageTag;
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
-            }
-
-            if (statusCount != 1)
-            {
-                throw new TlvException("Exactly one status code must exist in aggregation error.");
-            }
-
-            if (errorMessageCount > 1)
-            {
-                throw new TlvException("Only one error message is allowed in aggregation error.");
-            }
         }
-
-        /// <summary>
-        ///     Get aggregation error status code.
-        /// </summary>
-        public ulong Status { get; }
-
-        /// <summary>
-        ///     Get aggregation error message if it exists.
-        /// </summary>
-        public string ErrorMessage { get; }
     }
 }

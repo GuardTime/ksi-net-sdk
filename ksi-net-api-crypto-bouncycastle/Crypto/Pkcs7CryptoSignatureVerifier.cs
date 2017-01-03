@@ -20,7 +20,9 @@
 using System;
 using System.Collections;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using Guardtime.KSI.Exceptions;
+using NLog;
 using Org.BouncyCastle.Cms;
 using Org.BouncyCastle.Pkix;
 using Org.BouncyCastle.Security;
@@ -35,6 +37,8 @@ namespace Guardtime.KSI.Crypto.BouncyCastle.Crypto
     /// </summary>
     public class Pkcs7CryptoSignatureVerifier : ICryptoSignatureVerifier
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         private readonly ISet _trustAnchors = new HashSet();
         private readonly ICertificateSubjectRdnSelector _certificateRdnSelector;
 
@@ -126,10 +130,15 @@ namespace Guardtime.KSI.Crypto.BouncyCastle.Crypto
 
                 ValidateCertPath(certificate, x509Store);
             }
-            catch (PkiVerificationFailedException)
+            catch (PkiVerificationFailedException ex)
             {
+                Logger.Warn("Verification failed. " + Environment.NewLine +
+                            "Exception: " + ex + Environment.NewLine +
+                            "Trust anchors: " + Environment.NewLine + GetTrustAnchorsString());
+
                 throw;
             }
+
             catch (Exception e)
             {
                 throw new PkiVerificationErrorException("Error when verifying PKCS#7 signature.", e);
@@ -155,8 +164,17 @@ namespace Guardtime.KSI.Crypto.BouncyCastle.Crypto
             pkixBuilderParameters.AddCertPathChecker(certPathChecker);
             pkixBuilderParameters.IsRevocationEnabled = false;
 
-            PkixCertPathBuilderResult pkixCertPathBuilderResult = new PkixCertPathBuilder().Build(pkixBuilderParameters);
-            PkixCertPath pkixCertPath = pkixCertPathBuilderResult.CertPath;
+            PkixCertPath pkixCertPath;
+
+            try
+            {
+                PkixCertPathBuilderResult pkixCertPathBuilderResult = new PkixCertPathBuilder().Build(pkixBuilderParameters);
+                pkixCertPath = pkixCertPathBuilderResult.CertPath;
+            }
+            catch (PkixCertPathBuilderException e)
+            {
+                throw new PkiVerificationFailedException("Could not build certificate path.", e);
+            }
 
             // Create pkix parameteres
             PkixParameters pkixParameters = new PkixParameters(_trustAnchors);
@@ -172,6 +190,18 @@ namespace Guardtime.KSI.Crypto.BouncyCastle.Crypto
             {
                 throw new PkiVerificationFailedException("Failed to verify PKCS#7 signature.", e);
             }
+        }
+
+        private string GetTrustAnchorsString()
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (object c in _trustAnchors)
+            {
+                sb.AppendLine("------------------ Trust anchor --------------------");
+                sb.AppendLine(c.ToString());
+            }
+
+            return sb.ToString();
         }
 
         /// <summary>

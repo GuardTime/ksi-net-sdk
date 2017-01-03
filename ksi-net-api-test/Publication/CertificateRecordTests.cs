@@ -37,7 +37,7 @@ namespace Guardtime.KSI.Test.Publication
                         new RawTag(Constants.CertificateRecord.X509CertificateTagType, false, false, new byte[] { 0x3 }),
                     });
 
-            CertificateRecord tag2 = new CertificateRecord(tag);
+            CertificateRecord tag2 = new CertificateRecord(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
         }

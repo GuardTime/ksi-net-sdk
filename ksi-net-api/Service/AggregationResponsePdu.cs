@@ -24,45 +24,43 @@ namespace Guardtime.KSI.Service
     /// <summary>
     ///     Aggregation response message PDU.
     /// </summary>
-    public sealed class AggregationResponsePdu : KsiPdu
+    public sealed class AggregationResponsePdu : Pdu
     {
+        /// <summary>
+        /// Expected tag type
+        /// </summary>
+        protected override uint ExpectedTagType => Constants.AggregationResponsePdu.TagType;
+
         /// <summary>
         ///     Create aggregation response pdu TLV element from TLV element.
         /// </summary>
         /// <param name="tag">TLV element</param>
         public AggregationResponsePdu(ITlvTag tag) : base(tag)
         {
-            CheckTagType(Constants.AggregationResponsePdu.TagType);
+        }
 
-            for (int i = 0; i < Count; i++)
+        /// <summary>
+        /// Parse child tag
+        /// </summary>
+        protected override ITlvTag ParseChild(ITlvTag childTag)
+        {
+            switch (childTag.Type)
             {
-                ITlvTag childTag = this[i];
-
-                switch (childTag.Type)
-                {
-                    case Constants.AggregationResponsePayload.TagType:
-                        AggregationResponsePayload aggregationResponsePayload = new AggregationResponsePayload(childTag);
-                        this[i] = aggregationResponsePayload;
-                        Payloads.Add(aggregationResponsePayload);
-                        break;
-                    case Constants.AggregationErrorPayload.TagType:
-                        AggregationErrorPayload aggregationErrorPayload = new AggregationErrorPayload(childTag);
-                        this[i] = aggregationErrorPayload;
-                        Payloads.Add(aggregationErrorPayload);
-                        break;
-                    case Constants.AggregationConfigResponsePayload.TagType:
-                        AggregationConfigResponsePayload aggregationConfigResponsePayload = new AggregationConfigResponsePayload(childTag);
-                        this[i] = aggregationConfigResponsePayload;
-                        Payloads.Add(aggregationConfigResponsePayload);
-                        break;
-                    case Constants.AggregationAcknowledgmentResponsePayload.TagType:
-                    case Constants.KsiPduHeader.TagType:
-                    case Constants.KsiPdu.MacTagType:
-                        break;
-                    default:
-                        VerifyUnknownTag(childTag);
-                        break;
-                }
+                case Constants.AggregationResponsePayload.TagType:
+                    AggregationResponsePayload aggregationResponsePayload = childTag as AggregationResponsePayload ?? new AggregationResponsePayload(childTag);
+                    Payloads.Add(aggregationResponsePayload);
+                    return aggregationResponsePayload;
+                case Constants.ErrorPayload.TagType:
+                    return ErrorPayload = childTag as AggregationErrorPayload ?? new AggregationErrorPayload(childTag);
+                case Constants.AggregatorConfigResponsePayload.TagType:
+                    AggregatorConfigResponsePayload aggregatorConfigResponsePayload = childTag as AggregatorConfigResponsePayload ?? new AggregatorConfigResponsePayload(childTag);
+                    Payloads.Add(aggregatorConfigResponsePayload);
+                    return aggregatorConfigResponsePayload;
+                // not implemented yet, so just return the tag
+                case Constants.AggregationAcknowledgmentResponsePayload.TagType:
+                    return childTag;
+                default:
+                    return base.ParseChild(childTag);
             }
         }
 
@@ -90,16 +88,16 @@ namespace Guardtime.KSI.Service
         /// <returns></returns>
         public AggregationErrorPayload GetAggregationErrorPayload()
         {
-            return GetPayload<AggregationErrorPayload>();
+            return ErrorPayload as AggregationErrorPayload;
         }
 
         /// <summary>
-        /// Get aggregation configuration response payload
+        /// Get aggregator configuration response payload
         /// </summary>
         /// <returns></returns>
-        public AggregationConfigResponsePayload GetAggregationConfigResponsePayload()
+        public AggregatorConfigResponsePayload GetAggregatorConfigResponsePayload()
         {
-            return GetPayload<AggregationConfigResponsePayload>();
+            return GetPayload<AggregatorConfigResponsePayload>();
         }
     }
 }

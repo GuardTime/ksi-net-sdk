@@ -125,7 +125,7 @@ namespace Guardtime.KSI.Test.Signature
                         })
                 });
 
-            CalendarAuthenticationRecord tag2 = new CalendarAuthenticationRecord(tag);
+            CalendarAuthenticationRecord tag2 = new CalendarAuthenticationRecord(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
         }
