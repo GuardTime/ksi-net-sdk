@@ -18,6 +18,7 @@
  */
 
 using System.IO;
+using System.Linq;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Signature;
 using NUnit.Framework;
@@ -57,9 +58,9 @@ namespace Guardtime.KSI.Test.Signature
             IKsiSignature signature = GetKsiSignatureFromFile(Properties.Resources.KsiSignature_Ok_With_Mixed_Aggregation_Chains);
             Assert.AreEqual("GT :: testA :: taavi-test :: anon", signature.Identity,
                 "Invalid signature identity. Path: " + Properties.Resources.KsiSignature_Ok_With_Mixed_Aggregation_Chains);
+            Assert.AreEqual("GT :: testA :: taavi-test :: anon", signature.GetIdentity().Select(i => i.ClientId).Aggregate((current, next) => current + " :: " + next),
+                "Invalid signature identity returned by GetIdentity. Path: " + Properties.Resources.KsiSignature_Ok_With_Mixed_Aggregation_Chains);
 
-            signature = GetKsiSignatureFromFile(Properties.Resources.KsiSignature_Ok_Identity);
-            Assert.AreEqual("GT :: GT :: rsyslog :: ot.tDyra8", signature.Identity, "Invalid signature identity. Path: " + Properties.Resources.KsiSignature_Ok_Identity);
         }
 
         [Test]

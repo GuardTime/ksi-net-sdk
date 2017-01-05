@@ -29,7 +29,7 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         /// Aggregation hash chain link metadata TLV element.
         /// </summary>
-        public class Metadata : CompositeTag
+        public class Metadata : CompositeTag, IIdentity
         {
             private StringTag _clientId;
             private StringTag _machineId;
@@ -90,6 +90,7 @@ namespace Guardtime.KSI.Signature
                         {
                             throw new TlvException("Invalid tag type for creating padding tag. Tag: " + childTag);
                         }
+
                         return Padding;
 
                     case Constants.AggregationHashChain.Metadata.ClientIdTagType:
@@ -176,6 +177,11 @@ namespace Guardtime.KSI.Signature
 
                 return list.ToArray();
             }
+
+            /// <summary>
+            /// The type of the identity
+            /// </summary>
+            public IdentityType IdentityType => Padding != null ? IdentityType.PaddedMetadata : IdentityType.Metadata;
 
             /// <summary>
             /// Padding element
