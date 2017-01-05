@@ -1,6 +1,12 @@
+Version 3.8
+
+2017-01-04 3.8.X
+
+* IMPROVEMENT: Added GetIdentity method to KsiSignature to get identity information as an array (KSINETAPI-101)
+
 Version 3.7
 
-2017-01-04 3.7.X
+2017-01-04 3.7.235
 
 * BUGFIX: Fixed PKCS#7 signature verification (KSINETAPI-100)
 * BUGFIX: Fixed PDU HMAC calculation (KSINETAPI-98)
