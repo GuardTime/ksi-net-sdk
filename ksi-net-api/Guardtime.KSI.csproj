@@ -162,7 +162,10 @@
     <Compile Include="Service\TcpKsiServiceProtocol.cs" />
     <Compile Include="Signature\AggregationHashChain.Metadata.cs" />
     <Compile Include="Signature\AggregationHashChain.Link.cs" />
+    <Compile Include="Signature\IdentityType.cs" />
+    <Compile Include="Signature\IIdentity.cs" />
     <Compile Include="Signature\IKsiSignatureFactory.cs" />
+    <Compile Include="Signature\LegacyIdentity.cs" />
     <Compile Include="Signature\Verification\Rule\Rfc3161RecordAggregationTimeRule.cs" />
     <Compile Include="Signature\Verification\Rule\Rfc3161RecordChainIndexRule.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainMetadataRule.cs" />

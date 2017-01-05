@@ -1144,9 +1144,6 @@
     <None Include="resources\signature\rfc3161-record\rfc3161-record-ok.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\signature-ok.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="resources\signature\signaturedata\signature-data-invalid-certificate-id-missing.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

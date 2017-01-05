@@ -17,6 +17,8 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using Guardtime.KSI.Hashing;
@@ -64,7 +66,14 @@ namespace Guardtime.KSI.Signature
         /// Get the identity of the signature.
         /// </summary>
         /// <returns></returns>
+        [Obsolete("This property is obsolete. Use GetIdentity() method instead.", false)]
         string Identity { get; }
+
+        /// <summary>
+        /// Get the identity of the signature.
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<IIdentity> GetIdentity();
 
         /// <summary>
         /// Returns true if signature contains signature publication record element.

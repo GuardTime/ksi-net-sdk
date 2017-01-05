@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -205,7 +206,54 @@ namespace Guardtime.KSI.Signature
         /// Get the identity of the signature.
         /// </summary>
         /// <returns></returns>
-        public string Identity => _identity ?? (_identity = GetIdentity());
+        [Obsolete("This property is obsolete. Use GetIdentity() method instead.", false)]
+        public string Identity
+        {
+            get
+            {
+                if (_identity != null)
+                {
+                    return _identity;
+                }
+
+                string identity = "";
+
+                foreach (IIdentity linkIdentity in GetIdentity())
+                {
+                    string id = linkIdentity.ClientId;
+                    if (id.Length <= 0)
+                    {
+                        continue;
+                    }
+
+                    if (identity.Length > 0)
+                    {
+                        identity += " :: ";
+                    }
+
+                    identity += id;
+                }
+
+                return identity;
+            }
+        }
+
+        /// <summary>
+        /// Get the identity of the signature.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<IIdentity> GetIdentity()
+        {
+            for (int i = _aggregationHashChains.Count - 1; i >= 0; i--)
+            {
+                AggregationHashChain chain = _aggregationHashChains[i];
+
+                foreach (IIdentity identity in chain.GetIdentity())
+                {
+                    yield return identity;
+                }
+            }
+        }
 
         /// <summary>
         /// Returns true if signature contains signature publication record element.
@@ -329,26 +377,6 @@ namespace Guardtime.KSI.Signature
                     throw;
                 }
             }
-        }
-
-        private string GetIdentity()
-        {
-            string identity = "";
-
-            foreach (AggregationHashChain chain in _aggregationHashChains)
-            {
-                string id = chain.GetChainIdentity();
-                if (id.Length <= 0)
-                {
-                    continue;
-                }
-                if (identity.Length > 0)
-                {
-                    identity = " :: " + identity;
-                }
-                identity = id + identity;
-            }
-            return identity;
         }
     }
 }
