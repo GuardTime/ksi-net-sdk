@@ -606,4 +606,7 @@
   <data name="PkiTrustProvider_SymantecCert" xml:space="preserve">
     <value>resources/trust/pkitrustprovider/symantec.cer</value>
   </data>
+  <data name="KsiPublicationsFile" xml:space="preserve">
+    <value>resources/publication/publicationsfile/ksi-publications.bin</value>
+  </data>
 </root>
