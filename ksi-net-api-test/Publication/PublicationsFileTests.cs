@@ -27,6 +27,7 @@ using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Test.Crypto;
+using Guardtime.KSI.Test.Properties;
 using Guardtime.KSI.Trust;
 using NUnit.Framework;
 
@@ -39,7 +40,7 @@ namespace Guardtime.KSI.Test.Publication
         [Test]
         public void TestCreatePublicationsFileFromFile1()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open))
             {
                 new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                     CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
@@ -51,7 +52,7 @@ namespace Guardtime.KSI.Test.Publication
         {
             if (CryptoTestFactory.ProviderType == CryptoProviderType.BouncyCastle)
             {
-                using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
+                using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open))
                 {
                     new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                         CryptoTestFactory.CreateCertificateSubjectRdnSelector("EmailAddress=publications@guardtime.com"))).Create(stream);
@@ -59,7 +60,7 @@ namespace Guardtime.KSI.Test.Publication
             }
             else if (CryptoTestFactory.ProviderType == CryptoProviderType.Microsoft)
             {
-                using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
+                using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open))
                 {
                     new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                         CryptoTestFactory.CreateCertificateSubjectRdnSelector("EMail=publications@guardtime.com"))).Create(stream);
@@ -70,7 +71,7 @@ namespace Guardtime.KSI.Test.Publication
         [Test]
         public void TestCreatePublicationsFileFromFile3()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open))
             {
                 new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                     CryptoTestFactory.CreateCertificateSubjectRdnSelector("1.2.840.113549.1.9.1=publications@guardtime.com"))).Create(stream);
@@ -80,7 +81,7 @@ namespace Guardtime.KSI.Test.Publication
         [Test]
         public void TestCreatePublicationsFileFromFile4()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open))
             {
                 ArgumentException ex = Assert.Throws<ArgumentException>(delegate
                 {
@@ -95,7 +96,7 @@ namespace Guardtime.KSI.Test.Publication
         [Test]
         public void TestCreatePublicationsFileFromFile5()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open))
             {
                 PublicationsFileException ex = Assert.Throws<PublicationsFileException>(delegate
                 {
@@ -110,7 +111,7 @@ namespace Guardtime.KSI.Test.Publication
         [Test]
         public void TestCreatePublicationsFileFromFile6()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open))
             {
                 PublicationsFileException ex = Assert.Throws<PublicationsFileException>(delegate
                 {
@@ -125,7 +126,7 @@ namespace Guardtime.KSI.Test.Publication
         [Test]
         public void TestCreatePublicationsFileFromFile7()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open))
             {
                 ArgumentException ex = Assert.Throws<ArgumentException>(delegate
                 {
@@ -144,7 +145,7 @@ namespace Guardtime.KSI.Test.Publication
         [Test]
         public void TestFindCertificateById()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open))
             {
                 IPublicationsFile publicationsFile =
                     new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
@@ -158,7 +159,7 @@ namespace Guardtime.KSI.Test.Publication
         [Test]
         public void TestContainsPublicationRecord()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open))
             {
                 using (
                     TlvReader reader =
@@ -177,7 +178,7 @@ namespace Guardtime.KSI.Test.Publication
         [Test]
         public void TestDoesNotContainPublicationRecord()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open))
             {
                 using (
                     TlvReader reader =
@@ -195,14 +196,14 @@ namespace Guardtime.KSI.Test.Publication
         [Test]
         public void TestGetLatestPublication()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open))
             {
                 IPublicationsFile publicationsFile =
                     new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                         CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
                 PublicationRecordInPublicationFile publicationRecord = publicationsFile.GetLatestPublication();
 
-                Assert.AreEqual(1455494400, publicationRecord.PublicationData.PublicationTime, "Should be correct publication time for latest publication");
+                Assert.AreEqual(1481760000, publicationRecord.PublicationData.PublicationTime, "Should be correct publication time for latest publication");
                 // TODO: Test more from latest publication
             }
         }

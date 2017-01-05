@@ -28,6 +28,7 @@ using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
 using Guardtime.KSI.Test.Crypto;
+using Guardtime.KSI.Test.Properties;
 using Guardtime.KSI.Test.Signature.Verification;
 using Guardtime.KSI.Trust;
 using NUnit.Framework;
@@ -58,7 +59,7 @@ namespace Guardtime.KSI.Test.Integration
                     {
                         case "PublicationFileBasedVerificationPolicy":
                             using (
-                                Stream publicationFileInStream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"),
+                                Stream publicationFileInStream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile),
                                     FileMode.Open))
                             {
                                 policy = new PublicationBasedVerificationPolicy();
@@ -75,7 +76,7 @@ namespace Guardtime.KSI.Test.Integration
 
                         case "PublicationFileBasedVerificationNoExtendingPolicy":
                             using (
-                                Stream publicationFileInStream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"),
+                                Stream publicationFileInStream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile),
                                     FileMode.Open))
                             {
                                 policy = new PublicationBasedVerificationPolicy();
@@ -125,7 +126,7 @@ namespace Guardtime.KSI.Test.Integration
 
                         default:
                             using (
-                                Stream publicationFileInStream = new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationsfile/ksi-publications.bin"),
+                                Stream publicationFileInStream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile),
                                     FileMode.Open))
                             {
                                 policy = new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
