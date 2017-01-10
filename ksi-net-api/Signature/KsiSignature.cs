@@ -216,7 +216,7 @@ namespace Guardtime.KSI.Signature
                     return _identity;
                 }
 
-                string identity = "";
+                _identity = "";
 
                 foreach (IIdentity linkIdentity in GetIdentity())
                 {
@@ -226,15 +226,15 @@ namespace Guardtime.KSI.Signature
                         continue;
                     }
 
-                    if (identity.Length > 0)
+                    if (_identity.Length > 0)
                     {
-                        identity += " :: ";
+                        _identity += " :: ";
                     }
 
-                    identity += id;
+                    _identity += id;
                 }
 
-                return identity;
+                return _identity;
             }
         }
 
