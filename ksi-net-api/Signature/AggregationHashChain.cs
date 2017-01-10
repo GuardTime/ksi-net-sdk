@@ -39,6 +39,7 @@ namespace Guardtime.KSI.Signature
         private RawTag _inputData;
         private ImprintTag _inputHash;
         private Dictionary<AggregationHashChainResult, AggregationHashChainResult> _aggregationHashChainResultCache;
+        private readonly object _cacheLock = new object();
 
         /// <summary>
         /// Expected tag type
@@ -306,13 +307,16 @@ namespace Guardtime.KSI.Signature
                 throw new KsiException("Invalid aggregation chain result: null.");
             }
 
-            if (_aggregationHashChainResultCache == null)
+            lock (_cacheLock)
             {
-                _aggregationHashChainResultCache = new Dictionary<AggregationHashChainResult, AggregationHashChainResult>();
-            }
-            else if (_aggregationHashChainResultCache.ContainsKey(result))
-            {
-                return _aggregationHashChainResultCache[result];
+                if (_aggregationHashChainResultCache == null)
+                {
+                    _aggregationHashChainResultCache = new Dictionary<AggregationHashChainResult, AggregationHashChainResult>();
+                }
+                else if (_aggregationHashChainResultCache.ContainsKey(result))
+                {
+                    return _aggregationHashChainResultCache[result];
+                }
             }
 
             DataHash lastHash = result.Hash;
@@ -333,7 +337,11 @@ namespace Guardtime.KSI.Signature
             }
 
             AggregationHashChainResult returnValue = new AggregationHashChainResult(level, lastHash);
-            _aggregationHashChainResultCache[result] = returnValue;
+
+            lock (_cacheLock)
+            {
+                _aggregationHashChainResultCache[result] = returnValue;
+            }
 
             return returnValue;
         }
