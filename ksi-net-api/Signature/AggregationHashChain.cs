@@ -253,24 +253,45 @@ namespace Guardtime.KSI.Signature
         /// Get the (partial) signer identity from the current hash chain.
         /// </summary>
         /// <returns></returns>
+        [Obsolete("This method is obsolete. Use GetIdentity() method instead.", false)]
         public string GetChainIdentity()
         {
             string identity = "";
 
-            foreach (Link aggregationChainLink in _links)
+            foreach (IIdentity linkIdentity in GetIdentity())
             {
-                string id = aggregationChainLink.GetIdentity();
+                string id = linkIdentity.ClientId;
                 if (id.Length <= 0)
                 {
                     continue;
                 }
+
                 if (identity.Length > 0)
                 {
-                    identity = " :: " + identity;
+                    identity += " :: ";
                 }
-                identity = id + identity;
+
+                identity += id;
             }
+
             return identity;
+        }
+
+        /// <summary>
+        /// Returns list of chain link identities
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<IIdentity> GetIdentity()
+        {
+            for (int i = _links.Count - 1; i >= 0; i--)
+            {
+                Link aggregationChainLink = _links[i];
+                IIdentity linkIdentity = aggregationChainLink.GetIdentity();
+                if (linkIdentity != null)
+                {
+                    yield return linkIdentity;
+                }
+            }
         }
 
         /// <summary>
