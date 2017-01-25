@@ -147,6 +147,24 @@ namespace Guardtime.KSI.Parser
         }
 
         /// <summary>
+        /// Add TLV child element
+        /// </summary>
+        /// <param name="childTag">TLV child element</param>
+        protected void AddChild(ITlvTag childTag)
+        {
+            _childTags.Add(childTag);
+        }
+
+        /// <summary>
+        /// Remove TLV child element
+        /// </summary>
+        /// <param name="childTag">TLV child element</param>
+        protected void RemoveChild(ITlvTag childTag)
+        {
+            _childTags.Remove(childTag);
+        }
+
+        /// <summary>
         ///     Get TLV element list size
         /// </summary>
         public int Count => _childTags.Count;

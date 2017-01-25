@@ -169,6 +169,28 @@ namespace Guardtime.KSI.Signature
                 return _metadata != null ? _metadata.ClientId : "";
             }
 
+            /// <summary>
+            /// Set level correction value
+            /// </summary>
+            /// <param name="levelCorrection">New level correction value</param>
+            public void SetLevelCorrection(ulong levelCorrection)
+            {
+                if (_levelCorrection != null)
+                {
+                    RemoveChild(_levelCorrection);
+                }
+
+                if (levelCorrection == 0)
+                {
+                    _levelCorrection = null;
+                }
+                else
+                {
+                    _levelCorrection = new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, levelCorrection);
+                    AddChild(_levelCorrection);
+                }
+            }
+
             private static string GetLegacyIdString(byte[] bytes)
             {
                 if (bytes[0] != LegacyIdFirstOctet)

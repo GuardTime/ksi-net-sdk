@@ -223,9 +223,7 @@ namespace Guardtime.KSI.Signature
         /// <param name="level">Signed hash node level value in the aggregation tree</param>
         private IKsiSignature CreateAndVerify(RawTag signatureRaw, DataHash hash, uint level = 0)
         {
-            KsiSignature signature = new KsiSignature(signatureRaw);
-            Verify(signature, hash, level);
-            return signature;
+            return CreateAndVerify(new KsiSignature(signatureRaw), hash, level);
         }
 
         /// <summary>
@@ -236,8 +234,23 @@ namespace Guardtime.KSI.Signature
         /// <param name="level">Signed hash node level value in the aggregation tree</param>
         private IKsiSignature CreateAndVerify(ITlvTag[] childTags, DataHash hash, uint level = 0)
         {
-            KsiSignature signature = new KsiSignature(false, false, childTags);
-            Verify(signature, hash, level);
+            return CreateAndVerify(new KsiSignature(false, false, childTags), hash, level);
+        }
+
+        /// <summary>
+        /// Create signature and verify with given verification policy
+        /// </summary>
+        /// <param name="signature">KSI signature</param>
+        /// <param name="hash">Signed hash</param>
+        /// <param name="level">Signed hash node level value in the aggregation tree</param>
+        private IKsiSignature CreateAndVerify(IKsiSignature signature, DataHash hash, uint level = 0)
+        {
+            if (level > 0)
+            {
+                signature.SetFirstLinkLevelCorrection(level);
+            }
+
+            Verify(signature, hash);
             return signature;
         }
 
@@ -246,12 +259,10 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         /// <param name="signature">KSI signature</param>
         /// <param name="hash">Signed hash</param>
-        /// <param name="level">Signed hash node level value in the aggregation tree</param>
-        private void Verify(IKsiSignature signature, DataHash hash, uint level)
+        private void Verify(IKsiSignature signature, DataHash hash)
         {
             _verificationContext.Signature = signature;
             _verificationContext.DocumentHash = hash;
-            _verificationContext.Level = level;
             VerificationResult verificationResult = _verificationPolicy.Verify(_verificationContext);
 
             if (verificationResult.ResultCode != VerificationResultCode.Ok)

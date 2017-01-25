@@ -145,6 +145,7 @@ namespace Guardtime.KSI.Service
 
             Logger.Debug("Signing root node hash. Level: {0}; Hash: {1}", signLevel, _root.NodeHash);
             RootSignature = _ksi.Sign(_root.NodeHash, signLevel);
+            RootSignature.SetFirstLinkLevelCorrection(0);
         }
 
         /// <summary>

@@ -17,7 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -71,7 +70,7 @@ namespace Guardtime.KSI.Test.Signature
             return AggregationHashChains;
         }
 
-        public DataHash GetAggregationHashChainRootHash(uint level)
+        public DataHash GetAggregationHashChainRootHash()
         {
             return AggregationHashChainRootHash;
         }
@@ -89,6 +88,11 @@ namespace Guardtime.KSI.Test.Signature
         public IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInSignature publicationRecord, IKsiSignatureFactory signatureFactory)
         {
             return ExtendedKsiSignature;
+        }
+
+        public void SetFirstLinkLevelCorrection(uint levelCorrection)
+        {
+            GetAggregationHashChains()[0].GetChainLinks()[0].SetLevelCorrection(0);
         }
 
         public void WriteTo(Stream outputStream)
@@ -113,10 +117,5 @@ namespace Guardtime.KSI.Test.Signature
         public string Identity => "Test";
 
         public bool IsExtended => PublicationRecord != null;
-
-        public void DoInternalVerification(DataHash hash, uint level = 0)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

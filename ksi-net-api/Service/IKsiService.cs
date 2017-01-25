@@ -33,16 +33,9 @@ namespace Guardtime.KSI.Service
         ///     Sync create signature with given data hash.
         /// </summary>
         /// <param name="hash">data hash</param>
-        /// <returns>KSI signature</returns>
-        IKsiSignature Sign(DataHash hash);
-
-        /// <summary>
-        ///     Create signature with given data hash (sync)
-        /// </summary>
-        /// <param name="hash">data hash</param>
         /// <param name="level">the level value of the aggregation tree node</param>
         /// <returns>KSI signature</returns>
-        IKsiSignature Sign(DataHash hash, uint level);
+        IKsiSignature Sign(DataHash hash, uint level = 0);
 
         /// <summary>
         ///     Begin create signature with given data hash (async).

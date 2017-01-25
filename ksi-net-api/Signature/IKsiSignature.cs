@@ -81,9 +81,8 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         ///     Get aggregation hash chain output hash.
         /// </summary>
-        /// <param name="level">Document hash node level value in the aggregation tree</param>
         /// <returns>output hash</returns>
-        DataHash GetAggregationHashChainRootHash(uint level);
+        DataHash GetAggregationHashChainRootHash();
 
         /// <summary>
         ///     Extend KSI signature with given calendar hash chain.
@@ -110,6 +109,12 @@ namespace Guardtime.KSI.Signature
         /// <param name="signatureFactory">signature factory to be used when creating extended signature</param>
         /// <returns>extended KSI signature</returns>
         IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInSignature publicationRecord, IKsiSignatureFactory signatureFactory = null);
+
+        /// <summary>
+        /// Set level correction of the first link in the first aggregation hash chain.
+        /// </summary>
+        /// <param name="levelCorrection"></param>
+        void SetFirstLinkLevelCorrection(uint levelCorrection);
 
         /// <summary>
         ///     Write KSI signature to stream.

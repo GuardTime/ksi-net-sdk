@@ -40,7 +40,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 if (chainResult == null)
                 {
-                    chainResult = new AggregationHashChainResult(context.Level, aggregationHashChain.InputHash);
+                    chainResult = new AggregationHashChainResult(0, aggregationHashChain.InputHash);
                 }
 
                 if (aggregationHashChain.InputHash != chainResult.Hash)
