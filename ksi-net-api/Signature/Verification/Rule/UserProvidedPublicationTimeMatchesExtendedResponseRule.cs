@@ -22,7 +22,7 @@ using Guardtime.KSI.Publication;
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
     /// <summary>
-    ///     Rule checks that user provided publication time matches extender response calendar hash chain registration time.
+    ///     Rule checks that user provided publication time matches extender response calendar hash chain shape.
     /// </summary>
     public sealed class UserProvidedPublicationTimeMatchesExtendedResponseRule : VerificationRule
     {

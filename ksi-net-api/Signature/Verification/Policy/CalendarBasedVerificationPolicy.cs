@@ -31,28 +31,17 @@ namespace Guardtime.KSI.Signature.Verification.Policy
         /// </summary>
         public CalendarBasedVerificationPolicy()
         {
-            ExtendedSignatureCalendarChainInputHashRule extendedSignatureCalendarChainInputHashRule =
-                new ExtendedSignatureCalendarChainInputHashRule();
-            ExtendedSignatureCalendarChainAggregationTimeRule extendedSignatureCalendarChainAggregationTimeRule =
-                new ExtendedSignatureCalendarChainAggregationTimeRule();
+            VerificationRule verificationRule = new ExtendedSignatureCalendarChainInputHashRule()
+                .OnSuccess(new ExtendedSignatureCalendarChainAggregationTimeRule());
 
             FirstRule = new InternalVerificationPolicy()
                 .OnSuccess(new CalendarHashChainExistenceRule()
-                    .OnSuccess(
-                        new SignaturePublicationRecordExistenceRule()
-                            .OnSuccess(
-                                new ExtendedSignatureCalendarChainRootHashRule()
-                                    .OnSuccess(
-                                        extendedSignatureCalendarChainInputHashRule
-                                            .OnSuccess(extendedSignatureCalendarChainAggregationTimeRule)))
-                            .OnNa(
-                                new ExtendedSignatureAggregationChainRightLinksMatchesRule()
-                                    .OnSuccess(
-                                        extendedSignatureCalendarChainInputHashRule
-                                            .OnSuccess(extendedSignatureCalendarChainAggregationTimeRule))))
-                    .OnNa(
-                        extendedSignatureCalendarChainInputHashRule
-                            .OnSuccess(extendedSignatureCalendarChainAggregationTimeRule)));
+                    .OnSuccess(new SignaturePublicationRecordExistenceRule()
+                        .OnSuccess(new ExtendedSignatureCalendarChainRootHashRule()
+                            .OnSuccess(verificationRule))
+                        .OnNa(new ExtendedSignatureAggregationChainRightLinksMatchesRule()
+                            .OnSuccess(verificationRule)))
+                    .OnNa(verificationRule));
         }
     }
 }

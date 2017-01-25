@@ -110,6 +110,28 @@ namespace Guardtime.KSI.Utils
         }
 
         /// <summary>
+        /// Returns array elements as a string (elements are separated by comma).
+        /// </summary>
+        /// <param name="arr">Array</param>
+        /// <returns></returns>
+        public static string ArrayToString<T>(T[] arr)
+        {
+            string result = "";
+
+            for (int i = 0; i < arr.Length; i++)
+            {
+                if (i > 0)
+                {
+                    result += ", ";
+                }
+
+                result += arr[i];
+            }
+
+            return result;
+        }
+
+        /// <summary>
         ///     Decode byte array to unsigned long.
         /// </summary>
         /// <param name="buf">byte array</param>

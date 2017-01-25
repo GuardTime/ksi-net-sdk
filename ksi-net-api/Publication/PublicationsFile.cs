@@ -184,30 +184,6 @@ namespace Guardtime.KSI.Publication
         }
 
         /// <summary>
-        ///     Is publication record in publications file.
-        /// </summary>
-        /// <param name="publicationRecord">lookup publication record</param>
-        /// <returns>true if publication record is in publications file</returns>
-        public bool Contains(PublicationRecord publicationRecord)
-        {
-            if (publicationRecord == null)
-            {
-                return false;
-            }
-
-            foreach (PublicationRecordInPublicationFile record in _publicationRecordList)
-            {
-                if (record.PublicationData.PublicationTime == publicationRecord.PublicationData.PublicationTime &&
-                    record.PublicationData.PublicationHash == publicationRecord.PublicationData.PublicationHash)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        /// <summary>
         ///     Get certificate by certificate ID.
         /// </summary>
         /// <param name="certificateId">certificate id</param>

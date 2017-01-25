@@ -193,10 +193,11 @@
     <Compile Include="Service\TestKsiServiceProtocol.cs" />
     <Compile Include="Signature\KsiSignatureUsingReflectionTests.cs" />
     <Compile Include="Signature\Verification\EmptyVerificationPolicy.cs" />
+    <Compile Include="Signature\Verification\Rule\AggregationHashChainIndexSuccessorRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\Rfc3161RecordAggregationTimeRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\Rfc3161RecordChainIndexRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainMetadataRuleTests.cs" />
-    <Compile Include="Signature\Verification\Rule\AggregationHashChainIndexRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\AggregationHashChainINdexRuleTests.cs" />
     <Compile Include="TestSetup.cs" />
     <Compile Include="Signature\CalendarAuthenticationRecordTests.cs" />
     <Compile Include="Signature\AggregationAuthenticationRecordTests.cs" />
@@ -224,7 +225,7 @@
     <Compile Include="Signature\Verification\Rule\ExtendedSignatureCalendarChainInputHashRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\ExtendedSignatureCalendarChainRootHashRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\ExtendingPermittedVerificationRuleTests.cs" />
-    <Compile Include="Signature\Verification\Rule\PublicationsFileContainsSignaturePublicationRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\PublicationsFileSignaturePublicationMatchRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\PublicationsFileExtendedSignatureInputHashRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\PublicationsFilePublicationHashMatchesExtenderResponseRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\PublicationsFilePublicationTimeMatchesExtenderResponseRuleTests.cs" />
@@ -604,6 +605,9 @@
     <None Include="resources\signature\integration-test-signatures\ExtendedSignature_WithOlderPublicationTime.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="resources\signature\integration-test-signatures\infile_2016-12-14-extended.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="resources\signature\integration-test-signatures\invalid-chain-index.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -982,6 +986,9 @@
     <None Include="resources\signature\ksi-signature\ksi-signature-invalid-aggregation-chain-aggregation-time-mismatch.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-aggregation-chain-index-mismatch-prev-2.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="resources\signature\ksi-signature\ksi-signature-invalid-aggregation-chain-index-mismatch.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -1009,7 +1016,13 @@
     <None Include="resources\signature\ksi-signature\ksi-signature-invalid-extra-tag.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-first-aggregation-chain-index-length.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="resources\signature\ksi-signature\ksi-signature-invalid-hash-algorithm.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-aggregation-chain-index-mismatch-prev.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\ksi-signature\ksi-signature-invalid-missing-aggregation-hash-chains.tlv">

@@ -609,4 +609,13 @@
   <data name="KsiPublicationsFile" xml:space="preserve">
     <value>resources/publication/publicationsfile/ksi-publications.bin</value>
   </data>
+  <data name="KsiSignature_Invalid_Aggregation_Chain_Index_Mismatch_Prev" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-aggregation-chain-index-mismatch-prev.tlv</value>
+  </data>
+  <data name="KsiSignature_Invalid_Aggregation_Chain_Index_Mismatch_Prev2" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-aggregation-chain-index-mismatch-prev-2.tlv</value>
+  </data>
+  <data name="KsiSignature_Invalid_First_Aggregation_Chain_Index_Length" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-first-aggregation-chain-index-length.tlv</value>
+  </data>
 </root>
