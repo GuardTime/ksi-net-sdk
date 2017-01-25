@@ -736,6 +736,15 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/publication/publicationsfile/ksi-publications.bin.
+        /// </summary>
+        internal static string KsiPublicationsFile {
+            get {
+                return ResourceManager.GetString("KsiPublicationsFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/service/aggregation-response-pdu.tlv.
         /// </summary>
         internal static string KsiService_AggregationResponsePdu {

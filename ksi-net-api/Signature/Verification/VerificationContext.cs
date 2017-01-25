@@ -30,7 +30,8 @@ namespace Guardtime.KSI.Signature.Verification
     /// </summary>
     public class VerificationContext : IVerificationContext
     {
-        readonly IDictionary<ulong, CalendarHashChain> _calendarHashChainCache = new Dictionary<ulong, CalendarHashChain>();
+        private IDictionary<ulong, CalendarHashChain> _calendarHashChainCache;
+        private readonly object _cacheLock = new object();
 
         /// <summary>
         ///     Create new verification context instance.
@@ -111,14 +112,28 @@ namespace Guardtime.KSI.Signature.Verification
 
             ulong cacheKey = publicationTime ?? 0;
 
-            if (_calendarHashChainCache.ContainsKey(cacheKey))
+            lock (_cacheLock)
             {
-                return _calendarHashChainCache[cacheKey];
+                if (_calendarHashChainCache == null)
+                {
+                    _calendarHashChainCache = new Dictionary<ulong, CalendarHashChain>();
+                }
+                else if (_calendarHashChainCache.ContainsKey(cacheKey))
+                {
+                    return _calendarHashChainCache[cacheKey];
+                }
             }
 
-            return _calendarHashChainCache[cacheKey] = publicationTime == null
+            CalendarHashChain calendarHashChain = publicationTime == null
                 ? KsiService.Extend(Signature.AggregationTime)
                 : KsiService.Extend(Signature.AggregationTime, publicationTime.Value);
+
+            lock (_cacheLock)
+            {
+                _calendarHashChainCache[cacheKey] = calendarHashChain;
+            }
+
+            return calendarHashChain;
         }
     }
 }

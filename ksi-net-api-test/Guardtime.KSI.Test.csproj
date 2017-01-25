@@ -139,6 +139,7 @@
     <Compile Include="Integration\BlockSigner.PrintTreeTests.cs" />
     <Compile Include="Integration\CommonGetTestFilesAndResults.cs" />
     <Compile Include="Integration\CommonTestExecution.cs" />
+    <Compile Include="Integration\ConfigurationIntegrationTests.cs" />
     <Compile Include="Integration\DataHolderForIntegrationTests.cs" />
     <Compile Include="Integration\IntegrationTests.cs" />
     <Compile Include="Integration\ExtendIntegrationTests.cs" />
@@ -1141,9 +1142,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\rfc3161-record\rfc3161-record-ok.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\signature-ok.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\signaturedata\signature-data-invalid-certificate-id-missing.tlv">

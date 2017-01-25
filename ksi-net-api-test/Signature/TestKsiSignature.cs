@@ -117,5 +117,11 @@ namespace Guardtime.KSI.Test.Signature
         public string Identity => "Test";
 
         public bool IsExtended => PublicationRecord != null;
+
+        public IEnumerable<IIdentity> GetIdentity()
+        {
+            return new[] { new LegacyIdentity("Test") };
+        }
+
     }
 }

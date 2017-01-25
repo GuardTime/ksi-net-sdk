@@ -159,14 +159,14 @@ namespace Guardtime.KSI.Signature
             /// Get link identity
             /// </summary>
             /// <returns></returns>
-            public string GetIdentity()
+            public IIdentity GetIdentity()
             {
                 if (_legacyId != null)
                 {
-                    return _legacyIdString;
+                    return new LegacyIdentity(_legacyIdString);
                 }
 
-                return _metadata != null ? _metadata.ClientId : "";
+                return _metadata;
             }
 
             /// <summary>

@@ -21,6 +21,7 @@ using System;
 using System.IO;
 using System.Threading;
 using Guardtime.KSI.Service;
+using Guardtime.KSI.Test.Properties;
 
 namespace Guardtime.KSI.Test.Service
 {
@@ -58,8 +59,7 @@ namespace Guardtime.KSI.Test.Service
 
         public byte[] EndGetPublicationsFile(IAsyncResult asyncResult)
         {
-            // TODO: use variable
-            return ReadFile("resources/publication/publicationsfile/ksi-publications.bin");
+            return ReadFile(Resources.KsiPublicationsFile);
         }
 
         private static byte[] ReadFile(string file)
