@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
@@ -84,22 +85,30 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         {
             PublicationsFilePublicationHashMatchesExtenderResponseRule rule = new PublicationsFilePublicationHashMatchesExtenderResponseRule();
 
+            TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
+            testPublicationsFile.NearestPublications.Add(1455478441,
+                new PublicationRecordInPublicationFile(new RawTag(0x703, false, false,
+                    new PublicationData("AAAAAA-CT5VGY-AAPUCF-L3EKCC-NRSX56-AXIDFL-VZJQK4-WDCPOE-3KIWGB-XGPPM3-O5BIMW-REOVR4").Encode())));
+
             // Check invalid extended calendar chain from context function: null
             using (
                 FileStream stream =
-                    new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record),
+                    new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Invalid_Missing_Calendar_Authentication_Record),
                         FileMode.Open))
             {
                 TestVerificationContextFaultyFunctions context = new TestVerificationContextFaultyFunctions()
                 {
                     Signature = new KsiSignatureFactory().Create(stream),
-                    PublicationsFile = new TestPublicationsFile()
+                    PublicationsFile = testPublicationsFile
                 };
 
-                Assert.Throws<KsiVerificationException>(delegate
+                Exception ex = Assert.Throws<KsiVerificationException>(delegate
                 {
                     rule.Verify(context);
                 });
+
+                Assert.That(ex.Message.StartsWith("Received invalid extended calendar hash chain from context extension function: null."),
+                    "Unexpected exception message: " + ex.Message);
             }
         }
 
@@ -112,6 +121,9 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_New), FileMode.Open))
             {
                 TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
+                testPublicationsFile.NearestPublications.Add(1439577242,
+                    new PublicationRecordInPublicationFile(new RawTag(0x703, false, false,
+                        Base16.Decode("3029020455ce349a04210115BA5EB48C064B198A09D37E8C022C281C1CA1E36216EA43E811DF51A7268013"))));
 
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -123,10 +135,39 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                                 "010453B34B80020453B2A01D052101E8E1FB57586DFE67D5B541FCE6CFC78684E4C38ED87784D97FFA7FEB81DB7D1E08210153D8E4B360DDB59CE2C6028C5C502664C035165C8FB4462BF82340F550E7547C07210100000000000000000000000000000000000000000000000000000000000000000821015744E0D040C744B1DB86070EB49051DE95F983E7288ED9F489C508B8B6DA6DF2082101736BA09B6108819611B3F6400415E7F778E21EAA412D1B769A048A657B9E98380821019D07C73BECEC4F37F05132C8695DED4D2EA27432DAB5A75E19739D42C667BD7B0721010000000000000000000000000000000000000000000000000000000000000000072101000000000000000000000000000000000000000000000000000000000000000007210100000000000000000000000000000000000000000000000000000000000000000721010000000000000000000000000000000000000000000000000000000000000000072101000000000000000000000000000000000000000000000000000000000000000007210100000000000000000000000000000000000000000000000000000000000000000721010000000000000000000000000000000000000000000000000000000000000000072101000000000000000000000000000000000000000000000000000000000000000008210181F5BA98D16F8A14B2B7E7C2D5FEE8FCD30D61731D097571ADF18BAF0285807C07210100000000000000000000000000000000000000000000000000000000000000000821013110D9D04908F59E422A9C674721ABF6E78B5BFB9B62F98D38E35818D28110CA0721010000000000000000000000000000000000000000000000000000000000000000082101C1DFAFE010C4D7046E143BBA14781F206D0026710C7B6D633A446B86750C54CE08210105D3A7B71DA6715B9B4F7DA5E4ECF52584B1A1A3451B814E4633C8894EC656CA08210142FEAC12960B2147E41C2C89663C2D05D11AECB43A5E646BB241F53C8BF00C010821016B303486CE63811ECCF8FB5EE071E471C574E661FBCAE366F8F4DC6ACFC79C400821011C102667AC4FBC8D91B99EF4A7C78BEE2448FF52AA6CD1D557595F23510E98EA082101FB79B43E0AA6BEE9173839C051D3D0DAC6F8EFBD487331B5B86A214C42FAA81C082101496FC0120D854E7534B992AB32EC3045B20D4BEE1BFBE4564FD092CEAFA08B72082101BB44FD36A5F3CDEE7B5C6DF3A6098A09E353335B6029F1477502588A7E37BE00")))
                 };
 
-                Assert.Throws<KsiVerificationException>(delegate
+                VerificationResult verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
+            }
+        }
+
+        [Test]
+        public void TestSignatureWithPubRecordMissingInPubFileButCanExtend()
+        {
+            PublicationsFilePublicationHashMatchesExtenderResponseRule rule = new PublicationsFilePublicationHashMatchesExtenderResponseRule();
+
+            // Check signature with publication record missing in publications file, but can be extended to a publication in publications file
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_With_Publication_Record), FileMode.Open))
+            {
+                // signature aggregation time: 1439577241
+
+                TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
+                testPublicationsFile.NearestPublications.Add(1439577241,
+                    new PublicationRecordInPublicationFile(new RawTag(0x703, false, false,
+                        Base16.Decode("3029020455ce349a042101A0325558A9ED65CEBABE502590E7903932B63F56FE0D832EF6236F9203DCDBC0")))); // publication time: 1439577242
+
+                TestVerificationContext context = new TestVerificationContext()
                 {
-                    rule.Verify(context);
-                });
+                    Signature = new KsiSignatureFactory().Create(stream),
+                    PublicationsFile = testPublicationsFile,
+                    // calendar chain from 1439577241 to 1439577242
+                    ExtendedCalendarHashChain =
+                        new CalendarHashChain(new RawTag(Constants.CalendarHashChain.TagType, false, false,
+                            Base16.Decode(
+                                "010455CE349A020455CE34990521012E86118343FBFF0422986896C42363DB331EBDE356303C1DFC3F33B2FDC39B08082101BBB4B47BBC16730790C32134C8348BB00F6C7E8B0B6AD1D7322AC4A551C3C3C80721012EAE245618B5EE8DD93C2ED6B3A84CECDF734FC5F26FB418AD55841CF25095BD082101EC0C7F4EDCB5E1445B7885D72B14D0098B5A2E1C976DE03A3C2860FCF49CEC8C082101B432DC9482ECF55C342C2457322BEC05F8D14903433DB1F2D27A5CDD763072BD082101C1C76C217C16303BC173B477E0B35BC9D9038C8E0CEC9E425D02A8CE5C1037290821014018FB1C9C9EFFD337B5676B87127CD0C1444E597FD7F291C06350706C9F2D730821010BD3C2B20050366102CF8A040251BDF866BFD0CDEB59EB43ECF9470E1DE68D44082101CEBE36A36A2A33A3003FD3CE955575D4466B4CB525AAD78E5E0F7D3217C5FCE90821014108F102F77702E5C467B330B634196B65E57F8354B4BB69898447A73F7D05A3082101FDF7DEFF598FA3608649BCC2FDE201655245DA192F2EA96D9A59822AEB3E76CC082101556C3B03730528CFC880F22611808771F37BE30E619876BD4191575CB781A8B908210113F40DCA06B1FCFC50DBDBC8800407CBFCBD99551B7E48B2E27B532E25B1F98E082101CDF3706B596D8F396EB80F24BB58CD9AF54AB491CE2EA374C58338AEDA8CC301082101B16FF759F8A8094777E6B9759A282F5513B8B476C1AD8A6B196364D4AECEFF63082101A6F082B82280F3A6AFB14C8E39B7F57860B857B70CA57AFD35F40395EEB32458082101496FC0120D854E7534B992AB32EC3045B20D4BEE1BFBE4564FD092CEAFA08B72082101BB44FD36A5F3CDEE7B5C6DF3A6098A09E353335B6029F1477502588A7E37BE00")))
+                };
+
+                VerificationResult verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
         }
 

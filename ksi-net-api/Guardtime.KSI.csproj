@@ -166,6 +166,7 @@
     <Compile Include="Signature\IIdentity.cs" />
     <Compile Include="Signature\IKsiSignatureFactory.cs" />
     <Compile Include="Signature\LegacyIdentity.cs" />
+    <Compile Include="Signature\Verification\Rule\AggregationHashChainIndexSuccessorRule.cs" />
     <Compile Include="Signature\Verification\Rule\Rfc3161RecordAggregationTimeRule.cs" />
     <Compile Include="Signature\Verification\Rule\Rfc3161RecordChainIndexRule.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainMetadataRule.cs" />
@@ -236,7 +237,7 @@
     <Compile Include="Signature\Verification\Rule\CalendarHashChainExistenceRule.cs" />
     <Compile Include="Signature\Verification\Rule\UserProvidedPublicationVerificationRule.cs" />
     <Compile Include="Signature\Verification\Rule\ExtendingPermittedVerificationRule.cs" />
-    <Compile Include="Signature\Verification\Rule\PublicationsFileContainsSignaturePublicationRule.cs" />
+    <Compile Include="Signature\Verification\Rule\PublicationsFileSignaturePublicationMatchRule.cs" />
     <Compile Include="Signature\Verification\Rule\PublicationsFileExtendedSignatureInputHashRule.cs" />
     <Compile Include="Signature\Verification\Rule\PublicationsFilePublicationHashMatchesExtenderResponseRule.cs" />
     <Compile Include="Signature\Verification\Rule\UserProvidedPublicationHashMatchesExtendedResponseRule.cs" />

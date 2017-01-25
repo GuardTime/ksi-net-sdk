@@ -45,7 +45,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                     return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
                 }
 
-                return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int09);
+                return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Pub04);
             }
 
             Logger.Debug("User provided publication does not equal to signature publication.{0}User provided publication:{1}{2}{3}Signature publication:{4}{5}",

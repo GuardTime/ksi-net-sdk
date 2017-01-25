@@ -90,6 +90,11 @@ namespace Guardtime.KSI.Signature.Verification
         public static readonly VerificationError Int11 = new VerificationError("INT-11", "The meta-data record in the aggregation hash chain may not be trusted");
 
         /// <summary>
+        ///     Inconsistent chain indexes error.
+        /// </summary>
+        public static readonly VerificationError Int12 = new VerificationError("INT-12", "Inconsistent chain indexes");
+
+        /// <summary>
         ///     Extender response calendar root hash mismatch error.
         /// </summary>
         public static readonly VerificationError Pub01 = new VerificationError("PUB-01", "Extender response calendar root hash mismatch");
@@ -105,6 +110,16 @@ namespace Guardtime.KSI.Signature.Verification
         public static readonly VerificationError Pub03 = new VerificationError("PUB-03", "Extender response input hash mismatch");
 
         /// <summary>
+        ///     Publication record hash and user provided publication hash mismatch error.
+        /// </summary>
+        public static readonly VerificationError Pub04 = new VerificationError("PUB-04", "Publication record hash and user provided publication hash mismatch");
+
+        /// <summary>
+        ///     Publication record hash and publications file publication hash mismatch error.
+        /// </summary>
+        public static readonly VerificationError Pub05 = new VerificationError("PUB-05", "Publication record hash and publications file publication hash mismatch");
+
+        /// <summary>
         ///     Certificate not found error.
         /// </summary>
         public static readonly VerificationError Key01 = new VerificationError("KEY-01", "Certificate not found");
@@ -115,14 +130,14 @@ namespace Guardtime.KSI.Signature.Verification
         public static readonly VerificationError Key02 = new VerificationError("KEY-02", "PKI signature not verified with certificate");
 
         /// <summary>
-        ///     Calendar root hash mismatch error.
+        ///     Calendar root hash mismatch error between signature and calendar database chain.
         /// </summary>
-        public static readonly VerificationError Cal01 = new VerificationError("CAL-01", "Calendar root hash mismatch");
+        public static readonly VerificationError Cal01 = new VerificationError("CAL-01", "Calendar root hash mismatch between signature and calendar database chain");
 
         /// <summary>
-        ///     Aggregation hash chain root hash and calendar hash chain input hash mismatch error.
+        ///     Aggregation hash chain root hash and calendar database hash chain input hash mismatch error.
         /// </summary>
-        public static readonly VerificationError Cal02 = new VerificationError("CAL-02", "Aggregation hash chain root hash and calendar hash chain input hash mismatch");
+        public static readonly VerificationError Cal02 = new VerificationError("CAL-02", "Aggregation hash chain root hash and calendar database hash chain input hash mismatch");
 
         /// <summary>
         ///     Aggregation time mismatch error.

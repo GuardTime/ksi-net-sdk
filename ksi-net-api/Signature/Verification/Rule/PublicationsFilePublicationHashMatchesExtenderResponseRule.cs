@@ -30,8 +30,16 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         public override VerificationResult Verify(IVerificationContext context)
         {
             IPublicationsFile publicationsFile = GetPublicationsFile(context);
-            ulong aggregationTime = GetSignature(context).AggregationTime;
-            PublicationRecordInPublicationFile publicationRecord = GetNearestPublicationRecord(publicationsFile, aggregationTime);
+            IKsiSignature signature = GetSignature(context);
+
+            PublicationRecordInPublicationFile publicationRecord = GetNearestPublicationRecord(publicationsFile, signature.AggregationTime, true);
+
+            if (publicationRecord == null)
+            {
+                // if suitable publication record does not exist in publications file then return NA
+                return new VerificationResult(GetRuleName(), VerificationResultCode.Na);
+            }
+
             CalendarHashChain extendedTimeCalendarHashChain = GetExtendedCalendarHashChain(context, publicationRecord.PublicationData.PublicationTime);
 
             return extendedTimeCalendarHashChain.OutputHash != publicationRecord.PublicationData.PublicationHash

@@ -104,7 +104,7 @@ namespace Guardtime.KSI.Test.Signature
                 }
             });
 
-            Assert.AreEqual(VerificationError.Int09.Code, ex.VerificationResult.VerificationError.Code, "Unexpected result code");
+            Assert.AreEqual(VerificationError.Pub04.Code, ex.VerificationResult.VerificationError.Code, "Unexpected result code");
         }
 
         [Test]

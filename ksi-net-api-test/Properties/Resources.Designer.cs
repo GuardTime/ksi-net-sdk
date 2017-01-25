@@ -925,6 +925,24 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-aggregation-chain-index-mismatch-prev.tlv.
+        /// </summary>
+        internal static string KsiSignature_Invalid_Aggregation_Chain_Index_Mismatch_Prev {
+            get {
+                return ResourceManager.GetString("KsiSignature_Invalid_Aggregation_Chain_Index_Mismatch_Prev", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-aggregation-chain-index-mismatch-prev-2.tlv.
+        /// </summary>
+        internal static string KsiSignature_Invalid_Aggregation_Chain_Index_Mismatch_Prev2 {
+            get {
+                return ResourceManager.GetString("KsiSignature_Invalid_Aggregation_Chain_Index_Mismatch_Prev2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-aggregation-chain-input-hash.tlv.
         /// </summary>
         internal static string KsiSignature_Invalid_Aggregation_Chain_Input_Hash {
@@ -994,6 +1012,15 @@ namespace Guardtime.KSI.Test.Properties {
         internal static string KsiSignature_Invalid_Extra_Tag {
             get {
                 return ResourceManager.GetString("KsiSignature_Invalid_Extra_Tag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-first-aggregation-chain-index-length.tlv.
+        /// </summary>
+        internal static string KsiSignature_Invalid_First_Aggregation_Chain_Index_Length {
+            get {
+                return ResourceManager.GetString("KsiSignature_Invalid_First_Aggregation_Chain_Index_Length", resourceCulture);
             }
         }
         

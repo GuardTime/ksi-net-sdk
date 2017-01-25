@@ -254,12 +254,13 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         /// </summary>
         /// <param name="publicationsFile">publications file</param>
         /// <param name="time">time</param>
+        /// <param name="allowNullValue">indicates if returning null value is allowed</param>
         /// <returns></returns>
-        public static PublicationRecordInPublicationFile GetNearestPublicationRecord(IPublicationsFile publicationsFile, ulong time)
+        public static PublicationRecordInPublicationFile GetNearestPublicationRecord(IPublicationsFile publicationsFile, ulong time, bool allowNullValue = false)
         {
             PublicationRecordInPublicationFile publicationRecord = publicationsFile.GetNearestPublicationRecord(time);
 
-            if (publicationRecord == null)
+            if (!allowNullValue && publicationRecord == null)
             {
                 throw new KsiVerificationException("No publication record found after given time in publications file: " + time + ".");
             }

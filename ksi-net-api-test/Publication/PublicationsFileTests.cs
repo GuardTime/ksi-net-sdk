@@ -157,43 +157,6 @@ namespace Guardtime.KSI.Test.Publication
         }
 
         [Test]
-        public void TestContainsPublicationRecord()
-        {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open))
-            {
-                using (
-                    TlvReader reader =
-                        new TlvReader(new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationrecord/pub-record-18-09-2014.bin"), FileMode.Open)))
-                {
-                    IPublicationsFile publicationsFile =
-                        new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                            CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
-                    Assert.IsFalse(publicationsFile.Contains(null), "Should not crash when null object is used");
-
-                    Assert.IsTrue(publicationsFile.Contains(new PublicationRecordInPublicationFile(reader.ReadTag())), "Should contain given publication record");
-                }
-            }
-        }
-
-        [Test]
-        public void TestDoesNotContainPublicationRecord()
-        {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open))
-            {
-                using (
-                    TlvReader reader =
-                        new TlvReader(new FileStream(Path.Combine(TestSetup.LocalPath, "resources/publication/publicationrecord/pub-record-invalid-hash-18-09-2014.bin"),
-                            FileMode.Open)))
-                {
-                    IPublicationsFile publicationsFile =
-                        new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                            CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
-                    Assert.IsFalse(publicationsFile.Contains(new PublicationRecordInPublicationFile(reader.ReadTag())), "Should not contain given publication record");
-                }
-            }
-        }
-
-        [Test]
         public void TestGetLatestPublication()
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open))
