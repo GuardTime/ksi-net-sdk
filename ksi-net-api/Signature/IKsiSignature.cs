@@ -120,12 +120,6 @@ namespace Guardtime.KSI.Signature
         IKsiSignature Extend(CalendarHashChain calendarHashChain, PublicationRecordInSignature publicationRecord, IKsiSignatureFactory signatureFactory = null);
 
         /// <summary>
-        /// Set level correction of the first link in the first aggregation hash chain.
-        /// </summary>
-        /// <param name="levelCorrection"></param>
-        void SetFirstLinkLevelCorrection(uint levelCorrection);
-
-        /// <summary>
         ///     Write KSI signature to stream.
         /// </summary>
         /// <param name="outputStream">output stream</param>

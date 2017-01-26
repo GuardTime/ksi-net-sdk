@@ -90,11 +90,6 @@ namespace Guardtime.KSI.Test.Signature
             return ExtendedKsiSignature;
         }
 
-        public void SetFirstLinkLevelCorrection(uint levelCorrection)
-        {
-            GetAggregationHashChains()[0].GetChainLinks()[0].SetLevelCorrection(0);
-        }
-
         public void WriteTo(Stream outputStream)
         {
             using (TlvWriter writer = new TlvWriter(outputStream))
@@ -122,6 +117,5 @@ namespace Guardtime.KSI.Test.Signature
         {
             return new[] { new LegacyIdentity("Test") };
         }
-
     }
 }

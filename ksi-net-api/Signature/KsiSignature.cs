@@ -377,14 +377,5 @@ namespace Guardtime.KSI.Signature
                 }
             }
         }
-
-        /// <summary>
-        /// Set level correction of the first link in the first aggregation hash chain.
-        /// </summary>
-        /// <param name="levelCorrection"></param>
-        public void SetFirstLinkLevelCorrection(uint levelCorrection)
-        {
-            GetAggregationHashChains()[0].GetChainLinks()[0].SetLevelCorrection(levelCorrection);
-        }
     }
 }

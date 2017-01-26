@@ -247,7 +247,7 @@ namespace Guardtime.KSI.Signature
         {
             if (level > 0)
             {
-                signature.SetFirstLinkLevelCorrection(level);
+                signature.GetAggregationHashChains()[0].GetChainLinks()[0].SetLevelCorrection(level);
             }
 
             Verify(signature, hash);
