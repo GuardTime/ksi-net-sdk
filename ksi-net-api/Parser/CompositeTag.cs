@@ -147,21 +147,11 @@ namespace Guardtime.KSI.Parser
         }
 
         /// <summary>
-        /// Add TLV child element
+        ///     Get array of child elements.
         /// </summary>
-        /// <param name="childTag">TLV child element</param>
-        protected void AddChild(ITlvTag childTag)
+        public ITlvTag[] GetChildren()
         {
-            _childTags.Add(childTag);
-        }
-
-        /// <summary>
-        /// Remove TLV child element
-        /// </summary>
-        /// <param name="childTag">TLV child element</param>
-        protected void RemoveChild(ITlvTag childTag)
-        {
-            _childTags.Remove(childTag);
+            return _childTags.ToArray();
         }
 
         /// <summary>
@@ -292,15 +282,6 @@ namespace Guardtime.KSI.Parser
 
                 return res + Type.GetHashCode() + Forward.GetHashCode() + NonCritical.GetHashCode();
             }
-        }
-
-        /// <summary>
-        /// Returns all child objects as an array
-        /// </summary>
-        /// <returns></returns>
-        public ITlvTag[] GetChildrenArray()
-        {
-            return _childTags.ToArray();
         }
 
         /// <summary>

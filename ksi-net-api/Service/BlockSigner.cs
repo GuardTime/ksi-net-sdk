@@ -144,8 +144,7 @@ namespace Guardtime.KSI.Service
             uint signLevel = _root.Level;
 
             Logger.Debug("Signing root node hash. Level: {0}; Hash: {1}", signLevel, _root.NodeHash);
-            RootSignature = _ksi.Sign(_root.NodeHash, signLevel);
-            RootSignature.GetAggregationHashChains()[0].GetChainLinks()[0].SetLevelCorrection(0);
+            RootSignature = new KsiSignature(false, false, _ksi.Sign(_root.NodeHash, signLevel).GetChildren(), 0);
         }
 
         /// <summary>

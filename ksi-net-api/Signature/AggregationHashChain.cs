@@ -68,6 +68,17 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
+        /// Create new aggregation hash chain TLV element.
+        /// </summary>
+        /// <param name="nonCritical">Is TLV element non critical</param>
+        /// <param name="forward">Is TLV element forwarded</param>
+        /// <param name="childTags">child TLV element list</param>
+        public AggregationHashChain(bool nonCritical, bool forward, ITlvTag[] childTags)
+            : base(Constants.AggregationHashChain.TagType, nonCritical, forward, childTags)
+        {
+        }
+
+        /// <summary>
         /// Parse child tag
         /// </summary>
         protected override ITlvTag ParseChild(ITlvTag childTag)

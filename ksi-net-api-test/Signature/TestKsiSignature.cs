@@ -65,6 +65,11 @@ namespace Guardtime.KSI.Test.Signature
             return GetEnumerator();
         }
 
+        public ITlvTag[] GetChildren()
+        {
+            return null;
+        }
+
         public ReadOnlyCollection<AggregationHashChain> GetAggregationHashChains()
         {
             return AggregationHashChains;

@@ -63,6 +63,31 @@ namespace Guardtime.KSI.Signature
             }
 
             /// <summary>
+            /// Create new aggregation hash chain link TLV element.
+            /// </summary>
+            /// <param name="direction">Direction</param>
+            /// <param name="nonCritical">Is TLV element non critical</param>
+            /// <param name="forward">Is TLV element forwarded</param>
+            /// <param name="childTags">child TLV element list</param>
+            public Link(LinkDirection direction, bool nonCritical, bool forward, ITlvTag[] childTags)
+                : base((uint)direction, nonCritical, forward, childTags)
+            {
+            }
+
+            /// <summary>
+            /// Create new aggregation hash chain link TLV element.
+            /// </summary>
+            /// <param name="direction">Direction</param>
+            /// <param name="nonCritical">Is TLV element non critical</param>
+            /// <param name="forward">Is TLV element forwarded</param>
+            /// <param name="childTags">child TLV element list</param>
+            /// <param name="levelCorrection">Level correction</param>
+            public Link(LinkDirection direction, bool nonCritical, bool forward, ITlvTag[] childTags, ulong levelCorrection)
+                : base((uint)direction, nonCritical, forward, BuildChildTags(childTags, levelCorrection))
+            {
+            }
+
+            /// <summary>
             /// Check tag type
             /// </summary>
             protected override void CheckTagType()
@@ -141,6 +166,48 @@ namespace Guardtime.KSI.Signature
             }
 
             /// <summary>
+            /// Create child TLV element list
+            /// </summary>
+            /// <param name="childTags">child TLV element list</param>
+            /// <param name="levelCorrection">Level correction</param>
+            private static ITlvTag[] BuildChildTags(ITlvTag[] childTags, ulong levelCorrection)
+            {
+                int index = -1;
+                List<ITlvTag> list = new List<ITlvTag>(childTags);
+
+                for (int i = 0; i < childTags.Length; i++)
+                {
+                    if (childTags[i].Type == Constants.AggregationHashChain.Link.LevelCorrectionTagType)
+                    {
+                        index = i;
+                        break;
+                    }
+                }
+
+                if (levelCorrection == 0)
+                {
+                    if (index != -1)
+                    {
+                        list.RemoveAt(index);
+                    }
+                }
+                else
+                {
+                    IntegerTag levelCorrectionTag = new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, levelCorrection);
+                    if (index != -1)
+                    {
+                        list[index] = levelCorrectionTag;
+                    }
+                    else
+                    {
+                        list.Add(levelCorrectionTag);
+                    }
+                }
+
+                return list.ToArray();
+            }
+
+            /// <summary>
             ///     Get level correction
             /// </summary>
             public ulong LevelCorrection => _levelCorrection?.Value ?? 0UL;
@@ -167,28 +234,6 @@ namespace Guardtime.KSI.Signature
                 }
 
                 return _metadata;
-            }
-
-            /// <summary>
-            /// Set level correction value
-            /// </summary>
-            /// <param name="levelCorrection">New level correction value</param>
-            public void SetLevelCorrection(ulong levelCorrection)
-            {
-                if (_levelCorrection != null)
-                {
-                    RemoveChild(_levelCorrection);
-                }
-
-                if (levelCorrection == 0)
-                {
-                    _levelCorrection = null;
-                }
-                else
-                {
-                    _levelCorrection = new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, levelCorrection);
-                    AddChild(_levelCorrection);
-                }
             }
 
             private static string GetLegacyIdString(byte[] bytes)
