@@ -609,6 +609,9 @@
   <data name="KsiPublicationsFile" xml:space="preserve">
     <value>resources/publication/publicationsfile/ksi-publications.bin</value>
   </data>
+  <data name="KsiPublicationsFile_2016_02" xml:space="preserve">
+    <value>resources/publication/publicationsfile/ksi-publications-2016-02.bin</value>
+  </data>
   <data name="KsiSignature_Invalid_Aggregation_Chain_Index_Mismatch_Prev" xml:space="preserve">
     <value>resources/signature/ksi-signature/ksi-signature-invalid-aggregation-chain-index-mismatch-prev.tlv</value>
   </data>

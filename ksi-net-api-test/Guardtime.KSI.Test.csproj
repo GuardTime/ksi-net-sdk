@@ -293,6 +293,9 @@
     <None Include="resources\publication\publicationrecord\pub-record-invalid-hash-18-09-2014.bin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="resources\publication\publicationsfile\ksi-publications-2016-02.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="resources\publication\publicationsfile\ksi-publications.bin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -59,7 +59,7 @@ namespace Guardtime.KSI.Test.Integration
                     {
                         case "PublicationFileBasedVerificationPolicy":
                             using (
-                                Stream publicationFileInStream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile),
+                                Stream publicationFileInStream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile_2016_02),
                                     FileMode.Open))
                             {
                                 policy = new PublicationBasedVerificationPolicy();
@@ -76,7 +76,7 @@ namespace Guardtime.KSI.Test.Integration
 
                         case "PublicationFileBasedVerificationNoExtendingPolicy":
                             using (
-                                Stream publicationFileInStream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile),
+                                Stream publicationFileInStream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile_2016_02),
                                     FileMode.Open))
                             {
                                 policy = new PublicationBasedVerificationPolicy();
