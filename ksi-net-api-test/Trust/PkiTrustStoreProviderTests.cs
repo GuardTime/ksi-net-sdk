@@ -193,7 +193,7 @@ namespace Guardtime.KSI.Test.Trust
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, path), FileMode.Open, FileAccess.Read))
             {
-                var binaryReader = new BinaryReader(stream);
+                BinaryReader binaryReader = new BinaryReader(stream);
                 byte[] pubsFileBytes = binaryReader.ReadBytes((int)stream.Length);
                 byte[] data = new byte[pubsFileBytes.Length - PublicationsFile.FileBeginningMagicBytes.Length];
                 Array.Copy(pubsFileBytes, PublicationsFile.FileBeginningMagicBytes.Length, data, 0, data.Length);
