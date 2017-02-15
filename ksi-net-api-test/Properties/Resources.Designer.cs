@@ -1250,11 +1250,29 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/trust/pkitrustprovider/custom-cert-expired.cer.
+        /// </summary>
+        internal static string PkiTrustProvider_CustomCertExpired {
+            get {
+                return ResourceManager.GetString("PkiTrustProvider_CustomCertExpired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/trust/pkitrustprovider/custom-cert-invalid.pem.
         /// </summary>
         internal static string PkiTrustProvider_CustomCertInvalid {
             get {
                 return ResourceManager.GetString("PkiTrustProvider_CustomCertInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/trust/pkitrustprovider/identrust.pem.
+        /// </summary>
+        internal static string PkiTrustProvider_IdenTrustCert {
+            get {
+                return ResourceManager.GetString("PkiTrustProvider_IdenTrustCert", resourceCulture);
             }
         }
         
@@ -1268,20 +1286,11 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/trust/pkitrustprovider/pubs-file-symantec.bin.
+        ///   Looks up a localized string similar to resources/trust/pkitrustprovider/pubs-file-custom-cert-expired.bin.
         /// </summary>
-        internal static string PkiTrustProvider_PubsFileSymantecCert {
+        internal static string PkiTrustProvider_PubsFileCustomCertExpired {
             get {
-                return ResourceManager.GetString("PkiTrustProvider_PubsFileSymantecCert", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/trust/pkitrustprovider/symantec.cer.
-        /// </summary>
-        internal static string PkiTrustProvider_SymantecCert {
-            get {
-                return ResourceManager.GetString("PkiTrustProvider_SymantecCert", resourceCulture);
+                return ResourceManager.GetString("PkiTrustProvider_PubsFileCustomCertExpired", resourceCulture);
             }
         }
         

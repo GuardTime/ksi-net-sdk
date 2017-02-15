@@ -59,8 +59,8 @@ namespace Guardtime.KSI.Test.Integration
                     {
                         case "PublicationFileBasedVerificationPolicy":
                             using (
-                                Stream publicationFileInStream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile_2016_02),
-                                    FileMode.Open))
+                                Stream publicationFileInStream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile),
+                                    FileMode.Open, FileAccess.Read))
                             {
                                 policy = new PublicationBasedVerificationPolicy();
                                 context.PublicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
@@ -76,8 +76,8 @@ namespace Guardtime.KSI.Test.Integration
 
                         case "PublicationFileBasedVerificationNoExtendingPolicy":
                             using (
-                                Stream publicationFileInStream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile_2016_02),
-                                    FileMode.Open))
+                                Stream publicationFileInStream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile),
+                                    FileMode.Open, FileAccess.Read))
                             {
                                 policy = new PublicationBasedVerificationPolicy();
                                 context.PublicationsFile = new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
@@ -127,7 +127,7 @@ namespace Guardtime.KSI.Test.Integration
                         default:
                             using (
                                 Stream publicationFileInStream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile),
-                                    FileMode.Open))
+                                    FileMode.Open, FileAccess.Read))
                             {
                                 policy = new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
                                     CryptoTestFactory.CreateCertificateSubjectRdnSelector(new List<CertificateSubjectRdn>

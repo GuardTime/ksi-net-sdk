@@ -36,10 +36,10 @@ namespace Guardtime.KSI.Test.Trust
         [Test]
         public void PkiTrustStoreProviderVerifyTest()
         {
-            PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(CreateCertStore(Resources.PkiTrustProvider_SymantecCert),
+            PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(CreateCertStore(Resources.PkiTrustProvider_IdenTrustCert),
                 CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
-            PublicationsFile publicationsFile = GetPublicationsFile(Resources.PkiTrustProvider_PubsFileSymantecCert);
+            PublicationsFile publicationsFile = GetPublicationsFile(Resources.KsiPublicationsFile);
 
             trustStoreProvider.Verify(publicationsFile.GetSignedBytes(), publicationsFile.GetSignatureValue());
         }
@@ -50,7 +50,7 @@ namespace Guardtime.KSI.Test.Trust
             PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                 CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
-            PublicationsFile publicationsFile = GetPublicationsFile(Resources.PkiTrustProvider_PubsFileSymantecCert);
+            PublicationsFile publicationsFile = GetPublicationsFile(Resources.KsiPublicationsFile);
 
             trustStoreProvider.Verify(publicationsFile.GetSignedBytes(), publicationsFile.GetSignatureValue());
         }
@@ -61,7 +61,7 @@ namespace Guardtime.KSI.Test.Trust
             PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(CreateCertStore(Resources.PkiTrustProvider_CustomCertInvalid),
                 CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
-            PublicationsFile publicationsFile = GetPublicationsFile(Resources.PkiTrustProvider_PubsFileSymantecCert);
+            PublicationsFile publicationsFile = GetPublicationsFile(Resources.KsiPublicationsFile);
 
             PkiVerificationFailedException ex = Assert.Throws<PkiVerificationFailedException>(delegate
             {
@@ -103,7 +103,8 @@ namespace Guardtime.KSI.Test.Trust
 
             // separate error messages for Microsoft and Bouncy Castle
             Assert.That(ex.Message.StartsWith("Trust chain did not complete to the known authority anchor. Thumbprints did not match.") ||
-                        ex.Message.StartsWith("Could not build certificate path"),
+                        (ex.Message.StartsWith("Could not build certificate path")
+                         && ex.InnerException.Message.StartsWith("Unable to find certificate chain.")),
                 "Unexpected exception message: " + ex.Message);
         }
 
@@ -124,7 +125,7 @@ namespace Guardtime.KSI.Test.Trust
         [Test]
         public void PkiTrustStoreProviderVerifyCustomCertInvalidTest()
         {
-            PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(CreateCertStore(Resources.PkiTrustProvider_SymantecCert),
+            PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(CreateCertStore(Resources.PkiTrustProvider_IdenTrustCert),
                 CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
             PublicationsFile publicationsFile = GetPublicationsFile(Resources.PkiTrustProvider_PubsFileCustomCert);
@@ -136,7 +137,8 @@ namespace Guardtime.KSI.Test.Trust
 
             // separate error messages for Microsoft and Bouncy Castle
             Assert.That(ex.Message.StartsWith("Trust chain did not complete to the known authority anchor. Thumbprints did not match.") ||
-                        ex.Message.StartsWith("Could not build certificate path"),
+                        (ex.Message.StartsWith("Could not build certificate path")
+                         && ex.InnerException.Message.StartsWith("Unable to find certificate chain.")),
                 "Unexpected exception message: " + ex.Message);
         }
 
@@ -144,7 +146,9 @@ namespace Guardtime.KSI.Test.Trust
         public void PkiTrustStoreProviderVerifyCustomCertMultiInvalidTest()
         {
             PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(
-                CreateCertStore(Resources.PkiTrustProvider_CustomCertInvalid, Resources.PkiTrustProvider_SymantecCert),
+                CreateCertStore(
+                    Resources.PkiTrustProvider_CustomCertInvalid,
+                    Resources.PkiTrustProvider_IdenTrustCert),
                 CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
             PublicationsFile publicationsFile = GetPublicationsFile(Resources.PkiTrustProvider_PubsFileCustomCert);
@@ -156,17 +160,46 @@ namespace Guardtime.KSI.Test.Trust
 
             // separate error messages for Microsoft and Bouncy Castle
             Assert.That(ex.Message.StartsWith("Trust chain did not complete to the known authority anchor. Thumbprints did not match.") ||
-                        ex.Message.StartsWith("Could not build certificate path"),
+                        (ex.Message.StartsWith("Could not build certificate path")
+                         && ex.InnerException.Message.StartsWith("Unable to find certificate chain.")),
+                "Unexpected exception message: " + ex.Message);
+        }
+
+        [Test]
+        public void PkiTrustStoreProviderVerifyCustomCertExpiredInvalidTest()
+        {
+            PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(CreateCertStore(Resources.PkiTrustProvider_CustomCertExpired),
+                CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
+
+            PublicationsFile publicationsFile = GetPublicationsFile(Resources.PkiTrustProvider_PubsFileCustomCertExpired);
+
+            PkiVerificationFailedException ex = Assert.Throws<PkiVerificationFailedException>(delegate
+            {
+                trustStoreProvider.Verify(publicationsFile.GetSignedBytes(), publicationsFile.GetSignatureValue());
+            });
+
+            // separate error messages for Microsoft and Bouncy Castle
+
+            Assert.That(
+                ex.Message.StartsWith(
+                    "Trust chain did not complete to the known authority anchor. Errors: A required certificate is not within its validity period when verifying against the current system clock or the timestamp in the signed file.") ||
+                (ex.Message.StartsWith("Could not build certificate path")
+                 && ex.InnerException.Message.StartsWith("Certification path could not be validated.")
+                 && ex.InnerException.InnerException.Message.StartsWith("Could not validate certificate: certificate expired on ")),
                 "Unexpected exception message: " + ex.Message);
         }
 
         private static PublicationsFile GetPublicationsFile(string path)
         {
-            byte[] pubsFileBytes = File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, path));
-            byte[] data = new byte[pubsFileBytes.Length - PublicationsFile.FileBeginningMagicBytes.Length];
-            Array.Copy(pubsFileBytes, PublicationsFile.FileBeginningMagicBytes.Length, data, 0, data.Length);
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, path), FileMode.Open, FileAccess.Read))
+            {
+                var binaryReader = new BinaryReader(stream);
+                byte[] pubsFileBytes = binaryReader.ReadBytes((int)stream.Length);
+                byte[] data = new byte[pubsFileBytes.Length - PublicationsFile.FileBeginningMagicBytes.Length];
+                Array.Copy(pubsFileBytes, PublicationsFile.FileBeginningMagicBytes.Length, data, 0, data.Length);
 
-            return new PublicationsFile(new RawTag(0x0, false, false, data));
+                return new PublicationsFile(new RawTag(0x0, false, false, data));
+            }
         }
 
         public X509Store CreateCertStore(params string[] certPaths)

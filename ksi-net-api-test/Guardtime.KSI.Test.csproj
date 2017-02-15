@@ -244,6 +244,7 @@
     <Compile Include="Trust\PkiTrustStoreProviderTests.cs" />
     <Compile Include="CryptoTestFactoryTests.cs" />
     <Compile Include="TestUtil.cs" />
+    <Compile Include="Trust\TestPkiTrustStoreProvider.cs" />
     <Compile Include="Utils\InvalidEncodeTlvTag.cs" />
     <Compile Include="Utils\UtilTests.cs" />
   </ItemGroup>
@@ -608,7 +609,7 @@
     <None Include="resources\signature\integration-test-signatures\ExtendedSignature_WithOlderPublicationTime.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\integration-test-signatures\infile_2016-12-14-extended.ksig">
+    <None Include="resources\signature\integration-test-signatures\infile_2017-02-14.ksig">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\integration-test-signatures\invalid-chain-index.ksig">
@@ -1196,22 +1197,25 @@
     <None Include="resources\testdata.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-calendar-hash-chain-input-hash.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\trust\pkitrustprovider\custom-cert-expired.cer">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="resources\trust\pkitrustprovider\custom-cert-invalid.pem">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\trust\pkitrustprovider\custom-cert.pem">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-calendar-hash-chain-input-hash.tlv">
+    <None Include="resources\trust\pkitrustprovider\identrust.pem">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\trust\pkitrustprovider\pubs-file-custom-cert-expired.bin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\trust\pkitrustprovider\pubs-file-custom-cert.bin">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\trust\pkitrustprovider\pubs-file-symantec.bin">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\trust\pkitrustprovider\symantec.cer">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
