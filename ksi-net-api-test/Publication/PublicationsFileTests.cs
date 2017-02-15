@@ -33,14 +33,13 @@ using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Publication
 {
-    // TODO: Possibility to change file easily because signature certificate expires
     [TestFixture]
     public class PublicationsFileTests
     {
         [Test]
-        public void TestCreatePublicationsFileFromFile1()
+        public void TestCreatePublicationsFileFromFileEmail()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
             {
                 new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                     CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
@@ -48,11 +47,21 @@ namespace Guardtime.KSI.Test.Publication
         }
 
         [Test]
-        public void TestCreatePublicationsFileFromFile2()
+        public void TestCreatePublicationsFileFromFileOu()
+        {
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
+            {
+                new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
+                    CryptoTestFactory.CreateCertificateSubjectRdnSelector("OU=Verified Email: publications@guardtime.com"))).Create(stream);
+            }
+        }
+
+        [Test]
+        public void TestCreatePublicationsFileFromFileLongEmailName()
         {
             if (CryptoTestFactory.ProviderType == CryptoProviderType.BouncyCastle)
             {
-                using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open))
+                using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
                 {
                     new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                         CryptoTestFactory.CreateCertificateSubjectRdnSelector("EmailAddress=publications@guardtime.com"))).Create(stream);
@@ -60,7 +69,7 @@ namespace Guardtime.KSI.Test.Publication
             }
             else if (CryptoTestFactory.ProviderType == CryptoProviderType.Microsoft)
             {
-                using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open))
+                using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
                 {
                     new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                         CryptoTestFactory.CreateCertificateSubjectRdnSelector("EMail=publications@guardtime.com"))).Create(stream);
@@ -69,9 +78,9 @@ namespace Guardtime.KSI.Test.Publication
         }
 
         [Test]
-        public void TestCreatePublicationsFileFromFile3()
+        public void TestCreatePublicationsFileFromFileWithOid()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
             {
                 new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                     CryptoTestFactory.CreateCertificateSubjectRdnSelector("1.2.840.113549.1.9.1=publications@guardtime.com"))).Create(stream);
@@ -79,9 +88,9 @@ namespace Guardtime.KSI.Test.Publication
         }
 
         [Test]
-        public void TestCreatePublicationsFileFromFile4()
+        public void TestCreatePublicationsFileFromFileInvalidName()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
             {
                 ArgumentException ex = Assert.Throws<ArgumentException>(delegate
                 {
@@ -94,9 +103,9 @@ namespace Guardtime.KSI.Test.Publication
         }
 
         [Test]
-        public void TestCreatePublicationsFileFromFile5()
+        public void TestCreatePublicationsFileFromFileInvalidEmail()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
             {
                 PublicationsFileException ex = Assert.Throws<PublicationsFileException>(delegate
                 {
@@ -109,9 +118,24 @@ namespace Guardtime.KSI.Test.Publication
         }
 
         [Test]
-        public void TestCreatePublicationsFileFromFile6()
+        public void TestCreatePublicationsFileFromFileInvalidOu()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
+            {
+                PublicationsFileException ex = Assert.Throws<PublicationsFileException>(delegate
+                {
+                    new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
+                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("OU=something"))).Create(stream);
+                });
+
+                Assert.That(ex.Message, Does.StartWith("Publications file verification failed."));
+            }
+        }
+
+        [Test]
+        public void TestCreatePublicationsFileFromFileInvalidEmailWithOid()
+        {
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
             {
                 PublicationsFileException ex = Assert.Throws<PublicationsFileException>(delegate
                 {
@@ -124,9 +148,9 @@ namespace Guardtime.KSI.Test.Publication
         }
 
         [Test]
-        public void TestCreatePublicationsFileFromFile7()
+        public void TestCreatePublicationsFileFromFileInvalidOid()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
             {
                 ArgumentException ex = Assert.Throws<ArgumentException>(delegate
                 {
@@ -143,9 +167,44 @@ namespace Guardtime.KSI.Test.Publication
         }
 
         [Test]
+        public void TestCreatePublicationsFileFromFileMultipleRdns()
+        {
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
+            {
+                new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
+                    CryptoTestFactory.CreateCertificateSubjectRdnSelector(new List<CertificateSubjectRdn>
+                    {
+                        new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com"),
+                        new CertificateSubjectRdn("OU", "Verified Email: publications@guardtime.com")
+                    })))
+                    .Create(stream);
+            }
+        }
+
+        [Test]
+        public void TestCreatePublicationsFileFromFileMultipleRdnsInvalidOu()
+        {
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
+            {
+                PublicationsFileException ex = Assert.Throws<PublicationsFileException>(delegate
+                {
+                    new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
+                        CryptoTestFactory.CreateCertificateSubjectRdnSelector(new List<CertificateSubjectRdn>
+                        {
+                            new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com"),
+                            new CertificateSubjectRdn("OU", "something")
+                        })))
+                        .Create(stream);
+                });
+
+                Assert.That(ex.Message, Does.StartWith("Publications file verification failed"));
+            }
+        }
+
+        [Test]
         public void TestFindCertificateById()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
             {
                 IPublicationsFile publicationsFile =
                     new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
@@ -159,15 +218,14 @@ namespace Guardtime.KSI.Test.Publication
         [Test]
         public void TestGetLatestPublication()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
             {
                 IPublicationsFile publicationsFile =
                     new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                         CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
                 PublicationRecordInPublicationFile publicationRecord = publicationsFile.GetLatestPublication();
 
-                Assert.AreEqual(1455494400, publicationRecord.PublicationData.PublicationTime, "Should be correct publication time for latest publication");
-                // TODO: Test more from latest publication
+                Assert.AreEqual(1484438400, publicationRecord.PublicationData.PublicationTime, "Should be correct publication time for latest publication");
             }
         }
 

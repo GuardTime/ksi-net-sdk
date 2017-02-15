@@ -62,7 +62,7 @@ namespace Guardtime.KSI.Test.Signature.Verification
                                 new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com")
                             })))
                             .Create(
-                                new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open))
+                                new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
                 };
 
                 Console.WriteLine(@"// Internal verification policy");
