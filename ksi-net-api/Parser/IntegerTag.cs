@@ -39,7 +39,7 @@ namespace Guardtime.KSI.Parser
             {
                 throw new TlvException("Invalid TLV element encoded value: null.");
             }
-            Value = Util.DecodeUnsignedLong(data, 0, data.Length);
+            Value = Util.DecodeUnsignedLong(data, 0, data.Length, true);
         }
 
         /// <summary>

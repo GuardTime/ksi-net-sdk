@@ -137,12 +137,18 @@ namespace Guardtime.KSI.Utils
         /// <param name="buf">byte array</param>
         /// <param name="ofs">data offset</param>
         /// <param name="len">data length</param>
+        /// <param name="checkLeadingZeros">check that byte array does not contains leading zeros</param>
         /// <returns>unsigned long</returns>
-        public static ulong DecodeUnsignedLong(byte[] buf, int ofs, int len)
+        public static ulong DecodeUnsignedLong(byte[] buf, int ofs, int len, bool checkLeadingZeros = false)
         {
             if (buf == null)
             {
                 throw new KsiException("Input byte array cannot be null.");
+            }
+
+            if (checkLeadingZeros && buf.Length > 1 && buf[0] == 0)
+            {
+                throw new KsiException("Integer encoding cannot contain leading zeros");
             }
 
             if (ofs < 0 || len < 0 || ofs + len < 0 || ofs + len > buf.Length)
