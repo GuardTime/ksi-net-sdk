@@ -56,7 +56,8 @@ namespace Guardtime.KSI.Crypto.BouncyCastle.Crypto
             {
                 try
                 {
-                    oidList.Add(new DerObjectIdentifier(rdn.Oid));
+                    // try to get by name first (expect Oid contain name). DefaultLookup contains "name"=> DerObjectIdentifier pairs)
+                    oidList.Add(X509Name.DefaultLookup[rdn.Oid.ToLower()] as DerObjectIdentifier ?? new DerObjectIdentifier(rdn.Oid));
                     valueList.Add(rdn.Value);
                 }
                 catch (Exception ex)

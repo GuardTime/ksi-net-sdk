@@ -139,7 +139,15 @@ namespace Guardtime.KSI.Crypto.Microsoft.Crypto
 
         private static List<string> GetRdnList(X500DistinguishedName dname)
         {
-            return new List<string>(dname.Format(true).Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries));
+            string[] rdns = dname.Format(true).Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+
+            // trim values
+            for (int i = 0; i < rdns.Length; i++)
+            {
+                rdns[i] = rdns[i].Trim();
+            }
+
+            return new List<string>(rdns);
         }
     }
 }

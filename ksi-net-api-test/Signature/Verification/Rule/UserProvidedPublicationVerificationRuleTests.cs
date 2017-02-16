@@ -150,7 +150,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
 
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-                Assert.AreEqual(VerificationError.Int09, verificationResult.VerificationError);
+                Assert.AreEqual(VerificationError.Pub04, verificationResult.VerificationError);
             }
         }
 

@@ -594,19 +594,31 @@
   <data name="PkiTrustProvider_CustomCertInvalid" xml:space="preserve">
     <value>resources/trust/pkitrustprovider/custom-cert-invalid.pem</value>
   </data>
+  <data name="PkiTrustProvider_CustomCertExpired" xml:space="preserve">
+    <value>resources/trust/pkitrustprovider/custom-cert-expired.cer</value>
+  </data>
   <data name="PkiTrustProvider_CustomCert" xml:space="preserve">
     <value>resources/trust/pkitrustprovider/custom-cert.pem</value>
   </data>
   <data name="PkiTrustProvider_PubsFileCustomCert" xml:space="preserve">
     <value>resources/trust/pkitrustprovider/pubs-file-custom-cert.bin</value>
   </data>
-  <data name="PkiTrustProvider_PubsFileSymantecCert" xml:space="preserve">
-    <value>resources/trust/pkitrustprovider/pubs-file-symantec.bin</value>
+  <data name="PkiTrustProvider_PubsFileCustomCertExpired" xml:space="preserve">
+    <value>resources/trust/pkitrustprovider/pubs-file-custom-cert-expired.bin</value>
   </data>
-  <data name="PkiTrustProvider_SymantecCert" xml:space="preserve">
-    <value>resources/trust/pkitrustprovider/symantec.cer</value>
+  <data name="PkiTrustProvider_IdenTrustCert" xml:space="preserve">
+    <value>resources/trust/pkitrustprovider/identrust.pem</value>
   </data>
   <data name="KsiPublicationsFile" xml:space="preserve">
     <value>resources/publication/publicationsfile/ksi-publications.bin</value>
+  </data>
+  <data name="KsiSignature_Invalid_Aggregation_Chain_Index_Mismatch_Prev" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-aggregation-chain-index-mismatch-prev.tlv</value>
+  </data>
+  <data name="KsiSignature_Invalid_Aggregation_Chain_Index_Mismatch_Prev2" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-aggregation-chain-index-mismatch-prev-2.tlv</value>
+  </data>
+  <data name="KsiSignature_Invalid_First_Aggregation_Chain_Index_Length" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-first-aggregation-chain-index-length.tlv</value>
   </data>
 </root>

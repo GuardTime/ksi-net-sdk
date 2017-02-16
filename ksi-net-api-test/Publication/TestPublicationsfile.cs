@@ -44,25 +44,6 @@ namespace Guardtime.KSI.Test.Publication
             return EncodeValueBytes;
         }
 
-        public bool Contains(PublicationRecord publicationRecord)
-        {
-            if (publicationRecord == null)
-            {
-                return false;
-            }
-
-            foreach (PublicationRecordInPublicationFile record in PublicationRecords)
-            {
-                if (record.PublicationData.PublicationTime == publicationRecord.PublicationData.PublicationTime &&
-                    record.PublicationData.PublicationHash == publicationRecord.PublicationData.PublicationHash)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         public byte[] FindCertificateById(byte[] certificateId)
         {
             foreach (CertificateRecord certificateRecord in CertificateRecords)

@@ -33,9 +33,9 @@ resources/signature/integration-test-signatures/NewSignature-CalAuth-WrongCertID
 resources/signature/integration-test-signatures/NewSignature-CalAuth-WrongSigningValue.ksig;false;Ok; ; ; 
 resources/signature/integration-test-signatures/NewSignature-CalAuth-WrongSigType.ksig;false;Ok; ; ; 
 #
-# Na because signature's publication is not in publications file.
+# Na because signature's aggregation time is later than latest publication in publications file
 #
-resources/signature/integration-test-signatures/ok-sig-extended-2014-05-15.ksig;false;Na; ; ;PublicationsFileContainsSignaturePublicationRule
+resources/signature/integration-test-signatures/infile_2017-02-14.ksig;false;Na; ; ;PublicationsFilePublicationHashMatchesExtenderResponseRule
 #
 # Failed.
 #
