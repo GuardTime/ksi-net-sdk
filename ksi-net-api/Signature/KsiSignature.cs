@@ -66,19 +66,6 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
-        /// Create new KSI signature TLV element.
-        /// </summary>
-        /// <param name="nonCritical">Is TLV element non critical</param>
-        /// <param name="forward">Is TLV element forwarded</param>
-        /// <param name="childTags">child TLV element list</param>
-        /// <param name="firstLinkLevelCorrection">level correction of the first link in the first aggregation chain.</param>
-        public KsiSignature(bool nonCritical, bool forward, ITlvTag[] childTags, ulong firstLinkLevelCorrection)
-            : base(Constants.KsiSignature.TagType, nonCritical, forward, BuildChildTags(childTags, firstLinkLevelCorrection))
-        {
-            SortAggregationHashChains();
-        }
-
-        /// <summary>
         /// Parse child tag
         /// </summary>
         protected override ITlvTag ParseChild(ITlvTag childTag)
@@ -146,72 +133,6 @@ namespace Guardtime.KSI.Signature
         private void SortAggregationHashChains()
         {
             _aggregationHashChains.Sort(new AggregationHashChain.ChainIndexOrdering());
-        }
-
-        /// <summary>
-        /// Create child TLV element list
-        /// </summary>
-        /// <param name="childTags">child TLV element list</param>
-        /// <param name="firstLinkLevelCorrection">level correction of the first link in the first aggregation chain.</param>
-        private static ITlvTag[] BuildChildTags(ITlvTag[] childTags, ulong firstLinkLevelCorrection)
-        {
-            List<ITlvTag> list = new List<ITlvTag>(childTags);
-
-            AggregationHashChain firstAggregationHashChain = null;
-            int index = -1;
-            AggregationHashChain.ChainIndexOrdering comparer = new AggregationHashChain.ChainIndexOrdering();
-
-            // find the first aggregation hash chain
-            for (int i = 0; i < list.Count; i++)
-            {
-                ITlvTag childTag = list[i];
-                if (childTag.Type != Constants.AggregationHashChain.TagType)
-                {
-                    continue;
-                }
-
-                AggregationHashChain aggregationHashChain = new AggregationHashChain(childTag);
-
-                if (firstAggregationHashChain == null || comparer.Compare(firstAggregationHashChain, aggregationHashChain) > 0)
-                {
-                    firstAggregationHashChain = aggregationHashChain;
-                    index = i;
-                }
-            }
-
-            if (index > -1)
-            {
-                // replace the first aggregation hash chain
-                list[index] = GetAggregationHashChainWithLevelCorrection(firstAggregationHashChain, firstLinkLevelCorrection);
-            }
-
-            return list.ToArray();
-        }
-
-        private static AggregationHashChain GetAggregationHashChainWithLevelCorrection(AggregationHashChain aggregationHashChain, ulong levelCorrection)
-        {
-            List<ITlvTag> childTags = new List<ITlvTag>(aggregationHashChain.GetChildren());
-            int index = -1;
-
-            for (int i = 0; i < childTags.Count; i++)
-            {
-                ITlvTag childTag = childTags[i];
-
-                if (childTag.Type == (uint)LinkDirection.Left || childTag.Type == (uint)LinkDirection.Right)
-                {
-                    index = i;
-                    break;
-                }
-            }
-
-            if (index > -1)
-            {
-                AggregationHashChain.Link link = (AggregationHashChain.Link)childTags[index];
-                // replace link
-                childTags[index] = new AggregationHashChain.Link(link.Direction, link.NonCritical, link.Forward, link.GetChildren(), levelCorrection);
-            }
-
-            return new AggregationHashChain(false, false, childTags.ToArray());
         }
 
         /// <summary>

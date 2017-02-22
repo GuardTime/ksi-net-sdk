@@ -71,15 +71,6 @@ namespace Guardtime.KSI.Test.Signature
         }
 
         [Test]
-        public void CreateFromStreamAndVerifyWithLevel3Test()
-        {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok_Level3), FileMode.Open))
-            {
-                new KsiSignatureFactory().Create(stream, null, 3);
-            }
-        }
-
-        [Test]
         public void CreateFromStreamAndVerifyWithPolicyInvalidTest()
         {
             IKsiSignature signature;

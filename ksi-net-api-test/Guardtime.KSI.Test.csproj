@@ -299,6 +299,9 @@
     <None Include="resources\publication\publicationsfile\ksi-publications.bin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="resources\service\aggregation-response-pdu-with-level-correction-1.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="resources\service\aggregator-config-response-pdu-0x0-int.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

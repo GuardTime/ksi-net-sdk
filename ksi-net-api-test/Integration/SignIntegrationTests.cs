@@ -48,13 +48,15 @@ namespace Guardtime.KSI.Test.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void HttpSignHashWithLevelTest(Ksi ksi)
         {
-            IKsiSignature signature = ksi.Sign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), 3);
+            DataHash documentHash = new DataHash(HashAlgorithm.Sha2256, Base16.Decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"));
+
+            IKsiSignature signature = ksi.Sign(documentHash, 3);
+
             Assert.AreEqual(3, signature.GetAggregationHashChains()[0].GetChainLinks()[0].LevelCorrection, "Level correction is invalid.");
 
             VerificationContext verificationContext = new VerificationContext(signature)
             {
-                DocumentHash = new DataHash(HashAlgorithm.Sha2256,
-                    Base16.Decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")),
+                DocumentHash = documentHash,
                 PublicationsFile = ksi.GetPublicationsFile()
             };
             KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
@@ -253,7 +255,7 @@ namespace Guardtime.KSI.Test.Integration
         {
             ManualResetEvent waitHandle = new ManualResetEvent(false);
             int doneCount = 0;
-            int runCount = 8;
+            int runCount = 7;
             string errorMessage = null;
 
             for (int i = 0; i < runCount; i++)

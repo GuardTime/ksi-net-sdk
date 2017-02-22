@@ -21,6 +21,7 @@ using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Service;
+using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Test.Properties;
 using Guardtime.KSI.Utils;
@@ -138,6 +139,21 @@ namespace Guardtime.KSI.Test.Service
             });
 
             Assert.That(ex.Message.StartsWith("Unknown request ID:"), "Unexpected exception message: " + ex.Message);
+        }
+
+        /// <summary>
+        /// Test signing with level 2. Level correction in response is 1.
+        /// </summary>
+        [Test]
+        public void SignStaticWithLevelTest()
+        {
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_SignedLevel2_LevelCorrection1)),
+                3306651419058286509);
+            DataHash documentHash = new DataHash(HashAlgorithm.Sha2256, Base16.Decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"));
+
+            IKsiSignature signature = ksi.Sign(documentHash, 2);
+
+            Assert.AreEqual(3, signature.GetAggregationHashChains()[0].GetChainLinks()[0].LevelCorrection, "Level correction is invalid.");
         }
     }
 }

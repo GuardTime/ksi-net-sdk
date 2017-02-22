@@ -65,6 +65,11 @@ namespace Guardtime.KSI.Service
         /// <returns>async result</returns>
         public IAsyncResult BeginSign(DataHash hash, uint level, AsyncCallback callback, object asyncState)
         {
+            if (hash == null)
+            {
+                throw new ArgumentNullException(nameof(hash));
+            }
+
             if (_signingServiceProtocol == null)
             {
                 throw new KsiServiceException("Signing service protocol is missing from service.");
@@ -85,10 +90,10 @@ namespace Guardtime.KSI.Service
             AggregationRequestPayload payload = level == 0 ? new AggregationRequestPayload(requestId, hash) : new AggregationRequestPayload(requestId, hash, level);
             AggregationRequestPdu pdu = new AggregationRequestPdu(header, payload, _macAlgorithm, _signingServiceCredentials.LoginKey);
 
-            Logger.Debug("Begin sign (request id: {0}){1}{2}", requestId, Environment.NewLine, pdu);
-            IAsyncResult serviceProtocolAsyncResult = _signingServiceProtocol.BeginSign(pdu.Encode(), requestId, callback, asyncState);
+            Logger.Debug("Begin sign (request id: {0}){1}{2}", payload.RequestId, Environment.NewLine, pdu);
+            IAsyncResult serviceProtocolAsyncResult = _signingServiceProtocol.BeginSign(pdu.Encode(), payload.RequestId, callback, asyncState);
 
-            return new CreateSignatureKsiServiceAsyncResult(hash, level, requestId, serviceProtocolAsyncResult, asyncState);
+            return new CreateSignatureKsiServiceAsyncResult(payload, serviceProtocolAsyncResult, asyncState);
         }
 
         /// <summary>
@@ -109,18 +114,47 @@ namespace Guardtime.KSI.Service
                 : new LegacyAggregationRequestPayload(requestId, hash, level);
             LegacyAggregationPdu pdu = new LegacyAggregationPdu(header, payload, LegacyPdu.GetMacTag(_macAlgorithm, _signingServiceCredentials.LoginKey, header, payload));
 
-            Logger.Debug("Begin legacy sign (request id: {0}){1}{2}", requestId, Environment.NewLine, pdu);
-            IAsyncResult serviceProtocolAsyncResult = _signingServiceProtocol.BeginSign(pdu.Encode(), requestId, callback, asyncState);
+            Logger.Debug("Begin legacy sign (request id: {0}){1}{2}", payload.RequestId, Environment.NewLine, pdu);
+            IAsyncResult serviceProtocolAsyncResult = _signingServiceProtocol.BeginSign(pdu.Encode(), payload.RequestId, callback, asyncState);
 
-            return new CreateSignatureKsiServiceAsyncResult(hash, level, requestId, serviceProtocolAsyncResult, asyncState);
+            return new CreateSignatureKsiServiceAsyncResult(payload, serviceProtocolAsyncResult, asyncState);
         }
 
         /// <summary>
         ///     End create signature (async).
         /// </summary>
-        /// <param name="asyncResult">async result status</param>
+        /// <param name="asyncResult">async result</param>
         /// <returns>KSI signature</returns>
         public IKsiSignature EndSign(IAsyncResult asyncResult)
+        {
+            RequestResponsePayload reponsePayload = GetSignResponsePayload(asyncResult);
+
+            CreateSignatureKsiServiceAsyncResult serviceAsyncResult = asyncResult as CreateSignatureKsiServiceAsyncResult;
+
+            IKsiSignature signature;
+            LegacyAggregationResponsePayload legacyPayload = reponsePayload as LegacyAggregationResponsePayload;
+            AggregationResponsePayload payload = reponsePayload as AggregationResponsePayload;
+
+            if (legacyPayload != null)
+            {
+                signature = _ksiSignatureFactory.Create(legacyPayload, serviceAsyncResult.DocumentHash, serviceAsyncResult.Level);
+            }
+            else
+            {
+                signature = _ksiSignatureFactory.Create(payload, serviceAsyncResult.DocumentHash, serviceAsyncResult.Level);
+            }
+
+            Logger.Debug("End sign successful (request id: {0}){1}{2}", serviceAsyncResult.RequestId, Environment.NewLine, signature);
+
+            return signature;
+        }
+
+        /// <summary>
+        /// Get sign request response payload (async).
+        /// </summary>
+        /// <param name="asyncResult">async result</param>
+        /// <returns>Request response payload</returns>
+        public RequestResponsePayload GetSignResponsePayload(IAsyncResult asyncResult)
         {
             if (_signingServiceProtocol == null)
             {
@@ -153,7 +187,7 @@ namespace Guardtime.KSI.Service
         /// <param name="data"></param>
         /// <param name="serviceAsyncResult"></param>
         /// <returns></returns>
-        private IKsiSignature ParseSignRequestResponse(byte[] data, CreateSignatureKsiServiceAsyncResult serviceAsyncResult)
+        private RequestResponsePayload ParseSignRequestResponse(byte[] data, CreateSignatureKsiServiceAsyncResult serviceAsyncResult)
         {
             RawTag rawTag = null;
             AggregationResponsePdu pdu = null;
@@ -196,8 +230,6 @@ namespace Guardtime.KSI.Service
                     throw new KsiServiceException("Unknown response PDU tag type: " + rawTag.Type.ToString("X"));
                 }
 
-                IKsiSignature signature;
-
                 if (legacyPdu != null)
                 {
                     LegacyAggregationResponsePayload legacyPayload = legacyPdu.Payload as LegacyAggregationResponsePayload;
@@ -205,7 +237,7 @@ namespace Guardtime.KSI.Service
 
                     ValidateLegacyResponse(legacyPdu, legacyPayload, errorPayload, serviceAsyncResult.RequestId, _signingServiceCredentials);
 
-                    signature = _ksiSignatureFactory.Create(legacyPayload, serviceAsyncResult.DocumentHash, serviceAsyncResult.Level);
+                    return legacyPayload;
                 }
                 else
                 {
@@ -214,12 +246,8 @@ namespace Guardtime.KSI.Service
 
                     ValidateResponse(data, pdu, payload, errorPayload, _signingServiceCredentials);
 
-                    signature = _ksiSignatureFactory.Create(payload, serviceAsyncResult.DocumentHash, serviceAsyncResult.Level);
+                    return payload;
                 }
-
-                Logger.Debug("End sign successful (request id: {0}){1}{2}", serviceAsyncResult.RequestId, Environment.NewLine, signature);
-
-                return signature;
             }
             catch (TlvException e)
             {
@@ -358,22 +386,36 @@ namespace Guardtime.KSI.Service
         /// </summary>
         private class CreateSignatureKsiServiceAsyncResult : KsiServiceAsyncResult
         {
-            public CreateSignatureKsiServiceAsyncResult(DataHash documentHash, uint level, ulong requestId, IAsyncResult serviceProtocolAsyncResult, object asyncState)
+            AggregationRequestPayload _payload;
+            LegacyAggregationRequestPayload _legacyPayload;
+
+            public CreateSignatureKsiServiceAsyncResult(AggregationRequestPayload payload, IAsyncResult serviceProtocolAsyncResult, object asyncState)
                 : base(serviceProtocolAsyncResult, asyncState)
             {
-                if (documentHash == null)
+                if (payload == null)
                 {
-                    throw new ArgumentNullException(nameof(documentHash));
+                    throw new ArgumentNullException(nameof(payload));
                 }
 
-                RequestId = requestId;
-                DocumentHash = documentHash;
-                Level = level;
+                _payload = payload;
             }
 
-            public ulong RequestId { get; }
-            public DataHash DocumentHash { get; }
-            public uint Level { get; }
+            public CreateSignatureKsiServiceAsyncResult(LegacyAggregationRequestPayload legacyPayload, IAsyncResult serviceProtocolAsyncResult, object asyncState)
+                : base(serviceProtocolAsyncResult, asyncState)
+            {
+                if (legacyPayload == null)
+                {
+                    throw new ArgumentNullException(nameof(legacyPayload));
+                }
+
+                _legacyPayload = legacyPayload;
+            }
+
+            public ulong RequestId => _payload?.RequestId ?? _legacyPayload.RequestId;
+
+            public uint? Level => (uint?)(_payload != null ? _payload?.RequestLevel : _legacyPayload.RequestLevel);
+
+            public DataHash DocumentHash => _payload?.RequestHash ?? _legacyPayload.RequestHash;
         }
 
         private class AggregatorConfigKsiServiceAsyncResult : KsiServiceAsyncResult

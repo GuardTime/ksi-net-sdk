@@ -93,10 +93,6 @@ namespace Guardtime.KSI.Test.Service
 
             for (int i = 0; i < lowestLevelNodes.Count; i++)
             {
-                if (lowestLevelNodes[i].Level != 0)
-                {
-                    throw new Exception(string.Format("Invalid tree. Leaf must have level value 0. Position: {0}", i));
-                }
                 if (lowestLevelNodes[i] != children[i])
                 {
                     throw new Exception(string.Format("Invalid tree. Leaves at position {0} do not match.", i));
@@ -176,9 +172,9 @@ namespace Guardtime.KSI.Test.Service
                 space += twelveSpaces;
             }
 
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sbRow = new StringBuilder();
 
-            sb.Append(prefix);
+            sbRow.Append(prefix);
 
             // print spaces and tree branches
             if (nodes.Count > 1)
@@ -190,39 +186,60 @@ namespace Guardtime.KSI.Test.Service
                         TreeNode firstNode = nodes[i];
                         TreeNode secondNode = i + 1 < nodes.Count ? nodes[i + 1] : null;
 
-                        if (firstNode != null && (firstNode.IsLeftNode || secondNode != null))
+                        if (firstNode != null && (secondNode != null || firstNode.NodeHash != null || firstNode.DocumentHash != null || firstNode.Metadata != null))
                         {
-                            sb.Append("        / ");
-                        }
-                        else if (firstNode == null || firstNode.IsLeftNode)
-                        {
-                            sb.Append("          ");
-                        }
-
-                        if (level > 0 && secondNode != null)
-                        {
-                            sb.Append((space + "  ").Replace(" ", "‾"));
-                        }
-                        else
-                        {
-                            sb.Append(space + "  ");
-                        }
-
-                        if (secondNode != null || (firstNode != null && !firstNode.IsLeftNode && firstNode.NodeHash != null))
-                        {
-                            sb.Append(" \\        ");
+                            if (firstNode.IsLeftNode)
+                            {
+                                sbRow.Append("        / ");
+                            }
+                            else if (firstNode.NodeHash != null || firstNode.DocumentHash != null || firstNode.Metadata != null)
+                            {
+                                sbRow.Append(" \\        ");
+                            }
+                            else
+                            {
+                                sbRow.Append("          ");
+                            }
                         }
                         else
                         {
-                            sb.Append("          ");
+                            sbRow.Append("          ");
+                        }
+
+                        if (level > 0 && firstNode != null && secondNode != null)
+                        {
+                            sbRow.Append((space + "  ").Replace(" ", "‾"));
+                        }
+                        else
+                        {
+                            sbRow.Append(space + "  ");
+                        }
+
+                        if (secondNode != null && (firstNode != null || secondNode.NodeHash != null || secondNode.DocumentHash != null || secondNode.Metadata != null))
+                        {
+                            if (firstNode == null && secondNode.IsLeftNode)
+                            {
+                                sbRow.Append("        / ");
+                            }
+                            else
+                            {
+                                sbRow.Append(" \\        ");
+                            }
+                        }
+                        else
+                        {
+                            sbRow.Append("          ");
                         }
                     }
-                    else if (i + 2 < nodes.Count)
+                    else
                     {
-                        sb.Append(space + "  ");
+                        sbRow.Append(space + "  ");
                     }
                 }
             }
+
+            StringBuilder sb = new StringBuilder(sbRow.ToString().TrimEnd());
+            sbRow = new StringBuilder();
 
             sb.AppendLine();
             sb.Append(prefix);
@@ -238,18 +255,20 @@ namespace Guardtime.KSI.Test.Service
                 }
                 else
                 {
-                    sb.Append(space);
+                    sbRow.Append(space);
                 }
 
                 if (node == null || (node.NodeHash == null && node.Metadata == null))
                 {
-                    sb.Append(twelveSpaces);
+                    sbRow.Append(twelveSpaces);
                 }
                 else
                 {
-                    sb.Append(node.ToString().Substring(0, 10) + "  ");
+                    sbRow.Append(node.ToString().Substring(0, 10) + "  ");
                 }
             }
+
+            sb.Append(sbRow.ToString().TrimEnd());
 
             sb.AppendLine();
 
@@ -289,7 +308,8 @@ namespace Guardtime.KSI.Test.Service
                         {
                             TreeNode newNode = new TreeNode(node.Level - 1)
                             {
-                                Left = node.Left
+                                Right = node.Left,
+                                IsLeftNode = true
                             };
                             result.Add(newNode);
                         }
@@ -309,7 +329,7 @@ namespace Guardtime.KSI.Test.Service
                         {
                             TreeNode newNode = new TreeNode(node.Level - 1)
                             {
-                                Right = node.Right
+                                Left = node.Right
                             };
                             result.Add(newNode);
                         }

@@ -57,9 +57,16 @@ namespace Guardtime.KSI.Service
         IAsyncResult BeginSign(DataHash hash, uint level, AsyncCallback callback, object asyncState);
 
         /// <summary>
+        /// Get sign request response payload (async).
+        /// </summary>
+        /// <param name="asyncResult">async result</param>
+        /// <returns>Request response payload</returns>
+        RequestResponsePayload GetSignResponsePayload(IAsyncResult asyncResult);
+
+        /// <summary>
         ///     End create signature (async)
         /// </summary>
-        /// <param name="asyncResult">async result status</param>
+        /// <param name="asyncResult">async result</param>
         /// <returns>KSI signature</returns>
         IKsiSignature EndSign(IAsyncResult asyncResult);
 

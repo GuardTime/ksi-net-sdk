@@ -23,13 +23,17 @@ using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
+using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
 using Guardtime.KSI.Test.Crypto;
+using Guardtime.KSI.Test.Service;
+using Guardtime.KSI.Test.Signature.Verification.Rule;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
@@ -45,7 +49,7 @@ namespace Guardtime.KSI.Test.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void BlockSignerGetUniSignaturesOfManyRandomHashesTest(Ksi ksi)
         {
-            int k = 8;
+            int k = 7;
             Random random = new Random();
             AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id", "test machine id");
             List<DataHash> hashes = new List<DataHash>();
@@ -60,7 +64,7 @@ namespace Guardtime.KSI.Test.Integration
             }
 
             Console.WriteLine(DateTime.Now + ": Start creating local blockSigner.");
-            BlockSigner blockSigner = new BlockSigner(ksi);
+            BlockSigner blockSigner = new BlockSigner(HttpKsiService);
 
             foreach (DataHash hash in hashes)
             {
@@ -68,13 +72,13 @@ namespace Guardtime.KSI.Test.Integration
             }
 
             Console.WriteLine(DateTime.Now + ": Sign documents.");
-            IEnumerable<RawTag> uniSignatures = blockSigner.GetUniSignatures();
+            IEnumerable<IKsiSignature> uniSignatures = blockSigner.GetUniSignatures();
             Console.WriteLine(DateTime.Now + ": Start verifying.");
             int n = 0;
 
-            foreach (RawTag signature in uniSignatures)
+            foreach (IKsiSignature signature in uniSignatures)
             {
-                Verify(ksi, new KsiSignature(signature), hashes[n++]);
+                Verify(ksi, signature, hashes[n++]);
             }
         }
 
@@ -85,7 +89,7 @@ namespace Guardtime.KSI.Test.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void BlockSignerGetUniSignaturesOfGivenHashesTest(Ksi ksi)
         {
-            BlockSigner blockSigner = new BlockSigner(ksi);
+            BlockSigner blockSigner = new BlockSigner(HttpKsiService);
             AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
             List<DataHash> hashes = new List<DataHash>
             {
@@ -101,12 +105,120 @@ namespace Guardtime.KSI.Test.Integration
 
             int i = 0;
 
-            foreach (RawTag signature in blockSigner.GetUniSignatures())
+            foreach (IKsiSignature ksiSignature in blockSigner.GetUniSignatures())
             {
-                KsiSignature ksiSignature = new KsiSignature(signature);
                 VerifyChainAlgorithm(ksiSignature, HashAlgorithm.Default);
                 Verify(ksi, ksiSignature, hashes[i++]);
             }
+        }
+
+        /// <summary>
+        /// Testing getting uni-signatures of given hashes wiht given level
+        /// </summary>
+        /// <param name="ksi"></param>
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void BlockSignerGetUniSignaturesOfGivenHashesWithLevelTest(Ksi ksi)
+        {
+            BlockSigner blockSigner = new BlockSigner(HttpKsiService);
+            AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
+            List<DataHash> hashes = new List<DataHash>
+            {
+                new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2")),
+                new DataHash(Base16.Decode("018D982C6911831201C5CF15E937514686A2169E2AD57BA36FD92CBEBD99A67E34")),
+                new DataHash(Base16.Decode("0114F9189A45A30D856029F9537FD20C9C7342B82A2D949072AB195D95D7B32ECB")),
+                new DataHash(Base16.Decode("01680192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F1")),
+                new DataHash(Base16.Decode("019D982C6911831201C5CF15E937514686A2169E2AD57BA36FD92CBEBD99A67E32")),
+                new DataHash(Base16.Decode("0124F9189A45A30D856029F9537FD20C9C7342B82A2D949072AB195D95D7B32EC3")),
+                new DataHash(Base16.Decode("0134F9189A45A30D856029F9537FD20C9C7342B82A2D949072AB195D95D7B32EC4"))
+            };
+
+            List<uint> levels = new List<uint>() { 1, 2, 3, 0, 4, 2, 2 };
+            List<bool> hasMetada = new List<bool>() { true, false, false, false, true, true, true, false };
+            int i = 0;
+
+            foreach (DataHash hash in hashes)
+            {
+                blockSigner.AddDocument(hash, hasMetada[i] ? metadata : null, levels[i++]);
+            }
+
+            i = 0;
+
+            Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
+
+            foreach (IKsiSignature ksiSignature in blockSigner.GetUniSignatures())
+            {
+                VerifyChainAlgorithm(ksiSignature, HashAlgorithm.Default);
+                Verify(ksi, ksiSignature, hashes[i]);
+                Console.WriteLine("VERIFIED UNI-SIGNATURE: " + hashes[i]);
+                i++;
+            }
+        }
+
+        /// <summary>
+        /// Testing getting uni-signatures of given hashes wiht given level
+        /// </summary>
+        /// <param name="ksi"></param>
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void BlockSignerGetUniSignaturesOfGivenHashesWithLevelAndBlindingMaskTest(Ksi ksi)
+        {
+            BlockSigner blockSigner = new BlockSigner(HttpKsiService, true, new byte[] { 1, 2, 3 });
+            AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
+            List<DataHash> hashes = new List<DataHash>
+            {
+                new DataHash(Base16.Decode("01A80192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2")),
+                new DataHash(Base16.Decode("01AD982C6911831201C5CF15E937514686A2169E2AD57BA36FD92CBEBD99A67E34")),
+                new DataHash(Base16.Decode("01A4F9189A45A30D856029F9537FD20C9C7342B82A2D949072AB195D95D7B32ECB")),
+                new DataHash(Base16.Decode("01A80192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F1")),
+                new DataHash(Base16.Decode("01AD982C6911831201C5CF15E937514686A2169E2AD57BA36FD92CBEBD99A67E32")),
+                new DataHash(Base16.Decode("01A4F9189A45A30D856029F9537FD20C9C7342B82A2D949072AB195D95D7B32EC3")),
+                new DataHash(Base16.Decode("01A4F9189A45A30D856029F9537FD20C9C7342B82A2D949072AB195D95D7B32EC4"))
+            };
+
+            List<uint> levels = new List<uint>() { 3, 2, 5, 0, 1, 2, 0 };
+            List<bool> hasMetada = new List<bool>() { false, false, true, true, false, true, true, false };
+            int i = 0;
+
+            foreach (DataHash hash in hashes)
+            {
+                blockSigner.AddDocument(hash, hasMetada[i] ? metadata : null, levels[i++]);
+            }
+
+            i = 0;
+            Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
+
+            foreach (IKsiSignature ksiSignature in blockSigner.GetUniSignatures())
+            {
+                VerifyChainAlgorithm(ksiSignature, HashAlgorithm.Default);
+                Verify(ksi, ksiSignature, hashes[i++]);
+            }
+        }
+
+        /// <summary>
+        /// Testing custom signature factory.
+        /// </summary>
+        /// <param name="ksi"></param>
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void BlockSignerCustomSignatureFactoryTest(Ksi ksi)
+        {
+            BlockSigner blockSigner = new BlockSigner(HttpKsiService, null, new KsiSignatureFactory(
+                new PublicationBasedVerificationPolicy(),
+                new TestVerificationContext()
+                {
+                    UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AANGVK-SV7GJL-36LN65-AVJYZR-6XRZSL-HIMRH3-6GU7WR-YNRY7C-X2XECY-WFQXRB")
+                }));
+
+            AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
+
+            DataHash documentHash = new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2"));
+            blockSigner.AddDocument(documentHash, metadata);
+
+            KsiSignatureInvalidContentException ex = Assert.Throws<KsiSignatureInvalidContentException>(delegate
+            {
+                foreach (IKsiSignature ksiSignature in blockSigner.GetUniSignatures())
+                {
+                    Verify(ksi, ksiSignature, documentHash);
+                }
+            }, "Verification should fail.");
         }
 
         /// <summary>
@@ -116,7 +228,7 @@ namespace Guardtime.KSI.Test.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void BlockSignerGetUniSignaturesOfGivenHashesWithSha1Test(Ksi ksi)
         {
-            BlockSigner blockSigner = new BlockSigner(ksi, HashAlgorithm.Sha1);
+            BlockSigner blockSigner = new BlockSigner(HttpKsiService, HashAlgorithm.Sha1);
             AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
             List<DataHash> hashes = new List<DataHash>
             {
@@ -132,9 +244,8 @@ namespace Guardtime.KSI.Test.Integration
 
             int i = 0;
 
-            foreach (RawTag signature in blockSigner.GetUniSignatures())
+            foreach (IKsiSignature ksiSignature in blockSigner.GetUniSignatures())
             {
-                KsiSignature ksiSignature = new KsiSignature(signature);
                 VerifyChainAlgorithm(ksiSignature, HashAlgorithm.Sha1);
                 Verify(ksi, ksiSignature, hashes[i++]);
             }
@@ -157,7 +268,7 @@ namespace Guardtime.KSI.Test.Integration
         {
             ManualResetEvent waitHandle = new ManualResetEvent(false);
 
-            int[] treeSizes = new[] { 1, 2, 3, 4, 5, 6, 7, 8 };
+            int[] treeSizes = new[] { 1, 2, 3, 4, 5 };
             int doneCount = 0;
             int runCount = treeSizes.Length;
             string errorMessage = null;
@@ -174,7 +285,7 @@ namespace Guardtime.KSI.Test.Integration
                 {
                     Console.WriteLine("Document count: " + k);
 
-                    BlockSigner blockSigner = new BlockSigner(ksi);
+                    BlockSigner blockSigner = new BlockSigner(HttpKsiService);
                     List<DataHash> hashes = new List<DataHash>();
 
                     byte[] buffer = new byte[10];
@@ -196,9 +307,9 @@ namespace Guardtime.KSI.Test.Integration
                     {
                         int i = 0;
 
-                        foreach (RawTag signature in blockSigner.GetUniSignatures())
+                        foreach (IKsiSignature ksiSignature in blockSigner.GetUniSignatures())
                         {
-                            Verify(ksi, new KsiSignature(signature), hashes[i++]);
+                            Verify(ksi, ksiSignature, hashes[i++]);
                         }
                     }
                     catch (Exception ex)

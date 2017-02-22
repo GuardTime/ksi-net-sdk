@@ -790,6 +790,15 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/service/aggregation-response-pdu-with-level-correction-1.tlv.
+        /// </summary>
+        internal static string KsiService_AggregationResponsePdu_SignedLevel2_LevelCorrection1 {
+            get {
+                return ResourceManager.GetString("KsiService_AggregationResponsePdu_SignedLevel2_LevelCorrection1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/service/aggregator-config-response-pdu.tlv.
         /// </summary>
         internal static string KsiService_AggregatorConfigResponsePdu {
