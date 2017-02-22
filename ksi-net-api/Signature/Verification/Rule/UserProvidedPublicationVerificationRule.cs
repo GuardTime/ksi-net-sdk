@@ -17,7 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
 using Guardtime.KSI.Publication;
 using NLog;
 
@@ -48,13 +47,9 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Pub04);
             }
 
-            Logger.Debug("User provided publication does not equal to signature publication.{0}User provided publication:{1}{2}{3}Signature publication:{4}{5}",
-                Environment.NewLine,
-                Environment.NewLine,
-                userPublication,
-                Environment.NewLine,
-                Environment.NewLine,
-                signaturePublication);
+            Logger.Debug("User provided publication time does not equal to signature publication time. User provided publication time:{0}; Signature publication time:{1}",
+                userPublication.PublicationTime,
+                signaturePublication.PublicationTime);
 
             return new VerificationResult(GetRuleName(), VerificationResultCode.Na, VerificationError.Gen02);
         }
