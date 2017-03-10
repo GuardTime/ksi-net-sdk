@@ -1493,6 +1493,15 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/signaturedata/signature-data-invalid-leading-zero.tlv.
+        /// </summary>
+        internal static string SignatureData_Invalid_Leading_Zero {
+            get {
+                return ResourceManager.GetString("SignatureData_Invalid_Leading_Zero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/signaturedata/signature-data-invalid-multiple-certificate-id.tlv.
         /// </summary>
         internal static string SignatureData_Invalid_Multiple_Certificate_Id {
