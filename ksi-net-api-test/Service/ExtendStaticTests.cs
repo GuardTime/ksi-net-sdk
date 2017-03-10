@@ -19,6 +19,7 @@
 
 using System.IO;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
@@ -123,7 +124,7 @@ namespace Guardtime.KSI.Test.Service
         }
 
         /// <summary>
-        /// Test extending with PDU v1.
+        /// Test extending using PDU v1.
         /// </summary>
         [Test]
         public void LegacyExtendStaticTest()
@@ -137,7 +138,28 @@ namespace Guardtime.KSI.Test.Service
         }
 
         /// <summary>
-        /// Test extending with PDU v1. Response payload has non-zero status value.
+        /// Test exteding using PDU v1. Verification fail (calendar hash chain input hash mismatch)
+        /// </summary>
+        [Test]
+        public void LegacyExtendStaticInvalidSignatureTest()
+        {
+            IKsiSignature signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(
+                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Invalid_Calendar_Chain_Input_Hash)));
+
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_LegacyExtendResponsePdu)), 3491956840, null, PduVersion.v1);
+
+            KsiSignatureInvalidContentException ex = Assert.Throws<KsiSignatureInvalidContentException>(delegate
+            {
+                ksi.Extend(signature, signature.CalendarHashChain.PublicationData);
+            });
+
+            Assert.That(ex.Message.StartsWith("Signature verification failed"), "Unexpected exception message: " + ex.Message);
+            Assert.IsNotNull(ex.Signature);
+            Assert.AreEqual(VerificationError.Int03.Code, ex.VerificationResult.VerificationError.Code);
+        }
+
+        /// <summary>
+        /// Test extending using PDU v1. Response payload has non-zero status value.
         /// </summary>
         [Test]
         public void LegacyExtendStaticWithNonZeroPayloadStatusTest()
@@ -196,7 +218,7 @@ namespace Guardtime.KSI.Test.Service
         }
 
         /// <summary>
-        /// Test extending with PDU v1. Response payload has invalid request ID.
+        /// Test extending using PDU v1. Response payload has invalid request ID.
         /// </summary>
         [Test]
         public void LegacyExtendStaticInvalidRequestIdTest()
@@ -213,6 +235,46 @@ namespace Guardtime.KSI.Test.Service
             });
 
             Assert.That(ex.Message.StartsWith("Unknown request ID:"), "Unexpected exception message: " + ex.Message);
+        }
+
+        /// <summary>
+        /// Test extending. HMAC algorithms do no match.
+        /// </summary>
+        [Test]
+        public void ExtendStaticInvalidMacAlgorithmTest()
+        {
+            IKsiSignature signature = new KsiSignatureFactory().Create(
+                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
+
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu)), 1043101455, null,
+                PduVersion.v2, null, HashAlgorithm.Sha2512);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                ksi.Extend(signature);
+            });
+
+            Assert.That(ex.Message.StartsWith("HMAC algorithm mismatch."), "Unexpected exception message: " + ex.Message);
+        }
+
+        /// <summary>
+        /// Test extending using PDU v1. HMAC algorithms do no match.
+        /// </summary>
+        [Test]
+        public void LegacyExtendStaticInvalidMacAlgorithmTest()
+        {
+            IKsiSignature signature = new KsiSignatureFactory().Create(
+                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
+
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_LegacyExtendResponsePdu)), 3491956840, null,
+                PduVersion.v1, null, HashAlgorithm.Sha2512);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                ksi.Extend(signature);
+            });
+
+            Assert.That(ex.Message.StartsWith("HMAC algorithm mismatch."), "Unexpected exception message: " + ex.Message);
         }
     }
 }

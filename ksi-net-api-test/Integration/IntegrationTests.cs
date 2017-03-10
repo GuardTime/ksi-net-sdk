@@ -97,7 +97,6 @@ namespace Guardtime.KSI.Test.Integration
                         new PublicationsFileFactory(
                             new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
                         new KsiSignatureFactory(),
-                        HashAlgorithm.Sha2256,
                         TestSetup.PduVersion))
             }
         };
