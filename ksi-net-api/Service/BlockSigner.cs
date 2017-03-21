@@ -45,7 +45,7 @@ namespace Guardtime.KSI.Service
         private readonly bool _useBlindingMasks;
         private readonly byte[] _randomSeed;
         private readonly HashAlgorithm _hashAlgorithm;
-        private IKsiSignatureFactory _signatureFactory;
+        private readonly IKsiSignatureFactory _signatureFactory;
 
         /// <summary>
         /// Merkle tree root hash signature
@@ -160,17 +160,7 @@ namespace Guardtime.KSI.Service
 
             RequestResponsePayload signResponsePayload = _ksiService.GetSignResponsePayload(_ksiService.BeginSign(_root.NodeHash, signLevel, null, null));
 
-            List<ITlvTag> childTags = new List<ITlvTag>();
-
-            foreach (ITlvTag childTag in signResponsePayload)
-            {
-                if (childTag.Type > 0x800 && childTag.Type < 0x900)
-                {
-                    childTags.Add(childTag);
-                }
-            }
-
-            RootSignature = new KsiSignature(false, false, childTags.ToArray());
+            RootSignature = new KsiSignature(false, false, signResponsePayload.GetSignatureChildTags());
         }
 
         /// <summary>

@@ -145,6 +145,8 @@
     <Compile Include="Integration\ExtendIntegrationTests.cs" />
     <Compile Include="Integration\VerificationPolicyIntegrationTests.cs" />
     <Compile Include="Integration\SignIntegrationTests.cs" />
+    <Compile Include="Parser\CompositeTestTag.cs" />
+    <Compile Include="Parser\TlvTagBuilderTests.cs" />
     <Compile Include="Parser\CompositeTagTests.cs" />
     <Compile Include="Parser\IntegerTagTests.cs" />
     <Compile Include="Parser\RawTagTests.cs" />

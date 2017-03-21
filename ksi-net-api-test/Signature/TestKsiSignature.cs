@@ -75,7 +75,7 @@ namespace Guardtime.KSI.Test.Signature
             return AggregationHashChains;
         }
 
-        public DataHash GetAggregationHashChainRootHash()
+        public DataHash GetLastAggregationHashChainRootHash()
         {
             return AggregationHashChainRootHash;
         }

@@ -41,7 +41,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 throw new KsiVerificationException("Received invalid extended calendar hash chain from context extension function: null.");
             }
 
-            return signature.GetAggregationHashChainRootHash() != extendedCalendarHashChain.InputHash
+            return signature.GetLastAggregationHashChainRootHash() != extendedCalendarHashChain.InputHash
                 ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Cal02)
                 : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }

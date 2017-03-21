@@ -52,7 +52,7 @@ namespace Guardtime.KSI.Test.Integration
 
             IKsiSignature signature = ksi.Sign(documentHash, 3);
 
-            Assert.AreEqual(3, signature.GetAggregationHashChains()[0].GetChainLinks()[0].LevelCorrection, "Level correction is invalid.");
+            Assert.LessOrEqual(3, signature.GetAggregationHashChains()[0].GetChainLinks()[0].LevelCorrection, "Level correction is invalid.");
 
             VerificationContext verificationContext = new VerificationContext(signature)
             {

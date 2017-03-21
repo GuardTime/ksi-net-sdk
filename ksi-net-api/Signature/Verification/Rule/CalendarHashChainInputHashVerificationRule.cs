@@ -37,7 +37,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
             }
 
-            return signature.GetAggregationHashChainRootHash() != calendarHashChain.InputHash
+            return signature.GetLastAggregationHashChainRootHash() != calendarHashChain.InputHash
                 ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int03)
                 : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }

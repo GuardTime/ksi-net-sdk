@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
@@ -142,26 +143,18 @@ namespace Guardtime.KSI.Signature
 
         private IKsiSignature CreateFromResponsePayload(RequestResponsePayload payload, ulong requestId, DataHash hash, uint? level)
         {
-            List<ITlvTag> childTags = new List<ITlvTag>();
-
-            foreach (ITlvTag childTag in payload)
-            {
-                if (childTag.Type > 0x800 && childTag.Type < 0x900)
-                {
-                    childTags.Add(childTag);
-                }
-            }
-
-            if (level > 0)
-            {
-                UpdateFirstAggregationHashChainLevelCorrection(childTags, level.Value);
-            }
-
             try
             {
                 Logger.Debug("Creating KSI signature from aggregation response. (request id: {0})", requestId);
 
-                IKsiSignature signature = CreateAndVerify(childTags.ToArray(), hash);
+                KsiSignature signature = new KsiSignature(false, false, payload.GetSignatureChildTags());
+
+                if (level > 0)
+                {
+                    signature = GetSignatureWithLevelCorrection(signature, level.Value);
+                }
+
+                Verify(signature, hash);
 
                 Logger.Debug("Creating KSI signature from aggregation response successful. (request id: {0})", requestId);
                 return signature;
@@ -173,94 +166,57 @@ namespace Guardtime.KSI.Signature
             }
         }
 
-        private static void UpdateFirstAggregationHashChainLevelCorrection(List<ITlvTag> childTags, uint fistLinkLevelCorrection)
+        private static KsiSignature GetSignatureWithLevelCorrection(KsiSignature signature, uint fistLinkLevelCorrection)
         {
-            AggregationHashChain firstAggregationHashChain = null;
-            int index = -1;
-            AggregationHashChain.ChainIndexOrdering comparer = new AggregationHashChain.ChainIndexOrdering();
+            ReadOnlyCollection<AggregationHashChain> aggregationHashChains = signature.GetAggregationHashChains();
 
-            // find the first aggregation hash chain
-            for (int i = 0; i < childTags.Count; i++)
+            if (aggregationHashChains.Count > 0)
             {
-                ITlvTag childTag = childTags[i];
-                if (childTag.Type != Constants.AggregationHashChain.TagType)
-                {
-                    continue;
-                }
-
-                AggregationHashChain aggregationHashChain = new AggregationHashChain(childTag);
-
-                if (firstAggregationHashChain == null || comparer.Compare(firstAggregationHashChain, aggregationHashChain) > 0)
-                {
-                    firstAggregationHashChain = aggregationHashChain;
-                    index = i;
-                }
+                TlvTagBuilder builder = new TlvTagBuilder(signature);
+                AggregationHashChain firstAggregationHashChain = aggregationHashChains[0];
+                builder.ReplaceChildTag(firstAggregationHashChain, GetAggregationHashChainWithLevelCorrection(firstAggregationHashChain, fistLinkLevelCorrection));
+                return new KsiSignature(false, false, builder.GetChildTags());
             }
 
-            if (index > -1)
-            {
-                // replace the first aggregation hash chain
-                childTags[index] = UpdateAggregationHashChainLevelCorrection(firstAggregationHashChain, fistLinkLevelCorrection);
-            }
+            return signature;
         }
 
-        private static AggregationHashChain UpdateAggregationHashChainLevelCorrection(AggregationHashChain aggregationHashChain, uint levelCorrection)
+        private static AggregationHashChain GetAggregationHashChainWithLevelCorrection(AggregationHashChain aggregationHashChain, uint levelCorrection)
         {
-            List<ITlvTag> childTags = new List<ITlvTag>(aggregationHashChain.GetChildren());
-            int index = -1;
+            ReadOnlyCollection<AggregationHashChain.Link> chainLinks = aggregationHashChain.GetChainLinks();
 
-            for (int i = 0; i < childTags.Count; i++)
+            if (chainLinks.Count > 0)
             {
-                ITlvTag childTag = childTags[i];
-
-                if (childTag.Type == (uint)LinkDirection.Left || childTag.Type == (uint)LinkDirection.Right)
-                {
-                    index = i;
-                    break;
-                }
+                TlvTagBuilder builder = new TlvTagBuilder(aggregationHashChain);
+                AggregationHashChain.Link firstLink = chainLinks[0];
+                builder.ReplaceChildTag(firstLink, GetLinkWithLevelCorrection(firstLink, levelCorrection));
+                return new AggregationHashChain(builder.BuildTag());
             }
 
-            if (index > -1)
-            {
-                AggregationHashChain.Link link = (AggregationHashChain.Link)childTags[index];
-                // replace link
-                childTags[index] = UpdateLinkLevelCorrection(link, levelCorrection);
-            }
-
-            return new AggregationHashChain(false, false, childTags.ToArray());
+            return aggregationHashChain;
         }
 
-        private static AggregationHashChain.Link UpdateLinkLevelCorrection(AggregationHashChain.Link link, uint levelCorrection)
+        private static AggregationHashChain.Link GetLinkWithLevelCorrection(AggregationHashChain.Link link, uint levelCorrection)
         {
-            List<ITlvTag> childTags = new List<ITlvTag>(link.GetChildren());
-            int index = -1;
+            TlvTagBuilder builder = new TlvTagBuilder(link);
+            IntegerTag levelCorrectionTag = builder.GetChildByType(Constants.AggregationHashChain.Link.LevelCorrectionTagType) as IntegerTag;
 
-            for (int i = 0; i < childTags.Count; i++)
+            if (levelCorrectionTag != null)
             {
-                ITlvTag childTag = childTags[i];
+                IntegerTag newLevelCorrectionTag = new IntegerTag(
+                    levelCorrectionTag.Type,
+                    levelCorrectionTag.NonCritical,
+                    levelCorrectionTag.Forward,
+                    levelCorrectionTag.Value + levelCorrection);
 
-                if (childTag.Type == Constants.AggregationHashChain.Link.LevelCorrectionTagType)
-                {
-                    index = i;
-                    break;
-                }
-            }
-
-            if (index > -1)
-            {
-                IntegerTag tag = childTags[index] as IntegerTag;
-                if (tag == null)
-                {
-                    throw new TlvException("Invalid level correction tag object type. Expected IntegerTag. Actual type: " + childTags[index].GetType());
-                }
-                childTags[index] = new IntegerTag(tag.Type, tag.NonCritical, tag.Forward, tag.Value + levelCorrection);
+                builder.ReplaceChildTag(levelCorrectionTag, newLevelCorrectionTag);
             }
             else
             {
-                childTags.Add(new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, levelCorrection));
+                builder.AddChildTag(new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, levelCorrection));
             }
 
-            return new AggregationHashChain.Link(link.Direction, false, false, childTags.ToArray());
+            return new AggregationHashChain.Link(builder.BuildTag());
         }
 
         /// <summary>

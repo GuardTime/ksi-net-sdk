@@ -188,48 +188,6 @@ namespace Guardtime.KSI.Test.Parser
             });
         }
 
-        private class CompositeTestTag : CompositeTag
-        {
-            public CompositeTestTag CompositeTestTagValue { get; private set; }
-
-            public CompositeTestTag(ITlvTag tag) : base(tag)
-            {
-                BuildStructure();
-            }
-
-            public CompositeTestTag(uint type, bool nonCritical, bool forward, ITlvTag[] childTags)
-                : base(type, nonCritical, forward, childTags)
-            {
-                BuildStructure();
-            }
-
-            private void BuildStructure()
-            {
-                for (int i = 0; i < Count; i++)
-                {
-                    ITlvTag childTag = this[i];
-
-                    switch (childTag.Type)
-                    {
-                        case 0x5:
-                            this[i] = CompositeTestTagValue = childTag as CompositeTestTag ?? new CompositeTestTag(childTag);
-                            break;
-                        case 0x2:
-                        case 0x1:
-                            break;
-                        default:
-                            VerifyUnknownTag(childTag);
-                            break;
-                    }
-                }
-            }
-
-            public void VerifyCriticalFlagWithoutTag()
-            {
-                VerifyUnknownTag(null);
-            }
-        }
-
         private class ChildCompositeTestTag : CompositeTestTag
         {
             public ChildCompositeTestTag(uint type, bool nonCritical, bool forward, ITlvTag[] childTags) : base(type, nonCritical, forward, childTags)

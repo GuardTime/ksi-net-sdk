@@ -234,10 +234,10 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
-        ///     Get aggregation hash chain output hash.
+        ///     Get last aggregation hash chain output hash.
         /// </summary>
         /// <returns>output hash</returns>
-        public DataHash GetAggregationHashChainRootHash()
+        public DataHash GetLastAggregationHashChainRootHash()
         {
             if (_aggregationHashChainRootHash != null)
             {
