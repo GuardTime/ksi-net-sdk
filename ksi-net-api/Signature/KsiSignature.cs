@@ -234,7 +234,7 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
-        ///     Get last aggregation hash chain output hash.
+        ///     Get last aggregation hash chain output hash that is calculated from all aggregation hash chains
         /// </summary>
         /// <returns>output hash</returns>
         public DataHash GetLastAggregationHashChainRootHash()

@@ -88,7 +88,7 @@ namespace Guardtime.KSI.Signature
         ReadOnlyCollection<AggregationHashChain> GetAggregationHashChains();
 
         /// <summary>
-        ///     Get last aggregation hash chain output hash.
+        ///     Get last aggregation hash chain output hash that is calculated from all aggregation hash chains
         /// </summary>
         /// <returns>output hash</returns>
         DataHash GetLastAggregationHashChainRootHash();
