@@ -32,7 +32,6 @@ using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
 using Guardtime.KSI.Test.Crypto;
-using Guardtime.KSI.Test.Service;
 using Guardtime.KSI.Test.Signature.Verification.Rule;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
@@ -63,7 +62,6 @@ namespace Guardtime.KSI.Test.Integration
                 hashes.Add(hasher.GetHash());
             }
 
-            Console.WriteLine(DateTime.Now + ": Start creating local blockSigner.");
             BlockSigner blockSigner = new BlockSigner(HttpKsiService);
 
             foreach (DataHash hash in hashes)
@@ -71,9 +69,7 @@ namespace Guardtime.KSI.Test.Integration
                 blockSigner.AddDocument(hash, metadata);
             }
 
-            Console.WriteLine(DateTime.Now + ": Sign documents.");
             IEnumerable<IKsiSignature> uniSignatures = blockSigner.GetUniSignatures();
-            Console.WriteLine(DateTime.Now + ": Start verifying.");
             int n = 0;
 
             foreach (IKsiSignature signature in uniSignatures)
@@ -133,23 +129,20 @@ namespace Guardtime.KSI.Test.Integration
             };
 
             List<uint> levels = new List<uint>() { 1, 2, 3, 0, 4, 2, 2 };
-            List<bool> hasMetada = new List<bool>() { true, false, false, false, true, true, true, false };
+            List<bool> hasMetadata = new List<bool>() { true, false, false, false, true, true, true, false };
             int i = 0;
 
             foreach (DataHash hash in hashes)
             {
-                blockSigner.AddDocument(hash, hasMetada[i] ? metadata : null, levels[i++]);
+                blockSigner.AddDocument(hash, hasMetadata[i] ? metadata : null, levels[i++]);
             }
 
             i = 0;
-
-            Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
 
             foreach (IKsiSignature ksiSignature in blockSigner.GetUniSignatures())
             {
                 VerifyChainAlgorithm(ksiSignature, HashAlgorithm.Default);
                 Verify(ksi, ksiSignature, hashes[i]);
-                Console.WriteLine("VERIFIED UNI-SIGNATURE: " + hashes[i]);
                 i++;
             }
         }
@@ -175,16 +168,15 @@ namespace Guardtime.KSI.Test.Integration
             };
 
             List<uint> levels = new List<uint>() { 3, 2, 5, 0, 1, 2, 0 };
-            List<bool> hasMetada = new List<bool>() { false, false, true, true, false, true, true, false };
+            List<bool> hasMetadata = new List<bool>() { false, false, true, true, false, true, true, false };
             int i = 0;
 
             foreach (DataHash hash in hashes)
             {
-                blockSigner.AddDocument(hash, hasMetada[i] ? metadata : null, levels[i++]);
+                blockSigner.AddDocument(hash, hasMetadata[i] ? metadata : null, levels[i++]);
             }
 
             i = 0;
-            Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
 
             foreach (IKsiSignature ksiSignature in blockSigner.GetUniSignatures())
             {
@@ -194,7 +186,7 @@ namespace Guardtime.KSI.Test.Integration
         }
 
         /// <summary>
-        /// Testing custom signature factory.
+        /// Testing custom signature factory. Automatic verification fails.
         /// </summary>
         /// <param name="ksi"></param>
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
@@ -214,11 +206,8 @@ namespace Guardtime.KSI.Test.Integration
 
             KsiSignatureInvalidContentException ex = Assert.Throws<KsiSignatureInvalidContentException>(delegate
             {
-                foreach (IKsiSignature ksiSignature in blockSigner.GetUniSignatures())
-                {
-                    Verify(ksi, ksiSignature, documentHash);
-                }
-            }, "Verification should fail.");
+                blockSigner.GetUniSignatures().GetEnumerator().MoveNext();
+            }, "Automatic verification should fail.");
         }
 
         /// <summary>
@@ -251,12 +240,12 @@ namespace Guardtime.KSI.Test.Integration
             }
         }
 
-        private static void VerifyChainAlgorithm(IKsiSignature ksiSignature, HashAlgorithm expecgedAloAlgorithm)
+        private static void VerifyChainAlgorithm(IKsiSignature ksiSignature, HashAlgorithm expectedAlgorithm)
         {
             AggregationHashChain aggregationHashChain = ksiSignature.GetAggregationHashChains()[0];
             IntegerTag id = aggregationHashChain.GetType().InvokeMember("_aggrAlgorithmId", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.GetField, null,
                 aggregationHashChain, null) as IntegerTag;
-            Assert.AreEqual(expecgedAloAlgorithm.Id, id.Value, "Aggregation hash chain hash algorithm should match");
+            Assert.AreEqual(expectedAlgorithm.Id, id.Value, "Aggregation hash chain hash algorithm should match");
         }
 
         /// <summary>

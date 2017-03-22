@@ -456,12 +456,12 @@ namespace Guardtime.KSI.Test.Integration
             };
 
             List<uint> levels = new List<uint>() { 3, 2, 0, 0, 1, 2, 0 };
-            List<bool> hasMetada = new List<bool>() { false, false, true, true, false, true, true };
+            List<bool> hasMetadata = new List<bool>() { false, false, true, true, false, true, true };
             int i = 0;
 
             foreach (DataHash hash in hashes)
             {
-                blockSigner.AddDocument(hash, hasMetada[i] ? metadata : null, levels[i++]);
+                blockSigner.AddDocument(hash, hasMetadata[i] ? metadata : null, levels[i++]);
             }
 
             Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
@@ -501,11 +501,11 @@ namespace Guardtime.KSI.Test.Integration
             };
 
             List<uint> levels = new List<uint>() { 3, 2, 0, 0, 1 };
-            List<bool> hasMetada = new List<bool>() { false, true, true, false, false };
+            List<bool> hasMetadata = new List<bool>() { false, true, true, false, false };
             int i = 0;
             foreach (DataHash hash in hashes)
             {
-                blockSigner.AddDocument(hash, hasMetada[i] ? metadata : null, levels[i++]);
+                blockSigner.AddDocument(hash, hasMetadata[i] ? metadata : null, levels[i++]);
             }
 
             Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
