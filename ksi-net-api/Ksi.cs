@@ -67,24 +67,9 @@ namespace Guardtime.KSI
         ///     </example>
         /// </summary>
         /// <param name="hash">document hash</param>
-        /// <returns>KSI signature</returns>
-        public IKsiSignature Sign(DataHash hash)
-        {
-            if (hash == null)
-            {
-                throw new KsiException("Document hash cannot be null.");
-            }
-
-            return _ksiService.Sign(hash);
-        }
-
-        /// <summary>
-        ///     Sign document hash.
-        /// </summary>
-        /// <param name="hash">Document hash</param>
         /// <param name="level">The document hash node level value in the aggregation tree</param>
         /// <returns>KSI signature</returns>
-        public IKsiSignature Sign(DataHash hash, uint level)
+        public IKsiSignature Sign(DataHash hash, uint level = 0)
         {
             if (hash == null)
             {

@@ -34,7 +34,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             PublicationRecordInPublicationFile publicationRecord = GetNearestPublicationRecord(GetPublicationsFile(context), aggregationTime);
             CalendarHashChain extendedTimeCalendarHashChain = GetExtendedCalendarHashChain(context, publicationRecord.PublicationData.PublicationTime);
 
-            return extendedTimeCalendarHashChain.InputHash != signature.GetAggregationHashChainRootHash(context.Level)
+            return extendedTimeCalendarHashChain.InputHash != signature.GetLastAggregationHashChainRootHash()
                 ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Pub03)
                 : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }

@@ -46,6 +46,26 @@ namespace Guardtime.KSI.Test.Integration
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void HttpSignHashWithLevelTest(Ksi ksi)
+        {
+            DataHash documentHash = new DataHash(HashAlgorithm.Sha2256, Base16.Decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"));
+
+            IKsiSignature signature = ksi.Sign(documentHash, 3);
+
+            Assert.LessOrEqual(3, signature.GetAggregationHashChains()[0].GetChainLinks()[0].LevelCorrection, "Level correction is invalid.");
+
+            VerificationContext verificationContext = new VerificationContext(signature)
+            {
+                DocumentHash = documentHash,
+                PublicationsFile = ksi.GetPublicationsFile()
+            };
+            KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
+                CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
+            VerificationResult verificationResult = policy.Verify(verificationContext);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode, "Signature should verify with key based policy");
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void HttpSignByteArrayTest(Ksi ksi)
         {
             byte[] data = Encoding.UTF8.GetBytes("This is my document");
@@ -184,7 +204,7 @@ namespace Guardtime.KSI.Test.Integration
             Assert.AreEqual(VerificationError.Gen01, verificationResult.VerificationError);
         }
 
-        public VerificationResult SignHash(Ksi ksi)
+        private VerificationResult SignHash(Ksi ksi)
         {
             IKsiSignature signature = ksi.Sign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
             VerificationContext verificationContext = new VerificationContext(signature)
@@ -235,7 +255,7 @@ namespace Guardtime.KSI.Test.Integration
         {
             ManualResetEvent waitHandle = new ManualResetEvent(false);
             int doneCount = 0;
-            int runCount = 8;
+            int runCount = 7;
             string errorMessage = null;
 
             for (int i = 0; i < runCount; i++)

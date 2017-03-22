@@ -63,6 +63,18 @@ namespace Guardtime.KSI.Signature
             }
 
             /// <summary>
+            /// Create new aggregation hash chain link TLV element.
+            /// </summary>
+            /// <param name="direction">Direction</param>
+            /// <param name="nonCritical">Is TLV element non critical</param>
+            /// <param name="forward">Is TLV element forwarded</param>
+            /// <param name="childTags">child TLV element list</param>
+            public Link(LinkDirection direction, bool nonCritical, bool forward, ITlvTag[] childTags)
+                : base((uint)direction, nonCritical, forward, childTags)
+            {
+            }
+
+            /// <summary>
             /// Check tag type
             /// </summary>
             protected override void CheckTagType()

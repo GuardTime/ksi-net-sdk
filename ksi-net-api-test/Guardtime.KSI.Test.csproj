@@ -145,6 +145,8 @@
     <Compile Include="Integration\ExtendIntegrationTests.cs" />
     <Compile Include="Integration\VerificationPolicyIntegrationTests.cs" />
     <Compile Include="Integration\SignIntegrationTests.cs" />
+    <Compile Include="Parser\CompositeTestTag.cs" />
+    <Compile Include="Parser\TlvTagBuilderTests.cs" />
     <Compile Include="Parser\CompositeTagTests.cs" />
     <Compile Include="Parser\IntegerTagTests.cs" />
     <Compile Include="Parser\RawTagTests.cs" />
@@ -297,6 +299,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\publication\publicationsfile\ksi-publications.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\service\aggregation-response-pdu-with-level-correction-1.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\service\aggregator-config-response-pdu-0x0-int.tlv">

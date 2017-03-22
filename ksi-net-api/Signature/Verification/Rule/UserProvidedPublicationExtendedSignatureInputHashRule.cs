@@ -30,7 +30,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             ulong publicationTime = GetUserPublication(context).PublicationTime;
             CalendarHashChain extendedTimeCalendarHashChain = GetExtendedCalendarHashChain(context, publicationTime);
 
-            return extendedTimeCalendarHashChain.InputHash != GetSignature(context).GetAggregationHashChainRootHash(context.Level)
+            return extendedTimeCalendarHashChain.InputHash != GetSignature(context).GetLastAggregationHashChainRootHash()
                 ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Pub03)
                 : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }

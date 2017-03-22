@@ -88,11 +88,10 @@ namespace Guardtime.KSI.Signature
         ReadOnlyCollection<AggregationHashChain> GetAggregationHashChains();
 
         /// <summary>
-        ///     Get aggregation hash chain output hash.
+        ///     Get last aggregation hash chain output hash that is calculated from all aggregation hash chains
         /// </summary>
-        /// <param name="level">Document hash node level value in the aggregation tree</param>
         /// <returns>output hash</returns>
-        DataHash GetAggregationHashChainRootHash(uint level);
+        DataHash GetLastAggregationHashChainRootHash();
 
         /// <summary>
         ///     Extend KSI signature with given calendar hash chain.

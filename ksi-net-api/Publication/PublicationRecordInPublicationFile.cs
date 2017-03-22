@@ -45,7 +45,7 @@ namespace Guardtime.KSI.Publication
         /// <returns></returns>
         public PublicationRecordInSignature ConvertToPublicationRecordInSignature()
         {
-            return new PublicationRecordInSignature(NonCritical, Forward, GetChildrenArray());
+            return new PublicationRecordInSignature(NonCritical, Forward, GetChildren());
         }
     }
 }

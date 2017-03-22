@@ -17,7 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -66,12 +65,17 @@ namespace Guardtime.KSI.Test.Signature
             return GetEnumerator();
         }
 
+        public ITlvTag[] GetChildren()
+        {
+            return null;
+        }
+
         public ReadOnlyCollection<AggregationHashChain> GetAggregationHashChains()
         {
             return AggregationHashChains;
         }
 
-        public DataHash GetAggregationHashChainRootHash(uint level)
+        public DataHash GetLastAggregationHashChainRootHash()
         {
             return AggregationHashChainRootHash;
         }
@@ -117,11 +121,6 @@ namespace Guardtime.KSI.Test.Signature
         public IEnumerable<IIdentity> GetIdentity()
         {
             return new[] { new LegacyIdentity("Test") };
-        }
-
-        public void DoInternalVerification(DataHash hash, uint level = 0)
-        {
-            throw new NotImplementedException();
         }
     }
 }

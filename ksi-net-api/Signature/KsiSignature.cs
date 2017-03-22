@@ -234,18 +234,17 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
-        ///     Get aggregation hash chain output hash.
+        ///     Get last aggregation hash chain output hash that is calculated from all aggregation hash chains
         /// </summary>
-        /// <param name="level">Document hash node level value in the aggregation tree</param>
         /// <returns>output hash</returns>
-        public DataHash GetAggregationHashChainRootHash(uint level)
+        public DataHash GetLastAggregationHashChainRootHash()
         {
             if (_aggregationHashChainRootHash != null)
             {
                 return _aggregationHashChainRootHash;
             }
 
-            AggregationHashChainResult lastResult = new AggregationHashChainResult(level, _aggregationHashChains[0].InputHash);
+            AggregationHashChainResult lastResult = new AggregationHashChainResult(0, _aggregationHashChains[0].InputHash);
 
             foreach (AggregationHashChain chain in _aggregationHashChains)
             {

@@ -43,7 +43,8 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="documentHash">Hash of a document to be signed</param>
         /// <param name="metadata">Metadata to be added to hash chain</param>
-        public TreeNode(DataHash documentHash, AggregationHashChain.Metadata metadata = null)
+        /// <param name="level">the level value of the aggregation tree node</param>
+        public TreeNode(DataHash documentHash, AggregationHashChain.Metadata metadata = null, uint? level = null)
         {
             if (documentHash == null)
             {
@@ -51,21 +52,22 @@ namespace Guardtime.KSI.Service
             }
             DocumentHash = NodeHash = documentHash;
             Metadata = metadata;
-            Level = 0;
+            Level = level ?? 0;
         }
 
         /// <summary>
         /// Create aggregation tree node instance.
         /// </summary>
         /// <param name="metadata">Metadata to be added to hash chain</param>
-        public TreeNode(AggregationHashChain.Metadata metadata)
+        /// <param name="level">the level value of the aggregation tree node</param>
+        public TreeNode(AggregationHashChain.Metadata metadata, uint? level = null)
         {
             if (metadata == null)
             {
                 throw new ArgumentNullException(nameof(metadata));
             }
             Metadata = metadata;
-            Level = 0;
+            Level = level ?? 0;
         }
 
         /// <summary>
