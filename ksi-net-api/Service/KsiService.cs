@@ -20,6 +20,7 @@
 using System;
 using System.Threading;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Utils;
@@ -44,7 +45,8 @@ namespace Guardtime.KSI.Service
         private readonly IKsiPublicationsFileServiceProtocol _publicationsFileServiceProtocol;
         private readonly IServiceCredentials _signingServiceCredentials;
         private readonly IServiceCredentials _extendingServiceCredentials;
-        private readonly HashAlgorithm _macAlgorithm;
+        private readonly HashAlgorithm _signingMacAlgorithm;
+        private readonly HashAlgorithm _extendingMacAlgorithm;
 
         /// <summary>
         ///     Create KSI service with service protocol and service settings.
@@ -71,7 +73,6 @@ namespace Guardtime.KSI.Service
                     publicationsFileServiceProtocol,
                     publicationsFileFactory,
                     new KsiSignatureFactory(),
-                    DefaultMacAlgorithm,
                     pduVersion)
         {
         }
@@ -94,72 +95,6 @@ namespace Guardtime.KSI.Service
                           IKsiPublicationsFileServiceProtocol publicationsFileServiceProtocol,
                           IPublicationsFileFactory publicationsFileFactory,
                           IKsiSignatureFactory ksiSignatureFactory,
-                          PduVersion pduVersion = DefaultPduVersion)
-            :
-                this(signingServiceProtocol,
-                    signingServiceCredentials,
-                    extendingServiceProtocol,
-                    extendingServiceCredentials,
-                    publicationsFileServiceProtocol,
-                    publicationsFileFactory,
-                    ksiSignatureFactory,
-                    DefaultMacAlgorithm,
-                    pduVersion)
-        {
-        }
-
-        /// <summary>
-        ///     Create KSI service with service protocol and service settings.
-        /// </summary>
-        /// <param name="signingServiceProtocol">signing service protocol</param>
-        /// <param name="signingServiceCredentials">signing service credentials</param>
-        /// <param name="extendingServiceProtocol">extending service protocol</param>
-        /// <param name="extendingServiceCredentials">extending service credentials</param>
-        /// <param name="publicationsFileServiceProtocol">publications file protocol</param>
-        /// <param name="publicationsFileFactory">publications file factory</param>
-        /// <param name="macAlgorithm">MAC algorithm</param>
-        /// <param name="pduVersion">PDU version</param>
-        public KsiService(IKsiSigningServiceProtocol signingServiceProtocol,
-                          IServiceCredentials signingServiceCredentials,
-                          IKsiExtendingServiceProtocol extendingServiceProtocol,
-                          IServiceCredentials extendingServiceCredentials,
-                          IKsiPublicationsFileServiceProtocol publicationsFileServiceProtocol,
-                          IPublicationsFileFactory publicationsFileFactory,
-                          HashAlgorithm macAlgorithm,
-                          PduVersion pduVersion = DefaultPduVersion)
-            :
-                this(signingServiceProtocol,
-                    signingServiceCredentials,
-                    extendingServiceProtocol,
-                    extendingServiceCredentials,
-                    publicationsFileServiceProtocol,
-                    publicationsFileFactory,
-                    new KsiSignatureFactory(),
-                    macAlgorithm,
-                    pduVersion)
-        {
-        }
-
-        /// <summary>
-        ///     Create KSI service with service protocol and service settings.
-        /// </summary>
-        /// <param name="signingServiceProtocol">signing service protocol</param>
-        /// <param name="signingServiceCredentials">signing service credentials</param>
-        /// <param name="extendingServiceProtocol">extending service protocol</param>
-        /// <param name="extendingServiceCredentials">extending service credentials</param>
-        /// <param name="publicationsFileServiceProtocol">publications file protocol</param>
-        /// <param name="publicationsFileFactory">publications file factory</param>
-        /// <param name="ksiSignatureFactory">ksi signature factory</param>
-        /// <param name="macAlgorithm">MAC algorithm</param>
-        /// <param name="pduVersion">PDU version</param>
-        public KsiService(IKsiSigningServiceProtocol signingServiceProtocol,
-                          IServiceCredentials signingServiceCredentials,
-                          IKsiExtendingServiceProtocol extendingServiceProtocol,
-                          IServiceCredentials extendingServiceCredentials,
-                          IKsiPublicationsFileServiceProtocol publicationsFileServiceProtocol,
-                          IPublicationsFileFactory publicationsFileFactory,
-                          IKsiSignatureFactory ksiSignatureFactory,
-                          HashAlgorithm macAlgorithm,
                           PduVersion pduVersion = DefaultPduVersion)
 
         {
@@ -175,8 +110,10 @@ namespace Guardtime.KSI.Service
             _publicationsFileServiceProtocol = publicationsFileServiceProtocol;
             _publicationsFileFactory = publicationsFileFactory;
             _ksiSignatureFactory = ksiSignatureFactory;
-            _macAlgorithm = macAlgorithm;
             PduVersion = pduVersion;
+
+            _signingMacAlgorithm = _signingServiceCredentials?.MacAlgorithm ?? DefaultMacAlgorithm;
+            _extendingMacAlgorithm = _extendingServiceCredentials?.MacAlgorithm ?? DefaultMacAlgorithm;
         }
 
         private bool IsLegacyPduVersion => PduVersion == PduVersion.v1;
@@ -196,7 +133,7 @@ namespace Guardtime.KSI.Service
         }
 
         private static void ValidateLegacyResponse(LegacyPdu pdu, RequestResponsePayload payload,
-                                                   ErrorPayload errorPayload, ulong requestId, IServiceCredentials serviceCredentials)
+                                                   ErrorPayload errorPayload, ulong requestId, HashAlgorithm expectedMacAlgorithm, IServiceCredentials serviceCredentials)
         {
             if (payload == null && errorPayload == null)
             {
@@ -208,8 +145,9 @@ namespace Guardtime.KSI.Service
                 throw new KsiServiceException(FormatErrorStatus(errorPayload.Status, errorPayload.ErrorMessage));
             }
 
-            if (!LegacyPdu.ValidateMac(pdu.Encode(), pdu.Mac, serviceCredentials.LoginKey))
+            CheckMacAlgorithm(pdu.Mac, expectedMacAlgorithm);
 
+            if (!LegacyPdu.ValidateMac(pdu.Encode(), pdu.Mac, serviceCredentials.LoginKey))
             {
                 throw new KsiServiceException("Invalid MAC in response PDU.");
             }
@@ -225,7 +163,8 @@ namespace Guardtime.KSI.Service
             }
         }
 
-        private static void ValidateResponse(byte[] data, Pdu pdu, PduPayload payload, ErrorPayload errorPayload, IServiceCredentials serviceCredentials)
+        private static void ValidateResponse(byte[] data, Pdu pdu, PduPayload payload, ErrorPayload errorPayload, HashAlgorithm expectedMacAlgorithm,
+                                             IServiceCredentials serviceCredentials)
         {
             if (payload == null && errorPayload == null)
             {
@@ -237,8 +176,9 @@ namespace Guardtime.KSI.Service
                 throw new KsiServiceException(FormatErrorStatus(errorPayload.Status, errorPayload.ErrorMessage));
             }
 
-            if (!Pdu.ValidateMac(data, pdu.Mac, serviceCredentials.LoginKey))
+            CheckMacAlgorithm(pdu.Mac, expectedMacAlgorithm);
 
+            if (!Pdu.ValidateMac(data, pdu.Mac, serviceCredentials.LoginKey))
             {
                 throw new KsiServiceException("Invalid MAC in response PDU.");
             }
@@ -248,6 +188,14 @@ namespace Guardtime.KSI.Service
             if (responsePayload != null && responsePayload.Status != 0)
             {
                 throw new KsiServiceException(FormatErrorStatus(responsePayload.Status, responsePayload.ErrorMessage));
+            }
+        }
+
+        private static void CheckMacAlgorithm(ImprintTag mac, HashAlgorithm expectedMacAlgorithm)
+        {
+            if (mac != null && mac.Value.Algorithm.Id != expectedMacAlgorithm.Id)
+            {
+                throw new KsiServiceException(string.Format("HMAC algorithm mismatch. Expected {0}, received {1}", expectedMacAlgorithm.Name, mac.Value.Algorithm.Name));
             }
         }
 

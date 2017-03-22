@@ -52,7 +52,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
                     for (int i = 0; i < currentIndex.Length; i++)
                     {
-                        if (currentIndex[i] != childChainIndex[i])
+                        if (childChainIndex[i] != currentIndex[i])
                         {
                             isValid = false;
                             break;
@@ -63,20 +63,20 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 childChainIndex = currentIndex;
             }
 
+            if (!isValid)
+            {
+                Logger.Warn("Chain index is not the successor to the parent aggregation hash chain index. Chain index: {0}; Parent chain index: {1}",
+                    Util.ArrayToString(childChainIndex), Util.ArrayToString(currentIndex));
+                return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int12);
+            }
+
             if (currentIndex != null && currentIndex.Length != 1)
             {
                 Logger.Warn("Highest aggregation hash chain index length is not 1. Chain index: {0};", Util.ArrayToString(currentIndex));
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int12);
             }
 
-            if (isValid)
-            {
-                return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
-            }
-
-            Logger.Warn("Chain index is not the successor to the parent aggregation hash chain index. Chain index: {0}; Parent chain index: {1}",
-                Util.ArrayToString(childChainIndex), Util.ArrayToString(currentIndex));
-            return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int12);
+            return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }
     }
 }

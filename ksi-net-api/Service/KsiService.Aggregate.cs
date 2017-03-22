@@ -88,7 +88,7 @@ namespace Guardtime.KSI.Service
             PduHeader header = new PduHeader(_signingServiceCredentials.LoginId);
             ulong requestId = GenerateRequestId();
             AggregationRequestPayload payload = level == 0 ? new AggregationRequestPayload(requestId, hash) : new AggregationRequestPayload(requestId, hash, level);
-            AggregationRequestPdu pdu = new AggregationRequestPdu(header, payload, _macAlgorithm, _signingServiceCredentials.LoginKey);
+            AggregationRequestPdu pdu = new AggregationRequestPdu(header, payload, _signingMacAlgorithm, _signingServiceCredentials.LoginKey);
 
             Logger.Debug("Begin sign (request id: {0}){1}{2}", payload.RequestId, Environment.NewLine, pdu);
             IAsyncResult serviceProtocolAsyncResult = _signingServiceProtocol.BeginSign(pdu.Encode(), payload.RequestId, callback, asyncState);
@@ -112,7 +112,7 @@ namespace Guardtime.KSI.Service
             LegacyAggregationRequestPayload payload = level == 0
                 ? new LegacyAggregationRequestPayload(requestId, hash)
                 : new LegacyAggregationRequestPayload(requestId, hash, level);
-            LegacyAggregationPdu pdu = new LegacyAggregationPdu(header, payload, LegacyPdu.GetMacTag(_macAlgorithm, _signingServiceCredentials.LoginKey, header, payload));
+            LegacyAggregationPdu pdu = new LegacyAggregationPdu(header, payload, LegacyPdu.GetMacTag(_signingMacAlgorithm, _signingServiceCredentials.LoginKey, header, payload));
 
             Logger.Debug("Begin legacy sign (request id: {0}){1}{2}", payload.RequestId, Environment.NewLine, pdu);
             IAsyncResult serviceProtocolAsyncResult = _signingServiceProtocol.BeginSign(pdu.Encode(), payload.RequestId, callback, asyncState);
@@ -235,7 +235,7 @@ namespace Guardtime.KSI.Service
                     LegacyAggregationResponsePayload legacyPayload = legacyPdu.Payload as LegacyAggregationResponsePayload;
                     LegacyAggregationErrorPayload errorPayload = legacyPdu.ErrorPayload as LegacyAggregationErrorPayload;
 
-                    ValidateLegacyResponse(legacyPdu, legacyPayload, errorPayload, serviceAsyncResult.RequestId, _signingServiceCredentials);
+                    ValidateLegacyResponse(legacyPdu, legacyPayload, errorPayload, serviceAsyncResult.RequestId, _signingMacAlgorithm, _signingServiceCredentials);
 
                     return legacyPayload;
                 }
@@ -244,7 +244,7 @@ namespace Guardtime.KSI.Service
                     AggregationResponsePayload payload = pdu.GetAggregationResponsePayload(serviceAsyncResult.RequestId);
                     AggregationErrorPayload errorPayload = pdu.GetAggregationErrorPayload();
 
-                    ValidateResponse(data, pdu, payload, errorPayload, _signingServiceCredentials);
+                    ValidateResponse(data, pdu, payload, errorPayload, _signingMacAlgorithm, _signingServiceCredentials);
 
                     return payload;
                 }
@@ -296,7 +296,7 @@ namespace Guardtime.KSI.Service
 
             PduHeader header = new PduHeader(_signingServiceCredentials.LoginId);
             AggregatorConfigRequestPayload payload = new AggregatorConfigRequestPayload();
-            AggregationRequestPdu pdu = new AggregationRequestPdu(header, payload, _macAlgorithm, _signingServiceCredentials.LoginKey);
+            AggregationRequestPdu pdu = new AggregationRequestPdu(header, payload, _signingMacAlgorithm, _signingServiceCredentials.LoginKey);
 
             ulong requestId = GenerateRequestId();
 
@@ -363,7 +363,7 @@ namespace Guardtime.KSI.Service
                 AggregatorConfigResponsePayload payload = pdu.GetAggregatorConfigResponsePayload();
                 AggregationErrorPayload errorPayload = pdu.GetAggregationErrorPayload();
 
-                ValidateResponse(data, pdu, payload, errorPayload, _signingServiceCredentials);
+                ValidateResponse(data, pdu, payload, errorPayload, _signingMacAlgorithm, _signingServiceCredentials);
 
                 return new AggregatorConfig(payload);
             }

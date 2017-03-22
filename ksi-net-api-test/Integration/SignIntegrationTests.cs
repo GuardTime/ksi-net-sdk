@@ -345,7 +345,13 @@ namespace Guardtime.KSI.Test.Integration
 
             asyncResult = service.BeginSign(dataHash, delegate(IAsyncResult ar)
             {
-                signature = service.EndSign(asyncResult);
+                try
+                {
+                    signature = service.EndSign(asyncResult);
+                }
+                catch (Exception ex)
+                {
+                }
                 waitHandle.Set();
             }, asyncState);
 

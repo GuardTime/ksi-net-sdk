@@ -624,4 +624,7 @@
   <data name="KsiSignature_Invalid_First_Aggregation_Chain_Index_Length" xml:space="preserve">
     <value>resources/signature/ksi-signature/ksi-signature-invalid-first-aggregation-chain-index-length.tlv</value>
   </data>
+  <data name="SignatureData_Invalid_Leading_Zero" xml:space="preserve">
+    <value>resources/signature/signaturedata/signature-data-invalid-leading-zero.tlv</value>
+  </data>
 </root>

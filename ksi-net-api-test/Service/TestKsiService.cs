@@ -42,7 +42,6 @@ namespace Guardtime.KSI.Test.Service
                     extendingServiceCredentials,
                     publicationsFileServiceProtocol,
                     publicationsFileFactory,
-                    HashAlgorithm.Sha2256,
                     pduVersion)
         {
             _requestId = requestId;

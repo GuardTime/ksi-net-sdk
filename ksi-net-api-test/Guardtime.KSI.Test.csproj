@@ -1171,6 +1171,9 @@
     <None Include="resources\signature\signaturedata\signature-data-invalid-extra-tag.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="resources\signature\signaturedata\signature-data-invalid-leading-zero.tlv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="resources\signature\signaturedata\signature-data-invalid-multiple-certificate-id.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

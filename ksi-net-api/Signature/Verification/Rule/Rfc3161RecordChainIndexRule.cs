@@ -47,7 +47,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                         string.Format("Aggregation hash chain index and RFC3161 chain index mismatch. Aggregation chain index length is {0} and RFC3161 chain index length is {1}",
                             aggregationChainIndex.Length, rfc3161ChainIndex.Length));
 
-                    return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int10);
+                    return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int12);
                 }
 
                 for (int i = 0; i < rfc3161ChainIndex.Length; i++)
@@ -61,7 +61,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                             string.Format(
                                 "Aggregation hash chain index and RFC3161 chain index mismatch. At position {0} aggregation chain index value is {1} and RFC3161 chain index value is {2}",
                                 i, aggregationIndex, rfc3161Index));
-                        return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int10);
+                        return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int12);
                     }
                 }
             }

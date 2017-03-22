@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Service
@@ -31,10 +32,12 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="loginId">login ID</param>
         /// <param name="loginKey">login key</param>
-        public ServiceCredentials(string loginId, byte[] loginKey)
+        /// <param name="macAlgorithm">MAC calculation algorithm of outgoing and incoming messages</param>
+        public ServiceCredentials(string loginId, byte[] loginKey, HashAlgorithm macAlgorithm = null)
         {
             LoginId = loginId;
             LoginKey = loginKey;
+            MacAlgorithm = macAlgorithm;
         }
 
         /// <summary>
@@ -42,10 +45,12 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="loginId">login ID</param>
         /// <param name="loginKey">login key</param>
-        public ServiceCredentials(string loginId, string loginKey)
+        /// <param name="macAlgorithm">MAC calculation algorithm of outgoing and incoming messages</param>
+        public ServiceCredentials(string loginId, string loginKey, HashAlgorithm macAlgorithm = null)
         {
             LoginId = loginId;
             LoginKey = Util.EncodeNullTerminatedUtf8String(loginKey);
+            MacAlgorithm = macAlgorithm;
         }
 
         /// <summary>
@@ -58,5 +63,9 @@ namespace Guardtime.KSI.Service
         /// </summary>
         public byte[] LoginKey { get; }
 
+        /// <summary>
+        ///     MAC calculation algorithm of outgoing and incoming messages
+        /// </summary>
+        public HashAlgorithm MacAlgorithm { get; }
     }
 }

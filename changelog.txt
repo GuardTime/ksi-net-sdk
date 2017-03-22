@@ -2,6 +2,9 @@ Version 3.8
 
 2017-01-04 3.8.X
 
+* BUGFIX: Added leading zeros banning when decoding integer fields (KSINETAPI-106)
+* BUGFIX: Fixed certificate subject RDN selector (KSINETAPI-105)
+* IMPROVEMENT: Updated signature verification process (KSINETAPI-103)
 * IMPROVEMENT: Added GetIdentity method to KsiSignature to get identity information as an array (KSINETAPI-101)
 
 Version 3.7

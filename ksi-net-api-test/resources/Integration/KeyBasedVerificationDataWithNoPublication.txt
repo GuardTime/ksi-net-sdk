@@ -128,6 +128,7 @@ resources/signature/integration-test-signatures/NewSignature-AggrHashGW-MissingL
 resources/signature/integration-test-signatures/another-core-response-with-only-cal-chain.tlv;true;Fail;TlvException;Invalid tag type! Class: KsiSignature; 
 resources/signature/integration-test-signatures/NewSignature-CalHash-MissingCalHash.ksig;true;Fail;TlvException;No publication record or calendar authentication record is allowed in KSI signature if there is no calendar hash chain; 
 resources/signature/integration-test-signatures/ok-sig-2014-06-2-extended-no-publication-time.ksig;true;Fail;TlvException;Exactly one publication time must exist in publication data; 
+resources/signature/signaturedata/signature-data-invalid-leading-zero.tlv;false;Fail;KsiException;Integer encoding cannot contain leading zeros; 
 #
 # Chain index errors
 #

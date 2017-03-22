@@ -18,6 +18,7 @@
  */
 
 using System.Security.Cryptography.X509Certificates;
+using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature;
@@ -28,7 +29,8 @@ namespace Guardtime.KSI.Test.Service
 {
     public class StaticServiceTestsBase
     {
-        protected static Ksi GetStaticKsi(byte[] requestResult, ulong requestId = 0, IKsiSignatureFactory ksiSignatureFactory = null, PduVersion pduVersion = PduVersion.v2)
+        protected static Ksi GetStaticKsi(byte[] requestResult, ulong requestId = 0, IKsiSignatureFactory ksiSignatureFactory = null, PduVersion pduVersion = PduVersion.v2,
+                                          HashAlgorithm signingMacAlgorithm = null, HashAlgorithm extendingMacAlgorithm = null)
         {
             TestKsiServiceProtocol protocol = new TestKsiServiceProtocol
             {
@@ -37,8 +39,12 @@ namespace Guardtime.KSI.Test.Service
 
             return
                 new Ksi(
-                    new TestKsiService(protocol, new ServiceCredentials(Properties.Settings.Default.HttpSigningServiceUser, Properties.Settings.Default.HttpSigningServicePass),
-                        protocol, new ServiceCredentials(Properties.Settings.Default.HttpExtendingServiceUser, Properties.Settings.Default.HttpExtendingServicePass), protocol,
+                    new TestKsiService(
+                        protocol,
+                        new ServiceCredentials(Properties.Settings.Default.HttpSigningServiceUser, Properties.Settings.Default.HttpSigningServicePass, signingMacAlgorithm),
+                        protocol,
+                        new ServiceCredentials(Properties.Settings.Default.HttpExtendingServiceUser, Properties.Settings.Default.HttpExtendingServicePass, extendingMacAlgorithm),
+                        protocol,
                         new PublicationsFileFactory(
                             new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                                 CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))), requestId, pduVersion),

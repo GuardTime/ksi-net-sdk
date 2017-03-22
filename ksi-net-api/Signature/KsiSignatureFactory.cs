@@ -309,7 +309,7 @@ namespace Guardtime.KSI.Signature
                     Environment.NewLine,
                     verificationResult,
                     Environment.NewLine,
-                    this);
+                    signature);
 
                 throw new KsiSignatureInvalidContentException("Signature verification failed.", signature, verificationResult);
             }
