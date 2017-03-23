@@ -39,7 +39,7 @@ using NUnit.Framework;
 namespace Guardtime.KSI.Test.Integration
 {
     [TestFixture]
-    public partial class BlockSignerTests : IntegrationTests
+    public class BlockSignerTests : IntegrationTests
     {
         /// <summary>
         /// Testing getting uni-signatures of lots of randomly generated hashes

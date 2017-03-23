@@ -1,4 +1,4 @@
-﻿/*nameof(KsiServiceTestCases))]
+﻿/*nameof(GetKsiService()TestCases))]
  * Copyright 2013-2016 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
@@ -22,20 +22,20 @@ using System.Collections.Generic;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature;
-using Guardtime.KSI.Test.Service;
+using Guardtime.KSI.Test.Integration;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
-namespace Guardtime.KSI.Test.Integration
+namespace Guardtime.KSI.Test.Service
 {
     [TestFixture]
-    public partial class BlockSignerTests
+    public class BlockSignerPrintTreeTests
     {
         /// <summary>
         /// Test building Merkle trees
         /// </summary>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiServiceTestCases))]
-        public void BlockSignerMakeTreeTest(KsiService ksiService)
+        [Test]
+        public void BlockSignerMakeTreeTest()
         {
             Random random = new Random();
 
@@ -45,7 +45,7 @@ namespace Guardtime.KSI.Test.Integration
             {
                 byte[] buffer = new byte[10];
 
-                BlockSigner blockSigner = new BlockSigner(ksiService);
+                BlockSigner blockSigner = new BlockSigner(GetKsiService());
 
                 for (int i = 0; i < k; i++)
                 {
@@ -64,8 +64,8 @@ namespace Guardtime.KSI.Test.Integration
         /// <summary>
         /// Test building Merkle trees with blinding masks
         /// </summary>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiServiceTestCases))]
-        public void BlockSignerWithBlindingMasksMakeTreeTest(KsiService ksiService)
+        [Test]
+        public void BlockSignerWithBlindingMasksMakeTreeTest()
         {
             Random random = new Random();
 
@@ -75,7 +75,7 @@ namespace Guardtime.KSI.Test.Integration
             {
                 byte[] buffer = new byte[10];
 
-                BlockSigner blockSigner = new BlockSigner(ksiService, true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
+                BlockSigner blockSigner = new BlockSigner(GetKsiService(), true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
 
                 for (int i = 0; i < k; i++)
                 {
@@ -94,10 +94,10 @@ namespace Guardtime.KSI.Test.Integration
         /// Test printing tree with 11 elements
         /// </summary>
         /// <param name="ksiService"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiServiceTestCases))]
-        public void BlockSignerPrintTree11Element7MetadataTest(KsiService ksiService)
+        [Test]
+        public void BlockSignerPrintTree11Element7MetadataTest()
         {
-            BlockSigner blockSigner = new BlockSigner(ksiService);
+            BlockSigner blockSigner = new BlockSigner(GetKsiService());
 
             AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
 
@@ -135,10 +135,10 @@ namespace Guardtime.KSI.Test.Integration
         /// Test printing tree with 5 elements
         /// </summary>
         /// <param name="ksiService"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiServiceTestCases))]
-        public void BlockSignerPrintTree5Element2MetadataTest(KsiService ksiService)
+        [Test]
+        public void BlockSignerPrintTree5Element2MetadataTest()
         {
-            BlockSigner blockSigner = new BlockSigner(ksiService);
+            BlockSigner blockSigner = new BlockSigner(GetKsiService());
 
             AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
 
@@ -168,10 +168,10 @@ namespace Guardtime.KSI.Test.Integration
         /// Test printing tree with 5 elements
         /// </summary>
         /// <param name="ksiService"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiServiceTestCases))]
-        public void BlockSignerPrintTree5Element3MetadataTest(KsiService ksiService)
+        [Test]
+        public void BlockSignerPrintTree5Element3MetadataTest()
         {
-            BlockSigner blockSigner = new BlockSigner(ksiService);
+            BlockSigner blockSigner = new BlockSigner(GetKsiService());
 
             AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
 
@@ -201,10 +201,10 @@ namespace Guardtime.KSI.Test.Integration
         /// Test printing tree with 5 elements
         /// </summary>
         /// <param name="ksiService"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiServiceTestCases))]
-        public void BlockSignerPrintTree5ElementWithMetadataTest(KsiService ksiService)
+        [Test]
+        public void BlockSignerPrintTree5ElementWithMetadataTest()
         {
-            BlockSigner blockSigner = new BlockSigner(ksiService);
+            BlockSigner blockSigner = new BlockSigner(GetKsiService());
 
             AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
 
@@ -234,10 +234,10 @@ namespace Guardtime.KSI.Test.Integration
         /// Test printing tree with 5 elements
         /// </summary>
         /// <param name="ksiService"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiServiceTestCases))]
-        public void BlockSignerPrintTree5ElementNoMetadataTest(KsiService ksiService)
+        [Test]
+        public void BlockSignerPrintTree5ElementNoMetadataTest()
         {
-            BlockSigner blockSigner = new BlockSigner(ksiService);
+            BlockSigner blockSigner = new BlockSigner(GetKsiService());
 
             blockSigner.AddDocument(new DataHash(Base16.Decode("0109A9FE430803D8984273324CF462E40A875D483DE6DD0D86BC6DFF4D27C9D853")));
             blockSigner.AddDocument(new DataHash(Base16.Decode("01BEC84E1F95F729F4482338E781341B1615F5B0A882231AE6C0FAEF7D0E6121D5")));
@@ -263,10 +263,10 @@ namespace Guardtime.KSI.Test.Integration
         /// Test printing tree with 11 elements with blindign masks
         /// </summary>
         /// <param name="ksiService"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiServiceTestCases))]
-        public void BlockSignerWithBlindingMasksPrintTree11Element8MetadataTest(KsiService ksiService)
+        [Test]
+        public void BlockSignerWithBlindingMasksPrintTree11Element8MetadataTest()
         {
-            BlockSigner blockSigner = new BlockSigner(ksiService, true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
+            BlockSigner blockSigner = new BlockSigner(GetKsiService(), true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
 
             AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
 
@@ -306,10 +306,10 @@ namespace Guardtime.KSI.Test.Integration
         /// Test printing tree with 5 elements with blindign masks
         /// </summary>
         /// <param name="ksiService"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiServiceTestCases))]
-        public void BlockSignerWithBlindingMasksPrintTree5ElementAllMetadataTest(KsiService ksiService)
+        [Test]
+        public void BlockSignerWithBlindingMasksPrintTree5ElementAllMetadataTest()
         {
-            BlockSigner blockSigner = new BlockSigner(ksiService, true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
+            BlockSigner blockSigner = new BlockSigner(GetKsiService(), true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
 
             AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
 
@@ -341,10 +341,10 @@ namespace Guardtime.KSI.Test.Integration
         /// Test printing tree with 5 elements with blindign masks
         /// </summary>
         /// <param name="ksiService"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiServiceTestCases))]
-        public void BlockSignerWithBlindingMasksPrintTree5ElementNoMetadataTest(KsiService ksiService)
+        [Test]
+        public void BlockSignerWithBlindingMasksPrintTree5ElementNoMetadataTest()
         {
-            BlockSigner blockSigner = new BlockSigner(ksiService, true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
+            BlockSigner blockSigner = new BlockSigner(GetKsiService(), true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
 
             blockSigner.AddDocument(new DataHash(Base16.Decode("0109A9FE430803D8984273324CF462E40A875D483DE6DD0D86BC6DFF4D27C9D853")));
             blockSigner.AddDocument(new DataHash(Base16.Decode("01BEC84E1F95F729F4482338E781341B1615F5B0A882231AE6C0FAEF7D0E6121D5")));
@@ -372,10 +372,10 @@ namespace Guardtime.KSI.Test.Integration
         /// Test printing tree with 5 elements with blindign masks
         /// </summary>
         /// <param name="ksiService"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiServiceTestCases))]
-        public void BlockSignerWithBlindingMasksPrintTree5Element3MetadataTest(KsiService ksiService)
+        [Test]
+        public void BlockSignerWithBlindingMasksPrintTree5Element3MetadataTest()
         {
-            BlockSigner blockSigner = new BlockSigner(ksiService, true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
+            BlockSigner blockSigner = new BlockSigner(GetKsiService(), true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
 
             AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
 
@@ -407,10 +407,10 @@ namespace Guardtime.KSI.Test.Integration
         /// Test printing tree with 5 elements with blindign masks
         /// </summary>
         /// <param name="ksiService"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiServiceTestCases))]
-        public void BlockSignerWithBlindingMasksPrintTree5Element2MetadataTest(KsiService ksiService)
+        [Test]
+        public void BlockSignerWithBlindingMasksPrintTree5Element2MetadataTest()
         {
-            BlockSigner blockSigner = new BlockSigner(ksiService, true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
+            BlockSigner blockSigner = new BlockSigner(GetKsiService(), true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
 
             AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
 
@@ -438,10 +438,10 @@ namespace Guardtime.KSI.Test.Integration
                 BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()));
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(IntegrationTests.HttpTestCases))]
         public void BlockSignerWithLevelPrintTreeTest(Ksi ksi)
         {
-            BlockSigner blockSigner = new BlockSigner(HttpKsiService);
+            BlockSigner blockSigner = new BlockSigner(IntegrationTests.HttpKsiService);
             AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
 
             List<DataHash> hashes = new List<DataHash>
@@ -485,10 +485,10 @@ namespace Guardtime.KSI.Test.Integration
                 BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()));
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(IntegrationTests.HttpTestCases))]
         public void BlockSignerWithLevelAndBlindingMaskPrintTreeTest(Ksi ksi)
         {
-            BlockSigner blockSigner = new BlockSigner(HttpKsiService, true, new byte[] { 1, 2, 3 });
+            BlockSigner blockSigner = new BlockSigner(IntegrationTests.HttpKsiService, true, new byte[] { 1, 2, 3 });
             AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
 
             List<DataHash> hashes = new List<DataHash>
@@ -535,10 +535,10 @@ namespace Guardtime.KSI.Test.Integration
         /// Get root node test
         /// </summary>
         /// <param name="ksiService"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiServiceTestCases))]
-        public void BlockSignerGetRootNodeTest(KsiService ksiService)
+        [Test]
+        public void BlockSignerGetRootNodeTest()
         {
-            BlockSigner blockSigner = new BlockSigner(ksiService, true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
+            BlockSigner blockSigner = new BlockSigner(GetKsiService(), true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
 
             AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
 
@@ -555,12 +555,17 @@ namespace Guardtime.KSI.Test.Integration
         /// Get root node test when no documents added
         /// </summary>
         /// <param name="ksiService"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiServiceTestCases))]
-        public void BlockSignerGetRootNodeNoDocumentsTest(KsiService ksiService)
+        [Test]
+        public void BlockSignerGetRootNodeNoDocumentsTest()
         {
-            BlockSigner blockSigner = new BlockSigner(ksiService, true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
+            BlockSigner blockSigner = new BlockSigner(GetKsiService(), true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
 
             Assert.AreEqual(null, blockSigner.GetRootNode(), "Invalid root node");
+        }
+
+        private KsiService GetKsiService()
+        {
+            return IntegrationTests.GetHttpKsiService();
         }
     }
 }
