@@ -22,7 +22,7 @@ using System;
 namespace Guardtime.KSI.Service
 {
     /// <summary>
-    ///     KSI service protocol interface.
+    ///     Service protocol interface for making KSI publications file request.
     /// </summary>
     public interface IKsiPublicationsFileServiceProtocol
     {
