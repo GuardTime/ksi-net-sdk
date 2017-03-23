@@ -32,14 +32,14 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             IKsiSignature signature = GetSignature(context);
 
             PublicationRecordInPublicationFile publicationRecord = GetNearestPublicationRecord(GetPublicationsFile(context), signature.AggregationTime);
-            CalendarHashChain extendedTimeCalendarHashChain = GetExtendedCalendarHashChain(context, publicationRecord.PublicationData.PublicationTime);
+            CalendarHashChain extendedCalendarHashChain = GetExtendedCalendarHashChain(context, publicationRecord.PublicationData.PublicationTime);
 
-            if (publicationRecord.PublicationData.PublicationTime != extendedTimeCalendarHashChain.PublicationTime)
+            if (publicationRecord.PublicationData.PublicationTime != extendedCalendarHashChain.PublicationTime)
             {
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Pub02);
             }
 
-            return signature.AggregationTime != extendedTimeCalendarHashChain.RegistrationTime
+            return signature.AggregationTime != extendedCalendarHashChain.RegistrationTime
                 ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Pub02)
                 : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }
