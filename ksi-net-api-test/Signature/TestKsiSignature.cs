@@ -70,6 +70,8 @@ namespace Guardtime.KSI.Test.Signature
             return null;
         }
 
+        public DataHash InputHash => IsRfc3161Signature ? Rfc3161Record.InputHash : AggregationHashChains[0].InputHash;
+
         public ReadOnlyCollection<AggregationHashChain> GetAggregationHashChains()
         {
             return AggregationHashChains;

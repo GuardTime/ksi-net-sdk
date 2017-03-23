@@ -38,7 +38,7 @@ namespace Guardtime.KSI.Signature
         Rfc3161Record Rfc3161Record { get; }
 
         /// <summary>
-        ///     Is signature RFC 3161 format
+        ///     Returns true if RFC 3161 record exists.
         /// </summary>
         bool IsRfc3161Signature { get; }
 
@@ -80,6 +80,12 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         /// <returns></returns>
         bool IsExtended { get; }
+
+        /// <summary>
+        ///     If RFC 3161 record exists then RFC3161 input hash will be returned. Otherwise first aggregation chain input hash will be returned.
+        /// </summary>
+        /// <returns>aggregations hash chains list</returns>
+        DataHash InputHash { get; }
 
         /// <summary>
         ///     Get aggregation hash chains list.

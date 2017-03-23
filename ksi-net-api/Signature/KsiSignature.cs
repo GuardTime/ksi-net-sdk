@@ -146,7 +146,7 @@ namespace Guardtime.KSI.Signature
         public Rfc3161Record Rfc3161Record { get; private set; }
 
         /// <summary>
-        ///     Is signature RFC 3161 format
+        ///     Returns true if RFC 3161 record exists.
         /// </summary>
         public bool IsRfc3161Signature => Rfc3161Record != null;
 
@@ -223,6 +223,12 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         /// <returns></returns>
         public bool IsExtended => PublicationRecord != null;
+
+        /// <summary>
+        ///     If RFC 3161 record exists then RFC3161 input hash will be returned. Otherwise first aggregation chain input hash will be returned.
+        /// </summary>
+        /// <returns>aggregations hash chains list</returns>
+        public DataHash InputHash => IsRfc3161Signature ? Rfc3161Record.InputHash : _aggregationHashChains[0].InputHash;
 
         /// <summary>
         ///     Get aggregation hash chains list.
@@ -328,7 +334,7 @@ namespace Guardtime.KSI.Signature
 
                 try
                 {
-                    IKsiSignature signature = signatureFactory.CreateByContent(((MemoryStream)writer.BaseStream).ToArray(), GetAggregationHashChains()[0].InputHash);
+                    IKsiSignature signature = signatureFactory.CreateByContent(((MemoryStream)writer.BaseStream).ToArray(), InputHash);
                     Logger.Debug("Extending KSI signature successful.");
 
                     return signature;
