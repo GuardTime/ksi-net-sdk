@@ -164,14 +164,14 @@ namespace Guardtime.KSI.Service
 
             if (asyncResult == null)
             {
-                throw new KsiServiceException("Invalid IAsyncResult: null.");
+                throw new ArgumentNullException(nameof(asyncResult));
             }
 
             ExtendKsiServiceAsyncResult serviceAsyncResult = asyncResult as ExtendKsiServiceAsyncResult;
 
             if (serviceAsyncResult == null)
             {
-                throw new KsiServiceException("Invalid IAsyncResult, could not cast to correct object.");
+                throw new KsiServiceException("Invalid " + nameof(asyncResult) + ", could not cast to correct object.");
             }
 
             if (!serviceAsyncResult.IsCompleted)

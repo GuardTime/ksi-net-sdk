@@ -93,7 +93,6 @@ namespace Guardtime.KSI.Test.Service
         /// <summary>
         /// Test printing tree with 11 elements
         /// </summary>
-        /// <param name="ksiService"></param>
         [Test]
         public void BlockSignerPrintTree11Element7MetadataTest()
         {
@@ -134,7 +133,6 @@ namespace Guardtime.KSI.Test.Service
         /// <summary>
         /// Test printing tree with 5 elements
         /// </summary>
-        /// <param name="ksiService"></param>
         [Test]
         public void BlockSignerPrintTree5Element2MetadataTest()
         {
@@ -167,7 +165,6 @@ namespace Guardtime.KSI.Test.Service
         /// <summary>
         /// Test printing tree with 5 elements
         /// </summary>
-        /// <param name="ksiService"></param>
         [Test]
         public void BlockSignerPrintTree5Element3MetadataTest()
         {
@@ -200,7 +197,6 @@ namespace Guardtime.KSI.Test.Service
         /// <summary>
         /// Test printing tree with 5 elements
         /// </summary>
-        /// <param name="ksiService"></param>
         [Test]
         public void BlockSignerPrintTree5ElementWithMetadataTest()
         {
@@ -233,7 +229,6 @@ namespace Guardtime.KSI.Test.Service
         /// <summary>
         /// Test printing tree with 5 elements
         /// </summary>
-        /// <param name="ksiService"></param>
         [Test]
         public void BlockSignerPrintTree5ElementNoMetadataTest()
         {
@@ -262,7 +257,6 @@ namespace Guardtime.KSI.Test.Service
         /// <summary>
         /// Test printing tree with 11 elements with blindign masks
         /// </summary>
-        /// <param name="ksiService"></param>
         [Test]
         public void BlockSignerWithBlindingMasksPrintTree11Element8MetadataTest()
         {
@@ -305,7 +299,6 @@ namespace Guardtime.KSI.Test.Service
         /// <summary>
         /// Test printing tree with 5 elements with blindign masks
         /// </summary>
-        /// <param name="ksiService"></param>
         [Test]
         public void BlockSignerWithBlindingMasksPrintTree5ElementAllMetadataTest()
         {
@@ -340,7 +333,6 @@ namespace Guardtime.KSI.Test.Service
         /// <summary>
         /// Test printing tree with 5 elements with blindign masks
         /// </summary>
-        /// <param name="ksiService"></param>
         [Test]
         public void BlockSignerWithBlindingMasksPrintTree5ElementNoMetadataTest()
         {
@@ -371,7 +363,6 @@ namespace Guardtime.KSI.Test.Service
         /// <summary>
         /// Test printing tree with 5 elements with blindign masks
         /// </summary>
-        /// <param name="ksiService"></param>
         [Test]
         public void BlockSignerWithBlindingMasksPrintTree5Element3MetadataTest()
         {
@@ -406,7 +397,6 @@ namespace Guardtime.KSI.Test.Service
         /// <summary>
         /// Test printing tree with 5 elements with blindign masks
         /// </summary>
-        /// <param name="ksiService"></param>
         [Test]
         public void BlockSignerWithBlindingMasksPrintTree5Element2MetadataTest()
         {
@@ -534,7 +524,6 @@ namespace Guardtime.KSI.Test.Service
         /// <summary>
         /// Get root node test
         /// </summary>
-        /// <param name="ksiService"></param>
         [Test]
         public void BlockSignerGetRootNodeTest()
         {
@@ -554,7 +543,6 @@ namespace Guardtime.KSI.Test.Service
         /// <summary>
         /// Get root node test when no documents added
         /// </summary>
-        /// <param name="ksiService"></param>
         [Test]
         public void BlockSignerGetRootNodeNoDocumentsTest()
         {

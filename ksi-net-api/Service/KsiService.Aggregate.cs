@@ -163,13 +163,14 @@ namespace Guardtime.KSI.Service
 
             if (asyncResult == null)
             {
-                throw new KsiServiceException("Invalid IAsyncResult: null.");
+                throw new ArgumentNullException(nameof(asyncResult));
             }
 
             CreateSignatureKsiServiceAsyncResult serviceAsyncResult = asyncResult as CreateSignatureKsiServiceAsyncResult;
+
             if (serviceAsyncResult == null)
             {
-                throw new KsiServiceException("Invalid IAsyncResult, could not cast to correct object.");
+                throw new KsiServiceException("Invalid " + nameof(asyncResult) + ", could not cast to correct object.");
             }
 
             if (!serviceAsyncResult.IsCompleted)
@@ -386,8 +387,8 @@ namespace Guardtime.KSI.Service
         /// </summary>
         private class CreateSignatureKsiServiceAsyncResult : KsiServiceAsyncResult
         {
-            AggregationRequestPayload _payload;
-            LegacyAggregationRequestPayload _legacyPayload;
+            private readonly AggregationRequestPayload _payload;
+            private readonly LegacyAggregationRequestPayload _legacyPayload;
 
             public CreateSignatureKsiServiceAsyncResult(AggregationRequestPayload payload, IAsyncResult serviceProtocolAsyncResult, object asyncState)
                 : base(serviceProtocolAsyncResult, asyncState)

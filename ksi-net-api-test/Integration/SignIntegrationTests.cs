@@ -309,11 +309,11 @@ namespace Guardtime.KSI.Test.Integration
         {
             KsiService service = GetHttpKsiService(PduVersion.v2);
 
+            // if new aggregator then no exception 
             try
             {
                 service.Sign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
             }
-                // if new aggregator then no exception
             catch (Exception ex)
             {
                 Assert.That(ex.Message.StartsWith("Received PDU v1 response to PDU v2 request. Configure the SDK to use PDU v1 format for the given Aggregator"),
@@ -341,7 +341,6 @@ namespace Guardtime.KSI.Test.Integration
             ManualResetEvent waitHandle = new ManualResetEvent(false);
             IKsiSignature signature = null;
             IAsyncResult asyncResult = null;
-            string asyncState = "test state";
 
             asyncResult = service.BeginSign(dataHash, delegate(IAsyncResult ar)
             {
@@ -349,11 +348,11 @@ namespace Guardtime.KSI.Test.Integration
                 {
                     signature = service.EndSign(asyncResult);
                 }
-                catch (Exception ex)
+                finally
                 {
+                    waitHandle.Set();
                 }
-                waitHandle.Set();
-            }, asyncState);
+            }, null);
 
             waitHandle.WaitOne();
 
@@ -367,6 +366,30 @@ namespace Guardtime.KSI.Test.Integration
             InternalVerificationPolicy policy = new InternalVerificationPolicy();
             VerificationResult verificationResult = policy.Verify(verificationContext);
             Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode, "Signature should verify with internal policy");
+        }
+
+        [Test]
+        public void EndSignArgumentNullTest()
+        {
+            KsiService service = GetHttpKsiService();
+
+            Assert.Throws<ArgumentNullException>(delegate
+            {
+                service.EndSign(null);
+            });
+        }
+
+        [Test]
+        public void EndSignInvalidArgumentTest()
+        {
+            KsiService service = GetHttpKsiService();
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                service.EndSign(new TestAsyncResult());
+            });
+
+            Assert.That(ex.Message.StartsWith("Invalid asyncResult, could not cast to correct object."), "Unexpected exception message: " + ex.Message);
         }
     }
 }

@@ -357,5 +357,29 @@ namespace Guardtime.KSI.Test.Integration
                     "Unexpected exception message: " + ex.Message);
             }
         }
+
+        [Test]
+        public void EndExtendArgumentNullTest()
+        {
+            KsiService service = GetHttpKsiService();
+
+            Assert.Throws<ArgumentNullException>(delegate
+            {
+                service.EndExtend(null);
+            });
+        }
+
+        [Test]
+        public void EndExtendInvalidArgumentTest()
+        {
+            KsiService service = GetHttpKsiService();
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                service.EndExtend(new TestAsyncResult());
+            });
+
+            Assert.That(ex.Message.StartsWith("Invalid asyncResult, could not cast to correct object."), "Unexpected exception message: " + ex.Message);
+        }
     }
 }

@@ -204,7 +204,7 @@ namespace Guardtime.KSI.Test.Integration
             DataHash documentHash = new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2"));
             blockSigner.AddDocument(documentHash, metadata);
 
-            KsiSignatureInvalidContentException ex = Assert.Throws<KsiSignatureInvalidContentException>(delegate
+            Assert.Throws<KsiSignatureInvalidContentException>(delegate
             {
                 blockSigner.GetUniSignatures().GetEnumerator().MoveNext();
             }, "Automatic verification should fail.");
