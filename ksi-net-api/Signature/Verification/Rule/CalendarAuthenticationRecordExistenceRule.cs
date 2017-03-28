@@ -27,9 +27,9 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         /// <see cref="VerificationRule.Verify" />
         public override VerificationResult Verify(IVerificationContext context)
         {
-            return GetSignature(context).CalendarAuthenticationRecord != null
-                ? new VerificationResult(GetRuleName(), VerificationResultCode.Ok)
-                : new VerificationResult(GetRuleName(), VerificationResultCode.Na, VerificationError.Gen02);
+            return GetSignature(context).CalendarAuthenticationRecord == null
+                ? new VerificationResult(GetRuleName(), VerificationResultCode.Na, VerificationError.Gen02)
+                : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }
     }
 }

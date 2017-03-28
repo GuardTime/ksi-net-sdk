@@ -147,6 +147,14 @@ namespace Guardtime.KSI.Parser
         }
 
         /// <summary>
+        ///     Get array of child elements.
+        /// </summary>
+        public ITlvTag[] GetChildren()
+        {
+            return _childTags.ToArray();
+        }
+
+        /// <summary>
         ///     Get TLV element list size
         /// </summary>
         public int Count => _childTags.Count;
@@ -274,15 +282,6 @@ namespace Guardtime.KSI.Parser
 
                 return res + Type.GetHashCode() + Forward.GetHashCode() + NonCritical.GetHashCode();
             }
-        }
-
-        /// <summary>
-        /// Returns all child objects as an array
-        /// </summary>
-        /// <returns></returns>
-        public ITlvTag[] GetChildrenArray()
-        {
-            return _childTags.ToArray();
         }
 
         /// <summary>

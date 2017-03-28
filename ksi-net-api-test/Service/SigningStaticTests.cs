@@ -21,6 +21,7 @@ using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Service;
+using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Test.Properties;
 using Guardtime.KSI.Utils;
@@ -41,6 +42,17 @@ namespace Guardtime.KSI.Test.Service
         public void SignStaticTest()
         {
             Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu)), 1584727637);
+
+            ksi.Sign(new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
+        }
+
+        /// <summary>
+        /// Test signing using PDU v1.
+        /// </summary>
+        [Test]
+        public void LegacySignStaticTest()
+        {
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_LegacyAggregationResponsePdu)), 318748698, null, PduVersion.v1);
 
             ksi.Sign(new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
         }
@@ -92,6 +104,24 @@ namespace Guardtime.KSI.Test.Service
         }
 
         /// <summary>
+        /// Test signing using PDU v1. Verification fail.
+        /// </summary>
+        [Test]
+        public void LegacySignStaticInvalidSignatureTest()
+        {
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_LegacyAggregationResponsePdu)), 318748698, null, PduVersion.v1);
+
+            KsiSignatureInvalidContentException ex = Assert.Throws<KsiSignatureInvalidContentException>(delegate
+            {
+                ksi.Sign(new DataHash(Base16.Decode("01A1A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")));
+            });
+
+            Assert.That(ex.Message.StartsWith("Signature verification failed"), "Unexpected exception message: " + ex.Message);
+            Assert.IsNotNull(ex.Signature);
+            Assert.AreEqual(VerificationError.Gen01.Code, ex.VerificationResult.VerificationError.Code);
+        }
+
+        /// <summary>
         /// Test signing with PDU containing multiple payloads including an error payload.
         /// </summary>
         [Test]
@@ -125,7 +155,7 @@ namespace Guardtime.KSI.Test.Service
         }
 
         /// <summary>
-        /// Test signing with PDU v1. Response payload has invalid request ID.
+        /// Test signing using PDU v1. Response payload has invalid request ID.
         /// </summary>
         [Test]
         public void LegacySignStaticInvalidRequestIdTest()
@@ -138,6 +168,55 @@ namespace Guardtime.KSI.Test.Service
             });
 
             Assert.That(ex.Message.StartsWith("Unknown request ID:"), "Unexpected exception message: " + ex.Message);
+        }
+
+        /// <summary>
+        /// Test signing with level 2. Level correction in response is 1.
+        /// </summary>
+        [Test]
+        public void SignStaticWithLevelTest()
+        {
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_SignedLevel2_LevelCorrection1)),
+                3306651419058286509);
+            DataHash documentHash = new DataHash(HashAlgorithm.Sha2256, Base16.Decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"));
+
+            IKsiSignature signature = ksi.Sign(documentHash, 2);
+
+            Assert.AreEqual(3, signature.GetAggregationHashChains()[0].GetChainLinks()[0].LevelCorrection, "Level correction is invalid.");
+        }
+
+        /// <summary>
+        /// Test signing. HMAC algorithms do no match.
+        /// </summary>
+        [Test]
+        public void SignStaticInvalidMacAlgorithmTest()
+        {
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu)), 1584727637, null, PduVersion.v2,
+                HashAlgorithm.Sha2512);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                ksi.Sign(new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")));
+            });
+
+            Assert.That(ex.Message.StartsWith("HMAC algorithm mismatch."), "Unexpected exception message: " + ex.Message);
+        }
+
+        /// <summary>
+        /// Test signing using PDU v1. HMAC algorithms do no match.
+        /// </summary>
+        [Test]
+        public void LegacySignStaticInvalidMacAlgorithmTest()
+        {
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_LegacyAggregationResponsePdu)), 318748698, null, PduVersion.v1,
+                HashAlgorithm.Sha2512);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                ksi.Sign(new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")));
+            });
+
+            Assert.That(ex.Message.StartsWith("HMAC algorithm mismatch."), "Unexpected exception message: " + ex.Message);
         }
     }
 }

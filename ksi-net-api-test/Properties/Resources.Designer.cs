@@ -790,6 +790,15 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/service/aggregation-response-pdu-with-level-correction-1.tlv.
+        /// </summary>
+        internal static string KsiService_AggregationResponsePdu_SignedLevel2_LevelCorrection1 {
+            get {
+                return ResourceManager.GetString("KsiService_AggregationResponsePdu_SignedLevel2_LevelCorrection1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/service/aggregator-config-response-pdu.tlv.
         /// </summary>
         internal static string KsiService_AggregatorConfigResponsePdu {
@@ -1498,6 +1507,15 @@ namespace Guardtime.KSI.Test.Properties {
         internal static string SignatureData_Invalid_Extra_Tag {
             get {
                 return ResourceManager.GetString("SignatureData_Invalid_Extra_Tag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/signaturedata/signature-data-invalid-leading-zero.tlv.
+        /// </summary>
+        internal static string SignatureData_Invalid_Leading_Zero {
+            get {
+                return ResourceManager.GetString("SignatureData_Invalid_Leading_Zero", resourceCulture);
             }
         }
         

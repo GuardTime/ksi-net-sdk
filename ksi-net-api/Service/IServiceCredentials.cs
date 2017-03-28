@@ -17,6 +17,8 @@
  * reserves and retains all trademark rights.
  */
 
+using Guardtime.KSI.Hashing;
+
 namespace Guardtime.KSI.Service
 {
     /// <summary>
@@ -33,5 +35,10 @@ namespace Guardtime.KSI.Service
         ///     Login key.
         /// </summary>
         byte[] LoginKey { get; }
+
+        /// <summary>
+        ///     MAC calculation algorithm of outgoing and incoming messages
+        /// </summary>
+        HashAlgorithm MacAlgorithm { get; }
     }
 }

@@ -38,7 +38,7 @@ namespace Guardtime.KSI.Signature
         Rfc3161Record Rfc3161Record { get; }
 
         /// <summary>
-        ///     Is signature RFC 3161 format
+        ///     Returns true if RFC 3161 record exists.
         /// </summary>
         bool IsRfc3161Signature { get; }
 
@@ -82,17 +82,22 @@ namespace Guardtime.KSI.Signature
         bool IsExtended { get; }
 
         /// <summary>
+        ///     If RFC 3161 record exists then RFC3161 input hash will be returned. Otherwise first aggregation chain input hash will be returned.
+        /// </summary>
+        /// <returns>aggregations hash chains list</returns>
+        DataHash InputHash { get; }
+
+        /// <summary>
         ///     Get aggregation hash chains list.
         /// </summary>
         /// <returns>aggregations hash chains list</returns>
         ReadOnlyCollection<AggregationHashChain> GetAggregationHashChains();
 
         /// <summary>
-        ///     Get aggregation hash chain output hash.
+        ///     Get last aggregation hash chain output hash that is calculated from all aggregation hash chains
         /// </summary>
-        /// <param name="level">Document hash node level value in the aggregation tree</param>
         /// <returns>output hash</returns>
-        DataHash GetAggregationHashChainRootHash(uint level);
+        DataHash GetLastAggregationHashChainRootHash();
 
         /// <summary>
         ///     Extend KSI signature with given calendar hash chain.

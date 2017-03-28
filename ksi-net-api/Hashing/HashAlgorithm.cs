@@ -141,7 +141,7 @@ namespace Guardtime.KSI.Hashing
         }
 
         /// <summary>
-        /// Returns true if alogrithm with given id is marked as invalid.
+        /// Returns true if algorithm with given id is marked as invalid.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>

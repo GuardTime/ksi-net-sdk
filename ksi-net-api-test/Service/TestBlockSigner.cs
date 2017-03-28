@@ -26,11 +26,12 @@ namespace Guardtime.KSI.Test.Service
     {
         //private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public TestBlockSigner(Ksi ksi, HashAlgorithm hashAlgorithm = null) : base(ksi, hashAlgorithm)
+        public TestBlockSigner(IKsiService ksiService, HashAlgorithm hashAlgorithm = null) : base(ksiService, hashAlgorithm)
         {
         }
 
-        public TestBlockSigner(Ksi ksi, bool useBlindingMask, byte[] randomSeed, HashAlgorithm hashAlgorithm = null) : base(ksi, useBlindingMask, randomSeed, hashAlgorithm)
+        public TestBlockSigner(IKsiService ksiService, bool useBlindingMask, byte[] randomSeed, HashAlgorithm hashAlgorithm = null)
+            : base(ksiService, useBlindingMask, randomSeed, hashAlgorithm)
         {
         }
     }

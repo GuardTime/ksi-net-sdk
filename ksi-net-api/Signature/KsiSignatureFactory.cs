@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
@@ -57,13 +58,12 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         /// <param name="bytes">signature byte array</param>
         /// <param name="hash">Signed hash</param>
-        /// <param name="level">Signed hash node level value in the aggregation tree</param>
         /// <returns>KSI signature</returns>
-        public IKsiSignature Create(byte[] bytes, DataHash hash = null, uint level = 0)
+        public IKsiSignature Create(byte[] bytes, DataHash hash = null)
         {
             using (Stream stream = new MemoryStream(bytes))
             {
-                return Create(stream, hash, level);
+                return Create(stream, hash);
             }
         }
 
@@ -72,11 +72,10 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         /// <param name="contentBytes">signature content byte array</param>
         /// <param name="hash">Signed hash</param>
-        /// <param name="level">Signed hash node level value in the aggregation tree</param>
         /// <returns>KSI signature</returns>
-        public IKsiSignature CreateByContent(byte[] contentBytes, DataHash hash = null, uint level = 0)
+        public IKsiSignature CreateByContent(byte[] contentBytes, DataHash hash = null)
         {
-            return CreateAndVerify(new RawTag(Constants.KsiSignature.TagType, false, false, contentBytes), hash, level);
+            return CreateAndVerify(new RawTag(Constants.KsiSignature.TagType, false, false, contentBytes), hash);
         }
 
         /// <summary>
@@ -84,9 +83,8 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         /// <param name="stream">signature data stream</param>
         /// <param name="hash">Signed hash</param>
-        /// <param name="level">Signed hash node level value in the aggregation tree</param>
         /// <returns>KSI signature</returns>
-        public IKsiSignature Create(Stream stream, DataHash hash = null, uint level = 0)
+        public IKsiSignature Create(Stream stream, DataHash hash = null)
         {
             if (stream == null)
             {
@@ -98,7 +96,7 @@ namespace Guardtime.KSI.Signature
                 try
                 {
                     Logger.Debug("Creating KSI signature from stream.");
-                    IKsiSignature signature = CreateAndVerify(reader.ReadTag(), null, level);
+                    IKsiSignature signature = CreateAndVerify(reader.ReadTag(), null);
                     Logger.Debug("Creating KSI signature from stream successful.");
 
                     return signature;
@@ -118,7 +116,7 @@ namespace Guardtime.KSI.Signature
         /// <param name="hash">Signed hash</param>
         /// <param name="level">Signed hash node level value in the aggregation tree</param>
         /// <returns>KSI signature</returns>
-        public IKsiSignature Create(AggregationResponsePayload payload, DataHash hash, uint level = 0)
+        public IKsiSignature Create(AggregationResponsePayload payload, DataHash hash, uint? level = null)
         {
             if (payload == null)
             {
@@ -134,7 +132,7 @@ namespace Guardtime.KSI.Signature
         /// <param name="hash">Signed hash</param>
         /// <param name="level">Signed hash node level value in the aggregation tree</param>
         /// <returns>KSI signature</returns>
-        public IKsiSignature Create(LegacyAggregationResponsePayload payload, DataHash hash, uint level = 0)
+        public IKsiSignature Create(LegacyAggregationResponsePayload payload, DataHash hash, uint? level = null)
         {
             if (payload == null)
             {
@@ -143,23 +141,20 @@ namespace Guardtime.KSI.Signature
             return CreateFromResponsePayload(payload, payload.RequestId, hash, level);
         }
 
-        private IKsiSignature CreateFromResponsePayload(CompositeTag payload, ulong requestId, DataHash hash, uint level)
+        private IKsiSignature CreateFromResponsePayload(RequestResponsePayload payload, ulong requestId, DataHash hash, uint? level)
         {
-            List<ITlvTag> childTags = new List<ITlvTag>();
-
-            foreach (ITlvTag childTag in payload)
-            {
-                if (childTag.Type > 0x800 && childTag.Type < 0x900)
-                {
-                    childTags.Add(childTag);
-                }
-            }
-
             try
             {
                 Logger.Debug("Creating KSI signature from aggregation response. (request id: {0})", requestId);
 
-                IKsiSignature signature = CreateAndVerify(childTags.ToArray(), hash, level);
+                KsiSignature signature = new KsiSignature(false, false, payload.GetSignatureChildTags());
+
+                if (level > 0)
+                {
+                    signature = GetSignatureWithLevelCorrection(signature, level.Value);
+                }
+
+                Verify(signature, hash);
 
                 Logger.Debug("Creating KSI signature from aggregation response successful. (request id: {0})", requestId);
                 return signature;
@@ -171,6 +166,59 @@ namespace Guardtime.KSI.Signature
             }
         }
 
+        private static KsiSignature GetSignatureWithLevelCorrection(KsiSignature signature, uint fistLinkLevelCorrection)
+        {
+            ReadOnlyCollection<AggregationHashChain> aggregationHashChains = signature.GetAggregationHashChains();
+
+            if (aggregationHashChains.Count > 0)
+            {
+                TlvTagBuilder builder = new TlvTagBuilder(signature);
+                AggregationHashChain firstAggregationHashChain = aggregationHashChains[0];
+                builder.ReplaceChildTag(firstAggregationHashChain, GetAggregationHashChainWithLevelCorrection(firstAggregationHashChain, fistLinkLevelCorrection));
+                return new KsiSignature(false, false, builder.GetChildTags());
+            }
+
+            return signature;
+        }
+
+        private static AggregationHashChain GetAggregationHashChainWithLevelCorrection(AggregationHashChain aggregationHashChain, uint levelCorrection)
+        {
+            ReadOnlyCollection<AggregationHashChain.Link> chainLinks = aggregationHashChain.GetChainLinks();
+
+            if (chainLinks.Count > 0)
+            {
+                TlvTagBuilder builder = new TlvTagBuilder(aggregationHashChain);
+                AggregationHashChain.Link firstLink = chainLinks[0];
+                builder.ReplaceChildTag(firstLink, GetLinkWithLevelCorrection(firstLink, levelCorrection));
+                return new AggregationHashChain(builder.BuildTag());
+            }
+
+            return aggregationHashChain;
+        }
+
+        private static AggregationHashChain.Link GetLinkWithLevelCorrection(AggregationHashChain.Link link, uint levelCorrection)
+        {
+            TlvTagBuilder builder = new TlvTagBuilder(link);
+            IntegerTag levelCorrectionTag = builder.GetChildByType(Constants.AggregationHashChain.Link.LevelCorrectionTagType) as IntegerTag;
+
+            if (levelCorrectionTag != null)
+            {
+                IntegerTag newLevelCorrectionTag = new IntegerTag(
+                    levelCorrectionTag.Type,
+                    levelCorrectionTag.NonCritical,
+                    levelCorrectionTag.Forward,
+                    levelCorrectionTag.Value + levelCorrection);
+
+                builder.ReplaceChildTag(levelCorrectionTag, newLevelCorrectionTag);
+            }
+            else
+            {
+                builder.AddChildTag(new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, levelCorrection));
+            }
+
+            return new AggregationHashChain.Link(builder.BuildTag());
+        }
+
         /// <summary>
         /// Get KSI signature instance from tlv tags
         /// </summary>
@@ -180,11 +228,10 @@ namespace Guardtime.KSI.Signature
         /// <param name="publicationRecord">Publication record tlv element</param>
         /// <param name="rfc3161Record">RFC3161 record tlv element</param>
         /// <param name="hash">Signed hash</param>
-        /// <param name="level">Signed hash node level value in the aggregation tree</param>
         /// <returns></returns>
         public IKsiSignature Create(ICollection<AggregationHashChain> aggregationHashChains, CalendarHashChain calendarHashChain,
                                     CalendarAuthenticationRecord calendarAuthenticationRecord, PublicationRecordInSignature publicationRecord,
-                                    Rfc3161Record rfc3161Record, DataHash hash, uint level = 0)
+                                    Rfc3161Record rfc3161Record, DataHash hash)
         {
             List<ITlvTag> childTags = new List<ITlvTag>();
 
@@ -212,7 +259,7 @@ namespace Guardtime.KSI.Signature
                 childTags.Add(rfc3161Record);
             }
 
-            return CreateAndVerify(childTags.ToArray(), hash, level);
+            return CreateAndVerify(childTags.ToArray(), hash);
         }
 
         /// <summary>
@@ -220,11 +267,11 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         /// <param name="signatureRaw">KSI signature</param>
         /// <param name="hash">Signed hash</param>
-        /// <param name="level">Signed hash node level value in the aggregation tree</param>
-        private IKsiSignature CreateAndVerify(RawTag signatureRaw, DataHash hash, uint level = 0)
+        private IKsiSignature CreateAndVerify(RawTag signatureRaw, DataHash hash)
         {
             KsiSignature signature = new KsiSignature(signatureRaw);
-            Verify(signature, hash, level);
+
+            Verify(signature, hash);
             return signature;
         }
 
@@ -233,11 +280,11 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         /// <param name="childTags">Child tags</param>
         /// <param name="hash">Signed hash</param>
-        /// <param name="level">Signed hash node level value in the aggregation tree</param>
-        private IKsiSignature CreateAndVerify(ITlvTag[] childTags, DataHash hash, uint level = 0)
+        private IKsiSignature CreateAndVerify(ITlvTag[] childTags, DataHash hash)
         {
             KsiSignature signature = new KsiSignature(false, false, childTags);
-            Verify(signature, hash, level);
+
+            Verify(signature, hash);
             return signature;
         }
 
@@ -246,12 +293,10 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         /// <param name="signature">KSI signature</param>
         /// <param name="hash">Signed hash</param>
-        /// <param name="level">Signed hash node level value in the aggregation tree</param>
-        private void Verify(IKsiSignature signature, DataHash hash, uint level)
+        private void Verify(IKsiSignature signature, DataHash hash)
         {
             _verificationContext.Signature = signature;
             _verificationContext.DocumentHash = hash;
-            _verificationContext.Level = level;
             VerificationResult verificationResult = _verificationPolicy.Verify(_verificationContext);
 
             if (verificationResult.ResultCode != VerificationResultCode.Ok)
@@ -264,7 +309,7 @@ namespace Guardtime.KSI.Signature
                     Environment.NewLine,
                     verificationResult,
                     Environment.NewLine,
-                    this);
+                    signature);
 
                 throw new KsiSignatureInvalidContentException("Signature verification failed.", signature, verificationResult);
             }

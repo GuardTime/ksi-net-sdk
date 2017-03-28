@@ -46,6 +46,26 @@ namespace Guardtime.KSI.Test.Integration
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void HttpSignHashWithLevelTest(Ksi ksi)
+        {
+            DataHash documentHash = new DataHash(HashAlgorithm.Sha2256, Base16.Decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"));
+
+            IKsiSignature signature = ksi.Sign(documentHash, 3);
+
+            Assert.LessOrEqual(3, signature.GetAggregationHashChains()[0].GetChainLinks()[0].LevelCorrection, "Level correction is invalid.");
+
+            VerificationContext verificationContext = new VerificationContext(signature)
+            {
+                DocumentHash = documentHash,
+                PublicationsFile = ksi.GetPublicationsFile()
+            };
+            KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
+                CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
+            VerificationResult verificationResult = policy.Verify(verificationContext);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode, "Signature should verify with key based policy");
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void HttpSignByteArrayTest(Ksi ksi)
         {
             byte[] data = Encoding.UTF8.GetBytes("This is my document");
@@ -184,7 +204,7 @@ namespace Guardtime.KSI.Test.Integration
             Assert.AreEqual(VerificationError.Gen01, verificationResult.VerificationError);
         }
 
-        public VerificationResult SignHash(Ksi ksi)
+        private VerificationResult SignHash(Ksi ksi)
         {
             IKsiSignature signature = ksi.Sign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
             VerificationContext verificationContext = new VerificationContext(signature)
@@ -235,7 +255,7 @@ namespace Guardtime.KSI.Test.Integration
         {
             ManualResetEvent waitHandle = new ManualResetEvent(false);
             int doneCount = 0;
-            int runCount = 8;
+            int runCount = 7;
             string errorMessage = null;
 
             for (int i = 0; i < runCount; i++)
@@ -289,11 +309,11 @@ namespace Guardtime.KSI.Test.Integration
         {
             KsiService service = GetHttpKsiService(PduVersion.v2);
 
+            // if new aggregator then no exception 
             try
             {
                 service.Sign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
             }
-                // if new aggregator then no exception
             catch (Exception ex)
             {
                 Assert.That(ex.Message.StartsWith("Received PDU v1 response to PDU v2 request. Configure the SDK to use PDU v1 format for the given Aggregator"),
@@ -321,15 +341,19 @@ namespace Guardtime.KSI.Test.Integration
             ManualResetEvent waitHandle = new ManualResetEvent(false);
             IKsiSignature signature = null;
             IAsyncResult asyncResult = null;
-            string asyncState = "test state";
-            
 
             asyncResult = service.BeginSign(dataHash, delegate(IAsyncResult ar)
             {
-                signature = service.EndSign(asyncResult);
-                waitHandle.Set();
-            }, asyncState);
-            
+                try
+                {
+                    signature = service.EndSign(asyncResult);
+                }
+                finally
+                {
+                    waitHandle.Set();
+                }
+            }, null);
+
             waitHandle.WaitOne();
 
             Assert.IsNotNull(signature, "Signature should not be null.");
@@ -342,6 +366,30 @@ namespace Guardtime.KSI.Test.Integration
             InternalVerificationPolicy policy = new InternalVerificationPolicy();
             VerificationResult verificationResult = policy.Verify(verificationContext);
             Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode, "Signature should verify with internal policy");
+        }
+
+        [Test]
+        public void EndSignArgumentNullTest()
+        {
+            KsiService service = GetHttpKsiService();
+
+            Assert.Throws<ArgumentNullException>(delegate
+            {
+                service.EndSign(null);
+            });
+        }
+
+        [Test]
+        public void EndSignInvalidArgumentTest()
+        {
+            KsiService service = GetHttpKsiService();
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                service.EndSign(new TestAsyncResult());
+            });
+
+            Assert.That(ex.Message.StartsWith("Invalid asyncResult, could not cast to correct object."), "Unexpected exception message: " + ex.Message);
         }
     }
 }

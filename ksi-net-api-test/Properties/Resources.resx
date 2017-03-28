@@ -594,6 +594,9 @@
   <data name="KsiService_LegacyAggregationResponsePdu" xml:space="preserve">
     <value>resources/service/legacy-aggregation-response-pdu.tlv</value>
   </data>
+  <data name="KsiService_AggregationResponsePdu_SignedLevel2_LevelCorrection1" xml:space="preserve">
+    <value>resources/service/aggregation-response-pdu-with-level-correction-1.tlv</value>
+  </data>
   <data name="PkiTrustProvider_CustomCertInvalid" xml:space="preserve">
     <value>resources/trust/pkitrustprovider/custom-cert-invalid.pem</value>
   </data>
@@ -623,5 +626,8 @@
   </data>
   <data name="KsiSignature_Invalid_First_Aggregation_Chain_Index_Length" xml:space="preserve">
     <value>resources/signature/ksi-signature/ksi-signature-invalid-first-aggregation-chain-index-length.tlv</value>
+  </data>
+  <data name="SignatureData_Invalid_Leading_Zero" xml:space="preserve">
+    <value>resources/signature/signaturedata/signature-data-invalid-leading-zero.tlv</value>
   </data>
 </root>

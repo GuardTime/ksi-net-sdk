@@ -135,14 +135,12 @@ namespace Guardtime.KSI
                 throw new HashingException("Invalid hash algorithm: null.");
             }
 
-            /*
-            If an algorithm is given which is not implemented or is invalid, an illegal argument exception is thrown.
-            The developer must ensure that only implemented algorithms are used.
-            */
-            switch (algorithm.Status)
+            // If an algorithm is given which is not implemented, an illegal argument exception is thrown.
+            // The developer must ensure that only implemented algorithms are used.
+
+            if (algorithm.Status == HashAlgorithm.AlgorithmStatus.NotImplemented)
             {
-                case HashAlgorithm.AlgorithmStatus.NotImplemented:
-                    throw new HashingException("Hash algorithm is not implemented. Algorithm: " + algorithm.Name);
+                throw new HashingException("Hash algorithm is not implemented. Algorithm: " + algorithm.Name);
             }
         }
     }

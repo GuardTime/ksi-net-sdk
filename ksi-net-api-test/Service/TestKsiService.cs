@@ -17,7 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 
@@ -42,7 +41,6 @@ namespace Guardtime.KSI.Test.Service
                     extendingServiceCredentials,
                     publicationsFileServiceProtocol,
                     publicationsFileFactory,
-                    HashAlgorithm.Sha2256,
                     pduVersion)
         {
             _requestId = requestId;

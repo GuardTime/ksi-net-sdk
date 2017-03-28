@@ -395,7 +395,6 @@ namespace Guardtime.KSI.Service
                 return;
             }
 
-            asyncResult.Request.Timeout = _requestTimeOut - asyncResult.TimeElapsed;
             byte[] data = asyncResult.PostData;
             try
             {
@@ -522,7 +521,6 @@ namespace Guardtime.KSI.Service
             private readonly AsyncCallback _callback;
             private readonly object _lock;
 
-            private readonly DateTime _startTime = DateTime.Now;
             private readonly ManualResetEvent _waitHandle;
             private bool _isCompleted;
 
@@ -555,8 +553,6 @@ namespace Guardtime.KSI.Service
             public HttpWebRequest Request { get; }
 
             public byte[] PostData { get; }
-
-            public int TimeElapsed => (int)(DateTime.Now - _startTime).TotalMilliseconds;
 
             public bool HasError => Error != null;
 

@@ -30,14 +30,14 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         public override VerificationResult Verify(IVerificationContext context)
         {
             PublicationData userPublication = GetUserPublication(context);
-            CalendarHashChain extendedTimeCalendarHashChain = GetExtendedCalendarHashChain(context, userPublication.PublicationTime);
+            CalendarHashChain extendedCalendarHashChain = GetExtendedCalendarHashChain(context, userPublication.PublicationTime);
 
-            if (userPublication.PublicationTime != extendedTimeCalendarHashChain.PublicationData.PublicationTime)
+            if (userPublication.PublicationTime != extendedCalendarHashChain.PublicationData.PublicationTime)
             {
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Pub02);
             }
 
-            return GetSignature(context).AggregationTime != extendedTimeCalendarHashChain.RegistrationTime
+            return GetSignature(context).AggregationTime != extendedCalendarHashChain.RegistrationTime
                 ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Pub02)
                 : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }

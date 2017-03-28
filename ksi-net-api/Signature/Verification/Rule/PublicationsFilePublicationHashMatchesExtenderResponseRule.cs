@@ -40,9 +40,9 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Na);
             }
 
-            CalendarHashChain extendedTimeCalendarHashChain = GetExtendedCalendarHashChain(context, publicationRecord.PublicationData.PublicationTime);
+            CalendarHashChain extendedCalendarHashChain = GetExtendedCalendarHashChain(context, publicationRecord.PublicationData.PublicationTime);
 
-            return extendedTimeCalendarHashChain.OutputHash != publicationRecord.PublicationData.PublicationHash
+            return extendedCalendarHashChain.OutputHash != publicationRecord.PublicationData.PublicationHash
                 ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Pub01)
                 : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }

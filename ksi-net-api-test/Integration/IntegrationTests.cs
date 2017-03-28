@@ -17,16 +17,15 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.Security.Cryptography.X509Certificates;
-using Guardtime.KSI.Hashing;
+using System.Threading;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Test.Crypto;
 using Guardtime.KSI.Test.Properties;
 using Guardtime.KSI.Trust;
-using Guardtime.KSI.Utils;
-using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Integration
 {
@@ -97,7 +96,6 @@ namespace Guardtime.KSI.Test.Integration
                         new PublicationsFileFactory(
                             new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
                         new KsiSignatureFactory(),
-                        HashAlgorithm.Sha2256,
                         TestSetup.PduVersion))
             }
         };
@@ -245,25 +243,15 @@ namespace Guardtime.KSI.Test.Integration
                     CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))));
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
-        public void GetPublicationsFileTest(Ksi ksi)
+        protected class TestAsyncResult : IAsyncResult
         {
-            IPublicationsFile publicationsFile = ksi.GetPublicationsFile();
+            public object AsyncState => null;
 
-            PublicationRecordInPublicationFile latest = publicationsFile.GetLatestPublication();
-            if (latest == null)
-            {
-                Assert.True(true);
-                return;
-            }
+            public WaitHandle AsyncWaitHandle => new ManualResetEvent(false);
 
-            PublicationRecordInPublicationFile prev = publicationsFile.GetNearestPublicationRecord(latest.PublicationData.PublicationTime - 35 * 24 * 3600);
+            public bool CompletedSynchronously => false;
 
-            Assert.True(latest.PublicationData.PublicationTime > prev.PublicationData.PublicationTime);
-
-            prev = publicationsFile.GetNearestPublicationRecord(Util.ConvertUnixTimeToDateTime(latest.PublicationData.PublicationTime).AddDays(-35));
-
-            Assert.True(latest.PublicationData.PublicationTime > prev.PublicationData.PublicationTime);
+            public bool IsCompleted => false;
         }
     }
 }

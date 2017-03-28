@@ -107,6 +107,7 @@
     <Compile Include="Hashing\IDataHasher.cs" />
     <Compile Include="Hashing\IHmacHasher.cs" />
     <Compile Include="Ksi.cs" />
+    <Compile Include="Parser\TlvTagBuilder.cs" />
     <Compile Include="Parser\ICompositeTag.cs" />
     <Compile Include="Parser\ImprintTag.cs" />
     <Compile Include="Parser\IntegerTag.cs" />

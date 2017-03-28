@@ -37,5 +37,10 @@ namespace Guardtime.KSI.Parser
         ///     Get TLV element list size
         /// </summary>
         int Count { get; }
+
+        /// <summary>
+        ///     Get array of child elements.
+        /// </summary>
+        ITlvTag[] GetChildren();
     }
 }

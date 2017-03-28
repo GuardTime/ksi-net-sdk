@@ -32,9 +32,9 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             ulong publicationTime = GetCalendarHashChain(signature).PublicationData.PublicationTime;
             CalendarHashChain extendedCalendarHashChain = GetExtendedCalendarHashChain(context, publicationTime);
 
-            return !GetCalendarHashChain(signature).AreRightLinksEqual(extendedCalendarHashChain)
-                ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Cal04)
-                : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
+            return GetCalendarHashChain(signature).AreRightLinksEqual(extendedCalendarHashChain)
+                ? new VerificationResult(GetRuleName(), VerificationResultCode.Ok)
+                : new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Cal04);
         }
     }
 }

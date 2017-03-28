@@ -107,7 +107,7 @@ namespace Guardtime.KSI.Service
             }
 
             PduHeader header = new PduHeader(_extendingServiceCredentials.LoginId);
-            ExtendRequestPdu pdu = new ExtendRequestPdu(header, payload, _macAlgorithm, _extendingServiceCredentials.LoginKey);
+            ExtendRequestPdu pdu = new ExtendRequestPdu(header, payload, _extendingMacAlgorithm, _extendingServiceCredentials.LoginKey);
 
             Logger.Debug("Begin extend. (request id: {0}){1}{2}", payload.RequestId, Environment.NewLine, pdu);
             IAsyncResult serviceProtocolAsyncResult = _extendingServiceProtocol.BeginExtend(pdu.Encode(), payload.RequestId, callback, asyncState);
@@ -142,7 +142,7 @@ namespace Guardtime.KSI.Service
             }
 
             PduHeader header = new PduHeader(_extendingServiceCredentials.LoginId);
-            LegacyExtendPdu pdu = new LegacyExtendPdu(header, payload, LegacyPdu.GetMacTag(_macAlgorithm, _extendingServiceCredentials.LoginKey, header, payload));
+            LegacyExtendPdu pdu = new LegacyExtendPdu(header, payload, LegacyPdu.GetMacTag(_extendingMacAlgorithm, _extendingServiceCredentials.LoginKey, header, payload));
 
             Logger.Debug("Begin legacy extend. (request id: {0}){1}{2}", payload.RequestId, Environment.NewLine, pdu);
             IAsyncResult serviceProtocolAsyncResult = _extendingServiceProtocol.BeginExtend(pdu.Encode(), payload.RequestId, callback, asyncState);
@@ -164,14 +164,14 @@ namespace Guardtime.KSI.Service
 
             if (asyncResult == null)
             {
-                throw new KsiServiceException("Invalid IAsyncResult: null.");
+                throw new ArgumentNullException(nameof(asyncResult));
             }
 
             ExtendKsiServiceAsyncResult serviceAsyncResult = asyncResult as ExtendKsiServiceAsyncResult;
 
             if (serviceAsyncResult == null)
             {
-                throw new KsiServiceException("Invalid IAsyncResult, could not cast to correct object.");
+                throw new KsiServiceException("Invalid " + nameof(asyncResult) + ", could not cast to correct object.");
             }
 
             if (!serviceAsyncResult.IsCompleted)
@@ -234,7 +234,7 @@ namespace Guardtime.KSI.Service
                     LegacyExtendResponsePayload legacyPayload = legacyPdu.Payload as LegacyExtendResponsePayload;
                     LegacyExtendErrorPayload errorPayload = legacyPdu.ErrorPayload as LegacyExtendErrorPayload;
 
-                    ValidateLegacyResponse(legacyPdu, legacyPayload, errorPayload, serviceAsyncResult.RequestId, _extendingServiceCredentials);
+                    ValidateLegacyResponse(legacyPdu, legacyPayload, errorPayload, serviceAsyncResult.RequestId, _extendingMacAlgorithm, _extendingServiceCredentials);
 
                     calendarHashChain = legacyPayload.CalendarHashChain;
                 }
@@ -243,7 +243,7 @@ namespace Guardtime.KSI.Service
                     ExtendResponsePayload payload = pdu.GetExtendResponsePayload(serviceAsyncResult.RequestId);
                     ExtendErrorPayload errorPayload = pdu.GetExtendErrorPayload();
 
-                    ValidateResponse(data, pdu, payload, errorPayload, _extendingServiceCredentials);
+                    ValidateResponse(data, pdu, payload, errorPayload, _extendingMacAlgorithm, _extendingServiceCredentials);
 
                     calendarHashChain = payload.CalendarHashChain;
                 }
@@ -304,7 +304,7 @@ namespace Guardtime.KSI.Service
 
             PduHeader header = new PduHeader(_extendingServiceCredentials.LoginId);
             ExtenderConfigRequestPayload payload = new ExtenderConfigRequestPayload();
-            ExtendRequestPdu pdu = new ExtendRequestPdu(header, payload, _macAlgorithm, _extendingServiceCredentials.LoginKey);
+            ExtendRequestPdu pdu = new ExtendRequestPdu(header, payload, _extendingMacAlgorithm, _extendingServiceCredentials.LoginKey);
 
             ulong requestId = GenerateRequestId();
 
@@ -371,7 +371,7 @@ namespace Guardtime.KSI.Service
                 ExtenderConfigResponsePayload payload = pdu.GetExtenderConfigResponsePayload();
                 ExtendErrorPayload errorPayload = pdu.GetExtendErrorPayload();
 
-                ValidateResponse(data, pdu, payload, errorPayload, _extendingServiceCredentials);
+                ValidateResponse(data, pdu, payload, errorPayload, _extendingMacAlgorithm, _extendingServiceCredentials);
 
                 return new ExtenderConfig(payload);
             }

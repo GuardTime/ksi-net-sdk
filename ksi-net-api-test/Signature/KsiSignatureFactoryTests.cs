@@ -71,15 +71,6 @@ namespace Guardtime.KSI.Test.Signature
         }
 
         [Test]
-        public void CreateFromStreamAndVerifyWithLevel3Test()
-        {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok_Level3), FileMode.Open))
-            {
-                new KsiSignatureFactory().Create(stream, null, 3);
-            }
-        }
-
-        [Test]
         public void CreateFromStreamAndVerifyWithPolicyInvalidTest()
         {
             IKsiSignature signature;
@@ -151,7 +142,7 @@ namespace Guardtime.KSI.Test.Signature
 
             IKsiSignature newSignature = signatureFactory.Create(signature.GetAggregationHashChains(), signature.CalendarHashChain, signature.CalendarAuthenticationRecord,
                 signature.PublicationRecord,
-                signature.Rfc3161Record, signature.GetAggregationHashChains()[0].InputHash);
+                signature.Rfc3161Record, signature.InputHash);
 
             Assert.AreEqual(signature.EncodeValue(), newSignature.EncodeValue(), "Signatures should be equal.");
         }

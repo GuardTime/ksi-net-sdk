@@ -146,7 +146,7 @@ namespace Guardtime.KSI.Signature
         public Rfc3161Record Rfc3161Record { get; private set; }
 
         /// <summary>
-        ///     Is signature RFC 3161 format
+        ///     Returns true if RFC 3161 record exists.
         /// </summary>
         public bool IsRfc3161Signature => Rfc3161Record != null;
 
@@ -225,6 +225,12 @@ namespace Guardtime.KSI.Signature
         public bool IsExtended => PublicationRecord != null;
 
         /// <summary>
+        ///     If RFC 3161 record exists then RFC3161 input hash will be returned. Otherwise first aggregation chain input hash will be returned.
+        /// </summary>
+        /// <returns>aggregations hash chains list</returns>
+        public DataHash InputHash => IsRfc3161Signature ? Rfc3161Record.InputHash : _aggregationHashChains[0].InputHash;
+
+        /// <summary>
         ///     Get aggregation hash chains list.
         /// </summary>
         /// <returns>aggregations hash chains list</returns>
@@ -234,18 +240,17 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
-        ///     Get aggregation hash chain output hash.
+        ///     Get last aggregation hash chain output hash that is calculated from all aggregation hash chains
         /// </summary>
-        /// <param name="level">Document hash node level value in the aggregation tree</param>
         /// <returns>output hash</returns>
-        public DataHash GetAggregationHashChainRootHash(uint level)
+        public DataHash GetLastAggregationHashChainRootHash()
         {
             if (_aggregationHashChainRootHash != null)
             {
                 return _aggregationHashChainRootHash;
             }
 
-            AggregationHashChainResult lastResult = new AggregationHashChainResult(level, _aggregationHashChains[0].InputHash);
+            AggregationHashChainResult lastResult = new AggregationHashChainResult(0, _aggregationHashChains[0].InputHash);
 
             foreach (AggregationHashChain chain in _aggregationHashChains)
             {
@@ -329,7 +334,7 @@ namespace Guardtime.KSI.Signature
 
                 try
                 {
-                    IKsiSignature signature = signatureFactory.CreateByContent(((MemoryStream)writer.BaseStream).ToArray(), GetAggregationHashChains()[0].InputHash);
+                    IKsiSignature signature = signatureFactory.CreateByContent(((MemoryStream)writer.BaseStream).ToArray(), InputHash);
                     Logger.Debug("Extending KSI signature successful.");
 
                     return signature;
