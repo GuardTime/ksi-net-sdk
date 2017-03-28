@@ -312,6 +312,9 @@
   <data name="KsiSignature_Legacy_Ok" xml:space="preserve">
     <value>resources/signature/ksi-signature/legacy-ksi-signature-ok.tlv</value>
   </data>
+  <data name="KsiSignature_Legacy_Invalid_Input" xml:space="preserve">
+    <value>resources/signature/ksi-signature/legacy-ksi-signature-invalid-input.tlv</value>
+  </data>
   <data name="KsiSignature_Legacy_Ok_With_Publication_Record" xml:space="preserve">
     <value>resources/signature/ksi-signature/legacy-ksi-signature-ok-with-publication-record.tlv</value>
   </data>

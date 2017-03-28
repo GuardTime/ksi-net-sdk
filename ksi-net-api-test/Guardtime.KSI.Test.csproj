@@ -133,17 +133,14 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Integration\SharedBetweenSDKsTests.cs" />
     <Compile Include="Hashing\DataHasherTests.cs" />
     <Compile Include="Hashing\DataHashTests.cs" />
     <Compile Include="Hashing\HashAlgorithmTests.cs" />
     <Compile Include="Integration\BlockSigner.PrintTreeTests.cs" />
-    <Compile Include="Integration\CommonGetTestFilesAndResults.cs" />
-    <Compile Include="Integration\CommonTestExecution.cs" />
     <Compile Include="Integration\ConfigurationIntegrationTests.cs" />
-    <Compile Include="Integration\DataHolderForIntegrationTests.cs" />
     <Compile Include="Integration\IntegrationTests.cs" />
     <Compile Include="Integration\ExtendIntegrationTests.cs" />
-    <Compile Include="Integration\VerificationPolicyIntegrationTests.cs" />
     <Compile Include="Integration\SignIntegrationTests.cs" />
     <Compile Include="Parser\CompositeTagTests.cs" />
     <Compile Include="Parser\IntegerTagTests.cs" />
@@ -193,6 +190,7 @@
     <Compile Include="Service\TestKsiServiceProtocol.cs" />
     <Compile Include="Signature\KsiSignatureUsingReflectionTests.cs" />
     <Compile Include="Signature\Verification\EmptyVerificationPolicy.cs" />
+    <Compile Include="Signature\Verification\Rule\DocumentHashVerificationRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainIndexSuccessorRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\Rfc3161RecordAggregationTimeRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\Rfc3161RecordChainIndexRuleTests.cs" />
@@ -274,6 +272,936 @@
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-aggr-algo-datahash-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-aggr-algo-has-child-element.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-aggr-algo-int-value-wrong.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-aggr-algo-missing-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-aggr-algo-multiple-tags.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-aggr-algo-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-aggr-algo-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-aggr-time-datahash-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-aggr-time-future-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-aggr-time-has-child-element.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-aggr-time-int-value-wrong.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-aggr-time-missing-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-aggr-time-multiple-tags.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-aggr-time-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-aggr-time-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-chain-index-datahash-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-chain-index-has-child-element.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-chain-index-int-value-wrong.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-chain-index-missing-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-chain-index-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-chain-index-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-input-data-datahash-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-input-data-has-child-element.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-input-data-int-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-input-data-multiple-tags.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-input-data-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-input-data-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-input-hash-has-child-element.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-input-hash-int-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-input-hash-missing-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-input-hash-multiple-tags.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-input-hash-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-input-hash-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-input-hash-wrong.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-left-link-legacy-id-datahash-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-left-link-legacy-id-int-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-left-link-legacy-id-multiple-tags.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-left-link-legacy-id-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-left-link-legacy-id-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-left-link-level-corr-datahash-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-left-link-level-corr-int-value-wrong.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-left-link-level-corr-missing-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-left-link-level-corr-multiple-tags.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-left-link-level-corr-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-left-link-level-corr-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-left-link-metadata-client-id-datahash-value-not-null-ending.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-left-link-metadata-client-id-datahash-value-null-ending.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-left-link-metadata-client-id-int-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-left-link-metadata-machine-id-datahash-value-not-null-ending.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-left-link-metadata-machine-id-datahash-value-null-ending.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-left-link-metadata-machine-id-int-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-left-link-metadata-padding-int-value-wrong.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-left-link-metadata-padding-missing-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-left-link-metadata-padding-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-left-link-metadata-req-time-datahash-value-not-null-ending.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-left-link-metadata-req-time-future-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-left-link-metadata-req-time-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-left-link-metadata-sequence-nr-datahash-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-left-link-metadata-sequence-nr-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-left-link-sibling-hash-datahash-value-wrong.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-left-link-sibling-hash-int-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-left-link-sibling-hash-multiple-tags.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-left-link-sibling-hash-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-left-link-sibling-hash-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-multiple-chains-aggr-time-wrong.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-multiple-chains-chain-index-wrong.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-multiple-chains-input-hash-wrong.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-right-link-legacy-id-datahash-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-right-link-legacy-id-int-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-right-link-legacy-id-multiple-tags.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-right-link-legacy-id-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-right-link-legacy-id-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-right-link-level-corr-datahash-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-right-link-level-corr-int-value-wrong.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-right-link-level-corr-missing-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-right-link-level-corr-multiple-tags.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-right-link-level-corr-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-right-link-level-corr-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-right-link-metadata-client-id-datahash-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-right-link-metadata-client-id-int-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-right-link-metadata-machine-id-datahash-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-right-link-metadata-machine-id-int-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-right-link-metadata-padding-int-value-wrong.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-right-link-metadata-padding-missing-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-right-link-metadata-padding-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-right-link-metadata-req-time-future-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-right-link-metadata-req-time-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-right-link-metadata-sequence-nr-datahash-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-right-link-metadata-sequence-nr-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-right-link-sibling-hash-datahash-value-wrong.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-right-link-sibling-hash-int-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-right-link-sibling-hash-multiple-tags.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-right-link-sibling-hash-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-right-link-sibling-hash-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-cert-id-datahash-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-cert-id-has-child-element.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-cert-id-int-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-cert-id-missing-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-cert-id-multiple-tags.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-cert-id-text-value-wrong.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-cert-rep-uri-datahash-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-cert-rep-uri-int-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-cert-rep-uri-multiple-tags.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-cert-rep-uri-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-pub-data-missing-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-pub-data-multiple-tags.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-pub-data-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-pub-data-unknown-critical-element.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-pub-hash-datahash-value-wrong.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-pub-hash-has-child-element.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-pub-hash-int-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-pub-hash-missing-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-pub-hash-multiple-tags.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-pub-hash-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-pub-hash-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-pub-time-datahash-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-pub-time-future-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-pub-time-has-child-element.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-pub-time-int-value-wrong.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-pub-time-missing-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-pub-time-multiple-tags.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-pub-time-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-pub-time-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-sig-data-has-child-element.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-sig-data-missing-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-sig-data-multiple-tags.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-sig-data-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-sig-type-datahash-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-sig-type-has-child-element.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-sig-type-int-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-sig-type-missing-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-sig-type-multiple-tags.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-sig-type-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-sig-type-text-value-wrong.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-sig-value-datahash-value-wrong.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-sig-value-has-child-element.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-sig-value-int-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-sig-value-missing-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-sig-value-multiple-tags.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-sig-value-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-hash-chain\invalid-signature-calendar-chain-aggr-time-datahash-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-hash-chain\invalid-signature-calendar-chain-aggr-time-does-not-match-aggr-chain-time.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-hash-chain\invalid-signature-calendar-chain-aggr-time-future-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-hash-chain\invalid-signature-calendar-chain-aggr-time-has-child-element.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-hash-chain\invalid-signature-calendar-chain-aggr-time-int-value-wrong.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-hash-chain\invalid-signature-calendar-chain-aggr-time-missing-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-hash-chain\invalid-signature-calendar-chain-aggr-time-multiple-tags.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-hash-chain\invalid-signature-calendar-chain-aggr-time-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-hash-chain\invalid-signature-calendar-chain-aggr-time-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-hash-chain\invalid-signature-calendar-chain-input-hash-has-child-element.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-hash-chain\invalid-signature-calendar-chain-input-hash-int-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-hash-chain\invalid-signature-calendar-chain-input-hash-missing-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-hash-chain\invalid-signature-calendar-chain-input-hash-multiple-tags.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-hash-chain\invalid-signature-calendar-chain-input-hash-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-hash-chain\invalid-signature-calendar-chain-input-hash-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-hash-chain\invalid-signature-calendar-chain-missing-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-hash-chain\invalid-signature-calendar-chain-pub-time-datahash-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-hash-chain\invalid-signature-calendar-chain-pub-time-future-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-hash-chain\invalid-signature-calendar-chain-pub-time-has-child-element.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-hash-chain\invalid-signature-calendar-chain-pub-time-int-value-wrong.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-hash-chain\invalid-signature-calendar-chain-pub-time-missing-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-hash-chain\invalid-signature-calendar-chain-pub-time-multiple-tags.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-hash-chain\invalid-signature-calendar-chain-pub-time-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-hash-chain\invalid-signature-calendar-chain-pub-time-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-hash-chain\invalid-signature-calendar-chain-right-link-additional-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-hash-chain\invalid-signature-calendar-chain-right-link-has-child-element.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-hash-chain\invalid-signature-calendar-chain-right-link-int-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-hash-chain\invalid-signature-calendar-chain-right-link-left-link-missing-tags.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-hash-chain\invalid-signature-calendar-chain-right-link-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-hash-chain\invalid-signature-calendar-chain-right-link-one-missing-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-hash-chain\invalid-signature-calendar-chain-right-link-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\calendar-hash-chain\invalid-signature-calendar-chain-right-link-wrong.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\invalid-signature-results.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\publication-record\invalid-signature-pub-rec-pub-data-has-child-element.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\publication-record\invalid-signature-pub-rec-pub-data-missing-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\publication-record\invalid-signature-pub-rec-pub-data-multiple-tags.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\publication-record\invalid-signature-pub-rec-pub-data-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\publication-record\invalid-signature-pub-rec-pub-hash-datahash-value-wrong.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\publication-record\invalid-signature-pub-rec-pub-hash-has-child-element.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\publication-record\invalid-signature-pub-rec-pub-hash-int-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\publication-record\invalid-signature-pub-rec-pub-hash-missing-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\publication-record\invalid-signature-pub-rec-pub-hash-multiple-tags.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\publication-record\invalid-signature-pub-rec-pub-hash-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\publication-record\invalid-signature-pub-rec-pub-hash-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\publication-record\invalid-signature-pub-rec-pub-ref-int-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\publication-record\invalid-signature-pub-rec-pub-ref-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\publication-record\invalid-signature-pub-rec-pub-rep-uri-int-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\publication-record\invalid-signature-pub-rec-pub-rep-uri-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\publication-record\invalid-signature-pub-rec-pub-time-datahash-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\publication-record\invalid-signature-pub-rec-pub-time-future-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\publication-record\invalid-signature-pub-rec-pub-time-has-child-element.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\publication-record\invalid-signature-pub-rec-pub-time-int-value-wrong.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\publication-record\invalid-signature-pub-rec-pub-time-missing-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\publication-record\invalid-signature-pub-rec-pub-time-multiple-tags.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\publication-record\invalid-signature-pub-rec-pub-time-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\publication-record\invalid-signature-pub-rec-pub-time-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-aggr-time-datahash-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-aggr-time-future-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-aggr-time-has-child-element.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-aggr-time-int-value-wrong.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-aggr-time-missing-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-aggr-time-multiple-tags.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-aggr-time-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-aggr-time-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-all-chain-index-missing-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-chain-index-datahash-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-chain-index-has-child-element.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-chain-index-int-value-wrong.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-chain-index-missing-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-chain-index-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-chain-index-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-input-hash-has-child-element.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-input-hash-int-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-input-hash-missing-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-input-hash-multiple-tags.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-input-hash-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-input-hash-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-input-hash-wrong.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-sig-attr-algo-datahash-value-wrong.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-sig-attr-algo-has-child-element.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-sig-attr-algo-int-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-sig-attr-algo-missing-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-sig-attr-algo-multiple-tags.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-sig-attr-algo-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-sig-attr-algo-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-sig-attr-prefix-datahash-value-wrong.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-sig-attr-prefix-has-child-element.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-sig-attr-prefix-int-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-sig-attr-prefix-missing-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-sig-attr-prefix-multiple-tags.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-sig-attr-prefix-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-sig-attr-prefix-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-sig-attr-suffix-datahash-value-wrong.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-sig-attr-suffix-has-child-element.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-sig-attr-suffix-int-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-sig-attr-suffix-missing-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-sig-attr-suffix-multiple-tags.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-sig-attr-suffix-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-sig-attr-suffix-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-tst-info-algo-datahash-value-wrong.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-tst-info-algo-has-child-element.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-tst-info-algo-int-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-tst-info-algo-missing-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-tst-info-algo-multiple-tags.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-tst-info-algo-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-tst-info-algo-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-tst-info-prefix-datahash-value-wrong.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-tst-info-prefix-has-child-element.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-tst-info-prefix-int-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-tst-info-prefix-missing-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-tst-info-prefix-multiple-tags.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-tst-info-prefix-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-tst-info-prefix-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-tst-info-suffix-datahash-value-wrong.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-tst-info-suffix-has-child-element.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-tst-info-suffix-int-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-tst-info-suffix-missing-tag.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-tst-info-suffix-multiple-tags.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-tst-info-suffix-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-tst-info-suffix-text-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-results.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-calendar-input-hashes-do-not-match-PUB-03.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-changed-certificate-id-KEY-01.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-changed-publication-data-KEY-02.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-extended-signature-GEN-02.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-first-right-link-is-changed-CAL-04.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-invalid-signature-value-KEY-02.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-just-one-aggregation-chain-GEN-02.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-one-aggregation-chain-and-chc-GEN-02.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-other-core-extended-signature-to-publication-file-PUB-05.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-other-core-signature-signature-extended.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-other-core-signature-with-authentication-record-PUB-03.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-other-core-signature-with-no-calendar-CAL-02.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-other-core-signature.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-publication-hashes-do-not-match-PUB-04.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-response-aggregation-time-differs-CAL-03.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-rfc-signature.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-suitable-publication-not-found-GEN-02.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-wrong-documentGEN-1.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\policy-verification-signatures\resources\calendar-response-for-different-time.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\policy-verification-signatures\resources\calendar-response-with-changed-times.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\policy-verification-signatures\resources\extension-response-payload-for-CAL-03.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\policy-verification-signatures\resources\publications-file.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\valid-signatures\rfc3161-signature-extended-for-publication-file-based-verification.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\valid-signatures\rfc3161-signature-extended.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\valid-signatures\rfc3161-signature-no-calendar-auth-and-publication-record.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\valid-signatures\rfc3161-signature-only-rfc3161-and-aggregation-chains.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\valid-signatures\rfc3161-signature-only-rfc3161-and-one-aggregation-chain.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\valid-signatures\rfc3161-signature.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\valid-signatures\signature-extended-one-aggregation-chain-chc-and-auth.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\valid-signatures\signature-extended-optional-additions-in-publication-rec-pub-ref-and-pub-rep-uri.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\valid-signatures\signature-extended.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\valid-signatures\signature-just-one-aggregation-chain.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\valid-signatures\signature-no-calendar-auth-and-publication-record.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\valid-signatures\signature-non-critical-element-in-aggregation-chain.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\valid-signatures\signature-non-critical-element-in-cal-auth-rec.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\valid-signatures\signature-non-critical-element-in-calendar-hash-chain.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\valid-signatures\signature-non-critical-element-in-publication-rec.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\valid-signatures\signature-non-critical-element-in-unisignature.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\valid-signatures\signature-non-critical-element-with-child-elements-in-aggregation-chain.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\valid-signatures\signature-non-critical-element-with-child-elements-in-cal-auth-rec.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\valid-signatures\signature-non-critical-element-with-child-elements-in-calendar-hash-chain.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\valid-signatures\signature-non-critical-element-with-child-elements-in-publication-rec.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\valid-signatures\signature-one-aggregation-chain-and-chc.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\valid-signatures\signature-one-aggregation-chain-chc-and-auth-missing-aggregation-time-in-calendar-hash-chain.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\valid-signatures\signature-one-aggregation-chain-chc-and-auth.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\valid-signatures\signature-only-aggregation-chains.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\valid-signatures\signature-optional-additions-in-cal-auth-rec-cert-rep-uri.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\valid-signatures\signature-results.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\valid-signatures\signature.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\publication\publicationdata\missingtag.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -569,423 +1497,6 @@
     <None Include="resources\signature\calendar-hash-chain\calendar-hash-chain-ok.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\integration-test-signatures\all-wrong-hash-chains-in-signature.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ExtendedSignature-EmptyPubRec.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ExtendedSignature-MissingCalChain.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ExtendedSignature-MissingCalChainAndPubRec.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ExtendedSignature-MissingCalChainEmptyPubRecHash.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ExtendedSignature-MissingCalChainMissingPubRecHash.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ExtendedSignature-MissingPubRecWrongCalChainFirstLeftLink.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ExtendedSignature-MissingPubRecWrongCalChainFirstRightLink.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ExtendedSignature-MissingPubRecWrongCalChainLastRightLink.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ExtendedSignature-WrongAllTimes.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ExtendedSignature-WrongPubTime.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ExtendedSignature_WithNewerPublicationTime.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ExtendedSignature_WithOlderPublicationTime.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\infile_2017-02-14.ksig">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\invalid-chain-index.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\invalid-legacy-id-content-length.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\invalid-legacy-id-content.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\invalid-legacy-id-ending-byte.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\invalid-legacy-id-prefix.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\invalid-sibling-algorithm-legacy-id-tlv-changed-to-sibling-hash.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\legacy-id-algorithm.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\legacy-id-content-null.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHash-WrongLeftLinkLevelCorrector.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-MissingAggrAlg.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-MissingAggrTime.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-MissingChainIndex.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-MissingCoreAggr.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-MissingInputHash.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-MissingLeftLink.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-MissingRightLink.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-NoAggrAlg.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-NoAggrTime.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-NoChainIndex.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-NoCoreAggr.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-NoInputHash.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-NoLeftLink.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-NoLeftLink1.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-NoLeftLink2.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-NoRightLink.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-NoRightLink1.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-WrongAggrAlg.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-WrongAggrTime.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-WrongChainIndex.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-WrongInputHash.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-WrongLeftLink1.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-WrongLeftLink2.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashCore-WrongRightLink.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashGW-MissingLeftLinkClientId.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashGW-MissingReqTime.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashGW-NoInputHash.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashGW-NoLeftLinkClientId.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashGW-NoReqTime.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashGW-WrongAggrAlgo2.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashGW-WrongAggrTime.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashGW-WrongChainID2.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashGW-WrongInputHash.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashGW-WrongLeftLinkClientId.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashGW-WrongReqTimeFuture.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-AggrHashGW-WrongReqTimePast.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalAuth-MissingCertID.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalAuth-MissingPubHash.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalAuth-MissingPubTime.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalAuth-MissingSigningValue.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalAuth-MissingSigType.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalAuth-NoCertID.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalAuth-NoPubHash.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalAuth-NoPubTime.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalAuth-NoSigningValue.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalAuth-NoSigType.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalAuth-WrongPubHash.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalAuth-WrongPubTime.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalAuth-WrongSigningValue.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalAuth-WrongSigType.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-MissingAggrTime.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-MissingCalHashAndAuthReq.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-MissingInputHash.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-MissingLeftLinkLast.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-MissingPubTime.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-MissingRightLink1.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-NoAggrTime.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-NoCalHash.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-NoInputHash.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-NoLeftLink1.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-NoPubTime.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-NoRightLinkLast.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-WrongAggrTime.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-WrongInputHash.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-WrongLeftLinkLast.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-WrongPubTime.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-WrongRightLink1.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\non-signature-file.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extended-empty-publication-hash.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extended-empty-publication-reference.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extended-empty-publication-time.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extended-empty-publication-url.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extended-extra-critical-elements-in-publication-record-lvl1.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extended-extra-critical-elements-in-publication-record-lvl2.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extended-extra-elements-in-publication-record-lvl1.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extended-extra-elements-in-publication-record-lvl2.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extended-no-publication-hash.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extended-no-publication-reference.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extended-no-publication-time.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extended-one-empty-publication-reference.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extended-wrong-publication-reference.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-critical-element-in-aggregation-lvl1.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-critical-element-in-aggregation-lvl2.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-critical-element-in-aggregation-lvl3.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-critical-element-in-aggregation.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-critical-element-in-calendar-authentication-lvl1.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-critical-element-in-calendar-authentication-lvl2.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-critical-element-in-calendar-chain.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-critical-main-nested-tlv-block-with-critical-tlvs.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-critical-main-nested-tlv-block-with-non-critical-tlvs.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-element-in-aggregation-lvl1.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-element-in-aggregation-lvl2.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-element-in-aggregation-lvl3.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-element-in-aggregation.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-element-in-calendar-authentication-lvl1.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-element-in-calendar-authentication-lvl2.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-element-in-calendar-chain.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-main-nested-tlv-block-with-critical-tlvs.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-main-nested-tlv-block.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-nested-critical-tlv-in-main.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-nested-tlv-in-main-with-critical-elements.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-2014-06-2-extra-nested-tlv-in-main.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-extended-2014-05-15_invalid_sibling_hash_algorithm.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\signature-with-invalid-calendar-authentication-record-hash.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\signature-with-invalid-certificate-id.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\signature-with-invalid-pki-signature.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\signature-without-calendar-authentication-record.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\signature-without-calendar-elements.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\single-invalid-chain-index.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\timesMissing.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\too-long-legacy-id.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\too-short-legacy-id.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\wrongTimes.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalAuth-NullSigType.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalAuth-WrongCertID.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\NewSignature-CalHash-MissingCalHash.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="resources\signature\ksi-signature\ksi-signature-invalid-aggregation-chain-aggregation-time-mismatch.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -1079,17 +1590,14 @@
     <None Include="resources\signature\ksi-signature\ksi-signature-ok-with-mixed-aggregation-chains.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="resources\signature\ksi-signature\legacy-ksi-signature-invalid-input.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="resources\signature\ksi-signature\legacy-ksi-signature-ok-with-publication-record.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\ksi-signature\legacy-ksi-signature-ok.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\another-core-response-with-only-cal-chain.tlv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\integration-test-signatures\ok-sig-extended-2014-05-15.ksig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\ksi-signature\ksi-signature-level-3-ok.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1217,29 +1725,6 @@
     <None Include="resources\trust\pkitrustprovider\pubs-file-custom-cert.bin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="resources\Integration\CalendarBasedVerificationData.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Integration\KeyBasedVerificationData.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Integration\KeyBasedVerificationDataWithNoPublication.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Integration\PublicationFileBasedVerificationData.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Integration\PublicationFileBasedVerificationDataNoExtending.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Integration\PublicationStringVerificationData.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Integration\PublicationStringVerificationNoExtendingData.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

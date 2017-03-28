@@ -32,11 +32,11 @@ namespace Guardtime.KSI.Signature
         private IntegerTag _aggregationTime;
         private readonly List<IntegerTag> _chainIndex = new List<IntegerTag>();
         private ImprintTag _inputHash;
-        private IntegerTag _signedAttributesAlgorithm;
+        private HashAlgorithm _signedAttributesAlgorithm;
 
         private RawTag _signedAttributesPrefix;
         private RawTag _signedAttributesSuffix;
-        private IntegerTag _tstInfoAlgorithm;
+        private HashAlgorithm _tstInfoAlgorithm;
 
         private RawTag _tstInfoPrefix;
         private RawTag _tstInfoSuffix;
@@ -77,7 +77,9 @@ namespace Guardtime.KSI.Signature
                     return _tstInfoSuffix = GetRawTag(childTag);
 
                 case Constants.Rfc3161Record.TstInfoAlgorithmTagType:
-                    return _tstInfoAlgorithm = GetIntegerTag(childTag);
+                    IntegerTag tstInfoAlgorithmTag = GetIntegerTag(childTag);
+                    _tstInfoAlgorithm = HashAlgorithm.GetById((byte)tstInfoAlgorithmTag.Value);
+                    return tstInfoAlgorithmTag;
 
                 case Constants.Rfc3161Record.SignedAttributesPrefixTagType:
                     return _signedAttributesPrefix = GetRawTag(childTag);
@@ -86,7 +88,10 @@ namespace Guardtime.KSI.Signature
                     return _signedAttributesSuffix = GetRawTag(childTag);
 
                 case Constants.Rfc3161Record.SignedAttributesAlgorithmTagType:
-                    return _signedAttributesAlgorithm = GetIntegerTag(childTag);
+                    IntegerTag signedAttributesAlgorithmTag = GetIntegerTag(childTag);
+                    _signedAttributesAlgorithm = HashAlgorithm.GetById((byte)signedAttributesAlgorithmTag.Value);
+                    return signedAttributesAlgorithmTag;
+
                 default:
                     return base.ParseChild(childTag);
             }
@@ -129,6 +134,11 @@ namespace Guardtime.KSI.Signature
                 throw new TlvException("Exactly one tstInfo algorithm must exist in RFC#3161 record.");
             }
 
+            if (_tstInfoAlgorithm == null)
+            {
+                throw new TlvException("Invalid tstInfo algorithm value in RFC#3161 record.");
+            }
+
             if (tagCounter[Constants.Rfc3161Record.SignedAttributesPrefixTagType] != 1)
             {
                 throw new TlvException("Exactly one signed attributes prefix must exist in RFC#3161 record.");
@@ -142,6 +152,11 @@ namespace Guardtime.KSI.Signature
             if (tagCounter[Constants.Rfc3161Record.SignedAttributesAlgorithmTagType] != 1)
             {
                 throw new TlvException("Exactly one signed attributes algorithm must exist in RFC#3161 record.");
+            }
+
+            if (_signedAttributesAlgorithm == null)
+            {
+                throw new TlvException("Invalid signed attributes algorithm value in RFC#3161 record.");
             }
         }
 
@@ -172,23 +187,17 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         ///     Get output hash for RFC 3161 from document hash
         /// </summary>
-        /// <param name="inputHash">document hash</param>
         /// <returns>aggregation input hash</returns>
-        public DataHash GetOutputHash(DataHash inputHash)
+        public DataHash GetOutputHash()
         {
-            if (inputHash == null)
-            {
-                throw new KsiException("Invalid input hash: null.");
-            }
-
-            IDataHasher hasher = KsiProvider.CreateDataHasher(HashAlgorithm.GetById((byte)_tstInfoAlgorithm.Value));
+            IDataHasher hasher = KsiProvider.CreateDataHasher(_tstInfoAlgorithm);
             hasher.AddData(_tstInfoPrefix.Value);
-            hasher.AddData(inputHash.Value);
+            hasher.AddData(InputHash.Value);
             hasher.AddData(_tstInfoSuffix.Value);
 
-            inputHash = hasher.GetHash();
+            DataHash inputHash = hasher.GetHash();
 
-            hasher = KsiProvider.CreateDataHasher(HashAlgorithm.GetById((byte)_signedAttributesAlgorithm.Value));
+            hasher = KsiProvider.CreateDataHasher(_signedAttributesAlgorithm);
             hasher.AddData(_signedAttributesPrefix.Value);
             hasher.AddData(inputHash.Value);
             hasher.AddData(_signedAttributesSuffix.Value);

@@ -36,12 +36,7 @@ namespace Guardtime.KSI.Test.Signature
             Rfc3161Record rfc3161Record = GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Ok);
             Assert.AreEqual(10, rfc3161Record.Count, "Invalid amount of child TLV objects");
 
-            Assert.That(delegate
-            {
-                rfc3161Record.GetOutputHash(null);
-            }, Throws.TypeOf<KsiException>().With.Message.StartWith("Invalid input hash: null"), "Output hash calculation should throw exception when inputhash is null");
-
-            Assert.AreEqual(rfc3161Record.GetOutputHash(rfc3161Record.InputHash),
+            Assert.AreEqual(rfc3161Record.GetOutputHash(),
                 new DataHash(HashAlgorithm.Sha2256, Base16.Decode("C96682043DB0474031CEF1AE12941523E59BDC64E62CDAAE817CE46370918648")), "Output hash should be correctly calculated");
         }
 
