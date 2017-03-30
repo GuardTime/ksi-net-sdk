@@ -39,7 +39,7 @@ namespace Guardtime.KSI.Test.Service
         {
             Random random = new Random();
 
-            AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
+            IdentityMetadata metadata = new IdentityMetadata("test client id");
 
             for (int k = 1; k < 30; k++)
             {
@@ -53,7 +53,7 @@ namespace Guardtime.KSI.Test.Service
                     random.NextBytes(buffer);
                     hasher.AddData(buffer);
 
-                    blockSigner.AddDocument(hasher.GetHash(), buffer[0] % 2 == 0 ? metadata : null);
+                    blockSigner.Add(hasher.GetHash(), buffer[0] % 2 == 0 ? metadata : null);
                 }
 
                 Console.WriteLine("Document count: " + k);
@@ -69,7 +69,7 @@ namespace Guardtime.KSI.Test.Service
         {
             Random random = new Random();
 
-            AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
+            IdentityMetadata metadata = new IdentityMetadata("test client id");
 
             for (int k = 1; k < 30; k++)
             {
@@ -82,7 +82,7 @@ namespace Guardtime.KSI.Test.Service
                     IDataHasher hasher = KsiProvider.CreateDataHasher();
                     random.NextBytes(buffer);
                     hasher.AddData(buffer);
-                    blockSigner.AddDocument(hasher.GetHash(), metadata);
+                    blockSigner.Add(hasher.GetHash(), metadata);
                 }
 
                 Console.WriteLine("Document count: " + k);
@@ -98,19 +98,19 @@ namespace Guardtime.KSI.Test.Service
         {
             BlockSigner blockSigner = new BlockSigner(GetKsiService());
 
-            AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
+            IdentityMetadata metadata = new IdentityMetadata("test client id");
 
-            blockSigner.AddDocument(new DataHash(Base16.Decode("0109A9FE430803D8984273324CF462E40A875D483DE6DD0D86BC6DFF4D27C9D853")), metadata);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01BEC84E1F95F729F4482338E781341B1615F5B0A882231AE6C0FAEF7D0E6121D5")));
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01C734EEFE09B6B717B0BA6997CA634ADB93E2F227BEB785BBB8B4472651084509")), metadata);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")), metadata);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")), metadata);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("017943B1F4521425E11B461A76B9F46B08980FFD04CD080497D55A8C063E6DCDF7")));
-            blockSigner.AddDocument(new DataHash(Base16.Decode("0123C4ADE3B64A45694088FD427399D3C2EC120BB0D5DF8C5212B1562F8D821902")));
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01A360BBAE9A0215196449971E57EB91B6C9B39725408324BE325D40C254353FBF")), metadata);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("010347A3E6C16B743473CECD6CAAD813464F8B8BD03829F649DD2FD3BA60D02ECD")), metadata);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("0178C63034846B2C6E67218FBD9F583330442A99D7165492FA5732024F27FE7FFA")));
-            blockSigner.AddDocument(new DataHash(Base16.Decode("010579A776558FE48456A30E56B9BF58E595FF7D4DF049275C0D0ED5B361E91382")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("0109A9FE430803D8984273324CF462E40A875D483DE6DD0D86BC6DFF4D27C9D853")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("01BEC84E1F95F729F4482338E781341B1615F5B0A882231AE6C0FAEF7D0E6121D5")));
+            blockSigner.Add(new DataHash(Base16.Decode("01C734EEFE09B6B717B0BA6997CA634ADB93E2F227BEB785BBB8B4472651084509")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("017943B1F4521425E11B461A76B9F46B08980FFD04CD080497D55A8C063E6DCDF7")));
+            blockSigner.Add(new DataHash(Base16.Decode("0123C4ADE3B64A45694088FD427399D3C2EC120BB0D5DF8C5212B1562F8D821902")));
+            blockSigner.Add(new DataHash(Base16.Decode("01A360BBAE9A0215196449971E57EB91B6C9B39725408324BE325D40C254353FBF")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("010347A3E6C16B743473CECD6CAAD813464F8B8BD03829F649DD2FD3BA60D02ECD")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("0178C63034846B2C6E67218FBD9F583330442A99D7165492FA5732024F27FE7FFA")));
+            blockSigner.Add(new DataHash(Base16.Decode("010579A776558FE48456A30E56B9BF58E595FF7D4DF049275C0D0ED5B361E91382")), metadata);
 
             Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
             Assert.AreEqual(
@@ -138,13 +138,13 @@ namespace Guardtime.KSI.Test.Service
         {
             BlockSigner blockSigner = new BlockSigner(GetKsiService());
 
-            AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
+            IdentityMetadata metadata = new IdentityMetadata("test client id");
 
-            blockSigner.AddDocument(new DataHash(Base16.Decode("0109A9FE430803D8984273324CF462E40A875D483DE6DD0D86BC6DFF4D27C9D853")), metadata);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01BEC84E1F95F729F4482338E781341B1615F5B0A882231AE6C0FAEF7D0E6121D5")));
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01C734EEFE09B6B717B0BA6997CA634ADB93E2F227BEB785BBB8B4472651084509")));
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")));
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("0109A9FE430803D8984273324CF462E40A875D483DE6DD0D86BC6DFF4D27C9D853")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("01BEC84E1F95F729F4482338E781341B1615F5B0A882231AE6C0FAEF7D0E6121D5")));
+            blockSigner.Add(new DataHash(Base16.Decode("01C734EEFE09B6B717B0BA6997CA634ADB93E2F227BEB785BBB8B4472651084509")));
+            blockSigner.Add(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")));
+            blockSigner.Add(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")), metadata);
 
             Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
             Assert.AreEqual(
@@ -170,13 +170,13 @@ namespace Guardtime.KSI.Test.Service
         {
             BlockSigner blockSigner = new BlockSigner(GetKsiService());
 
-            AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
+            IdentityMetadata metadata = new IdentityMetadata("test client id");
 
-            blockSigner.AddDocument(new DataHash(Base16.Decode("0109A9FE430803D8984273324CF462E40A875D483DE6DD0D86BC6DFF4D27C9D853")));
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01BEC84E1F95F729F4482338E781341B1615F5B0A882231AE6C0FAEF7D0E6121D5")), metadata);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01C734EEFE09B6B717B0BA6997CA634ADB93E2F227BEB785BBB8B4472651084509")), metadata);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")), metadata);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")));
+            blockSigner.Add(new DataHash(Base16.Decode("0109A9FE430803D8984273324CF462E40A875D483DE6DD0D86BC6DFF4D27C9D853")));
+            blockSigner.Add(new DataHash(Base16.Decode("01BEC84E1F95F729F4482338E781341B1615F5B0A882231AE6C0FAEF7D0E6121D5")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("01C734EEFE09B6B717B0BA6997CA634ADB93E2F227BEB785BBB8B4472651084509")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")));
 
             Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
             Assert.AreEqual(
@@ -202,13 +202,13 @@ namespace Guardtime.KSI.Test.Service
         {
             BlockSigner blockSigner = new BlockSigner(GetKsiService());
 
-            AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
+            IdentityMetadata metadata = new IdentityMetadata("test client id");
 
-            blockSigner.AddDocument(new DataHash(Base16.Decode("0109A9FE430803D8984273324CF462E40A875D483DE6DD0D86BC6DFF4D27C9D853")), metadata);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01BEC84E1F95F729F4482338E781341B1615F5B0A882231AE6C0FAEF7D0E6121D5")), metadata);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01C734EEFE09B6B717B0BA6997CA634ADB93E2F227BEB785BBB8B4472651084509")), metadata);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")), metadata);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("0109A9FE430803D8984273324CF462E40A875D483DE6DD0D86BC6DFF4D27C9D853")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("01BEC84E1F95F729F4482338E781341B1615F5B0A882231AE6C0FAEF7D0E6121D5")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("01C734EEFE09B6B717B0BA6997CA634ADB93E2F227BEB785BBB8B4472651084509")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")), metadata);
 
             Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
             Assert.AreEqual(
@@ -234,11 +234,11 @@ namespace Guardtime.KSI.Test.Service
         {
             BlockSigner blockSigner = new BlockSigner(GetKsiService());
 
-            blockSigner.AddDocument(new DataHash(Base16.Decode("0109A9FE430803D8984273324CF462E40A875D483DE6DD0D86BC6DFF4D27C9D853")));
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01BEC84E1F95F729F4482338E781341B1615F5B0A882231AE6C0FAEF7D0E6121D5")));
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01C734EEFE09B6B717B0BA6997CA634ADB93E2F227BEB785BBB8B4472651084509")));
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")));
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")));
+            blockSigner.Add(new DataHash(Base16.Decode("0109A9FE430803D8984273324CF462E40A875D483DE6DD0D86BC6DFF4D27C9D853")));
+            blockSigner.Add(new DataHash(Base16.Decode("01BEC84E1F95F729F4482338E781341B1615F5B0A882231AE6C0FAEF7D0E6121D5")));
+            blockSigner.Add(new DataHash(Base16.Decode("01C734EEFE09B6B717B0BA6997CA634ADB93E2F227BEB785BBB8B4472651084509")));
+            blockSigner.Add(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")));
+            blockSigner.Add(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")));
 
             Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
             Assert.AreEqual(
@@ -262,19 +262,19 @@ namespace Guardtime.KSI.Test.Service
         {
             BlockSigner blockSigner = new BlockSigner(GetKsiService(), true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
 
-            AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
+            IdentityMetadata metadata = new IdentityMetadata("test client id");
 
-            blockSigner.AddDocument(new DataHash(Base16.Decode("0109A9FE430803D8984273324CF462E40A875D483DE6DD0D86BC6DFF4D27C9D853")), metadata);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01BEC84E1F95F729F4482338E781341B1615F5B0A882231AE6C0FAEF7D0E6121D5")));
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01C734EEFE09B6B717B0BA6997CA634ADB93E2F227BEB785BBB8B4472651084509")), metadata);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")), metadata);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")), metadata);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("017943B1F4521425E11B461A76B9F46B08980FFD04CD080497D55A8C063E6DCDF7")), metadata);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("0123C4ADE3B64A45694088FD427399D3C2EC120BB0D5DF8C5212B1562F8D821902")));
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01A360BBAE9A0215196449971E57EB91B6C9B39725408324BE325D40C254353FBF")));
-            blockSigner.AddDocument(new DataHash(Base16.Decode("010347A3E6C16B743473CECD6CAAD813464F8B8BD03829F649DD2FD3BA60D02ECD")), metadata);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("0178C63034846B2C6E67218FBD9F583330442A99D7165492FA5732024F27FE7FFA")), metadata);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("010579A776558FE48456A30E56B9BF58E595FF7D4DF049275C0D0ED5B361E91382")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("0109A9FE430803D8984273324CF462E40A875D483DE6DD0D86BC6DFF4D27C9D853")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("01BEC84E1F95F729F4482338E781341B1615F5B0A882231AE6C0FAEF7D0E6121D5")));
+            blockSigner.Add(new DataHash(Base16.Decode("01C734EEFE09B6B717B0BA6997CA634ADB93E2F227BEB785BBB8B4472651084509")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("017943B1F4521425E11B461A76B9F46B08980FFD04CD080497D55A8C063E6DCDF7")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("0123C4ADE3B64A45694088FD427399D3C2EC120BB0D5DF8C5212B1562F8D821902")));
+            blockSigner.Add(new DataHash(Base16.Decode("01A360BBAE9A0215196449971E57EB91B6C9B39725408324BE325D40C254353FBF")));
+            blockSigner.Add(new DataHash(Base16.Decode("010347A3E6C16B743473CECD6CAAD813464F8B8BD03829F649DD2FD3BA60D02ECD")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("0178C63034846B2C6E67218FBD9F583330442A99D7165492FA5732024F27FE7FFA")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("010579A776558FE48456A30E56B9BF58E595FF7D4DF049275C0D0ED5B361E91382")), metadata);
 
             Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
             Assert.AreEqual(
@@ -304,13 +304,13 @@ namespace Guardtime.KSI.Test.Service
         {
             BlockSigner blockSigner = new BlockSigner(GetKsiService(), true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
 
-            AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
+            IdentityMetadata metadata = new IdentityMetadata("test client id");
 
-            blockSigner.AddDocument(new DataHash(Base16.Decode("0109A9FE430803D8984273324CF462E40A875D483DE6DD0D86BC6DFF4D27C9D853")), metadata);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01BEC84E1F95F729F4482338E781341B1615F5B0A882231AE6C0FAEF7D0E6121D5")), metadata);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01C734EEFE09B6B717B0BA6997CA634ADB93E2F227BEB785BBB8B4472651084509")), metadata);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")), metadata);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("0109A9FE430803D8984273324CF462E40A875D483DE6DD0D86BC6DFF4D27C9D853")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("01BEC84E1F95F729F4482338E781341B1615F5B0A882231AE6C0FAEF7D0E6121D5")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("01C734EEFE09B6B717B0BA6997CA634ADB93E2F227BEB785BBB8B4472651084509")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")), metadata);
 
             Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
             Assert.AreEqual(
@@ -338,11 +338,11 @@ namespace Guardtime.KSI.Test.Service
         {
             BlockSigner blockSigner = new BlockSigner(GetKsiService(), true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
 
-            blockSigner.AddDocument(new DataHash(Base16.Decode("0109A9FE430803D8984273324CF462E40A875D483DE6DD0D86BC6DFF4D27C9D853")));
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01BEC84E1F95F729F4482338E781341B1615F5B0A882231AE6C0FAEF7D0E6121D5")));
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01C734EEFE09B6B717B0BA6997CA634ADB93E2F227BEB785BBB8B4472651084509")));
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")));
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")));
+            blockSigner.Add(new DataHash(Base16.Decode("0109A9FE430803D8984273324CF462E40A875D483DE6DD0D86BC6DFF4D27C9D853")));
+            blockSigner.Add(new DataHash(Base16.Decode("01BEC84E1F95F729F4482338E781341B1615F5B0A882231AE6C0FAEF7D0E6121D5")));
+            blockSigner.Add(new DataHash(Base16.Decode("01C734EEFE09B6B717B0BA6997CA634ADB93E2F227BEB785BBB8B4472651084509")));
+            blockSigner.Add(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")));
+            blockSigner.Add(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")));
 
             Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
             Assert.AreEqual(
@@ -368,13 +368,13 @@ namespace Guardtime.KSI.Test.Service
         {
             BlockSigner blockSigner = new BlockSigner(GetKsiService(), true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
 
-            AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
+            IdentityMetadata metadata = new IdentityMetadata("test client id");
 
-            blockSigner.AddDocument(new DataHash(Base16.Decode("0109A9FE430803D8984273324CF462E40A875D483DE6DD0D86BC6DFF4D27C9D853")), metadata);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01BEC84E1F95F729F4482338E781341B1615F5B0A882231AE6C0FAEF7D0E6121D5")));
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01C734EEFE09B6B717B0BA6997CA634ADB93E2F227BEB785BBB8B4472651084509")));
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")), metadata);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("0109A9FE430803D8984273324CF462E40A875D483DE6DD0D86BC6DFF4D27C9D853")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("01BEC84E1F95F729F4482338E781341B1615F5B0A882231AE6C0FAEF7D0E6121D5")));
+            blockSigner.Add(new DataHash(Base16.Decode("01C734EEFE09B6B717B0BA6997CA634ADB93E2F227BEB785BBB8B4472651084509")));
+            blockSigner.Add(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")), metadata);
 
             Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
             Assert.AreEqual(
@@ -402,13 +402,13 @@ namespace Guardtime.KSI.Test.Service
         {
             BlockSigner blockSigner = new BlockSigner(GetKsiService(), true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
 
-            AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
+            IdentityMetadata metadata = new IdentityMetadata("test client id");
 
-            blockSigner.AddDocument(new DataHash(Base16.Decode("0109A9FE430803D8984273324CF462E40A875D483DE6DD0D86BC6DFF4D27C9D853")));
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01BEC84E1F95F729F4482338E781341B1615F5B0A882231AE6C0FAEF7D0E6121D5")), metadata);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01C734EEFE09B6B717B0BA6997CA634ADB93E2F227BEB785BBB8B4472651084509")), metadata);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")), metadata);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")));
+            blockSigner.Add(new DataHash(Base16.Decode("0109A9FE430803D8984273324CF462E40A875D483DE6DD0D86BC6DFF4D27C9D853")));
+            blockSigner.Add(new DataHash(Base16.Decode("01BEC84E1F95F729F4482338E781341B1615F5B0A882231AE6C0FAEF7D0E6121D5")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("01C734EEFE09B6B717B0BA6997CA634ADB93E2F227BEB785BBB8B4472651084509")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")));
 
             Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
             Assert.AreEqual(
@@ -432,7 +432,7 @@ namespace Guardtime.KSI.Test.Service
         public void BlockSignerWithLevelPrintTreeTest(Ksi ksi)
         {
             BlockSigner blockSigner = new BlockSigner(IntegrationTests.HttpKsiService);
-            AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
+            IdentityMetadata metadata = new IdentityMetadata("test client id");
 
             List<DataHash> hashes = new List<DataHash>
             {
@@ -451,7 +451,7 @@ namespace Guardtime.KSI.Test.Service
 
             foreach (DataHash hash in hashes)
             {
-                blockSigner.AddDocument(hash, hasMetadata[i] ? metadata : null, levels[i++]);
+                blockSigner.Add(hash, hasMetadata[i] ? metadata : null, levels[i++]);
             }
 
             Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
@@ -479,7 +479,7 @@ namespace Guardtime.KSI.Test.Service
         public void BlockSignerWithLevelAndBlindingMaskPrintTreeTest(Ksi ksi)
         {
             BlockSigner blockSigner = new BlockSigner(IntegrationTests.HttpKsiService, true, new byte[] { 1, 2, 3 });
-            AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
+            IdentityMetadata metadata = new IdentityMetadata("test client id");
 
             List<DataHash> hashes = new List<DataHash>
             {
@@ -495,7 +495,7 @@ namespace Guardtime.KSI.Test.Service
             int i = 0;
             foreach (DataHash hash in hashes)
             {
-                blockSigner.AddDocument(hash, hasMetadata[i] ? metadata : null, levels[i++]);
+                blockSigner.Add(hash, hasMetadata[i] ? metadata : null, levels[i++]);
             }
 
             Console.WriteLine("Tree: \"" + BlockSignerTreeNodeVisualizer.PrintTree(blockSigner.GetRootNode()) + "\"");
@@ -529,13 +529,13 @@ namespace Guardtime.KSI.Test.Service
         {
             BlockSigner blockSigner = new BlockSigner(GetKsiService(), true, new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5 });
 
-            AggregationHashChain.Metadata metadata = new AggregationHashChain.Metadata("test client id");
+            IdentityMetadata metadata = new IdentityMetadata("test client id");
 
-            blockSigner.AddDocument(new DataHash(Base16.Decode("0109A9FE430803D8984273324CF462E40A875D483DE6DD0D86BC6DFF4D27C9D853")));
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01BEC84E1F95F729F4482338E781341B1615F5B0A882231AE6C0FAEF7D0E6121D5")), metadata);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01C734EEFE09B6B717B0BA6997CA634ADB93E2F227BEB785BBB8B4472651084509")), metadata);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")), metadata);
-            blockSigner.AddDocument(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")));
+            blockSigner.Add(new DataHash(Base16.Decode("0109A9FE430803D8984273324CF462E40A875D483DE6DD0D86BC6DFF4D27C9D853")));
+            blockSigner.Add(new DataHash(Base16.Decode("01BEC84E1F95F729F4482338E781341B1615F5B0A882231AE6C0FAEF7D0E6121D5")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("01C734EEFE09B6B717B0BA6997CA634ADB93E2F227BEB785BBB8B4472651084509")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("01B0CF0A7E6E0420D27CDFA11BDFAC4AA9BC777AE4D6C0211816BCB91DE7C920AD")), metadata);
+            blockSigner.Add(new DataHash(Base16.Decode("01BB95E9B09E7F6BC95533D805739E26510A05F9788A86C7F81BA8F81E0E6C43DA")));
 
             Assert.AreEqual("5R:4C948816F3C4D21FF9C5CE299948DAB85F9E78585B103E13C09F053029C4758C", blockSigner.GetRootNode().ToString(), "Invalid root node");
         }

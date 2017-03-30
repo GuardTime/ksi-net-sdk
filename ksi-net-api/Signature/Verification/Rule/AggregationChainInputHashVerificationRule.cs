@@ -45,13 +45,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (signature.IsRfc3161Signature)
             {
-                IDataHasher hasher = KsiProvider.CreateDataHasher(aggregationHashChainInputHash.Algorithm);
-
                 if (signature.Rfc3161Record == null)
                 {
                     throw new KsiVerificationException("No RFC 3161 record in KSI signature.");
                 }
 
+                IDataHasher hasher = KsiProvider.CreateDataHasher(aggregationHashChainInputHash.Algorithm);
                 hasher.AddData(signature.Rfc3161Record.GetOutputHash(inputHash).Imprint);
                 inputHash = hasher.GetHash();
 

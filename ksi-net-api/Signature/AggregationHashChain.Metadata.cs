@@ -54,8 +54,8 @@ namespace Guardtime.KSI.Signature
             /// </summary>
             /// <param name="clientId">Client identifier</param>
             /// <param name="machineId">Machine identifier</param>
-            /// <param name="requestTime">Request time</param>
             /// <param name="sequenceNumber">Sequence number</param>
+            /// <param name="requestTime">Request time</param>
             public Metadata(string clientId, string machineId, ulong? sequenceNumber = null, ulong? requestTime = null)
                 : base(Constants.AggregationHashChain.Metadata.TagType, false, false, BuildChildTags(clientId, machineId, sequenceNumber, requestTime))
             {
@@ -201,12 +201,12 @@ namespace Guardtime.KSI.Signature
             /// <summary>
             /// A local sequence number of a request assigned by the machine that created the link
             /// </summary>
-            public ulong SequenceNumber => _sequenceNumber.Value;
+            public ulong? SequenceNumber => _sequenceNumber?.Value;
 
             /// <summary>
             /// The time when the server received the request from the client (in milliseconds)
             /// </summary>
-            public ulong RequestTime => _requestTime.Value;
+            public ulong? RequestTime => _requestTime?.Value;
 
             /// <summary>
             /// Padding tag for metadata element

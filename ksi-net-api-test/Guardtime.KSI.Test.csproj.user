@@ -2,5 +2,6 @@
 <Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ReferencePath>C:\Program Files (x86)\Common Files\microsoft shared\VSTT\12.0\UITestExtensionPackages;C:\Users\Martti\Documents\Visual Studio 2013\Projects\ksi-net-api\ksi-net-api\</ReferencePath>
+    <ProjectView>ProjectFiles</ProjectView>
   </PropertyGroup>
 </Project>
