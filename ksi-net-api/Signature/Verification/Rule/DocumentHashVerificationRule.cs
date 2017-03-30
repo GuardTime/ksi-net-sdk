@@ -17,7 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using System.Collections.ObjectModel;
 using Guardtime.KSI.Hashing;
 using NLog;
 
@@ -43,17 +42,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
             }
 
-            DataHash inputHash;
-
-            if (signature.IsRfc3161Signature)
-            {
-                inputHash = signature.Rfc3161Record.InputHash;
-            }
-            else
-            {
-                ReadOnlyCollection<AggregationHashChain> aggregationHashChains = GetAggregationHashChains(signature, false);
-                inputHash = aggregationHashChains[0].InputHash;
-            }
+            DataHash inputHash = signature.InputHash;
 
             if (documentHash != inputHash)
             {

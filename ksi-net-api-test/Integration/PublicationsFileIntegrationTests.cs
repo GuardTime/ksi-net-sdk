@@ -18,7 +18,6 @@
  */
 
 using System;
-using System.Threading;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;

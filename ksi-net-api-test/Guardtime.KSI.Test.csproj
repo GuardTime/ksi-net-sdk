@@ -305,8 +305,8 @@
     </None>
     <None Include="resources\service\aggregator-config-response-pdu-0x0-int.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>    
-	<None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-aggr-time-future-value.tlv">
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-aggr-time-future-value.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-aggr-time-has-child-element.tlv">
@@ -1116,16 +1116,19 @@
     <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-suitable-publication-not-found-GEN-02.ksig">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-with-rfc-record-wrong-documentGEN-1.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-wrong-documentGEN-1.ksig">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\shared\policy-verification-signatures\resources\calendar-response-for-different-time.tlv">
+    <None Include="resources\signature\shared\policy-verification-signatures\resources\extender-response-for-CAL-03.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\shared\policy-verification-signatures\resources\calendar-response-with-changed-times.tlv">
+    <None Include="resources\signature\shared\policy-verification-signatures\resources\extender-response-for-different-time.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\shared\policy-verification-signatures\resources\extension-response-payload-for-CAL-03.tlv">
+    <None Include="resources\signature\shared\policy-verification-signatures\resources\extender-response-with-changed-times.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\shared\policy-verification-signatures\resources\publications-file.bin">

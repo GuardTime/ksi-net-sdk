@@ -77,25 +77,6 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         }
 
         [Test]
-        public void TestSignatureWithoutAggregationHashChains()
-        {
-            DocumentHashVerificationRule rule = new DocumentHashVerificationRule();
-
-            // Check signature without aggregation hash chains
-            Assert.Throws<KsiVerificationException>(delegate
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new TestKsiSignature(),
-                    DocumentHash =
-                        new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D"))
-                };
-
-                rule.Verify(context);
-            });
-        }
-
-        [Test]
         public void TestRfc3161SignatureInputHash()
         {
             DocumentHashVerificationRule rule = new DocumentHashVerificationRule();

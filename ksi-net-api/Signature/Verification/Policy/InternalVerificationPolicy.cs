@@ -40,20 +40,24 @@ namespace Guardtime.KSI.Signature.Verification.Policy
                                 .OnSuccess(new AggregationHashChainTimeConsistencyRule()
                                     .OnSuccess(new AggregationHashChainIndexSuccessorRule()
                                         .OnSuccess(new AggregationHashChainIndexRule()
-                                            .OnSuccess(
-                                                // If present verify calendar hash chain
-                                                new CalendarHashChainInputHashVerificationRule()
+                                            // Verify calendar hash chain.
+                                            .OnSuccess(new CalendarHashChainExistenceRule()
+                                                .OnSuccess(new CalendarHashChainInputHashVerificationRule()
                                                     .OnSuccess(new CalendarHashChainAggregationTimeRule()
                                                         .OnSuccess(new CalendarHashChainRegistrationTimeRule()
-                                                            .OnSuccess(
-                                                                // If present verify calendar authentication record
-                                                                new CalendarAuthenticationRecordAggregationHashRule()
+                                                            // Verify calendar auth record
+                                                            .OnSuccess(new CalendarAuthenticationRecordExistenceRule()
+                                                                .OnSuccess(new CalendarAuthenticationRecordAggregationHashRule()
                                                                     .OnSuccess(new CalendarAuthenticationRecordAggregationTimeRule()
-                                                                        .OnSuccess(
-                                                                            // If present verify publication record
-                                                                            new SignaturePublicationRecordPublicationHashRule()
-                                                                                .OnSuccess(new SignaturePublicationRecordPublicationTimeRule()
-                                                                                    .OnSuccess(new DocumentHashVerificationRule())))))))))))))));
+                                                                        .OnSuccess(new DocumentHashVerificationRule())))
+                                                                // No calendar auth record. Verify publication record.
+                                                                .OnNa(new SignaturePublicationRecordExistenceRule()
+                                                                    .OnSuccess(new SignaturePublicationRecordPublicationHashRule()
+                                                                        .OnSuccess(new SignaturePublicationRecordPublicationTimeRule()
+                                                                            .OnSuccess(new DocumentHashVerificationRule())))
+                                                                    .OnNa(new DocumentHashVerificationRule()))))))
+                                                // No calendar hash chain
+                                                .OnNa(new DocumentHashVerificationRule())))))))));
         }
     }
 }

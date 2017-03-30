@@ -29,7 +29,7 @@ namespace Guardtime.KSI.Test.Service
 {
     public class StaticServiceTestsBase
     {
-        public static Ksi GetStaticKsi(byte[] requestResult, ulong requestId = 0, IKsiSignatureFactory ksiSignatureFactory = null, PduVersion pduVersion = PduVersion.v2,
+        protected static Ksi GetStaticKsi(byte[] requestResult, ulong requestId = 0, IKsiSignatureFactory ksiSignatureFactory = null, PduVersion pduVersion = PduVersion.v2,
                                           HashAlgorithm signingMacAlgorithm = null, HashAlgorithm extendingMacAlgorithm = null)
         {
             TestKsiServiceProtocol protocol = new TestKsiServiceProtocol

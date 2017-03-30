@@ -24,14 +24,14 @@ using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
-using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
+using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
 using Guardtime.KSI.Test.Crypto;
+using Guardtime.KSI.Test.Service;
 using Guardtime.KSI.Test.Signature.Verification;
-using Guardtime.KSI.Test.Signature.Verification.Rule;
 using Guardtime.KSI.Trust;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
@@ -123,8 +123,8 @@ namespace Guardtime.KSI.Test.Integration
 
         private static IVerificationContext GetVerificationContext(TestingRow testingRow, IKsiSignature signature, string testDataDir, bool setUserPublication = false)
         {
-            IVerificationContext verificationContext;
             IPublicationsFile publicationsFile = null;
+            IKsiService service;
 
             if (!setUserPublication)
             {
@@ -133,30 +133,34 @@ namespace Guardtime.KSI.Test.Integration
 
             if (string.IsNullOrEmpty(testingRow.ResourceFile))
             {
-                verificationContext = new VerificationContext(signature)
-                {
-                    DocumentHash = testingRow.InputHash,
-                    UserPublication = setUserPublication ? testingRow.PublicationData : null,
-                    IsExtendingAllowed = testingRow.IsExtendingAllowed,
-                    KsiService = GetHttpKsiService(),
-                    PublicationsFile = publicationsFile
-                };
+                service = GetHttpKsiService();
             }
             else
             {
-                verificationContext = new TestVerificationContext()
+                TestKsiServiceProtocol protocol = new TestKsiServiceProtocol
                 {
-                    Signature = signature,
-                    DocumentHash = testingRow.InputHash,
-                    UserPublication = setUserPublication ? testingRow.PublicationData : null,
-                    IsExtendingAllowed = testingRow.IsExtendingAllowed,
-                    KsiService = GetHttpKsiService(),
-                    PublicationsFile = publicationsFile,
-                    ExtendedCalendarHashChain =
-                        new CalendarHashChain(new TlvReader(File.OpenRead(Path.Combine(TestSetup.LocalPath, testDataDir + testingRow.ResourceFile))).ReadTag())
+                    RequestResult = File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, testDataDir + testingRow.ResourceFile))
                 };
+                service =
+                    new TestKsiService(
+                        protocol,
+                        new ServiceCredentials(Properties.Settings.Default.HttpSigningServiceUser, Properties.Settings.Default.HttpSigningServicePass, HashAlgorithm.Sha2256),
+                        protocol,
+                        new ServiceCredentials(Properties.Settings.Default.HttpExtendingServiceUser, Properties.Settings.Default.HttpExtendingServicePass, HashAlgorithm.Sha2256),
+                        protocol,
+                        new PublicationsFileFactory(
+                            new PkiTrustStoreProvider(new X509Store(StoreName.Root),
+                                CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))), 1, PduVersion.v2);
             }
-            return verificationContext;
+
+            return new VerificationContext(signature)
+            {
+                DocumentHash = testingRow.InputHash,
+                UserPublication = setUserPublication ? testingRow.PublicationData : null,
+                IsExtendingAllowed = testingRow.IsExtendingAllowed,
+                KsiService = service,
+                PublicationsFile = publicationsFile
+            };
         }
 
         private static void Verify(TestingRow data, VerificationPolicy policy, IVerificationContext context)
