@@ -22,6 +22,7 @@ using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
+using NLog;
 
 namespace Guardtime.KSI.Signature
 {
@@ -30,12 +31,15 @@ namespace Guardtime.KSI.Signature
     /// </summary>
     public sealed class CalendarHashChain : CompositeTag
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         private IntegerTag _aggregationTime;
         private readonly List<Link> _chain = new List<Link>();
         private ImprintTag _inputHash;
         private IntegerTag _publicationTime;
         private DataHash _outputHash;
         private PublicationData _publicationData;
+        private ulong? _registrationTime;
 
         /// <summary>
         /// Expected tag type
@@ -48,7 +52,6 @@ namespace Guardtime.KSI.Signature
         /// <param name="tag">TLV element</param>
         public CalendarHashChain(ITlvTag tag) : base(tag)
         {
-            RegistrationTime = CalculateRegistrationTime();
         }
 
         /// <summary>
@@ -115,7 +118,7 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         ///     Get registration time.
         /// </summary>
-        public ulong RegistrationTime { get; private set; }
+        public ulong RegistrationTime => _registrationTime ?? (_registrationTime = CalculateRegistrationTime()).Value;
 
         /// <summary>
         ///     Get input hash.
@@ -224,7 +227,8 @@ namespace Guardtime.KSI.Signature
             {
                 if (r <= 0)
                 {
-                    throw new TlvException("Invalid calendar hash chain shape for publication time.");
+                    Logger.Warn("Invalid calendar hash chain shape for publication time. Cannot calculate registration time.");
+                    return 0;
                 }
 
                 if (_chain[i].Direction == LinkDirection.Left)
@@ -240,7 +244,8 @@ namespace Guardtime.KSI.Signature
 
             if (r != 0)
             {
-                throw new TlvException("Calendar hash chain shape inconsistent with publication time.");
+                Logger.Warn("Calendar hash chain shape inconsistent with publication time. Cannot calculate registration time.");
+                return 0;
             }
 
             return t;
