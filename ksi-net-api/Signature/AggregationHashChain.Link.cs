@@ -183,6 +183,11 @@ namespace Guardtime.KSI.Signature
 
             private static string GetLegacyIdString(byte[] bytes)
             {
+                if (bytes.Length == 0)
+                {
+                    throw new TlvException("Invalid legacy id tag: empty");
+                }
+
                 if (bytes[0] != LegacyIdFirstOctet)
                 {
                     throw new TlvException("Invalid first octet in legacy id tag: " + bytes[0]);

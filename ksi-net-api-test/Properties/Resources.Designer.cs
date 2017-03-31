@@ -1151,6 +1151,15 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/legacy-ksi-signature-invalid-input.tlv.
+        /// </summary>
+        internal static string KsiSignature_Legacy_Invalid_Input {
+            get {
+                return ResourceManager.GetString("KsiSignature_Legacy_Invalid_Input", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/ksi-signature/legacy-ksi-signature-ok.tlv.
         /// </summary>
         internal static string KsiSignature_Legacy_Ok {

@@ -168,6 +168,7 @@
     <Compile Include="Signature\IIdentity.cs" />
     <Compile Include="Signature\IKsiSignatureFactory.cs" />
     <Compile Include="Signature\LegacyIdentity.cs" />
+    <Compile Include="Signature\Verification\Rule\DocumentHashVerificationRule.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainIndexSuccessorRule.cs" />
     <Compile Include="Signature\Verification\Rule\Rfc3161RecordAggregationTimeRule.cs" />
     <Compile Include="Signature\Verification\Rule\Rfc3161RecordChainIndexRule.cs" />
