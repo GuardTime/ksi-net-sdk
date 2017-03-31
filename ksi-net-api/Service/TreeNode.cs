@@ -44,7 +44,7 @@ namespace Guardtime.KSI.Service
         /// <param name="documentHash">Hash of a document to be signed</param>
         /// <param name="metadata">Metadata to be added to hash chain</param>
         /// <param name="level">the level value of the aggregation tree node</param>
-        public TreeNode(DataHash documentHash, AggregationHashChain.Metadata metadata = null, uint? level = null)
+        public TreeNode(DataHash documentHash, IdentityMetadata metadata = null, uint? level = null)
         {
             if (documentHash == null)
             {
@@ -60,7 +60,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="metadata">Metadata to be added to hash chain</param>
         /// <param name="level">the level value of the aggregation tree node</param>
-        public TreeNode(AggregationHashChain.Metadata metadata, uint? level = null)
+        public TreeNode(IdentityMetadata metadata, uint? level = null)
         {
             if (metadata == null)
             {
@@ -78,7 +78,7 @@ namespace Guardtime.KSI.Service
         /// <summary>
         /// Metadata to be added to aggregation hash chain
         /// </summary>
-        public AggregationHashChain.Metadata Metadata { get; }
+        public IdentityMetadata Metadata { get; }
 
         /// <summary>
         /// Hash value of the node.
@@ -124,7 +124,7 @@ namespace Guardtime.KSI.Service
                     return nameof(TreeNode);
                 }
 
-                value = "M:" + Base16.Encode(Metadata.EncodeValue());
+                value = "M:" + Base16.Encode(Metadata.AggregationHashChainMetadata.EncodeValue());
             }
             else
             {

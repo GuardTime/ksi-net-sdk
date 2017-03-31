@@ -100,7 +100,7 @@ namespace Guardtime.KSI.Service
         /// <param name="documentHash">Document hash</param>
         /// <param name="metadata">Metadata to be added together with document hash</param>
         /// <param name="level">the level value of the aggregation tree node</param>
-        public void AddDocument(DataHash documentHash, AggregationHashChain.Metadata metadata = null, uint? level = null)
+        public void Add(DataHash documentHash, IdentityMetadata metadata = null, uint? level = null)
         {
             if (!_canAddItems)
             {
@@ -123,7 +123,7 @@ namespace Guardtime.KSI.Service
         /// <summary>
         /// Sign given hashes. Returns uni-signatures.
         /// </summary>
-        public IEnumerable<IKsiSignature> GetUniSignatures()
+        public IEnumerable<IKsiSignature> Sign()
         {
             if (DocumentNodes.Count == 0)
             {
@@ -264,7 +264,7 @@ namespace Guardtime.KSI.Service
                     links.Add(new AggregationHashChain.Link(
                         LinkDirection.Left,
                         node.Parent.Right.NodeHash,
-                        node.Parent.Right.NodeHash == null ? node.Parent.Right.Metadata : null,
+                        node.Parent.Right.NodeHash == null ? node.Parent.Right.Metadata.AggregationHashChainMetadata : null,
                         levelCorrection));
                 }
                 else
@@ -272,7 +272,7 @@ namespace Guardtime.KSI.Service
                     links.Add(new AggregationHashChain.Link(
                         LinkDirection.Right,
                         node.Parent.Left.NodeHash,
-                        node.Parent.Left.NodeHash == null ? node.Parent.Left.Metadata : null,
+                        node.Parent.Left.NodeHash == null ? node.Parent.Left.Metadata.AggregationHashChainMetadata : null,
                         levelCorrection));
                 }
 
@@ -290,25 +290,28 @@ namespace Guardtime.KSI.Service
         private TreeNode GetTreeRoot(List<TreeNode> documentNodes)
         {
             List<TreeNode> treeNodes = new List<TreeNode>();
+            IDataHasher dataHasher = KsiProvider.CreateDataHasher(_hashAlgorithm);
 
             for (int i = 0; i < documentNodes.Count; i++)
             {
                 TreeNode node = documentNodes[i];
 
-                AggregationHashChain.Metadata metadata = node.Metadata;
+                IdentityMetadata metadata = node.Metadata;
 
                 if (metadata != null)
                 {
-                    IDataHasher hasher = KsiProvider.CreateDataHasher(_hashAlgorithm);
-                    hasher.AddData(node.DocumentHash.Imprint);
-                    hasher.AddData(metadata.EncodeValue());
-                    hasher.AddData(Util.EncodeUnsignedLong(node.Level + 1));
+                    dataHasher.Reset();
+                    DataHash nodeHash = dataHasher
+                        .AddData(node.DocumentHash.Imprint)
+                        .AddData(metadata.AggregationHashChainMetadata.EncodeValue())
+                        .AddData(Util.EncodeUnsignedLong(node.Level + 1))
+                        .GetHash();
 
                     TreeNode metadataNode = new TreeNode(metadata, node.Level);
 
                     TreeNode parent = new TreeNode(node.Level + 1)
                     {
-                        NodeHash = hasher.GetHash(),
+                        NodeHash = nodeHash,
                         Left = node,
                         Right = metadataNode
                     };
@@ -340,17 +343,20 @@ namespace Guardtime.KSI.Service
         /// <param name="treeNodes"></param>
         private void AddBlindingMasks(List<TreeNode> treeNodes)
         {
+            IDataHasher dataHasher = KsiProvider.CreateDataHasher(_hashAlgorithm);
             byte[] previousHash = new byte[_hashAlgorithm.Length + 1];
 
             for (int i = 0; i < treeNodes.Count;)
             {
                 TreeNode node = treeNodes[i];
 
-                IDataHasher hasher = KsiProvider.CreateDataHasher(_hashAlgorithm);
-                hasher.AddData(previousHash);
-                hasher.AddData(_randomSeed);
+                dataHasher.Reset();
+                DataHash documentHash = dataHasher
+                    .AddData(previousHash)
+                    .AddData(_randomSeed)
+                    .GetHash();
 
-                TreeNode maskNode = new TreeNode(hasher.GetHash(), null, node.Level);
+                TreeNode maskNode = new TreeNode(documentHash, null, node.Level);
                 treeNodes.Insert(i, maskNode);
                 previousHash = node.NodeHash.Imprint;
                 i += 2;
@@ -366,6 +372,7 @@ namespace Guardtime.KSI.Service
         {
             List<TreeNode> list = new List<TreeNode>(nodes);
             List<TreeNode> nextLevelList = new List<TreeNode>();
+            IDataHasher dataHasher = KsiProvider.CreateDataHasher(_hashAlgorithm);
 
             while (list.Count > 1)
             {
@@ -383,11 +390,12 @@ namespace Guardtime.KSI.Service
                     rightNode.Parent = treeNode;
                     rightNode.IsLeftNode = false;
 
-                    IDataHasher hasher = KsiProvider.CreateDataHasher(_hashAlgorithm);
-                    hasher.AddData(leftNode.NodeHash.Imprint);
-                    hasher.AddData(rightNode.NodeHash.Imprint);
-                    hasher.AddData(Util.EncodeUnsignedLong(level));
-                    treeNode.NodeHash = hasher.GetHash();
+                    dataHasher.Reset();
+                    treeNode.NodeHash = dataHasher
+                        .AddData(leftNode.NodeHash.Imprint)
+                        .AddData(rightNode.NodeHash.Imprint)
+                        .AddData(Util.EncodeUnsignedLong(level))
+                        .GetHash();
 
                     treeNode.Left = leftNode;
                     treeNode.Right = rightNode;

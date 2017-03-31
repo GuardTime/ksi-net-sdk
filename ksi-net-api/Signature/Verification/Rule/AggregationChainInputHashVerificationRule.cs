@@ -38,13 +38,13 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
             }
 
-            ReadOnlyCollection<AggregationHashChain> aggregationHashChains = GetAggregationHashChains(signature, false);
-            DataHash aggregationHashChainInputHash = aggregationHashChains[0].InputHash;
+            DataHash aggregationHashChainInputHash = GetAggregationHashChains(signature, false)[0].InputHash;
 
-            IDataHasher hasher = KsiProvider.CreateDataHasher(aggregationHashChainInputHash.Algorithm);
-            hasher.AddData(signature.Rfc3161Record.GetOutputHash().Imprint);
+            DataHash inputHash = KsiProvider.CreateDataHasher(aggregationHashChainInputHash.Algorithm)
+                                            .AddData(signature.Rfc3161Record.GetOutputHash().Imprint)
+                                            .GetHash();
 
-            return hasher.GetHash() != aggregationHashChainInputHash
+            return inputHash != aggregationHashChainInputHash
                 ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int01)
                 : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }

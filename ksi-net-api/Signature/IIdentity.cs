@@ -42,11 +42,11 @@ namespace Guardtime.KSI.Signature
         /// <summary>
         /// A local sequence number of a request assigned by the machine that created the link
         /// </summary>
-        ulong SequenceNumber { get; }
+        ulong? SequenceNumber { get; }
 
         /// <summary>
         /// The time when the server received the request from the client (in milliseconds)
         /// </summary>
-        ulong RequestTime { get; }
+        ulong? RequestTime { get; }
     }
 }

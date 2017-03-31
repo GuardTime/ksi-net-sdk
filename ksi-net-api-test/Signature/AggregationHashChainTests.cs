@@ -117,14 +117,20 @@ namespace Guardtime.KSI.Test.Signature
 
             AggregationHashChain.Metadata metadata = aggregationHashChain.Metadata;
 
-            IntegerTag sequenceNumber = metadata.GetType().InvokeMember("_sequenceNumber", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.GetField, null,
-                metadata, null) as IntegerTag;
+            Assert.AreEqual(1, metadata.SequenceNumber, "Aggregation hash chain link metadata sequnece number should match");
+            Assert.AreEqual(2, metadata.RequestTime, "Aggregation hash chain link metadata request time should match");
+        }
 
-            IntegerTag requestTime = metadata.GetType().InvokeMember("_requestTime", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.GetField, null,
-                metadata, null) as IntegerTag;
+        [Test]
+        public void AggregationHashChainLinkSequenceNumberMissingTest()
+        {
+            AggregationHashChain.Link aggregationHashChain = new AggregationHashChain.Link(LinkDirection.Left, null,
+                new AggregationHashChain.Metadata("test client", "test machine id"), 0);
 
-            Assert.AreEqual(1, sequenceNumber.Value, "Aggregation hash chain link metadata sequnece number should match");
-            Assert.AreEqual(2, requestTime.Value, "Aggregation hash chain link metadata request time should match");
+            AggregationHashChain.Metadata metadata = aggregationHashChain.Metadata;
+
+            Assert.IsNull(metadata.SequenceNumber, "Aggregation hash chain link metadata sequnece number should match");
+            Assert.IsNull(metadata.RequestTime, "Aggregation hash chain link metadata request time should match");
         }
 
         [Test]
