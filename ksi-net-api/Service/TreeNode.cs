@@ -19,7 +19,6 @@
 
 using System;
 using Guardtime.KSI.Hashing;
-using Guardtime.KSI.Signature;
 using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Service
@@ -41,18 +40,16 @@ namespace Guardtime.KSI.Service
         /// <summary>
         /// Create aggregation tree node instance.
         /// </summary>
-        /// <param name="documentHash">Hash of a document to be signed</param>
-        /// <param name="metadata">Metadata to be added to hash chain</param>
+        /// <param name="hash">Data hash to be signed</param>
         /// <param name="level">the level value of the aggregation tree node</param>
-        public TreeNode(DataHash documentHash, IdentityMetadata metadata = null, uint? level = null)
+        public TreeNode(DataHash hash, uint level = 0)
         {
-            if (documentHash == null)
+            if (hash == null)
             {
-                throw new ArgumentNullException(nameof(documentHash));
+                throw new ArgumentNullException(nameof(hash));
             }
-            DocumentHash = NodeHash = documentHash;
-            Metadata = metadata;
-            Level = level ?? 0;
+            Hash = hash;
+            Level = level;
         }
 
         /// <summary>
@@ -60,20 +57,15 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="metadata">Metadata to be added to hash chain</param>
         /// <param name="level">the level value of the aggregation tree node</param>
-        public TreeNode(IdentityMetadata metadata, uint? level = null)
+        public TreeNode(IdentityMetadata metadata, uint level = 0)
         {
             if (metadata == null)
             {
                 throw new ArgumentNullException(nameof(metadata));
             }
             Metadata = metadata;
-            Level = level ?? 0;
+            Level = level;
         }
-
-        /// <summary>
-        /// Document hash value
-        /// </summary>
-        public DataHash DocumentHash { get; }
 
         /// <summary>
         /// Metadata to be added to aggregation hash chain
@@ -83,7 +75,7 @@ namespace Guardtime.KSI.Service
         /// <summary>
         /// Hash value of the node.
         /// </summary>
-        public DataHash NodeHash { get; set; }
+        public DataHash Hash { get; set; }
 
         /// <summary>
         /// Parent node
@@ -117,7 +109,7 @@ namespace Guardtime.KSI.Service
         public override string ToString()
         {
             string value;
-            if (NodeHash == null)
+            if (Hash == null)
             {
                 if (Metadata == null)
                 {
@@ -128,7 +120,7 @@ namespace Guardtime.KSI.Service
             }
             else
             {
-                value = Base16.Encode((DocumentHash ?? NodeHash).Value);
+                value = Base16.Encode(Hash.Value);
             }
             return string.Format("{0}{1}:{2}", Level, IsLeftNode ? "L" : "R", value);
         }

@@ -24,7 +24,7 @@ using Guardtime.KSI.Service;
 
 namespace Guardtime.KSI.Test.Service
 {
-    class BlockSignerTreeNodeVisualizer
+    public class TreeVisualizer
     {
         /// <summary>
         /// Validates child nodes in Merkle tree.
@@ -186,13 +186,13 @@ namespace Guardtime.KSI.Test.Service
                         TreeNode firstNode = nodes[i];
                         TreeNode secondNode = i + 1 < nodes.Count ? nodes[i + 1] : null;
 
-                        if (firstNode != null && (secondNode != null || firstNode.NodeHash != null || firstNode.DocumentHash != null || firstNode.Metadata != null))
+                        if (firstNode != null && (secondNode != null || firstNode.Hash != null || firstNode.Hash != null || firstNode.Metadata != null))
                         {
                             if (firstNode.IsLeftNode)
                             {
                                 sbRow.Append("        / ");
                             }
-                            else if (firstNode.NodeHash != null || firstNode.DocumentHash != null || firstNode.Metadata != null)
+                            else if (firstNode.Hash != null || firstNode.Hash != null || firstNode.Metadata != null)
                             {
                                 sbRow.Append(" \\        ");
                             }
@@ -215,7 +215,7 @@ namespace Guardtime.KSI.Test.Service
                             sbRow.Append(space + "  ");
                         }
 
-                        if (secondNode != null && (firstNode != null || secondNode.NodeHash != null || secondNode.DocumentHash != null || secondNode.Metadata != null))
+                        if (secondNode != null && (firstNode != null || secondNode.Hash != null || secondNode.Hash != null || secondNode.Metadata != null))
                         {
                             if (firstNode == null && secondNode.IsLeftNode)
                             {
@@ -258,7 +258,7 @@ namespace Guardtime.KSI.Test.Service
                     sbRow.Append(space);
                 }
 
-                if (node == null || (node.NodeHash == null && node.Metadata == null))
+                if (node == null || (node.Hash == null && node.Metadata == null))
                 {
                     sbRow.Append(twelveSpaces);
                 }
