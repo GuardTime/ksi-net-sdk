@@ -53,9 +53,9 @@ namespace Guardtime.KSI.Service
             }
             else
             {
-                if (maxTreeHeight < 1 || maxTreeHeight > DefaultMaxTreeHeight)
+                if (maxTreeHeight < 0 || maxTreeHeight > DefaultMaxTreeHeight)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(maxTreeHeight), "Max tree height must be between 1 and " + DefaultMaxTreeHeight);
+                    throw new ArgumentOutOfRangeException(nameof(maxTreeHeight), "Max tree height must be between 0 and " + DefaultMaxTreeHeight);
                 }
 
                 _maxTreeHeight = maxTreeHeight.Value;
@@ -90,7 +90,7 @@ namespace Guardtime.KSI.Service
 
             if (_heads.Count == 0)
             {
-                if (node.Level >= _maxTreeHeight)
+                if (node.Level > _maxTreeHeight)
                 {
                     return false;
                 }
@@ -163,7 +163,7 @@ namespace Guardtime.KSI.Service
             // Add cloned node to the cloned heads. Real heads will not be modified.
             AddNodeToForest(new TreeNode(node.Level) { Hash = node.Hash }, heads);
             TreeNode rootNode = ExtractLowerHeads(DefaultMaxTreeHeight, heads);
-            return rootNode.Level + 1;
+            return rootNode.Level;
         }
 
         private List<TreeNode> CloneHeads()

@@ -28,7 +28,6 @@ using NUnit.Framework;
 namespace Guardtime.KSI.Test.Service
 {
     [TestFixture]
-    [TestFixture]
     public class TreeBuilderPrintTreeTests
     {
         /// <summary>
