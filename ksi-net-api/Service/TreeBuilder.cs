@@ -25,7 +25,8 @@ using Guardtime.KSI.Utils;
 namespace Guardtime.KSI.Service
 {
     /// <summary>
-    /// Class for building Merkle trees.
+    /// Class for building Merkle tree and receiving the tree root node.
+    /// The order of added nodes will be persisted.
     /// </summary>
     public class TreeBuilder
     {
@@ -111,6 +112,7 @@ namespace Guardtime.KSI.Service
         /// <returns></returns>
         public TreeNode GetTreeRoot()
         {
+            // merge heads and return the root
             return ExtractLowerHeads(DefaultMaxTreeHeight, _heads);
         }
 
@@ -188,6 +190,7 @@ namespace Guardtime.KSI.Service
                 return;
             }
 
+            // merge and extract lower level heads
             TreeNode lowerHeadsRoot = ExtractLowerHeads(node.Level, heads);
 
             if (lowerHeadsRoot != null)
@@ -198,7 +201,9 @@ namespace Guardtime.KSI.Service
                 }
                 else
                 {
+                    // remove lowerHeadsRoot
                     heads.RemoveAt(heads.Count - 1);
+                    // merge lowerHeadsRoot with new node
                     AddToHeads(CreateParentNode(lowerHeadsRoot, node), heads);
                 }
             }
@@ -244,8 +249,10 @@ namespace Guardtime.KSI.Service
 
         /// <summary>
         /// Merge heads that have level lower or equal to the given level.
-        /// Merge so that there are no nodes having equal levels.</summary>
-        /// Remove merged heads from the list and return root node of the created tree.
+        /// Merge so that there are no nodes having equal levels.
+        /// Remove merged heads from the list and add root node of the created tree.
+        /// Return the created tree root node.
+        /// </summary>
         private TreeNode ExtractLowerHeads(uint level, List<TreeNode> heads)
         {
             if (heads.Count == 0)
