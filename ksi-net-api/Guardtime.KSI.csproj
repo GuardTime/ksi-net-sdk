@@ -162,6 +162,7 @@
     <Compile Include="Service\LegacyPdu.cs" />
     <Compile Include="Service\PduVersion.cs" />
     <Compile Include="Service\TcpKsiServiceProtocol.cs" />
+    <Compile Include="Service\TreeBuilder.cs" />
     <Compile Include="Signature\AggregationHashChain.Metadata.cs" />
     <Compile Include="Signature\AggregationHashChain.Link.cs" />
     <Compile Include="Signature\IdentityType.cs" />

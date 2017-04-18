@@ -361,5 +361,86 @@ namespace Guardtime.KSI.Test.Integration
             }
             Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode, "Signature should verify with key based policy");
         }
+
+        /// <param name="ksi"></param>
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void BlockSignerTreeHeightLimitTest(Ksi ksi)
+        {
+            IdentityMetadata metadata = new IdentityMetadata("test client id", "test machine id");
+            DataHash hash = new DataHash(Base16.Decode("0114F9189A45A30D856029F9537FD20C9C7342B82A2D949072AB195D95D7B32ECB"));
+
+            List<int> a = new List<int> { 1, 2 };
+
+            List<HeightTestData> list = new List<HeightTestData>()
+            {
+                new HeightTestData(new List<uint> { 1 }, null, 0, 0),
+                new HeightTestData(new List<uint> { 1, 2, 1 }, null, 3, 2),
+                new HeightTestData(new List<uint> { 1, 2, 2 }, null, 3, 2),
+                new HeightTestData(new List<uint> { 1, 0, 1 }, null, 2, 2),
+                new HeightTestData(new List<uint> { 0, 0, 0 }, new List<bool> { true, false, true }, 2, 2),
+                new HeightTestData(new List<uint> { 2, 1, 1, 1 }, null, 3, 3),
+                new HeightTestData(new List<uint> { 1, 0, 0, 0 }, null, 2, 3),
+                new HeightTestData(new List<uint> { 0, 0, 0, 0, 0 }, new List<bool> { true, true, true, true, true }, 3, 4),
+                new HeightTestData(new List<uint> { 1, 0, 1, 0, 0, 0 }, null, 3, 5),
+                new HeightTestData(new List<uint> { 0, 0, 0, 1, 0, 1, 0 }, null, 3, 5),
+                new HeightTestData(new List<uint> { 0, 0, 0, 0, 0, 0 }, new List<bool> { true, false, true, false, false, false }, 3, 5),
+                new HeightTestData(new List<uint> { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, new List<bool> { false, false, false, false, false, false, false, false, false }, 3, 8),
+                new HeightTestData(new List<uint> { 3, 3 }, new List<bool> { false, false }, 3, 1),
+                new HeightTestData(new List<uint> { 3, 3 }, new List<bool> { true, true }, 3, 0),
+                new HeightTestData(new List<uint> { 0, 3 }, new List<bool> { false, false }, 3, 1),
+                new HeightTestData(new List<uint> { 3, 0 }, new List<bool> { false, false }, 3, 1),
+                new HeightTestData(new List<uint> { 2, 0, 0, 0, 0, 0 }, null, 3, 5),
+                new HeightTestData(new List<uint> { 4, 3, 2, 3, 1, 0, 3, 2, 0, 3 }, null, 6, 9),
+                new HeightTestData(new List<uint> { 4, 3, 2, 3, 1, 0, 3, 2, 0, 1, 0, 0 }, null, 6, 10),
+                new HeightTestData(new List<uint> { 7, 6, 5, 6, 4, 3, 6, 5, 3, 6, 8 }, null, 9, 9),
+            };
+
+            for (int index = 0; index < list.Count; index++)
+            {
+                HeightTestData data = list[index];
+                BlockSigner blockSigner = new BlockSigner(HttpKsiService, null, null, data.MaxHeight);
+                bool success = false;
+
+                Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                Console.WriteLine("Test row: " + (index + 1));
+                Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
+                for (int i = 0; i < data.Levels.Count; i++)
+                {
+                    Console.WriteLine("---------------------------------------------------------------------");
+                    Console.WriteLine("Item: " + (i + 1) + "; Level: " + data.Levels[i] + "; Node: " + hash);
+                    Console.WriteLine("---------------------------------------------------------------------");
+
+                    IdentityMetadata meta = data.MetaExists != null && data.MetaExists.Count > i && data.MetaExists[i] ? metadata : null;
+                    if (!blockSigner.Add(hash, meta, data.Levels[i]))
+                    {
+                        success = data.AllowedItemCount == i;
+                        Assert.IsTrue(success, "Invalid height calculation. Row: " + (index + 1) + "; Node count: " + (i + 1));
+                        break;
+                    }
+                }
+
+                if (!success)
+                {
+                    Assert.Fail("Invalid height calculation.  All hashes added. Row: " + (index + 1));
+                }
+            }
+        }
+
+        private class HeightTestData
+        {
+            public List<uint> Levels { get; }
+            public List<bool> MetaExists { get; }
+            public uint MaxHeight { get; }
+            public uint AllowedItemCount { get; }
+
+            public HeightTestData(List<uint> levels, List<bool> metaExists, uint maxHeight, uint allowedItemCount)
+            {
+                Levels = levels;
+                MetaExists = metaExists;
+                MaxHeight = maxHeight;
+                AllowedItemCount = allowedItemCount;
+            }
+        }
     }
 }

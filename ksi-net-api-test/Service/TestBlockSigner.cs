@@ -30,8 +30,8 @@ namespace Guardtime.KSI.Test.Service
         {
         }
 
-        public TestBlockSigner(IKsiService ksiService, bool useBlindingMask, byte[] randomSeed, HashAlgorithm hashAlgorithm = null)
-            : base(ksiService, useBlindingMask, randomSeed, hashAlgorithm)
+        public TestBlockSigner(IKsiService ksiService, bool useBlindingMasks, byte[] randomSeed, HashAlgorithm hashAlgorithm = null)
+            : base(ksiService, useBlindingMasks, randomSeed, hashAlgorithm)
         {
         }
     }

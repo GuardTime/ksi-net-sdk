@@ -23,7 +23,6 @@ using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Signature;
-using Guardtime.KSI.Utils;
 using NLog;
 
 namespace Guardtime.KSI.Service
@@ -36,7 +35,6 @@ namespace Guardtime.KSI.Service
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private readonly IKsiService _ksiService;
-        private const uint MaxLevel = 255;
 
         private TreeNode _root;
         private bool _canAddItems = true;
@@ -45,16 +43,11 @@ namespace Guardtime.KSI.Service
         private readonly byte[] _randomSeed;
         private readonly HashAlgorithm _hashAlgorithm;
         private readonly IKsiSignatureFactory _signatureFactory;
-
-        /// <summary>
-        /// Merkle tree root hash signature
-        /// </summary>
-        protected IKsiSignature RootSignature;
-
-        /// <summary>
-        /// List of nodes containing document hashes
-        /// </summary>
-        protected readonly List<TreeNode> DocumentNodes = new List<TreeNode>();
+        private readonly List<TreeNode> _leafNodes = new List<TreeNode>();
+        private byte[] _previousHash;
+        private IDataHasher _dataHasher;
+        readonly TreeBuilder _treeBuilder;
+        private IKsiSignature _rootSignature;
 
         /// <summary>
         /// Create new block signer instance
@@ -62,7 +55,9 @@ namespace Guardtime.KSI.Service
         /// <param name="ksiService">KSI service</param>
         /// <param name="hashAlgorithm">Hash algorithm to be used when creating aggregation hash chains. If null then defult is used.</param>
         /// <param name="signatureFactory">Signature factory for creating uni-signatures.</param>
-        public BlockSigner(IKsiService ksiService, HashAlgorithm hashAlgorithm = null, IKsiSignatureFactory signatureFactory = null)
+        /// <param name="maxTreeHeight">Max allowed aggregation tree height</param>
+        public BlockSigner(IKsiService ksiService, HashAlgorithm hashAlgorithm = null, IKsiSignatureFactory signatureFactory = null,
+                           uint? maxTreeHeight = null)
         {
             if (ksiService == null)
             {
@@ -71,53 +66,77 @@ namespace Guardtime.KSI.Service
 
             _hashAlgorithm = hashAlgorithm ?? HashAlgorithm.Default;
             _ksiService = ksiService;
-
             _signatureFactory = signatureFactory ?? new KsiSignatureFactory();
+            _treeBuilder = new TreeBuilder(_hashAlgorithm, maxTreeHeight);
         }
 
         /// <summary>
         ///  Create new block signer instance
         /// </summary>
         /// <param name="ksiService">KSI service</param>
-        /// <param name="useBlindingMask">If true then blinding masks are used when aggregating</param>
+        /// <param name="useBlindingMasks">If true then blinding masks are used when aggregating</param>
         /// <param name="randomSeed">Random seed for for blinding masks</param>
         /// <param name="hashAlgorithm">Hash algorithm to be used when creating aggregation hash chains. If null then defult is used.</param>
         /// <param name="signatureFactory">KSI signature factory for creating uni-signatures.</param>
-        public BlockSigner(IKsiService ksiService, bool useBlindingMask, byte[] randomSeed, HashAlgorithm hashAlgorithm = null, IKsiSignatureFactory signatureFactory = null)
-            : this(ksiService, hashAlgorithm, signatureFactory)
+        /// <param name="maxTreeHeight">Max allowed aggregation tree height</param>
+        public BlockSigner(IKsiService ksiService, bool useBlindingMasks, byte[] randomSeed, HashAlgorithm hashAlgorithm = null, IKsiSignatureFactory signatureFactory = null,
+                           uint? maxTreeHeight = null)
+            : this(ksiService, hashAlgorithm, signatureFactory, maxTreeHeight)
         {
-            _useBlindingMasks = useBlindingMask;
-            if (_useBlindingMasks && randomSeed == null)
+            if (useBlindingMasks)
             {
-                throw new BlockSigningException("Random seed cannot be null when using blinding masks.");
+                if (randomSeed == null)
+                {
+                    throw new BlockSigningException("Random seed cannot be null when using blinding masks.");
+                }
+                _previousHash = new byte[_hashAlgorithm.Length + 1];
+                _useBlindingMasks = true;
+                _randomSeed = randomSeed;
             }
-            _randomSeed = randomSeed;
+        }
+
+        private IDataHasher DataHasher
+        {
+            get
+            {
+                if (_dataHasher != null)
+                {
+                    _dataHasher.Reset();
+                    return _dataHasher;
+                }
+
+                return _dataHasher = KsiProvider.CreateDataHasher(_hashAlgorithm);
+            }
         }
 
         /// <summary>
-        /// Add an item to be signed
+        /// Add a data hash to be signed. Returns false if the hash cannot be added because tree would get higher than allowed.
         /// </summary>
-        /// <param name="documentHash">Document hash</param>
-        /// <param name="metadata">Metadata to be added together with document hash</param>
+        /// <param name="dataHash">Data hash to be added</param>
+        /// <param name="metadata">Metadata to be added together with data hash</param>
         /// <param name="level">the level value of the aggregation tree node</param>
-        public void Add(DataHash documentHash, IdentityMetadata metadata = null, uint? level = null)
+        /// <returns>false if data hash cannot be added because tree would get higher than allowed, true otherwise.</returns>
+        public bool Add(DataHash dataHash, IdentityMetadata metadata = null, uint level = 0)
         {
             if (!_canAddItems)
             {
                 throw new BlockSigningException("Signing process is started. Cannot add new items.");
             }
 
-            if (documentHash == null)
+            if (dataHash == null)
             {
-                throw new ArgumentNullException(nameof(documentHash));
+                throw new ArgumentNullException(nameof(dataHash));
             }
 
-            if (level.HasValue && (level < 0 || level > MaxLevel))
+            TreeNode node = new TreeNode(dataHash, level);
+
+            if (!_treeBuilder.AddNode(node, metadata, _useBlindingMasks ? GetBlindingMaskNode(node) : null))
             {
-                throw new ArgumentOutOfRangeException(nameof(level), "Level must be between 0 and 255");
+                return false;
             }
 
-            DocumentNodes.Add(new TreeNode(documentHash, metadata, level));
+            _leafNodes.Add(node);
+            return true;
         }
 
         /// <summary>
@@ -125,13 +144,13 @@ namespace Guardtime.KSI.Service
         /// </summary>
         public IEnumerable<IKsiSignature> Sign()
         {
-            if (DocumentNodes.Count == 0)
+            if (_leafNodes.Count == 0)
             {
                 return new List<IKsiSignature>();
             }
 
             SignRoot();
-            AggregationHashChain existingAggregationHashChain = RootSignature.GetAggregationHashChains()[0];
+            AggregationHashChain existingAggregationHashChain = _rootSignature.GetAggregationHashChains()[0];
             return CreateUniSignatures(existingAggregationHashChain);
         }
 
@@ -145,6 +164,18 @@ namespace Guardtime.KSI.Service
             return _root;
         }
 
+        private TreeNode GetBlindingMaskNode(TreeNode node)
+        {
+            DataHash hash = DataHasher
+                .AddData(_previousHash)
+                .AddData(_randomSeed)
+                .GetHash();
+
+            TreeNode maskNode = new TreeNode(hash, node.Level);
+            _previousHash = node.Hash.Imprint;
+            return maskNode;
+        }
+
         /// <summary>
         /// Sign tree root hash.
         /// </summary>
@@ -155,11 +186,11 @@ namespace Guardtime.KSI.Service
             BuildTree();
             uint signLevel = _root.Level;
 
-            Logger.Debug("Signing root node hash. Level: {0}; Hash: {1}", signLevel, _root.NodeHash);
+            Logger.Debug("Signing root node hash. Level: {0}; Hash: {1}", signLevel, _root.Hash);
 
-            RequestResponsePayload signResponsePayload = _ksiService.GetSignResponsePayload(_ksiService.BeginSign(_root.NodeHash, signLevel, null, null));
+            RequestResponsePayload signResponsePayload = _ksiService.GetSignResponsePayload(_ksiService.BeginSign(_root.Hash, signLevel, null, null));
 
-            RootSignature = new KsiSignature(false, false, signResponsePayload.GetSignatureChildTags());
+            _rootSignature = new KsiSignature(false, false, signResponsePayload.GetSignatureChildTags());
         }
 
         /// <summary>
@@ -167,14 +198,14 @@ namespace Guardtime.KSI.Service
         /// </summary>
         private void BuildTree()
         {
-            if (DocumentNodes.Count == 0)
+            if (_leafNodes.Count == 0)
             {
                 return;
             }
 
             if (!_isTreeBuilt)
             {
-                _root = GetTreeRoot(DocumentNodes);
+                _root = _treeBuilder.GetTreeRoot();
                 _isTreeBuilt = true;
             }
         }
@@ -188,10 +219,10 @@ namespace Guardtime.KSI.Service
         {
             Logger.Debug("Start creating uni-signatures.");
 
-            byte[] rootSignatureData = RootSignature.EncodeValue();
+            byte[] rootSignatureData = _rootSignature.EncodeValue();
             ulong[] chainIndex = PrepareChainIndex(existingAggregationHashChain);
 
-            foreach (TreeNode node in DocumentNodes)
+            foreach (TreeNode node in _leafNodes)
             {
                 using (MemoryStream stream = new MemoryStream())
                 {
@@ -205,7 +236,7 @@ namespace Guardtime.KSI.Service
                     Array.Copy(rootSignatureData, 0, signatureData, stream.Length, rootSignatureData.Length);
 
                     // Create new signature from the signature data.
-                    yield return _signatureFactory.CreateByContent(signatureData, node.NodeHash);
+                    yield return _signatureFactory.CreateByContent(signatureData, node.Hash);
                 }
             }
 
@@ -237,7 +268,7 @@ namespace Guardtime.KSI.Service
             AggregationHashChain.Link[] chainLinks = CreateAggregationHashChainLinks(node);
             chainIndex[chainIndex.Length - 1] = AggregationHashChain.CalcLocationPointer(chainLinks);
 
-            return new AggregationHashChain(existingChain.AggregationTime, chainIndex, node.DocumentHash, _hashAlgorithm.Id, chainLinks);
+            return new AggregationHashChain(existingChain.AggregationTime, chainIndex, node.Hash, _hashAlgorithm.Id, chainLinks);
         }
 
         /// <summary>
@@ -263,16 +294,16 @@ namespace Guardtime.KSI.Service
                 {
                     links.Add(new AggregationHashChain.Link(
                         LinkDirection.Left,
-                        node.Parent.Right.NodeHash,
-                        node.Parent.Right.NodeHash == null ? node.Parent.Right.Metadata.AggregationHashChainMetadata : null,
+                        node.Parent.Right.Hash,
+                        node.Parent.Right.Hash == null ? node.Parent.Right.Metadata.AggregationHashChainMetadata : null,
                         levelCorrection));
                 }
                 else
                 {
                     links.Add(new AggregationHashChain.Link(
                         LinkDirection.Right,
-                        node.Parent.Left.NodeHash,
-                        node.Parent.Left.NodeHash == null ? node.Parent.Left.Metadata.AggregationHashChainMetadata : null,
+                        node.Parent.Left.Hash,
+                        node.Parent.Left.Hash == null ? node.Parent.Left.Metadata.AggregationHashChainMetadata : null,
                         levelCorrection));
                 }
 
@@ -280,139 +311,6 @@ namespace Guardtime.KSI.Service
             }
 
             return links.ToArray();
-        }
-
-        /// <summary>
-        /// Builds Merkle tree and returns root node
-        /// </summary>
-        /// <param name="documentNodes"></param>
-        /// <returns></returns>
-        private TreeNode GetTreeRoot(List<TreeNode> documentNodes)
-        {
-            List<TreeNode> treeNodes = new List<TreeNode>();
-            IDataHasher dataHasher = KsiProvider.CreateDataHasher(_hashAlgorithm);
-
-            for (int i = 0; i < documentNodes.Count; i++)
-            {
-                TreeNode node = documentNodes[i];
-
-                IdentityMetadata metadata = node.Metadata;
-
-                if (metadata != null)
-                {
-                    dataHasher.Reset();
-                    DataHash nodeHash = dataHasher
-                        .AddData(node.DocumentHash.Imprint)
-                        .AddData(metadata.AggregationHashChainMetadata.EncodeValue())
-                        .AddData(Util.EncodeUnsignedLong(node.Level + 1))
-                        .GetHash();
-
-                    TreeNode metadataNode = new TreeNode(metadata, node.Level);
-
-                    TreeNode parent = new TreeNode(node.Level + 1)
-                    {
-                        NodeHash = nodeHash,
-                        Left = node,
-                        Right = metadataNode
-                    };
-
-                    node.IsLeftNode = true;
-                    metadataNode.IsLeftNode = false;
-
-                    node.Parent = metadataNode.Parent = parent;
-
-                    treeNodes.Add(parent);
-                }
-                else
-                {
-                    treeNodes.Add(node);
-                }
-            }
-
-            if (_useBlindingMasks)
-            {
-                AddBlindingMasks(treeNodes);
-            }
-
-            return MakeTree(treeNodes);
-        }
-
-        /// <summary>
-        /// Add blinding masks as Merkle tree leaves
-        /// </summary>
-        /// <param name="treeNodes"></param>
-        private void AddBlindingMasks(List<TreeNode> treeNodes)
-        {
-            IDataHasher dataHasher = KsiProvider.CreateDataHasher(_hashAlgorithm);
-            byte[] previousHash = new byte[_hashAlgorithm.Length + 1];
-
-            for (int i = 0; i < treeNodes.Count;)
-            {
-                TreeNode node = treeNodes[i];
-
-                dataHasher.Reset();
-                DataHash documentHash = dataHasher
-                    .AddData(previousHash)
-                    .AddData(_randomSeed)
-                    .GetHash();
-
-                TreeNode maskNode = new TreeNode(documentHash, null, node.Level);
-                treeNodes.Insert(i, maskNode);
-                previousHash = node.NodeHash.Imprint;
-                i += 2;
-            }
-        }
-
-        /// <summary>
-        /// Builds Merkle tree
-        /// </summary>
-        /// <param name="nodes">Leaf nodes</param>
-        /// <returns>Root node</returns>
-        private TreeNode MakeTree(IList<TreeNode> nodes)
-        {
-            List<TreeNode> list = new List<TreeNode>(nodes);
-            List<TreeNode> nextLevelList = new List<TreeNode>();
-            IDataHasher dataHasher = KsiProvider.CreateDataHasher(_hashAlgorithm);
-
-            while (list.Count > 1)
-            {
-                for (int i = 0; i + 1 < list.Count; i += 2)
-                {
-                    TreeNode leftNode = list[i];
-                    TreeNode rightNode = list[i + 1];
-                    uint level = Math.Max(leftNode.Level, rightNode.Level) + 1;
-
-                    TreeNode treeNode = new TreeNode(level);
-
-                    leftNode.Parent = treeNode;
-                    leftNode.IsLeftNode = true;
-
-                    rightNode.Parent = treeNode;
-                    rightNode.IsLeftNode = false;
-
-                    dataHasher.Reset();
-                    treeNode.NodeHash = dataHasher
-                        .AddData(leftNode.NodeHash.Imprint)
-                        .AddData(rightNode.NodeHash.Imprint)
-                        .AddData(Util.EncodeUnsignedLong(level))
-                        .GetHash();
-
-                    treeNode.Left = leftNode;
-                    treeNode.Right = rightNode;
-
-                    nextLevelList.Add(treeNode);
-                }
-
-                if (list.Count % 2 == 1)
-                {
-                    nextLevelList.Add(list[list.Count - 1]);
-                }
-
-                list = nextLevelList;
-                nextLevelList = new List<TreeNode>();
-            }
-
-            return list[0];
         }
     }
 }

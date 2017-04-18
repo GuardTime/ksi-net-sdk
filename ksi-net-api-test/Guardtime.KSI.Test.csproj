@@ -138,7 +138,7 @@
     <Compile Include="Hashing\DataHashTests.cs" />
     <Compile Include="Hashing\HashAlgorithmTests.cs" />
     <Compile Include="Integration\PublicationsFileIntegrationTests.cs" />
-    <Compile Include="Service\BlockSignerPrintTreeTests.cs" />
+    <Compile Include="Service\TreeBuilderPrintTreeTests.cs" />
     <Compile Include="Integration\ConfigurationIntegrationTests.cs" />
     <Compile Include="Integration\IntegrationTests.cs" />
     <Compile Include="Integration\ExtendIntegrationTests.cs" />
@@ -172,7 +172,7 @@
     <Compile Include="Service\LegacyPduTests.cs" />
     <Compile Include="Service\PduTests.cs" />
     <Compile Include="Service\ExtenderConfigRequestStaticTests.cs" />
-    <Compile Include="Service\BlockSignerTreeNodeVisualizer.cs" />
+    <Compile Include="Service\TreeVisualizer.cs" />
     <Compile Include="Service\ExtendErrorPayloadTests.cs" />
     <Compile Include="Integration\BlockSignerTests.cs" />
     <Compile Include="Service\ExtendPduTests.cs" />
