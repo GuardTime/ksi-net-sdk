@@ -108,6 +108,25 @@ namespace Guardtime.KSI.Test.Integration
             }
         }
 
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void BlockSignerSignOneHashTest(Ksi ksi)
+        {
+            BlockSigner blockSigner = new BlockSigner(HttpKsiService);
+            DataHash hash = new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2"));
+
+            blockSigner.Add(hash);
+
+            IEnumerator<IKsiSignature> signatures = blockSigner.Sign().GetEnumerator();
+            Assert.True(signatures.MoveNext(), "Invalid signature count: 0");
+
+            IKsiSignature signature = signatures.Current;
+
+            Assert.False(signatures.MoveNext(), "Invalid signature count: > 1");
+
+            VerifyChainAlgorithm(signature, HashAlgorithm.Default);
+            Verify(ksi, signature, hash);
+        }
+
         /// <summary>
         /// Testing getting uni-signatures of given hashes wiht given level
         /// </summary>
