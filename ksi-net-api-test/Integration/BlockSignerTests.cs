@@ -141,7 +141,7 @@ namespace Guardtime.KSI.Test.Integration
             Assert.False(signatures.MoveNext(), "Invalid signature count: > 1");
             Assert.Less(0, signature.GetAggregationHashChains()[0].GetChainLinks().Count, "Invalid links count.");
             Assert.AreEqual(Properties.Settings.Default.HttpSigningServiceUser, signature.GetAggregationHashChains()[0].GetChainLinks()[0].Metadata.ClientId, "Unexpected metadata.");
-            Assert.AreEqual(2, signature.GetAggregationHashChains()[0].GetChainLinks()[0].LevelCorrection, "Level correction is invalid.");
+            Assert.LessOrEqual(2, signature.GetAggregationHashChains()[0].GetChainLinks()[0].LevelCorrection, "Level correction is invalid.");
 
             VerifyChainAlgorithm(signature, HashAlgorithm.Default);
             Verify(ksi, signature, hash);
