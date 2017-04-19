@@ -55,8 +55,6 @@ namespace Guardtime.KSI.Crypto.Microsoft.Hashing
             {
                 throw new HashingException("Hash algorithm(" + algorithm.Name + ") is not supported.");
             }
-
-            _hasher.Initialize();
         }
 
         private static System.Security.Cryptography.HashAlgorithm GetHasher(HashAlgorithm algorithm)
@@ -184,8 +182,7 @@ namespace Guardtime.KSI.Crypto.Microsoft.Hashing
         public IDataHasher Reset()
         {
             _outputHash = null;
-            _hasher.Clear();
-            _hasher = GetHasher(_algorithm);
+            _hasher.Initialize();
 
             return this;
         }
