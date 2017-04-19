@@ -106,7 +106,7 @@ simplified wrapper.
                 "http://extending.service.url", "http://verify.guardtime.com/ksi-publications.bin");
 
             // Creates service settings which are used to access service.
-            ServiceCredentials serviceCredentials = new ServiceCredentials("anon", "anon");
+            ServiceCredentials serviceCredentials = new ServiceCredentials("user", "pass");
 
             // Windows uses always its own trust store by default, so adding it is not required.
             IPkiTrustProvider trustProvider = new PkiTrustStoreProvider(null,
@@ -222,7 +222,7 @@ Following code represents the verification against publications file and will pr
                 "http://extending.service.url", "http://verify.guardtime.com/ksi-publications.bin");
 
             // Creates service settings which are used to access service.
-            ServiceCredentials serviceCredentials = new ServiceCredentials("anon", "anon");
+            ServiceCredentials serviceCredentials = new ServiceCredentials("user", "pass");
 
             // Windows uses always its own trust store by default, so adding it is not required.
             IPkiTrustProvider trustProvider = new PkiTrustStoreProvider(null,
@@ -292,7 +292,7 @@ it is extended to closest publication.
                 "http://extending.service.url", "http://verify.guardtime.com/ksi-publications.bin");
 
             // Creates service settings which are used to access service.
-            ServiceCredentials serviceCredentials = new ServiceCredentials("anon", "anon");
+            ServiceCredentials serviceCredentials = new ServiceCredentials("user", "pass");
 
             // Windows uses always its own trust store by default, so adding it is not required.
             IPkiTrustProvider trustProvider = new PkiTrustStoreProvider(null,

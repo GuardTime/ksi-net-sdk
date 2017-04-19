@@ -31,8 +31,8 @@ KsiProvider.SetCryptoProvider(new MicrosoftCryptoProvider());
 var httpKsiServiceProtocol = new HttpKsiServiceProtocol("http://signingservice_url", "http://extendingservice_url", "http://publicationsfile_url");
 // Create new KSI service
 var ksiService = new KsiService(
-    httpKsiServiceProtocol, new ServiceCredentials("anon", "anon"),
-    httpKsiServiceProtocol, new ServiceCredentials("anon", "anon"),
+    httpKsiServiceProtocol, new ServiceCredentials("sign-user", "pass"),
+    httpKsiServiceProtocol, new ServiceCredentials("extend-user", "pass"),
     httpKsiServiceProtocol,
     new PublicationsFileFactory(
         new PkiTrustStoreProvider(
@@ -51,8 +51,8 @@ KsiProvider.SetCryptoProvider(new MicrosoftCryptoProvider());
 var httpKsiServiceProtocol = new HttpKsiServiceProtocol("http://signingservice_url", "http://extendingservice_url", "http://publicationsfile_url");
 // Create new KSI service
 var ksiService = new KsiService(
-    httpKsiServiceProtocol, new ServiceCredentials("anon", "anon"),
-    httpKsiServiceProtocol, new ServiceCredentials("anon", "anon"),
+    httpKsiServiceProtocol, new ServiceCredentials("sign-user", "pass"),
+    httpKsiServiceProtocol, new ServiceCredentials("extend-user", "pass"),
     httpKsiServiceProtocol,
     new PublicationsFileFactory(
         new PkiTrustStoreProvider(
