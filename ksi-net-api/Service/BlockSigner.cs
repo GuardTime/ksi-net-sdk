@@ -150,18 +150,13 @@ namespace Guardtime.KSI.Service
             }
 
             SignRoot();
-            AggregationHashChain existingAggregationHashChain = _rootSignature.GetAggregationHashChains()[0];
-            return CreateUniSignatures(existingAggregationHashChain);
-        }
 
-        /// <summary>
-        /// Get Merkle tree string representation
-        /// </summary>
-        /// <returns></returns>
-        public TreeNode GetRootNode()
-        {
-            BuildTree();
-            return _root;
+            if (_leafNodes.Count == 1 && _leafNodes[0].Parent == null)
+            {
+                return new List<IKsiSignature>() { _rootSignature };
+            }
+
+            return CreateUniSignatures();
         }
 
         private TreeNode GetBlindingMaskNode(TreeNode node)
@@ -213,11 +208,12 @@ namespace Guardtime.KSI.Service
         /// <summary>
         /// Create uni-signatures based on the root signature.
         /// </summary>
-        /// <param name="existingAggregationHashChain"></param>
         /// <returns></returns>
-        private IEnumerable<IKsiSignature> CreateUniSignatures(AggregationHashChain existingAggregationHashChain)
+        private IEnumerable<IKsiSignature> CreateUniSignatures()
         {
             Logger.Debug("Start creating uni-signatures.");
+
+            AggregationHashChain existingAggregationHashChain = _rootSignature.GetAggregationHashChains()[0];
 
             byte[] rootSignatureData = _rootSignature.EncodeValue();
             ulong[] chainIndex = PrepareChainIndex(existingAggregationHashChain);
