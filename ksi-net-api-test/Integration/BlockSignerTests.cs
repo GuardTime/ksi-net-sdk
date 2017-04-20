@@ -118,10 +118,69 @@ namespace Guardtime.KSI.Test.Integration
 
             IEnumerator<IKsiSignature> signatures = blockSigner.Sign().GetEnumerator();
             Assert.True(signatures.MoveNext(), "Invalid signature count: 0");
-
             IKsiSignature signature = signatures.Current;
-
             Assert.False(signatures.MoveNext(), "Invalid signature count: > 1");
+            Assert.Less(0, signature.GetAggregationHashChains()[0].GetChainLinks().Count, "Invalid links count.");
+            Assert.AreEqual(Properties.Settings.Default.HttpSigningServiceUser, signature.GetAggregationHashChains()[0].GetChainLinks()[0].Metadata.ClientId, "Unexpected metadata.");
+
+            VerifyChainAlgorithm(signature, HashAlgorithm.Default);
+            Verify(ksi, signature, hash);
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void BlockSignerSignOneHashWithLevelTest(Ksi ksi)
+        {
+            BlockSigner blockSigner = new BlockSigner(HttpKsiService);
+            DataHash hash = new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2"));
+
+            blockSigner.Add(hash, null, 2);
+
+            IEnumerator<IKsiSignature> signatures = blockSigner.Sign().GetEnumerator();
+            Assert.True(signatures.MoveNext(), "Invalid signature count: 0");
+            IKsiSignature signature = signatures.Current;
+            Assert.False(signatures.MoveNext(), "Invalid signature count: > 1");
+            Assert.Less(0, signature.GetAggregationHashChains()[0].GetChainLinks().Count, "Invalid links count.");
+            Assert.AreEqual(Properties.Settings.Default.HttpSigningServiceUser, signature.GetAggregationHashChains()[0].GetChainLinks()[0].Metadata.ClientId, "Unexpected metadata.");
+            Assert.LessOrEqual(2, signature.GetAggregationHashChains()[0].GetChainLinks()[0].LevelCorrection, "Level correction is invalid.");
+
+            VerifyChainAlgorithm(signature, HashAlgorithm.Default);
+            Verify(ksi, signature, hash);
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void BlockSignerSignOneWithMetadaHashTest(Ksi ksi)
+        {
+            BlockSigner blockSigner = new BlockSigner(HttpKsiService);
+            DataHash hash = new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2"));
+            IdentityMetadata metadata = new IdentityMetadata("test client id");
+
+            blockSigner.Add(hash, metadata);
+
+            IEnumerator<IKsiSignature> signatures = blockSigner.Sign().GetEnumerator();
+            Assert.True(signatures.MoveNext(), "Invalid signature count: 0");
+            IKsiSignature signature = signatures.Current;
+            Assert.False(signatures.MoveNext(), "Invalid signature count: > 1");
+            Assert.AreEqual(1, signature.GetAggregationHashChains()[0].GetChainLinks().Count, "Invalid links count.");
+            Assert.AreEqual(metadata.ClientId, signature.GetAggregationHashChains()[0].GetChainLinks()[0].Metadata.ClientId, "Invalid metadata.");
+
+            VerifyChainAlgorithm(signature, HashAlgorithm.Default);
+            Verify(ksi, signature, hash);
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void BlockSignerSignOneHashWithBlindingMaskTest(Ksi ksi)
+        {
+            BlockSigner blockSigner = new BlockSigner(HttpKsiService, true, new byte[] { 1, 2, 3 });
+            DataHash hash = new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2"));
+
+            blockSigner.Add(hash);
+
+            IEnumerator<IKsiSignature> signatures = blockSigner.Sign().GetEnumerator();
+            Assert.True(signatures.MoveNext(), "Invalid signature count: 0");
+            IKsiSignature signature = signatures.Current;
+            Assert.False(signatures.MoveNext(), "Invalid signature count: > 1");
+            Assert.Less(0, signature.GetAggregationHashChains()[0].GetChainLinks().Count, "Invalid links count.");
+            Assert.IsNull(signature.GetAggregationHashChains()[0].GetChainLinks()[0].Metadata, "Unexpected right sibling type.");
 
             VerifyChainAlgorithm(signature, HashAlgorithm.Default);
             Verify(ksi, signature, hash);

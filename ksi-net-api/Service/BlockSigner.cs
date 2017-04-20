@@ -33,21 +33,16 @@ namespace Guardtime.KSI.Service
     public class BlockSigner
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
         private readonly IKsiService _ksiService;
-
-        private TreeNode _root;
         private bool _canAddItems = true;
-        private bool _isTreeBuilt;
         private readonly bool _useBlindingMasks;
         private readonly byte[] _randomSeed;
+        private byte[] _previousHash;
         private readonly HashAlgorithm _hashAlgorithm;
+        private IDataHasher _dataHasher;
         private readonly IKsiSignatureFactory _signatureFactory;
         private readonly List<TreeNode> _leafNodes = new List<TreeNode>();
-        private byte[] _previousHash;
-        private IDataHasher _dataHasher;
         readonly TreeBuilder _treeBuilder;
-        private IKsiSignature _rootSignature;
 
         /// <summary>
         /// Create new block signer instance
@@ -144,19 +139,24 @@ namespace Guardtime.KSI.Service
         /// </summary>
         public IEnumerable<IKsiSignature> Sign()
         {
+            _canAddItems = false;
+
             if (_leafNodes.Count == 0)
             {
                 return new List<IKsiSignature>();
             }
 
-            SignRoot();
+            TreeNode root = _treeBuilder.GetTreeRoot();
 
-            if (_leafNodes.Count == 1 && _leafNodes[0].Parent == null)
+            if (root.Left == null && root.Right == null)
             {
-                return new List<IKsiSignature>() { _rootSignature };
+                Logger.Debug("Only one node in the tree. Signing the hash. Level: {0}; Hash: {1}", root.Level, root.Hash);
+                return new List<IKsiSignature>() { _ksiService.Sign(root.Hash, root.Level) };
             }
 
-            return CreateUniSignatures();
+            Logger.Debug("Signing root node hash. Level: {0}; Hash: {1}", root.Level, root.Hash);
+            RequestResponsePayload signResponsePayload = _ksiService.GetSignResponsePayload(_ksiService.BeginSign(root.Hash, root.Level, null, null));
+            return CreateUniSignatures(new KsiSignature(false, false, signResponsePayload.GetSignatureChildTags()));
         }
 
         private TreeNode GetBlindingMaskNode(TreeNode node)
@@ -172,50 +172,15 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        /// Sign tree root hash.
-        /// </summary>
-        private void SignRoot()
-        {
-            _canAddItems = false;
-            Logger.Debug("Creating tree.");
-            BuildTree();
-            uint signLevel = _root.Level;
-
-            Logger.Debug("Signing root node hash. Level: {0}; Hash: {1}", signLevel, _root.Hash);
-
-            RequestResponsePayload signResponsePayload = _ksiService.GetSignResponsePayload(_ksiService.BeginSign(_root.Hash, signLevel, null, null));
-
-            _rootSignature = new KsiSignature(false, false, signResponsePayload.GetSignatureChildTags());
-        }
-
-        /// <summary>
-        /// Build Merkle tree.
-        /// </summary>
-        private void BuildTree()
-        {
-            if (_leafNodes.Count == 0)
-            {
-                return;
-            }
-
-            if (!_isTreeBuilt)
-            {
-                _root = _treeBuilder.GetTreeRoot();
-                _isTreeBuilt = true;
-            }
-        }
-
-        /// <summary>
         /// Create uni-signatures based on the root signature.
         /// </summary>
         /// <returns></returns>
-        private IEnumerable<IKsiSignature> CreateUniSignatures()
+        private IEnumerable<IKsiSignature> CreateUniSignatures(IKsiSignature rootSignature)
         {
             Logger.Debug("Start creating uni-signatures.");
 
-            AggregationHashChain existingAggregationHashChain = _rootSignature.GetAggregationHashChains()[0];
-
-            byte[] rootSignatureData = _rootSignature.EncodeValue();
+            AggregationHashChain existingAggregationHashChain = rootSignature.GetAggregationHashChains()[0];
+            byte[] rootSignatureData = rootSignature.EncodeValue();
             ulong[] chainIndex = PrepareChainIndex(existingAggregationHashChain);
 
             foreach (TreeNode node in _leafNodes)
