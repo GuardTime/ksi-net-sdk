@@ -193,12 +193,13 @@
     <Compile Include="Service\TestKsiServiceProtocol.cs" />
     <Compile Include="Signature\KsiSignatureUsingReflectionTests.cs" />
     <Compile Include="Signature\Verification\EmptyVerificationPolicy.cs" />
+    <Compile Include="Signature\Verification\Rule\DocumentHashLevelVerificationRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\DocumentHashVerificationRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainIndexSuccessorRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\Rfc3161RecordAggregationTimeRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\Rfc3161RecordChainIndexRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainMetadataRuleTests.cs" />
-    <Compile Include="Signature\Verification\Rule\AggregationHashChainINdexRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\AggregationHashChainIndexRuleTests.cs" />
     <Compile Include="TestSetup.cs" />
     <Compile Include="Signature\CalendarAuthenticationRecordTests.cs" />
     <Compile Include="Signature\AggregationAuthenticationRecordTests.cs" />
@@ -624,6 +625,9 @@
     <None Include="resources\signature\ksi-signature\ksi-signature-invalid-with-invalid-publication-record.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="resources\signature\ksi-signature\ksi-signature-level-correction-3.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="resources\signature\ksi-signature\ksi-signature-ok-extended.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -676,9 +680,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\ksi-signature\legacy-ksi-signature-ok.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\ksi-signature\ksi-signature-level-3-ok.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\ksi-signature\ksi-signature-invalid-rfc3161-aggregation-time-mismatch.tlv">

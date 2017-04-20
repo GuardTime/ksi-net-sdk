@@ -28,6 +28,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
     public class TestVerificationContext : IVerificationContext
     {
         public DataHash DocumentHash { get; set; }
+        public uint DocumentHashLevel { get; set; }
         public IKsiSignature Signature { get; set; }
         public PublicationData UserPublication { get; set; }
         public IKsiService KsiService { get; set; }

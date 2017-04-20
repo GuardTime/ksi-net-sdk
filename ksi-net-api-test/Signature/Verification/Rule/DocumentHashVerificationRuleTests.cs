@@ -28,7 +28,6 @@ using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
-    // Better name for ruletests
     [TestFixture]
     public class DocumentHashVerificationRuleTests
     {

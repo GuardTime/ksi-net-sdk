@@ -60,6 +60,11 @@ namespace Guardtime.KSI.Signature.Verification
         public DataHash DocumentHash { get; set; }
 
         /// <summary>
+        ///     Get or set document hash node level value in the aggregation tree
+        /// </summary>
+        public uint DocumentHashLevel { get; set; }
+
+        /// <summary>
         ///     Get KSI signature.
         /// </summary>
         public IKsiSignature Signature { get; set; }

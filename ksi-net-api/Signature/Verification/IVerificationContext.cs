@@ -29,12 +29,17 @@ namespace Guardtime.KSI.Signature.Verification
     public interface IVerificationContext
     {
         /// <summary>
-        ///     Get document hash.
+        ///     Get or set document hash.
         /// </summary>
         DataHash DocumentHash { get; set; }
 
         /// <summary>
-        ///     Get signature.
+        ///     Get document hash node level value in the aggregation tree
+        /// </summary>
+        uint DocumentHashLevel { get; }
+
+        /// <summary>
+        ///     Get or set signature.
         /// </summary>
         IKsiSignature Signature { get; set; }
 

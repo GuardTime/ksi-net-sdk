@@ -1205,11 +1205,11 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-level-3-ok.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-level-correction-3.tlv.
         /// </summary>
-        internal static string KsiSignature_Ok_Level3 {
+        internal static string KsiSignature_Ok_LevelCorrection3 {
             get {
-                return ResourceManager.GetString("KsiSignature_Ok_Level3", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Ok_LevelCorrection3", resourceCulture);
             }
         }
         
