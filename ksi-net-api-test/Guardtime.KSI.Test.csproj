@@ -157,6 +157,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -193,6 +194,8 @@
     <Compile Include="Service\TestKsiServiceProtocol.cs" />
     <Compile Include="Signature\KsiSignatureUsingReflectionTests.cs" />
     <Compile Include="Signature\Verification\EmptyVerificationPolicy.cs" />
+    <Compile Include="Signature\Verification\Policy\InternalVerificationPolicyTests.cs" />
+    <Compile Include="Signature\Verification\Rule\OkResultRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\DocumentHashLevelVerificationRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\DocumentHashVerificationRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainIndexSuccessorRuleTests.cs" />
@@ -264,6 +267,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
@@ -604,6 +608,9 @@
     <None Include="resources\signature\ksi-signature\ksi-signature-invalid-calendar-hash-chain-publication-time.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-calendar-hash-chain-registration-time.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="resources\signature\ksi-signature\ksi-signature-invalid-contain-both-publication-record-and-calendar-authentication-record.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -622,7 +629,10 @@
     <None Include="resources\signature\ksi-signature\ksi-signature-invalid-missing-aggregation-hash-chains.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-with-invalid-publication-record.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-with-invalid-publication-record-hash.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-with-invalid-publication-record-time.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\ksi-signature\ksi-signature-level-correction-3.tlv">

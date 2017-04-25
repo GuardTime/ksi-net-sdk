@@ -140,7 +140,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
 
             // Check invalid signature with invalid publications record
             using (FileStream stream =
-                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Invalid_With_Invalid_Publication_Record), FileMode.Open))
+                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Invalid_With_Invalid_Publication_Record_Time), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {

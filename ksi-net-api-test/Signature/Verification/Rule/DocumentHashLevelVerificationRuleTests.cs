@@ -22,7 +22,6 @@ using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
-using Guardtime.KSI.Signature.Verification.Policy;
 using Guardtime.KSI.Signature.Verification.Rule;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
@@ -59,7 +58,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         }
 
         [Test]
-        public void TestDocumentHashLevelMissing()
+        public void TestDocumentHashWithNoLevel()
         {
             DocumentHashLevelVerificationRule rule = new DocumentHashLevelVerificationRule();
 
@@ -77,7 +76,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         }
 
         [Test]
-        public void TestDocumentHashLevel0()
+        public void TestDocumentHashLevelZero()
         {
             DocumentHashLevelVerificationRule rule = new DocumentHashLevelVerificationRule();
 
@@ -110,26 +109,6 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                 };
 
                 VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-                Assert.AreEqual(VerificationError.Gen03, verificationResult.VerificationError);
-            }
-        }
-
-        [Test]
-        public void TestDocumentHashLevelInvalidUsingInternalVerification()
-        {
-            InternalVerificationPolicy policy = new InternalVerificationPolicy();
-
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream),
-                    DocumentHashLevel = 1,
-                    DocumentHash = new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D"))
-                };
-
-                VerificationResult verificationResult = policy.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
                 Assert.AreEqual(VerificationError.Gen03, verificationResult.VerificationError);
             }
@@ -175,7 +154,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         }
 
         [Test]
-        public void TestRfc3161DocumentHashLevel0()
+        public void TestRfc3161DocumentHashLevelZero()
         {
             DocumentHashLevelVerificationRule rule = new DocumentHashLevelVerificationRule();
 
@@ -195,7 +174,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         }
 
         [Test]
-        public void TestRfc3161DocumentHashLevel1()
+        public void TestRfc3161DocumentHashLevelNotZero()
         {
             DocumentHashLevelVerificationRule rule = new DocumentHashLevelVerificationRule();
 

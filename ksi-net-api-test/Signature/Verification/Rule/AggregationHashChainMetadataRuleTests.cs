@@ -321,24 +321,5 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             VerificationResult verificationResult = rule.Verify(context);
             Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
         }
-
-        /// <summary>
-        /// Test internal policy with invalid metadata
-        /// </summary>
-        [Test]
-        public void TestAggregationHashChainMetadataInternalPolicyFail()
-        {
-            InternalVerificationPolicy policy = new InternalVerificationPolicy();
-
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature =
-                    _ksiSignatureFactory.Create(new FileStream(Path.Combine(TestSetup.LocalPath,
-                        Properties.Resources.AggregationHashChainMetadataPaddingNotFirstFail), FileMode.Open))
-            };
-
-            VerificationResult verificationResult = policy.Verify(context);
-            Assert.AreEqual(VerificationError.Int11.Code, verificationResult.VerificationError?.Code);
-        }
     }
 }
