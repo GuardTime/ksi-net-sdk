@@ -1,6 +1,6 @@
 Version 3.8
 
-2017-01-04 3.8.308
+2017-04-26 3.8.308
 
 * IMPROVEMENT: Improved block signer interface (KSINETAPI-109)
 * IMPROVEMENT: Improved signature parsing and verification (KSINETAPI-108)
