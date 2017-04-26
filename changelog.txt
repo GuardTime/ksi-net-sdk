@@ -2,8 +2,12 @@ Version 3.8
 
 2017-01-04 3.8.X
 
+* IMPROVEMENT: Improved block signer interface (KSINETAPI-109)
+* IMPROVEMENT: Improved signature parsing and verification (KSINETAPI-108)
+* IMPROVEMENT: Checking equality of outgoing and incoming messages HMAC (KSINETAPI-107)
 * BUGFIX: Added leading zeros banning when decoding integer fields (KSINETAPI-106)
 * BUGFIX: Fixed certificate subject RDN selector (KSINETAPI-105)
+* IMPROVEMENT: Set level correction when input hash level is greater than 0 (KSINETAPI-104)
 * IMPROVEMENT: Updated signature verification process (KSINETAPI-103)
 * IMPROVEMENT: Added GetIdentity method to KsiSignature to get identity information as an array (KSINETAPI-101)
 
