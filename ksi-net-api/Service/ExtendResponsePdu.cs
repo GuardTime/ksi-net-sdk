@@ -60,41 +60,5 @@ namespace Guardtime.KSI.Service
                     return base.ParseChild(childTag);
             }
         }
-
-        /// <summary>
-        /// Get extend response payload
-        /// </summary>
-        /// <param name="requestId">Request ID</param>
-        /// <returns></returns>
-        public ExtendResponsePayload GetExtendResponsePayload(ulong requestId)
-        {
-            foreach (ExtendResponsePayload payload in GetPayloads<ExtendResponsePayload>())
-            {
-                if (payload.RequestId == requestId)
-                {
-                    return payload;
-                }
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// Get extend error payload
-        /// </summary>
-        /// <returns></returns>
-        public ExtendErrorPayload GetExtendErrorPayload()
-        {
-            return ErrorPayload as ExtendErrorPayload;
-        }
-
-        /// <summary>
-        /// Get aggregation configuration response payload
-        /// </summary>
-        /// <returns></returns>
-        public ExtenderConfigResponsePayload GetExtenderConfigResponsePayload()
-        {
-            return GetPayload<ExtenderConfigResponsePayload>();
-        }
     }
 }

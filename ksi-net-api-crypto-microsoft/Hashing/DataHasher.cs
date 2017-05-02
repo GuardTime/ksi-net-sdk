@@ -33,7 +33,7 @@ namespace Guardtime.KSI.Crypto.Microsoft.Hashing
         private const int DefaultStreamBufferSize = 8192;
 
         private readonly HashAlgorithm _algorithm;
-        private System.Security.Cryptography.HashAlgorithm _hasher;
+        private readonly System.Security.Cryptography.HashAlgorithm _hasher;
         private DataHash _outputHash;
 
         /// <summary>

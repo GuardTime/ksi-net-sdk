@@ -18,11 +18,8 @@
  */
 
 using System;
-using System.IO;
 using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Parser;
 using Guardtime.KSI.Signature;
-using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Service
 {
@@ -31,6 +28,9 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public partial class KsiService
     {
+        private KsiServiceResponseParser _extendRequestResponseParser;
+        private KsiServiceResponseParser _extenderConfigRequestResponseParser;
+
         /// <summary>
         ///     Extend to latest publication (sync).
         /// </summary>
@@ -65,6 +65,7 @@ namespace Guardtime.KSI.Service
             {
                 return BeginLegacyExtend(aggregationTime, null, null);
             }
+
             return BeginExtend(new ExtendRequestPayload(GenerateRequestId(), aggregationTime), callback, asyncState);
         }
 
@@ -180,93 +181,47 @@ namespace Guardtime.KSI.Service
             }
 
             byte[] data = _extendingServiceProtocol.EndExtend(serviceAsyncResult.ServiceProtocolAsyncResult);
+            PduPayload payload = ExtendRequestResponseParser.Parse(data, serviceAsyncResult.RequestId);
 
-            return ParseExtendRequestResponse(data, serviceAsyncResult);
+            if (IsLegacyPduVersion)
+            {
+                LegacyExtendResponsePayload legacyResponsePayload = payload as LegacyExtendResponsePayload;
+
+                if (legacyResponsePayload == null)
+                {
+                    Logger.Warn("Extend request failed. Invalid response payload.{0}Payload:{0}{1}", Environment.NewLine, payload);
+                    throw new KsiServiceException("Invalid extend response payload. Type: " + payload.Type);
+                }
+
+                return legacyResponsePayload.CalendarHashChain;
+            }
+            else
+
+            {
+                ExtendResponsePayload responsePayload = payload as ExtendResponsePayload;
+
+                if (responsePayload == null)
+                {
+                    Logger.Warn("Extend request failed. Invalid response payload.{0}Payload:{0}{1}", Environment.NewLine, payload);
+                    throw new KsiServiceException("Invalid extend response payload. Type: " + payload.Type);
+                }
+
+                return responsePayload.CalendarHashChain;
+            }
         }
 
-        private CalendarHashChain ParseExtendRequestResponse(byte[] data, ExtendKsiServiceAsyncResult serviceAsyncResult)
+        private KsiServiceResponseParser ExtendRequestResponseParser
         {
-            RawTag rawTag = null;
-            ExtendResponsePdu pdu = null;
-            LegacyExtendPdu legacyPdu = null;
-
-            try
+            get
             {
-                if (data == null)
+                if (_extendRequestResponseParser == null)
                 {
-                    throw new KsiServiceException("Invalid extend response PDU: null.");
+                    _extendRequestResponseParser = new KsiServiceResponseParser(PduVersion, Constants.ExtendResponsePdu.TagType, Constants.LegacyExtendPdu.TagType,
+                        Constants.ExtendResponsePayload.TagType, Constants.ExtendResponsePayload.LegacyTagType, new uint[] { Constants.ExtenderConfigResponsePayload.TagType },
+                        _extendingMacAlgorithm, _extendingServiceCredentials.LoginKey);
                 }
 
-                using (TlvReader reader = new TlvReader(new MemoryStream(data)))
-                {
-                    rawTag = new RawTag(reader.ReadTag());
-                }
-
-                if (rawTag.Type == Constants.ExtendResponsePdu.TagType)
-                {
-                    if (IsLegacyPduVersion)
-                    {
-                        throw new KsiServiceInvalidRequestFormatException(
-                            "Received PDU v2 response to PDU v1 request. Configure the SDK to use PDU v2 format for the given Extender.");
-                    }
-
-                    pdu = new ExtendResponsePdu(rawTag);
-                }
-                else if (rawTag.Type == Constants.LegacyExtendPdu.TagType)
-                {
-                    if (!IsLegacyPduVersion)
-                    {
-                        throw new KsiServiceInvalidRequestFormatException(
-                            "Received PDU v1 response to PDU v2 request. Configure the SDK to use PDU v1 format for the given Extender.");
-                    }
-
-                    legacyPdu = new LegacyExtendPdu(rawTag);
-                }
-                else
-                {
-                    throw new KsiServiceException("Unknown response PDU tag type: " + rawTag.Type.ToString("X"));
-                }
-
-                CalendarHashChain calendarHashChain;
-
-                if (legacyPdu != null)
-                {
-                    LegacyExtendResponsePayload legacyPayload = legacyPdu.Payload as LegacyExtendResponsePayload;
-                    LegacyExtendErrorPayload errorPayload = legacyPdu.ErrorPayload as LegacyExtendErrorPayload;
-
-                    ValidateLegacyResponse(legacyPdu, legacyPayload, errorPayload, serviceAsyncResult.RequestId, _extendingMacAlgorithm, _extendingServiceCredentials);
-
-                    calendarHashChain = legacyPayload.CalendarHashChain;
-                }
-                else
-                {
-                    ExtendResponsePayload payload = pdu.GetExtendResponsePayload(serviceAsyncResult.RequestId);
-                    ExtendErrorPayload errorPayload = pdu.GetExtendErrorPayload();
-
-                    ValidateResponse(data, pdu, payload, errorPayload, _extendingMacAlgorithm, _extendingServiceCredentials);
-
-                    calendarHashChain = payload.CalendarHashChain;
-                }
-
-                if (calendarHashChain == null)
-                {
-                    throw new KsiServiceException("No calendar hash chain in payload.");
-                }
-
-                Logger.Debug("End extend successful (request id: {0}) {1}{2}", serviceAsyncResult.RequestId, Environment.NewLine, legacyPdu);
-
-                return calendarHashChain;
-            }
-            catch (TlvException e)
-            {
-                KsiException ksiException = new KsiServiceException("Could not parse extend response message: " + Base16.Encode(data), e);
-                Logger.Warn("End extend request failed (request id: {0}): {1}", serviceAsyncResult.RequestId, ksiException);
-                throw ksiException;
-            }
-            catch (KsiException e)
-            {
-                Logger.Warn("End extend request failed (request id: {0}): {1}{2}{3}", serviceAsyncResult.RequestId, e, Environment.NewLine, legacyPdu ?? pdu ?? (ITlvTag)rawTag);
-                throw;
+                return _extendRequestResponseParser;
             }
         }
 
@@ -312,7 +267,7 @@ namespace Guardtime.KSI.Service
 
             IAsyncResult serviceProtocolAsyncResult = _extendingServiceProtocol.BeginExtend(pdu.Encode(), requestId, callback, asyncState);
 
-            return new ExtenderConfigKsiServiceAsyncResult(requestId, serviceProtocolAsyncResult, asyncState);
+            return new ExtenderConfigKsiServiceAsyncResult(serviceProtocolAsyncResult, asyncState);
         }
 
         /// <summary>
@@ -344,60 +299,38 @@ namespace Guardtime.KSI.Service
             }
 
             byte[] data = _extendingServiceProtocol.EndExtend(serviceAsyncResult.ServiceProtocolAsyncResult);
+            PduPayload payload = ExtenderConfigRequestResponseParser.Parse(data);
+            ExtenderConfigResponsePayload configResponsePayload = payload as ExtenderConfigResponsePayload;
 
-            ExtendResponsePdu pdu = null;
-
-            try
+            if (configResponsePayload == null)
             {
-                if (data == null)
-                {
-                    throw new KsiException("Invalid extender config response payload: null.");
-                }
-
-                RawTag rawTag;
-
-                using (TlvReader reader = new TlvReader(new MemoryStream(data)))
-                {
-                    rawTag = new RawTag(reader.ReadTag());
-                }
-
-                if (rawTag.Type == Constants.LegacyExtendPdu.TagType)
-                {
-                    throw new KsiServiceInvalidRequestFormatException("Received PDU v1 response to PDU v2 request.");
-                }
-
-                pdu = new ExtendResponsePdu(rawTag);
-
-                ExtenderConfigResponsePayload payload = pdu.GetExtenderConfigResponsePayload();
-                ExtendErrorPayload errorPayload = pdu.GetExtendErrorPayload();
-
-                ValidateResponse(data, pdu, payload, errorPayload, _extendingMacAlgorithm, _extendingServiceCredentials);
-
-                return new ExtenderConfig(payload);
+                Logger.Warn("Extender config request failed. Invalid response payload.{0}Payload:{0}{1}", Environment.NewLine, payload);
+                throw new KsiServiceException("Invalid config response payload. Type: " + payload.Type);
             }
-            catch (TlvException e)
-            {
-                KsiException ksiException = new KsiException("Could not parse extender config response message: " + Base16.Encode(data), e);
-                Logger.Warn("End extender config request failed (request id: {0}): {1}", serviceAsyncResult.RequestId, ksiException);
-                throw ksiException;
-            }
-            catch (KsiException e)
-            {
-                Logger.Warn("End extender config request failed (request id: {0}): {1}{2}{3}", serviceAsyncResult.RequestId, e, Environment.NewLine, pdu);
 
-                throw;
+            return new ExtenderConfig(configResponsePayload);
+        }
+
+        private KsiServiceResponseParser ExtenderConfigRequestResponseParser
+        {
+            get
+            {
+                if (_extenderConfigRequestResponseParser == null)
+                {
+                    _extenderConfigRequestResponseParser = new KsiServiceResponseParser(Constants.ExtendResponsePdu.TagType, Constants.LegacyExtendPdu.TagType,
+                        Constants.ExtenderConfigResponsePayload.TagType, null, _extendingMacAlgorithm, _extendingServiceCredentials.LoginKey);
+                }
+
+                return _extenderConfigRequestResponseParser;
             }
         }
 
         private class ExtenderConfigKsiServiceAsyncResult : KsiServiceAsyncResult
         {
-            public ExtenderConfigKsiServiceAsyncResult(ulong requestId, IAsyncResult serviceProtocolAsyncResult, object asyncState)
+            public ExtenderConfigKsiServiceAsyncResult(IAsyncResult serviceProtocolAsyncResult, object asyncState)
                 : base(serviceProtocolAsyncResult, asyncState)
             {
-                RequestId = requestId;
             }
-
-            public ulong RequestId { get; }
         }
 
         /// <summary>

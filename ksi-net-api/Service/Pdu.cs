@@ -40,12 +40,12 @@ namespace Guardtime.KSI.Service
         /// <summary>
         /// List on payloads
         /// </summary>
-        protected List<PduPayload> Payloads { get; } = new List<PduPayload>();
+        public List<PduPayload> Payloads { get; } = new List<PduPayload>();
 
         /// <summary>
         /// Error payload
         /// </summary>
-        protected PduPayload ErrorPayload { get; set; }
+        public ErrorPayload ErrorPayload { get; set; }
 
         /// <summary>
         ///     Get and set PDU header
@@ -73,16 +73,14 @@ namespace Guardtime.KSI.Service
                 }
             }
 
-            if (childTag.Type == Constants.PduHeader.TagType)
+            switch (childTag.Type)
             {
-                _headerIndex = Count;
-                return Header = childTag as PduHeader ?? new PduHeader(childTag);
-            }
-
-            if (childTag.Type == Constants.Pdu.MacTagType)
-            {
-                _macIndex = Count;
-                return Mac = GetImprintTag(childTag);
+                case Constants.PduHeader.TagType:
+                    _headerIndex = Count;
+                    return Header = childTag as PduHeader ?? new PduHeader(childTag);
+                case Constants.Pdu.MacTagType:
+                    _macIndex = Count;
+                    return Mac = GetImprintTag(childTag);
             }
 
             return base.ParseChild(childTag);
@@ -142,42 +140,6 @@ namespace Guardtime.KSI.Service
         /// MAC
         /// </summary>
         public ImprintTag Mac { get; private set; }
-
-        /// <summary>
-        /// Get payload of a given type
-        /// </summary>
-        /// <typeparam name="T">PDU payload type</typeparam>
-        /// <returns></returns>
-        protected T GetPayload<T>() where T : PduPayload
-        {
-            foreach (PduPayload payload in Payloads)
-            {
-                T p = payload as T;
-                if (p != null)
-                {
-                    return p;
-                }
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// Get payloads of a given type
-        /// </summary>
-        /// <typeparam name="T">PDU payload type</typeparam>
-        /// <returns></returns>
-        protected IEnumerable<T> GetPayloads<T>() where T : PduPayload
-        {
-            foreach (PduPayload payload in Payloads)
-            {
-                T p = payload as T;
-                if (p != null)
-                {
-                    yield return p;
-                }
-            }
-        }
 
         /// <summary>
         /// Set MAC tag value
@@ -265,11 +227,6 @@ namespace Guardtime.KSI.Service
         /// <returns>true if MAC is valid</returns>
         public static bool ValidateMac(byte[] pduBytes, ImprintTag mac, byte[] key)
         {
-            if (pduBytes == null || mac == null)
-            {
-                return false;
-            }
-
             if (pduBytes == null)
             {
                 throw new ArgumentNullException(nameof(pduBytes));

@@ -141,7 +141,7 @@ namespace Guardtime.KSI.Signature
             return CreateFromResponsePayload(payload, payload.RequestId, hash, level);
         }
 
-        private IKsiSignature CreateFromResponsePayload(RequestResponsePayload payload, ulong requestId, DataHash hash, uint? level)
+        private IKsiSignature CreateFromResponsePayload(SignRequestResponsePayload payload, ulong requestId, DataHash hash, uint? level)
         {
             try
             {

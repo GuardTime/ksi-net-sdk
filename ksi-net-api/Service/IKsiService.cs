@@ -61,7 +61,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="asyncResult">async result</param>
         /// <returns>Request response payload</returns>
-        RequestResponsePayload GetSignResponsePayload(IAsyncResult asyncResult);
+        SignRequestResponsePayload GetSignResponsePayload(IAsyncResult asyncResult);
 
         /// <summary>
         ///     End create signature (async)

@@ -27,7 +27,7 @@ namespace Guardtime.KSI.Service
     ///     Aggregation response payload.
     /// </summary>
     [Obsolete]
-    public sealed class LegacyAggregationResponsePayload : RequestResponsePayload
+    public sealed class LegacyAggregationResponsePayload : SignRequestResponsePayload
     {
         /// <summary>
         /// Expected tag type

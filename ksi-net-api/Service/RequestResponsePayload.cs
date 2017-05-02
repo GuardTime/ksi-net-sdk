@@ -17,7 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using System.Collections.Generic;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 
@@ -69,23 +68,5 @@ namespace Guardtime.KSI.Service
         ///     Get request ID.
         /// </summary>
         public ulong RequestId => _requestId.Value;
-
-        /// <summary>
-        /// Get child tags that will be used to create a KSI signature
-        /// </summary>
-        /// <returns></returns>
-        public ITlvTag[] GetSignatureChildTags()
-        {
-            List<ITlvTag> childTags = new List<ITlvTag>();
-
-            foreach (ITlvTag childTag in this)
-            {
-                if (childTag.Type > 0x800 && childTag.Type < 0x900)
-                {
-                    childTags.Add(childTag);
-                }
-            }
-            return childTags.ToArray();
-        }
     }
 }

@@ -155,7 +155,7 @@ namespace Guardtime.KSI.Service
             }
 
             Logger.Debug("Signing root node hash. Level: {0}; Hash: {1}", root.Level, root.Hash);
-            RequestResponsePayload signResponsePayload = _ksiService.GetSignResponsePayload(_ksiService.BeginSign(root.Hash, root.Level, null, null));
+            SignRequestResponsePayload signResponsePayload = _ksiService.GetSignResponsePayload(_ksiService.BeginSign(root.Hash, root.Level, null, null));
             return CreateUniSignatures(new KsiSignature(false, false, signResponsePayload.GetSignatureChildTags()));
         }
 
