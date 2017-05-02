@@ -27,17 +27,17 @@ namespace Guardtime.KSI.Signature.Verification
         /// <summary>
         ///     Wrong document error.
         /// </summary>
-        public static readonly VerificationError Gen01 = new VerificationError("GEN-1", "Wrong document");
+        public static readonly VerificationError Gen01 = new VerificationError("GEN-01", "Wrong document");
 
         /// <summary>
         ///     Verification inconclusive error.
         /// </summary>
-        public static readonly VerificationError Gen02 = new VerificationError("GEN-2", "Verification inconclusive");
+        public static readonly VerificationError Gen02 = new VerificationError("GEN-02", "Verification inconclusive");
 
         /// <summary>
         ///     Input hash level too large error.
         /// </summary>
-        public static readonly VerificationError Gen03 = new VerificationError("GEN-3", "Input hash level too large");
+        public static readonly VerificationError Gen03 = new VerificationError("GEN-03", "Input hash level too large");
 
         /// <summary>
         ///     Inconsistent aggregation hash chains error.
@@ -75,9 +75,10 @@ namespace Guardtime.KSI.Signature.Verification
         public static readonly VerificationError Int07 = new VerificationError("INT-07", "Calendar hash chain time inconsistent with publication time");
 
         /// <summary>
-        ///     Calendar hash chain root hash is inconsistent with calendar auth record input hash error.
+        ///     Calendar hash chain root hash is inconsistent with calendar authentication record input hash error.
         /// </summary>
-        public static readonly VerificationError Int08 = new VerificationError("INT-08", "Calendar hash chain root hash is inconsistent with calendar auth record input hash");
+        public static readonly VerificationError Int08 = new VerificationError("INT-08",
+            "Calendar hash chain root hash is inconsistent with calendar authentication record input hash");
 
         /// <summary>
         ///     Calendar hash chain root hash is inconsistent with published hash value error.
