@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.Collections.Generic;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
@@ -31,6 +32,7 @@ namespace Guardtime.KSI.Signature.Verification
     public class VerificationContext : IVerificationContext
     {
         private IDictionary<ulong, CalendarHashChain> _calendarHashChainCache;
+        private long _latestCalendarGetTime;
         private readonly object _cacheLock = new object();
 
         /// <summary>
@@ -125,7 +127,12 @@ namespace Guardtime.KSI.Signature.Verification
                 }
                 else if (_calendarHashChainCache.ContainsKey(cacheKey))
                 {
-                    return _calendarHashChainCache[cacheKey];
+                    // when getting latest calendar hash chain and last extend is more than 1 sec ago then do not take from cache
+                    // otherwise take from cache
+                    if (publicationTime != null || _latestCalendarGetTime + 10000000 > DateTime.Now.Ticks)
+                    {
+                        return _calendarHashChainCache[cacheKey];
+                    }
                 }
             }
 
@@ -136,6 +143,11 @@ namespace Guardtime.KSI.Signature.Verification
             lock (_cacheLock)
             {
                 _calendarHashChainCache[cacheKey] = calendarHashChain;
+
+                if (publicationTime == null)
+                {
+                    _latestCalendarGetTime = DateTime.Now.Ticks;
+                }
             }
 
             return calendarHashChain;
