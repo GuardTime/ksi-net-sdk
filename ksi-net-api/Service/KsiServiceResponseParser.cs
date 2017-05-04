@@ -34,49 +34,21 @@ namespace Guardtime.KSI.Service
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly PduVersion _pduVersion;
-        private readonly uint _pduTagType;
-        private readonly uint _legacyPduTagType;
-        private readonly uint _payloadTagType;
-        private readonly uint _legacyPayloadTagType;
-        private readonly uint[] _allowedAdditionalPayloadTagTypes;
+        private readonly KsiServiceRequestType _requestType;
         private readonly HashAlgorithm _macAlgorithm;
         private readonly byte[] _macKey;
-
-        /// <summary>
-        /// Create new KSI service reponse parser. Used if only PDU version v2 request is supported.
-        /// </summary>
-        /// <param name="pduTagType">Expected PDU tag type</param>
-        /// <param name="legacyPduTagType">Expected legacy PDU tag type</param>
-        /// <param name="payloadTagType">Expected payload tag type</param>
-        /// <param name="allowedAdditionalPayloadTagTypes">Additional payload tag types that are allowed in PDU in addition to expected payload</param>
-        /// <param name="macAlgorithm">MAC calculation algorithm</param>
-        /// <param name="macKey">MAC calculation key</param>
-        public KsiServiceResponseParser(uint pduTagType, uint legacyPduTagType, uint payloadTagType, uint[] allowedAdditionalPayloadTagTypes, HashAlgorithm macAlgorithm,
-                                        byte[] macKey)
-            : this(PduVersion.v2, pduTagType, legacyPduTagType, payloadTagType, 0, allowedAdditionalPayloadTagTypes, macAlgorithm, macKey)
-        {
-        }
 
         /// <summary>
         /// Create new KSI service reponse parser. 
         /// </summary>
         /// <param name="pduVersion">PDU version</param>
-        /// <param name="pduTagType">Expected PDU tag type</param>
-        /// <param name="legacyPduTagType">Expected legacy PDU tag type</param>
-        /// <param name="payloadTagType">Expected payload tag type</param>
-        /// <param name="legacyPayloadTagType">Expected legacy payload tag type</param>
-        /// <param name="allowedAdditionalPayloadTagTypes">Additional payload tag types that are allowed in PDU in addition to expected payload</param>
+        /// <param name="requestType">Request type of the response to be parsed</param>
         /// <param name="macAlgorithm">MAC calculation algorithm</param>
         /// <param name="macKey">MAC calculation key</param>
-        public KsiServiceResponseParser(PduVersion pduVersion, uint pduTagType, uint legacyPduTagType, uint payloadTagType, uint legacyPayloadTagType,
-                                        uint[] allowedAdditionalPayloadTagTypes, HashAlgorithm macAlgorithm, byte[] macKey)
+        public KsiServiceResponseParser(PduVersion pduVersion, KsiServiceRequestType requestType, HashAlgorithm macAlgorithm, byte[] macKey)
         {
             _pduVersion = pduVersion;
-            _pduTagType = pduTagType;
-            _legacyPduTagType = legacyPduTagType;
-            _payloadTagType = payloadTagType;
-            _legacyPayloadTagType = legacyPayloadTagType;
-            _allowedAdditionalPayloadTagTypes = allowedAdditionalPayloadTagTypes;
+            _requestType = requestType;
             _macAlgorithm = macAlgorithm;
             _macKey = macKey;
         }
@@ -105,20 +77,20 @@ namespace Guardtime.KSI.Service
                     rawTag = new RawTag(reader.ReadTag());
                 }
 
-                if (rawTag.Type == _pduTagType)
+                if (rawTag.Type == GetPduTagType(false))
                 {
                     if (_pduVersion == PduVersion.v1)
                     {
                         throw new KsiServiceInvalidRequestFormatException("Received PDU v2 response to PDU v1 request. Configure the SDK to use PDU v2 format.");
                     }
 
-                    pdu = GetPdu(rawTag, _pduTagType);
+                    pdu = GetPdu(rawTag);
                 }
-                else if (rawTag.Type == _legacyPduTagType)
+                else if (rawTag.Type == GetPduTagType(true))
                 {
                     if (_pduVersion == PduVersion.v2)
                     {
-                        if (_legacyPayloadTagType == 0)
+                        if (!IsLegacyRequestSupported())
                         {
                             throw new KsiServiceInvalidRequestFormatException("Received PDU v1 response to PDU v2 request.");
                         }
@@ -126,7 +98,7 @@ namespace Guardtime.KSI.Service
                         throw new KsiServiceInvalidRequestFormatException("Received PDU v1 response to PDU v2 request. Configure the SDK to use PDU v1 format.");
                     }
 
-                    legacyPdu = GetLegacyPdu(rawTag, _legacyPduTagType);
+                    legacyPdu = GetLegacyPdu(rawTag);
                 }
                 else
                 {
@@ -171,40 +143,144 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        /// Get PDU from raw tag.
+        /// Returns true if request was available already in PDU version v1.
+        /// </summary>
+        /// <returns></returns>
+        private bool IsLegacyRequestSupported()
+        {
+            switch (_requestType)
+            {
+                case KsiServiceRequestType.Sign:
+                case KsiServiceRequestType.Extend:
+                    return true;
+                case KsiServiceRequestType.AggregatorConfig:
+                case KsiServiceRequestType.ExtenderConfig:
+                    return false;
+                default:
+                    throw new KsiServiceException("Unhandled request type: " + _requestType);
+            }
+        }
+
+        /// <summary>
+        /// Get expected PDU tag type.
+        /// </summary>
+        /// <param name="isLegacy"></param>
+        /// <returns></returns>
+        private uint GetPduTagType(bool isLegacy)
+        {
+            switch (_requestType)
+            {
+                case KsiServiceRequestType.Sign:
+                case KsiServiceRequestType.AggregatorConfig:
+                    if (isLegacy)
+                    {
+                        return Constants.LegacyAggregationPdu.TagType;
+                    }
+                    return Constants.AggregationResponsePdu.TagType;
+                case KsiServiceRequestType.Extend:
+                case KsiServiceRequestType.ExtenderConfig:
+                    if (isLegacy)
+                    {
+                        return Constants.LegacyExtendPdu.TagType;
+                    }
+                    return Constants.ExtendResponsePdu.TagType;
+                default:
+                    throw new KsiServiceException("Unhandled request type: " + _requestType);
+            }
+        }
+
+        /// <summary>
+        /// Get expected payload tag type
+        /// </summary>
+        /// <param name="isLegacy"></param>
+        /// <returns></returns>
+        private uint GetPayloadTagType(bool isLegacy)
+        {
+            switch (_requestType)
+            {
+                case KsiServiceRequestType.Sign:
+                    if (isLegacy)
+                    {
+                        return Constants.AggregationResponsePayload.LegacyTagType;
+                    }
+                    return Constants.AggregationResponsePayload.TagType;
+                case KsiServiceRequestType.AggregatorConfig:
+                    if (!isLegacy)
+                    {
+                        return Constants.AggregatorConfigResponsePayload.TagType;
+                    }
+                    break;
+                case KsiServiceRequestType.Extend:
+                    if (isLegacy)
+                    {
+                        return Constants.ExtendResponsePayload.LegacyTagType;
+                    }
+                    return Constants.ExtendResponsePayload.TagType;
+                case KsiServiceRequestType.ExtenderConfig:
+                    if (!isLegacy)
+                    {
+                        return Constants.ExtenderConfigResponsePayload.TagType;
+                    }
+                    break;
+            }
+
+            throw new KsiServiceException("Unhandled request type: " + _requestType);
+        }
+
+        /// <summary>
+        /// Get list of additionally allowed payload types (eg. pushed payload types)
+        /// </summary>
+        /// <returns></returns>
+        private uint[] GetAdditionallyAllowedPayloadTagTypes()
+        {
+            switch (_requestType)
+            {
+                case KsiServiceRequestType.Sign:
+                    return new uint[] { Constants.AggregatorConfigResponsePayload.TagType, Constants.AggregationAcknowledgmentResponsePayload.TagType };
+                case KsiServiceRequestType.AggregatorConfig:
+                    return null;
+                case KsiServiceRequestType.Extend:
+                    return new uint[] { Constants.ExtenderConfigResponsePayload.TagType };
+                case KsiServiceRequestType.ExtenderConfig:
+                    return null;
+                default:
+                    throw new KsiServiceException("Unhandled request type: " + _requestType);
+            }
+        }
+
+        /// <summary>
+        /// Get PDU tag from raw tag.
         /// </summary>
         /// <param name="rawTag"></param>
-        /// <param name="tagType"></param>
         /// <returns></returns>
-        private static Pdu GetPdu(RawTag rawTag, uint tagType)
+        private Pdu GetPdu(RawTag rawTag)
         {
-            switch (tagType)
+            switch (GetPduTagType(false))
             {
                 case Constants.AggregationResponsePdu.TagType:
                     return new AggregationResponsePdu(rawTag);
                 case Constants.ExtendResponsePdu.TagType:
                     return new ExtendResponsePdu(rawTag);
                 default:
-                    throw new ArgumentException("Unhandled tag type: " + tagType);
+                    throw new KsiServiceException("Unhandled tag type: " + GetPduTagType(false));
             }
         }
 
         /// <summary>
-        /// Get legacy PDU from raw tag.
+        /// Get legacy PDU tag from raw tag.
         /// </summary>
         /// <param name="rawTag"></param>
-        /// <param name="tagType"></param>
         /// <returns></returns>
-        private static LegacyPdu GetLegacyPdu(RawTag rawTag, uint tagType)
+        private LegacyPdu GetLegacyPdu(RawTag rawTag)
         {
-            switch (tagType)
+            switch (GetPduTagType(true))
             {
                 case Constants.LegacyAggregationPdu.TagType:
                     return new LegacyAggregationPdu(rawTag);
                 case Constants.LegacyExtendPdu.TagType:
                     return new LegacyExtendPdu(rawTag);
                 default:
-                    throw new ArgumentException("Unhandled tag type: " + tagType);
+                    throw new KsiServiceException("Unhandled tag type: " + GetPduTagType(true));
             }
         }
 
@@ -226,7 +302,7 @@ namespace Guardtime.KSI.Service
         /// <returns></returns>
         private PduPayload GetResponsePayload(byte[] data, Pdu pdu, ulong? requestId)
         {
-            PduPayload payload = GetPayload(pdu, _payloadTagType, requestId);
+            PduPayload payload = GetPayload(pdu, GetPayloadTagType(false), requestId);
             ErrorPayload errorPayload = pdu.ErrorPayload;
 
             if (payload == null && errorPayload == null)
@@ -272,7 +348,7 @@ namespace Guardtime.KSI.Service
                 }
             }
 
-            if (HasUnexpectedPayload(pdu, payload, _allowedAdditionalPayloadTagTypes))
+            if (HasUnexpectedPayload(pdu, payload, GetAdditionallyAllowedPayloadTagTypes()))
             {
                 LogUnexpectedPayloads(pdu);
             }
@@ -295,9 +371,9 @@ namespace Guardtime.KSI.Service
                 throw new KsiServiceException("Invalid response payload: null.");
             }
 
-            if (payload != null && payload.Type != _legacyPayloadTagType)
+            if (payload != null && payload.Type != GetPayloadTagType(true))
             {
-                throw new KsiServiceException("Unexpected response payload tag type. Type: " + payload.Type + "; Expected type: " + _legacyPayloadTagType);
+                throw new KsiServiceException("Unexpected response payload tag type. Type: " + payload.Type + "; Expected type: " + GetPayloadTagType(true));
             }
 
             if (pdu.ErrorPayload != null)
@@ -386,9 +462,14 @@ namespace Guardtime.KSI.Service
         /// <returns></returns>
         private static bool HasUnexpectedPayload(Pdu pdu, PduPayload expectedPayload, uint[] allowedPayloadTagTypes)
         {
+            if (allowedPayloadTagTypes == null)
+            {
+                return pdu.Payloads.Count > 1;
+            }
+
             foreach (PduPayload p in pdu.Payloads)
             {
-                if (!ReferenceEquals(p, expectedPayload) && allowedPayloadTagTypes != null && Array.IndexOf(allowedPayloadTagTypes, p.Type) < 0)
+                if (!ReferenceEquals(p, expectedPayload) && Array.IndexOf(allowedPayloadTagTypes, p.Type) < 0)
                 {
                     return true;
                 }

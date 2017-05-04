@@ -197,9 +197,7 @@ namespace Guardtime.KSI.Service
             {
                 if (_signRequestResponseParser == null)
                 {
-                    _signRequestResponseParser = new KsiServiceResponseParser(PduVersion, Constants.AggregationResponsePdu.TagType,
-                        Constants.LegacyAggregationPdu.TagType, Constants.AggregationResponsePayload.TagType, Constants.AggregationResponsePayload.LegacyTagType,
-                        new uint[] { Constants.AggregatorConfigResponsePayload.TagType, Constants.AggregationAcknowledgmentResponsePayload.TagType }, _signingMacAlgorithm,
+                    _signRequestResponseParser = new KsiServiceResponseParser(PduVersion, KsiServiceRequestType.Sign, _signingMacAlgorithm,
                         _signingServiceCredentials.LoginKey);
                 }
 
@@ -299,8 +297,8 @@ namespace Guardtime.KSI.Service
             {
                 if (_aggregatorConfigRequestResponseParser == null)
                 {
-                    _aggregatorConfigRequestResponseParser = new KsiServiceResponseParser(Constants.AggregationResponsePdu.TagType, Constants.LegacyAggregationPdu.TagType,
-                        Constants.AggregatorConfigResponsePayload.TagType, null, _signingMacAlgorithm, _signingServiceCredentials.LoginKey);
+                    _aggregatorConfigRequestResponseParser = new KsiServiceResponseParser(PduVersion, KsiServiceRequestType.AggregatorConfig,
+                        _signingMacAlgorithm, _signingServiceCredentials.LoginKey);
                 }
 
                 return _aggregatorConfigRequestResponseParser;

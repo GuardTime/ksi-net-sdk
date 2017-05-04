@@ -216,9 +216,8 @@ namespace Guardtime.KSI.Service
             {
                 if (_extendRequestResponseParser == null)
                 {
-                    _extendRequestResponseParser = new KsiServiceResponseParser(PduVersion, Constants.ExtendResponsePdu.TagType, Constants.LegacyExtendPdu.TagType,
-                        Constants.ExtendResponsePayload.TagType, Constants.ExtendResponsePayload.LegacyTagType, new uint[] { Constants.ExtenderConfigResponsePayload.TagType },
-                        _extendingMacAlgorithm, _extendingServiceCredentials.LoginKey);
+                    _extendRequestResponseParser = new KsiServiceResponseParser(PduVersion, KsiServiceRequestType.Extend, _extendingMacAlgorithm,
+                        _extendingServiceCredentials.LoginKey);
                 }
 
                 return _extendRequestResponseParser;
@@ -317,8 +316,8 @@ namespace Guardtime.KSI.Service
             {
                 if (_extenderConfigRequestResponseParser == null)
                 {
-                    _extenderConfigRequestResponseParser = new KsiServiceResponseParser(Constants.ExtendResponsePdu.TagType, Constants.LegacyExtendPdu.TagType,
-                        Constants.ExtenderConfigResponsePayload.TagType, null, _extendingMacAlgorithm, _extendingServiceCredentials.LoginKey);
+                    _extenderConfigRequestResponseParser = new KsiServiceResponseParser(PduVersion, KsiServiceRequestType.ExtenderConfig,
+                        _extendingMacAlgorithm, _extendingServiceCredentials.LoginKey);
                 }
 
                 return _extenderConfigRequestResponseParser;
