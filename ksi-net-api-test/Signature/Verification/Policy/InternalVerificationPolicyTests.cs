@@ -32,6 +32,24 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
     public class InternalVerificationPolicyTests
     {
         [Test]
+        public void InternalVerificationPolicyOkTest()
+        {
+            InternalVerificationPolicy policy = new InternalVerificationPolicy();
+
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            {
+                TestVerificationContext context = new TestVerificationContext()
+                {
+                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream),
+                    DocumentHash = new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D"))
+                };
+
+                VerificationResult verificationResult = policy.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            }
+        }
+
+        [Test]
         public void InternalVerificationPolicyDocumentHashTest()
         {
             InternalVerificationPolicy policy = new InternalVerificationPolicy();
