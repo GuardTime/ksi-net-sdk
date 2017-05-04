@@ -113,13 +113,13 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         }
 
         [Test]
-        public void TestSignatureCalendarHashChainInvalidPublicationTime()
+        public void TestSignatureCalendarHashChainInvalidRegistrationTime()
         {
             CalendarHashChainRegistrationTimeRule rule = new CalendarHashChainRegistrationTimeRule();
 
-            // Check invalid signature calendar hash chain with invalid aggregation time
+            // aggregation time does not match calendar shape
             using (FileStream stream =
-                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Invalid_Calendar_Chain_Publication_Time), FileMode.Open))
+                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Invalid_Calendar_Chain_Registration_Time), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {

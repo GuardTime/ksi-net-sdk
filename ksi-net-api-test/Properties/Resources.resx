@@ -372,8 +372,14 @@
   <data name="KsiSignature_Invalid_Calendar_Chain_Publication_Time" xml:space="preserve">
     <value>resources/signature/ksi-signature/ksi-signature-invalid-calendar-hash-chain-publication-time.tlv</value>
   </data>
-  <data name="KsiSignature_Invalid_With_Invalid_Publication_Record" xml:space="preserve">
-    <value>resources/signature/ksi-signature/ksi-signature-invalid-with-invalid-publication-record.tlv</value>
+  <data name="KsiSignature_Invalid_Calendar_Chain_Registration_Time" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-calendar-hash-chain-registration-time.tlv</value>
+  </data>
+  <data name="KsiSignature_Invalid_With_Invalid_Publication_Record_Hash" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-with-invalid-publication-record-hash.tlv</value>
+  </data>
+  <data name="KsiSignature_Invalid_With_Invalid_Publication_Record_Time" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-with-invalid-publication-record-time.tlv</value>
   </data>
   <data name="KsiSignature_Invalid_With_Invalid_Aggregation_Root_Hash" xml:space="preserve">
     <value>resources/signature/ksi-signature/ksi-signature-invalid-aggregation-root-hash.tlv</value>
@@ -492,8 +498,8 @@
   <data name="KsiSignature_Invalid_Hash_Algorithm" xml:space="preserve">
     <value>resources/signature/ksi-signature/ksi-signature-invalid-hash-algorithm.tlv</value>
   </data>
-  <data name="KsiSignature_Ok_Level3" xml:space="preserve">
-    <value>resources/signature/ksi-signature/ksi-signature-level-3-ok.tlv</value>
+  <data name="KsiSignature_Ok_LevelCorrection3" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-level-correction-3.tlv</value>
   </data>
   <data name="AggregationHashChainMetadataInvalidPaddingFail" xml:space="preserve">
     <value>resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataInvalidPaddingFail.ksig</value>
