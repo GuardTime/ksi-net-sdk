@@ -132,9 +132,7 @@ namespace Guardtime.KSI.Crypto.BouncyCastle.Crypto
             }
             catch (PkiVerificationFailedException ex)
             {
-                Logger.Warn("Verification failed. " + Environment.NewLine +
-                            "Exception: " + ex + Environment.NewLine +
-                            "Trust anchors: " + Environment.NewLine + GetTrustAnchorsString());
+                Logger.Warn(string.Format("Failed to verify PKCS#7 signature.{0}Exception: {1}{0}Trust anchors: {0}{2}", Environment.NewLine, ex, GetTrustAnchorsString()));
 
                 throw;
             }

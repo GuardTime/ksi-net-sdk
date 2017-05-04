@@ -165,7 +165,7 @@ namespace Guardtime.KSI.Crypto.Microsoft.Crypto
                 }
             }
 
-            Logger.Warn("Trust chain did not complete to the known authority anchor. Thumbprints did not match." +
+            Logger.Warn("Failed to verify PKCS#7 signature. Trust chain did not complete to the known authority anchor. Thumbprints did not match." +
                         GetCertInfoString(chain.ChainElements));
 
             throw new PkiVerificationFailedException("Trust chain did not complete to the known authority anchor. Thumbprints did not match.");

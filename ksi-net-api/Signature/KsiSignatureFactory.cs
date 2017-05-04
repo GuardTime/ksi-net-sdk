@@ -301,14 +301,11 @@ namespace Guardtime.KSI.Signature
 
             if (verificationResult.ResultCode != VerificationResultCode.Ok)
             {
-                Logger.Warn("Signature verification failed.{0}Verification policy: {1}{2}Verification error: {3}{4}Verification result: {5}{6}Signature: {7}",
+                Logger.Warn("Signature verification failed.{0}Verification policy: {1}{0}Verification error: {2}{0}Verification result: {3}{0}Signature: {4}",
                     Environment.NewLine,
                     _verificationPolicy.GetRuleName(),
-                    Environment.NewLine,
                     verificationResult.VerificationError,
-                    Environment.NewLine,
                     verificationResult,
-                    Environment.NewLine,
                     signature);
 
                 throw new KsiSignatureInvalidContentException("Signature verification failed.", signature, verificationResult);
