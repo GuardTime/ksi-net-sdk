@@ -39,7 +39,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Pub02);
             }
 
-            return signature.AggregationTime != extendedCalendarHashChain.RegistrationTime
+            return signature.AggregationTime != extendedCalendarHashChain.CalculateRegistrationTime()
                 ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Pub02)
                 : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }
