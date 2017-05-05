@@ -210,7 +210,7 @@ namespace Guardtime.KSI.Service
                 {
                     if (IsLegacyPduVersion)
                     {
-                        throw new KsiServiceInvalidRequestFormatException(
+                        throw new KsiServiceUnexpectedResponseFormatException(
                             "Received PDU v2 response to PDU v1 request. Configure the SDK to use PDU v2 format for the given Aggregator.");
                     }
 
@@ -220,7 +220,7 @@ namespace Guardtime.KSI.Service
                 {
                     if (!IsLegacyPduVersion)
                     {
-                        throw new KsiServiceInvalidRequestFormatException(
+                        throw new KsiServiceUnexpectedResponseFormatException(
                             "Received PDU v1 response to PDU v2 request. Configure the SDK to use PDU v1 format for the given Aggregator.");
                     }
 
@@ -356,7 +356,7 @@ namespace Guardtime.KSI.Service
 
                 if (rawTag.Type == Constants.LegacyAggregationPdu.TagType)
                 {
-                    throw new KsiServiceInvalidRequestFormatException("Received PDU v1 response to PDU v2 request.");
+                    throw new KsiServiceUnexpectedResponseFormatException("Received PDU v1 response to PDU v2 request.");
                 }
 
                 pdu = new AggregationResponsePdu(rawTag);
