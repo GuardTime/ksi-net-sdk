@@ -22,13 +22,13 @@ namespace Guardtime.KSI.Exceptions
     /// <summary>
     /// Invalid KSI service request format exception. Used when wrong PDU format is used.
     /// </summary>
-    public class KsiServiceInvalidRequestFormatException : KsiServiceException
+    public class KsiServiceUnexpectedResponseFormatException : KsiServiceException
     {
         /// <summary>
         /// Create invalid request format exception.
         /// </summary>
         /// <param name="message"></param>
-        public KsiServiceInvalidRequestFormatException(string message) : base(message)
+        public KsiServiceUnexpectedResponseFormatException(string message) : base(message)
         {
         }
     }
