@@ -143,7 +143,7 @@ namespace Guardtime.KSI.Utils
         {
             if (buf == null)
             {
-                throw new KsiException("Input byte array cannot be null.");
+                throw new ArgumentNullException(nameof(buf));
             }
 
             if (checkLeadingZeros && buf.Length > 1 && buf[0] == 0)
@@ -223,7 +223,7 @@ namespace Guardtime.KSI.Utils
         {
             if (bytes == null)
             {
-                throw new KsiException("Input bytes cannot be null.");
+                throw new ArgumentNullException(nameof(bytes));
             }
 
             if (bytes.Length == 0 || bytes[bytes.Length - 1] != 0)
@@ -243,7 +243,7 @@ namespace Guardtime.KSI.Utils
         {
             if (value == null)
             {
-                throw new KsiException("Input string cannot be null.");
+                throw new ArgumentNullException(nameof(value));
             }
 
             byte[] stringBytes = Encoding.UTF8.GetBytes(value);
@@ -273,7 +273,7 @@ namespace Guardtime.KSI.Utils
         {
             if (arr == null)
             {
-                throw new KsiException("Input array cannot be null.");
+                throw new ArgumentNullException(nameof(arr));
             }
 
             for (int i = 0; i < arr.Length; i++)
@@ -379,7 +379,7 @@ namespace Guardtime.KSI.Utils
         {
             if (headerBytes == null)
             {
-                throw new KsiException("Input array cannot be null.");
+                throw new ArgumentNullException(nameof(headerBytes));
             }
 
             if (headerBytes.Length == 0)

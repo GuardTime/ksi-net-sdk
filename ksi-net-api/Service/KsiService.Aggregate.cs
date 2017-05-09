@@ -127,6 +127,11 @@ namespace Guardtime.KSI.Service
         /// <returns>KSI signature</returns>
         public IKsiSignature EndSign(IAsyncResult asyncResult)
         {
+            if (_ksiSignatureFactory == null)
+            {
+                throw new KsiServiceException("KSI signature factory is missing from service.");
+            }
+
             RequestResponsePayload reponsePayload = GetSignResponsePayload(asyncResult);
 
             CreateSignatureKsiServiceAsyncResult serviceAsyncResult = asyncResult as CreateSignatureKsiServiceAsyncResult;

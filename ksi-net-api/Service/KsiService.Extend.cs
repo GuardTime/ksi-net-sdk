@@ -186,17 +186,17 @@ namespace Guardtime.KSI.Service
 
         private CalendarHashChain ParseExtendRequestResponse(byte[] data, ExtendKsiServiceAsyncResult serviceAsyncResult)
         {
+            if (data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+
             RawTag rawTag = null;
             ExtendResponsePdu pdu = null;
             LegacyExtendPdu legacyPdu = null;
 
             try
             {
-                if (data == null)
-                {
-                    throw new KsiServiceException("Invalid extend response PDU: null.");
-                }
-
                 using (TlvReader reader = new TlvReader(new MemoryStream(data)))
                 {
                     rawTag = new RawTag(reader.ReadTag());

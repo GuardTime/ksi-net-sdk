@@ -96,13 +96,7 @@ namespace Guardtime.KSI.Service
                           IPublicationsFileFactory publicationsFileFactory,
                           IKsiSignatureFactory ksiSignatureFactory,
                           PduVersion pduVersion = DefaultPduVersion)
-
         {
-            if (publicationsFileFactory == null)
-            {
-                throw new ArgumentNullException(nameof(publicationsFileFactory));
-            }
-
             _signingServiceProtocol = signingServiceProtocol;
             _signingServiceCredentials = signingServiceCredentials;
             _extendingServiceProtocol = extendingServiceProtocol;
