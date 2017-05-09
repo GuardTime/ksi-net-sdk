@@ -39,7 +39,6 @@ namespace Guardtime.KSI.Signature
         private IntegerTag _publicationTime;
         private DataHash _outputHash;
         private PublicationData _publicationData;
-        private ulong? _registrationTime;
 
         /// <summary>
         /// Expected tag type
@@ -114,11 +113,6 @@ namespace Guardtime.KSI.Signature
         ///     Get publication time.
         /// </summary>
         public ulong PublicationTime => _publicationTime.Value;
-
-        /// <summary>
-        ///     Get registration time.
-        /// </summary>
-        public ulong RegistrationTime => _registrationTime ?? (_registrationTime = CalculateRegistrationTime()).Value;
 
         /// <summary>
         ///     Get input hash.
@@ -217,7 +211,7 @@ namespace Guardtime.KSI.Signature
         ///     Calculate registration time.
         /// </summary>
         /// <returns>registration time</returns>
-        private ulong CalculateRegistrationTime()
+        public ulong CalculateRegistrationTime()
         {
             ulong r = _publicationTime.Value;
             ulong t = 0;
