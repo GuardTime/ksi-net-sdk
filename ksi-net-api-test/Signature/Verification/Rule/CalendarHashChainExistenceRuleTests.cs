@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Signature;
@@ -35,7 +36,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             CalendarHashChainExistenceRule rule = new CalendarHashChainExistenceRule();
 
             // Argument null exception when no context
-            Assert.Throws<KsiException>(delegate
+            Assert.Throws<ArgumentNullException>(delegate
             {
                 rule.Verify(null);
             });
@@ -79,7 +80,10 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             CalendarHashChainExistenceRule rule = new CalendarHashChainExistenceRule();
 
             // Check signature which has not calendar hash chain
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record), FileMode.Open))
+            using (
+                FileStream stream =
+                    new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record),
+                        FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {

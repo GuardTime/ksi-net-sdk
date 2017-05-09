@@ -88,7 +88,7 @@ namespace Guardtime.KSI.Signature
         {
             if (stream == null)
             {
-                throw new KsiException("Invalid input stream: null.");
+                throw new ArgumentNullException(nameof(stream));
             }
 
             using (TlvReader reader = new TlvReader(stream))
@@ -120,7 +120,7 @@ namespace Guardtime.KSI.Signature
         {
             if (payload == null)
             {
-                throw new KsiException("Invalid aggregation response payload: null.");
+                throw new ArgumentNullException(nameof(payload));
             }
             return CreateFromResponsePayload(payload, payload.RequestId, hash, level);
         }
@@ -136,7 +136,7 @@ namespace Guardtime.KSI.Signature
         {
             if (payload == null)
             {
-                throw new KsiException("Invalid aggregation response payload: null.");
+                throw new ArgumentNullException(nameof(payload));
             }
             return CreateFromResponsePayload(payload, payload.RequestId, hash, level);
         }

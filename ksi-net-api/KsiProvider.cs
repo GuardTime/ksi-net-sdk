@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
@@ -127,12 +128,12 @@ namespace Guardtime.KSI
         /// <summary>
         /// Check if hash algorithm can be used for hashing.
         /// </summary>
-        /// <param name="algorithm"></param>
+        /// <param name="algorithm">Hash algorithm</param>
         private static void ValidateHashAlgorithm(HashAlgorithm algorithm)
         {
             if (algorithm == null)
             {
-                throw new HashingException("Invalid hash algorithm: null.");
+                throw new ArgumentNullException(nameof(algorithm));
             }
 
             // If an algorithm is given which is not implemented, an illegal argument exception is thrown.

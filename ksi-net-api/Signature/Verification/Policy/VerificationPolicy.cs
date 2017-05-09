@@ -46,7 +46,7 @@ namespace Guardtime.KSI.Signature.Verification.Policy
         {
             if (context == null)
             {
-                throw new KsiException("Invalid context: null.");
+                throw new ArgumentNullException(nameof(context));
             }
 
             if (context.Signature == null)

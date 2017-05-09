@@ -100,7 +100,7 @@ namespace Guardtime.KSI.Service
         {
             if (publicationsFileFactory == null)
             {
-                throw new KsiServiceException("Invalid publications file factory: null.");
+                throw new ArgumentNullException(nameof(publicationsFileFactory));
             }
 
             _signingServiceProtocol = signingServiceProtocol;
@@ -213,7 +213,7 @@ namespace Guardtime.KSI.Service
             {
                 if (serviceProtocolAsyncResult == null)
                 {
-                    throw new KsiServiceException("Invalid service protocol IAsyncResult: null.");
+                    throw new ArgumentNullException(nameof(serviceProtocolAsyncResult));
                 }
 
                 ServiceProtocolAsyncResult = serviceProtocolAsyncResult;

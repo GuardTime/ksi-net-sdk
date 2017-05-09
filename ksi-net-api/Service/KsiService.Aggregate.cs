@@ -190,17 +190,17 @@ namespace Guardtime.KSI.Service
         /// <returns></returns>
         private RequestResponsePayload ParseSignRequestResponse(byte[] data, CreateSignatureKsiServiceAsyncResult serviceAsyncResult)
         {
+            if (data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+
             RawTag rawTag = null;
             AggregationResponsePdu pdu = null;
             LegacyAggregationPdu legacyPdu = null;
 
             try
             {
-                if (data == null)
-                {
-                    throw new KsiServiceException("Invalid sign response PDU: null.");
-                }
-
                 using (TlvReader reader = new TlvReader(new MemoryStream(data)))
                 {
                     rawTag = new RawTag(reader.ReadTag());
@@ -315,14 +315,14 @@ namespace Guardtime.KSI.Service
         /// <returns>Aggregator configuration data</returns>
         public AggregatorConfig EndGetAggregatorConfig(IAsyncResult asyncResult)
         {
+            if (asyncResult == null)
+            {
+                throw new ArgumentNullException(nameof(asyncResult));
+            }
+
             if (_signingServiceProtocol == null)
             {
                 throw new KsiServiceException("Signing service protocol is missing from service.");
-            }
-
-            if (asyncResult == null)
-            {
-                throw new KsiServiceException("Invalid IAsyncResult: null.");
             }
 
             AggregatorConfigKsiServiceAsyncResult serviceAsyncResult = asyncResult as AggregatorConfigKsiServiceAsyncResult;

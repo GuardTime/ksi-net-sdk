@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -91,7 +92,7 @@ namespace Guardtime.KSI.Parser
 
             if (childTags == null)
             {
-                throw new TlvException("Invalid TLV element list: null.");
+                throw new ArgumentNullException(nameof(childTags));
             }
 
             ParseAndValidateChildTags(childTags);
@@ -109,7 +110,7 @@ namespace Guardtime.KSI.Parser
             {
                 if (tag == null)
                 {
-                    throw new TlvException("Invalid TLV in element list: null.");
+                    throw new ArgumentNullException(nameof(childTags));
                 }
 
                 _childTags.Add(ParseChild(tag) ?? tag);
@@ -257,7 +258,7 @@ namespace Guardtime.KSI.Parser
         {
             if (tag == null)
             {
-                throw new TlvException("Invalid TLV tag: null.");
+                throw new ArgumentNullException(nameof(tag));
             }
 
             if (!tag.NonCritical)

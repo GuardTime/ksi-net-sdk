@@ -142,7 +142,7 @@ namespace Guardtime.KSI.Test.Parser
         [Test]
         public void TestCompositeTagAddNullValueToSpecificPosition()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.Throws<ArgumentNullException>(delegate
             {
                 new CompositeTestTag(0x1, false, false, new ITlvTag[] { null });
             });
@@ -151,7 +151,7 @@ namespace Guardtime.KSI.Test.Parser
         [Test]
         public void TestCompositeTagCreateFromDataNullValue()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.Throws<ArgumentNullException>(delegate
             {
                 new CompositeTestTag(0x1, false, false, null);
             });
@@ -174,15 +174,8 @@ namespace Guardtime.KSI.Test.Parser
         [Test]
         public void TestVerifyCriticalFlag()
         {
-            CompositeTestTag tag = new CompositeTestTag(0x1, false, false,
-                new ITlvTag[]
-                {
-                    new RawTag(0x25, true, false, new byte[] { 0x1, 0x2 }),
-                    new RawTag(0x1, true, false, new byte[] { 0x1, 0x2 }),
-                    new RawTag(0x2, true, false, new byte[] { 0x3, 0x4 }),
-                    new CompositeTestTag(0x5, true, false, new ITlvTag[] { new RawTag(0x1, true, false, new byte[] { }) })
-                });
-            Assert.Throws<TlvException>(delegate
+            CompositeTestTag tag = new CompositeTestTag(0x1, false, false, new ITlvTag[] { });
+            Assert.Throws<ArgumentNullException>(delegate
             {
                 tag.VerifyCriticalFlagWithoutTag();
             });
