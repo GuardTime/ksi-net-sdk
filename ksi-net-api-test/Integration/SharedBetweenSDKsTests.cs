@@ -159,7 +159,8 @@ namespace Guardtime.KSI.Test.Integration
                 UserPublication = setUserPublication ? testingRow.PublicationData : null,
                 IsExtendingAllowed = testingRow.IsExtendingAllowed,
                 KsiService = service,
-                PublicationsFile = publicationsFile
+                PublicationsFile = publicationsFile,
+                DocumentHashLevel = testingRow.InputHashLevel
             };
         }
 
@@ -233,58 +234,59 @@ namespace Guardtime.KSI.Test.Integration
                 ActionName = args[1];
                 ErrorCode = args[2];
                 ErrorMessage = args[3];
+                InputHashLevel = !string.IsNullOrEmpty(args[4]) ? uint.Parse(args[4]) : 0;
 
-                string s = args[4];
+                string s = args[5];
                 if (!string.IsNullOrEmpty(s))
                 {
                     InputHash = new DataHash(Base16.Decode(s));
                 }
 
-                s = args[5];
+                s = args[6];
                 if (!string.IsNullOrEmpty(s))
                 {
                     CalendarHashChainInput = new DataHash(Base16.Decode(s));
                 }
 
-                s = args[6];
+                s = args[7];
                 if (!string.IsNullOrEmpty(s))
                 {
                     CalendarHashChainOutput = new DataHash(Base16.Decode(s));
                 }
 
-                s = args[7];
+                s = args[8];
                 if (!string.IsNullOrEmpty(s))
                 {
                     RegistrationTime = ulong.Parse(s);
                 }
 
-                s = args[8];
+                s = args[9];
                 if (!string.IsNullOrEmpty(s))
                 {
                     AggregationTime = ulong.Parse(s);
                 }
 
-                s = args[9];
+                s = args[10];
                 if (!string.IsNullOrEmpty(s))
                 {
                     PublicationTime = ulong.Parse(s);
                 }
 
-                s = args[10];
+                s = args[11];
                 if (!string.IsNullOrEmpty(s))
                 {
                     PublicationData = new PublicationData(s);
                 }
 
-                s = args[11];
+                s = args[12];
                 if (!string.IsNullOrEmpty(s) && s.ToUpper() == "TRUE")
                 {
                     IsExtendingAllowed = true;
                 }
 
-                ResourceFile = args[12];
+                ResourceFile = args[13];
 
-                PublicationsFilePath = args[13];
+                PublicationsFilePath = args[14];
 
                 TestIndex = index;
             }
@@ -294,6 +296,7 @@ namespace Guardtime.KSI.Test.Integration
             public string ActionName { get; }
             public string ErrorCode { get; }
             public string ErrorMessage { get; }
+            public uint InputHashLevel { get; }
             public DataHash InputHash { get; }
             public DataHash CalendarHashChainInput { get; }
             public DataHash CalendarHashChainOutput { get; }
