@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2016 Guardtime, Inc.
+ * Copyright 2013-2017 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -54,5 +54,5 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 
-[assembly: AssemblyVersion("3.7.0.0")]
-[assembly: AssemblyFileVersion("3.7.0.0")]
+[assembly: AssemblyVersion("3.8.308.0")]
+[assembly: AssemblyFileVersion("3.8.308.0")]

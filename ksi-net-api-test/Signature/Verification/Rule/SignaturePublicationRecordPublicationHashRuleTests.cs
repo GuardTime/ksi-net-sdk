@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2016 Guardtime, Inc.
+ * Copyright 2013-2017 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -140,7 +140,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
 
             // Check invalid signature with invalid publication record
             using (FileStream stream =
-                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Invalid_With_Invalid_Publication_Record), FileMode.Open))
+                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Invalid_With_Invalid_Publication_Record_Hash), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {

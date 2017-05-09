@@ -1006,6 +1006,15 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-calendar-hash-chain-registration-time.tlv.
+        /// </summary>
+        internal static string KsiSignature_Invalid_Calendar_Chain_Registration_Time {
+            get {
+                return ResourceManager.GetString("KsiSignature_Invalid_Calendar_Chain_Registration_Time", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-contain-both-publication-record-and-calendar-authentication-record.tlv.
         /// </summary>
         internal static string KsiSignature_Invalid_Contain_Publication_Record_And_Calendar_Authentication_Record {
@@ -1142,11 +1151,20 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-with-invalid-publication-record.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-with-invalid-publication-record-hash.tlv.
         /// </summary>
-        internal static string KsiSignature_Invalid_With_Invalid_Publication_Record {
+        internal static string KsiSignature_Invalid_With_Invalid_Publication_Record_Hash {
             get {
-                return ResourceManager.GetString("KsiSignature_Invalid_With_Invalid_Publication_Record", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Invalid_With_Invalid_Publication_Record_Hash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-with-invalid-publication-record-time.tlv.
+        /// </summary>
+        internal static string KsiSignature_Invalid_With_Invalid_Publication_Record_Time {
+            get {
+                return ResourceManager.GetString("KsiSignature_Invalid_With_Invalid_Publication_Record_Time", resourceCulture);
             }
         }
         
@@ -1205,11 +1223,11 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-level-3-ok.tlv.
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-level-correction-3.tlv.
         /// </summary>
-        internal static string KsiSignature_Ok_Level3 {
+        internal static string KsiSignature_Ok_LevelCorrection3 {
             get {
-                return ResourceManager.GetString("KsiSignature_Ok_Level3", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Ok_LevelCorrection3", resourceCulture);
             }
         }
         

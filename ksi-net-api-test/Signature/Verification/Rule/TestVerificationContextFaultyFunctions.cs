@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2016 Guardtime, Inc.
+ * Copyright 2013-2017 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -28,6 +28,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
     public class TestVerificationContextFaultyFunctions : IVerificationContext
     {
         public DataHash DocumentHash { get; set; }
+        public uint DocumentHashLevel { get; set; }
         public IKsiSignature Signature { get; set; }
         public PublicationData UserPublication { get; set; }
         public IKsiService KsiService { get; set; }

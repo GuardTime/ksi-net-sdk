@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2016 Guardtime, Inc.
+ * Copyright 2013-2017 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -65,7 +65,7 @@ namespace Guardtime.KSI.Test.Service
         {
             Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu)), 1584727637, null, PduVersion.v1);
 
-            KsiServiceInvalidRequestFormatException ex = Assert.Throws<KsiServiceInvalidRequestFormatException>(delegate
+            KsiServiceUnexpectedResponseFormatException ex = Assert.Throws<KsiServiceUnexpectedResponseFormatException>(delegate
             {
                 ksi.Sign(new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")));
             });

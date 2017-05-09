@@ -17,19 +17,17 @@
  * reserves and retains all trademark rights.
  */
 
-namespace Guardtime.KSI.Exceptions
+namespace Guardtime.KSI.Signature.Verification.Rule
 {
     /// <summary>
-    /// Invalid KSI service request format exception. Used when wrong PDU format is used.
+    ///     Rule that always returns <see cref="VerificationResultCode.Ok" />
     /// </summary>
-    public class KsiServiceInvalidRequestFormatException : KsiServiceException
+    public sealed class OkResultRule : VerificationRule
     {
-        /// <summary>
-        /// Create invalid request format exception.
-        /// </summary>
-        /// <param name="message"></param>
-        public KsiServiceInvalidRequestFormatException(string message) : base(message)
+        /// <see cref="VerificationRule.Verify" />
+        public override VerificationResult Verify(IVerificationContext context)
         {
+            return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }
     }
 }

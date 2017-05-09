@@ -81,7 +81,7 @@ namespace Guardtime.KSI.Service
                 {
                     if (_pduVersion == PduVersion.v1)
                     {
-                        throw new KsiServiceInvalidRequestFormatException("Received PDU v2 response to PDU v1 request. Configure the SDK to use PDU v2 format.");
+                        throw new KsiServiceUnexpectedResponseFormatException("Received PDU v2 response to PDU v1 request. Configure the SDK to use PDU v2 format.");
                     }
 
                     pdu = GetPdu(rawTag);
@@ -92,10 +92,10 @@ namespace Guardtime.KSI.Service
                     {
                         if (!IsLegacyRequestSupported())
                         {
-                            throw new KsiServiceInvalidRequestFormatException("Received PDU v1 response to PDU v2 request.");
+                            throw new KsiServiceUnexpectedResponseFormatException("Received PDU v1 response to PDU v2 request.");
                         }
 
-                        throw new KsiServiceInvalidRequestFormatException("Received PDU v1 response to PDU v2 request. Configure the SDK to use PDU v1 format.");
+                        throw new KsiServiceUnexpectedResponseFormatException("Received PDU v1 response to PDU v2 request. Configure the SDK to use PDU v1 format.");
                     }
 
                     legacyPdu = GetLegacyPdu(rawTag);

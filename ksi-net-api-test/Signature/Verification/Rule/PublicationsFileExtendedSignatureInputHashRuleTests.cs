@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2016 Guardtime, Inc.
+ * Copyright 2013-2017 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -218,10 +218,10 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
 
             // Check invalid signature
             using (FileStream stream =
-                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Invalid_With_Invalid_Publication_Record), FileMode.Open))
+                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Invalid_With_Invalid_Publication_Record_Hash), FileMode.Open))
             {
                 TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
-                testPublicationsFile.NearestPublications.Add(1457984041,
+                testPublicationsFile.NearestPublications.Add(1455478441,
                     new PublicationRecordInPublicationFile(new RawTag(0x703, false, false,
                         new PublicationData("AAAAAA-CT5VGY-AAPUCF-L3EKCC-NRSX56-AXIDFL-VZJQK4-WDCPOE-3KIWGB-XGPPM3-O5BIMW-REOVR4").Encode())));
 
