@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
@@ -43,7 +44,7 @@ namespace Guardtime.KSI.Publication
         {
             if (pkiTrustProvider == null)
             {
-                throw new KsiException("Invalid PKI trust provider: null.");
+                throw new ArgumentNullException(nameof(pkiTrustProvider));
             }
 
             _pkiTrustProvider = pkiTrustProvider;
@@ -59,7 +60,7 @@ namespace Guardtime.KSI.Publication
         {
             if (stream == null)
             {
-                throw new KsiException("Invalid input stream: null.");
+                throw new ArgumentNullException(nameof(stream));
             }
 
             Logger.Debug("Creating publications file.");
@@ -107,7 +108,7 @@ namespace Guardtime.KSI.Publication
         {
             if (stream == null)
             {
-                throw new KsiException("Invalid input stream: null.");
+                throw new ArgumentNullException(nameof(stream));
             }
 
             return Create(stream, DefaultBufferSize);
@@ -122,7 +123,7 @@ namespace Guardtime.KSI.Publication
         {
             if (bytes == null)
             {
-                throw new KsiException("Invalid input data: null.");
+                throw new ArgumentNullException(nameof(bytes));
             }
 
             using (MemoryStream stream = new MemoryStream(bytes))

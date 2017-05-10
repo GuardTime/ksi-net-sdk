@@ -93,7 +93,7 @@ namespace Guardtime.KSI.Service
         {
             if (data == null)
             {
-                throw new KsiException("Invalid input data: null.");
+                throw new ArgumentNullException(nameof(data));
             }
 
             IPAddress ipAddress;
@@ -336,7 +336,7 @@ namespace Guardtime.KSI.Service
             {
                 if (client == null)
                 {
-                    throw new KsiException("Invalid tcp client: null.");
+                    throw new ArgumentNullException(nameof(client));
                 }
 
                 Client = client;

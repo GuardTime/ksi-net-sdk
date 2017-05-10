@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Signature;
@@ -35,7 +36,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             AggregationHashChainIndexRule rule = new AggregationHashChainIndexRule();
 
             // Argument null exception when no context
-            Assert.Throws<KsiException>(delegate
+            Assert.Throws<ArgumentNullException>(delegate
             {
                 rule.Verify(null);
             });

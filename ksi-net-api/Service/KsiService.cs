@@ -96,13 +96,7 @@ namespace Guardtime.KSI.Service
                           IPublicationsFileFactory publicationsFileFactory,
                           IKsiSignatureFactory ksiSignatureFactory,
                           PduVersion pduVersion = DefaultPduVersion)
-
         {
-            if (publicationsFileFactory == null)
-            {
-                throw new KsiServiceException("Invalid publications file factory: null.");
-            }
-
             _signingServiceProtocol = signingServiceProtocol;
             _signingServiceCredentials = signingServiceCredentials;
             _extendingServiceProtocol = extendingServiceProtocol;
@@ -213,7 +207,7 @@ namespace Guardtime.KSI.Service
             {
                 if (serviceProtocolAsyncResult == null)
                 {
-                    throw new KsiServiceException("Invalid service protocol IAsyncResult: null.");
+                    throw new ArgumentNullException(nameof(serviceProtocolAsyncResult));
                 }
 
                 ServiceProtocolAsyncResult = serviceProtocolAsyncResult;

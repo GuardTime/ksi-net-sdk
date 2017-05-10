@@ -51,7 +51,7 @@ namespace Guardtime.KSI.Parser
         {
             if (tag == null)
             {
-                throw new TlvException("Invalid TLV tag: null.");
+                throw new ArgumentNullException(nameof(tag));
             }
 
             Type = tag.Type;
@@ -244,7 +244,7 @@ namespace Guardtime.KSI.Parser
         {
             if (outputStream == null)
             {
-                throw new KsiException("Invalid output stream: null.");
+                throw new ArgumentNullException(nameof(outputStream));
             }
 
             if (!outputStream.CanWrite)

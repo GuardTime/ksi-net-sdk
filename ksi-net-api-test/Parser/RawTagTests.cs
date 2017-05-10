@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Test.Utils;
@@ -87,7 +88,7 @@ namespace Guardtime.KSI.Test.Parser
         [Test]
         public void TestTlvTagCreateFromNullData()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.Throws<ArgumentNullException>(delegate
             {
                 new RawTag(0x1, false, false, null);
             });
@@ -96,7 +97,7 @@ namespace Guardtime.KSI.Test.Parser
         [Test]
         public void TestTlvTagCreateFromNullTag()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.Throws<ArgumentNullException>(delegate
             {
                 new RawTag(null);
             });

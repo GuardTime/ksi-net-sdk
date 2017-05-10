@@ -186,17 +186,17 @@ namespace Guardtime.KSI.Service
 
         private CalendarHashChain ParseExtendRequestResponse(byte[] data, ExtendKsiServiceAsyncResult serviceAsyncResult)
         {
+            if (data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+
             RawTag rawTag = null;
             ExtendResponsePdu pdu = null;
             LegacyExtendPdu legacyPdu = null;
 
             try
             {
-                if (data == null)
-                {
-                    throw new KsiServiceException("Invalid extend response PDU: null.");
-                }
-
                 using (TlvReader reader = new TlvReader(new MemoryStream(data)))
                 {
                     rawTag = new RawTag(reader.ReadTag());
@@ -322,14 +322,14 @@ namespace Guardtime.KSI.Service
         /// <returns>Extender configuration data</returns>
         public ExtenderConfig EndGetExtenderConfig(IAsyncResult asyncResult)
         {
+            if (asyncResult == null)
+            {
+                throw new ArgumentNullException(nameof(asyncResult));
+            }
+
             if (_extendingServiceProtocol == null)
             {
                 throw new KsiServiceException("Extending service protocol is missing from service.");
-            }
-
-            if (asyncResult == null)
-            {
-                throw new KsiException("Invalid IAsyncResult: null.");
             }
 
             ExtenderConfigKsiServiceAsyncResult serviceAsyncResult = asyncResult as ExtenderConfigKsiServiceAsyncResult;
