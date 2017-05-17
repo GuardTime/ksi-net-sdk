@@ -18,6 +18,7 @@
  */
 
 using System;
+using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using Guardtime.KSI.Publication;
@@ -38,13 +39,11 @@ namespace Guardtime.KSI.Test.Integration
             new HttpKsiServiceProtocol("http://invalid.signing.service.url", "http://invalid.extending.service.url",
                 "http://invalid.publications.file.url", 10000);
 
-        private static readonly TcpKsiServiceProtocol TcpKsiServiceProtocol = new TcpKsiServiceProtocol(Settings.Default.TcpSigningServiceUrl,
+        private static readonly TcpKsiServiceProtocol TcpKsiServiceProtocol = new TcpKsiServiceProtocol(IPAddress.Parse(Settings.Default.TcpSigningServiceUrl),
             Settings.Default.TcpSigningServicePort, 10000);
 
-        private static readonly TcpKsiServiceProtocol TcpKsiServiceProtocolInvalidUrl = new TcpKsiServiceProtocol("tcp.invalid.service.url",
-            Settings.Default.TcpSigningServicePort, 10000);
-
-        private static readonly TcpKsiServiceProtocol TcpKsiServiceProtocolInvalidPort = new TcpKsiServiceProtocol(Settings.Default.TcpSigningServiceUrl, 2847, 10000);
+        private static readonly TcpKsiServiceProtocol TcpKsiServiceProtocolInvalidPort = new TcpKsiServiceProtocol(IPAddress.Parse(Settings.Default.TcpSigningServiceUrl), 2847,
+            10000);
 
         public static KsiService HttpKsiService = GetHttpKsiService();
 
@@ -179,23 +178,6 @@ namespace Guardtime.KSI.Test.Integration
                         HttpKsiServiceProtocol,
                         new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass + "x"),
                         HttpKsiServiceProtocol,
-                        new PublicationsFileFactory(
-                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
-                        TestSetup.PduVersion))
-            }
-        };
-
-        protected static object[] TcpTestCasesInvalidUrl =
-        {
-            new object[]
-            {
-                new Ksi(
-                    new KsiService(
-                        TcpKsiServiceProtocolInvalidUrl,
-                        new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
-                        HttpKsiServiceProtocolInvalidUrls,
-                        new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
-                        HttpKsiServiceProtocolInvalidUrls,
                         new PublicationsFileFactory(
                             new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
                         TestSetup.PduVersion))

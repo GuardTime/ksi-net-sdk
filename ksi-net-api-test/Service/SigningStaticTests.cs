@@ -218,5 +218,37 @@ namespace Guardtime.KSI.Test.Service
 
             Assert.That(ex.Message.StartsWith("HMAC algorithm mismatch."), "Unexpected exception message: " + ex.Message);
         }
+
+        /// <summary>
+        /// Test signing with invalid response PDU type.
+        /// </summary>
+        [Test]
+        public void SignStaticInvalidPduTypeTest()
+        {
+            Ksi ksi = GetStaticKsi(new byte[] { 1, 2, 3, 4, 5 });
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                ksi.Sign(new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")));
+            });
+
+            Assert.That(ex.Message.StartsWith("Unknown response PDU tag type"), "Unexpected exception message: " + ex.Message);
+        }
+
+        /// <summary>
+        /// Test signing with invalid response PDU content.
+        /// </summary>
+        [Test]
+        public void SignStaticInvalidPduContentTest()
+        {
+            Ksi ksi = GetStaticKsi(new byte[] { 0x82, 0x21, 0x08, 0xA7, 0x01 });
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                ksi.Sign(new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")));
+            });
+
+            Assert.That(ex.Message.StartsWith("Could not parse response message"), "Unexpected exception message: " + ex.Message);
+        }
     }
 }

@@ -321,7 +321,7 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        ///     Begin create signature.
+        ///     Begin signing request.
         /// </summary>
         /// <param name="data">aggregation request bytes</param>
         /// <param name="requestId"></param>
@@ -377,7 +377,7 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        ///     End create signature.
+        ///     End signing request.
         /// </summary>
         /// <param name="asyncResult">HTTP KSI service protocol async result</param>
         /// <returns>aggregation response bytes</returns>
