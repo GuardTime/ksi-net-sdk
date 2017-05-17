@@ -276,14 +276,14 @@ namespace Guardtime.KSI.Service
         /// <returns>Extender configuration data</returns>
         public ExtenderConfig EndGetExtenderConfig(IAsyncResult asyncResult)
         {
+            if (asyncResult == null)
+            {
+                throw new ArgumentNullException(nameof(asyncResult));
+            }
+
             if (_extendingServiceProtocol == null)
             {
                 throw new KsiServiceException("Extending service protocol is missing from service.");
-            }
-
-            if (asyncResult == null)
-            {
-                throw new KsiException("Invalid IAsyncResult: null.");
             }
 
             ExtenderConfigKsiServiceAsyncResult serviceAsyncResult = asyncResult as ExtenderConfigKsiServiceAsyncResult;

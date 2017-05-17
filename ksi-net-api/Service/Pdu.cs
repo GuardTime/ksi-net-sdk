@@ -210,7 +210,7 @@ namespace Guardtime.KSI.Service
         {
             if (macAlgorithm == null)
             {
-                throw new TlvException("Invalid MAC algorithm: null.");
+                throw new ArgumentNullException(nameof(macAlgorithm));
             }
 
             byte[] imprintBytes = new byte[macAlgorithm.Length + 1];

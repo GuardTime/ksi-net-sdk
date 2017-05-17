@@ -1016,7 +1016,16 @@
     <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-multiple-chains-chain-index-are-same.tlv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-multiple-chains-chain-index-wrong-value.tlv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-multiple-chains-changed-order-chain-index-are-same.tlv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-multiple-chains-input-hash-wrong.tlv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-multiple-chains-one-chain-removed.tlv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-right-link-legacy-id-datahash-value.tlv">
@@ -1607,13 +1616,16 @@
     <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-first-right-link-is-changed-CAL-04.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-input-hash-level-bigger-than-allowed-GEN-03.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-invalid-signature-value-KEY-02.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-just-one-aggregation-chain-GEN-02.ksig">
+    <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-just-one-aggregation-chainGEN-02.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-one-aggregation-chain-and-chc-GEN-02.ksig">
+    <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-one-aggregation-chain-and-chcGEN-02.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-other-core-extended-signature-to-publication-file-PUB-05.ksig">
@@ -1640,13 +1652,16 @@
     <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-rfc-signature.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-rfc3161-signature-with-input-level-GEN-03.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-suitable-publication-not-found-GEN-02.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-with-rfc-record-wrong-documentGEN-1.ksig">
+    <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-with-rfc-record-wrong-document-GEN-01.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-wrong-documentGEN-1.ksig">
+    <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-wrong-document-GEN-01.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\shared\policy-verification-signatures\resources\extender-response-for-CAL-03.tlv">
@@ -1737,6 +1752,15 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\shared\valid-signatures\signature-optional-additions-in-cal-auth-rec-cert-rep-uri.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\valid-signatures\signature-provided-input-hash-level-is-0.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\valid-signatures\signature-provided-input-hash-level-is-5.ksig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\valid-signatures\signature-provided-input-hash-level-is-less-than-5.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\shared\valid-signatures\signature-results.csv">

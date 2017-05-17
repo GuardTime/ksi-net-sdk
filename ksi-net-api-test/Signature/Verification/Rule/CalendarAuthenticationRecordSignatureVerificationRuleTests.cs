@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Exceptions;
@@ -42,7 +43,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                 CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
             // Argument null exception when no context
-            Assert.Throws<KsiException>(delegate
+            Assert.Throws<ArgumentNullException>(delegate
             {
                 rule.Verify(null);
             });

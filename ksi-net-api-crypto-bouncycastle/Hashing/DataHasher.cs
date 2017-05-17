@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
@@ -44,7 +45,7 @@ namespace Guardtime.KSI.Crypto.BouncyCastle.Hashing
         {
             if (algorithm == null)
             {
-                throw new HashingException("Invalid hash algorithm: null.");
+                throw new ArgumentNullException(nameof(algorithm));
             }
 
             _algorithm = algorithm;
@@ -75,7 +76,7 @@ namespace Guardtime.KSI.Crypto.BouncyCastle.Hashing
 
             if (data == null)
             {
-                throw new HashingException("Invalid input data: null.");
+                throw new ArgumentNullException(nameof(data));
             }
 
             _digester.BlockUpdate(data, offset, length);
@@ -91,7 +92,7 @@ namespace Guardtime.KSI.Crypto.BouncyCastle.Hashing
         {
             if (data == null)
             {
-                throw new HashingException("Invalid input data: null.");
+                throw new ArgumentNullException(nameof(data));
             }
 
             return AddData(data, 0, data.Length);
@@ -117,7 +118,7 @@ namespace Guardtime.KSI.Crypto.BouncyCastle.Hashing
         {
             if (inStream == null)
             {
-                throw new HashingException("Invalid input stream: null.");
+                throw new ArgumentNullException(nameof(inStream));
             }
 
             byte[] buffer = new byte[bufferSize];

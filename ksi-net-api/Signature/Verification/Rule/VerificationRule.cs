@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.Collections.ObjectModel;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
@@ -109,7 +110,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         {
             if (context == null)
             {
-                throw new KsiException("Invalid verification context: null.");
+                throw new ArgumentNullException(nameof(context));
             }
         }
 

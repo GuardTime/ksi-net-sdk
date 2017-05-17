@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 
@@ -53,7 +54,7 @@ namespace Guardtime.KSI.Parser
         {
             if (value == null)
             {
-                throw new TlvException("Invalid input value: null.");
+                throw new ArgumentNullException(nameof(value));
             }
 
             Value = value;

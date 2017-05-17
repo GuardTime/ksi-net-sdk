@@ -61,17 +61,17 @@ namespace Guardtime.KSI.Service
         /// <returns></returns>
         public PduPayload Parse(byte[] data, ulong? requestId = null)
         {
+            if (data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+
             RawTag rawTag = null;
             Pdu pdu = null;
             LegacyPdu legacyPdu = null;
 
             try
             {
-                if (data == null)
-                {
-                    throw new KsiServiceException("Invalid response PDU: null.");
-                }
-
                 using (TlvReader reader = new TlvReader(new MemoryStream(data)))
                 {
                     rawTag = new RawTag(reader.ReadTag());

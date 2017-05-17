@@ -50,7 +50,7 @@ namespace Guardtime.KSI.Signature.Verification
         {
             if (signature == null)
             {
-                throw new KsiException("Invalid KSI signature: null.");
+                throw new ArgumentNullException(nameof(signature));
             }
 
             Signature = signature;

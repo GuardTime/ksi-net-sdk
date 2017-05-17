@@ -315,7 +315,7 @@ namespace Guardtime.KSI.Signature
         {
             if (result == null)
             {
-                throw new KsiException("Invalid aggregation chain result: null.");
+                throw new ArgumentNullException(nameof(result));
             }
 
             lock (_cacheLock)
