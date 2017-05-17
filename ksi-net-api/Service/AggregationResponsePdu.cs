@@ -63,41 +63,5 @@ namespace Guardtime.KSI.Service
                     return base.ParseChild(childTag);
             }
         }
-
-        /// <summary>
-        /// Get aggregation response payload
-        /// </summary>
-        /// <param name="requestId">Request ID</param>
-        /// <returns></returns>
-        public AggregationResponsePayload GetAggregationResponsePayload(ulong requestId)
-        {
-            foreach (AggregationResponsePayload payload in GetPayloads<AggregationResponsePayload>())
-            {
-                if (payload.RequestId == requestId)
-                {
-                    return payload;
-                }
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// Get aggregation error payload
-        /// </summary>
-        /// <returns></returns>
-        public AggregationErrorPayload GetAggregationErrorPayload()
-        {
-            return ErrorPayload as AggregationErrorPayload;
-        }
-
-        /// <summary>
-        /// Get aggregator configuration response payload
-        /// </summary>
-        /// <returns></returns>
-        public AggregatorConfigResponsePayload GetAggregatorConfigResponsePayload()
-        {
-            return GetPayload<AggregatorConfigResponsePayload>();
-        }
     }
 }
