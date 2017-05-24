@@ -18,12 +18,9 @@
  */
 
 using System;
-using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
-using Guardtime.KSI.Parser;
 using Guardtime.KSI.Signature;
-using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Service
 {
@@ -32,6 +29,9 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public partial class KsiService
     {
+        private KsiServiceResponseParser _signRequestResponseParser;
+        private KsiServiceResponseParser _aggregatorConfigRequestResponseParser;
+
         /// <summary>
         ///     Create signature with given data hash (sync).
         /// </summary>
@@ -127,7 +127,7 @@ namespace Guardtime.KSI.Service
         /// <returns>KSI signature</returns>
         public IKsiSignature EndSign(IAsyncResult asyncResult)
         {
-            RequestResponsePayload reponsePayload = GetSignResponsePayload(asyncResult);
+            SignRequestResponsePayload reponsePayload = GetSignResponsePayload(asyncResult);
 
             CreateSignatureKsiServiceAsyncResult serviceAsyncResult = asyncResult as CreateSignatureKsiServiceAsyncResult;
 
@@ -154,7 +154,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="asyncResult">async result</param>
         /// <returns>Request response payload</returns>
-        public RequestResponsePayload GetSignResponsePayload(IAsyncResult asyncResult)
+        public SignRequestResponsePayload GetSignResponsePayload(IAsyncResult asyncResult)
         {
             if (_signingServiceProtocol == null)
             {
@@ -179,87 +179,29 @@ namespace Guardtime.KSI.Service
             }
 
             byte[] data = _signingServiceProtocol.EndSign(serviceAsyncResult.ServiceProtocolAsyncResult);
-            return ParseSignRequestResponse(data, serviceAsyncResult);
+            PduPayload payload = SignRequestResponseParser.Parse(data, serviceAsyncResult.RequestId);
+            SignRequestResponsePayload signResponsePayload = payload as SignRequestResponsePayload;
+
+            if (signResponsePayload == null)
+            {
+                Logger.Warn("Sign request failed. Invalid response payload.{0}Payload:{0}{1}", Environment.NewLine, payload);
+                throw new KsiServiceException("Invalid sign response payload. Type: " + payload.Type);
+            }
+
+            return signResponsePayload;
         }
 
-        /// <summary>
-        /// Parse sign request response
-        /// </summary>
-        /// <param name="data"></param>
-        /// <param name="serviceAsyncResult"></param>
-        /// <returns></returns>
-        private RequestResponsePayload ParseSignRequestResponse(byte[] data, CreateSignatureKsiServiceAsyncResult serviceAsyncResult)
+        private KsiServiceResponseParser SignRequestResponseParser
         {
-            RawTag rawTag = null;
-            AggregationResponsePdu pdu = null;
-            LegacyAggregationPdu legacyPdu = null;
-
-            try
+            get
             {
-                if (data == null)
+                if (_signRequestResponseParser == null)
                 {
-                    throw new KsiServiceException("Invalid sign response PDU: null.");
+                    _signRequestResponseParser = new KsiServiceResponseParser(PduVersion, KsiServiceRequestType.Sign, _signingMacAlgorithm,
+                        _signingServiceCredentials.LoginKey);
                 }
 
-                using (TlvReader reader = new TlvReader(new MemoryStream(data)))
-                {
-                    rawTag = new RawTag(reader.ReadTag());
-                }
-
-                if (rawTag.Type == Constants.AggregationResponsePdu.TagType)
-                {
-                    if (IsLegacyPduVersion)
-                    {
-                        throw new KsiServiceUnexpectedResponseFormatException(
-                            "Received PDU v2 response to PDU v1 request. Configure the SDK to use PDU v2 format for the given Aggregator.");
-                    }
-
-                    pdu = new AggregationResponsePdu(rawTag);
-                }
-                else if (rawTag.Type == Constants.LegacyAggregationPdu.TagType)
-                {
-                    if (!IsLegacyPduVersion)
-                    {
-                        throw new KsiServiceUnexpectedResponseFormatException(
-                            "Received PDU v1 response to PDU v2 request. Configure the SDK to use PDU v1 format for the given Aggregator.");
-                    }
-
-                    legacyPdu = new LegacyAggregationPdu(rawTag);
-                }
-                else
-                {
-                    throw new KsiServiceException("Unknown response PDU tag type: " + rawTag.Type.ToString("X"));
-                }
-
-                if (legacyPdu != null)
-                {
-                    LegacyAggregationResponsePayload legacyPayload = legacyPdu.Payload as LegacyAggregationResponsePayload;
-                    LegacyAggregationErrorPayload errorPayload = legacyPdu.ErrorPayload as LegacyAggregationErrorPayload;
-
-                    ValidateLegacyResponse(legacyPdu, legacyPayload, errorPayload, serviceAsyncResult.RequestId, _signingMacAlgorithm, _signingServiceCredentials);
-
-                    return legacyPayload;
-                }
-                else
-                {
-                    AggregationResponsePayload payload = pdu.GetAggregationResponsePayload(serviceAsyncResult.RequestId);
-                    AggregationErrorPayload errorPayload = pdu.GetAggregationErrorPayload();
-
-                    ValidateResponse(data, pdu, payload, errorPayload, _signingMacAlgorithm, _signingServiceCredentials);
-
-                    return payload;
-                }
-            }
-            catch (TlvException e)
-            {
-                KsiException ksiException = new KsiServiceException("Could not parse response message: " + Base16.Encode(data), e);
-                Logger.Warn("End sign request failed (request id: {0}): {1}", serviceAsyncResult.RequestId, ksiException);
-                throw ksiException;
-            }
-            catch (KsiException e)
-            {
-                Logger.Warn("End sign request failed (request id: {0}): {1}{2}{3}", serviceAsyncResult.RequestId, e, Environment.NewLine, legacyPdu ?? pdu ?? (ITlvTag)rawTag);
-                throw;
+                return _signRequestResponseParser;
             }
         }
 
@@ -305,7 +247,7 @@ namespace Guardtime.KSI.Service
 
             IAsyncResult serviceProtocolAsyncResult = _signingServiceProtocol.BeginSign(pdu.Encode(), requestId, callback, asyncState);
 
-            return new AggregatorConfigKsiServiceAsyncResult(requestId, serviceProtocolAsyncResult, asyncState);
+            return new AggregatorConfigKsiServiceAsyncResult(serviceProtocolAsyncResult, asyncState);
         }
 
         /// <summary>
@@ -315,14 +257,14 @@ namespace Guardtime.KSI.Service
         /// <returns>Aggregator configuration data</returns>
         public AggregatorConfig EndGetAggregatorConfig(IAsyncResult asyncResult)
         {
+            if (asyncResult == null)
+            {
+                throw new ArgumentNullException(nameof(asyncResult));
+            }
+
             if (_signingServiceProtocol == null)
             {
                 throw new KsiServiceException("Signing service protocol is missing from service.");
-            }
-
-            if (asyncResult == null)
-            {
-                throw new KsiServiceException("Invalid IAsyncResult: null.");
             }
 
             AggregatorConfigKsiServiceAsyncResult serviceAsyncResult = asyncResult as AggregatorConfigKsiServiceAsyncResult;
@@ -337,48 +279,29 @@ namespace Guardtime.KSI.Service
             }
 
             byte[] data = _signingServiceProtocol.EndSign(serviceAsyncResult.ServiceProtocolAsyncResult);
+            PduPayload payload = AggregatorConfigRequestResponseParser.Parse(data);
+            AggregatorConfigResponsePayload configResponsePayload = payload as AggregatorConfigResponsePayload;
 
-            AggregationResponsePdu pdu = null;
-
-            try
+            if (configResponsePayload == null)
             {
-                if (data == null)
-                {
-                    throw new KsiServiceException("Invalid aggregator config response PDU: null.");
-                }
-
-                RawTag rawTag;
-
-                using (TlvReader reader = new TlvReader(new MemoryStream(data)))
-                {
-                    rawTag = new RawTag(reader.ReadTag());
-                }
-
-                if (rawTag.Type == Constants.LegacyAggregationPdu.TagType)
-                {
-                    throw new KsiServiceUnexpectedResponseFormatException("Received PDU v1 response to PDU v2 request.");
-                }
-
-                pdu = new AggregationResponsePdu(rawTag);
-
-                AggregatorConfigResponsePayload payload = pdu.GetAggregatorConfigResponsePayload();
-                AggregationErrorPayload errorPayload = pdu.GetAggregationErrorPayload();
-
-                ValidateResponse(data, pdu, payload, errorPayload, _signingMacAlgorithm, _signingServiceCredentials);
-
-                return new AggregatorConfig(payload);
+                Logger.Warn("Aggregator config request failed. Invalid response payload.{0}Payload:{0}{1}", Environment.NewLine, payload);
+                throw new KsiServiceException("Invalid config response payload. Type: " + payload.Type);
             }
-            catch (TlvException e)
-            {
-                KsiException ksiException = new KsiServiceException("Could not parse response message: " + Base16.Encode(data), e);
-                Logger.Warn("End aggregator config request failed (request id: {0}): {1}", serviceAsyncResult.RequestId, ksiException);
-                throw ksiException;
-            }
-            catch (KsiException e)
-            {
-                Logger.Warn("End aggregator config request failed (request id: {0}): {1}{2}{3}", serviceAsyncResult.RequestId, e, Environment.NewLine, pdu);
 
-                throw;
+            return new AggregatorConfig(configResponsePayload);
+        }
+
+        private KsiServiceResponseParser AggregatorConfigRequestResponseParser
+        {
+            get
+            {
+                if (_aggregatorConfigRequestResponseParser == null)
+                {
+                    _aggregatorConfigRequestResponseParser = new KsiServiceResponseParser(PduVersion, KsiServiceRequestType.AggregatorConfig,
+                        _signingMacAlgorithm, _signingServiceCredentials.LoginKey);
+                }
+
+                return _aggregatorConfigRequestResponseParser;
             }
         }
 
@@ -421,13 +344,10 @@ namespace Guardtime.KSI.Service
 
         private class AggregatorConfigKsiServiceAsyncResult : KsiServiceAsyncResult
         {
-            public AggregatorConfigKsiServiceAsyncResult(ulong requestId, IAsyncResult serviceProtocolAsyncResult, object asyncState)
+            public AggregatorConfigKsiServiceAsyncResult(IAsyncResult serviceProtocolAsyncResult, object asyncState)
                 : base(serviceProtocolAsyncResult, asyncState)
             {
-                RequestId = requestId;
             }
-
-            public ulong RequestId { get; }
         }
     }
 }

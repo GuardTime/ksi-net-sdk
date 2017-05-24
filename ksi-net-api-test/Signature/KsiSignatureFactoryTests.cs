@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
@@ -40,7 +41,7 @@ namespace Guardtime.KSI.Test.Signature
         [Test]
         public void CreateFromStreamFromNullInvalidTest()
         {
-            Assert.Throws<KsiException>(delegate
+            Assert.Throws<ArgumentNullException>(delegate
             {
                 new KsiSignatureFactory().Create((Stream)null);
             });
@@ -115,13 +116,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             KsiSignatureFactory signatureFactory = new KsiSignatureFactory();
 
-            Assert.Throws<KsiException>(delegate
-            {
-                signatureFactory.Create((AggregationResponsePayload)null, null);
-            });
-
             // corrseponding hash: "01D439459856BEF5ED25772646F73A70A841FC078D3CBBC24AB7F47C464683768D"
-
             AggregationResponsePayload aggregationResponsePayload =
                 new AggregationResponsePayload(new RawTag(0x2, false, false,
                     Base16.Decode(

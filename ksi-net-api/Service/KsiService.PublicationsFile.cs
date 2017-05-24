@@ -66,6 +66,11 @@ namespace Guardtime.KSI.Service
                 throw new KsiServiceException("Publications file service protocol is missing from service.");
             }
 
+            if (_publicationsFileFactory == null)
+            {
+                throw new KsiServiceException("Publications file factory is missing from service.");
+            }
+
             if (asyncResult == null)
             {
                 throw new ArgumentNullException(nameof(asyncResult));

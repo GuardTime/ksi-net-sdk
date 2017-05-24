@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Utils
@@ -104,7 +105,7 @@ namespace Guardtime.KSI.Utils
         {
             if (data == null)
             {
-                throw new KsiException("Invalid input data: null.");
+                throw new ArgumentNullException(nameof(data));
             }
 
             ulong retval = ival ^ 0xffffffff;

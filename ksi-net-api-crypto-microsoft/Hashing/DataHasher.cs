@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.IO;
 using System.Security.Cryptography;
 using Guardtime.KSI.Exceptions;
@@ -33,7 +34,7 @@ namespace Guardtime.KSI.Crypto.Microsoft.Hashing
         private const int DefaultStreamBufferSize = 8192;
 
         private readonly HashAlgorithm _algorithm;
-        private System.Security.Cryptography.HashAlgorithm _hasher;
+        private readonly System.Security.Cryptography.HashAlgorithm _hasher;
         private DataHash _outputHash;
 
         /// <summary>
@@ -44,7 +45,7 @@ namespace Guardtime.KSI.Crypto.Microsoft.Hashing
         {
             if (algorithm == null)
             {
-                throw new HashingException("Invalid hash algorithm: null.");
+                throw new ArgumentNullException(nameof(algorithm));
             }
 
             _algorithm = algorithm;
@@ -98,7 +99,7 @@ namespace Guardtime.KSI.Crypto.Microsoft.Hashing
 
             if (data == null)
             {
-                throw new HashingException("Invalid input data: null.");
+                throw new ArgumentNullException(nameof(data));
             }
 
             _hasher.TransformBlock(data, offset, length, null, 0);
@@ -114,7 +115,7 @@ namespace Guardtime.KSI.Crypto.Microsoft.Hashing
         {
             if (data == null)
             {
-                throw new HashingException("Invalid input data: null.");
+                throw new ArgumentNullException(nameof(data));
             }
 
             return AddData(data, 0, data.Length);
@@ -140,7 +141,7 @@ namespace Guardtime.KSI.Crypto.Microsoft.Hashing
         {
             if (inStream == null)
             {
-                throw new HashingException("Invalid input stream: null.");
+                throw new ArgumentNullException(nameof(inStream));
             }
 
             byte[] buffer = new byte[bufferSize];

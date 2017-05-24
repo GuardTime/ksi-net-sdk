@@ -96,13 +96,7 @@ namespace Guardtime.KSI.Service
                           IPublicationsFileFactory publicationsFileFactory,
                           IKsiSignatureFactory ksiSignatureFactory,
                           PduVersion pduVersion = DefaultPduVersion)
-
         {
-            if (publicationsFileFactory == null)
-            {
-                throw new KsiServiceException("Invalid publications file factory: null.");
-            }
-
             _signingServiceProtocol = signingServiceProtocol;
             _signingServiceCredentials = signingServiceCredentials;
             _extendingServiceProtocol = extendingServiceProtocol;
@@ -132,78 +126,6 @@ namespace Guardtime.KSI.Service
             return Util.GetRandomUnsignedLong();
         }
 
-        private static void ValidateLegacyResponse(LegacyPdu pdu, RequestResponsePayload payload,
-                                                   ErrorPayload errorPayload, ulong requestId, HashAlgorithm expectedMacAlgorithm, IServiceCredentials serviceCredentials)
-        {
-            if (payload == null && errorPayload == null)
-            {
-                throw new KsiServiceException("Invalid response payload: null.");
-            }
-
-            if (errorPayload != null)
-            {
-                throw new KsiServiceException(FormatErrorStatus(errorPayload.Status, errorPayload.ErrorMessage));
-            }
-
-            CheckMacAlgorithm(pdu.Mac, expectedMacAlgorithm);
-
-            if (!LegacyPdu.ValidateMac(pdu.Encode(), pdu.Mac, serviceCredentials.LoginKey))
-            {
-                throw new KsiServiceException("Invalid MAC in response PDU.");
-            }
-
-            if (payload.RequestId != requestId)
-            {
-                throw new KsiServiceException("Unknown request ID: " + payload.RequestId);
-            }
-
-            if (payload.Status != 0)
-            {
-                throw new KsiServiceException(FormatErrorStatus(payload.Status, payload.ErrorMessage));
-            }
-        }
-
-        private static void ValidateResponse(byte[] data, Pdu pdu, PduPayload payload, ErrorPayload errorPayload, HashAlgorithm expectedMacAlgorithm,
-                                             IServiceCredentials serviceCredentials)
-        {
-            if (payload == null && errorPayload == null)
-            {
-                throw new KsiServiceException("Invalid response PDU. Could not find a valid payload. PDU: " + pdu);
-            }
-
-            if (errorPayload != null)
-            {
-                throw new KsiServiceException(FormatErrorStatus(errorPayload.Status, errorPayload.ErrorMessage));
-            }
-
-            CheckMacAlgorithm(pdu.Mac, expectedMacAlgorithm);
-
-            if (!Pdu.ValidateMac(data, pdu.Mac, serviceCredentials.LoginKey))
-            {
-                throw new KsiServiceException("Invalid MAC in response PDU.");
-            }
-
-            ResponsePayload responsePayload = payload as ResponsePayload;
-
-            if (responsePayload != null && responsePayload.Status != 0)
-            {
-                throw new KsiServiceException(FormatErrorStatus(responsePayload.Status, responsePayload.ErrorMessage));
-            }
-        }
-
-        private static void CheckMacAlgorithm(ImprintTag mac, HashAlgorithm expectedMacAlgorithm)
-        {
-            if (mac != null && mac.Value.Algorithm.Id != expectedMacAlgorithm.Id)
-            {
-                throw new KsiServiceException(string.Format("HMAC algorithm mismatch. Expected {0}, received {1}", expectedMacAlgorithm.Name, mac.Value.Algorithm.Name));
-            }
-        }
-
-        private static string FormatErrorStatus(ulong status, string errorMessage)
-        {
-            return "Server responded with error message. Status: " + status + "; Message: " + errorMessage + ".";
-        }
-
         /// <summary>
         ///     Abstract KSI service async result.
         /// </summary>
@@ -213,7 +135,7 @@ namespace Guardtime.KSI.Service
             {
                 if (serviceProtocolAsyncResult == null)
                 {
-                    throw new KsiServiceException("Invalid service protocol IAsyncResult: null.");
+                    throw new ArgumentNullException(nameof(serviceProtocolAsyncResult));
                 }
 
                 ServiceProtocolAsyncResult = serviceProtocolAsyncResult;

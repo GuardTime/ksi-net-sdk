@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
@@ -33,7 +34,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             ExtendingPermittedVerificationRule rule = new ExtendingPermittedVerificationRule();
 
             // Argument null exception when no context
-            Assert.Throws<KsiException>(delegate
+            Assert.Throws<ArgumentNullException>(delegate
             {
                 rule.Verify(null);
             });

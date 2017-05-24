@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
@@ -170,7 +171,7 @@ namespace Guardtime.KSI.Test.Parser
         [Test]
         public void TestImprintTagCreateFromNullTag()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.Throws<ArgumentNullException>(delegate
             {
                 new ImprintTag(null);
             });
@@ -179,7 +180,7 @@ namespace Guardtime.KSI.Test.Parser
         [Test]
         public void TestImprintTagCreateWithNullValue()
         {
-            Assert.Throws<TlvException>(delegate
+            Assert.Throws<ArgumentNullException>(delegate
             {
                 new ImprintTag(0x1, true, true, null);
             });

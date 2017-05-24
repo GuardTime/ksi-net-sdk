@@ -145,7 +145,7 @@ namespace Guardtime.KSI.Test.Hashing
         [Test]
         public void TestDataHasherWithAlgorithmNull()
         {
-            Assert.Throws<HashingException>(delegate
+            Assert.Throws<ArgumentNullException>(delegate
             {
                 CryptoTestFactory.CreateDataHasher(null);
             });
@@ -164,7 +164,7 @@ namespace Guardtime.KSI.Test.Hashing
         public void TestDataHasherWithNullBytes()
         {
             IDataHasher hasher = CryptoTestFactory.CreateDataHasher();
-            Assert.Throws<HashingException>(delegate
+            Assert.Throws<ArgumentNullException>(delegate
             {
                 hasher.AddData((byte[])null);
             });
@@ -174,7 +174,7 @@ namespace Guardtime.KSI.Test.Hashing
         public void TestDataHasherWithNullICollection()
         {
             IDataHasher hasher = CryptoTestFactory.CreateDataHasher();
-            Assert.Throws<HashingException>(delegate
+            Assert.Throws<ArgumentNullException>(delegate
             {
                 hasher.AddData((byte[])null);
             });
@@ -184,7 +184,7 @@ namespace Guardtime.KSI.Test.Hashing
         public void TestDataHasherWithNullBytesAndNoLength()
         {
             IDataHasher hasher = CryptoTestFactory.CreateDataHasher();
-            Assert.Throws<HashingException>(delegate
+            Assert.Throws<ArgumentNullException>(delegate
             {
                 hasher.AddData(null, 0, 0);
             });
@@ -194,7 +194,7 @@ namespace Guardtime.KSI.Test.Hashing
         public void TestDataHasherWithNullStream()
         {
             IDataHasher hasher = CryptoTestFactory.CreateDataHasher();
-            Assert.Throws<HashingException>(delegate
+            Assert.Throws<ArgumentNullException>(delegate
             {
                 hasher.AddData((Stream)null);
             });

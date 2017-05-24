@@ -150,7 +150,7 @@ namespace Guardtime.KSI.Service
         {
             if (data == null)
             {
-                throw new KsiException("Invalid input data: null.");
+                throw new ArgumentNullException(nameof(data));
             }
 
             HttpWebRequest request = null;
@@ -332,7 +332,7 @@ namespace Guardtime.KSI.Service
         {
             if (data == null)
             {
-                throw new KsiException("Invalid input data: null.");
+                throw new ArgumentNullException(nameof(data));
             }
 
             HttpWebRequest request = null;
@@ -529,7 +529,7 @@ namespace Guardtime.KSI.Service
             {
                 if (request == null)
                 {
-                    throw new KsiException("Invalid HTTP web request: null.");
+                    throw new ArgumentNullException(nameof(request));
                 }
 
                 Request = request;

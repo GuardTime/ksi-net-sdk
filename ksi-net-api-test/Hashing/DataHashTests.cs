@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using NUnit.Framework;
@@ -78,7 +79,7 @@ namespace Guardtime.KSI.Test.Hashing
         [Test]
         public void TestDataHashCreateWithNullAlgorithm()
         {
-            Assert.Throws<HashingException>(delegate
+            Assert.Throws<ArgumentNullException>(delegate
             {
                 new DataHash(null, new byte[] { });
             });
@@ -87,7 +88,7 @@ namespace Guardtime.KSI.Test.Hashing
         [Test]
         public void TestDataHashCreateWithNullValue()
         {
-            Assert.Throws<HashingException>(delegate
+            Assert.Throws<ArgumentNullException>(delegate
             {
                 new DataHash(HashAlgorithm.Sha2256, null);
             });
@@ -105,7 +106,7 @@ namespace Guardtime.KSI.Test.Hashing
         [Test]
         public void TestDataHashCreateWithNullBytes()
         {
-            Assert.Throws<HashingException>(delegate
+            Assert.Throws<ArgumentNullException>(delegate
             {
                 new DataHash(null);
             });

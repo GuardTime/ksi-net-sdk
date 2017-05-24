@@ -46,7 +46,7 @@ namespace Guardtime.KSI
         {
             if (ksiService == null)
             {
-                throw new KsiException("KSI service cannot be null.");
+                throw new ArgumentNullException(nameof(ksiService));
             }
 
             _ksiService = ksiService;
@@ -73,7 +73,7 @@ namespace Guardtime.KSI
         {
             if (hash == null)
             {
-                throw new KsiException("Document hash cannot be null.");
+                throw new ArgumentNullException(nameof(hash));
             }
 
             return _ksiService.Sign(hash, level);
@@ -88,7 +88,7 @@ namespace Guardtime.KSI
         {
             if (stream == null)
             {
-                throw new KsiException("Stream cannot be null.");
+                throw new ArgumentNullException(nameof(stream));
             }
 
             IDataHasher dataHasher = KsiProvider.CreateDataHasher();
@@ -105,7 +105,7 @@ namespace Guardtime.KSI
         {
             if (documentBytes == null)
             {
-                throw new KsiException("Document bytes cannot be null.");
+                throw new ArgumentNullException(nameof(documentBytes));
             }
 
             IDataHasher dataHasher = KsiProvider.CreateDataHasher();
@@ -144,12 +144,12 @@ namespace Guardtime.KSI
         {
             if (signature == null)
             {
-                throw new KsiException("KSI signature cannot be null.");
+                throw new ArgumentNullException(nameof(signature));
             }
 
             if (publicationRecord == null)
             {
-                throw new KsiException("Publication record cannot be null.");
+                throw new ArgumentNullException(nameof(publicationRecord));
             }
 
             CalendarHashChain calendarHashChain = _ksiService.Extend(signature.AggregationTime, publicationRecord.PublicationData.PublicationTime);
@@ -178,12 +178,12 @@ namespace Guardtime.KSI
         {
             if (signature == null)
             {
-                throw new KsiException("KSI signature cannot be null.");
+                throw new ArgumentNullException(nameof(signature));
             }
 
             if (publicationRecord == null)
             {
-                throw new KsiException("Publication record cannot be null.");
+                throw new ArgumentNullException(nameof(publicationRecord));
             }
 
             CalendarHashChain calendarHashChain = _ksiService.Extend(signature.AggregationTime, publicationRecord.PublicationData.PublicationTime);
@@ -200,12 +200,12 @@ namespace Guardtime.KSI
         {
             if (signature == null)
             {
-                throw new KsiException("KSI signature cannot be null.");
+                throw new ArgumentNullException(nameof(signature));
             }
 
             if (publicationData == null)
             {
-                throw new KsiException("Publication data cannot be null.");
+                throw new ArgumentNullException(nameof(publicationData));
             }
 
             CalendarHashChain calendarHashChain = _ksiService.Extend(signature.AggregationTime, publicationData.PublicationTime);
@@ -222,8 +222,9 @@ namespace Guardtime.KSI
         {
             if (signature == null)
             {
-                throw new KsiException("KSI signature cannot be null.");
+                throw new ArgumentNullException(nameof(signature));
             }
+
             PublicationRecordInPublicationFile publicationRecord = GetPublicationsFile().GetNearestPublicationRecord(signature.AggregationTime);
 
             if (publicationRecord == null)
@@ -267,7 +268,7 @@ namespace Guardtime.KSI
 
             if (_publicationsFile == null)
             {
-                throw new KsiException("Invalid publications file: null");
+                throw new KsiException("Invalid publications file: null.");
             }
 
             _publicationsFileLoadTime = DateTime.Now;

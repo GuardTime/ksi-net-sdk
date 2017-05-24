@@ -133,7 +133,7 @@ namespace Guardtime.KSI.Service
 
             if (data == null)
             {
-                throw new KsiServiceProtocolException("Invalid input data: null.");
+                throw new ArgumentNullException(nameof(data));
             }
 
             Socket socket = GetSocket(requestId);
@@ -445,7 +445,7 @@ namespace Guardtime.KSI.Service
             {
                 if (socket == null)
                 {
-                    throw new KsiServiceProtocolException("Invalid tcp socket: null.");
+                    throw new ArgumentNullException(nameof(socket));
                 }
 
                 Socket = socket;

@@ -134,11 +134,14 @@
     <Compile Include="Publication\PublicationsFileHeader.cs" />
     <Compile Include="Publication\PublicationsFile.cs" />
     <Compile Include="Publication\PublicationData.cs" />
+    <Compile Include="Service\KsiServiceRequestType.cs" />
+    <Compile Include="Service\KsiServiceResponseParser.cs" />
     <Compile Include="Service\AggregatorConfig.cs" />
     <Compile Include="Service\ExtenderConfigRequestPayload.cs" />
     <Compile Include="Service\ExtenderConfig.cs" />
     <Compile Include="Service\ExtenderConfigResponsePayload.cs" />
     <Compile Include="Service\IdentityMetadata.cs" />
+    <Compile Include="Service\SignRequestResponsePayload.cs" />
     <Compile Include="Service\RequestResponsePayload.cs" />
     <Compile Include="Service\ResponsePayload.cs" />
     <Compile Include="Service\KsiService.PublicationsFile.cs" />

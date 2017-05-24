@@ -301,7 +301,7 @@ namespace Guardtime.KSI.Signature
 
             if (calendarHashChain == null)
             {
-                throw new KsiException("Invalid calendar hash chain: null.");
+                throw new ArgumentNullException(nameof(calendarHashChain));
             }
 
             if (signatureFactory == null)

@@ -128,7 +128,7 @@ namespace Guardtime.KSI.Publication
         {
             if (publicationString == null)
             {
-                throw new TlvException("Invalid publication string: null.");
+                throw new ArgumentNullException(nameof(publicationString));
             }
 
             byte[] dataBytesWithCrc32 = Base32.Decode(publicationString);
