@@ -34,22 +34,23 @@ namespace Guardtime.KSI.Service
     /// New request takes an available socket if one exists and makes the request. If none is available a new socket is created.
     /// If the request using old socket fails (eg. socket is closed by server) it will be repeated once more with a new freshly connected socket.
     /// </summary>
-    public class TcpKsiServiceProtocol : IKsiSigningServiceProtocol
+    public class TcpKsiServiceProtocol : IKsiSigningServiceProtocol, IDisposable
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly int _requestTimeOut = 10000;
-        private readonly int _bufferSize = 8192;
+        private readonly uint _requestTimeOut = 10000;
+        private readonly uint _bufferSize = 8192;
         private readonly IPAddress _ipAddress;
-        private readonly int _port;
+        private readonly ushort _port;
         private readonly Stack<Socket> _availableSockets = new Stack<Socket>();
         private readonly object _syncObj = new object();
+        private bool _isDisposed;
 
         /// <summary>
         ///     Create TCP KSI service protocol
         /// </summary>
         /// <param name="ipAddress">Signing service IP address</param>
         /// <param name="port">Signing service port</param>
-        public TcpKsiServiceProtocol(IPAddress ipAddress, int port)
+        public TcpKsiServiceProtocol(IPAddress ipAddress, ushort port)
         {
             if (ipAddress == null)
             {
@@ -66,13 +67,8 @@ namespace Guardtime.KSI.Service
         /// <param name="ipAddress">Signing service IP address</param>
         /// <param name="port">Signing service port</param>
         /// <param name="requestTimeout">request timeout in milliseconds</param>
-        public TcpKsiServiceProtocol(IPAddress ipAddress, int port, int requestTimeout) : this(ipAddress, port)
+        public TcpKsiServiceProtocol(IPAddress ipAddress, ushort port, uint requestTimeout) : this(ipAddress, port)
         {
-            if (requestTimeout < 0)
-            {
-                throw new KsiServiceProtocolException("Request timeout should be in milliseconds, but was (" + requestTimeout + ").");
-            }
-
             _requestTimeOut = requestTimeout;
         }
 
@@ -83,14 +79,41 @@ namespace Guardtime.KSI.Service
         /// <param name="port">Signing service port</param>
         /// <param name="requestTimeout">request timeout in milliseconds</param>
         /// <param name="bufferSize">size of buffer to be used when receiving data</param>
-        public TcpKsiServiceProtocol(IPAddress ipAddress, int port, int requestTimeout, int bufferSize) : this(ipAddress, port, requestTimeout)
+        public TcpKsiServiceProtocol(IPAddress ipAddress, ushort port, uint requestTimeout, uint bufferSize) : this(ipAddress, port, requestTimeout)
         {
-            if (bufferSize < 0)
+            if (bufferSize == 0)
             {
                 throw new KsiServiceProtocolException("Buffer size should be in positive integer, but was (" + bufferSize + ").");
             }
 
             _bufferSize = bufferSize;
+        }
+
+        /// <summary>
+        /// Dispose TCP KSI service protocol. Close opened connections.
+        /// </summary>
+        public void Dispose()
+        {
+            Logger.Debug("Disposing.");
+
+            lock (_syncObj)
+            {
+                _isDisposed = true;
+
+                while (_availableSockets.Count > 0)
+                {
+                    Socket socket = _availableSockets.Pop();
+                    CloseSocket(socket);
+                }
+            }
+        }
+
+        private static void CloseSocket(Socket socket)
+        {
+            Logger.Debug("Closing socket. Handle: " + socket.Handle);
+            socket.Shutdown(SocketShutdown.Both);
+            socket.Disconnect(false);
+            socket.Close();
         }
 
         /// <summary>
@@ -103,13 +126,18 @@ namespace Guardtime.KSI.Service
         /// <returns>TCP KSI service protocol async result</returns>
         public IAsyncResult BeginSign(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
-            if (data == null)
+            if (_isDisposed)
             {
-                throw new KsiException("Invalid input data: null.");
+                throw new KsiServiceProtocolException("TCP KSI service protocol is disposed.");
             }
 
-            Socket client = GetSocket(requestId);
-            TcpKsiServiceProtocolAsyncResult asyncResult = new TcpKsiServiceProtocolAsyncResult(client, data, requestId, callback, asyncState, _bufferSize);
+            if (data == null)
+            {
+                throw new KsiServiceProtocolException("Invalid input data: null.");
+            }
+
+            Socket socket = GetSocket(requestId);
+            TcpKsiServiceProtocolAsyncResult asyncResult = new TcpKsiServiceProtocolAsyncResult(socket, data, requestId, callback, asyncState, _bufferSize);
             BeginSocketConnect(asyncResult);
             ThreadPool.RegisterWaitForSingleObject(asyncResult.BeginWaitHandle, EndBeginSignCallback, asyncResult, _requestTimeOut, true);
             return asyncResult;
@@ -117,15 +145,15 @@ namespace Guardtime.KSI.Service
 
         private void BeginSocketConnect(TcpKsiServiceProtocolAsyncResult asyncResult)
         {
-            if (asyncResult.Client.Connected)
+            if (asyncResult.Socket.Connected)
             {
-                Logger.Debug("Re-using already connected TCP socket. (Socket handle: {0}; request id: {1}).", asyncResult.Client.Handle, asyncResult.RequestId);
+                Logger.Debug("Re-using already connected TCP socket. (Socket handle: {0}; request id: {1}).", asyncResult.Socket.Handle, asyncResult.RequestId);
                 BeginSend(asyncResult);
             }
             else
             {
-                Logger.Debug("Begin TCP socket connection. (Socket handle: {0}; request id: {1}).", asyncResult.Client.Handle, asyncResult.RequestId);
-                asyncResult.Client.BeginConnect(new IPEndPoint(_ipAddress, _port), ConnectCallback, asyncResult);
+                Logger.Debug("Begin TCP socket connection. (Socket handle: {0}; request id: {1}).", asyncResult.Socket.Handle, asyncResult.RequestId);
+                asyncResult.Socket.BeginConnect(new IPEndPoint(_ipAddress, _port), ConnectCallback, asyncResult);
             }
         }
 
@@ -135,17 +163,25 @@ namespace Guardtime.KSI.Service
         /// <returns></returns>
         private Socket GetSocket(ulong requestId)
         {
+            Socket s;
+
             lock (_syncObj)
             {
                 if (_availableSockets.Count > 0)
                 {
-                    return _availableSockets.Pop();
+                    s = _availableSockets.Pop();
+                    Logger.Debug("An available socket found to be re-used. (Socket handle: {0}; request id: {1}).", s.Handle, requestId);
+                    return s;
                 }
             }
 
+            return CreateSocket(requestId);
+        }
+
+        private static Socket CreateSocket(ulong requestId)
+        {
             Socket s = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             Logger.Debug("New TCP socket created. (Socket handle: {0}; request id: {1}).", s.Handle, requestId);
-
             return s;
         }
 
@@ -156,8 +192,8 @@ namespace Guardtime.KSI.Service
             try
             {
                 // Complete the connection.
-                asyncResult.Client.EndConnect(ar);
-                Logger.Debug("Socket connected to {0} (request id: {1}).", asyncResult.Client.RemoteEndPoint.ToString(), asyncResult.RequestId);
+                asyncResult.Socket.EndConnect(ar);
+                Logger.Debug("Socket connected to {0} (request id: {1}).", asyncResult.Socket.RemoteEndPoint.ToString(), asyncResult.RequestId);
             }
             catch (Exception e)
             {
@@ -178,11 +214,11 @@ namespace Guardtime.KSI.Service
             try
             {
                 Logger.Debug("Starting sending (request id: {0}).", asyncResult.RequestId);
-                asyncResult.Client.BeginSend(asyncResult.PostData, 0, asyncResult.PostData.Length, 0, SendCallback, asyncResult);
+                asyncResult.Socket.BeginSend(asyncResult.PostData, 0, asyncResult.PostData.Length, 0, SendCallback, asyncResult);
             }
             catch (Exception e)
             {
-                RetryOrSetError(asyncResult, e, "Starting sending failed.");
+                RetryOrSetError(asyncResult, e, "Failed to start sending.");
             }
         }
 
@@ -198,12 +234,12 @@ namespace Guardtime.KSI.Service
             try
             {
                 // Complete sending the data to the remote device.
-                int bytesSent = asyncResult.Client.EndSend(ar);
+                int bytesSent = asyncResult.Socket.EndSend(ar);
                 Logger.Debug("{0} bytes sent to server (request id: {1}).", bytesSent, asyncResult.RequestId);
             }
             catch (Exception e)
             {
-                RetryOrSetError(asyncResult, e, "Completing sending failed.");
+                RetryOrSetError(asyncResult, e, "Failed to complete sending.");
                 return;
             }
 
@@ -215,11 +251,11 @@ namespace Guardtime.KSI.Service
             try
             {
                 Logger.Debug("Starting receiving (request id: {0}).", asyncResult.RequestId);
-                asyncResult.Client.BeginReceive(asyncResult.Buffer, 0, asyncResult.Buffer.Length, 0, ReceiveCallback, asyncResult);
+                asyncResult.Socket.BeginReceive(asyncResult.Buffer, 0, asyncResult.Buffer.Length, 0, ReceiveCallback, asyncResult);
             }
             catch (Exception e)
             {
-                RetryOrSetError(asyncResult, e, "Starting receiving failed.");
+                RetryOrSetError(asyncResult, e, "Failed to start receiving.");
             }
         }
 
@@ -235,7 +271,7 @@ namespace Guardtime.KSI.Service
                 }
 
                 // Read data from the remote device.
-                int bytesRead = asyncResult.Client.EndReceive(ar);
+                int bytesRead = asyncResult.Socket.EndReceive(ar);
 
                 if (bytesRead == 0)
                 {
@@ -275,7 +311,7 @@ namespace Guardtime.KSI.Service
 
                 // Get the rest of the data.
                 Logger.Debug("Rerun BeginReceive (request id: {0}).", asyncResult.RequestId);
-                asyncResult.Client.BeginReceive(asyncResult.Buffer, 0, asyncResult.Buffer.Length, 0, ReceiveCallback, asyncResult);
+                asyncResult.Socket.BeginReceive(asyncResult.Buffer, 0, asyncResult.Buffer.Length, 0, ReceiveCallback, asyncResult);
             }
             catch (Exception e)
             {
@@ -308,36 +344,51 @@ namespace Guardtime.KSI.Service
                 throw new KsiServiceProtocolException("Invalid IAsyncResult.");
             }
 
-            if (asyncResult.IsDisposed)
-            {
-                throw new KsiServiceProtocolException("Provided async result is already disposed. Possibly using the same async result twice when calling EndSign().");
-            }
-
-            if (!asyncResult.IsCompleted)
-            {
-                asyncResult.AsyncWaitHandle.WaitOne();
-            }
-
-            if (asyncResult.HasError)
-            {
-                Logger.Warn("{0} (request id: {1}){2}{3}", asyncResult.Error.Message, asyncResult.RequestId, Environment.NewLine, asyncResult.Error);
-                throw asyncResult.Error;
-            }
-
-            Logger.Debug("Returning {0} bytes (request id: {1}).", asyncResult.ResultStream.Length, asyncResult.RequestId);
-
             try
             {
+                if (_isDisposed)
+                {
+                    throw new KsiServiceProtocolException("TCP KSI service protocol is disposed.");
+                }
+
+                if (asyncResult.IsDisposed)
+                {
+                    throw new KsiServiceProtocolException("Provided async result is already disposed. Possibly using the same async result twice when calling EndSign().");
+                }
+
+                if (!asyncResult.IsCompleted)
+                {
+                    asyncResult.AsyncWaitHandle.WaitOne();
+                }
+
+                if (asyncResult.HasError)
+                {
+                    Logger.Warn("{0} (request id: {1}){2}{3}", asyncResult.Error.Message, asyncResult.RequestId, Environment.NewLine, asyncResult.Error);
+                    throw asyncResult.Error;
+                }
+
+                Logger.Debug("Returning {0} bytes (request id: {1}).", asyncResult.ResultStream.Length, asyncResult.RequestId);
+
                 return asyncResult.ResultStream.ToArray();
             }
             finally
             {
+                bool isAdded = false;
                 lock (_syncObj)
                 {
-                    if (!_availableSockets.Contains(asyncResult.Client))
+                    if (!_isDisposed)
                     {
-                        _availableSockets.Push(asyncResult.Client);
+                        if (!_availableSockets.Contains(asyncResult.Socket))
+                        {
+                            _availableSockets.Push(asyncResult.Socket);
+                            isAdded = true;
+                        }
                     }
+                }
+
+                if (!isAdded)
+                {
+                    CloseSocket(asyncResult.Socket);
                 }
 
                 asyncResult.Dispose();
@@ -350,21 +401,18 @@ namespace Guardtime.KSI.Service
             {
                 Logger.Debug(message + " Re-trying with a new socket (request id: {0}).", asyncResult.RequestId);
                 asyncResult.IsFirstTry = false;
-                Logger.Debug("Closing socket. Handle: " + asyncResult.Client.Handle);
-                asyncResult.Client.Close();
+                CloseSocket(asyncResult.Socket);
 
                 lock (_syncObj)
                 {
                     // close all available sockets because they are even older and moste likely not connected
                     while (_availableSockets.Count > 0)
                     {
-                        Socket socket = _availableSockets.Pop();
-                        Logger.Debug("Closing socket. Handle: " + socket.Handle);
-                        socket.Close();
+                        CloseSocket(_availableSockets.Pop());
                     }
                 }
 
-                asyncResult.Client = GetSocket(asyncResult.RequestId);
+                asyncResult.Socket = CreateSocket(asyncResult.RequestId);
                 BeginSocketConnect(asyncResult);
             }
             else
@@ -377,8 +425,8 @@ namespace Guardtime.KSI.Service
         {
             asyncResult.Error = new KsiServiceProtocolException(errorMessage, e);
             asyncResult.BeginWaitHandle.Set();
-            Logger.Debug("Closing socket due to error. Handle: " + asyncResult.Client.Handle);
-            asyncResult.Client.Close();
+            Logger.Debug("Closing socket due to error. Handle: " + asyncResult.Socket.Handle);
+            asyncResult.Socket.Close();
         }
 
         /// <summary>
@@ -392,15 +440,15 @@ namespace Guardtime.KSI.Service
             private bool _isCompleted;
             private bool _isDisposed;
 
-            public TcpKsiServiceProtocolAsyncResult(Socket client, byte[] postData, ulong requestId, AsyncCallback callback,
-                                                    object asyncState, int bufferSize)
+            public TcpKsiServiceProtocolAsyncResult(Socket socket, byte[] postData, ulong requestId, AsyncCallback callback,
+                                                    object asyncState, uint bufferSize)
             {
-                if (client == null)
+                if (socket == null)
                 {
-                    throw new KsiException("Invalid tcp client: null.");
+                    throw new KsiServiceProtocolException("Invalid tcp socket: null.");
                 }
 
-                Client = client;
+                Socket = socket;
                 PostData = postData;
                 _callback = callback;
                 AsyncState = asyncState;
@@ -422,7 +470,7 @@ namespace Guardtime.KSI.Service
 
             public MemoryStream ResultStream { get; }
 
-            public Socket Client { get; set; }
+            public Socket Socket { get; set; }
 
             public byte[] PostData { get; }
 
@@ -480,7 +528,7 @@ namespace Guardtime.KSI.Service
 
                 if (!_waitHandle.Set())
                 {
-                    throw new KsiException("WaitHandle completion failed");
+                    throw new KsiServiceProtocolException("WaitHandle completion failed");
                 }
             }
         }

@@ -392,18 +392,7 @@ namespace Guardtime.KSI.Test.Integration
         public void TcpSignHashWithReusedSocketsTest()
         {
             TcpKsiServiceProtocol tcp = new TcpKsiServiceProtocol(IPAddress.Parse(Settings.Default.TcpSigningServiceUrl), Settings.Default.TcpSigningServicePort);
-            HttpKsiServiceProtocol http = new HttpKsiServiceProtocol(Settings.Default.HttpSigningServiceUrl, Settings.Default.HttpExtendingServiceUrl,
-                Settings.Default.HttpPublicationsFileUrl);
-
-            KsiService service = new KsiService(
-                tcp,
-                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
-                http,
-                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
-                http,
-                new PublicationsFileFactory(
-                    new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
-                TestSetup.PduVersion);
+            KsiService service = GetKsiService(tcp);
 
             // test signing using tcp
             // signing 3 hashes simultaneously. 3 sockets will be available after that and will be reused when signing an other 3 hashes.
@@ -419,10 +408,16 @@ namespace Guardtime.KSI.Test.Integration
 
             IKsiSignature sig1 = service.EndSign(ar1);
             Assert.AreEqual(1, availableSockets.Count, "Unexpected amount of available sockets");
+            Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), sig1.InputHash,
+                "Unexpected signature input hash");
             IKsiSignature sig2 = service.EndSign(ar2);
             Assert.AreEqual(2, availableSockets.Count, "Unexpected amount of available sockets");
+            Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("2f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), sig2.InputHash,
+                "Unexpected signature input hash");
             IKsiSignature sig3 = service.EndSign(ar3);
             Assert.AreEqual(3, availableSockets.Count, "Unexpected amount of available sockets");
+            Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("3f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), sig3.InputHash,
+                "Unexpected signature input hash");
 
             Socket socket1 = availableSockets.ToArray()[0];
             Socket socket2 = availableSockets.ToArray()[1];
@@ -437,24 +432,90 @@ namespace Guardtime.KSI.Test.Integration
 
             IKsiSignature sig4 = service.EndSign(ar4);
             Assert.AreEqual(1, availableSockets.Count, "Unexpected amount of available sockets");
+            Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("4f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), sig4.InputHash,
+                "Unexpected signature input hash");
             IKsiSignature sig5 = service.EndSign(ar5);
             Assert.AreEqual(2, availableSockets.Count, "Unexpected amount of available sockets");
+            Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("5f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), sig5.InputHash,
+                "Unexpected signature input hash");
             IKsiSignature sig6 = service.EndSign(ar6);
             Assert.AreEqual(3, availableSockets.Count, "Unexpected amount of available sockets");
+            Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("6f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), sig6.InputHash,
+                "Unexpected signature input hash");
 
             Assert.AreEqual(socket1, availableSockets.ToArray()[2], "Unexpected socket at position 2");
             Assert.AreEqual(socket2, availableSockets.ToArray()[1], "Unexpected socket at position 1");
             Assert.AreEqual(socket3, availableSockets.ToArray()[0], "Unexpected socket at position 0");
+
+            Thread.Sleep(5000);
+            Assert.AreEqual(3, availableSockets.Count, "Unexpected amount of available sockets");
+            tcp.Dispose();
+            Assert.AreEqual(0, availableSockets.Count, "Unexpected amount of available sockets");
+            Thread.Sleep(10000);
         }
 
         [Test]
-        public void TcpSignHashesWithReusingSocketsButTimeoutTest()
+        public void TcpSignHashesWithSocketReuseAndTimeoutTest()
         {
             TcpKsiServiceProtocol tcp = new TcpKsiServiceProtocol(IPAddress.Parse(Settings.Default.TcpSigningServiceUrl), Settings.Default.TcpSigningServicePort, 60000);
+            Ksi ksi = new Ksi(GetKsiService(tcp));
+
+            Stack<Socket> availableSockets =
+                (Stack<Socket>)typeof(TcpKsiServiceProtocol).GetField("_availableSockets", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(tcp);
+
+            // test signing using tcp
+            // time between two signing requests is more than 20 sec and server has closed connections thus sockets cannot be equal
+            IKsiSignature s1 = ksi.Sign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
+            Assert.AreEqual(1, availableSockets.Count, "Unexpected amount of available sockets");
+            Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), s1.InputHash,
+                "Unexpected signature input hash");
+            Socket socket = availableSockets.ToArray()[0];
+            Thread.Sleep(25000);
+            IKsiSignature s2 = ksi.Sign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("2f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
+            Assert.AreEqual(1, availableSockets.Count, "Unexpected amount of available sockets");
+            Assert.AreNotEqual(socket, availableSockets.ToArray()[0], "Unexpected socket at position 0");
+            Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("2f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), s2.InputHash,
+                "Unexpected signature input hash");
+        }
+
+        [Test]
+        public void TcpSignHashesWithDisposedServiceProtocolTest()
+        {
+            TcpKsiServiceProtocol tcp = new TcpKsiServiceProtocol(IPAddress.Parse(Settings.Default.TcpSigningServiceUrl), Settings.Default.TcpSigningServicePort);
+            KsiService service = GetKsiService(tcp);
+
+            IAsyncResult ar1 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
+            IAsyncResult ar2 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("2f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
+            service.EndSign(ar1);
+
+            Stack<Socket> availableSockets =
+                (Stack<Socket>)typeof(TcpKsiServiceProtocol).GetField("_availableSockets", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(tcp);
+
+            Assert.AreEqual(1, availableSockets.Count, "Unexpected amount of available sockets");
+            tcp.Dispose();
+            Assert.AreEqual(0, availableSockets.Count, "Unexpected amount of available sockets");
+
+            KsiServiceProtocolException ex = Assert.Throws<KsiServiceProtocolException>(delegate
+            {
+                service.EndSign(ar2);
+            });
+
+            Assert.That(ex.Message.StartsWith("TCP KSI service protocol is disposed."), "Unexpected exception message: " + ex.Message);
+
+            ex = Assert.Throws<KsiServiceProtocolException>(delegate
+            {
+                service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("3f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
+            });
+
+            Assert.That(ex.Message.StartsWith("TCP KSI service protocol is disposed."), "Unexpected exception message: " + ex.Message);
+        }
+
+        private static KsiService GetKsiService(TcpKsiServiceProtocol tcp)
+        {
             HttpKsiServiceProtocol http = new HttpKsiServiceProtocol(Settings.Default.HttpSigningServiceUrl, Settings.Default.HttpExtendingServiceUrl,
                 Settings.Default.HttpPublicationsFileUrl);
 
-            Ksi ksi = new Ksi(new KsiService(
+            KsiService service = new KsiService(
                 tcp,
                 new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
                 http,
@@ -462,20 +523,8 @@ namespace Guardtime.KSI.Test.Integration
                 http,
                 new PublicationsFileFactory(
                     new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
-                TestSetup.PduVersion));
-
-            Stack<Socket> availableSockets =
-                (Stack<Socket>)typeof(TcpKsiServiceProtocol).GetField("_availableSockets", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(tcp);
-
-            // test signing using tcp
-            // time between two signing requests is more than 20 sec and server has closed connections thus sockets cannot be equal
-            IKsiSignature s1 = ksi.Sign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
-            Assert.AreEqual(1, availableSockets.Count, "Unexpected amount of available sockets");
-            Socket socket = availableSockets.ToArray()[0];
-            Thread.Sleep(25000);
-            IKsiSignature s2 = ksi.Sign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
-            Assert.AreEqual(1, availableSockets.Count, "Unexpected amount of available sockets");
-            Assert.AreNotEqual(socket, availableSockets.ToArray()[0], "Unexpected socket at position 0");
+                TestSetup.PduVersion);
+            return service;
         }
     }
 }
