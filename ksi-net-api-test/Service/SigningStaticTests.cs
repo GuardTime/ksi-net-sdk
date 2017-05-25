@@ -86,6 +86,23 @@ namespace Guardtime.KSI.Test.Service
         }
 
         /// <summary>
+        /// Test signing. Response has invalid request ID.
+        /// </summary>
+        [Test]
+        public void SignStaticResponseWithWrongRequestIdTest()
+        {
+            // Response has additional unknown non-ciritcal payload.
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu)), 1234567890);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                ksi.Sign(new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
+            });
+
+            Assert.That(ex.Message.StartsWith("Invalid response PDU. Could not find a valid payload."), "Unexpected exception message: " + ex.Message);
+        }
+
+        /// <summary>
         /// Test signing. Response has not requested conf.
         /// </summary>
         [Test]
@@ -107,6 +124,22 @@ namespace Guardtime.KSI.Test.Service
             Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.AggregationREsponseWithUnknownNonCriticalPayload)), 1584727637);
 
             ksi.Sign(new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
+        }
+
+        /// <summary>
+        /// Test signing. Response has only unknown non-ciritcal payload.
+        /// </summary>
+        [Test]
+        public void SignStaticResponseHasOnlyUnknownNonCriticalPayloadTest()
+        {
+            // Response has additional unknown non-ciritcal payload.
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.AggregationResponseUnknownNonCriticalPayload)), 1234567890);
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                ksi.Sign(new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
+            });
+
+            Assert.That(ex.Message.StartsWith("Could not parse response message"), "Unexpected exception message: " + ex.Message);
         }
 
         /// <summary>

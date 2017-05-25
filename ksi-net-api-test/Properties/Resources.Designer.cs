@@ -547,6 +547,15 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/service/aggregation-response-pdu-with-only-unknown-non-critical-payload.tlv.
+        /// </summary>
+        internal static string AggregationResponseUnknownNonCriticalPayload {
+            get {
+                return ResourceManager.GetString("AggregationResponseUnknownNonCriticalPayload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/service/aggregation-response-pdu-with-conf.tlv.
         /// </summary>
         internal static string AggregationResponseWithConf {
@@ -750,6 +759,15 @@ namespace Guardtime.KSI.Test.Properties {
         internal static string DataHasher_TestString {
             get {
                 return ResourceManager.GetString("DataHasher_TestString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/extender-response-with-only-unknown-non-critical-payload.tlv.
+        /// </summary>
+        internal static string ExtenderResponseUnkownNonCriticalPayload {
+            get {
+                return ResourceManager.GetString("ExtenderResponseUnkownNonCriticalPayload", resourceCulture);
             }
         }
         

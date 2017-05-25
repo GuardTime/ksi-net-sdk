@@ -287,6 +287,9 @@
     <None Include="resources\service\aggregation-response-pdu-with-level-correction-1.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="resources\service\aggregation-response-pdu-with-only-unknown-non-critical-payload.tlv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="resources\service\aggregation-response-pdu-with-unknown-non-critical-payload.tlv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -361,6 +364,9 @@
     </None>
     <None Include="resources\service\extender-response-pdu-error-payload.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\service\extender-response-with-only-unknown-non-critical-payload.tlv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="resources\service\legacy-aggregation-response-pdu-0x0-int.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
