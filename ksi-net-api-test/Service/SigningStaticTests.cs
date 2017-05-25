@@ -86,6 +86,30 @@ namespace Guardtime.KSI.Test.Service
         }
 
         /// <summary>
+        /// Test signing. Response has not requested conf.
+        /// </summary>
+        [Test]
+        public void SignStaticWithConfTest()
+        {
+            // Response has additional conf.
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.AggregationResponseWithConf)), 1584727637);
+
+            ksi.Sign(new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
+        }
+
+        /// <summary>
+        /// Test signing. Response has unknown non-ciritcal payload.
+        /// </summary>
+        [Test]
+        public void SignStaticWithUnknownNonCriticalPayloadTest()
+        {
+            // Response has additional unknown non-ciritcal payload.
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.AggregationREsponseWithUnknownNonCriticalPayload)), 1584727637);
+
+            ksi.Sign(new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
+        }
+
+        /// <summary>
         /// Test signing and verification fail.
         /// </summary>
         [Test]

@@ -281,8 +281,14 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="resources\service\aggregation-response-pdu-with-conf.tlv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="resources\service\aggregation-response-pdu-with-level-correction-1.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\service\aggregation-response-pdu-with-unknown-non-critical-payload.tlv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="resources\service\aggregator-config-response-pdu-0x0-int.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -341,11 +347,17 @@
     <None Include="resources\service\extend-response-pdu-status-17.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="resources\service\extend-response-pdu-unknown-non-critical-payload.tlv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="resources\service\extend-response-pdu.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\service\extend-response-pdu-multi-payloads.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\service\extend-response-with-conf.tlv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="resources\service\extender-response-pdu-error-payload.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

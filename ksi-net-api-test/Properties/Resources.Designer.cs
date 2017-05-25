@@ -547,6 +547,24 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/service/aggregation-response-pdu-with-conf.tlv.
+        /// </summary>
+        internal static string AggregationResponseWithConf {
+            get {
+                return ResourceManager.GetString("AggregationResponseWithConf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/aggregation-response-pdu-with-unknown-non-critical-payload.tlv.
+        /// </summary>
+        internal static string AggregationREsponseWithUnknownNonCriticalPayload {
+            get {
+                return ResourceManager.GetString("AggregationREsponseWithUnknownNonCriticalPayload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/integration-test-signatures/all-wrong-hash-chains-in-signature.ksig.
         /// </summary>
         internal static string All_Wrong_Chains_Invalid_Signature {
@@ -732,6 +750,24 @@ namespace Guardtime.KSI.Test.Properties {
         internal static string DataHasher_TestString {
             get {
                 return ResourceManager.GetString("DataHasher_TestString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/extend-response-pdu-unknown-non-critical-payload.tlv.
+        /// </summary>
+        internal static string ExtendResponseNonCriticalPayload {
+            get {
+                return ResourceManager.GetString("ExtendResponseNonCriticalPayload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/extend-response-with-conf.tlv.
+        /// </summary>
+        internal static string ExtendResponseWithConf {
+            get {
+                return ResourceManager.GetString("ExtendResponseWithConf", resourceCulture);
             }
         }
         

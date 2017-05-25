@@ -138,6 +138,34 @@ namespace Guardtime.KSI.Test.Service
         }
 
         /// <summary>
+        /// Test extending using PDU v2 and response contains unknonwn non-critical payload.
+        /// </summary>
+        [Test]
+        public void ExtendStaticWithNonCriticalPayloadTest()
+        {
+            IKsiSignature signature = new KsiSignatureFactory().Create(
+                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
+
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.ExtendResponseNonCriticalPayload)), 1043101455, null, PduVersion.v2);
+
+            ksi.Extend(signature);
+        }
+
+        /// <summary>
+        /// Test extending using PDU v2 and response contains conf.
+        /// </summary>
+        [Test]
+        public void ExtendStaticWithConfTest()
+        {
+            IKsiSignature signature = new KsiSignatureFactory().Create(
+                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
+
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.ExtendResponseWithConf)), 1043101455, null, PduVersion.v2);
+
+            ksi.Extend(signature); 
+        }
+
+        /// <summary>
         /// Test exteding using PDU v1. Verification fail (calendar hash chain input hash mismatch)
         /// </summary>
         [Test]
