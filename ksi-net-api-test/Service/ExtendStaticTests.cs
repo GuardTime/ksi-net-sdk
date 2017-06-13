@@ -103,6 +103,25 @@ namespace Guardtime.KSI.Test.Service
         }
 
         /// <summary>
+        /// Test extending. Response has invalid request id.
+        /// </summary>
+        [Test]
+        public void ExtendStaticResponseWithWrongRequestIdTest()
+        {
+            IKsiSignature signature = new KsiSignatureFactory().Create(
+                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
+
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu)), 1234567890, null, PduVersion.v2);
+            
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                ksi.Extend(signature);
+            });
+
+            Assert.That(ex.Message.StartsWith("Invalid response PDU. Could not find a valid payload."), "Unexpected exception message: " + ex.Message);
+        }
+
+        /// <summary>
         /// Test exteding and verification fail (calendar hash chain input hash mismatch)
         /// </summary>
         [Test]
@@ -135,6 +154,53 @@ namespace Guardtime.KSI.Test.Service
             Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_LegacyExtendResponsePdu)), 3491956840, null, PduVersion.v1);
 
             ksi.Extend(signature);
+        }
+
+        /// <summary>
+        /// Test extending using PDU v2 and response contains unknonwn non-critical payload.
+        /// </summary>
+        [Test]
+        public void ExtendStaticWithNonCriticalPayloadTest()
+        {
+            IKsiSignature signature = new KsiSignatureFactory().Create(
+                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
+
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.ExtendResponseNonCriticalPayload)), 1043101455, null, PduVersion.v2);
+
+            ksi.Extend(signature);
+        }
+
+        /// <summary>
+        /// Test extending using PDU v2 and response contains conf.
+        /// </summary>
+        [Test]
+        public void ExtendStaticWithConfTest()
+        {
+            IKsiSignature signature = new KsiSignatureFactory().Create(
+                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
+
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.ExtendResponseWithConf)), 1043101455, null, PduVersion.v2);
+
+            ksi.Extend(signature);
+        }
+
+        /// <summary>
+        /// Test extending using PDU v2 and response has only unknown non critical payload.
+        /// </summary>
+        [Test]
+        public void ExtendStaticResponseHasOnlyUnknownNonCriticalPayloadTest()
+        {
+            IKsiSignature signature = new KsiSignatureFactory().Create(
+                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
+
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.ExtenderResponseUnkownNonCriticalPayload)), 1234567890, null, PduVersion.v2);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                ksi.Extend(signature);
+            });
+
+            Assert.That(ex.Message.StartsWith("Could not parse response message"), "Unexpected exception message: " + ex.Message);
         }
 
         /// <summary>

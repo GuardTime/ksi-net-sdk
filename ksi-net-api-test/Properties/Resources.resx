@@ -636,4 +636,22 @@
   <data name="SignatureData_Invalid_Leading_Zero" xml:space="preserve">
     <value>resources/signature/signaturedata/signature-data-invalid-leading-zero.tlv</value>
   </data>
+  <data name="AggregationResponseUnknownNonCriticalPayload" xml:space="preserve">
+    <value>resources/service/aggregation-response-pdu-with-only-unknown-non-critical-payload.tlv</value>
+  </data>
+  <data name="AggregationResponseWithConf" xml:space="preserve">
+    <value>resources/service/aggregation-response-pdu-with-conf.tlv</value>
+  </data>
+  <data name="AggregationREsponseWithUnknownNonCriticalPayload" xml:space="preserve">
+    <value>resources/service/aggregation-response-pdu-with-unknown-non-critical-payload.tlv</value>
+  </data>
+  <data name="ExtenderResponseUnkownNonCriticalPayload" xml:space="preserve">
+    <value>resources/service/extender-response-with-only-unknown-non-critical-payload.tlv</value>
+  </data>
+  <data name="ExtendResponseNonCriticalPayload" xml:space="preserve">
+    <value>resources/service/extend-response-pdu-unknown-non-critical-payload.tlv</value>
+  </data>
+  <data name="ExtendResponseWithConf" xml:space="preserve">
+    <value>resources/service/extend-response-with-conf.tlv</value>
+  </data>
 </root>
