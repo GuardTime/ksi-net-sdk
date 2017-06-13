@@ -42,12 +42,32 @@ namespace Guardtime.KSI.Test.Service
             return RequestResult;
         }
 
+        public IAsyncResult BeginGetAggregatorConfig(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
+        {
+            return new AsyncResult(data);
+        }
+
+        public byte[] EndGetAggregatorConfig(IAsyncResult asyncResult)
+        {
+            return RequestResult;
+        }
+
         public IAsyncResult BeginExtend(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
             return new AsyncResult(data);
         }
 
         public byte[] EndExtend(IAsyncResult asyncResult)
+        {
+            return RequestResult;
+        }
+
+        public IAsyncResult BeginGetExtenderConfig(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
+        {
+            return new AsyncResult(data);
+        }
+
+        public byte[] EndGetExtenderConfig(IAsyncResult asyncResult)
         {
             return RequestResult;
         }

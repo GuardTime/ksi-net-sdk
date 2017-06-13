@@ -18,7 +18,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -35,6 +34,7 @@ using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
 using Guardtime.KSI.Test.Crypto;
 using Guardtime.KSI.Test.Properties;
+using Guardtime.KSI.Test.Signature.Verification;
 using Guardtime.KSI.Trust;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
@@ -389,93 +389,71 @@ namespace Guardtime.KSI.Test.Integration
         }
 
         [Test]
-        public void TcpSignHashWithReusedSocketsTest()
+        public void TcpSignHashWithReusedSocketTest()
         {
             TcpKsiServiceProtocol tcp = new TcpKsiServiceProtocol(IPAddress.Parse(Settings.Default.TcpSigningServiceUrl), Settings.Default.TcpSigningServicePort);
             KsiService service = GetKsiService(tcp);
 
-            // test signing using tcp
-            // signing 3 hashes simultaneously. 3 sockets will be available after that and will be reused when signing an other 3 hashes.
-
             IAsyncResult ar1 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
             IAsyncResult ar2 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("2f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
-            IAsyncResult ar3 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("3f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
-
-            Stack<Socket> availableSockets =
-                (Stack<Socket>)typeof(TcpKsiServiceProtocol).GetField("_availableSockets", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(tcp);
-
-            Assert.AreEqual(0, availableSockets.Count, "Unexpected amount of available sockets");
 
             IKsiSignature sig1 = service.EndSign(ar1);
-            Assert.AreEqual(1, availableSockets.Count, "Unexpected amount of available sockets");
             Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), sig1.InputHash,
                 "Unexpected signature input hash");
             IKsiSignature sig2 = service.EndSign(ar2);
-            Assert.AreEqual(2, availableSockets.Count, "Unexpected amount of available sockets");
             Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("2f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), sig2.InputHash,
                 "Unexpected signature input hash");
+
+            Socket socket1 =
+                (Socket)typeof(TcpKsiServiceProtocol).GetField("_socket", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(tcp);
+
+            IAsyncResult ar3 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("3f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
+            IAsyncResult ar4 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("4f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
+
             IKsiSignature sig3 = service.EndSign(ar3);
-            Assert.AreEqual(3, availableSockets.Count, "Unexpected amount of available sockets");
             Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("3f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), sig3.InputHash,
                 "Unexpected signature input hash");
-
-            Socket socket1 = availableSockets.ToArray()[0];
-            Socket socket2 = availableSockets.ToArray()[1];
-            Socket socket3 = availableSockets.ToArray()[2];
-
-            IAsyncResult ar4 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("4f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
-            Assert.AreEqual(2, availableSockets.Count, "Unexpected amount of available sockets");
-            IAsyncResult ar5 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("5f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
-            Assert.AreEqual(1, availableSockets.Count, "Unexpected amount of available sockets");
-            IAsyncResult ar6 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("6f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
-            Assert.AreEqual(0, availableSockets.Count, "Unexpected amount of available sockets");
-
             IKsiSignature sig4 = service.EndSign(ar4);
-            Assert.AreEqual(1, availableSockets.Count, "Unexpected amount of available sockets");
             Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("4f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), sig4.InputHash,
                 "Unexpected signature input hash");
-            IKsiSignature sig5 = service.EndSign(ar5);
-            Assert.AreEqual(2, availableSockets.Count, "Unexpected amount of available sockets");
-            Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("5f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), sig5.InputHash,
-                "Unexpected signature input hash");
-            IKsiSignature sig6 = service.EndSign(ar6);
-            Assert.AreEqual(3, availableSockets.Count, "Unexpected amount of available sockets");
-            Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("6f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), sig6.InputHash,
-                "Unexpected signature input hash");
 
-            Assert.AreEqual(socket1, availableSockets.ToArray()[2], "Unexpected socket at position 2");
-            Assert.AreEqual(socket2, availableSockets.ToArray()[1], "Unexpected socket at position 1");
-            Assert.AreEqual(socket3, availableSockets.ToArray()[0], "Unexpected socket at position 0");
+            Socket socket2 =
+                (Socket)typeof(TcpKsiServiceProtocol).GetField("_socket", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(tcp);
 
-            Thread.Sleep(5000);
-            Assert.AreEqual(3, availableSockets.Count, "Unexpected amount of available sockets");
-            tcp.Dispose();
-            Assert.AreEqual(0, availableSockets.Count, "Unexpected amount of available sockets");
-            Thread.Sleep(10000);
+            Assert.AreEqual(socket1, socket2, "Sockets should be equal");
         }
 
         [Test]
         public void TcpSignHashesWithSocketReuseAndTimeoutTest()
         {
-            TcpKsiServiceProtocol tcp = new TcpKsiServiceProtocol(IPAddress.Parse(Settings.Default.TcpSigningServiceUrl), Settings.Default.TcpSigningServicePort, 60000);
-            Ksi ksi = new Ksi(GetKsiService(tcp));
+            TcpKsiServiceProtocol tcp = new TcpKsiServiceProtocol(IPAddress.Parse(Settings.Default.TcpSigningServiceUrl), Settings.Default.TcpSigningServicePort, 30000);
+            KsiService service = GetKsiService(tcp);
 
-            Stack<Socket> availableSockets =
-                (Stack<Socket>)typeof(TcpKsiServiceProtocol).GetField("_availableSockets", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(tcp);
+            IAsyncResult ar1 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
 
-            // test signing using tcp
-            // time between two signing requests is more than 20 sec and server has closed connections thus sockets cannot be equal
-            IKsiSignature s1 = ksi.Sign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
-            Assert.AreEqual(1, availableSockets.Count, "Unexpected amount of available sockets");
-            Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), s1.InputHash,
+            IKsiSignature sig1 = service.EndSign(ar1);
+            Socket socket1 =
+                (Socket)typeof(TcpKsiServiceProtocol).GetField("_socket", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(tcp);
+
+            Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), sig1.InputHash,
                 "Unexpected signature input hash");
-            Socket socket = availableSockets.ToArray()[0];
-            Thread.Sleep(25000);
-            IKsiSignature s2 = ksi.Sign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("2f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
-            Assert.AreEqual(1, availableSockets.Count, "Unexpected amount of available sockets");
-            Assert.AreNotEqual(socket, availableSockets.ToArray()[0], "Unexpected socket at position 0");
-            Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("2f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), s2.InputHash,
+            Socket socket2 =
+                (Socket)typeof(TcpKsiServiceProtocol).GetField("_socket", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(tcp);
+
+            Assert.AreEqual(socket1, socket2, "Sockets should be equal");
+
+            // after 20 sec server will close connection
+            Thread.Sleep(22000);
+
+            IAsyncResult ar2 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("2f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
+
+            IKsiSignature sig2 = service.EndSign(ar2);
+            Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("2f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), sig2.InputHash,
                 "Unexpected signature input hash");
+            Socket socket3 =
+                (Socket)typeof(TcpKsiServiceProtocol).GetField("_socket", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(tcp);
+
+            Assert.AreNotEqual(socket1, socket3, "Sockets should not be equal");
         }
 
         [Test]
@@ -488,12 +466,12 @@ namespace Guardtime.KSI.Test.Integration
             IAsyncResult ar2 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("2f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
             service.EndSign(ar1);
 
-            Stack<Socket> availableSockets =
-                (Stack<Socket>)typeof(TcpKsiServiceProtocol).GetField("_availableSockets", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(tcp);
+            Socket socket =
+                (Socket)typeof(TcpKsiServiceProtocol).GetField("_socket", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(tcp);
 
-            Assert.AreEqual(1, availableSockets.Count, "Unexpected amount of available sockets");
+            Assert.IsNotNull(socket, "Socket should not be null");
             tcp.Dispose();
-            Assert.AreEqual(0, availableSockets.Count, "Unexpected amount of available sockets");
+            Assert.IsNotNull(socket, "Socket should be null");
 
             KsiServiceProtocolException ex = Assert.Throws<KsiServiceProtocolException>(delegate
             {
@@ -523,6 +501,7 @@ namespace Guardtime.KSI.Test.Integration
                 http,
                 new PublicationsFileFactory(
                     new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
+                new KsiSignatureFactory(new EmptyVerificationPolicy()),
                 TestSetup.PduVersion);
             return service;
         }

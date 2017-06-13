@@ -264,7 +264,7 @@ namespace Guardtime.KSI.Service
 
             Logger.Debug("Begin get extender config (request id: {0}){1}{2}", requestId, Environment.NewLine, pdu);
 
-            IAsyncResult serviceProtocolAsyncResult = _extendingServiceProtocol.BeginExtend(pdu.Encode(), requestId, callback, asyncState);
+            IAsyncResult serviceProtocolAsyncResult = _extendingServiceProtocol.BeginGetExtenderConfig(pdu.Encode(), requestId, callback, asyncState);
 
             return new ExtenderConfigKsiServiceAsyncResult(serviceProtocolAsyncResult, asyncState);
         }
@@ -297,7 +297,7 @@ namespace Guardtime.KSI.Service
                 serviceAsyncResult.AsyncWaitHandle.WaitOne();
             }
 
-            byte[] data = _extendingServiceProtocol.EndExtend(serviceAsyncResult.ServiceProtocolAsyncResult);
+            byte[] data = _extendingServiceProtocol.EndGetExtenderConfig(serviceAsyncResult.ServiceProtocolAsyncResult);
             PduPayload payload = ExtenderConfigRequestResponseParser.Parse(data);
             ExtenderConfigResponsePayload configResponsePayload = payload as ExtenderConfigResponsePayload;
 

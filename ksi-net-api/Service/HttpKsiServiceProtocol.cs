@@ -139,7 +139,7 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        ///     Begin extend.
+        ///     Begin extending request.
         /// </summary>
         /// <param name="data">extending request bytes</param>
         /// <param name="requestId">request id</param>
@@ -147,6 +147,24 @@ namespace Guardtime.KSI.Service
         /// <param name="asyncState">async state object</param>
         /// <returns>HTTP KSI service protocol async result</returns>
         public IAsyncResult BeginExtend(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
+        {
+            return BeginExtenderRequest(data, requestId, callback, asyncState);
+        }
+
+        /// <summary>
+        ///     Begin extender configuration request.
+        /// </summary>
+        /// <param name="data">extending request bytes</param>
+        /// <param name="requestId">request id</param>
+        /// <param name="callback">callback when extending signature is finished</param>
+        /// <param name="asyncState">async state object</param>
+        /// <returns>HTTP KSI service protocol async result</returns>
+        public IAsyncResult BeginGetExtenderConfig(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
+        {
+            return BeginExtenderRequest(data, requestId, callback, asyncState);
+        }
+
+        private IAsyncResult BeginExtenderRequest(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
             if (data == null)
             {
@@ -215,8 +233,18 @@ namespace Guardtime.KSI.Service
         ///     End extend.
         /// </summary>
         /// <param name="asyncResult">HTTP KSI service protocol async result</param>
-        /// <returns>extending response bytes</returns>
+        /// <returns>response bytes</returns>
         public byte[] EndExtend(IAsyncResult asyncResult)
+        {
+            return EndGetResult(asyncResult);
+        }
+
+        /// <summary>
+        ///     End extender configuration request.
+        /// </summary>
+        /// <param name="asyncResult">HTTP KSI service protocol async result</param>
+        /// <returns>response bytes</returns>
+        public byte[] EndGetExtenderConfig(IAsyncResult asyncResult)
         {
             return EndGetResult(asyncResult);
         }
@@ -315,7 +343,7 @@ namespace Guardtime.KSI.Service
                 throw asyncResult.Error;
             }
 
-            Logger.Debug("Returning {0} bytes (request id: {1}).", asyncResult.ResultStream.Length, asyncResult.RequestId);
+            Logger.Debug("Service protocol returning {0} bytes (request id: {1}).", asyncResult.ResultStream.Length, asyncResult.RequestId);
 
             return asyncResult.ResultStream.ToArray();
         }
@@ -329,6 +357,24 @@ namespace Guardtime.KSI.Service
         /// <param name="asyncState">async state object</param>
         /// <returns>HTTP KSI service protocol async result</returns>
         public IAsyncResult BeginSign(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
+        {
+            return BeginAggregatorRequest(data, requestId, callback, asyncState);
+        }
+
+        /// <summary>
+        ///     Begin aggregator configuration request.
+        /// </summary>
+        /// <param name="data">aggregation request bytes</param>
+        /// <param name="requestId">request id</param>
+        /// <param name="callback">callback when creating signature is finished</param>
+        /// <param name="asyncState">async state object</param>
+        /// <returns>HTTP KSI service protocol async result</returns>
+        public IAsyncResult BeginGetAggregatorConfig(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
+        {
+            return BeginAggregatorRequest(data, requestId, callback, asyncState);
+        }
+
+        private IAsyncResult BeginAggregatorRequest(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
             if (data == null)
             {
@@ -380,8 +426,18 @@ namespace Guardtime.KSI.Service
         ///     End signing request.
         /// </summary>
         /// <param name="asyncResult">HTTP KSI service protocol async result</param>
-        /// <returns>aggregation response bytes</returns>
+        /// <returns>response bytes</returns>
         public byte[] EndSign(IAsyncResult asyncResult)
+        {
+            return EndGetResult(asyncResult);
+        }
+
+        /// <summary>
+        ///     End aggregator configuration request.
+        /// </summary>
+        /// <param name="asyncResult">HTTP KSI service protocol async result</param>
+        /// <returns>response bytes</returns>
+        public byte[] EndGetAggregatorConfig(IAsyncResult asyncResult)
         {
             return EndGetResult(asyncResult);
         }
@@ -500,7 +556,7 @@ namespace Guardtime.KSI.Service
                 throw asyncResult.Error;
             }
 
-            Logger.Debug("Returning {0} bytes (request id: {1}).", asyncResult.ResultStream.Length, asyncResult.RequestId);
+            Logger.Debug("Service protocol returning {0} bytes (request id: {1}).", asyncResult.ResultStream.Length, asyncResult.RequestId);
 
             return asyncResult.ResultStream.ToArray();
         }

@@ -245,7 +245,7 @@ namespace Guardtime.KSI.Service
 
             Logger.Debug("Begin get aggregator config (request id: {0}){1}{2}", requestId, Environment.NewLine, pdu);
 
-            IAsyncResult serviceProtocolAsyncResult = _signingServiceProtocol.BeginSign(pdu.Encode(), requestId, callback, asyncState);
+            IAsyncResult serviceProtocolAsyncResult = _signingServiceProtocol.BeginGetAggregatorConfig(pdu.Encode(), requestId, callback, asyncState);
 
             return new AggregatorConfigKsiServiceAsyncResult(serviceProtocolAsyncResult, asyncState);
         }
