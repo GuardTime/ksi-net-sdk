@@ -53,7 +53,7 @@ namespace Guardtime.KSI.Test.Service
         /// Test extending. Response payload has non-zero status value.
         /// </summary>
         [Test]
-        public void ExtendStaticWithNonZeroPayloadStatusTest()
+        public void ExtendStaticInvalidWithNonZeroPayloadStatusTest()
         {
             IKsiSignature signature = new KsiSignatureFactory().Create(
                 File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
@@ -88,7 +88,7 @@ namespace Guardtime.KSI.Test.Service
         }
 
         /// <summary>
-        /// Test extending. Response PDU contains multiple payloads.
+        /// Test extending. Response PDU contains multiple payloads. Warning about unexpected payload is logged.
         /// </summary>
         [Test]
         public void ExtendStaticWithMultiPayloadsResponseTest()
@@ -96,6 +96,7 @@ namespace Guardtime.KSI.Test.Service
             IKsiSignature signature = new KsiSignatureFactory().Create(
                 File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
 
+            // Response has multiple payloads (2 extending payloads and a configuration payload)
             Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_Multi_Payloads)), 8396215651691691389,
                 new KsiSignatureFactory(new EmptyVerificationPolicy()));
 
@@ -111,8 +112,8 @@ namespace Guardtime.KSI.Test.Service
             IKsiSignature signature = new KsiSignatureFactory().Create(
                 File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
 
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu)), 1234567890, null, PduVersion.v2);
-            
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu)), 1234567890);
+
             KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
             {
                 ksi.Extend(signature);
@@ -157,7 +158,7 @@ namespace Guardtime.KSI.Test.Service
         }
 
         /// <summary>
-        /// Test extending using PDU v2 and response contains unknonwn non-critical payload.
+        /// Test extending using PDU v2. Response contains an additional unknonwn non-critical payload. Warning about unexpected payload is logged.
         /// </summary>
         [Test]
         public void ExtendStaticWithNonCriticalPayloadTest()
@@ -165,13 +166,13 @@ namespace Guardtime.KSI.Test.Service
             IKsiSignature signature = new KsiSignatureFactory().Create(
                 File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
 
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.ExtendResponseNonCriticalPayload)), 1043101455, null, PduVersion.v2);
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSerice_ExtendResponseNonCriticalPayload)), 1043101455);
 
             ksi.Extend(signature);
         }
 
         /// <summary>
-        /// Test extending using PDU v2 and response contains conf.
+        /// Test extending using PDU v2. Response contains an additinal config payload.
         /// </summary>
         [Test]
         public void ExtendStaticWithConfTest()
@@ -179,7 +180,7 @@ namespace Guardtime.KSI.Test.Service
             IKsiSignature signature = new KsiSignatureFactory().Create(
                 File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
 
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.ExtendResponseWithConf)), 1043101455, null, PduVersion.v2);
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSerice_ExtendResponseWithConf)), 1043101455);
 
             ksi.Extend(signature);
         }
@@ -193,7 +194,7 @@ namespace Guardtime.KSI.Test.Service
             IKsiSignature signature = new KsiSignatureFactory().Create(
                 File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
 
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.ExtenderResponseUnkownNonCriticalPayload)), 1234567890, null, PduVersion.v2);
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSerice_ExtenderResponseUnkownNonCriticalPayload)), 1234567890);
 
             KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
             {

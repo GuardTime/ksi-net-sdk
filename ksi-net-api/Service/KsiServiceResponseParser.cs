@@ -238,7 +238,7 @@ namespace Guardtime.KSI.Service
                 case KsiServiceRequestType.Sign:
                     return new uint[] { Constants.AggregatorConfigResponsePayload.TagType, Constants.AggregationAcknowledgmentResponsePayload.TagType };
                 case KsiServiceRequestType.AggregatorConfig:
-                    return null;
+                    return new uint[] { Constants.AggregationAcknowledgmentResponsePayload.TagType };
                 case KsiServiceRequestType.Extend:
                     return new uint[] { Constants.ExtenderConfigResponsePayload.TagType };
                 case KsiServiceRequestType.ExtenderConfig:
@@ -462,14 +462,14 @@ namespace Guardtime.KSI.Service
         /// <returns></returns>
         private static bool HasUnexpectedPayload(Pdu pdu, PduPayload expectedPayload, uint[] allowedPayloadTagTypes)
         {
-            if (allowedPayloadTagTypes == null)
+            foreach (ITlvTag child in pdu.GetChildren())
             {
-                return pdu.Payloads.Count > 1;
-            }
+                if (child.Type == Constants.PduHeader.TagType || child.Type == Constants.Pdu.MacTagType)
+                {
+                    continue;
+                }
 
-            foreach (PduPayload p in pdu.Payloads)
-            {
-                if (!ReferenceEquals(p, expectedPayload) && Array.IndexOf(allowedPayloadTagTypes, p.Type) < 0)
+                if (!ReferenceEquals(child, expectedPayload) && (allowedPayloadTagTypes == null || Array.IndexOf(allowedPayloadTagTypes, child.Type) < 0))
                 {
                     return true;
                 }

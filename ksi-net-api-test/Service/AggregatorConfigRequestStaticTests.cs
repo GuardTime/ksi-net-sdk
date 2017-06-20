@@ -48,13 +48,30 @@ namespace Guardtime.KSI.Test.Service
         }
 
         /// <summary>
-        /// Test aggregator configuration request
+        /// Test aggregator configuration request. Response PDU contains multiple payloads. Warning about unexpected payload is logged.
         /// </summary>
         [Test]
         public void AggregatorConfigRequestWithMultiPayloadsResponseStaticTest()
         {
-            // Response has multiple payloads (including a payload containing invalid signature and a configuration payload)
+            // Response has multiple payloads (2 signature payloads and a configuration payload)
             Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_Multi_Payloads)));
+
+            AggregatorConfig config = ksi.GetAggregatorConfig();
+
+            Assert.AreEqual(17, config.MaxLevel, "Unexpected max level value");
+            Assert.AreEqual(1, config.AggregationAlgorithm, "Unexpected algorithm value");
+            Assert.AreEqual(400, config.AggregationPeriod, "Unexpected aggregation period value");
+            Assert.AreEqual(1024, config.MaxRequests, "Unexpected max requests value");
+        }
+
+        /// <summary>
+        /// Test aggregator configuration request. Response PDU contains acknowledgment.
+        /// </summary>
+        [Test]
+        public void AggregatorConfigRequestWithAcknowledgmentStaticTest()
+        {
+            // Response has multiple payloads (a configuration payload and an acknowledgment payload)
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregatorConfigResponsePdu_With_Acknowledgment)));
 
             AggregatorConfig config = ksi.GetAggregatorConfig();
 

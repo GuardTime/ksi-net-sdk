@@ -270,7 +270,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="App.config">
       <SubType>Designer</SubType>
@@ -283,6 +282,9 @@
     </None>
     <None Include="resources\service\aggregation-response-pdu-with-conf.tlv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\service\aggregation-response-pdu-with-config-and-acknowledgment.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\service\aggregation-response-pdu-with-level-correction-1.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -321,6 +323,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\service\aggregator-config-response-pdu-0x0-int.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\service\aggregator-config-response-pdu-with-acknowledgment.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\service\aggregator-config-response-pdu.tlv">
