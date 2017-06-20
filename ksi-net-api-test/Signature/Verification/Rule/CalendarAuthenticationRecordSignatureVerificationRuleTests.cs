@@ -214,7 +214,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         }
 
         [Test]
-        public void TestSignatureNotValidCert()
+        public void TestSignatureWithNotValidCertAtAggregationTime()
         {
             CalendarAuthenticationRecordSignatureVerificationRule rule = new CalendarAuthenticationRecordSignatureVerificationRule(new X509Store(StoreName.Root),
                 CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
@@ -225,7 +225,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                 pubsFile = new PublicationsFileFactory(new TestPkiTrustProvider()).Create(stream);
             }
 
-            // Check invalid signature with not valid cert
+            // Check invalid signature with cert that was not valid at aggregation time.
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Invalid_Not_Valid_Cert), FileMode.Open))
             {
                 VerificationContext context = new VerificationContext()
