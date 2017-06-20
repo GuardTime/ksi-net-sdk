@@ -47,12 +47,12 @@ namespace Guardtime.KSI.Test.Service
         }
 
         /// <summary>
-        /// Test extender configuration request
+        /// Test extender configuration request. Warning about unexpected payload is logged.
         /// </summary>
         [Test]
         public void ExtenderConfigRequestWithMultiPayloadsResponseStaticTest()
         {
-            // Response has multiple payloads (including a payload containing invalid signature and a configuration payload)
+            // Response has multiple payloads (2 extending payloads and a configuration payload)
             Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_Multi_Payloads)));
 
             ExtenderConfig config = ksi.GetExtenderConfig();

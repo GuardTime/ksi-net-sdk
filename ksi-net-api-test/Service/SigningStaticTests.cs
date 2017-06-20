@@ -74,13 +74,25 @@ namespace Guardtime.KSI.Test.Service
         }
 
         /// <summary>
-        /// Test signing. Response has multiple payloads
+        /// Test signing. Response PDU contains multiple payloads. Warning about unexpected payload is logged.
         /// </summary>
         [Test]
         public void SignStaticWithMultiPayloadsResponseTest()
         {
-            // Response has multiple payloads (including a payload containing invalid signature, a configuration payload and an acknowledgment payload)
+            // Response has multiple payloads (2 signature payloads and a configuration payload)
             Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_Multi_Payloads)), 1584727637);
+
+            ksi.Sign(new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
+        }
+
+        /// <summary>
+        /// Test signing. Response PDU contains a config payload and an acknowledgment payload.
+        /// </summary>
+        [Test]
+        public void SignStaticWithConfigAndAcknowledgmentTest()
+        {
+            // Response has multiple payloads (1 signature payload, a config payload and an acknowledgment payload)
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_With_Config_And_Acknowledgment)), 1584727637);
 
             ksi.Sign(new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
         }
@@ -109,19 +121,19 @@ namespace Guardtime.KSI.Test.Service
         public void SignStaticWithConfTest()
         {
             // Response has additional conf.
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.AggregationResponseWithConf)), 1584727637);
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSerice_AggregationResponseWithConf)), 1584727637);
 
             ksi.Sign(new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
         }
 
         /// <summary>
-        /// Test signing. Response has unknown non-ciritcal payload.
+        /// Test signing. Response has additinal unknown non-ciritcal payload. Warning about unexpected payload is logged.
         /// </summary>
         [Test]
         public void SignStaticWithUnknownNonCriticalPayloadTest()
         {
             // Response has additional unknown non-ciritcal payload.
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.AggregationREsponseWithUnknownNonCriticalPayload)), 1584727637);
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSerice_AggregationResponseWithUnknownNonCriticalPayload)), 1584727637);
 
             ksi.Sign(new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
         }
@@ -132,8 +144,8 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void SignStaticResponseHasOnlyUnknownNonCriticalPayloadTest()
         {
-            // Response has additional unknown non-ciritcal payload.
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.AggregationResponseUnknownNonCriticalPayload)), 1234567890);
+            // Response has only unknown non-ciritcal payload.
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSerice_AggregationResponseUnknownNonCriticalPayload)), 1234567890);
             KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
             {
                 ksi.Sign(new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));

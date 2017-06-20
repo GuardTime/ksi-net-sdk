@@ -238,7 +238,7 @@ namespace Guardtime.KSI.Service
                 case KsiServiceRequestType.Sign:
                     return new uint[] { Constants.AggregatorConfigResponsePayload.TagType, Constants.AggregationAcknowledgmentResponsePayload.TagType };
                 case KsiServiceRequestType.AggregatorConfig:
-                    return null;
+                    return new uint[] { Constants.AggregationAcknowledgmentResponsePayload.TagType };
                 case KsiServiceRequestType.Extend:
                     return new uint[] { Constants.ExtenderConfigResponsePayload.TagType };
                 case KsiServiceRequestType.ExtenderConfig:
