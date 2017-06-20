@@ -19,37 +19,29 @@
 
 using System;
 
-namespace Guardtime.KSI.Crypto
+namespace Guardtime.KSI.Exceptions
 {
     /// <summary>
-    /// Crypto signature verification data
+    ///     Exception indicating that PKI signature verification failed because certificate was not valid at the given time.
     /// </summary>
-    public class CryptoSignatureVerificationData
+    [Serializable]
+    public class PkiVerificationFailedCertNotValidException : PkiVerificationException
     {
         /// <summary>
-        /// Certificate bytes
+        ///     Create new PKI signature verification failed (certificat not valid at the given time) exception with message.
         /// </summary>
-        public byte[] CertificateBytes { get; }
-
-        /// <summary>
-        /// Time of signing. If the time is given then it will be used for checking if certificate was valid at the given time.
-        /// </summary>
-        public ulong? SignTime { get; }
-
-        /// <summary>
-        /// Create crypto signature verification data instance
-        /// </summary>
-        /// <param name="certificate">certificate bytes</param>
-        /// <param name="signTime">time of signing</param>
-        public CryptoSignatureVerificationData(byte[] certificate, ulong? signTime = null)
+        /// <param name="message">exception message</param>
+        public PkiVerificationFailedCertNotValidException(string message) : base(message)
         {
-            if (certificate == null)
-            {
-                throw new ArgumentNullException(nameof(certificate));
-            }
+        }
 
-            CertificateBytes = certificate;
-            SignTime = signTime;
+        /// <summary>
+        ///     Create new PKI signature verification failed (certificat not valid at the given time) exception with message and inner exception.
+        /// </summary>
+        /// <param name="message">exception message</param>
+        /// <param name="innerException">inner exception</param>
+        public PkiVerificationFailedCertNotValidException(string message, Exception innerException) : base(message, innerException)
+        {
         }
     }
 }

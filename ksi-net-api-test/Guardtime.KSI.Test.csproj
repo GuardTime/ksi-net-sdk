@@ -249,6 +249,7 @@
     <Compile Include="Trust\PkiTrustStoreProviderTests.cs" />
     <Compile Include="CryptoTestFactoryTests.cs" />
     <Compile Include="TestUtil.cs" />
+    <Compile Include="Trust\TestPkiTrustProvider.cs" />
     <Compile Include="Utils\InvalidEncodeTlvTag.cs" />
     <Compile Include="Utils\UtilTests.cs" />
   </ItemGroup>
@@ -645,6 +646,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\ksi-signature\ksi-signature-invalid-missing-aggregation-hash-chains.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-not-valid-cert.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\ksi-signature\ksi-signature-invalid-with-invalid-publication-record-hash.tlv">

@@ -27,7 +27,9 @@ using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
 using Guardtime.KSI.Test.Crypto;
+using Guardtime.KSI.Test.Properties;
 using Guardtime.KSI.Test.Publication;
+using Guardtime.KSI.Test.Trust;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
@@ -208,6 +210,33 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
                 Assert.AreEqual(VerificationError.Key02, verificationResult.VerificationError);
+            }
+        }
+
+        [Test]
+        public void TestSignatureNotValidCert()
+        {
+            CalendarAuthenticationRecordSignatureVerificationRule rule = new CalendarAuthenticationRecordSignatureVerificationRule(new X509Store(StoreName.Root),
+                CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
+
+            IPublicationsFile pubsFile;
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
+            {
+                pubsFile = new PublicationsFileFactory(new TestPkiTrustProvider()).Create(stream);
+            }
+
+            // Check invalid signature with not valid cert
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Invalid_Not_Valid_Cert), FileMode.Open))
+            {
+                VerificationContext context = new VerificationContext()
+                {
+                    Signature = new KsiSignatureFactory().Create(stream),
+                    PublicationsFile = pubsFile
+                };
+
+                VerificationResult verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+                Assert.AreEqual(VerificationError.Key03, verificationResult.VerificationError);
             }
         }
     }
