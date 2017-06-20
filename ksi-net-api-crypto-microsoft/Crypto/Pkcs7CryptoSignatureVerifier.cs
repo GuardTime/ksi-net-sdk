@@ -96,6 +96,11 @@ namespace Guardtime.KSI.Crypto.Microsoft.Crypto
             SignerInfo signerInfo = signedCms.SignerInfos[0];
             X509Certificate2 certificate = signerInfo.Certificate;
 
+            if (data != null)
+            {
+                CertificateTimeVerifier.Verify(certificate, data.SignTime);
+            }
+
             try
             {
                 // Verify certificate with rdn selector

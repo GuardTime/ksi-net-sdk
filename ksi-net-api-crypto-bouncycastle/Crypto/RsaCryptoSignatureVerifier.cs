@@ -80,6 +80,8 @@ namespace Guardtime.KSI.Crypto.BouncyCastle.Crypto
             {
                 X509Certificate certificate = new X509CertificateParser().ReadCertificate(certificateBytes);
 
+                CertificateTimeVerifier.Verify(certificate, data.SignTime);
+
                 ISigner signer = SignerUtilities.GetSigner(_algorithm + "withRSA");
                 signer.Init(false, certificate.GetPublicKey());
                 signer.BlockUpdate(signedBytes, 0, signedBytes.Length);
@@ -88,6 +90,10 @@ namespace Guardtime.KSI.Crypto.BouncyCastle.Crypto
                 {
                     throw new PkiVerificationFailedException("Failed to verify RSA signature.");
                 }
+            }
+            catch (PkiVerificationFailedCertNotValidException)
+            {
+                throw;
             }
             catch (PkiVerificationFailedException)
             {

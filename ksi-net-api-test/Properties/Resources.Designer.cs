@@ -1187,6 +1187,15 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-not-valid-cert.tlv.
+        /// </summary>
+        internal static string KsiSignature_Invalid_Not_Valid_Cert {
+            get {
+                return ResourceManager.GetString("KsiSignature_Invalid_Not_Valid_Cert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-rfc3161-aggregation-time-mismatch.tlv.
         /// </summary>
         internal static string KsiSignature_Invalid_Rfc3161_Aggregation_Time_Mismatch {

@@ -117,6 +117,12 @@ namespace Guardtime.KSI.Crypto.BouncyCastle.Crypto
 
                 // Verify signer information
                 X509Certificate certificate = (X509Certificate)x509CertificateCollectionEnumerator.Current;
+
+                if (data != null)
+                {
+                    CertificateTimeVerifier.Verify(certificate, data.SignTime);
+                }
+
                 if (!signerInfo.Verify(certificate))
                 {
                     throw new PkiVerificationFailedException("Signer information does not match with certificate.");
@@ -130,10 +136,13 @@ namespace Guardtime.KSI.Crypto.BouncyCastle.Crypto
 
                 ValidateCertPath(certificate, x509Store);
             }
+            catch (PkiVerificationFailedCertNotValidException)
+            {
+                throw;
+            }
             catch (PkiVerificationFailedException ex)
             {
                 Logger.Warn(string.Format("Failed to verify PKCS#7 signature.{0}Exception: {1}{0}Trust anchors: {0}{2}", Environment.NewLine, ex, GetTrustAnchorsString()));
-
                 throw;
             }
 

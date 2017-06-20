@@ -136,6 +136,11 @@ namespace Guardtime.KSI.Signature.Verification
         public static readonly VerificationError Key02 = new VerificationError("KEY-02", "PKI signature not verified with certificate");
 
         /// <summary>
+        ///     Signing certificate not valid at aggregation time error.
+        /// </summary>
+        public static readonly VerificationError Key03 = new VerificationError("KEY-03", "Signing certificate not valid at aggregation time");
+
+        /// <summary>
         ///     Calendar root hash mismatch error between signature and calendar database chain.
         /// </summary>
         public static readonly VerificationError Cal01 = new VerificationError("CAL-01", "Calendar root hash mismatch between signature and calendar database chain");

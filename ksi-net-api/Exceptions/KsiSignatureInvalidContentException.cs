@@ -34,7 +34,7 @@ namespace Guardtime.KSI.Exceptions
         /// </summary>
         /// <param name="message">Exception message</param>
         /// <param name="signature">The signature the exception is associated with</param>
-        /// <param name="verificationResult">Verficiation result</param>
+        /// <param name="verificationResult">Verificiation result</param>
         public KsiSignatureInvalidContentException(string message, IKsiSignature signature, VerificationResult verificationResult) : base(message)
         {
             Signature = signature;
@@ -47,7 +47,7 @@ namespace Guardtime.KSI.Exceptions
         /// <param name="message">Exception message</param>
         /// <param name="innerException">Inner exception</param>
         /// <param name="signature">The signature the exception is associated with</param>
-        /// <param name="verificationResult">Verficiation result</param>
+        /// <param name="verificationResult">Verificiation result</param>
         public KsiSignatureInvalidContentException(string message, Exception innerException, IKsiSignature signature, VerificationResult verificationResult)
             : base(message, innerException)
         {

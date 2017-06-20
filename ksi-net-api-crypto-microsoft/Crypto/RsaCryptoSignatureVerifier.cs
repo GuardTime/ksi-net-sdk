@@ -79,6 +79,8 @@ namespace Guardtime.KSI.Crypto.Microsoft.Crypto
             {
                 X509Certificate2 certificate = new X509Certificate2(certificateBytes);
 
+                CertificateTimeVerifier.Verify(certificate, data.SignTime);
+
                 using (RSACryptoServiceProvider serviceProvider = (RSACryptoServiceProvider)certificate.PublicKey.Key)
                 {
                     if (!serviceProvider.VerifyData(signedBytes, _algorithm, signatureBytes))
@@ -86,6 +88,10 @@ namespace Guardtime.KSI.Crypto.Microsoft.Crypto
                         throw new PkiVerificationFailedException("Failed to verify RSA signature.");
                     }
                 }
+            }
+            catch (PkiVerificationFailedCertNotValidException)
+            {
+                throw;
             }
             catch (PkiVerificationFailedException)
             {

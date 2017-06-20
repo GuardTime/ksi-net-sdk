@@ -18,38 +18,31 @@
  */
 
 using System;
+using Guardtime.KSI.Exceptions;
+using Org.BouncyCastle.X509;
 
-namespace Guardtime.KSI.Crypto
+namespace Guardtime.KSI.Crypto.BouncyCastle.Crypto
 {
     /// <summary>
-    /// Crypto signature verification data
+    /// Class for verifying that a certificate was valid on given time
     /// </summary>
-    public class CryptoSignatureVerificationData
+    public class CertificateTimeVerifier
     {
         /// <summary>
-        /// Certificate bytes
+        /// Verify that given certificate was valid on given time
         /// </summary>
-        public byte[] CertificateBytes { get; }
-
-        /// <summary>
-        /// Time of signing. If the time is given then it will be used for checking if certificate was valid at the given time.
-        /// </summary>
-        public ulong? SignTime { get; }
-
-        /// <summary>
-        /// Create crypto signature verification data instance
-        /// </summary>
-        /// <param name="certificate">certificate bytes</param>
-        /// <param name="signTime">time of signing</param>
-        public CryptoSignatureVerificationData(byte[] certificate, ulong? signTime = null)
+        /// <param name="certificate">certificate</param>
+        /// <param name="time">time to check certificate validity against</param>
+        public static void Verify(X509Certificate certificate, ulong? time)
         {
-            if (certificate == null)
+            if (time.HasValue)
             {
-                throw new ArgumentNullException(nameof(certificate));
+                DateTime signTime = Utils.Util.ConvertUnixTimeToDateTime(time.Value);
+                if (certificate.NotBefore > signTime || certificate.NotAfter < signTime)
+                {
+                    throw new PkiVerificationFailedCertNotValidException(string.Format("Certificate not valid at {0}.", signTime));
+                }
             }
-
-            CertificateBytes = certificate;
-            SignTime = signTime;
         }
     }
 }

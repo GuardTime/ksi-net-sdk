@@ -54,7 +54,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         /// <see cref="VerificationRule.Verify" />
         public override VerificationResult Verify(IVerificationContext context)
         {
-            CalendarAuthenticationRecord calendarAuthenticationRecord = GetCalendarAuthenticationRecord(GetSignature(context));
+            IKsiSignature signature = GetSignature(context);
+            CalendarAuthenticationRecord calendarAuthenticationRecord = GetCalendarAuthenticationRecord(signature);
             SignatureData signatureData = calendarAuthenticationRecord.SignatureData;
             byte[] certificateBytes = GetPublicationsFile(context).FindCertificateById(signatureData.GetCertificateId());
 
@@ -66,11 +67,15 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             byte[] signedBytes = calendarAuthenticationRecord.PublicationData.Encode();
             ICryptoSignatureVerifier cryptoSignatureVerifier = CryptoSignatureVerifierFactory.GetCryptoSignatureVerifierByOid(signatureData.SignatureType, _trustStore,
                 _certificateRdnSelector);
-            CryptoSignatureVerificationData data = new CryptoSignatureVerificationData(certificateBytes);
+            CryptoSignatureVerificationData data = new CryptoSignatureVerificationData(certificateBytes, signature.AggregationTime);
 
             try
             {
                 cryptoSignatureVerifier.Verify(signedBytes, signatureData.GetSignatureValue(), data);
+            }
+            catch (PkiVerificationFailedCertNotValidException)
+            {
+                return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Key03);
             }
             catch (PkiVerificationFailedException)
             {
