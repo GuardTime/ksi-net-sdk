@@ -1700,6 +1700,9 @@
     <None Include="resources\signature\shared\policy-verification-signatures\resources\extender-response-with-changed-times.tlv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="resources\signature\shared\policy-verification-signatures\ksi-signature-invalid-not-valid-cert.tlv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="resources\signature\shared\policy-verification-signatures\resources\publications-file.bin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
