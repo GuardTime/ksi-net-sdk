@@ -404,8 +404,7 @@ namespace Guardtime.KSI.Test.Integration
             Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("2f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), sig2.InputHash,
                 "Unexpected signature input hash");
 
-            Socket socket1 =
-                (Socket)typeof(TcpKsiServiceProtocol).GetField("_socket", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(tcp);
+            Socket socket1 = GetSocket(tcp);
 
             IAsyncResult ar3 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("3f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
             IAsyncResult ar4 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("4f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
@@ -417,8 +416,7 @@ namespace Guardtime.KSI.Test.Integration
             Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("4f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), sig4.InputHash,
                 "Unexpected signature input hash");
 
-            Socket socket2 =
-                (Socket)typeof(TcpKsiServiceProtocol).GetField("_socket", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(tcp);
+            Socket socket2 = GetSocket(tcp);
 
             Assert.AreEqual(socket1, socket2, "Sockets should be equal");
         }
@@ -432,13 +430,11 @@ namespace Guardtime.KSI.Test.Integration
             IAsyncResult ar1 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
 
             IKsiSignature sig1 = service.EndSign(ar1);
-            Socket socket1 =
-                (Socket)typeof(TcpKsiServiceProtocol).GetField("_socket", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(tcp);
+            Socket socket1 = GetSocket(tcp);
 
             Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), sig1.InputHash,
                 "Unexpected signature input hash");
-            Socket socket2 =
-                (Socket)typeof(TcpKsiServiceProtocol).GetField("_socket", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(tcp);
+            Socket socket2 = GetSocket(tcp);
 
             Assert.AreEqual(socket1, socket2, "Sockets should be equal");
 
@@ -450,8 +446,7 @@ namespace Guardtime.KSI.Test.Integration
             IKsiSignature sig2 = service.EndSign(ar2);
             Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("2f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), sig2.InputHash,
                 "Unexpected signature input hash");
-            Socket socket3 =
-                (Socket)typeof(TcpKsiServiceProtocol).GetField("_socket", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(tcp);
+            Socket socket3 = GetSocket(tcp);
 
             Assert.AreNotEqual(socket1, socket3, "Sockets should not be equal");
         }
@@ -466,12 +461,10 @@ namespace Guardtime.KSI.Test.Integration
             IAsyncResult ar2 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("2f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
             service.EndSign(ar1);
 
-            Socket socket =
-                (Socket)typeof(TcpKsiServiceProtocol).GetField("_socket", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(tcp);
-
-            Assert.IsNotNull(socket, "Socket should not be null");
+            Assert.IsNotNull(GetSocket(tcp), "Socket should not be null");
             tcp.Dispose();
-            Assert.IsNotNull(socket, "Socket should be null");
+
+            Assert.IsNull(GetSocket(tcp), "Socket should be null");
 
             KsiServiceProtocolException ex = Assert.Throws<KsiServiceProtocolException>(delegate
             {
@@ -486,6 +479,11 @@ namespace Guardtime.KSI.Test.Integration
             });
 
             Assert.That(ex.Message.StartsWith("TCP KSI service protocol is disposed."), "Unexpected exception message: " + ex.Message);
+        }
+
+        private static Socket GetSocket(TcpKsiServiceProtocol tcp)
+        {
+            return (Socket)typeof(TcpKsiServiceProtocol).GetField("_socket", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(tcp);
         }
 
         private static KsiService GetKsiService(TcpKsiServiceProtocol tcp)

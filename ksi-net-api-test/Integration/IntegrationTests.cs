@@ -213,6 +213,18 @@ namespace Guardtime.KSI.Test.Integration
                     CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))), pduVersion ?? TestSetup.PduVersion);
         }
 
+        public static KsiService GetTcpKsiService(PduVersion? pduVersion = null)
+        {
+            return new KsiService(
+                TcpKsiServiceProtocol,
+                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
+                HttpKsiServiceProtocol,
+                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
+                HttpKsiServiceProtocol,
+                new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
+                    CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))), pduVersion ?? TestSetup.PduVersion);
+        }
+
         public static KsiService GetHttpKsiServiceWithDefaultPduVersion()
         {
             return new KsiService(

@@ -18,12 +18,11 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Service.Tcp;
 using NLog;
 
 namespace Guardtime.KSI.Service
@@ -33,14 +32,8 @@ namespace Guardtime.KSI.Service
     /// All requests and responses go through one socket that is kept opened for future requests.
     /// If a request fails (eg. socket is closed by server) it will be repeated once more with a new freshly connected socket.
     /// </summary>
-    public partial class TcpKsiServiceProtocol : IKsiSigningServiceProtocol, IDisposable
+    public class TcpKsiServiceProtocol : IKsiSigningServiceProtocol, IDisposable
     {
-        private enum RequestType
-        {
-            Aggregation,
-            AggregatorConfig
-        };
-
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly uint _requestTimeOut = 10000;
         private readonly uint _bufferSize = 8192;
@@ -54,7 +47,7 @@ namespace Guardtime.KSI.Service
         private ManualResetEvent _waitHandle;
         private bool _isReceivingRetry;
         private readonly TcpResponseProcessor _responseProcessor;
-        private readonly AsyncResultCollection _asyncResults;
+        private readonly TcpAsyncResultCollection _asyncResults;
 
         /// <summary>
         ///     Create TCP KSI service protocol
@@ -71,7 +64,7 @@ namespace Guardtime.KSI.Service
             _ipAddress = ipAddress;
             _port = port;
             _receiveDataBuffer = new byte[_bufferSize];
-            _asyncResults = new AsyncResultCollection();
+            _asyncResults = new TcpAsyncResultCollection();
             _responseProcessor = new TcpResponseProcessor(_asyncResults);
         }
 
@@ -113,7 +106,7 @@ namespace Guardtime.KSI.Service
         /// <returns>TCP KSI service protocol async result</returns>
         public IAsyncResult BeginSign(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
-            return BeginAggregatorRequest(RequestType.Aggregation, data, requestId, callback, asyncState);
+            return BeginAggregatorRequest(TcpRequestType.Aggregation, data, requestId, callback, asyncState);
         }
 
         /// <summary>
@@ -126,7 +119,7 @@ namespace Guardtime.KSI.Service
         /// <returns>TCP KSI service protocol async result</returns>
         public IAsyncResult BeginGetAggregatorConfig(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
-            return BeginAggregatorRequest(RequestType.AggregatorConfig, data, 0, callback, asyncState);
+            return BeginAggregatorRequest(TcpRequestType.AggregatorConfig, data, requestId, callback, asyncState);
         }
 
         /// <summary>
@@ -193,7 +186,7 @@ namespace Guardtime.KSI.Service
             _responseProcessor.Clear();
         }
 
-        private IAsyncResult BeginAggregatorRequest(RequestType requestType, byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
+        private IAsyncResult BeginAggregatorRequest(TcpRequestType requestType, byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
             if (_isDisposed)
             {
@@ -453,7 +446,7 @@ namespace Guardtime.KSI.Service
 
                 if (asyncResult.IsDisposed)
                 {
-                    throw new KsiServiceProtocolException("Provided async result is already disposed. Possibly using the same async result twice when ending your request.");
+                    throw new KsiServiceProtocolException("Provided async result is already disposed. Possibly using the same async result twice when ending request.");
                 }
 
                 if (!asyncResult.IsCompleted)
@@ -510,152 +503,6 @@ namespace Guardtime.KSI.Service
             asyncResult.Error = new KsiServiceProtocolException(errorMessage, e);
             asyncResult.SetComplete(true);
             _asyncResults.Remove(asyncResult);
-        }
-
-        /// <summary>
-        ///     TCP KSI service protocol async result.
-        /// </summary>
-        private class TcpKsiServiceProtocolAsyncResult : IAsyncResult, IDisposable
-        {
-            private readonly AsyncCallback _callback;
-            private readonly object _lock;
-            private readonly ManualResetEvent _waitHandle;
-            private bool _isCompleted;
-            private bool _isDisposed;
-
-            public TcpKsiServiceProtocolAsyncResult(RequestType requestType, byte[] postData, ulong requestId, AsyncCallback callback, object asyncState)
-            {
-                PostData = postData;
-                _callback = callback;
-                AsyncState = asyncState;
-
-                _isCompleted = false;
-
-                _lock = new object();
-                _waitHandle = new ManualResetEvent(false);
-
-                RequestType = requestType;
-                RequestId = requestId;
-            }
-
-            public RequestType RequestType { get; }
-            public ulong RequestId { get; }
-
-            public byte[] PostData { get; }
-
-            public MemoryStream ResultStream { get; set; }
-
-            public bool HasError => Error != null;
-
-            public KsiServiceProtocolException Error { get; set; }
-
-            public object AsyncState { get; }
-
-            public WaitHandle AsyncWaitHandle => _waitHandle;
-
-            public bool CompletedSynchronously => false;
-
-            public bool IsCompleted
-            {
-                get
-                {
-                    lock (_lock)
-                    {
-                        return _isCompleted;
-                    }
-                }
-            }
-
-            public bool IsDisposed => _isDisposed;
-
-            public void Dispose()
-            {
-                _waitHandle.Close();
-                _isDisposed = true;
-            }
-
-            public void SetComplete(bool errorOccured)
-            {
-                lock (_lock)
-                {
-                    if (!_isCompleted)
-                    {
-                        _isCompleted = true;
-
-                        if (errorOccured == false)
-                        {
-                            _callback?.Invoke(this);
-                        }
-                    }
-                }
-
-                if (!_waitHandle.Set())
-                {
-                    throw new KsiServiceProtocolException("WaitHandle completion failed");
-                }
-            }
-        }
-
-        /// <summary>
-        /// Syncronized collection containing TcpKsiServiceProtocol asyncResults.
-        /// </summary>
-        private class AsyncResultCollection
-        {
-            readonly Dictionary<ulong, TcpKsiServiceProtocolAsyncResult> _list = new Dictionary<ulong, TcpKsiServiceProtocolAsyncResult>();
-            private readonly object _syncObj = new object();
-
-            public void Add(ulong key, TcpKsiServiceProtocolAsyncResult asyncResult)
-            {
-                lock (_syncObj)
-                {
-                    _list.Add(key, asyncResult);
-                }
-            }
-
-            public void Remove(TcpKsiServiceProtocolAsyncResult asyncResult)
-            {
-                lock (_syncObj)
-                {
-                    if (_list.ContainsKey(asyncResult.RequestId))
-                    {
-                        _list.Remove(asyncResult.RequestId);
-                    }
-                }
-            }
-
-            public ulong[] GetKeys()
-            {
-                lock (_syncObj)
-                {
-                    ulong[] keys = new ulong[_list.Keys.Count];
-                    _list.Keys.CopyTo(keys, 0);
-                    return keys;
-                }
-            }
-
-            public int Count()
-            {
-                lock (_syncObj)
-                {
-                    return _list.Count;
-                }
-            }
-
-            public TcpKsiServiceProtocolAsyncResult GetValue(ulong key)
-            {
-                lock (_syncObj)
-                {
-                    return _list.ContainsKey(key) ? _list[key] : null;
-                }
-            }
-
-            public void Clear()
-            {
-                lock (_syncObj)
-                {
-                    _list.Clear();
-                }
-            }
         }
     }
 }
