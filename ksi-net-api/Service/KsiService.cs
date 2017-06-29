@@ -36,7 +36,7 @@ namespace Guardtime.KSI.Service
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly HashAlgorithm DefaultMacAlgorithm = HashAlgorithm.Sha2256;
-        private const PduVersion DefaultPduVersion = PduVersion.v1;
+        private const PduVersion DefaultPduVersion = PduVersion.v2;
 
         private readonly IKsiSigningServiceProtocol _signingServiceProtocol;
         private readonly IKsiExtendingServiceProtocol _extendingServiceProtocol;
