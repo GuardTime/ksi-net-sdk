@@ -50,7 +50,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         }
 
         [Test]
-        public void InternalVerificationPolicyDocumentHashTest()
+        public void InternalVerificationPolicyInvalidDocumentHashTest()
         {
             InternalVerificationPolicy policy = new InternalVerificationPolicy();
 
@@ -69,7 +69,26 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         }
 
         [Test]
-        public void InternalVerificationPolicyDocumentHashLevelTest()
+        public void InternalVerificationPolicyInvalidDocumentHashAlgorithmTest()
+        {
+            InternalVerificationPolicy policy = new InternalVerificationPolicy();
+
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            {
+                TestVerificationContext context = new TestVerificationContext()
+                {
+                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream),
+                    DocumentHash = new DataHash(Base16.Decode("0411A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772DE1A7F49828C340C328C340C328C340C3"))
+                };
+
+                VerificationResult verificationResult = policy.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+                Assert.AreEqual(VerificationError.Gen04, verificationResult.VerificationError);
+            }
+        }
+
+        [Test]
+        public void InternalVerificationPolicyInvalidDocumentHashLevelTest()
         {
             InternalVerificationPolicy policy = new InternalVerificationPolicy();
 
@@ -89,7 +108,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         }
 
         [Test]
-        public void InternalVerificationPolicyAggregationChainInputHashTest()
+        public void InternalVerificationPolicyInvalidAggregationChainInputHashTest()
         {
             InternalVerificationPolicy policy = new InternalVerificationPolicy();
 
@@ -107,7 +126,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         }
 
         [Test]
-        public void InternalVerificationPolicyRfc3161RecordAggregationTimeTest()
+        public void InternalVerificationPolicyInvalidRfc3161RecordAggregationTimeTest()
         {
             InternalVerificationPolicy policy = new InternalVerificationPolicy();
 
@@ -126,7 +145,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         }
 
         [Test]
-        public void InternalVerificationPolicyRfc3161RecordChainIndexTest()
+        public void InternalVerificationPolicyInvalidRfc3161RecordChainIndexTest()
         {
             InternalVerificationPolicy policy = new InternalVerificationPolicy();
 
@@ -145,7 +164,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         }
 
         [Test]
-        public void InternalVerificationPolicyAggregationHashChainIndexSuccessorTest()
+        public void InternalVerificationPolicyInvalidAggregationHashChainIndexSuccessorTest()
         {
             InternalVerificationPolicy policy = new InternalVerificationPolicy();
 
@@ -165,7 +184,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         }
 
         [Test]
-        public void InternalVerificationPolicyAggregationHashChainMetadataTest()
+        public void InternalVerificationPolicyInvalidAggregationHashChainMetadataTest()
         {
             InternalVerificationPolicy policy = new InternalVerificationPolicy();
 
@@ -181,7 +200,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         }
 
         [Test]
-        public void InternalVerificationPolicyAggregationHashChainConsistencyTest()
+        public void InternalVerificationPolicyInvalidAggregationHashChainConsistencyTest()
         {
             InternalVerificationPolicy policy = new InternalVerificationPolicy();
 
@@ -197,7 +216,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         }
 
         [Test]
-        public void InternalVerificationPolicyAggregationHashChainTimeConsistencyTest()
+        public void InternalVerificationPolicyInvalidAggregationHashChainTimeConsistencyTest()
         {
             InternalVerificationPolicy policy = new InternalVerificationPolicy();
 
@@ -213,7 +232,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         }
 
         [Test]
-        public void InternalVerificationPolicyAggregationHashChainIndexTest()
+        public void InternalVerificationPolicyInvalidAggregationHashChainIndexTest()
         {
             InternalVerificationPolicy policy = new InternalVerificationPolicy();
 
@@ -229,7 +248,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         }
 
         [Test]
-        public void InternalVerificationPolicyCalendarHashChainInputHashVerificationTest()
+        public void InternalVerificationPolicyInvalidCalendarHashChainInputHashVerificationTest()
         {
             InternalVerificationPolicy policy = new InternalVerificationPolicy();
 
@@ -245,7 +264,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         }
 
         [Test]
-        public void InternalVerificationPolicyCalendarHashChainAggregationTimeTest()
+        public void InternalVerificationPolicyInvalidCalendarHashChainAggregationTimeTest()
         {
             InternalVerificationPolicy policy = new InternalVerificationPolicy();
 
@@ -261,7 +280,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         }
 
         [Test]
-        public void InternalVerificationPolicyCalendarHashChainRegistrationTimeTest()
+        public void InternalVerificationPolicyInvalidCalendarHashChainRegistrationTimeTest()
         {
             InternalVerificationPolicy policy = new InternalVerificationPolicy();
 
@@ -277,7 +296,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         }
 
         [Test]
-        public void InternalVerificationPolicyCalendarAuthenticationRecordAggregationHashTest()
+        public void InternalVerificationPolicyInvalidCalendarAuthenticationRecordAggregationHashTest()
         {
             InternalVerificationPolicy policy = new InternalVerificationPolicy();
 
@@ -293,7 +312,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         }
 
         [Test]
-        public void InternalVerificationPolicyCalendarAuthenticationRecordAggregationTimeTest()
+        public void InternalVerificationPolicyInvalidCalendarAuthenticationRecordAggregationTimeTest()
         {
             InternalVerificationPolicy policy = new InternalVerificationPolicy();
 
@@ -309,7 +328,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         }
 
         [Test]
-        public void InternalVerificationPolicySignaturePublicationRecordPublicationHashTest()
+        public void InternalVerificationPolicyInvalidSignaturePublicationRecordPublicationHashTest()
         {
             InternalVerificationPolicy policy = new InternalVerificationPolicy();
 
@@ -325,7 +344,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         }
 
         [Test]
-        public void InternalVerificationPolicySignaturePublicationRecordPublicationTimeTest()
+        public void InternalVerificationPolicyInvalidSignaturePublicationRecordPublicationTimeTest()
         {
             InternalVerificationPolicy policy = new InternalVerificationPolicy();
 

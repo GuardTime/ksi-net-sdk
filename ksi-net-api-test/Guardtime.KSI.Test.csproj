@@ -195,6 +195,7 @@
     <Compile Include="Signature\KsiSignatureUsingReflectionTests.cs" />
     <Compile Include="Signature\Verification\EmptyVerificationPolicy.cs" />
     <Compile Include="Signature\Verification\Policy\InternalVerificationPolicyTests.cs" />
+    <Compile Include="Signature\Verification\Rule\InputHashAlgorithmVerificationRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\OkResultRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\DocumentHashLevelVerificationRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\DocumentHashVerificationRuleTests.cs" />
