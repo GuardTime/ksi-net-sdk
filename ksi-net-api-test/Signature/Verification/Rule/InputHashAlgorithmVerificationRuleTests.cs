@@ -94,7 +94,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         }
 
         [Test]
-        public void TestRfc3161SignatureInputHashAlgorithm()
+        public void TestRfc3161SignatureWithCorrectInputHashAlgorithm()
         {
             InputHashAlgorithmVerificationRule rule = new InputHashAlgorithmVerificationRule();
 
@@ -114,7 +114,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         }
 
         [Test]
-        public void TestRfc3161SignatureInvalidInputHashAlgorithm()
+        public void TestRfc3161SignatureWithWrongInputHashAlgorithm()
         {
             InputHashAlgorithmVerificationRule rule = new InputHashAlgorithmVerificationRule();
 
@@ -135,7 +135,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         }
 
         [Test]
-        public void TestSignatureInputHashAlgorithm()
+        public void TestSignatureWithCorrectInputHashAlgorithm()
         {
             InputHashAlgorithmVerificationRule rule = new InputHashAlgorithmVerificationRule();
 
@@ -155,7 +155,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         }
 
         [Test]
-        public void TestSignatureWithInvalidInputHashAlgorithm()
+        public void TestSignatureWithWrongInputHashAlgorithm()
         {
             InputHashAlgorithmVerificationRule rule = new InputHashAlgorithmVerificationRule();
 
@@ -176,7 +176,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         }
 
         [Test]
-        public void TestSignatureWithInvalidInputHashValue()
+        public void TestSignatureWithWrongInputHashValue()
         {
             InputHashAlgorithmVerificationRule rule = new InputHashAlgorithmVerificationRule();
 

@@ -46,7 +46,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (documentHash.Algorithm != inputHash.Algorithm)
             {
-                Logger.Warn("Invalid input hash algorithm. Expected {0}, found {1}", documentHash.Algorithm, inputHash.Algorithm);
+                Logger.Warn("Wrong input hash algorithm. Expected {0}, found {1}", documentHash.Algorithm, inputHash.Algorithm);
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Gen04);
             }
 
