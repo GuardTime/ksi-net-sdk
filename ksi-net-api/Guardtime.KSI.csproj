@@ -173,6 +173,7 @@
     <Compile Include="Signature\IIdentity.cs" />
     <Compile Include="Signature\IKsiSignatureFactory.cs" />
     <Compile Include="Signature\LegacyIdentity.cs" />
+    <Compile Include="Signature\Verification\Rule\InputHashAlgorithmVerificationRule.cs" />
     <Compile Include="Signature\Verification\Rule\OkResultRule.cs" />
     <Compile Include="Signature\Verification\Rule\DocumentHashLevelVerificationRule.cs" />
     <Compile Include="Signature\Verification\Rule\DocumentHashVerificationRule.cs" />
