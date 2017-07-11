@@ -98,9 +98,9 @@ namespace Guardtime.KSI.Test.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1234")]
-        public int TcpSigningServicePort {
+        public ushort TcpSigningServicePort {
             get {
-                return ((int)(this["TcpSigningServicePort"]));
+                return ((ushort)(this["TcpSigningServicePort"]));
             }
         }
         

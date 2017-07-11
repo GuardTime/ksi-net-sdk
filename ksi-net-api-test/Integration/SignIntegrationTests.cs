@@ -19,17 +19,23 @@
 
 using System;
 using System.IO;
+using System.Net;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
+using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
 using Guardtime.KSI.Test.Crypto;
+using Guardtime.KSI.Test.Properties;
+using Guardtime.KSI.Test.Signature.Verification;
+using Guardtime.KSI.Trust;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
@@ -165,17 +171,6 @@ namespace Guardtime.KSI.Test.Integration
             Assert.AreEqual("Server responded with error message. Status: 258; Message: The request could not be authenticated.", ex.Message);
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCasesInvalidUrl))]
-        public void TcpSignHashInvalidUrlTest(Ksi ksi)
-        {
-            Exception ex = Assert.Throws<KsiServiceProtocolException>(delegate
-            {
-                SignHash(ksi);
-            });
-            Assert.That(ex.Message.StartsWith("Could not get host entry for TCP connection"), "Unexpected exception message: " + ex.Message);
-            Assert.That(ex.InnerException is SocketException, "Unexpected inner exception: " + ex.InnerException);
-        }
-
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpTestCasesInvalidPort))]
         public void TcpSignHashInvalidPortTest(Ksi ksi)
         {
@@ -207,6 +202,7 @@ namespace Guardtime.KSI.Test.Integration
         private VerificationResult SignHash(Ksi ksi)
         {
             IKsiSignature signature = ksi.Sign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
+
             VerificationContext verificationContext = new VerificationContext(signature)
             {
                 DocumentHash = new DataHash(HashAlgorithm.Sha2256,
@@ -390,6 +386,122 @@ namespace Guardtime.KSI.Test.Integration
             });
 
             Assert.That(ex.Message.StartsWith("Invalid asyncResult, could not cast to correct object."), "Unexpected exception message: " + ex.Message);
+        }
+
+        [Test]
+        public void TcpSignHashWithReusedSocketTest()
+        {
+            TcpKsiServiceProtocol tcp = new TcpKsiServiceProtocol(IPAddress.Parse(Settings.Default.TcpSigningServiceUrl), Settings.Default.TcpSigningServicePort);
+            KsiService service = GetKsiService(tcp);
+
+            IAsyncResult ar1 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
+            IAsyncResult ar2 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("2f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
+
+            IKsiSignature sig1 = service.EndSign(ar1);
+            Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), sig1.InputHash,
+                "Unexpected signature input hash");
+            IKsiSignature sig2 = service.EndSign(ar2);
+            Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("2f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), sig2.InputHash,
+                "Unexpected signature input hash");
+
+            Socket socket1 = GetSocket(tcp);
+
+            IAsyncResult ar3 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("3f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
+            IAsyncResult ar4 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("4f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
+
+            IKsiSignature sig3 = service.EndSign(ar3);
+            Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("3f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), sig3.InputHash,
+                "Unexpected signature input hash");
+            IKsiSignature sig4 = service.EndSign(ar4);
+            Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("4f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), sig4.InputHash,
+                "Unexpected signature input hash");
+
+            Socket socket2 = GetSocket(tcp);
+
+            Assert.AreEqual(socket1, socket2, "Sockets should be equal");
+        }
+
+        [Test]
+        public void TcpSignHashesWithSocketReuseAndTimeoutTest()
+        {
+            TcpKsiServiceProtocol tcp = new TcpKsiServiceProtocol(IPAddress.Parse(Settings.Default.TcpSigningServiceUrl), Settings.Default.TcpSigningServicePort, 30000);
+            KsiService service = GetKsiService(tcp);
+
+            IAsyncResult ar1 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
+
+            IKsiSignature sig1 = service.EndSign(ar1);
+            Socket socket1 = GetSocket(tcp);
+
+            Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), sig1.InputHash,
+                "Unexpected signature input hash");
+            Socket socket2 = GetSocket(tcp);
+
+            Assert.AreEqual(socket1, socket2, "Sockets should be equal");
+
+            // after 20 sec server will close connection
+            Thread.Sleep(22000);
+
+            IAsyncResult ar2 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("2f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
+
+            IKsiSignature sig2 = service.EndSign(ar2);
+            Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("2f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), sig2.InputHash,
+                "Unexpected signature input hash");
+            Socket socket3 = GetSocket(tcp);
+
+            Assert.AreNotEqual(socket1, socket3, "Sockets should not be equal");
+        }
+
+        [Test]
+        public void TcpSignHashesWithDisposedServiceProtocolTest()
+        {
+            TcpKsiServiceProtocol tcp = new TcpKsiServiceProtocol(IPAddress.Parse(Settings.Default.TcpSigningServiceUrl), Settings.Default.TcpSigningServicePort);
+            KsiService service = GetKsiService(tcp);
+
+            IAsyncResult ar1 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
+            IAsyncResult ar2 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("2f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
+            service.EndSign(ar1);
+
+            Assert.IsNotNull(GetSocket(tcp), "Socket should not be null");
+            tcp.Dispose();
+
+            Assert.IsNull(GetSocket(tcp), "Socket should be null");
+
+            KsiServiceProtocolException ex = Assert.Throws<KsiServiceProtocolException>(delegate
+            {
+                service.EndSign(ar2);
+            });
+
+            Assert.That(ex.Message.StartsWith("TCP KSI service protocol is disposed."), "Unexpected exception message: " + ex.Message);
+
+            ex = Assert.Throws<KsiServiceProtocolException>(delegate
+            {
+                service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("3f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
+            });
+
+            Assert.That(ex.Message.StartsWith("TCP KSI service protocol is disposed."), "Unexpected exception message: " + ex.Message);
+        }
+
+        private static Socket GetSocket(TcpKsiServiceProtocol tcp)
+        {
+            return (Socket)typeof(TcpKsiServiceProtocol).GetField("_socket", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(tcp);
+        }
+
+        private static KsiService GetKsiService(TcpKsiServiceProtocol tcp)
+        {
+            HttpKsiServiceProtocol http = new HttpKsiServiceProtocol(Settings.Default.HttpSigningServiceUrl, Settings.Default.HttpExtendingServiceUrl,
+                Settings.Default.HttpPublicationsFileUrl);
+
+            KsiService service = new KsiService(
+                tcp,
+                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
+                http,
+                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
+                http,
+                new PublicationsFileFactory(
+                    new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
+                new KsiSignatureFactory(new EmptyVerificationPolicy()),
+                TestSetup.PduVersion);
+            return service;
         }
     }
 }

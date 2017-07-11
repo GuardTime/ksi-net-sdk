@@ -27,7 +27,7 @@ namespace Guardtime.KSI.Test
 {
     public class TestUtil
     {
-        public static T GetCompositeTag<T>(uint type, ITlvTag[] childTags)
+        public static T GetCompositeTag<T>(uint type, ITlvTag[] childTags) where T : ITlvTag
         {
             return (T)GetCompositeTag(typeof(T), type, childTags);
         }

@@ -45,6 +45,31 @@ namespace Guardtime.KSI.Test.Integration
             }
         }
 
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void GetAggregatorConfigTcpTest(Ksi ksi)
+        {
+            KsiService service = GetTcpKsiService();
+
+            if (TestSetup.PduVersion == PduVersion.v1)
+            {
+                Exception ex = Assert.Throws<KsiServiceException>(delegate
+                {
+                    service.BeginGetAggregatorConfig(null, null);
+                });
+
+                Assert.That(ex.Message.StartsWith("Aggregator config request is not supported using PDU version v1"), "Unexpected exception message: " + ex.Message);
+            }
+            else
+            {
+                // test with 2 config requests
+                IAsyncResult asyncResult1 = service.BeginGetAggregatorConfig(null, null);
+                IAsyncResult asyncResult2 = service.BeginGetAggregatorConfig(null, null);
+
+                AggregatorConfig conf1 = service.EndGetAggregatorConfig(asyncResult1);
+                AggregatorConfig conf2 = service.EndGetAggregatorConfig(asyncResult2);
+            }
+        }
+
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidExtendingUrl))]
         public void GetAggregatorConfigSuccessWithInvalidSigningUrlTest(Ksi ksi)
         {

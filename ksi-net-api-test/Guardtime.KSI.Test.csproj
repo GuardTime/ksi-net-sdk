@@ -138,6 +138,7 @@
     <Compile Include="Hashing\DataHashTests.cs" />
     <Compile Include="Hashing\HashAlgorithmTests.cs" />
     <Compile Include="Integration\PublicationsFileIntegrationTests.cs" />
+    <Compile Include="Service\TcpResponseProcessorTests.cs" />
     <Compile Include="Service\TreeBuilderPrintTreeTests.cs" />
     <Compile Include="Integration\ConfigurationIntegrationTests.cs" />
     <Compile Include="Integration\IntegrationTests.cs" />

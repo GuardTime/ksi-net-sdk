@@ -18,62 +18,77 @@
  */
 
 using System;
-using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Service.Tcp;
 using NLog;
 
 namespace Guardtime.KSI.Service
 {
     /// <summary>
-    ///     TCP KSI service protocol.
+    /// TCP KSI service protocol.
+    /// All requests and responses go through one socket that is kept opened for future requests.
+    /// If a request fails (eg. socket is closed by server) it will be repeated once more with a new freshly connected socket.
     /// </summary>
-    public class TcpKsiServiceProtocol : IKsiSigningServiceProtocol
+    public class TcpKsiServiceProtocol : IKsiSigningServiceProtocol, IDisposable
     {
-        private readonly int _requestTimeOut = 10000;
-        private readonly int _bufferSize = 8192;
-        private readonly string _signingUrl;
-        private readonly int _signingPort;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly uint _requestTimeOut = 10000;
+        private readonly uint _bufferSize = 8192;
+        readonly byte[] _receiveDataBuffer;
+        private readonly IPAddress _ipAddress;
+        private readonly ushort _port;
+        private Socket _socket;
+        private readonly object _syncObject = new object();
+        private bool _isDisposed;
+        private ManualResetEvent _waitSocketConnectHandle;
+        private ManualResetEvent _waitHandle;
+        private bool _isReceivingRetry;
+        private readonly TcpResponseProcessor _responseProcessor;
+        private readonly TcpAsyncResultCollection _asyncResults;
 
         /// <summary>
-        ///     Create TCP KSI service protocol with given url-s
+        ///     Create TCP KSI service protocol
         /// </summary>
-        /// <param name="signingUrl">signing url</param>
-        /// <param name="signingPort">signing port</param>
-        public TcpKsiServiceProtocol(string signingUrl, int signingPort)
+        /// <param name="ipAddress">Signing service IP address</param>
+        /// <param name="port">Signing service port</param>
+        public TcpKsiServiceProtocol(IPAddress ipAddress, ushort port)
         {
-            _signingUrl = signingUrl;
-            _signingPort = signingPort;
+            if (ipAddress == null)
+            {
+                throw new ArgumentNullException(nameof(ipAddress));
+            }
+
+            _ipAddress = ipAddress;
+            _port = port;
+            _receiveDataBuffer = new byte[_bufferSize];
+            _asyncResults = new TcpAsyncResultCollection();
+            _responseProcessor = new TcpResponseProcessor(_asyncResults);
         }
 
         /// <summary>
-        ///     Create TCP KSI service protocol with given url-s and request timeout
+        ///     Create TCP KSI service protocol
         /// </summary>
-        /// <param name="signingUrl">signing url</param>
-        /// <param name="signingPort">signing port</param>
+        /// <param name="ipAddress">Signing service IP address</param>
+        /// <param name="port">Signing service port</param>
         /// <param name="requestTimeout">request timeout in milliseconds</param>
-        public TcpKsiServiceProtocol(string signingUrl, int signingPort, int requestTimeout) : this(signingUrl, signingPort)
+        public TcpKsiServiceProtocol(IPAddress ipAddress, ushort port, uint requestTimeout) : this(ipAddress, port)
         {
-            if (requestTimeout < 0)
-            {
-                throw new KsiServiceProtocolException("Request timeout should be in milliseconds, but was (" + requestTimeout + ").");
-            }
             _requestTimeOut = requestTimeout;
         }
 
         /// <summary>
-        ///     Create TCP KSI service protocol with given url-s, request timeout and buffer size
+        ///     Create TCP KSI service protocol
         /// </summary>
-        /// <param name="signingUrl">signing url</param>
-        /// <param name="signingPort">signing port</param>
+        /// <param name="ipAddress">Signing service IP address</param>
+        /// <param name="port">Signing service port</param>
         /// <param name="requestTimeout">request timeout in milliseconds</param>
-        /// <param name="bufferSize">buffer size</param>
-        public TcpKsiServiceProtocol(string signingUrl, int signingPort, int requestTimeout, int bufferSize) : this(signingUrl, signingPort, requestTimeout)
+        /// <param name="bufferSize">size of buffer to be used when receiving data</param>
+        public TcpKsiServiceProtocol(IPAddress ipAddress, ushort port, uint requestTimeout, uint bufferSize) : this(ipAddress, port, requestTimeout)
         {
-            if (bufferSize < 0)
+            if (bufferSize == 0)
             {
                 throw new KsiServiceProtocolException("Buffer size should be in positive integer, but was (" + bufferSize + ").");
             }
@@ -82,7 +97,7 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        ///     Begin create signature.
+        ///    Begin signing request.
         /// </summary>
         /// <param name="data">aggregation request bytes</param>
         /// <param name="requestId">request id</param>
@@ -91,71 +106,188 @@ namespace Guardtime.KSI.Service
         /// <returns>TCP KSI service protocol async result</returns>
         public IAsyncResult BeginSign(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
+            return BeginAggregatorRequest(TcpRequestType.Aggregation, data, requestId, callback, asyncState);
+        }
+
+        /// <summary>
+        ///       Begin aggregator configuration request.
+        /// </summary>
+        /// <param name="data">aggregation request bytes</param>
+        /// <param name="requestId">request id</param>
+        /// <param name="callback">callback when creating signature is finished</param>
+        /// <param name="asyncState">async state object</param>
+        /// <returns>TCP KSI service protocol async result</returns>
+        public IAsyncResult BeginGetAggregatorConfig(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
+        {
+            return BeginAggregatorRequest(TcpRequestType.AggregatorConfig, data, requestId, callback, asyncState);
+        }
+
+        /// <summary>
+        ///     End signing request.
+        /// </summary>
+        /// <param name="ar">TCP KSI service protocol async result</param>
+        /// <returns>response bytes</returns>
+        public byte[] EndSign(IAsyncResult ar)
+        {
+            return EndRequest(ar);
+        }
+
+        /// <summary>
+        ///     End aggregator configuration request.
+        /// </summary>
+        /// <param name="ar">async result</param>
+        /// <returns>response bytes</returns>
+        public byte[] EndGetAggregatorConfig(IAsyncResult ar)
+        {
+            return EndRequest(ar);
+        }
+
+        /// <summary>
+        /// Dispose TCP KSI service protocol. Close opened connection.
+        /// </summary>
+        public void Dispose()
+        {
+            _waitHandle?.WaitOne();
+            // make new signing requests, retrying and error throwing to wait
+            _waitHandle = new ManualResetEvent(false);
+
+            Logger.Debug("Disposing TCP KSI service protocol.");
+
+            if (_isDisposed)
+            {
+                throw new KsiServiceProtocolException("TCP KSI service protocol is already disposed.");
+            }
+
+            _isDisposed = true;
+            CloseSocket();
+
+            _waitHandle.Set();
+        }
+
+        private void CloseSocket()
+        {
+            if (_socket != null)
+            {
+                Logger.Debug("Closing socket. Handle: " + _socket.Handle);
+                if (_socket.Connected)
+                {
+                    _socket.Shutdown(SocketShutdown.Both);
+                    _socket.Disconnect(false);
+                }
+                _socket.Close();
+
+                _socket = null;
+            }
+
+            _waitSocketConnectHandle.Set();
+            _waitSocketConnectHandle.Close();
+            _waitSocketConnectHandle = null;
+
+            _responseProcessor.Clear();
+        }
+
+        private IAsyncResult BeginAggregatorRequest(TcpRequestType requestType, byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
+        {
+            if (_isDisposed)
+            {
+                throw new KsiServiceProtocolException("TCP KSI service protocol is disposed.");
+            }
+
             if (data == null)
             {
                 throw new ArgumentNullException(nameof(data));
             }
 
-            IPAddress ipAddress;
+            TcpKsiServiceProtocolAsyncResult asyncResult = new TcpKsiServiceProtocolAsyncResult(requestType, data, requestId, callback, asyncState);
+            // wait until retrying, disposing or error throwing is in progress
+            _waitHandle?.WaitOne();
+            _asyncResults.Add(requestId, asyncResult);
 
-            try
+            if (_socket == null)
             {
-                IPHostEntry ipHostInfo = Dns.GetHostEntry(_signingUrl);
-                ipAddress = ipHostInfo.AddressList[0];
+                CreateSocketAndConnect();
             }
-            catch (Exception ex)
+
+            BeginSend(asyncResult);
+
+            ThreadPool.RegisterWaitForSingleObject(asyncResult.AsyncWaitHandle, EndBeginSignCallback, asyncResult, _requestTimeOut, true);
+            return asyncResult;
+        }
+
+        private void CreateSocketAndConnect()
+        {
+            lock (_syncObject)
             {
-                if (!IPAddress.TryParse(_signingUrl, out ipAddress))
+                if (_waitSocketConnectHandle == null)
                 {
-                    throw new KsiServiceProtocolException("Could not get host entry for TCP connection. Host: " + _signingUrl, ex);
+                    _waitSocketConnectHandle = new ManualResetEvent(false);
+                }
+                else
+                {
+                    _waitSocketConnectHandle.WaitOne();
                 }
             }
 
-            IPEndPoint endPoint = new IPEndPoint(ipAddress, _signingPort);
-
-            Socket client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
+            if (_socket == null)
             {
-                SendTimeout = _requestTimeOut,
-            };
+                _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                Logger.Debug("New TCP socket created. (Socket handle: {0}).", _socket.Handle);
 
-            TcpKsiServiceProtocolAsyncResult asyncResult = new TcpKsiServiceProtocolAsyncResult(client, data, requestId, callback, asyncState, _bufferSize);
-
-            Logger.Debug("Begin TCP socket connection (request id: {0}).", asyncResult.RequestId);
-            client.BeginConnect(endPoint, ConnectCallback, asyncResult);
-
-            ThreadPool.RegisterWaitForSingleObject(asyncResult.BeginWaitHandle, EndBeginSignCallback, asyncResult, _requestTimeOut, true);
-            return asyncResult;
+                Logger.Debug("Begin TCP socket connection. (Socket handle: {0}).", _socket.Handle);
+                _socket.BeginConnect(new IPEndPoint(_ipAddress, _port), ConnectCallback, null);
+            }
         }
 
         private void ConnectCallback(IAsyncResult ar)
         {
-            TcpKsiServiceProtocolAsyncResult asyncResult = (TcpKsiServiceProtocolAsyncResult)ar.AsyncState;
-
             try
             {
                 // Complete the connection.
-                asyncResult.Client.EndConnect(ar);
-                Logger.Debug("Socket connected to {0}. (request id: {1}).", asyncResult.Client.RemoteEndPoint.ToString(), asyncResult.RequestId);
+                _socket.EndConnect(ar);
+                Logger.Debug("Socket connected to {0}.", _socket.RemoteEndPoint.ToString());
+
+                if (!_waitSocketConnectHandle.Set())
+                {
+                    throw new KsiServiceProtocolException("WaitSocketConnectHandle completion failed.");
+                }
+
+                Logger.Debug("Starting receiving.");
+                _socket.BeginReceive(_receiveDataBuffer, 0, _receiveDataBuffer.Length, 0, ReceiveCallback, null);
             }
             catch (Exception e)
             {
-                SetError(asyncResult, e, "Completing connection failed.");
-                return;
+                SetError(e, "Completing connection failed.");
             }
+        }
 
-            if (asyncResult.IsCompleted)
+        private void BeginSend(TcpKsiServiceProtocolAsyncResult asyncResult)
+        {
+            if (asyncResult == null)
             {
                 return;
             }
 
             try
             {
+                _waitSocketConnectHandle.WaitOne();
                 Logger.Debug("Starting sending (request id: {0}).", asyncResult.RequestId);
-                asyncResult.Client.BeginSend(asyncResult.PostData, 0, asyncResult.PostData.Length, 0, SendCallback, asyncResult);
+
+                if (!asyncResult.IsCompleted)
+                {
+                    if (_socket == null)
+                    {
+                        // stop sending if socket is closed meanwhile
+                        Logger.Debug("Stopping sending. No socket. (request id: {0}).", asyncResult.RequestId);
+                    }
+                    else
+                    {
+                        _socket.BeginSend(asyncResult.PostData, 0, asyncResult.PostData.Length, 0, SendCallback, asyncResult);
+                    }
+                }
             }
             catch (Exception e)
             {
-                SetError(asyncResult, e, "Starting sending failed.");
+                SetError(asyncResult, e, "Failed to start sending.");
             }
         }
 
@@ -170,100 +302,123 @@ namespace Guardtime.KSI.Service
 
             try
             {
-                // Complete sending the data to the remote device.
-                int bytesSent = asyncResult.Client.EndSend(ar);
-                Logger.Debug("{0} bytes sent to server. (request id: {1}).", bytesSent, asyncResult.RequestId);
+                int bytesSent = _socket.EndSend(ar);
+                Logger.Debug("{0} bytes sent to server (request id: {1}).", bytesSent, asyncResult.RequestId);
             }
             catch (Exception e)
             {
-                SetError(asyncResult, e, "Completing sending failed.");
-                return;
-            }
-
-            if (asyncResult.IsCompleted)
-            {
-                return;
-            }
-
-            try
-            {
-                asyncResult.Client.ReceiveTimeout = _requestTimeOut - asyncResult.TimeElapsed;
-                Logger.Debug("Starting receiving (request id: {0}).", asyncResult.RequestId);
-                asyncResult.Client.BeginReceive(asyncResult.Buffer, 0, asyncResult.Buffer.Length, 0, ReceiveCallback, asyncResult);
-            }
-            catch (Exception e)
-            {
-                SetError(asyncResult, e, "Starting receiving failed.");
+                SetError(asyncResult, e, "Failed to complete sending.");
             }
         }
 
         private void ReceiveCallback(IAsyncResult ar)
         {
-            TcpKsiServiceProtocolAsyncResult asyncResult = (TcpKsiServiceProtocolAsyncResult)ar.AsyncState;
+            if (_isDisposed)
+            {
+                Logger.Debug("Exiting receiving due to disposing TCP KSI service protocol.");
+                return;
+            }
+
+            int bytesRead;
 
             try
             {
-                Socket client = asyncResult.Client;
-
-                if (asyncResult.IsCompleted)
-                {
-                    return;
-                }
-
                 // Read data from the remote device.
-                int bytesRead = asyncResult.Client.EndReceive(ar);
+                bytesRead = _socket.EndReceive(ar);
 
                 if (bytesRead == 0)
                 {
-                    SetError(asyncResult, null, "Received 0 bytes.");
+                    if (!_isReceivingRetry)
+                    {
+                        Logger.Debug("Received 0 bytes.");
+                        RetryUsingNewSocket();
+                    }
+                    else
+                    {
+                        SetError(null, "Receiving data failed. Received 0 bytes on second retry.");
+                    }
                     return;
                 }
+            }
+            catch (Exception ex)
+            {
+                SetError(ex, "Reading received data failed.");
+                return;
+            }
 
-                Logger.Debug("{0} bytes received (request id: {1}).", bytesRead, asyncResult.RequestId);
+            _isReceivingRetry = false;
 
-                asyncResult.ResultStream.Write(asyncResult.Buffer, 0, bytesRead);
+            try
+            {
+                _responseProcessor.ProcessReceivedData(_receiveDataBuffer, bytesRead);
+            }
+            catch (Exception ex)
+            {
+                SetError(ex, "Processing received data failed. Result data: " + _responseProcessor.GetEncodedReceivedData());
+                return;
+            }
 
-                if (asyncResult.ExpectedResponseLength == 0)
+            // Get the rest of the data.
+            Logger.Debug("Rerun BeginReceive.");
+            try
+            {
+                _socket.BeginReceive(_receiveDataBuffer, 0, _receiveDataBuffer.Length, 0, ReceiveCallback, null);
+            }
+            catch (Exception ex)
+            {
+                if (!_isReceivingRetry)
                 {
-                    if (asyncResult.ResultStream.Length >= 4)
+                    Logger.Debug("Rerun BeginReceive failed. Trying once more using new socket. Exception: " + ex);
+                    RetryUsingNewSocket();
+                }
+                else
+                {
+                    SetError(ex, "Rerun BeginReceive failed.");
+                }
+            }
+        }
+
+        private void RetryUsingNewSocket()
+        {
+            _waitHandle?.WaitOne();
+            // make new signing requests, error throwing and disposing to wait
+            _waitHandle = new ManualResetEvent(false);
+
+            try
+            {
+                CloseSocket();
+
+                if (_asyncResults.Count() == 0)
+                {
+                    Logger.Debug("No pending signing requests.");
+                }
+                else
+                {
+                    _isReceivingRetry = true;
+                    CreateSocketAndConnect();
+
+                    Logger.Debug("Rerun all signing requests.");
+
+                    foreach (ulong key in _asyncResults.GetKeys())
                     {
-                        asyncResult.ExpectedResponseLength = Utils.Util.GetTlvLength(asyncResult.ResultStream.ToArray());
+                        BeginSend(_asyncResults.GetValue(key));
                     }
                 }
-
-                else if (asyncResult.ExpectedResponseLength < asyncResult.ResultStream.Length)
-                {
-                    SetError(asyncResult, null, "Received more bytes than expected.");
-                    return;
-                }
-
-                if (asyncResult.ExpectedResponseLength == asyncResult.ResultStream.Length)
-                {
-                    Logger.Debug("Receiving done (request id: {0}).", asyncResult.RequestId);
-                    // Signal that all bytes have been received.
-                    asyncResult.BeginWaitHandle.Set();
-                    return;
-                }
-
-                if (asyncResult.IsCompleted)
-                {
-                    return;
-                }
-
-                Logger.Debug("Rerun BeginReceive (request id: {0}).", asyncResult.RequestId);
-
-                // Get the rest of the data.
-                client.BeginReceive(asyncResult.Buffer, 0, asyncResult.Buffer.Length, 0, ReceiveCallback, asyncResult);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                SetError(asyncResult, e, "Receiving failed.");
+                SetError(ex, "Retrying with a new socket failed.");
+            }
+            finally
+            {
+                _waitHandle.Set();
             }
         }
 
         private void EndBeginSignCallback(object state, bool timedOut)
         {
             TcpKsiServiceProtocolAsyncResult asyncResult = (TcpKsiServiceProtocolAsyncResult)state;
+            _asyncResults.Remove(asyncResult);
 
             if (timedOut)
             {
@@ -273,158 +428,81 @@ namespace Guardtime.KSI.Service
             asyncResult.SetComplete(timedOut);
         }
 
-        /// <summary>
-        ///     End create signature.
-        /// </summary>
-        /// <param name="asyncResult">TCP KSI service protocol async result</param>
-        /// <returns>aggregation response bytes</returns>
-        public byte[] EndSign(IAsyncResult asyncResult)
-        {
-            return EndGetResult(asyncResult);
-        }
-
-        /// <summary>
-        ///     End get result from web request.
-        /// </summary>
-        /// <param name="ar">TCP KSI service protocol async result</param>
-        /// <returns>result bytes</returns>
-        private byte[] EndGetResult(IAsyncResult ar)
+        private byte[] EndRequest(IAsyncResult ar)
         {
             TcpKsiServiceProtocolAsyncResult asyncResult = ar as TcpKsiServiceProtocolAsyncResult;
+
             if (asyncResult == null)
             {
                 throw new KsiServiceProtocolException("Invalid IAsyncResult.");
             }
 
-            if (!asyncResult.IsCompleted)
+            try
             {
-                asyncResult.AsyncWaitHandle.WaitOne();
-            }
+                if (_isDisposed)
+                {
+                    throw new KsiServiceProtocolException("TCP KSI service protocol is disposed.");
+                }
 
-            if (asyncResult.HasError)
+                if (asyncResult.IsDisposed)
+                {
+                    throw new KsiServiceProtocolException("Provided async result is already disposed. Possibly using the same async result twice when ending request.");
+                }
+
+                if (!asyncResult.IsCompleted)
+                {
+                    asyncResult.AsyncWaitHandle.WaitOne();
+                }
+
+                if (asyncResult.HasError)
+                {
+                    Logger.Warn("{0} (request id: {1}){2}{3}", asyncResult.Error.Message, asyncResult.RequestId, Environment.NewLine, asyncResult.Error);
+                    throw asyncResult.Error;
+                }
+
+                Logger.Debug("Service protocol returning {0} bytes (request id: {1}).", asyncResult.ResultStream.Length, asyncResult.RequestId);
+
+                return asyncResult.ResultStream.ToArray();
+            }
+            finally
             {
-                throw asyncResult.Error;
+                asyncResult.Dispose();
             }
-
-            Logger.Debug("Returning {0} bytes (request id: {1}).", asyncResult.ResultStream.Length, asyncResult.RequestId);
-
-            return asyncResult.ResultStream.ToArray();
         }
 
-        private static void SetError(TcpKsiServiceProtocolAsyncResult asyncResult, Exception e, string errorMessage)
+        private void SetError(Exception e, string errorMessage)
         {
-            string message = errorMessage + string.Format(" (request id: {0}).", asyncResult.RequestId);
-            Logger.Warn(message + " " + e);
-            asyncResult.Error = new KsiServiceProtocolException(message, e);
-            asyncResult.BeginWaitHandle.Set();
+            _waitHandle?.WaitOne();
+            // make new signing requests, disposing and retrying to wait
+            _waitHandle = new ManualResetEvent(false);
+
+            try
+            {
+                Logger.Debug(errorMessage + " Closing socket due to error.");
+                CloseSocket();
+
+                // no specific asyncResult, notify all pending requests about the error
+                foreach (ulong key in _asyncResults.GetKeys())
+                {
+                    TcpKsiServiceProtocolAsyncResult asyncResult = _asyncResults.GetValue(key);
+                    asyncResult.Error = new KsiServiceProtocolException(errorMessage, e);
+                    asyncResult.SetComplete(true);
+                }
+
+                Logger.Debug("Clearing asyncResults.");
+                _asyncResults.Clear();
+            }
+            finally
+            {
+                _waitHandle.Set();
+            }
         }
 
-        /// <summary>
-        ///     TCP KSI service protocol async result.
-        /// </summary>
-        private class TcpKsiServiceProtocolAsyncResult : IAsyncResult, IDisposable
+        private void SetError(TcpKsiServiceProtocolAsyncResult asyncResult, Exception e, string errorMessage)
         {
-            private readonly AsyncCallback _callback;
-            private readonly object _lock;
-
-            private readonly DateTime _startTime = DateTime.Now;
-            private readonly ManualResetEvent _waitHandle;
-            private bool _isCompleted;
-
-            public TcpKsiServiceProtocolAsyncResult(Socket client, byte[] postData, ulong requestId, AsyncCallback callback,
-                                                    object asyncState, int bufferSize)
-            {
-                if (client == null)
-                {
-                    throw new ArgumentNullException(nameof(client));
-                }
-
-                Client = client;
-                PostData = postData;
-                _callback = callback;
-                AsyncState = asyncState;
-
-                _isCompleted = false;
-
-                _lock = new object();
-                _waitHandle = new ManualResetEvent(false);
-                BeginWaitHandle = new ManualResetEvent(false);
-                RequestId = requestId;
-                ResultStream = new MemoryStream();
-                Buffer = new byte[bufferSize];
-            }
-
-            public int ExpectedResponseLength { get; set; }
-
-            public ulong RequestId { get; }
-
-            public MemoryStream ResultStream { get; }
-
-            public Socket Client { get; }
-
-            public byte[] PostData { get; }
-
-            public byte[] Buffer { get; }
-
-            public int TimeElapsed => (int)(DateTime.Now - _startTime).TotalMilliseconds;
-
-            public bool HasError => Error != null;
-
-            public KsiServiceProtocolException Error { get; set; }
-
-            public object AsyncState { get; }
-
-            public WaitHandle AsyncWaitHandle => _waitHandle;
-
-            public ManualResetEvent BeginWaitHandle { get; }
-
-            public bool CompletedSynchronously => false;
-
-            public bool IsCompleted
-            {
-                get
-                {
-                    lock (_lock)
-                    {
-                        return _isCompleted;
-                    }
-                }
-            }
-
-            public void Dispose()
-            {
-                _waitHandle.Close();
-                BeginWaitHandle.Close();
-                if (Client != null && Client.Connected)
-                {
-                    Client.Shutdown(SocketShutdown.Both);
-                    Client.Close();
-                    Logger.Debug("Connection closed (request id: {0}).", RequestId);
-                }
-
-                ResultStream?.Dispose();
-            }
-
-            public void SetComplete(bool errorOccured)
-            {
-                lock (_lock)
-                {
-                    if (!_isCompleted)
-                    {
-                        _isCompleted = true;
-
-                        if (errorOccured == false)
-                        {
-                            _callback?.Invoke(this);
-                        }
-                    }
-                }
-
-                if (!_waitHandle.Set())
-                {
-                    throw new KsiException("WaitHandle completion failed");
-                }
-            }
+            asyncResult.Error = new KsiServiceProtocolException(errorMessage, e);
+            asyncResult.SetComplete(true);
+            _asyncResults.Remove(asyncResult);
         }
     }
 }

@@ -290,7 +290,7 @@ namespace Guardtime.KSI.Service
         /// <param name="pdu"></param>
         private static void LogUnexpectedPayloads(ITlvTag pdu)
         {
-            Logger.Warn(string.Format("Unexpected response payloads!{0}PDU:{0}{1}", Environment.NewLine, pdu));
+            Logger.Warn(string.Format("PDU contains unexpected response payloads!{0}PDU:{0}{1}", Environment.NewLine, pdu));
         }
 
         /// <summary>
