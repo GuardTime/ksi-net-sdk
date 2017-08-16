@@ -41,7 +41,7 @@ namespace Guardtime.KSI.Service
         ///     Begin get publications file (async).
         /// </summary>
         /// <param name="callback">callback when publications file is downloaded</param>
-        /// <param name="asyncState">async state object</param>
+        /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         public IAsyncResult BeginGetPublicationsFile(AsyncCallback callback, object asyncState)
         {

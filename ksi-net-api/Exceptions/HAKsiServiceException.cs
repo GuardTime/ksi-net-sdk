@@ -1,5 +1,5 @@
-/*
- * Copyright 2013-2016 Guardtime, Inc.
+﻿/*
+ * Copyright 2013-2017 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -17,31 +17,38 @@
  * reserves and retains all trademark rights.
  */
 
-namespace Guardtime.KSI.Service
+using System;
+using System.Collections.Generic;
+
+namespace Guardtime.KSI.Exceptions
 {
     /// <summary>
-    /// KSI service request type
+    ///     Exception inidcating that HA service request failed.
     /// </summary>
-    public enum KsiServiceRequestType
+    [Serializable]
+    public class HAKsiServiceException : KsiException
     {
         /// <summary>
-        /// Signing request
+        /// Exceptions thrown by sub-services
         /// </summary>
-        Sign,
+        public List<HAKsiSubServiceException> SubServiceExceptions { get; }
 
         /// <summary>
-        /// Aggregator configuration request
+        ///     Create new HA KSI service exception.
         /// </summary>
-        AggregatorConfig,
+        /// <param name="message">Exception message</param>
+        public HAKsiServiceException(string message) : base(message)
+        {
+        }
 
         /// <summary>
-        /// Extending request
+        ///     Create new HA KSI service exception.
         /// </summary>
-        Extend,
-
-        /// <summary>
-        /// Extender configuration request
-        /// </summary>
-        ExtenderConfig
+        /// <param name="message">Exception message</param>
+        /// <param name="subServiceExceptions">Exceptions thrown by sub-services</param>
+        public HAKsiServiceException(string message, List<HAKsiSubServiceException> subServiceExceptions) : base(message)
+        {
+            SubServiceExceptions = subServiceExceptions;
+        }
     }
 }

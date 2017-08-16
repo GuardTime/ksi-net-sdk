@@ -37,6 +37,18 @@ namespace Guardtime.KSI.Service
         private readonly KsiServiceRequestType _requestType;
         private readonly HashAlgorithm _macAlgorithm;
         private readonly byte[] _macKey;
+        private AggregatorConfig _currentAggregatorConfig;
+        private ExtenderConfig _currentExtenderConfig;
+
+        /// <summary>
+        /// Aggregator configuration changed event
+        /// </summary>
+        public event EventHandler<AggregatorConfigChangedEventArgs> AggregatorConfigChanged;
+
+        /// <summary>
+        /// Extender configuration changed event
+        /// </summary>
+        public event EventHandler<ExtenderConfigChangedEventArgs> ExtenderConfigChanged;
 
         /// <summary>
         /// Create new KSI service reponse parser. 
@@ -111,6 +123,36 @@ namespace Guardtime.KSI.Service
                 }
                 else
                 {
+                    if (AggregatorConfigChanged != null)
+                    {
+                        AggregatorConfigResponsePayload configPayload = GetPayload(pdu, Constants.AggregatorConfigResponsePayload.TagType, null) as AggregatorConfigResponsePayload;
+                        if (configPayload != null)
+                        {
+                            AggregatorConfig aggregatorConfig = new AggregatorConfig(configPayload);
+
+                            if (_currentAggregatorConfig == null || !_currentAggregatorConfig.Equals(aggregatorConfig))
+                            {
+                                _currentAggregatorConfig = aggregatorConfig;
+                                AggregatorConfigChanged.BeginInvoke(this, new AggregatorConfigChangedEventArgs(_currentAggregatorConfig), null, null);
+                            }
+                        }
+                    }
+
+                    if (ExtenderConfigChanged != null)
+                    {
+                        ExtenderConfigResponsePayload configPayload = GetPayload(pdu, Constants.ExtenderConfigResponsePayload.TagType, null) as ExtenderConfigResponsePayload;
+                        if (configPayload != null)
+                        {
+                            ExtenderConfig extenderConfig = new ExtenderConfig(configPayload);
+
+                            if (_currentExtenderConfig == null || !_currentExtenderConfig.Equals(extenderConfig))
+                            {
+                                _currentExtenderConfig = extenderConfig;
+                                ExtenderConfigChanged.BeginInvoke(this, new ExtenderConfigChangedEventArgs(_currentExtenderConfig), null, null);
+                            }
+                        }
+                    }
+
                     return GetResponsePayload(data, pdu, requestId);
                 }
             }

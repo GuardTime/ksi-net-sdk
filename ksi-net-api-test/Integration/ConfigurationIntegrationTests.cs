@@ -21,6 +21,7 @@ using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Service;
 using NUnit.Framework;
 using System;
+using System.Threading;
 
 namespace Guardtime.KSI.Test.Integration
 {
@@ -43,6 +44,41 @@ namespace Guardtime.KSI.Test.Integration
             {
                 ksi.GetAggregatorConfig();
             }
+        }
+
+        private ManualResetEvent _waitHandle;
+        private AggregatorConfig _aggregatorConfig;
+
+        [Test]
+        public void GetAggregatorConfigUsingEventHandlerTest()
+        {
+            KsiService service = GetHttpKsiService();
+            service.AggregatorConfigChanged += Service_AggregatorConfigChanged;
+            _waitHandle = new ManualResetEvent(false);
+
+            if (TestSetup.PduVersion == PduVersion.v1)
+            {
+                Exception ex = Assert.Throws<KsiServiceException>(delegate
+                {
+                    service.GetAggregatorConfig();
+                });
+
+                Assert.That(ex.Message.StartsWith("Aggregator config request is not supported using PDU version v1"), "Unexpected exception message: " + ex.Message);
+            }
+            else
+            {
+                service.GetAggregatorConfig();
+            }
+
+            _waitHandle.WaitOne(10000);
+
+            Assert.IsNotNull(_aggregatorConfig, "Could not get aggregator config using event handler.");
+        }
+
+        private void Service_AggregatorConfigChanged(object sender, AggregatorConfigChangedEventArgs e)
+        {
+            _aggregatorConfig = e.AggregatorConfig;
+            _waitHandle.Set();
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidExtendingUrl))]
@@ -109,6 +145,41 @@ namespace Guardtime.KSI.Test.Integration
                     ksi.GetExtenderConfig();
                 }, "Invalid signing password should not prevent getting extnder config.");
             }
+        }
+
+        private ManualResetEvent _waitHandle2;
+        private ExtenderConfig _extenderConfig;
+
+        [Test]
+        public void GetExtenderrConfigUsingEventHandlerTest()
+        {
+            KsiService service = GetHttpKsiService();
+            service.ExtenderConfigChanged += Service_ExtenderConfigChanged;
+            _waitHandle2 = new ManualResetEvent(false);
+
+            if (TestSetup.PduVersion == PduVersion.v1)
+            {
+                Exception ex = Assert.Throws<KsiServiceException>(delegate
+                {
+                    service.GetExtenderConfig();
+                });
+
+                Assert.That(ex.Message.StartsWith("Extender config request is not supported using PDU version v1"), "Unexpected exception message: " + ex.Message);
+            }
+            else
+            {
+                service.GetExtenderConfig();
+            }
+
+            _waitHandle2.WaitOne(10000);
+
+            Assert.IsNotNull(_extenderConfig, "Could not get extender config using event handler.");
+        }
+
+        private void Service_ExtenderConfigChanged(object sender, ExtenderConfigChangedEventArgs e)
+        {
+            _extenderConfig = e.ExtenderConfig;
+            _waitHandle2.Set();
         }
     }
 }

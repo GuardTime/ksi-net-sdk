@@ -48,7 +48,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="hash">data hash</param>
         /// <param name="callback">callback when creating signature is finished</param>
-        /// <param name="asyncState">async state object</param>
+        /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         public IAsyncResult BeginSign(DataHash hash, AsyncCallback callback, object asyncState)
         {
@@ -61,7 +61,7 @@ namespace Guardtime.KSI.Service
         /// <param name="hash">data hash</param>
         /// <param name="level">the level value of the aggregation tree node</param>
         /// <param name="callback">callback when creating signature is finished</param>
-        /// <param name="asyncState">async state object</param>
+        /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         public IAsyncResult BeginSign(DataHash hash, uint level, AsyncCallback callback, object asyncState)
         {
@@ -102,7 +102,7 @@ namespace Guardtime.KSI.Service
         /// <param name="hash">data hash</param>
         /// <param name="level">the level value of the aggregation tree node</param>
         /// <param name="callback">callback when creating signature is finished</param>
-        /// <param name="asyncState">async state object</param>
+        /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         [Obsolete]
         private IAsyncResult BeginLegacySign(DataHash hash, uint level, AsyncCallback callback, object asyncState)
@@ -199,10 +199,16 @@ namespace Guardtime.KSI.Service
                 {
                     _signRequestResponseParser = new KsiServiceResponseParser(PduVersion, KsiServiceRequestType.Sign, _signingMacAlgorithm,
                         _signingServiceCredentials.LoginKey);
+                    _signRequestResponseParser.AggregatorConfigChanged += RequestResponseParser_AggregatorConfigChanged;
                 }
 
                 return _signRequestResponseParser;
             }
+        }
+
+        private void RequestResponseParser_AggregatorConfigChanged(object sender, AggregatorConfigChangedEventArgs e)
+        {
+            AggregatorConfigChanged?.Invoke(this, new AggregatorConfigChangedEventArgs(e.AggregatorConfig, this));
         }
 
         /// <summary>
@@ -217,8 +223,8 @@ namespace Guardtime.KSI.Service
         /// <summary>
         /// Begin get additional aggregator configuration data (async)
         /// </summary>
-        /// <param name="callback"></param>
-        /// <param name="asyncState"></param>
+        /// <param name="callback">callback when configuration request is finished</param>
+        /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         public IAsyncResult BeginGetAggregatorConfig(AsyncCallback callback, object asyncState)
         {
@@ -299,6 +305,7 @@ namespace Guardtime.KSI.Service
                 {
                     _aggregatorConfigRequestResponseParser = new KsiServiceResponseParser(PduVersion, KsiServiceRequestType.AggregatorConfig,
                         _signingMacAlgorithm, _signingServiceCredentials.LoginKey);
+                    _aggregatorConfigRequestResponseParser.AggregatorConfigChanged += RequestResponseParser_AggregatorConfigChanged;
                 }
 
                 return _aggregatorConfigRequestResponseParser;

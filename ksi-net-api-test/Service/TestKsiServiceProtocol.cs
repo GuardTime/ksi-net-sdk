@@ -34,7 +34,9 @@ namespace Guardtime.KSI.Test.Service
 
         public IAsyncResult BeginSign(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
-            return new AsyncResult(data);
+            AsyncResult ar = new AsyncResult(data, asyncState);
+            callback?.Invoke(ar);
+            return ar;
         }
 
         public byte[] EndSign(IAsyncResult asyncResult)
@@ -42,9 +44,11 @@ namespace Guardtime.KSI.Test.Service
             return RequestResult;
         }
 
+        public string AggregatorLocation => "test.aggregator.location";
+
         public IAsyncResult BeginExtend(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
-            return new AsyncResult(data);
+            return new AsyncResult(data, asyncState);
         }
 
         public byte[] EndExtend(IAsyncResult asyncResult)
@@ -52,15 +56,21 @@ namespace Guardtime.KSI.Test.Service
             return RequestResult;
         }
 
+        public string ExtenderLocation => "test.extender.location";
+
         public IAsyncResult BeginGetPublicationsFile(AsyncCallback callback, object asyncState)
         {
-            return new AsyncResult(null);
+            return new AsyncResult(null, asyncState);
         }
+
+        public bool UseRequestResultAsPublicationsFileResponse { get; set; }
 
         public byte[] EndGetPublicationsFile(IAsyncResult asyncResult)
         {
-            return ReadFile(Resources.KsiPublicationsFile);
+            return UseRequestResultAsPublicationsFileResponse ? RequestResult : ReadFile(Resources.KsiPublicationsFile);
         }
+
+        public string PublicationsFileLocation => "test.publications.file.location";
 
         private static byte[] ReadFile(string file)
         {
@@ -77,17 +87,18 @@ namespace Guardtime.KSI.Test.Service
         {
             private readonly ManualResetEvent _resetEvent = new ManualResetEvent(true);
 
-            public AsyncResult(byte[] request)
+            public AsyncResult(byte[] request, object asyncState)
             {
+                AsyncState = asyncState;
             }
 
             public bool IsCompleted => true;
 
             public WaitHandle AsyncWaitHandle => _resetEvent;
 
-            public object AsyncState => null;
+            public object AsyncState { get; }
 
-            public bool CompletedSynchronously => true;
+            public bool CompletedSynchronously => false;
 
             public void Dispose()
             {
