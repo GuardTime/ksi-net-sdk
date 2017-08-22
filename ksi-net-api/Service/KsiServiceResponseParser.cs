@@ -123,35 +123,8 @@ namespace Guardtime.KSI.Service
                 }
                 else
                 {
-                    if (AggregatorConfigChanged != null)
-                    {
-                        AggregatorConfigResponsePayload configPayload = GetPayload(pdu, Constants.AggregatorConfigResponsePayload.TagType, null) as AggregatorConfigResponsePayload;
-                        if (configPayload != null)
-                        {
-                            AggregatorConfig aggregatorConfig = new AggregatorConfig(configPayload);
-
-                            if (_currentAggregatorConfig == null || !_currentAggregatorConfig.Equals(aggregatorConfig))
-                            {
-                                _currentAggregatorConfig = aggregatorConfig;
-                                AggregatorConfigChanged.BeginInvoke(this, new AggregatorConfigChangedEventArgs(_currentAggregatorConfig), null, null);
-                            }
-                        }
-                    }
-
-                    if (ExtenderConfigChanged != null)
-                    {
-                        ExtenderConfigResponsePayload configPayload = GetPayload(pdu, Constants.ExtenderConfigResponsePayload.TagType, null) as ExtenderConfigResponsePayload;
-                        if (configPayload != null)
-                        {
-                            ExtenderConfig extenderConfig = new ExtenderConfig(configPayload);
-
-                            if (_currentExtenderConfig == null || !_currentExtenderConfig.Equals(extenderConfig))
-                            {
-                                _currentExtenderConfig = extenderConfig;
-                                ExtenderConfigChanged.BeginInvoke(this, new ExtenderConfigChangedEventArgs(_currentExtenderConfig), null, null);
-                            }
-                        }
-                    }
+                    CheckAggregatorConfigChange(pdu);
+                    CheckExtenderConfigChange(pdu);
 
                     return GetResponsePayload(data, pdu, requestId);
                 }
@@ -181,6 +154,42 @@ namespace Guardtime.KSI.Service
                 }
 
                 throw;
+            }
+        }
+
+        private void CheckAggregatorConfigChange(Pdu pdu)
+        {
+            if (AggregatorConfigChanged != null)
+            {
+                AggregatorConfigResponsePayload configPayload = GetPayload(pdu, Constants.AggregatorConfigResponsePayload.TagType, null) as AggregatorConfigResponsePayload;
+                if (configPayload != null)
+                {
+                    AggregatorConfig aggregatorConfig = new AggregatorConfig(configPayload);
+
+                    if (_currentAggregatorConfig == null || !_currentAggregatorConfig.Equals(aggregatorConfig))
+                    {
+                        _currentAggregatorConfig = aggregatorConfig;
+                        AggregatorConfigChanged.BeginInvoke(this, new AggregatorConfigChangedEventArgs(_currentAggregatorConfig), null, null);
+                    }
+                }
+            }
+        }
+
+        private void CheckExtenderConfigChange(Pdu pdu)
+        {
+            if (ExtenderConfigChanged != null)
+            {
+                ExtenderConfigResponsePayload configPayload = GetPayload(pdu, Constants.ExtenderConfigResponsePayload.TagType, null) as ExtenderConfigResponsePayload;
+                if (configPayload != null)
+                {
+                    ExtenderConfig extenderConfig = new ExtenderConfig(configPayload);
+
+                    if (_currentExtenderConfig == null || !_currentExtenderConfig.Equals(extenderConfig))
+                    {
+                        _currentExtenderConfig = extenderConfig;
+                        ExtenderConfigChanged.BeginInvoke(this, new ExtenderConfigChangedEventArgs(_currentExtenderConfig), null, null);
+                    }
+                }
             }
         }
 

@@ -46,6 +46,30 @@ namespace Guardtime.KSI.Test.Integration
             }
         }
 
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidSigningUrl))]
+        public void GetAggregatorConfigWithInvalidUrlTest(Ksi ksi)
+        {
+            if (TestSetup.PduVersion == PduVersion.v1)
+            {
+                Exception ex = Assert.Throws<KsiServiceException>(delegate
+                {
+                    ksi.GetAggregatorConfig();
+                });
+
+                Assert.That(ex.Message.StartsWith("Aggregator config request is not supported using PDU version v1"), "Unexpected exception message: " + ex.Message);
+            }
+            else
+            {
+                Exception ex = Assert.Throws<KsiServiceProtocolException>(delegate
+                {
+                    ksi.GetAggregatorConfig();
+                });
+
+                Assert.That(ex.Message.StartsWith("Request failed"), "Unexpected exception message: " + ex.Message);
+                Assert.That(ex.InnerException.Message.StartsWith("The remote name could not be resolved"), "Unexpected inner exception message: " + ex.InnerException.Message);
+            }
+        }
+
         private ManualResetEvent _waitHandle;
         private AggregatorConfig _aggregatorConfig;
 
@@ -82,7 +106,7 @@ namespace Guardtime.KSI.Test.Integration
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidExtendingUrl))]
-        public void GetAggregatorConfigSuccessWithInvalidSigningUrlTest(Ksi ksi)
+        public void GetAggregatorConfigSuccessWithInvalidExtendingUrlTest(Ksi ksi)
         {
             if (TestSetup.PduVersion != PduVersion.v1)
             {
@@ -94,7 +118,7 @@ namespace Guardtime.KSI.Test.Integration
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidExtendingPass))]
-        public void GetAggregatorConfigSuccessWithInvalidSigningPassTest(Ksi ksi)
+        public void GetAggregatorConfigSuccessWithInvalidExtendingPassTest(Ksi ksi)
         {
             if (TestSetup.PduVersion != PduVersion.v1)
             {
@@ -120,6 +144,31 @@ namespace Guardtime.KSI.Test.Integration
             else
             {
                 ksi.GetExtenderConfig();
+            }
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidExtendingUrl))]
+        public void GetExtenderConfigWithInvalidUrlTest(Ksi ksi)
+        {
+            if (TestSetup.PduVersion == PduVersion.v1)
+            {
+                Exception ex = Assert.Throws<KsiServiceException>(delegate
+                {
+                    ksi.GetAggregatorConfig();
+                });
+
+                Assert.That(ex.Message.StartsWith("Extender config request is not supported using PDU version v1"), "Unexpected exception message: " + ex.Message);
+            }
+
+            else
+            {
+                Exception ex = Assert.Throws<KsiServiceProtocolException>(delegate
+                {
+                    ksi.GetExtenderConfig();
+                });
+
+                Assert.That(ex.Message.StartsWith("Request failed"), "Unexpected exception message: " + ex.Message);
+                Assert.That(ex.InnerException.Message.StartsWith("The remote name could not be resolved"), "Unexpected inner exception message: " + ex.InnerException.Message);
             }
         }
 

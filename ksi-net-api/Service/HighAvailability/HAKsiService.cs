@@ -30,7 +30,7 @@ using NLog;
 namespace Guardtime.KSI.Service.HighAvailability
 {
     /// <summary>
-    ///     High availability KSI service.
+    /// High availability KSI service. Combines max 3 sub-services to achieve redundancy.
     /// </summary>
     public class HAKsiService : IKsiService
     {
@@ -43,12 +43,14 @@ namespace Guardtime.KSI.Service.HighAvailability
         private ExtenderConfig _currentExtenderConfig;
 
         /// <summary>
-        /// Aggregator configuration changed event
+        /// Aggregator configuration changed event.
+        /// It is raised when a sub-service aggregation configuration changes and it changes consolidated configuration.
         /// </summary>
         public event EventHandler<AggregatorConfigChangedEventArgs> AggregatorConfigChanged;
 
         /// <summary>
-        /// Extender configuration changed event
+        /// Extender configuration changed event.
+        /// It is raised when a sub-service extender configuration changes and it changes consolidated configuration.
         /// </summary>
         public event EventHandler<ExtenderConfigChangedEventArgs> ExtenderConfigChanged;
 
@@ -115,22 +117,23 @@ namespace Guardtime.KSI.Service.HighAvailability
         }
 
         /// <summary>
-        /// Collection of signing sub-services
+        /// Collection of signing sub-services. Max 3 allowed.
         /// </summary>
         public ReadOnlyCollection<IKsiService> SigningServices { get; }
 
         /// <summary>
-        /// Collection of extending sub-services
+        /// Collection of extending sub-services. Max 3 allowed.
         /// </summary>
         public ReadOnlyCollection<IKsiService> ExtendingServices { get; }
 
         /// <summary>
-        /// Collection of publications file sub-services
+        /// Collection of publications file sub-services. Max 3 allowed.
         /// </summary>
         public ReadOnlyCollection<IKsiService> PublicationsFileServices { get; }
 
         /// <summary>
-        ///     Sync create signature with given data hash.
+        /// Create signature with given data hash (sync). 
+        /// Sends the request to all the sub-services in parallel. First successful response is used. Request fails only if all the sub-services fail.
         /// </summary>
         /// <param name="hash">data hash</param>
         /// <param name="level">the level value of the aggregation tree node</param>
@@ -141,7 +144,8 @@ namespace Guardtime.KSI.Service.HighAvailability
         }
 
         /// <summary>
-        ///     Begin create signature with given data hash (async).
+        /// Begin create signature with given data hash (async).
+        /// Sends the request to all the sub-services in parallel. First successful response is used. Request fails only if all the sub-services fail.
         /// </summary>
         /// <param name="hash">data hash</param>
         /// <param name="callback">callback when creating signature is finished</param>
@@ -153,7 +157,8 @@ namespace Guardtime.KSI.Service.HighAvailability
         }
 
         /// <summary>
-        ///     Begin create signature with given data hash (async).
+        /// Begin create signature with given data hash (async).
+        /// Sends the request to all the sub-services in parallel. First successful response is used. Request fails only if all the sub-services fail.
         /// </summary>
         /// <param name="hash">data hash</param>
         /// <param name="level">the level value of the aggregation tree node</param>
@@ -183,7 +188,7 @@ namespace Guardtime.KSI.Service.HighAvailability
         }
 
         /// <summary>
-        ///     End create signature (async)
+        /// End create signature (async)
         /// </summary>
         /// <param name="asyncResult">async result</param>
         /// <returns>KSI signature</returns>
@@ -195,7 +200,8 @@ namespace Guardtime.KSI.Service.HighAvailability
         }
 
         /// <summary>
-        /// Get additional aggregator configuration data (sync)
+        /// Get additional aggregator configuration data (sync).
+        /// Sends the request to all the sub-services in parallel. Successful responses are consolidated and the consolidated result is returned. Request fails only if all the sub-services fail.
         /// </summary>
         /// <returns>Aggregator configuration data</returns>
         public AggregatorConfig GetAggregatorConfig()
@@ -205,6 +211,7 @@ namespace Guardtime.KSI.Service.HighAvailability
 
         /// <summary>
         /// Begin get additional aggregator configuration data (async)
+        /// Sends the request to all the sub-services in parallel. Successful responses are consolidated and the consolidated result is returned. Request fails only if all the sub-services fail.
         /// </summary>
         /// <param name="callback">callback when aggregator configuration request is finished</param>
         /// <param name="asyncState">callback async state object</param>
@@ -235,6 +242,7 @@ namespace Guardtime.KSI.Service.HighAvailability
                 }
 
                 HAKsiServiceException ex = new HAKsiServiceException("Could not get aggregator configuration.", haAsyncResult.Errors);
+                Logger.Warn(ex);
                 AggregatorConfigChangedEventArgs aggregatorConfigChangedEventArgs = new AggregatorConfigChangedEventArgs(ex, this);
                 AggregatorConfigChanged?.Invoke(this, aggregatorConfigChangedEventArgs);
                 throw ex;
@@ -261,7 +269,8 @@ namespace Guardtime.KSI.Service.HighAvailability
         }
 
         /// <summary>
-        ///     Extend to latest publication (sync).
+        /// Extend to latest publication (sync).
+        /// Sends the request to all the sub-services in parallel. First successful response is used. Request fails only if all the sub-services fail.
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
         /// <returns>extended calendar hash chain</returns>
@@ -271,7 +280,8 @@ namespace Guardtime.KSI.Service.HighAvailability
         }
 
         /// <summary>
-        ///     Extend to given publication (sync).
+        /// Extend to given publication (sync).
+        /// Sends the request to all the sub-services in parallel. First successful response is used. Request fails only if all the sub-services fail.
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
         /// <param name="publicationTime">publication time</param>
@@ -282,7 +292,8 @@ namespace Guardtime.KSI.Service.HighAvailability
         }
 
         /// <summary>
-        ///     Begin extend to latest publication (async).
+        /// Begin extend to latest publication (async).
+        /// Sends the request to all the sub-services in parallel. First successful response is used. Request fails only if all the sub-services fail.
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
         /// <param name="callback">callback when extending signature is finished</param>
@@ -295,7 +306,8 @@ namespace Guardtime.KSI.Service.HighAvailability
         }
 
         /// <summary>
-        ///     Begin extend to given publication (async).
+        /// Begin extend to given publication (async).
+        /// Sends the request to all the sub-services in parallel. First successful response is used. Request fails only if all the sub-services fail.
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
         /// <param name="publicationTime">publication time</param>
@@ -309,7 +321,7 @@ namespace Guardtime.KSI.Service.HighAvailability
         }
 
         /// <summary>
-        ///     End extend (async).
+        /// End extend (async).
         /// </summary>
         /// <param name="asyncResult">async result</param>
         /// <returns>extended calendar hash chain</returns>
@@ -322,6 +334,7 @@ namespace Guardtime.KSI.Service.HighAvailability
 
         /// <summary>
         /// Get additional extender configuration data (sync)
+        /// Sends the request to all the sub-services in parallel. Successful responses are consolidated and the consolidated result is returned. Request fails only if all the sub-services fail.
         /// </summary>
         /// <returns>Extender configuration data</returns>
         public ExtenderConfig GetExtenderConfig()
@@ -331,6 +344,7 @@ namespace Guardtime.KSI.Service.HighAvailability
 
         /// <summary>
         /// Begin get additional extender configuration data (async)
+        /// Sends the request to all the sub-services in parallel. Successful responses are consolidated and the consolidated result is returned. Request fails only if all the sub-services fail.
         /// </summary>
         /// <param name="callback">callback when extnder configuration request is finished</param>
         /// <param name="asyncState">callback async state object</param>
@@ -361,6 +375,7 @@ namespace Guardtime.KSI.Service.HighAvailability
                 }
 
                 HAKsiServiceException ex = new HAKsiServiceException("Could not get extender configuration.", haAsyncResult.Errors);
+                Logger.Warn(ex);
                 ExtenderConfigChangedEventArgs extenderConfigChangedEventArgs = new ExtenderConfigChangedEventArgs(ex, this);
                 ExtenderConfigChanged?.Invoke(this, extenderConfigChangedEventArgs);
                 throw ex;
@@ -387,7 +402,8 @@ namespace Guardtime.KSI.Service.HighAvailability
         }
 
         /// <summary>
-        ///     Get publications file (sync).
+        /// Get publications file (sync).
+        /// Sends the request to all the sub-services in parallel. First successful response is used. Request fails only if all the sub-services fail.
         /// </summary>
         /// <returns>Publications file</returns>
         public IPublicationsFile GetPublicationsFile()
@@ -396,7 +412,8 @@ namespace Guardtime.KSI.Service.HighAvailability
         }
 
         /// <summary>
-        ///     Begin get publications file (async).
+        /// Begin get publications file (async).
+        /// Sends the request to all the sub-services in parallel. First successful response is used. Request fails only if all the sub-services fail.
         /// </summary>
         /// <param name="callback">callback when publications file is downloaded</param>
         /// <param name="asyncState">callback async state object</param>
@@ -408,7 +425,7 @@ namespace Guardtime.KSI.Service.HighAvailability
         }
 
         /// <summary>
-        ///     End get publications file (async).
+        /// End get publications file (async).
         /// </summary>
         /// <param name="asyncResult">async result</param>
         /// <returns>publications file</returns>
@@ -490,7 +507,7 @@ namespace Guardtime.KSI.Service.HighAvailability
 
             if (runner == null)
             {
-                throw new HAKsiServiceException(string.Format("Invalid async result. Containing invalid request runner: {0}; Expected type: {1}",
+                throw new HAKsiServiceException(string.Format("Invalid async result. Containing invalid request runner of type {0}; Expected type: {1}",
                     haAsyncResult.RequestRunner.GetType(), typeof(T)));
             }
             return runner;
@@ -503,49 +520,53 @@ namespace Guardtime.KSI.Service.HighAvailability
                 return;
             }
 
-            AggregatorConfig mergedConfig = null;
-
             lock (_aggregatorConfigChangedLock)
             {
-                Logger.Debug("Sub-service AggregationConfig changed: " + e.AggregatorConfig);
-
                 try
                 {
+                    Logger.Debug("Sub-service AggregationConfig changed: " + e.AggregatorConfig + "; Sub-service: " + e.KsiService.AggregatorLocation);
+
                     if (e.AggregatorConfig == null)
                     {
                         throw new ArgumentNullException(nameof(e.AggregatorConfig));
                     }
 
                     _currentAggregatorConfigList[e.KsiService] = e.AggregatorConfig;
-
-                    foreach (IKsiService service in SigningServices)
-                    {
-                        if (!_currentAggregatorConfigList.ContainsKey(service))
-                        {
-                            continue;
-                        }
-
-                        AggregatorConfig config = _currentAggregatorConfigList[service];
-                        Logger.Debug("AggregatorConfig in cache: " + config + "; Sub-service: " + e.KsiService.AggregatorLocation);
-                        mergedConfig = HAAggregatorConfigRequestRunner.MergeConfigs(mergedConfig, config);
-                    }
-
-                    if (_currentAggregatorConfig == null || !_currentAggregatorConfig.Equals(mergedConfig))
-                    {
-                        Logger.Debug("New merged AggregatorConfig: " + mergedConfig);
-                        _currentAggregatorConfig = mergedConfig;
-                        AggregatorConfigChanged?.Invoke(this, new AggregatorConfigChangedEventArgs(mergedConfig, this));
-                    }
-                    else
-                    {
-                        Logger.Debug("Merged AggregationCongif not changed.");
-                    }
+                    RecalculateAggregatorConfig();
                 }
                 catch (Exception ex)
                 {
                     Logger.Warn("HA aggregator configuration change handling failed", ex);
                     throw;
                 }
+            }
+        }
+
+        private void RecalculateAggregatorConfig()
+        {
+            AggregatorConfig mergedConfig = null;
+
+            foreach (IKsiService service in SigningServices)
+            {
+                if (!_currentAggregatorConfigList.ContainsKey(service))
+                {
+                    continue;
+                }
+
+                AggregatorConfig config = _currentAggregatorConfigList[service];
+                Logger.Debug("AggregatorConfig in cache: " + config + "; Sub-service: " + service.AggregatorLocation);
+                mergedConfig = HAAggregatorConfigRequestRunner.MergeConfigs(mergedConfig, config);
+            }
+
+            if (_currentAggregatorConfig == null || !_currentAggregatorConfig.Equals(mergedConfig))
+            {
+                Logger.Debug("New merged AggregatorConfig: " + mergedConfig);
+                _currentAggregatorConfig = mergedConfig;
+                AggregatorConfigChanged?.Invoke(this, new AggregatorConfigChangedEventArgs(mergedConfig, this));
+            }
+            else
+            {
+                Logger.Debug("Merged AggregationConfig not changed.");
             }
         }
 
@@ -556,14 +577,12 @@ namespace Guardtime.KSI.Service.HighAvailability
                 return;
             }
 
-            ExtenderConfig mergedConfig = null;
-
             lock (_extenderConfigChangedLock)
             {
-                Logger.Debug("Sub-service AggregationConfig changed: " + e.ExtenderConfig);
-
                 try
                 {
+                    Logger.Debug("Sub-service ExtenderConfig changed: " + e.ExtenderConfig + "; Sub-service: " + e.KsiService.ExtenderLocation);
+
                     if (e.ExtenderConfig == null)
                     {
                         throw new ArgumentNullException(nameof(e.ExtenderConfig));
@@ -571,34 +590,41 @@ namespace Guardtime.KSI.Service.HighAvailability
 
                     _currentExtenderConfigList[e.KsiService] = e.ExtenderConfig;
 
-                    foreach (IKsiService service in ExtendingServices)
-                    {
-                        if (!_currentExtenderConfigList.ContainsKey(service))
-                        {
-                            continue;
-                        }
-
-                        ExtenderConfig config = _currentExtenderConfigList[service];
-                        Logger.Debug("ExtenderConfig in cache: " + config + "; Sub-service: " + e.KsiService.ExtenderLocation);
-                        mergedConfig = HAExtenderConfigRequestRunner.MergeConfigs(mergedConfig, config);
-                    }
-
-                    if (_currentExtenderConfig == null || !_currentExtenderConfig.Equals(mergedConfig))
-                    {
-                        Logger.Debug("New merged ExtenderConfig: " + mergedConfig);
-                        _currentExtenderConfig = mergedConfig;
-                        ExtenderConfigChanged?.Invoke(this, new ExtenderConfigChangedEventArgs(mergedConfig, this));
-                    }
-                    else
-                    {
-                        Logger.Debug("Merged AggregationCongif not changed.");
-                    }
+                    RecalculateExtenderConfig();
                 }
                 catch (Exception ex)
                 {
                     Logger.Warn("HA extender configuration change handling failed", ex);
                     throw;
                 }
+            }
+        }
+
+        private void RecalculateExtenderConfig()
+        {
+            ExtenderConfig mergedConfig = null;
+
+            foreach (IKsiService service in ExtendingServices)
+            {
+                if (!_currentExtenderConfigList.ContainsKey(service))
+                {
+                    continue;
+                }
+
+                ExtenderConfig config = _currentExtenderConfigList[service];
+                Logger.Debug("ExtenderConfig in cache: " + config + "; Sub-service: " + service.ExtenderLocation);
+                mergedConfig = HAExtenderConfigRequestRunner.MergeConfigs(mergedConfig, config);
+            }
+
+            if (_currentExtenderConfig == null || !_currentExtenderConfig.Equals(mergedConfig))
+            {
+                Logger.Debug("New merged ExtenderConfig: " + mergedConfig);
+                _currentExtenderConfig = mergedConfig;
+                ExtenderConfigChanged?.Invoke(this, new ExtenderConfigChangedEventArgs(mergedConfig, this));
+            }
+            else
+            {
+                Logger.Debug("Merged ExtenderConfig not changed.");
             }
         }
     }

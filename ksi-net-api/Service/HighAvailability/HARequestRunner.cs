@@ -46,7 +46,7 @@ namespace Guardtime.KSI.Service.HighAvailability
         }
 
         /// <summary>
-        /// Begin request
+        /// Begin HA request.
         /// </summary>
         /// <param name="callback">callback when HA request is finished</param>
         /// <param name="asyncState">callback async state object</param>
@@ -122,11 +122,16 @@ namespace Guardtime.KSI.Service.HighAvailability
 
         private void HandleException(Exception ex, IKsiService service, HAAsyncResult haAsyncResult)
         {
-            string message = "Using sub-service failed. ";
+            string message = "Using sub-service failed.";
 
             if (service != null)
             {
-                message += SubServiceToString(service);
+                message += " " + SubServiceToString(service);
+            }
+
+            if (ex != null)
+            {
+                message += Environment.NewLine + ex;
             }
 
             Logger.Warn(message, ex);

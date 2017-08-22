@@ -40,7 +40,7 @@ namespace Guardtime.KSI.Service
         event EventHandler<ExtenderConfigChangedEventArgs> ExtenderConfigChanged;
 
         /// <summary>
-        ///     Sync create signature with given data hash.
+        ///     Create signature with given data hash (sync).
         /// </summary>
         /// <param name="hash">data hash</param>
         /// <param name="level">the level value of the aggregation tree node</param>

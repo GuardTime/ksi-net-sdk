@@ -133,7 +133,7 @@ namespace Guardtime.KSI.Service.HighAvailability
                 return currentMaxLevel;
             }
 
-            if (newMaxLevel > MaxMaxLevel || newMaxLevel < MinMaxLevel)
+            if (newMaxLevel > MaxMaxLevel)
             {
                 Logger.Warn("Received max level '{0}' from an aggregator. Will not use it as only values between {1} and {2} are considered sane.", newMaxLevel,
                     MinMaxLevel, MaxMaxLevel);
@@ -154,7 +154,7 @@ namespace Guardtime.KSI.Service.HighAvailability
                 return currentMaxRequests;
             }
 
-            if (newMaxRequests > MaxMaxRequests || newMaxRequests < MinMaxRequests)
+            if (newMaxRequests > MaxMaxRequests)
             {
                 Logger.Warn("Received max requests '{0}' from an aggregator. Will not use it as only values between {1} and {2} are considered sane.", newMaxRequests,
                     MinMaxRequests, MaxMaxRequests);
