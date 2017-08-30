@@ -247,7 +247,6 @@
     <Compile Include="Signature\Verification\Rule\UserProvidedPublicationHashMatchesExtendedResponseRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\UserProvidedPublicationTimeMatchesExtendedResponseRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\UserProvidedPublicationVerificationRuleTests.cs" />
-    <Compile Include="Signature\Verification\SignatureVerificationTests.cs" />
     <Compile Include="Trust\PkiTrustStoreProviderTests.cs" />
     <Compile Include="CryptoTestFactoryTests.cs" />
     <Compile Include="TestUtil.cs" />
