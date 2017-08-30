@@ -67,6 +67,11 @@ namespace Guardtime.KSI.Test.Integration
 
                 AggregatorConfig conf1 = service.EndGetAggregatorConfig(asyncResult1);
                 AggregatorConfig conf2 = service.EndGetAggregatorConfig(asyncResult2);
+
+                Assert.AreEqual(conf1.AggregationAlgorithm, conf2.AggregationAlgorithm);
+                Assert.AreEqual(conf1.AggregationPeriod, conf2.AggregationPeriod);
+                Assert.AreEqual(conf1.MaxLevel, conf2.MaxLevel);
+                Assert.AreEqual(conf1.MaxRequests, conf2.MaxRequests);
             }
         }
 

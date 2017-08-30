@@ -201,12 +201,12 @@ namespace Guardtime.KSI.Test.Integration
 
         private VerificationResult SignHash(Ksi ksi)
         {
-            IKsiSignature signature = ksi.Sign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
+            DataHash hash = new DataHash(HashAlgorithm.Sha2256, Base16.Decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"));
+            IKsiSignature signature = ksi.Sign(hash);
 
             VerificationContext verificationContext = new VerificationContext(signature)
             {
-                DocumentHash = new DataHash(HashAlgorithm.Sha2256,
-                    Base16.Decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")),
+                DocumentHash = hash,
                 PublicationsFile = ksi.GetPublicationsFile()
             };
             KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
@@ -391,30 +391,31 @@ namespace Guardtime.KSI.Test.Integration
         [Test]
         public void TcpSignHashWithReusedSocketTest()
         {
+            DataHash hash1 = new DataHash(HashAlgorithm.Sha2256, Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"));
+            DataHash hash2 = new DataHash(HashAlgorithm.Sha2256, Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"));
+            DataHash hash3 = new DataHash(HashAlgorithm.Sha2256, Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"));
+            DataHash hash4 = new DataHash(HashAlgorithm.Sha2256, Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"));
+
             TcpKsiServiceProtocol tcp = new TcpKsiServiceProtocol(IPAddress.Parse(Settings.Default.TcpSigningServiceUrl), Settings.Default.TcpSigningServicePort);
             KsiService service = GetKsiService(tcp);
 
-            IAsyncResult ar1 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
-            IAsyncResult ar2 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("2f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
+            IAsyncResult ar1 = service.BeginSign(hash1, null, null);
+            IAsyncResult ar2 = service.BeginSign(hash2, null, null);
 
             IKsiSignature sig1 = service.EndSign(ar1);
-            Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), sig1.InputHash,
-                "Unexpected signature input hash");
+            Assert.AreEqual(hash1, sig1.InputHash, "Unexpected signature input hash");
             IKsiSignature sig2 = service.EndSign(ar2);
-            Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("2f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), sig2.InputHash,
-                "Unexpected signature input hash");
+            Assert.AreEqual(hash2, sig2.InputHash, "Unexpected signature input hash");
 
             Socket socket1 = GetSocket(tcp);
 
-            IAsyncResult ar3 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("3f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
-            IAsyncResult ar4 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("4f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
+            IAsyncResult ar3 = service.BeginSign(hash3, null, null);
+            IAsyncResult ar4 = service.BeginSign(hash4, null, null);
 
             IKsiSignature sig3 = service.EndSign(ar3);
-            Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("3f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), sig3.InputHash,
-                "Unexpected signature input hash");
+            Assert.AreEqual(hash3, sig3.InputHash, "Unexpected signature input hash");
             IKsiSignature sig4 = service.EndSign(ar4);
-            Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("4f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), sig4.InputHash,
-                "Unexpected signature input hash");
+            Assert.AreEqual(hash4, sig4.InputHash, "Unexpected signature input hash");
 
             Socket socket2 = GetSocket(tcp);
 
@@ -424,16 +425,19 @@ namespace Guardtime.KSI.Test.Integration
         [Test]
         public void TcpSignHashesWithSocketReuseAndTimeoutTest()
         {
+            DataHash hash1 = new DataHash(HashAlgorithm.Sha2256, Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"));
+            DataHash hash2 = new DataHash(HashAlgorithm.Sha2256, Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"));
+
             TcpKsiServiceProtocol tcp = new TcpKsiServiceProtocol(IPAddress.Parse(Settings.Default.TcpSigningServiceUrl), Settings.Default.TcpSigningServicePort, 30000);
             KsiService service = GetKsiService(tcp);
 
-            IAsyncResult ar1 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
+            IAsyncResult ar1 = service.BeginSign(hash1, null, null);
 
             IKsiSignature sig1 = service.EndSign(ar1);
             Socket socket1 = GetSocket(tcp);
 
-            Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), sig1.InputHash,
-                "Unexpected signature input hash");
+            Assert.AreEqual(hash1, sig1.InputHash, "Unexpected signature input hash");
+
             Socket socket2 = GetSocket(tcp);
 
             Assert.AreEqual(socket1, socket2, "Sockets should be equal");
@@ -441,14 +445,14 @@ namespace Guardtime.KSI.Test.Integration
             // after 20 sec server will close connection
             Thread.Sleep(22000);
 
-            IAsyncResult ar2 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("2f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
+            IAsyncResult ar2 = service.BeginSign(hash2, null, null);
 
             IKsiSignature sig2 = service.EndSign(ar2);
-            Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("2f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), sig2.InputHash,
-                "Unexpected signature input hash");
-            Socket socket3 = GetSocket(tcp);
+            Assert.AreEqual(hash2, sig2.InputHash, "Unexpected signature input hash");
 
-            Assert.AreNotEqual(socket1, socket3, "Sockets should not be equal");
+            socket2 = GetSocket(tcp);
+
+            Assert.AreNotEqual(socket1, socket2, "Sockets should not be equal");
         }
 
         [Test]
