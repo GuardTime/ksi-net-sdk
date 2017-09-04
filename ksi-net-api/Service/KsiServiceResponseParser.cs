@@ -169,9 +169,26 @@ namespace Guardtime.KSI.Service
                     if (_currentAggregatorConfig == null || !_currentAggregatorConfig.Equals(aggregatorConfig))
                     {
                         _currentAggregatorConfig = aggregatorConfig;
-                        AggregatorConfigChanged.BeginInvoke(this, new AggregatorConfigChangedEventArgs(_currentAggregatorConfig), null, null);
+                        AggregatorConfigChanged.BeginInvoke(this, new AggregatorConfigChangedEventArgs(_currentAggregatorConfig), EndAggregatorConfigChanged, null);
                     }
                 }
+            }
+        }
+
+        private void EndAggregatorConfigChanged(IAsyncResult asyncResult)
+        {
+            if (AggregatorConfigChanged == null)
+            {
+                return;
+            }
+
+            try
+            {
+                AggregatorConfigChanged.EndInvoke(asyncResult);
+            }
+            catch (Exception ex)
+            {
+                Logger.Warn("Ending aggregator configuration changed call failed.", ex);
             }
         }
 
@@ -187,9 +204,26 @@ namespace Guardtime.KSI.Service
                     if (_currentExtenderConfig == null || !_currentExtenderConfig.Equals(extenderConfig))
                     {
                         _currentExtenderConfig = extenderConfig;
-                        ExtenderConfigChanged.BeginInvoke(this, new ExtenderConfigChangedEventArgs(_currentExtenderConfig), null, null);
+                        ExtenderConfigChanged.BeginInvoke(this, new ExtenderConfigChangedEventArgs(_currentExtenderConfig), EndExtenderConfigChanged, null);
                     }
                 }
+            }
+        }
+
+        private void EndExtenderConfigChanged(IAsyncResult asyncResult)
+        {
+            if (ExtenderConfigChanged == null)
+            {
+                return;
+            }
+
+            try
+            {
+                ExtenderConfigChanged.EndInvoke(asyncResult);
+            }
+            catch (Exception ex)
+            {
+                Logger.Warn("Ending extender configuration changed call failed.", ex);
             }
         }
 

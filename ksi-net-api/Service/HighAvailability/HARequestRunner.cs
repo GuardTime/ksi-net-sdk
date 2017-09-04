@@ -30,9 +30,12 @@ namespace Guardtime.KSI.Service.HighAvailability
     /// </summary>
     public abstract class HARequestRunner
     {
+        private delegate void RunSubServiceDelegate(HAAsyncResult haAsyncResult, int serviceIndex);
+
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IList<IKsiService> _subServices;
         private readonly bool _returnAllResponses;
+        private readonly RunSubServiceDelegate _runSubServiceDelegate;
 
         /// <summary>
         /// Create high availablity request runner instance.
@@ -43,6 +46,7 @@ namespace Guardtime.KSI.Service.HighAvailability
         {
             _subServices = subServices;
             _returnAllResponses = returnAllResponses;
+            _runSubServiceDelegate = RunSubService;
         }
 
         /// <summary>
@@ -62,8 +66,7 @@ namespace Guardtime.KSI.Service.HighAvailability
 
             for (int index = 0; index < _subServices.Count; index++)
             {
-                Action<SubServiceRunArgs> action = RunSubService;
-                action.BeginInvoke(new SubServiceRunArgs(haAsyncResult, index), null, null);
+                _runSubServiceDelegate.BeginInvoke(haAsyncResult, index, EndRunSubService, null);
             }
 
             CheckComplete(haAsyncResult);
@@ -71,38 +74,50 @@ namespace Guardtime.KSI.Service.HighAvailability
             return haAsyncResult;
         }
 
-        private void RunSubService(SubServiceRunArgs subServiceRunArgs)
+        private void EndRunSubService(IAsyncResult asyncResult)
         {
-            IKsiService service = GetService(subServiceRunArgs);
+            try
+            {
+                _runSubServiceDelegate.EndInvoke(asyncResult);
+            }
+            catch (Exception ex)
+            {
+                Logger.Warn("Ending running sub service failed.", ex);
+            }
+        }
+
+        private void RunSubService(HAAsyncResult haAsyncResult, int serviceIndex)
+        {
+            IKsiService service = GetService(serviceIndex);
 
             try
             {
                 IAsyncResult asyncResult = SubServiceBeginRequest(service);
                 asyncResult.AsyncWaitHandle.WaitOne();
-                subServiceRunArgs.HAAsyncResult.ResultTlvs.Add(SubServiceEndRequest(service, asyncResult));
+                haAsyncResult.ResultTlvs.Add(SubServiceEndRequest(service, asyncResult));
 
-                if (subServiceRunArgs.HAAsyncResult.IsCompleted)
+                if (haAsyncResult.IsCompleted)
                 {
                     return;
                 }
 
                 if (!_returnAllResponses)
                 {
-                    subServiceRunArgs.HAAsyncResult.SetComplete();
+                    haAsyncResult.SetComplete();
                     return;
                 }
             }
             catch (Exception ex)
             {
-                HandleException(ex, service, subServiceRunArgs.HAAsyncResult);
+                HandleException(ex, service, haAsyncResult);
             }
 
-            CheckComplete(subServiceRunArgs.HAAsyncResult);
+            CheckComplete(haAsyncResult);
         }
 
-        private IKsiService GetService(SubServiceRunArgs subServiceRunArgs)
+        private IKsiService GetService(int serviceIndex)
         {
-            return _subServices != null && _subServices.Count > subServiceRunArgs.ServiceIndex ? _subServices[subServiceRunArgs.ServiceIndex] : null;
+            return _subServices != null && _subServices.Count > serviceIndex ? _subServices[serviceIndex] : null;
         }
 
         /// <summary>
@@ -213,22 +228,6 @@ namespace Guardtime.KSI.Service.HighAvailability
                 {
                     haAsyncResult.SetComplete();
                 }
-            }
-        }
-
-        private class SubServiceRunArgs
-        {
-            public HAAsyncResult HAAsyncResult { get; }
-            public int ServiceIndex { get; }
-
-            public SubServiceRunArgs(HAAsyncResult haAsyncResult, int serviceIndex)
-            {
-                if (haAsyncResult == null)
-                {
-                    throw new ArgumentNullException(nameof(haAsyncResult));
-                }
-                HAAsyncResult = haAsyncResult;
-                ServiceIndex = serviceIndex;
             }
         }
     }

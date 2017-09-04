@@ -88,14 +88,11 @@ namespace Guardtime.KSI.Test.Integration
                 });
 
                 Assert.That(ex.Message.StartsWith("Aggregator config request is not supported using PDU version v1"), "Unexpected exception message: " + ex.Message);
-            }
-            else
-            {
-                service.GetAggregatorConfig();
+                return;
             }
 
+            service.GetAggregatorConfig();
             _waitHandle.WaitOne(10000);
-
             Assert.IsNotNull(_aggregatorConfig, "Could not get aggregator config using event handler.");
         }
 
@@ -154,7 +151,7 @@ namespace Guardtime.KSI.Test.Integration
             {
                 Exception ex = Assert.Throws<KsiServiceException>(delegate
                 {
-                    ksi.GetAggregatorConfig();
+                    ksi.GetExtenderConfig();
                 });
 
                 Assert.That(ex.Message.StartsWith("Extender config request is not supported using PDU version v1"), "Unexpected exception message: " + ex.Message);
@@ -214,14 +211,11 @@ namespace Guardtime.KSI.Test.Integration
                 });
 
                 Assert.That(ex.Message.StartsWith("Extender config request is not supported using PDU version v1"), "Unexpected exception message: " + ex.Message);
-            }
-            else
-            {
-                service.GetExtenderConfig();
+                return;
             }
 
+            service.GetExtenderConfig();
             _waitHandle2.WaitOne(10000);
-
             Assert.IsNotNull(_extenderConfig, "Could not get extender config using event handler.");
         }
 
