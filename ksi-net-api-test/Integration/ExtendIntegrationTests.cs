@@ -64,6 +64,7 @@ namespace Guardtime.KSI.Test.Integration
                 });
 
                 Assert.That(ex.Message.StartsWith("Request failed"), "Unexpected exception message: " + ex.Message);
+                Assert.IsNotNull(ex.InnerException, "Inner exception should not be null");
                 Assert.That(ex.InnerException.Message.StartsWith("The remote name could not be resolved"), "Unexpected inner exception message: " + ex.InnerException.Message);
             }
         }
@@ -126,7 +127,7 @@ namespace Guardtime.KSI.Test.Integration
 
                 KsiSignatureInvalidContentException ex = Assert.Throws<KsiSignatureInvalidContentException>(delegate
                 {
-                    IKsiSignature extendedSignature = ksi.Extend(ksiSignature);
+                    ksi.Extend(ksiSignature);
                 });
 
                 Assert.That(ex.Message.StartsWith("Signature verification failed"), "Unexpected exception message: " + ex.Message);
@@ -359,6 +360,68 @@ namespace Guardtime.KSI.Test.Integration
         }
 
         [Test]
+        public void HttpAsyncExtendTest()
+        {
+            KsiService service = GetHttpKsiService();
+
+            ManualResetEvent waitHandle = new ManualResetEvent(false);
+            CalendarHashChain cal = null;
+
+            object testObject = new object();
+            bool isAsyncCorrect = false;
+
+            service.BeginExtend(1455400000, delegate(IAsyncResult ar)
+            {
+                try
+                {
+                    isAsyncCorrect = ar.AsyncState == testObject;
+                    cal = service.EndExtend(ar);
+                }
+                finally
+                {
+                    waitHandle.Set();
+                }
+            }, testObject);
+
+            waitHandle.WaitOne();
+
+            Assert.IsNotNull(cal, "Calendar hash chain should not be null.");
+            Assert.AreEqual(true, isAsyncCorrect, "Unexpected async state.");
+        }
+
+        [Test]
+        public void HttpAsyncExtendWithInvalidPassTest()
+        {
+            KsiService service = GetHttpKsiServiceWithInvalidExtendingPass();
+
+            ManualResetEvent waitHandle = new ManualResetEvent(false);
+            Exception ex = null;
+            CalendarHashChain cal = null;
+
+            service.BeginExtend(1455400000, delegate(IAsyncResult ar)
+            {
+                try
+                {
+                    cal = service.EndExtend(ar);
+                }
+                catch (Exception e)
+                {
+                    ex = e;
+                }
+                finally
+                {
+                    waitHandle.Set();
+                }
+            }, null);
+
+            waitHandle.WaitOne();
+
+            Assert.IsNull(cal, "Calendar hash chain should be null.");
+            Assert.IsNotNull(ex, "Exception should not be null.");
+            Assert.AreEqual("Server responded with error message. Status: 258; Message: Failed hmac check.", ex.Message);
+        }
+
+        [Test]
         public void EndExtendArgumentNullTest()
         {
             KsiService service = GetHttpKsiService();
@@ -379,7 +442,7 @@ namespace Guardtime.KSI.Test.Integration
                 service.EndExtend(new TestAsyncResult());
             });
 
-            Assert.That(ex.Message.StartsWith("Invalid asyncResult, could not cast to correct object."), "Unexpected exception message: " + ex.Message);
+            Assert.That(ex.Message.StartsWith("Invalid asyncResult type:"), "Unexpected exception message: " + ex.Message);
         }
     }
 }

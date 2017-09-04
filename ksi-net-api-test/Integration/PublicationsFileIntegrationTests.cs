@@ -18,6 +18,7 @@
  */
 
 using System;
+using System.Threading;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
@@ -70,7 +71,37 @@ namespace Guardtime.KSI.Test.Integration
                 service.EndGetPublicationsFile(new TestAsyncResult());
             });
 
-            Assert.That(ex.Message.StartsWith("Invalid asyncResult, could not cast to correct object."), "Unexpected exception message: " + ex.Message);
+            Assert.That(ex.Message.StartsWith("Invalid asyncResult type:"), "Unexpected exception message: " + ex.Message);
+        }
+
+        [Test]
+        public void HttpAsyncGetPublicationsFileTest()
+        {
+            KsiService service = GetHttpKsiService();
+
+            ManualResetEvent waitHandle = new ManualResetEvent(false);
+            IPublicationsFile pubFile = null;
+
+            object testObject = new object();
+            bool isAsyncCorrect = false;
+
+            service.BeginGetPublicationsFile(delegate(IAsyncResult ar)
+            {
+                try
+                {
+                    isAsyncCorrect = ar.AsyncState == testObject;
+                    pubFile = service.EndGetPublicationsFile(ar);
+                }
+                finally
+                {
+                    waitHandle.Set();
+                }
+            }, testObject);
+
+            waitHandle.WaitOne();
+
+            Assert.IsNotNull(pubFile, "Publications file should not be null.");
+            Assert.AreEqual(true, isAsyncCorrect, "Unexpected async state.");
         }
     }
 }

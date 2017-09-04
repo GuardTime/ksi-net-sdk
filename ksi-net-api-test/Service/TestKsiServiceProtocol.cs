@@ -19,7 +19,6 @@
 
 using System;
 using System.IO;
-using System.Threading;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Test.Properties;
 
@@ -34,7 +33,7 @@ namespace Guardtime.KSI.Test.Service
 
         public IAsyncResult BeginSign(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
-            return new AsyncResult(data);
+            return new AsyncResult(requestId);
         }
 
         public byte[] EndSign(IAsyncResult asyncResult)
@@ -44,7 +43,7 @@ namespace Guardtime.KSI.Test.Service
 
         public IAsyncResult BeginGetAggregatorConfig(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
-            return new AsyncResult(data);
+            return new AsyncResult(requestId);
         }
 
         public byte[] EndGetAggregatorConfig(IAsyncResult asyncResult)
@@ -54,7 +53,7 @@ namespace Guardtime.KSI.Test.Service
 
         public IAsyncResult BeginExtend(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
-            return new AsyncResult(data);
+            return new AsyncResult(requestId);
         }
 
         public byte[] EndExtend(IAsyncResult asyncResult)
@@ -64,7 +63,7 @@ namespace Guardtime.KSI.Test.Service
 
         public IAsyncResult BeginGetExtenderConfig(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
-            return new AsyncResult(data);
+            return new AsyncResult(requestId);
         }
 
         public byte[] EndGetExtenderConfig(IAsyncResult asyncResult)
@@ -74,7 +73,7 @@ namespace Guardtime.KSI.Test.Service
 
         public IAsyncResult BeginGetPublicationsFile(AsyncCallback callback, object asyncState)
         {
-            return new AsyncResult(null);
+            return new AsyncResult(0);
         }
 
         public byte[] EndGetPublicationsFile(IAsyncResult asyncResult)
@@ -88,30 +87,15 @@ namespace Guardtime.KSI.Test.Service
             {
                 byte[] data = new byte[stream.Length];
                 stream.Read(data, 0, (int)stream.Length);
-
                 return data;
             }
         }
 
-        private class AsyncResult : IAsyncResult, IDisposable
+        private class AsyncResult : KsiServiceAsyncResult
         {
-            private readonly ManualResetEvent _resetEvent = new ManualResetEvent(true);
-
-            public AsyncResult(byte[] request)
+            public AsyncResult(ulong requestId) : base(null, requestId, null, null)
             {
-            }
-
-            public bool IsCompleted => true;
-
-            public WaitHandle AsyncWaitHandle => _resetEvent;
-
-            public object AsyncState => null;
-
-            public bool CompletedSynchronously => true;
-
-            public void Dispose()
-            {
-                _resetEvent.Dispose();
+                SetComplete();
             }
         }
     }

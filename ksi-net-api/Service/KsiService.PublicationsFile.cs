@@ -50,8 +50,8 @@ namespace Guardtime.KSI.Service
                 throw new KsiServiceException("Publications file service protocol is missing from service.");
             }
 
-            IAsyncResult serviceProtocolAsyncResult = _publicationsFileServiceProtocol.BeginGetPublicationsFile(callback, asyncState);
-            return new PublicationsFileKsiServiceAsyncResult(serviceProtocolAsyncResult, asyncState);
+            Logger.Debug("Begin get publications file.");
+            return _publicationsFileServiceProtocol.BeginGetPublicationsFile(callback, asyncState);
         }
 
         /// <summary>
@@ -71,36 +71,16 @@ namespace Guardtime.KSI.Service
                 throw new KsiServiceException("Publications file factory is missing from service.");
             }
 
-            if (asyncResult == null)
-            {
-                throw new ArgumentNullException(nameof(asyncResult));
-            }
-
-            KsiServiceAsyncResult serviceAsyncResult = asyncResult as PublicationsFileKsiServiceAsyncResult;
-
-            if (serviceAsyncResult == null)
-            {
-                throw new KsiServiceException("Invalid " + nameof(asyncResult) + ", could not cast to correct object.");
-            }
+            KsiServiceAsyncResult serviceAsyncResult = GetKsiServiceAsyncResult(asyncResult);
 
             if (!serviceAsyncResult.IsCompleted)
             {
                 serviceAsyncResult.AsyncWaitHandle.WaitOne();
             }
 
-            byte[] data = _publicationsFileServiceProtocol.EndGetPublicationsFile(serviceAsyncResult.ServiceProtocolAsyncResult);
+            byte[] data = _publicationsFileServiceProtocol.EndGetPublicationsFile(serviceAsyncResult);
+            Logger.Debug("End get publications file successful.");
             return _publicationsFileFactory.Create(data);
-        }
-
-        /// <summary>
-        ///     Publications file KSI service async result.
-        /// </summary>
-        private class PublicationsFileKsiServiceAsyncResult : KsiServiceAsyncResult
-        {
-            public PublicationsFileKsiServiceAsyncResult(IAsyncResult serviceProtocolAsyncResult, object asyncState)
-                : base(serviceProtocolAsyncResult, asyncState)
-            {
-            }
         }
     }
 }

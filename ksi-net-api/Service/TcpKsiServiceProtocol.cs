@@ -103,7 +103,7 @@ namespace Guardtime.KSI.Service
         /// <param name="requestId">request id</param>
         /// <param name="callback">callback when creating signature is finished</param>
         /// <param name="asyncState">async state object</param>
-        /// <returns>TCP KSI service protocol async result</returns>
+        /// <returns>TCP KSI service async result</returns>
         public IAsyncResult BeginSign(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
             return BeginAggregatorRequest(TcpRequestType.Aggregation, data, requestId, callback, asyncState);
@@ -116,7 +116,7 @@ namespace Guardtime.KSI.Service
         /// <param name="requestId">request id</param>
         /// <param name="callback">callback when creating signature is finished</param>
         /// <param name="asyncState">async state object</param>
-        /// <returns>TCP KSI service protocol async result</returns>
+        /// <returns>TCP KSI service async result</returns>
         public IAsyncResult BeginGetAggregatorConfig(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
             return BeginAggregatorRequest(TcpRequestType.AggregatorConfig, data, requestId, callback, asyncState);
@@ -125,7 +125,7 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     End signing request.
         /// </summary>
-        /// <param name="ar">TCP KSI service protocol async result</param>
+        /// <param name="ar">TCP KSI service async result</param>
         /// <returns>response bytes</returns>
         public byte[] EndSign(IAsyncResult ar)
         {
@@ -198,7 +198,7 @@ namespace Guardtime.KSI.Service
                 throw new ArgumentNullException(nameof(data));
             }
 
-            TcpKsiServiceProtocolAsyncResult asyncResult = new TcpKsiServiceProtocolAsyncResult(requestType, data, requestId, callback, asyncState);
+            TcpKsiServiceAsyncResult asyncResult = new TcpKsiServiceAsyncResult(requestType, data, requestId, callback, asyncState);
             // wait until retrying, disposing or error throwing is in progress
             _waitHandle?.WaitOne();
             _asyncResults.Add(requestId, asyncResult);
@@ -260,7 +260,7 @@ namespace Guardtime.KSI.Service
             }
         }
 
-        private void BeginSend(TcpKsiServiceProtocolAsyncResult asyncResult)
+        private void BeginSend(TcpKsiServiceAsyncResult asyncResult)
         {
             if (asyncResult == null)
             {
@@ -293,7 +293,7 @@ namespace Guardtime.KSI.Service
 
         private void SendCallback(IAsyncResult ar)
         {
-            TcpKsiServiceProtocolAsyncResult asyncResult = (TcpKsiServiceProtocolAsyncResult)ar.AsyncState;
+            TcpKsiServiceAsyncResult asyncResult = (TcpKsiServiceAsyncResult)ar.AsyncState;
 
             if (asyncResult.IsCompleted)
             {
@@ -417,7 +417,7 @@ namespace Guardtime.KSI.Service
 
         private void EndBeginSignCallback(object state, bool timedOut)
         {
-            TcpKsiServiceProtocolAsyncResult asyncResult = (TcpKsiServiceProtocolAsyncResult)state;
+            TcpKsiServiceAsyncResult asyncResult = (TcpKsiServiceAsyncResult)state;
             _asyncResults.Remove(asyncResult);
 
             if (timedOut)
@@ -425,12 +425,12 @@ namespace Guardtime.KSI.Service
                 asyncResult.Error = new KsiServiceProtocolException("Sign timed out.");
             }
 
-            asyncResult.SetComplete(timedOut);
+            asyncResult.SetComplete();
         }
 
         private byte[] EndRequest(IAsyncResult ar)
         {
-            TcpKsiServiceProtocolAsyncResult asyncResult = ar as TcpKsiServiceProtocolAsyncResult;
+            TcpKsiServiceAsyncResult asyncResult = ar as TcpKsiServiceAsyncResult;
 
             if (asyncResult == null)
             {
@@ -484,9 +484,9 @@ namespace Guardtime.KSI.Service
                 // no specific asyncResult, notify all pending requests about the error
                 foreach (ulong key in _asyncResults.GetKeys())
                 {
-                    TcpKsiServiceProtocolAsyncResult asyncResult = _asyncResults.GetValue(key);
+                    TcpKsiServiceAsyncResult asyncResult = _asyncResults.GetValue(key);
                     asyncResult.Error = new KsiServiceProtocolException(errorMessage, e);
-                    asyncResult.SetComplete(true);
+                    asyncResult.SetComplete();
                 }
 
                 Logger.Debug("Clearing asyncResults.");
@@ -498,10 +498,10 @@ namespace Guardtime.KSI.Service
             }
         }
 
-        private void SetError(TcpKsiServiceProtocolAsyncResult asyncResult, Exception e, string errorMessage)
+        private void SetError(TcpKsiServiceAsyncResult asyncResult, Exception e, string errorMessage)
         {
             asyncResult.Error = new KsiServiceProtocolException(errorMessage, e);
-            asyncResult.SetComplete(true);
+            asyncResult.SetComplete();
             _asyncResults.Remove(asyncResult);
         }
     }
