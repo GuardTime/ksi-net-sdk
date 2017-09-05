@@ -136,21 +136,15 @@ namespace Guardtime.KSI.Service
         /// <returns>KSI signature</returns>
         public IKsiSignature EndSign(IAsyncResult asyncResult)
         {
-            SignRequestResponsePayload reponsePayload = GetSignResponsePayload(asyncResult);
-            KsiServiceAsyncResult serviceAsyncResult = asyncResult as KsiServiceAsyncResult;
+            KsiServiceAsyncResult serviceAsyncResult = GetKsiServiceAsyncResult(asyncResult);
+            SignRequestResponsePayload reponsePayload = GetSignResponsePayload(serviceAsyncResult);
 
-            IKsiSignature signature;
             LegacyAggregationResponsePayload legacyPayload = reponsePayload as LegacyAggregationResponsePayload;
             AggregationResponsePayload payload = reponsePayload as AggregationResponsePayload;
 
-            if (legacyPayload != null)
-            {
-                signature = _ksiSignatureFactory.Create(legacyPayload, serviceAsyncResult.DocumentHash, serviceAsyncResult.Level);
-            }
-            else
-            {
-                signature = _ksiSignatureFactory.Create(payload, serviceAsyncResult.DocumentHash, serviceAsyncResult.Level);
-            }
+            IKsiSignature signature = legacyPayload != null
+                ? _ksiSignatureFactory.Create(legacyPayload, serviceAsyncResult.DocumentHash, serviceAsyncResult.Level)
+                : _ksiSignatureFactory.Create(payload, serviceAsyncResult.DocumentHash, serviceAsyncResult.Level);
 
             Logger.Debug("End sign successful (request id: {0}){1}{2}", serviceAsyncResult.RequestId, Environment.NewLine, signature);
 
@@ -164,12 +158,15 @@ namespace Guardtime.KSI.Service
         /// <returns>Request response payload</returns>
         public SignRequestResponsePayload GetSignResponsePayload(IAsyncResult asyncResult)
         {
+            return GetSignResponsePayload(GetKsiServiceAsyncResult(asyncResult));
+        }
+
+        private SignRequestResponsePayload GetSignResponsePayload(KsiServiceAsyncResult serviceAsyncResult)
+        {
             if (_signingServiceProtocol == null)
             {
                 throw new KsiServiceException("Signing service protocol is missing from service.");
             }
-
-            KsiServiceAsyncResult serviceAsyncResult = GetKsiServiceAsyncResult(asyncResult);
 
             if (!serviceAsyncResult.IsCompleted)
             {
