@@ -38,7 +38,7 @@ namespace Guardtime.KSI.Test.Service
         public void TcpProcessorAggregationOkTest()
         {
             TcpAsyncResultCollection asyncResultCollection = new TcpAsyncResultCollection();
-            asyncResultCollection.Add(123, new TcpKsiServiceProtocolAsyncResult(TcpRequestType.Aggregation, null, 123, null, null));
+            asyncResultCollection.Add(123, new TcpKsiServiceAsyncResult(TcpRequestType.Aggregation, null, 123, null, null));
 
             TcpResponseProcessor processor = new TcpResponseProcessor(asyncResultCollection);
 
@@ -63,7 +63,7 @@ namespace Guardtime.KSI.Test.Service
         public void TcpProcessorAggregationConfigOkTest()
         {
             TcpAsyncResultCollection asyncResultCollection = new TcpAsyncResultCollection();
-            asyncResultCollection.Add(123, new TcpKsiServiceProtocolAsyncResult(TcpRequestType.AggregatorConfig, null, 123, null, null));
+            asyncResultCollection.Add(123, new TcpKsiServiceAsyncResult(TcpRequestType.AggregatorConfig, null, 123, null, null));
 
             TcpResponseProcessor processor = new TcpResponseProcessor(asyncResultCollection);
 
@@ -88,7 +88,7 @@ namespace Guardtime.KSI.Test.Service
         public void TcpProcessorOkWithWarningTest()
         {
             TcpAsyncResultCollection asyncResultCollection = new TcpAsyncResultCollection();
-            asyncResultCollection.Add(123, new TcpKsiServiceProtocolAsyncResult(TcpRequestType.AggregatorConfig, null, 123, null, null));
+            asyncResultCollection.Add(123, new TcpKsiServiceAsyncResult(TcpRequestType.AggregatorConfig, null, 123, null, null));
 
             TcpResponseProcessor processor = new TcpResponseProcessor(asyncResultCollection);
 

@@ -135,6 +135,7 @@
     <Compile Include="Publication\PublicationsFileHeader.cs" />
     <Compile Include="Publication\PublicationsFile.cs" />
     <Compile Include="Publication\PublicationData.cs" />
+    <Compile Include="Service\KsiServiceAsyncResult.cs" />
     <Compile Include="Service\KsiServiceRequestType.cs" />
     <Compile Include="Service\KsiServiceResponseParser.cs" />
     <Compile Include="Service\AggregatorConfig.cs" />
@@ -169,7 +170,7 @@
     <Compile Include="Service\Tcp\TcpResponsePayloadType.cs" />
     <Compile Include="Service\Tcp\TcpResponseProcessor.cs" />
     <Compile Include="Service\TcpKsiServiceProtocol.cs" />
-    <Compile Include="Service\Tcp\TcpKsiServiceProtocolAsyncResult.cs" />
+    <Compile Include="Service\Tcp\TcpKsiServiceAsyncResult.cs" />
     <Compile Include="Service\Tcp\TcpRequestType.cs" />
     <Compile Include="Service\Tcp\TcpResponsePayloadInfo.cs" />
     <Compile Include="Service\TreeBuilder.cs" />

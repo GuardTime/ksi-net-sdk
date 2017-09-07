@@ -117,7 +117,7 @@ namespace Guardtime.KSI.Service.Tcp
                     isPayloadFound = true;
                     bool asyncResultFound = false;
 
-                    foreach (TcpKsiServiceProtocolAsyncResult asyncResult in GetAsyncResults(payloadInfo))
+                    foreach (TcpKsiServiceAsyncResult asyncResult in GetAsyncResults(payloadInfo))
                     {
                         asyncResultFound = true;
 
@@ -126,7 +126,7 @@ namespace Guardtime.KSI.Service.Tcp
                             asyncResult.ResultStream = new MemoryStream(pduBytes);
                             Logger.Debug("Response payload received. Request type: {0}; Response payload type: {1}; (request id: {2}).", asyncResult.RequestType,
                                 payloadInfo.ResponsePayloadType, asyncResult.RequestId);
-                            asyncResult.SetComplete(false);
+                            asyncResult.SetComplete();
                         }
                         else
                         {
@@ -155,7 +155,7 @@ namespace Guardtime.KSI.Service.Tcp
         /// </summary>
         /// <param name="payloadInfo">Response payload info</param>
         /// <returns></returns>
-        private IEnumerable<TcpKsiServiceProtocolAsyncResult> GetAsyncResults(TcpResponsePayloadInfo payloadInfo)
+        private IEnumerable<TcpKsiServiceAsyncResult> GetAsyncResults(TcpResponsePayloadInfo payloadInfo)
         {
             ulong[] keys = _asyncResults.GetKeys();
 
@@ -166,7 +166,7 @@ namespace Guardtime.KSI.Service.Tcp
                     {
                         if (key == payloadInfo.RequestId)
                         {
-                            TcpKsiServiceProtocolAsyncResult asyncResult = _asyncResults.GetValue(key);
+                            TcpKsiServiceAsyncResult asyncResult = _asyncResults.GetValue(key);
 
                             if (asyncResult == null)
                             {
@@ -180,7 +180,7 @@ namespace Guardtime.KSI.Service.Tcp
                 case TcpResponsePayloadType.Error:
                     foreach (ulong key in keys)
                     {
-                        TcpKsiServiceProtocolAsyncResult asyncResult = _asyncResults.GetValue(key);
+                        TcpKsiServiceAsyncResult asyncResult = _asyncResults.GetValue(key);
 
                         if (asyncResult != null)
                         {
@@ -189,9 +189,10 @@ namespace Guardtime.KSI.Service.Tcp
                     }
                     break;
                 case TcpResponsePayloadType.Config:
+                    // return all async results of all aggregator configuration requests 
                     foreach (ulong key in keys)
                     {
-                        TcpKsiServiceProtocolAsyncResult asyncResult = _asyncResults.GetValue(key);
+                        TcpKsiServiceAsyncResult asyncResult = _asyncResults.GetValue(key);
 
                         if (asyncResult?.RequestType == TcpRequestType.AggregatorConfig)
                         {

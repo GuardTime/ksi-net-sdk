@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright 2013-2017 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
@@ -21,13 +21,14 @@ using System;
 using System.IO;
 using System.Threading;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Hashing;
 
-namespace Guardtime.KSI.Service.Tcp
+namespace Guardtime.KSI.Service
 {
     /// <summary>
-    ///     TCP KSI service protocol async result.
+    ///     KSI service async result.
     /// </summary>
-    public class TcpKsiServiceProtocolAsyncResult : IAsyncResult, IDisposable
+    public class KsiServiceAsyncResult : IAsyncResult, IDisposable
     {
         private readonly AsyncCallback _callback;
         private readonly object _lock;
@@ -36,37 +37,38 @@ namespace Guardtime.KSI.Service.Tcp
         private bool _isDisposed;
 
         /// <summary>
-        /// Create TCP KSI service protocol async result instance
+        /// Create KSI service async result instance
         /// </summary>
-        /// <param name="requestType">Request type</param>
         /// <param name="postData">Posted bytes</param>
         /// <param name="requestId">Request ID</param>
         /// <param name="callback">Callback</param>
         /// <param name="asyncState">Async state</param>
-        public TcpKsiServiceProtocolAsyncResult(TcpRequestType requestType, byte[] postData, ulong requestId, AsyncCallback callback, object asyncState)
+        public KsiServiceAsyncResult(byte[] postData, ulong requestId, AsyncCallback callback, object asyncState)
         {
             PostData = postData;
+            RequestId = requestId;
             _callback = callback;
             AsyncState = asyncState;
-
             _isCompleted = false;
-
             _lock = new object();
             _waitHandle = new ManualResetEvent(false);
-
-            RequestType = requestType;
-            RequestId = requestId;
+            ResultStream = new MemoryStream();
         }
-
-        /// <summary>
-        /// TCP request type.
-        /// </summary>
-        public TcpRequestType RequestType { get; }
 
         /// <summary>
         /// Request ID
         /// </summary>
         public ulong RequestId { get; }
+
+        /// <summary>
+        /// The level value of the aggregation tree node to be signed
+        /// </summary>
+        public uint? Level { get; set; }
+
+        /// <summary>
+        /// Data hash to be signed
+        /// </summary>
+        public DataHash DocumentHash { get; set; }
 
         /// <summary>
         /// Posted bytes
@@ -139,26 +141,22 @@ namespace Guardtime.KSI.Service.Tcp
         /// </summary>
         public void Dispose()
         {
-            _waitHandle.Close();
             _isDisposed = true;
+            _waitHandle.Close();
+            ResultStream?.Dispose();
         }
 
         /// <summary>
         /// Complete the async result
         /// </summary>
-        /// <param name="errorOccured">True if error has occured</param>
-        public void SetComplete(bool errorOccured)
+        public void SetComplete()
         {
             lock (_lock)
             {
                 if (!_isCompleted)
                 {
                     _isCompleted = true;
-
-                    if (errorOccured == false)
-                    {
-                        _callback?.Invoke(this);
-                    }
+                    _callback?.Invoke(this);
                 }
             }
 
