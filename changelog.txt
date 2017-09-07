@@ -1,5 +1,5 @@
 Version 3.9
-2017-09-07 3.9.X
+2017-09-07 3.9.368
 
 * IMPROVEMENT: Added input hash algorithm check rule (KSINETAPI-124)
 * IMPROVEMENT: Set PDU V2 as default pdu version (KSINETAPI-123)
