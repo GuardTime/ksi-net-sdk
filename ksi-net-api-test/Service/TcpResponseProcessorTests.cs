@@ -153,14 +153,6 @@ namespace Guardtime.KSI.Test.Service
         {
             TcpAsyncResultCollection asyncResultCollection = new TcpAsyncResultCollection();
             TcpResponseProcessor processor = new TcpResponseProcessor(asyncResultCollection);
-
-            //CompositeTestTag pdu = new CompositeTestTag(Constants.AggregationResponsePdu.TagType, false, false,
-            //    new ITlvTag[]
-            //    {
-            //        new CompositeTestTag(0x3, true, false, new ITlvTag[] { new IntegerTag(0x4, true, false, 0), }),
-            //        new CompositeTestTag(0x7, false, false, new ITlvTag[] { new IntegerTag(0x4, true, false, 0) }),
-            //    });
-
             byte[] data = Base16.Decode("822100084302440007024400");
 
             TlvException ex = Assert.Throws<TlvException>(delegate
@@ -179,16 +171,7 @@ namespace Guardtime.KSI.Test.Service
         {
             TcpAsyncResultCollection asyncResultCollection = new TcpAsyncResultCollection();
             TcpResponseProcessor processor = new TcpResponseProcessor(asyncResultCollection);
-
-            //CompositeTestTag pdu = new CompositeTestTag(Constants.AggregationResponsePdu.TagType, false, false,
-            //    new ITlvTag[]
-            //    {
-            //        new CompositeTestTag(0x3, true, false, new ITlvTag[] { new IntegerTag(0x4, true, false, 0), }),
-            //        new CompositeTestTag(0x7, true, true, new ITlvTag[] { new IntegerTag(0x4, true, false, 0) }),
-            //    });
-
             byte[] data = Base16.Decode("822100084302440067024400");
-
             processor.ProcessReceivedData(data, data.Length);
         }
     }

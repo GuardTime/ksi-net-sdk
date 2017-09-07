@@ -37,7 +37,7 @@ namespace Guardtime.KSI.Service
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly uint _requestTimeOut = 10000;
         private readonly uint _bufferSize = 8192;
-        readonly byte[] _receiveDataBuffer;
+        readonly byte[] _receivedDataBuffer;
         private readonly IPAddress _ipAddress;
         private readonly ushort _port;
         private Socket _socket;
@@ -63,7 +63,7 @@ namespace Guardtime.KSI.Service
 
             _ipAddress = ipAddress;
             _port = port;
-            _receiveDataBuffer = new byte[_bufferSize];
+            _receivedDataBuffer = new byte[_bufferSize];
             _asyncResults = new TcpAsyncResultCollection();
             _responseProcessor = new TcpResponseProcessor(_asyncResults);
         }
@@ -252,7 +252,7 @@ namespace Guardtime.KSI.Service
                 }
 
                 Logger.Debug("Starting receiving.");
-                _socket.BeginReceive(_receiveDataBuffer, 0, _receiveDataBuffer.Length, 0, ReceiveCallback, null);
+                _socket.BeginReceive(_receivedDataBuffer, 0, _receivedDataBuffer.Length, 0, ReceiveCallback, null);
             }
             catch (Exception e)
             {
@@ -350,7 +350,7 @@ namespace Guardtime.KSI.Service
 
             try
             {
-                _responseProcessor.ProcessReceivedData(_receiveDataBuffer, bytesRead);
+                _responseProcessor.ProcessReceivedData(_receivedDataBuffer, bytesRead);
             }
             catch (Exception ex)
             {
@@ -362,7 +362,7 @@ namespace Guardtime.KSI.Service
             Logger.Debug("Rerun BeginReceive.");
             try
             {
-                _socket.BeginReceive(_receiveDataBuffer, 0, _receiveDataBuffer.Length, 0, ReceiveCallback, null);
+                _socket.BeginReceive(_receivedDataBuffer, 0, _receivedDataBuffer.Length, 0, ReceiveCallback, null);
             }
             catch (Exception ex)
             {
