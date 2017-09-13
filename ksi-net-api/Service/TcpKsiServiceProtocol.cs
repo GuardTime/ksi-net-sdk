@@ -96,7 +96,10 @@ namespace Guardtime.KSI.Service
             _bufferSize = bufferSize;
         }
 
-        public string AggregatorLocation => _signingUrl + ":" + _signingPort;
+        /// <summary>
+        /// Aggregator location url
+        /// </summary>
+        public string AggregatorLocation => _ipAddress + ":" + _port;
 
         /// <summary>
         ///    Begin signing request.

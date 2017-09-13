@@ -103,11 +103,9 @@ namespace Guardtime.KSI.Test.Service
 
         private class AsyncResult : KsiServiceAsyncResult
         {
-            private readonly ManualResetEvent _resetEvent = new ManualResetEvent(true);
-
-            public AsyncResult(ulong requestId, object asyncState)
+            public AsyncResult(ulong requestId, object asyncState = null) : base(null, requestId, null, asyncState)
             {
-                AsyncState = asyncState;
+                SetComplete();
             }
         }
     }

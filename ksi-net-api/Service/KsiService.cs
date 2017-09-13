@@ -18,6 +18,7 @@
  */
 
 using System;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Utils;
