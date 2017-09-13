@@ -63,7 +63,7 @@ namespace Guardtime.KSI.Service
         {
             if (IsLegacyPduVersion)
             {
-                return BeginLegacyExtend(aggregationTime, null, null);
+                return BeginLegacyExtend(aggregationTime, callback, asyncState);
             }
 
             return BeginExtend(new ExtendRequestPayload(GenerateRequestId(), aggregationTime), callback, asyncState);
@@ -82,7 +82,7 @@ namespace Guardtime.KSI.Service
         {
             if (IsLegacyPduVersion)
             {
-                return BeginLegacyExtend(aggregationTime, publicationTime, null, null);
+                return BeginLegacyExtend(aggregationTime, publicationTime, callback, asyncState);
             }
 
             return BeginExtend(new ExtendRequestPayload(GenerateRequestId(), aggregationTime, publicationTime), callback, asyncState);
@@ -109,11 +109,8 @@ namespace Guardtime.KSI.Service
 
             PduHeader header = new PduHeader(_extendingServiceCredentials.LoginId);
             ExtendRequestPdu pdu = new ExtendRequestPdu(header, payload, _extendingMacAlgorithm, _extendingServiceCredentials.LoginKey);
-
             Logger.Debug("Begin extend. (request id: {0}){1}{2}", payload.RequestId, Environment.NewLine, pdu);
-            IAsyncResult serviceProtocolAsyncResult = _extendingServiceProtocol.BeginExtend(pdu.Encode(), payload.RequestId, callback, asyncState);
-
-            return new ExtendKsiServiceAsyncResult(payload.RequestId, serviceProtocolAsyncResult, asyncState);
+            return _extendingServiceProtocol.BeginExtend(pdu.Encode(), payload.RequestId, callback, asyncState);
         }
 
         [Obsolete]
@@ -144,11 +141,8 @@ namespace Guardtime.KSI.Service
 
             PduHeader header = new PduHeader(_extendingServiceCredentials.LoginId);
             LegacyExtendPdu pdu = new LegacyExtendPdu(header, payload, LegacyPdu.GetMacTag(_extendingMacAlgorithm, _extendingServiceCredentials.LoginKey, header, payload));
-
             Logger.Debug("Begin legacy extend. (request id: {0}){1}{2}", payload.RequestId, Environment.NewLine, pdu);
-            IAsyncResult serviceProtocolAsyncResult = _extendingServiceProtocol.BeginExtend(pdu.Encode(), payload.RequestId, callback, asyncState);
-
-            return new ExtendKsiServiceAsyncResult(payload.RequestId, serviceProtocolAsyncResult, asyncState);
+            return _extendingServiceProtocol.BeginExtend(pdu.Encode(), payload.RequestId, callback, asyncState);
         }
 
         /// <summary>
@@ -163,24 +157,14 @@ namespace Guardtime.KSI.Service
                 throw new KsiServiceException("Extending service protocol is missing from service.");
             }
 
-            if (asyncResult == null)
-            {
-                throw new ArgumentNullException(nameof(asyncResult));
-            }
-
-            ExtendKsiServiceAsyncResult serviceAsyncResult = asyncResult as ExtendKsiServiceAsyncResult;
-
-            if (serviceAsyncResult == null)
-            {
-                throw new KsiServiceException("Invalid " + nameof(asyncResult) + ", could not cast to correct object.");
-            }
+            KsiServiceAsyncResult serviceAsyncResult = GetKsiServiceAsyncResult(asyncResult);
 
             if (!serviceAsyncResult.IsCompleted)
             {
                 serviceAsyncResult.AsyncWaitHandle.WaitOne();
             }
 
-            byte[] data = _extendingServiceProtocol.EndExtend(serviceAsyncResult.ServiceProtocolAsyncResult);
+            byte[] data = _extendingServiceProtocol.EndExtend(serviceAsyncResult);
             PduPayload payload = ExtendRequestResponseParser.Parse(data, serviceAsyncResult.RequestId);
 
             if (IsLegacyPduVersion)
@@ -205,6 +189,8 @@ namespace Guardtime.KSI.Service
                     Logger.Warn("Extend request failed. Invalid response payload.{0}Payload:{0}{1}", Environment.NewLine, payload);
                     throw new KsiServiceException("Invalid extend response payload. Type: " + payload.Type);
                 }
+
+                Logger.Debug("End extend successful (request id: {0}){1}{2}", serviceAsyncResult.RequestId, Environment.NewLine, responsePayload.CalendarHashChain);
 
                 return responsePayload.CalendarHashChain;
             }
@@ -265,14 +251,9 @@ namespace Guardtime.KSI.Service
             PduHeader header = new PduHeader(_extendingServiceCredentials.LoginId);
             ExtenderConfigRequestPayload payload = new ExtenderConfigRequestPayload();
             ExtendRequestPdu pdu = new ExtendRequestPdu(header, payload, _extendingMacAlgorithm, _extendingServiceCredentials.LoginKey);
-
             ulong requestId = GenerateRequestId();
-
             Logger.Debug("Begin get extender config (request id: {0}){1}{2}", requestId, Environment.NewLine, pdu);
-
-            IAsyncResult serviceProtocolAsyncResult = _extendingServiceProtocol.BeginExtend(pdu.Encode(), requestId, callback, asyncState);
-
-            return new ExtenderConfigKsiServiceAsyncResult(serviceProtocolAsyncResult, asyncState);
+            return _extendingServiceProtocol.BeginGetExtenderConfig(pdu.Encode(), requestId, callback, asyncState);
         }
 
         /// <summary>
@@ -282,28 +263,19 @@ namespace Guardtime.KSI.Service
         /// <returns>Extender configuration data</returns>
         public ExtenderConfig EndGetExtenderConfig(IAsyncResult asyncResult)
         {
-            if (asyncResult == null)
-            {
-                throw new ArgumentNullException(nameof(asyncResult));
-            }
-
             if (_extendingServiceProtocol == null)
             {
                 throw new KsiServiceException("Extending service protocol is missing from service.");
             }
 
-            ExtenderConfigKsiServiceAsyncResult serviceAsyncResult = asyncResult as ExtenderConfigKsiServiceAsyncResult;
-            if (serviceAsyncResult == null)
-            {
-                throw new KsiServiceException("Invalid IAsyncResult, could not cast to correct object.");
-            }
+            KsiServiceAsyncResult serviceAsyncResult = GetKsiServiceAsyncResult(asyncResult);
 
             if (!serviceAsyncResult.IsCompleted)
             {
                 serviceAsyncResult.AsyncWaitHandle.WaitOne();
             }
 
-            byte[] data = _extendingServiceProtocol.EndExtend(serviceAsyncResult.ServiceProtocolAsyncResult);
+            byte[] data = _extendingServiceProtocol.EndGetExtenderConfig(serviceAsyncResult);
             PduPayload payload = ExtenderConfigRequestResponseParser.Parse(data);
             ExtenderConfigResponsePayload configResponsePayload = payload as ExtenderConfigResponsePayload;
 
@@ -329,28 +301,6 @@ namespace Guardtime.KSI.Service
 
                 return _extenderConfigRequestResponseParser;
             }
-        }
-
-        private class ExtenderConfigKsiServiceAsyncResult : KsiServiceAsyncResult
-        {
-            public ExtenderConfigKsiServiceAsyncResult(IAsyncResult serviceProtocolAsyncResult, object asyncState)
-                : base(serviceProtocolAsyncResult, asyncState)
-            {
-            }
-        }
-
-        /// <summary>
-        ///     Extend KSI service async result.
-        /// </summary>
-        private class ExtendKsiServiceAsyncResult : KsiServiceAsyncResult
-        {
-            public ExtendKsiServiceAsyncResult(ulong requestId, IAsyncResult serviceProtocolAsyncResult, object asyncState)
-                : base(serviceProtocolAsyncResult, asyncState)
-            {
-                RequestId = requestId;
-            }
-
-            public ulong RequestId { get; }
         }
     }
 }

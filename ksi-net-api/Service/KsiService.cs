@@ -18,7 +18,6 @@
  */
 
 using System;
-using System.Threading;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Utils;
@@ -34,7 +33,7 @@ namespace Guardtime.KSI.Service
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly HashAlgorithm DefaultMacAlgorithm = HashAlgorithm.Sha2256;
-        private const PduVersion DefaultPduVersion = PduVersion.v1;
+        private const PduVersion DefaultPduVersion = PduVersion.v2;
 
         private readonly IKsiSigningServiceProtocol _signingServiceProtocol;
         private readonly IKsiExtendingServiceProtocol _extendingServiceProtocol;
@@ -134,31 +133,19 @@ namespace Guardtime.KSI.Service
             return Util.GetRandomUnsignedLong();
         }
 
-        /// <summary>
-        ///     Abstract KSI service async result.
-        /// </summary>
-        private abstract class KsiServiceAsyncResult : IAsyncResult
+        private static KsiServiceAsyncResult GetKsiServiceAsyncResult(IAsyncResult asyncResult)
         {
-            protected KsiServiceAsyncResult(IAsyncResult serviceProtocolAsyncResult, object asyncState)
+            if (asyncResult == null)
             {
-                if (serviceProtocolAsyncResult == null)
-                {
-                    throw new ArgumentNullException(nameof(serviceProtocolAsyncResult));
-                }
-
-                ServiceProtocolAsyncResult = serviceProtocolAsyncResult;
-                AsyncState = asyncState;
+                throw new ArgumentNullException(nameof(asyncResult));
             }
 
-            public IAsyncResult ServiceProtocolAsyncResult { get; }
-
-            public object AsyncState { get; }
-
-            public WaitHandle AsyncWaitHandle => ServiceProtocolAsyncResult.AsyncWaitHandle;
-
-            public bool CompletedSynchronously => ServiceProtocolAsyncResult.CompletedSynchronously;
-
-            public bool IsCompleted => ServiceProtocolAsyncResult.IsCompleted;
+            KsiServiceAsyncResult serviceAsyncResult = asyncResult as KsiServiceAsyncResult;
+            if (serviceAsyncResult == null)
+            {
+                throw new KsiServiceException("Invalid " + nameof(asyncResult) + " type: " + asyncResult.GetType() + "; Expected type: KsiServiceAsyncResult.");
+            }
+            return serviceAsyncResult;
         }
 
         /// <summary>

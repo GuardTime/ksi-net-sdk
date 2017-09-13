@@ -260,7 +260,13 @@ namespace Guardtime.KSI.Utils
         {
             byte[] bytes = new byte[8];
             Random.NextBytes(bytes);
-            return BitConverter.ToUInt64(bytes, 0);
+            ulong value = BitConverter.ToUInt64(bytes, 0);
+            if (value == 0)
+            {
+                return GetRandomUnsignedLong();
+            }
+
+            return value;
         }
 
         /// <summary>

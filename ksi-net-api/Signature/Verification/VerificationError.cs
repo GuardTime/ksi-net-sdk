@@ -40,6 +40,11 @@ namespace Guardtime.KSI.Signature.Verification
         public static readonly VerificationError Gen03 = new VerificationError("GEN-03", "Input hash level too large");
 
         /// <summary>
+        ///     Wrong input hash algorithm.
+        /// </summary>
+        public static readonly VerificationError Gen04 = new VerificationError("GEN-04", "Wrong input hash algorithm");
+
+        /// <summary>
         ///     Inconsistent aggregation hash chains error.
         /// </summary>
         public static readonly VerificationError Int01 = new VerificationError("INT-01", "Inconsistent aggregation hash chains");

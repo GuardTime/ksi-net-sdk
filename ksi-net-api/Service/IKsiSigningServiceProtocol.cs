@@ -27,7 +27,7 @@ namespace Guardtime.KSI.Service
     public interface IKsiSigningServiceProtocol
     {
         /// <summary>
-        ///     Async begin create signature.
+        ///     Begin signing request.
         /// </summary>
         /// <param name="data">aggregation request bytes</param>
         /// <param name="requestId">request id</param>
@@ -37,11 +37,28 @@ namespace Guardtime.KSI.Service
         IAsyncResult BeginSign(byte[] data, ulong requestId, AsyncCallback callback, object asyncState);
 
         /// <summary>
-        ///     Async end create signature.
+        ///     End signing request.
         /// </summary>
         /// <param name="asyncResult">async result</param>
-        /// <returns>aggregation response bytes</returns>
+        /// <returns>response bytes</returns>
         byte[] EndSign(IAsyncResult asyncResult);
+
+        /// <summary>
+        ///     Begin aggregator configuration request.
+        /// </summary>
+        /// <param name="data">aggregation request bytes</param>
+        /// <param name="requestId">request id</param>
+        /// <param name="callback">callback when response is ready</param>
+        /// <param name="asyncState">async state object</param>
+        /// <returns>async result</returns>
+        IAsyncResult BeginGetAggregatorConfig(byte[] data, ulong requestId, AsyncCallback callback, object asyncState);
+
+        /// <summary>
+        ///     End aggregator configuration request.
+        /// </summary>
+        /// <param name="asyncResult">async result</param>
+        /// <returns>response bytes</returns>
+        byte[] EndGetAggregatorConfig(IAsyncResult asyncResult);
 
         /// <summary>
         /// Aggregator location url

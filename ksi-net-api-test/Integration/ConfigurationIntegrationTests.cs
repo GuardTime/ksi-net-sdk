@@ -46,6 +46,36 @@ namespace Guardtime.KSI.Test.Integration
             }
         }
 
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void GetAggregatorConfigTcpTest(Ksi ksi)
+        {
+            KsiService service = GetTcpKsiService();
+
+            if (TestSetup.PduVersion == PduVersion.v1)
+            {
+                Exception ex = Assert.Throws<KsiServiceException>(delegate
+                {
+                    service.BeginGetAggregatorConfig(null, null);
+                });
+
+                Assert.That(ex.Message.StartsWith("Aggregator config request is not supported using PDU version v1"), "Unexpected exception message: " + ex.Message);
+            }
+            else
+            {
+                // test with 2 config requests
+                IAsyncResult asyncResult1 = service.BeginGetAggregatorConfig(null, null);
+                IAsyncResult asyncResult2 = service.BeginGetAggregatorConfig(null, null);
+
+                AggregatorConfig conf1 = service.EndGetAggregatorConfig(asyncResult1);
+                AggregatorConfig conf2 = service.EndGetAggregatorConfig(asyncResult2);
+
+                Assert.AreEqual(conf1.AggregationAlgorithm, conf2.AggregationAlgorithm);
+                Assert.AreEqual(conf1.AggregationPeriod, conf2.AggregationPeriod);
+                Assert.AreEqual(conf1.MaxLevel, conf2.MaxLevel);
+                Assert.AreEqual(conf1.MaxRequests, conf2.MaxRequests);
+            }
+        }
+
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidSigningUrl))]
         public void GetAggregatorConfigWithInvalidUrlTest(Ksi ksi)
         {
@@ -191,6 +221,72 @@ namespace Guardtime.KSI.Test.Integration
                     ksi.GetExtenderConfig();
                 }, "Invalid signing password should not prevent getting extnder config.");
             }
+        }
+
+        [Test]
+        public void HttpAsyncGetAggregatorConfigTest()
+        {
+            if (TestSetup.PduVersion == PduVersion.v1)
+            {
+                return;
+            }
+
+            KsiService service = GetHttpKsiService();
+            ManualResetEvent waitHandle = new ManualResetEvent(false);
+            AggregatorConfig config = null;
+            object testObject = new object();
+            bool isAsyncCorrect = false;
+
+            service.BeginGetAggregatorConfig(delegate(IAsyncResult ar)
+            {
+                try
+                {
+                    isAsyncCorrect = ar.AsyncState == testObject;
+                    config = service.EndGetAggregatorConfig(ar);
+                }
+                finally
+                {
+                    waitHandle.Set();
+                }
+            }, testObject);
+
+            waitHandle.WaitOne();
+
+            Assert.IsNotNull(config, "Aggregator configuration should not be null.");
+            Assert.AreEqual(true, isAsyncCorrect, "Unexpected async state.");
+        }
+
+        [Test]
+        public void HttpAsyncGetExtenderConfigTest()
+        {
+            if (TestSetup.PduVersion == PduVersion.v1)
+            {
+                return;
+            }
+
+            KsiService service = GetHttpKsiService();
+            ManualResetEvent waitHandle = new ManualResetEvent(false);
+            ExtenderConfig config = null;
+            object testObject = new object();
+            bool isAsyncCorrect = false;
+
+            service.BeginGetExtenderConfig(delegate(IAsyncResult ar)
+            {
+                try
+                {
+                    isAsyncCorrect = ar.AsyncState == testObject;
+                    config = service.EndGetExtenderConfig(ar);
+                }
+                finally
+                {
+                    waitHandle.Set();
+                }
+            }, testObject);
+
+            waitHandle.WaitOne();
+
+            Assert.IsNotNull(config, "Extender configuration should not be null.");
+            Assert.AreEqual(true, isAsyncCorrect, "Unexpected async state.");
         }
 
         private ManualResetEvent _waitHandle2;

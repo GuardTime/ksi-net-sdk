@@ -138,6 +138,7 @@
     <Compile Include="Hashing\DataHashTests.cs" />
     <Compile Include="Hashing\HashAlgorithmTests.cs" />
     <Compile Include="Integration\PublicationsFileIntegrationTests.cs" />
+    <Compile Include="Service\TcpResponseProcessorTests.cs" />
     <Compile Include="Service\HighAvailability\HAExtenderConfigStaticTests.cs" />
     <Compile Include="Service\HighAvailability\HAAggregatorConfigStaticTests.cs" />
     <Compile Include="Service\HighAvailability\HAExtendingStaticTests.cs" />
@@ -200,6 +201,7 @@
     <Compile Include="Signature\KsiSignatureUsingReflectionTests.cs" />
     <Compile Include="Signature\Verification\EmptyVerificationPolicy.cs" />
     <Compile Include="Signature\Verification\Policy\InternalVerificationPolicyTests.cs" />
+    <Compile Include="Signature\Verification\Rule\InputHashAlgorithmVerificationRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\OkResultRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\DocumentHashLevelVerificationRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\DocumentHashVerificationRuleTests.cs" />
@@ -250,7 +252,6 @@
     <Compile Include="Signature\Verification\Rule\UserProvidedPublicationHashMatchesExtendedResponseRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\UserProvidedPublicationTimeMatchesExtendedResponseRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\UserProvidedPublicationVerificationRuleTests.cs" />
-    <Compile Include="Signature\Verification\SignatureVerificationTests.cs" />
     <Compile Include="Trust\PkiTrustStoreProviderTests.cs" />
     <Compile Include="CryptoTestFactoryTests.cs" />
     <Compile Include="TestUtil.cs" />

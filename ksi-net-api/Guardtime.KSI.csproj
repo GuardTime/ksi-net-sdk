@@ -137,6 +137,7 @@
     <Compile Include="Publication\PublicationsFileHeader.cs" />
     <Compile Include="Publication\PublicationsFile.cs" />
     <Compile Include="Publication\PublicationData.cs" />
+    <Compile Include="Service\KsiServiceAsyncResult.cs" />
     <Compile Include="Service\AbstractConfig.cs" />
     <Compile Include="Service\ExtenderConfigChangedEventArgs.cs" />
     <Compile Include="Service\AggregatorConfigChangedEventArgs.cs" />
@@ -178,7 +179,13 @@
     <Compile Include="Service\LegacyExtendPdu.cs" />
     <Compile Include="Service\LegacyPdu.cs" />
     <Compile Include="Service\PduVersion.cs" />
+    <Compile Include="Service\Tcp\TcpAsyncResultCollection.cs" />
+    <Compile Include="Service\Tcp\TcpResponsePayloadType.cs" />
+    <Compile Include="Service\Tcp\TcpResponseProcessor.cs" />
     <Compile Include="Service\TcpKsiServiceProtocol.cs" />
+    <Compile Include="Service\Tcp\TcpKsiServiceAsyncResult.cs" />
+    <Compile Include="Service\Tcp\TcpRequestType.cs" />
+    <Compile Include="Service\Tcp\TcpResponsePayloadInfo.cs" />
     <Compile Include="Service\TreeBuilder.cs" />
     <Compile Include="Signature\AggregationHashChain.Metadata.cs" />
     <Compile Include="Signature\AggregationHashChain.Link.cs" />
@@ -186,6 +193,7 @@
     <Compile Include="Signature\IIdentity.cs" />
     <Compile Include="Signature\IKsiSignatureFactory.cs" />
     <Compile Include="Signature\LegacyIdentity.cs" />
+    <Compile Include="Signature\Verification\Rule\InputHashAlgorithmVerificationRule.cs" />
     <Compile Include="Signature\Verification\Rule\OkResultRule.cs" />
     <Compile Include="Signature\Verification\Rule\DocumentHashLevelVerificationRule.cs" />
     <Compile Include="Signature\Verification\Rule\DocumentHashVerificationRule.cs" />
