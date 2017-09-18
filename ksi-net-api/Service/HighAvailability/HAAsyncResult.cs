@@ -31,9 +31,12 @@ namespace Guardtime.KSI.Service.HighAvailability
     {
         private readonly AsyncCallback _callback;
         private readonly object _lock;
+        private readonly object _resultTlvLock;
 
         private readonly ManualResetEvent _waitHandle;
+        private ManualResetEvent _endCallWaitHandle;
         private bool _isCompleted;
+        private readonly List<object> _resultTlvs;
 
         /// <summary>
         /// Create high availablity KSI service async result instance.
@@ -55,13 +58,54 @@ namespace Guardtime.KSI.Service.HighAvailability
             _isCompleted = false;
 
             _lock = new object();
+            _resultTlvLock = new object();
+            _resultTlvs = new List<object>();
             _waitHandle = new ManualResetEvent(false);
         }
 
         /// <summary>
-        /// Sub-service requests result TLVs.
+        /// Add result TLV.
         /// </summary>
-        public List<object> ResultTlvs { get; } = new List<object>();
+        /// <param name="tlv"></param>
+        public void AddResultTlv(object tlv)
+        {
+            if (IsCompleted)
+            {
+                return;
+            }
+
+            lock (_resultTlvLock)
+            {
+                _resultTlvs.Add(tlv);
+            }
+        }
+
+        /// <summary>
+        /// Count of result TLVs.
+        /// </summary>
+        /// <returns></returns>
+        public int ResultTlvCount
+        {
+            get
+            {
+                lock (_resultTlvLock)
+                {
+                    return _resultTlvs.Count;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get array of result TLVs.
+        /// </summary>
+        /// <returns></returns>
+        public object[] GetResultTlvs()
+        {
+            lock (_resultTlvLock)
+            {
+                return _resultTlvs.ToArray();
+            }
+        }
 
         /// <summary>
         /// Sub-service errors.
@@ -79,6 +123,12 @@ namespace Guardtime.KSI.Service.HighAvailability
         public WaitHandle AsyncWaitHandle => _waitHandle;
 
         /// <summary>
+        /// Gets a <see cref="T:System.Threading.WaitHandle"/> that is used to wait for HA end request method call. 
+        /// It is used when multiple request end method exist, eg. signing request can end with EndSign or GetSignResponsePayload.
+        /// </summary>
+        public ManualResetEvent EndCallWaitHandle => _endCallWaitHandle;
+
+        /// <summary>
         /// Gets a value that indicates whether the asynchronous operation completed synchronously.
         /// </summary>
         public bool CompletedSynchronously => false;
@@ -87,6 +137,14 @@ namespace Guardtime.KSI.Service.HighAvailability
         /// Get high availability request runner.
         /// </summary>
         public HARequestRunner RequestRunner { get; }
+
+        /// <summary>
+        /// Initalize EndCallWaitHandle
+        /// </summary>
+        public void InitEndCallWaitHandle()
+        {
+            _endCallWaitHandle = new ManualResetEvent(false);
+        }
 
         /// <summary>
         /// Gets a value that indicates whether the asynchronous operation has completed.

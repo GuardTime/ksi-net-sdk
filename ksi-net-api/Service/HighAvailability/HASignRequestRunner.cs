@@ -46,6 +46,17 @@ namespace Guardtime.KSI.Service.HighAvailability
         }
 
         /// <summary>
+        /// Begin HA request.
+        /// </summary>
+        /// <param name="callback">callback when HA request is finished</param>
+        /// <param name="asyncState">callback async state object</param>
+        /// <returns></returns>
+        public HAAsyncResult BeginRequest(AsyncCallback callback, object asyncState)
+        {
+            return base.BeginRequest(callback, asyncState, true);
+        }
+
+        /// <summary>
         /// Begin sub-service signing request.
         /// </summary>
         /// <param name="service">sub-service</param>

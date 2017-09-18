@@ -54,8 +54,9 @@ namespace Guardtime.KSI.Service.HighAvailability
         /// </summary>
         /// <param name="callback">callback when HA request is finished</param>
         /// <param name="asyncState">callback async state object</param>
+        /// <param name="waitEndCall">If true then HA end request call is waited before sub-service end request call is made.</param>
         /// <returns></returns>
-        public HAAsyncResult BeginRequest(AsyncCallback callback, object asyncState)
+        public virtual HAAsyncResult BeginRequest(AsyncCallback callback, object asyncState, bool waitEndCall = false)
         {
             if (_subServices.Count == 0)
             {
@@ -63,6 +64,11 @@ namespace Guardtime.KSI.Service.HighAvailability
             }
 
             HAAsyncResult haAsyncResult = new HAAsyncResult(callback, asyncState, this);
+
+            if (waitEndCall)
+            {
+                haAsyncResult.InitEndCallWaitHandle();
+            }
 
             for (int index = 0; index < _subServices.Count; index++)
             {
@@ -94,7 +100,8 @@ namespace Guardtime.KSI.Service.HighAvailability
             {
                 IAsyncResult asyncResult = SubServiceBeginRequest(service);
                 asyncResult.AsyncWaitHandle.WaitOne();
-                haAsyncResult.ResultTlvs.Add(SubServiceEndRequest(service, asyncResult));
+                haAsyncResult.EndCallWaitHandle?.WaitOne();
+                haAsyncResult.AddResultTlv(SubServiceEndRequest(service, asyncResult));
 
                 if (haAsyncResult.IsCompleted)
                 {
@@ -172,7 +179,7 @@ namespace Guardtime.KSI.Service.HighAvailability
                 haAsyncResult.AsyncWaitHandle.WaitOne();
             }
 
-            return haAsyncResult.ResultTlvs.ToArray();
+            return haAsyncResult.GetResultTlvs();
         }
 
         /// <summary>
@@ -183,6 +190,8 @@ namespace Guardtime.KSI.Service.HighAvailability
         /// <returns></returns>
         protected T EndRequest<T>(HAAsyncResult haAsyncResult) where T : class
         {
+            haAsyncResult.EndCallWaitHandle?.Set();
+
             object[] results = EndRequestMulti(haAsyncResult);
 
             if (results.Length == 0)
@@ -217,7 +226,7 @@ namespace Guardtime.KSI.Service.HighAvailability
         {
             if (_returnAllResponses)
             {
-                if (haAsyncResult.ResultTlvs.Count + haAsyncResult.Errors.Count == _subServices.Count)
+                if (haAsyncResult.ResultTlvCount + haAsyncResult.Errors.Count == _subServices.Count)
                 {
                     haAsyncResult.SetComplete();
                 }

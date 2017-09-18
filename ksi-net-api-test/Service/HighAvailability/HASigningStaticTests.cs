@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Service;
@@ -120,6 +121,28 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
                     null, null);
 
             IAsyncResult ar = haService.BeginSign(new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
+            SignRequestResponsePayload payload = haService.GetSignResponsePayload(ar);
+            Assert.IsNotNull(payload, "Sign request response payload cannot be null.");
+        }
+
+        /// <summary>
+        /// Test get sign response payload. 1 sec delay is added between request begin and end.
+        /// </summary>
+        [Test]
+        public void HASignWithPayloadResponseAndWaitStaticTest()
+        {
+            IKsiService haService =
+                new HAKsiService(
+                    new List<IKsiService>()
+                    {
+                        GetStaticKsiService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_RequestId_1584727637)), 1584727638),
+                        GetStaticKsiService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_RequestId_1584727637)), 1584727637),
+                        GetStaticKsiService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_RequestId_1584727637)), 1584727637)
+                    },
+                    null, null);
+
+            IAsyncResult ar = haService.BeginSign(new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
+            Thread.Sleep(1000);
             SignRequestResponsePayload payload = haService.GetSignResponsePayload(ar);
             Assert.IsNotNull(payload, "Sign request response payload cannot be null.");
         }
