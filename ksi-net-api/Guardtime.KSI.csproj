@@ -187,7 +187,7 @@
     <Compile Include="Signature\Verification\Rule\Rfc3161RecordAggregationTimeRule.cs" />
     <Compile Include="Signature\Verification\Rule\Rfc3161RecordChainIndexRule.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainMetadataRule.cs" />
-    <Compile Include="Signature\Verification\Rule\AggregationHashChainIndexRule.cs" />
+    <Compile Include="Signature\Verification\Rule\AggregationHashChainShapeRule.cs" />
     <Compile Include="Service\TreeNode.cs" />
     <Compile Include="Utils\Base16.cs" />
     <Compile Include="Utils\Base32.cs" />
@@ -271,7 +271,7 @@
     <Compile Include="Signature\Verification\Rule\CalendarHashChainInputHashVerificationRule.cs" />
     <Compile Include="Signature\Verification\Policy\InternalVerificationPolicy.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainConsistencyRule.cs" />
-    <Compile Include="Signature\Verification\Rule\AggregationChainInputHashVerificationRule.cs" />
+    <Compile Include="Signature\Verification\Rule\Rfc3161OutputHashVerificationRule.cs" />
     <Compile Include="Signature\Verification\IVerificationContext.cs" />
     <Compile Include="Signature\Verification\VerificationContext.cs" />
     <Compile Include="Signature\Verification\VerificationError.cs" />

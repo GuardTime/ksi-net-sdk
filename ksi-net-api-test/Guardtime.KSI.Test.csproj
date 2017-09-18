@@ -204,7 +204,7 @@
     <Compile Include="Signature\Verification\Rule\Rfc3161RecordAggregationTimeRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\Rfc3161RecordChainIndexRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainMetadataRuleTests.cs" />
-    <Compile Include="Signature\Verification\Rule\AggregationHashChainIndexRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\AggregationHashChainShapeRuleTests.cs" />
     <Compile Include="TestSetup.cs" />
     <Compile Include="Signature\CalendarAuthenticationRecordTests.cs" />
     <Compile Include="Signature\AggregationAuthenticationRecordTests.cs" />
@@ -215,7 +215,7 @@
     <Compile Include="Signature\Rfc3161RecordTests.cs" />
     <Compile Include="Signature\SignatureDataTests.cs" />
     <Compile Include="Signature\TestKsiSignature.cs" />
-    <Compile Include="Signature\Verification\Rule\AggregationChainInputHashVerificationRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\Rfc3161OutputHashVerificationRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainConsistencyRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainTimeConsistencyRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\CalendarAuthenticationRecordAggregationHashRuleTests.cs" />

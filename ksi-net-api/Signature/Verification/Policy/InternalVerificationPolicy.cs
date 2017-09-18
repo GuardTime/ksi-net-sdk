@@ -32,30 +32,30 @@ namespace Guardtime.KSI.Signature.Verification.Policy
         public InternalVerificationPolicy()
         {
             // Verify aggregation chain
-            FirstRule = new InputHashAlgorithmVerificationRule()
-                .OnSuccess(new DocumentHashVerificationRule()
-                    .OnSuccess(new DocumentHashLevelVerificationRule()
-                        .OnSuccess(new AggregationChainInputHashVerificationRule()
-                            .OnSuccess(new Rfc3161RecordAggregationTimeRule()
-                                .OnSuccess(new Rfc3161RecordChainIndexRule()
-                                    .OnSuccess(new AggregationHashChainIndexSuccessorRule()
-                                        .OnSuccess(new AggregationHashChainMetadataRule()
-                                            .OnSuccess(new AggregationHashChainConsistencyRule()
-                                                .OnSuccess(new AggregationHashChainTimeConsistencyRule()
-                                                    .OnSuccess(new AggregationHashChainIndexRule()
+            FirstRule = new InputHashAlgorithmVerificationRule() // Gen-04
+                .OnSuccess(new DocumentHashVerificationRule() // Gen-01
+                    .OnSuccess(new DocumentHashLevelVerificationRule() // Gen-03
+                        .OnSuccess(new Rfc3161OutputHashVerificationRule() // Int-01
+                            .OnSuccess(new Rfc3161RecordAggregationTimeRule() // Int-02
+                                .OnSuccess(new Rfc3161RecordChainIndexRule() // Int-12
+                                    .OnSuccess(new AggregationHashChainIndexSuccessorRule() // Int-12
+                                        .OnSuccess(new AggregationHashChainMetadataRule() // Int-11
+                                            .OnSuccess(new AggregationHashChainConsistencyRule() // Int-01
+                                                .OnSuccess(new AggregationHashChainTimeConsistencyRule() // Int-02
+                                                    .OnSuccess(new AggregationHashChainShapeRule() // Int-10
                                                         // Verify calendar hash chain.
                                                         .OnSuccess(new CalendarHashChainExistenceRule()
-                                                            .OnSuccess(new CalendarHashChainInputHashVerificationRule()
-                                                                .OnSuccess(new CalendarHashChainAggregationTimeRule()
-                                                                    .OnSuccess(new CalendarHashChainRegistrationTimeRule()
+                                                            .OnSuccess(new CalendarHashChainInputHashVerificationRule() // Int-03
+                                                                .OnSuccess(new CalendarHashChainAggregationTimeRule() // Int-04
+                                                                    .OnSuccess(new CalendarHashChainRegistrationTimeRule() // Int-05
                                                                         // Verify calendar auth record
                                                                         .OnSuccess(new CalendarAuthenticationRecordExistenceRule()
-                                                                            .OnSuccess(new CalendarAuthenticationRecordAggregationHashRule()
-                                                                                .OnSuccess(new CalendarAuthenticationRecordAggregationTimeRule()))
+                                                                            .OnSuccess(new CalendarAuthenticationRecordAggregationTimeRule() // Int-06
+                                                                                .OnSuccess(new CalendarAuthenticationRecordAggregationHashRule())) // Int-08
                                                                             // No calendar auth record. Verify publication record.
                                                                             .OnNa(new SignaturePublicationRecordExistenceRule()
-                                                                                .OnSuccess(new SignaturePublicationRecordPublicationHashRule()
-                                                                                    .OnSuccess(new SignaturePublicationRecordPublicationTimeRule()))
+                                                                                .OnSuccess(new SignaturePublicationRecordPublicationTimeRule() // Int-07
+                                                                                    .OnSuccess(new SignaturePublicationRecordPublicationHashRule())) // Int-09
                                                                                 // No publication record
                                                                                 .OnNa(new OkResultRule()))))))
                                                             // No calendar hash chain
