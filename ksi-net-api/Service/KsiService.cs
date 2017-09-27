@@ -19,8 +19,6 @@
 
 using System;
 using System.Threading;
-using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Utils;

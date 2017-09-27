@@ -32,7 +32,7 @@ namespace Guardtime.KSI.Signature
     /// </summary>
     public sealed partial class AggregationHashChain : CompositeTag
     {
-        private IntegerTag _aggrAlgorithmId;
+        private HashAlgorithm _aggrAlgorithm;
         private IntegerTag _aggregationTime;
         private readonly List<Link> _links = new List<Link>();
         private readonly List<IntegerTag> _chainIndex = new List<IntegerTag>();
@@ -96,7 +96,9 @@ namespace Guardtime.KSI.Signature
                 case Constants.AggregationHashChain.InputHashTagType:
                     return _inputHash = GetImprintTag(childTag);
                 case Constants.AggregationHashChain.AggregationAlgorithmIdTagType:
-                    return _aggrAlgorithmId = GetIntegerTag(childTag);
+                    IntegerTag aggrAlgorithmTag = GetIntegerTag(childTag);
+                    _aggrAlgorithm = HashAlgorithm.GetById((byte)aggrAlgorithmTag.Value);
+                    return aggrAlgorithmTag;
                 case (uint)LinkDirection.Left:
                 case (uint)LinkDirection.Right:
                     Link linkTag = childTag as Link ?? new Link(childTag);
@@ -197,6 +199,11 @@ namespace Guardtime.KSI.Signature
         ///     Get aggregation time.
         /// </summary>
         public ulong AggregationTime => _aggregationTime.Value;
+
+        /// <summary>
+        /// Get Aggregation algorithm
+        /// </summary>
+        public HashAlgorithm AggregationAlgorithm => _aggrAlgorithm;
 
         /// <summary>
         /// Get chain index values
@@ -366,7 +373,7 @@ namespace Guardtime.KSI.Signature
         /// <returns>resulting hash</returns>
         private DataHash GetStepHash(byte[] hashA, byte[] hashB, ulong level)
         {
-            IDataHasher hasher = KsiProvider.CreateDataHasher(HashAlgorithm.GetById((byte)_aggrAlgorithmId.Value));
+            IDataHasher hasher = KsiProvider.CreateDataHasher(_aggrAlgorithm);
             hasher.AddData(hashA);
             hasher.AddData(hashB);
             hasher.AddData(Util.EncodeUnsignedLong(level));

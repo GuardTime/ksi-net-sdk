@@ -35,13 +35,17 @@ namespace Guardtime.KSI.Signature.Verification.Policy
             {
                 VerificationRule verificationRule = new UserProvidedPublicationCreationTimeVerificationRule()
                     .OnSuccess(new ExtendingPermittedVerificationRule()
-                        .OnSuccess(new UserProvidedPublicationHashMatchesExtendedResponseRule()
-                            .OnSuccess(new UserProvidedPublicationTimeMatchesExtendedResponseRule()
-                                .OnSuccess(new UserProvidedPublicationExtendedSignatureInputHashRule()))));
+                        .OnSuccess(new ExtenderResponseCalendarHashChainAlgorithmDeprecatedRule()
+                            .OnSuccess(new UserProvidedPublicationHashMatchesExtendedResponseRule()
+                                .OnSuccess(new UserProvidedPublicationHashMatchesExtendedResponseRule()
+                                    .OnSuccess(new UserProvidedPublicationTimeMatchesExtendedResponseRule()
+                                        .OnSuccess(new UserProvidedPublicationExtendedSignatureInputHashRule()))))));
 
                 FirstRule = new UserProvidedPublicationExistenceRule()
                     .OnSuccess(new SignaturePublicationRecordExistenceRule()
                         .OnSuccess(new UserProvidedPublicationVerificationRule()
+                            .OnSuccess(new CalendarHashChainAlgorithmDeprecatedRule()
+                                .OnNa(verificationRule))
                             .OnNa(verificationRule))
                         .OnNa(verificationRule));
             }

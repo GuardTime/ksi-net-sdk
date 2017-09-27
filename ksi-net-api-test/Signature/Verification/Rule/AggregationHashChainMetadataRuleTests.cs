@@ -22,7 +22,6 @@ using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
-using Guardtime.KSI.Signature.Verification.Policy;
 using Guardtime.KSI.Signature.Verification.Rule;
 using NUnit.Framework;
 

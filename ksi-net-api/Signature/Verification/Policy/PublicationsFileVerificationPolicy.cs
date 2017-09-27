@@ -34,12 +34,14 @@ namespace Guardtime.KSI.Signature.Verification.Policy
             public PublicationsFileVerificationPolicy()
             {
                 VerificationRule verificationRule = new ExtendingPermittedVerificationRule()
-                    .OnSuccess(new PublicationsFilePublicationHashMatchesExtenderResponseRule()
-                        .OnSuccess(new PublicationsFilePublicationTimeMatchesExtenderResponseRule()
-                            .OnSuccess(new PublicationsFileExtendedSignatureInputHashRule())));
+                    .OnSuccess(new ExtenderResponseCalendarHashChainAlgorithmDeprecatedRule()
+                        .OnSuccess(new PublicationsFilePublicationHashMatchesExtenderResponseRule() // pub-01
+                            .OnSuccess(new PublicationsFilePublicationTimeMatchesExtenderResponseRule() // pub-02
+                                .OnSuccess(new PublicationsFileExtendedSignatureInputHashRule())))); // pub-03
 
                 FirstRule = new SignaturePublicationRecordExistenceRule()
-                    .OnSuccess(new PublicationsFileSignaturePublicationMatchRule()
+                    .OnSuccess(new PublicationsFileSignaturePublicationMatchRule() // pub-05
+                        .OnSuccess(new CalendarHashChainAlgorithmDeprecatedRule())
                         .OnNa(verificationRule))
                     .OnNa(verificationRule);
             }

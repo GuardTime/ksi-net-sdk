@@ -69,24 +69,18 @@ namespace Guardtime.KSI.Signature
                     return chainTag;
                 case Constants.Rfc3161Record.InputHashTagType:
                     return _inputHash = GetImprintTag(childTag);
-
                 case Constants.Rfc3161Record.TstInfoPrefixTagType:
                     return _tstInfoPrefix = GetRawTag(childTag);
-
                 case Constants.Rfc3161Record.TstInfoSuffixTagType:
                     return _tstInfoSuffix = GetRawTag(childTag);
-
                 case Constants.Rfc3161Record.TstInfoAlgorithmTagType:
                     IntegerTag tstInfoAlgorithmTag = GetIntegerTag(childTag);
                     _tstInfoAlgorithm = HashAlgorithm.GetById((byte)tstInfoAlgorithmTag.Value);
                     return tstInfoAlgorithmTag;
-
                 case Constants.Rfc3161Record.SignedAttributesPrefixTagType:
                     return _signedAttributesPrefix = GetRawTag(childTag);
-
                 case Constants.Rfc3161Record.SignedAttributesSuffixTagType:
                     return _signedAttributesSuffix = GetRawTag(childTag);
-
                 case Constants.Rfc3161Record.SignedAttributesAlgorithmTagType:
                     IntegerTag signedAttributesAlgorithmTag = GetIntegerTag(childTag);
                     _signedAttributesAlgorithm = HashAlgorithm.GetById((byte)signedAttributesAlgorithmTag.Value);
@@ -164,6 +158,16 @@ namespace Guardtime.KSI.Signature
         ///     Get aggregation time.
         /// </summary>
         public ulong AggregationTime => _aggregationTime.Value;
+
+        /// <summary>
+        /// Hash algorithm used to hash the SignedAttributes structure.
+        /// </summary>
+        public HashAlgorithm SignedAttributesAlgorithm => _signedAttributesAlgorithm;
+
+        /// <summary>
+        /// Hash algorithm used to hash the TSTInfo structure.
+        /// </summary>
+        public HashAlgorithm TstInfoAlgorithm => _tstInfoAlgorithm;
 
         /// <summary>
         /// Get chain index values

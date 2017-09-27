@@ -196,11 +196,17 @@
     <Compile Include="Signature\KsiSignatureUsingReflectionTests.cs" />
     <Compile Include="Signature\Verification\EmptyVerificationPolicy.cs" />
     <Compile Include="Signature\Verification\Policy\InternalVerificationPolicyTests.cs" />
+    <Compile Include="Signature\Verification\Rule\ExtenderResponseCalendarHashChainAlgorithmDeprecatedRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarHashChainAlgorithmDeprecatedRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarHashChainAlgorithmObsoleteTests.cs" />
+    <Compile Include="Signature\Verification\Rule\AggregationHashChainAlgorithmDeprecatedRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\InputHashAlgorithmDeprecatedRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\InputHashAlgorithmVerificationRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\OkResultRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\DocumentHashLevelVerificationRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\DocumentHashVerificationRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainIndexSuccessorRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\Rfc3161RecordHashAlgorithmDeprecatedRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\Rfc3161RecordAggregationTimeRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\Rfc3161RecordChainIndexRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainMetadataRuleTests.cs" />
@@ -726,6 +732,24 @@
     <None Include="resources\signature\ksi-signature\ksi-signature-invalid-chain-index-mismatch.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="resources\signature\ksi-signature\sha1-as-aggregation-algo-2016-01.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\ksi-signature\sha1-as-aggregation-algo-2017.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\ksi-signature\sha1-as-calendar-algo-2016-01.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\ksi-signature\sha1-as-calendar-algo-2017.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\ksi-signature\sha1-as-input-algo-2016-01.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\ksi-signature\sha1-as-input-algo-2017.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="resources\signature\rfc3161-record\rfc3161-record-invalid-extra-tag.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -784,6 +808,24 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\rfc3161-record\rfc3161-record-ok.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\rfc3161-record\rfc3161-sha1-as-input-hash-2016-01.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\rfc3161-record\rfc3161-sha1-as-input-hash-2017.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\rfc3161-record\rfc3161-sha1-in-sig-atr-2016-01.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\rfc3161-record\rfc3161-sha1-in-sig-atr-2017.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\rfc3161-record\rfc3161-sha1-in-tst-algo-2016-01.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\rfc3161-record\rfc3161-sha1-in-tst-algo-2017.ksig">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\shared\invalid-signatures\aggregation-chain\invalid-signature-aggr-chain-aggr-algo-datahash-value.tlv">
@@ -1207,7 +1249,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-sig-type-datahash-value.tlv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-sig-type-has-child-element.tlv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -1225,7 +1267,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-sig-type-text-value-wrong.tlv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\shared\invalid-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-sig-value-datahash-value-wrong.tlv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -1626,6 +1668,9 @@
     <None Include="resources\signature\shared\invalid-signatures\rfc3161-record\invalid-signature-rfc3161-tst-info-suffix-text-value.tlv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="resources\signature\shared\policy-verification-signatures\ksi-signature-invalid-not-valid-cert.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-results.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -1699,9 +1744,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\shared\policy-verification-signatures\resources\extender-response-with-changed-times.tlv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\shared\policy-verification-signatures\ksi-signature-invalid-not-valid-cert.tlv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\shared\policy-verification-signatures\resources\publications-file.bin">

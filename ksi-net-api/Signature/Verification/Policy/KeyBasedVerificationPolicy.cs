@@ -36,9 +36,10 @@ namespace Guardtime.KSI.Signature.Verification.Policy
             // Check for internal verification
             FirstRule = new InternalVerificationPolicy()
                 .OnSuccess(new CalendarHashChainExistenceRule()
-                    .OnSuccess(new CalendarAuthenticationRecordExistenceRule()
-                        .OnSuccess(new CertificateExistenceRule()
-                            .OnSuccess(new CalendarAuthenticationRecordSignatureVerificationRule(trustStore, certificateRdnSelector)))));
+                    .OnSuccess(new CalendarHashChainAlgorithmDeprecatedRule()
+                        .OnSuccess(new CalendarAuthenticationRecordExistenceRule()
+                            .OnSuccess(new CertificateExistenceRule() // key-01
+                                .OnSuccess(new CalendarAuthenticationRecordSignatureVerificationRule(trustStore, certificateRdnSelector)))))); // key-02, key-03
         }
     }
 }

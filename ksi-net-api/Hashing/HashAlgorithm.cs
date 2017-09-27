@@ -57,6 +57,8 @@ namespace Guardtime.KSI.Hashing
         private static readonly HashAlgorithm[] Values;
 
         private readonly string[] _alternatives;
+        private readonly ulong? _deprecatedSince;
+        private readonly ulong? _obsoleteSince;
 
         /// <summary>
         ///     Static constructor for creating lookup table for names.
@@ -83,7 +85,10 @@ namespace Guardtime.KSI.Hashing
         /// <param name="length">algorithm value length</param>
         /// <param name="status">algorithm status</param>
         /// <param name="alternatives">algorithm alternative names</param>
-        private HashAlgorithm(string name, byte id, int length, AlgorithmStatus status, string[] alternatives = null)
+        /// <param name="deprecatedSince">date from which the algorithm is deprecated</param>
+        /// <param name="obsoleteSince">date from which the algorithm is obsolete</param>
+        private HashAlgorithm(string name, byte id, int length, AlgorithmStatus status, string[] alternatives = null, ulong? deprecatedSince = null,
+                              ulong? obsoleteSince = null)
         {
             if (alternatives == null)
             {
@@ -95,6 +100,8 @@ namespace Guardtime.KSI.Hashing
             Length = length;
             Status = status;
             _alternatives = alternatives;
+            _deprecatedSince = deprecatedSince;
+            _obsoleteSince = obsoleteSince;
         }
 
         /// <summary>
@@ -116,6 +123,24 @@ namespace Guardtime.KSI.Hashing
         ///     Return status of the algorithm.
         /// </summary>
         public AlgorithmStatus Status { get; }
+
+        /// <summary>
+        /// Returns true if the algorithm is deprecated at the given date
+        /// </summary>
+        /// <returns></returns>
+        public bool IsDeprecated(ulong date)
+        {
+            return _deprecatedSince.HasValue && date >= _deprecatedSince.Value;
+        }
+
+        /// <summary>
+        /// Returns true if the algorithm is obsolete at the given date
+        /// </summary>
+        /// <returns></returns>
+        public bool IsObsolete(ulong date)
+        {
+            return _obsoleteSince.HasValue && date >= _obsoleteSince.Value;
+        }
 
         /// <summary>
         ///     Get hash algorithm by id/code.
