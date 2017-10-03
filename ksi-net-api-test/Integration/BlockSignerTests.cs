@@ -316,6 +316,22 @@ namespace Guardtime.KSI.Test.Integration
             }
         }
 
+        /// <summary>
+        /// Testing with deprecated hash algorithm
+        /// </summary>
+        /// <param name="ksi"></param>
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void BlockSignerWithDeprecatedHashAlgorithmTest(Ksi ksi)
+        {
+            Exception ex = Assert.Throws<HashingException>(delegate
+            {
+                new BlockSigner(HttpKsiService, HashAlgorithm.Sha1);
+            });
+
+            Assert.That(ex.Message.StartsWith("Given hash algorithm cannot be used because it has deprecated since date set."),
+                "Unexpected exception message: " + ex.Message);
+        }
+
         private static void VerifyChainAlgorithm(IKsiSignature ksiSignature, HashAlgorithm expectedAlgorithm)
         {
             AggregationHashChain aggregationHashChain = ksiSignature.GetAggregationHashChains()[0];

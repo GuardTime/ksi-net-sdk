@@ -17,22 +17,33 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
-using Guardtime.KSI.Service;
+using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Service
 {
-    public class TestBlockSigner : BlockSigner
+    [TestFixture]
+    public class KsiServiceProviderTests
     {
-        //private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
-        public TestBlockSigner(IKsiService ksiService, HashAlgorithm hashAlgorithm = null) : base(ksiService, hashAlgorithm)
+        [Test]
+        public void GetHmacHasherTest()
         {
+            IHmacHasher hasher = KsiProvider.CreateHmacHasher(HashAlgorithm.Sha2256);
+            Assert.IsNotNull(hasher);
         }
 
-        public TestBlockSigner(IKsiService ksiService, bool useBlindingMasks, byte[] randomSeed, HashAlgorithm hashAlgorithm = null)
-            : base(ksiService, useBlindingMasks, randomSeed, hashAlgorithm)
+        [Test]
+        public void GetHmacHasherWithDeprecatedAlgorithmTest()
         {
+            Exception ex = Assert.Throws<HashingException>(delegate
+            {
+                KsiProvider.CreateHmacHasher(HashAlgorithm.Sha1);
+            });
+
+            Assert.That(ex.Message.StartsWith("Given hash algorithm cannot be used for calculating HMAC because it has deprecated since date set."),
+                "Unexpected exception message: " + ex.Message);
         }
     }
 }

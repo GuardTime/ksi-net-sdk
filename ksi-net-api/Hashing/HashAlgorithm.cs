@@ -125,6 +125,11 @@ namespace Guardtime.KSI.Hashing
         public AlgorithmStatus Status { get; }
 
         /// <summary>
+        /// Returns true if the algorithm has deprecated since date set.
+        /// </summary>
+        public bool HasDeprecatedSinceDate => _deprecatedSince.HasValue;
+
+        /// <summary>
         /// Returns true if the algorithm is deprecated at the given date
         /// </summary>
         /// <returns></returns>
@@ -132,6 +137,11 @@ namespace Guardtime.KSI.Hashing
         {
             return _deprecatedSince.HasValue && date >= _deprecatedSince.Value;
         }
+
+        /// <summary>
+        /// Returns true if the algorithm has obsolete since date set.
+        /// </summary>
+        public bool HasObsoleteSinceDate => _obsoleteSince.HasValue;
 
         /// <summary>
         /// Returns true if the algorithm is obsolete at the given date

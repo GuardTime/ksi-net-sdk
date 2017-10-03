@@ -59,7 +59,25 @@ namespace Guardtime.KSI.Service
                 throw new ArgumentNullException(nameof(ksiService));
             }
 
-            _hashAlgorithm = hashAlgorithm ?? HashAlgorithm.Default;
+            if (hashAlgorithm != null)
+            {
+                if (hashAlgorithm.HasDeprecatedSinceDate)
+                {
+                    throw new HashingException("Given hash algorithm cannot be used because it has deprecated since date set. Algorithm: " + hashAlgorithm.Name);
+                }
+
+                if (hashAlgorithm.HasObsoleteSinceDate)
+                {
+                    throw new HashingException("Given hash algorithm cannot be used because it has obsolete since date set. Algorithm: " + hashAlgorithm.Name);
+                }
+
+                _hashAlgorithm = hashAlgorithm;
+            }
+            else
+            {
+                _hashAlgorithm = HashAlgorithm.Default;
+            }
+
             _ksiService = ksiService;
             _signatureFactory = signatureFactory ?? new KsiSignatureFactory();
             _treeBuilder = new TreeBuilder(_hashAlgorithm, maxTreeHeight);

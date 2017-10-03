@@ -138,6 +138,7 @@
     <Compile Include="Hashing\DataHashTests.cs" />
     <Compile Include="Hashing\HashAlgorithmTests.cs" />
     <Compile Include="Integration\PublicationsFileIntegrationTests.cs" />
+    <Compile Include="Service\KsiServiceProviderTests.cs" />
     <Compile Include="Service\TcpResponseProcessorTests.cs" />
     <Compile Include="Service\TreeBuilderPrintTreeTests.cs" />
     <Compile Include="Integration\ConfigurationIntegrationTests.cs" />
@@ -190,7 +191,6 @@
     <Compile Include="Service\AggregatorConfigRequestStaticTests.cs" />
     <Compile Include="Service\StaticServiceTestsBase.cs" />
     <Compile Include="Service\SigningStaticTests.cs" />
-    <Compile Include="Service\TestBlockSigner.cs" />
     <Compile Include="Service\TestKsiService.cs" />
     <Compile Include="Service\TestKsiServiceProtocol.cs" />
     <Compile Include="Signature\KsiSignatureUsingReflectionTests.cs" />
