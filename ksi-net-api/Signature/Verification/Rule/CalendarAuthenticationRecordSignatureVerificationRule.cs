@@ -65,12 +65,13 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             }
 
             byte[] signedBytes = calendarAuthenticationRecord.PublicationData.Encode();
-            ICryptoSignatureVerifier cryptoSignatureVerifier = CryptoSignatureVerifierFactory.GetCryptoSignatureVerifierByOid(signatureData.SignatureType, _trustStore,
-                _certificateRdnSelector);
-            CryptoSignatureVerificationData data = new CryptoSignatureVerificationData(certificateBytes, signature.AggregationTime);
 
             try
             {
+                ICryptoSignatureVerifier cryptoSignatureVerifier = CryptoSignatureVerifierFactory.GetCryptoSignatureVerifierByOid(signatureData.SignatureType, _trustStore,
+                    _certificateRdnSelector);
+                CryptoSignatureVerificationData data = new CryptoSignatureVerificationData(certificateBytes, signature.AggregationTime);
+
                 cryptoSignatureVerifier.Verify(signedBytes, signatureData.GetSignatureValue(), data);
             }
             catch (PkiVerificationFailedCertNotValidException)
@@ -78,6 +79,10 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Key03);
             }
             catch (PkiVerificationFailedException)
+            {
+                return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Key02);
+            }
+            catch (PkiVerificationErrorException)
             {
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Key02);
             }

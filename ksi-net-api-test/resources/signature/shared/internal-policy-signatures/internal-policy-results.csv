@@ -7,7 +7,7 @@ aggregation-chain/invalid-signature-aggr-chain-chain-index-int-value-wrong.tlv;i
 aggregation-chain/invalid-signature-aggr-chain-chain-index-no-value.tlv;internal;INT-10;Aggregation hash chain chain index mismatch;0;;;;;;;false;;;
 aggregation-chain/invalid-signature-aggr-chain-chain-index-has-child-element.tlv;internal;INT-10;Aggregation hash chain chain index mismatch;0;;;;;;;false;;;
 aggregation-chain/invalid-signature-aggr-chain-input-hash-wrong.tlv;internal;INT-03;Calendar hash chain input hash mismatch;0;;;;;;;false;;;
-aggregation-chain/invalid-signature-aggr-chain-input-hash-has-deprecated-algorithm;internal;INT-13;Document hash algorithm deprecated at the time of signing;0;;;;;;;false;;;
+aggregation-chain/invalid-signature-aggr-chain-input-hash-has-deprecated-algorithm.tlv;internal;INT-13;Document hash algorithm deprecated at the time of signing;0;;;;;;;false;;;
 aggregation-chain/invalid-signature-aggr-chain-aggr-algo-int-value-wrong.tlv;internal;INT-03;Calendar hash chain input hash mismatch;0;;;;;;;false;;;
 aggregation-chain/invalid-signature-aggr-chain-aggr-algo-has-deprecated-algorithm.tlv;internal;INT-15;Aggregation hash chain uses hash algorithm that was deprecated at the time of signing;0;;;;;;;false;;;
 aggregation-chain/invalid-signature-aggr-chain-left-link-level-corr-int-value-wrong.tlv;internal;INT-03;Calendar hash chain input hash mismatch;0;;;;;;;false;;;

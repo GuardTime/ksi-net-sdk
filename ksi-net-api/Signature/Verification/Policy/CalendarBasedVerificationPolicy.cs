@@ -31,15 +31,15 @@ namespace Guardtime.KSI.Signature.Verification.Policy
         /// </summary>
         public CalendarBasedVerificationPolicy()
         {
-            VerificationRule verificationRule = new ExtendedSignatureCalendarChainInputHashRule()
-                .OnSuccess(new ExtendedSignatureCalendarChainAggregationTimeRule());
+            VerificationRule verificationRule = new ExtendedSignatureCalendarChainInputHashRule() // Cal-02
+                .OnSuccess(new ExtendedSignatureCalendarChainAggregationTimeRule()); // Cal-03
 
             FirstRule = new InternalVerificationPolicy()
                 .OnSuccess(new CalendarHashChainExistenceRule()
                     .OnSuccess(new SignaturePublicationRecordExistenceRule()
-                        .OnSuccess(new ExtendedSignatureCalendarChainRootHashRule()
+                        .OnSuccess(new ExtendedSignatureCalendarChainRootHashRule() // Cal-01
                             .OnSuccess(verificationRule))
-                        .OnNa(new ExtendedSignatureAggregationChainRightLinksMatchesRule()
+                        .OnNa(new ExtendedSignatureAggregationChainRightLinksMatchesRule() // Cal-4
                             .OnSuccess(verificationRule)))
                     .OnNa(verificationRule));
         }
