@@ -1,3 +1,8 @@
+Version 3.10
+2017-10-04 3.10.X
+
+* IMPROVEMENT: Handling of deprecated and obsolete hash functions (KSINETAPI-127)
+
 Version 3.9
 2017-09-12 3.9.369
 
