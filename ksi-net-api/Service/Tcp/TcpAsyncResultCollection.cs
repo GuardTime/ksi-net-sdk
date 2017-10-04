@@ -26,7 +26,7 @@ namespace Guardtime.KSI.Service.Tcp
     /// </summary>
     public class TcpAsyncResultCollection
     {
-        readonly Dictionary<ulong, TcpKsiServiceProtocolAsyncResult> _list = new Dictionary<ulong, TcpKsiServiceProtocolAsyncResult>();
+        readonly Dictionary<ulong, TcpKsiServiceAsyncResult> _list = new Dictionary<ulong, TcpKsiServiceAsyncResult>();
         private readonly object _syncObj = new object();
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Guardtime.KSI.Service.Tcp
         /// </summary>
         /// <param name="key">The key of the element to add</param>
         /// <param name="asyncResult">Asycn result to add</param>
-        public void Add(ulong key, TcpKsiServiceProtocolAsyncResult asyncResult)
+        public void Add(ulong key, TcpKsiServiceAsyncResult asyncResult)
         {
             lock (_syncObj)
             {
@@ -46,7 +46,7 @@ namespace Guardtime.KSI.Service.Tcp
         /// Remove async result from the collection
         /// </summary>
         /// <param name="asyncResult">Async result to removed</param>
-        public void Remove(TcpKsiServiceProtocolAsyncResult asyncResult)
+        public void Remove(TcpKsiServiceAsyncResult asyncResult)
         {
             lock (_syncObj)
             {
@@ -88,7 +88,7 @@ namespace Guardtime.KSI.Service.Tcp
         /// </summary>
         /// <param name="key">The key of the element to return</param>
         /// <returns></returns>
-        public TcpKsiServiceProtocolAsyncResult GetValue(ulong key)
+        public TcpKsiServiceAsyncResult GetValue(ulong key)
         {
             lock (_syncObj)
             {

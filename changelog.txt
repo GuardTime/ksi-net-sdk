@@ -1,3 +1,16 @@
+Version 3.9
+2017-09-12 3.9.369
+
+* IMPROVEMENT: Added input hash algorithm check rule (KSINETAPI-124)
+* IMPROVEMENT: Set PDU V2 as default pdu version (KSINETAPI-123)
+* IMPROVEMENT: Added verification of the validity of the signing certificate during aggregation time (KSINETAPI-121)
+* IMPROVEMENT: Using ArgumentNullException when checking if argument is not null (KSINETAPI-118)
+* IMPROVEMENT: Renamed KsiServiceInvalidRequestFormatException to KsiServiceUnexpectedResponseFormatException (KSINETAPI-117)
+* IMPROVEMENT: Removed RegistrationTime from CalendarHashChain (KSINETAPI-116)
+* IMPROVEMENT: Added user-provided hash level check against level correction into internal verification (KSINETAPI-112)
+* IMPROVEMENT: Improved handling of unknown / redundant response payloads (KSINETAPI-111)
+* IMPROVEMENT: Keep socket open when aggregating using tcp connection (KSINETAPI-78)
+
 Version 3.8
 
 2017-04-26 3.8.308

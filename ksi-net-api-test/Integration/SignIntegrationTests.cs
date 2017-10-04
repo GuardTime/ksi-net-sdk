@@ -150,6 +150,7 @@ namespace Guardtime.KSI.Test.Integration
             });
 
             Assert.That(ex.Message.StartsWith("Request failed"), "Unexpected exception message: " + ex.Message);
+            Assert.IsNotNull(ex.InnerException, "Inner exception should not be null");
             Assert.That(ex.InnerException.Message.StartsWith("The remote name could not be resolved"), "Unexpected inner exception message: " + ex.InnerException.Message);
         }
 
@@ -196,6 +197,7 @@ namespace Guardtime.KSI.Test.Integration
                 SignHash(ksi);
             });
             Assert.That(ex.Message.StartsWith("Completing connection failed"), "Unexpected exception message: " + ex.Message);
+            Assert.IsNotNull(ex.InnerException, "Inner exception should not be null");
             Assert.That(ex.InnerException.Message.StartsWith("No connection could be made because the target machine actively refused it"),
                 "Unexpected inner exception message: " + ex.InnerException.Message);
         }
@@ -282,7 +284,7 @@ namespace Guardtime.KSI.Test.Integration
                     try
                     {
                         Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " Start signing " + k);
-                        IKsiSignature signature = ksi.Sign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
+                        ksi.Sign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
                     }
                     catch (Exception ex)
                     {
@@ -353,23 +355,27 @@ namespace Guardtime.KSI.Test.Integration
 
             ManualResetEvent waitHandle = new ManualResetEvent(false);
             IKsiSignature signature = null;
-            IAsyncResult asyncResult = null;
 
-            asyncResult = service.BeginSign(dataHash, delegate(IAsyncResult ar)
+            object testObject = new object();
+            bool isAsyncStateCorrect = false;
+
+            service.BeginSign(dataHash, delegate(IAsyncResult ar)
             {
                 try
                 {
-                    signature = service.EndSign(asyncResult);
+                    isAsyncStateCorrect = ar.AsyncState == testObject;
+                    signature = service.EndSign(ar);
                 }
                 finally
                 {
                     waitHandle.Set();
                 }
-            }, null);
+            }, testObject);
 
             waitHandle.WaitOne();
 
             Assert.IsNotNull(signature, "Signature should not be null.");
+            Assert.AreEqual(true, isAsyncStateCorrect, "Unexpected async state.");
 
             VerificationContext verificationContext = new VerificationContext(signature)
             {
@@ -379,6 +385,43 @@ namespace Guardtime.KSI.Test.Integration
             InternalVerificationPolicy policy = new InternalVerificationPolicy();
             VerificationResult verificationResult = policy.Verify(verificationContext);
             Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode, "Signature should verify with internal policy");
+        }
+
+        [Test]
+        public void HttpAsyncSignWithInvalidPassTest()
+        {
+            byte[] data = Encoding.UTF8.GetBytes("This is my document");
+            KsiService service = GetHttpKsiServiceWithInvalidSigningPass();
+
+            IDataHasher dataHasher = KsiProvider.CreateDataHasher();
+            dataHasher.AddData(data);
+            DataHash dataHash = dataHasher.GetHash();
+
+            ManualResetEvent waitHandle = new ManualResetEvent(false);
+            Exception ex = null;
+            IKsiSignature signature = null;
+
+            service.BeginSign(dataHash, delegate(IAsyncResult ar)
+            {
+                try
+                {
+                    signature = service.EndSign(ar);
+                }
+                catch (Exception e)
+                {
+                    ex = e;
+                }
+                finally
+                {
+                    waitHandle.Set();
+                }
+            }, null);
+
+            waitHandle.WaitOne();
+
+            Assert.IsNull(signature, "Signature should be null.");
+            Assert.IsNotNull(ex, "Exception should not be null.");
+            Assert.AreEqual("Server responded with error message. Status: 258; Message: The request could not be authenticated.", ex.Message);
         }
 
         [Test]
@@ -402,7 +445,7 @@ namespace Guardtime.KSI.Test.Integration
                 service.EndSign(new TestAsyncResult());
             });
 
-            Assert.That(ex.Message.StartsWith("Invalid asyncResult, could not cast to correct object."), "Unexpected exception message: " + ex.Message);
+            Assert.That(ex.Message.StartsWith("Invalid asyncResult type:"), "Unexpected exception message: " + ex.Message);
         }
 
         [Test]

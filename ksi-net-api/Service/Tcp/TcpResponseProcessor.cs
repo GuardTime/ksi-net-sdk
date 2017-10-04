@@ -66,15 +66,15 @@ namespace Guardtime.KSI.Service.Tcp
         /// <summary>
         /// Process received data.
         /// </summary>
-        /// <param name="receiveDataBuffer">Received data buffer</param>
+        /// <param name="receivedDataBuffer">Received data buffer</param>
         /// <param name="receivedByteCount">Number of bytes received</param>
-        public void ProcessReceivedData(byte[] receiveDataBuffer, int receivedByteCount)
+        public void ProcessReceivedData(byte[] receivedDataBuffer, int receivedByteCount)
         {
             Logger.Debug("{0} bytes received.", receivedByteCount);
 
             int oldLength = _receivedBytes.Length;
             Array.Resize(ref _receivedBytes, _receivedBytes.Length + receivedByteCount);
-            Array.Copy(receiveDataBuffer, 0, _receivedBytes, oldLength, receivedByteCount);
+            Array.Copy(receivedDataBuffer, 0, _receivedBytes, oldLength, receivedByteCount);
 
             while (_receivedBytes.Length >= 4)
             {
@@ -117,7 +117,7 @@ namespace Guardtime.KSI.Service.Tcp
                     isPayloadFound = true;
                     bool asyncResultFound = false;
 
-                    foreach (TcpKsiServiceProtocolAsyncResult asyncResult in GetAsyncResults(payloadInfo))
+                    foreach (TcpKsiServiceAsyncResult asyncResult in GetAsyncResults(payloadInfo))
                     {
                         asyncResultFound = true;
 
@@ -126,7 +126,7 @@ namespace Guardtime.KSI.Service.Tcp
                             asyncResult.ResultStream = new MemoryStream(pduBytes);
                             Logger.Debug("Response payload received. Request type: {0}; Response payload type: {1}; (request id: {2}).", asyncResult.RequestType,
                                 payloadInfo.ResponsePayloadType, asyncResult.RequestId);
-                            asyncResult.SetComplete(false);
+                            asyncResult.SetComplete();
                         }
                         else
                         {
@@ -155,7 +155,7 @@ namespace Guardtime.KSI.Service.Tcp
         /// </summary>
         /// <param name="payloadInfo">Response payload info</param>
         /// <returns></returns>
-        private IEnumerable<TcpKsiServiceProtocolAsyncResult> GetAsyncResults(TcpResponsePayloadInfo payloadInfo)
+        private IEnumerable<TcpKsiServiceAsyncResult> GetAsyncResults(TcpResponsePayloadInfo payloadInfo)
         {
             ulong[] keys = _asyncResults.GetKeys();
 
@@ -166,7 +166,7 @@ namespace Guardtime.KSI.Service.Tcp
                     {
                         if (key == payloadInfo.RequestId)
                         {
-                            TcpKsiServiceProtocolAsyncResult asyncResult = _asyncResults.GetValue(key);
+                            TcpKsiServiceAsyncResult asyncResult = _asyncResults.GetValue(key);
 
                             if (asyncResult == null)
                             {
@@ -180,7 +180,7 @@ namespace Guardtime.KSI.Service.Tcp
                 case TcpResponsePayloadType.Error:
                     foreach (ulong key in keys)
                     {
-                        TcpKsiServiceProtocolAsyncResult asyncResult = _asyncResults.GetValue(key);
+                        TcpKsiServiceAsyncResult asyncResult = _asyncResults.GetValue(key);
 
                         if (asyncResult != null)
                         {
@@ -189,9 +189,10 @@ namespace Guardtime.KSI.Service.Tcp
                     }
                     break;
                 case TcpResponsePayloadType.Config:
+                    // return all async results of all aggregator configuration requests 
                     foreach (ulong key in keys)
                     {
-                        TcpKsiServiceProtocolAsyncResult asyncResult = _asyncResults.GetValue(key);
+                        TcpKsiServiceAsyncResult asyncResult = _asyncResults.GetValue(key);
 
                         if (asyncResult?.RequestType == TcpRequestType.AggregatorConfig)
                         {
@@ -234,6 +235,9 @@ namespace Guardtime.KSI.Service.Tcp
                         case Constants.ErrorPayload.TagType:
                             yield return new TcpResponsePayloadInfo(TcpResponsePayloadType.Error);
                             break;
+                        case Constants.PduHeader.TagType:
+                        case Constants.Pdu.MacTagType:
+                            break;
                         default:
                             containsUnknownPayload = true;
                             break;
@@ -244,7 +248,7 @@ namespace Guardtime.KSI.Service.Tcp
                 {
                     // try to parse PDU to check if critical unknown tags are included in which case a parsing exceptions is thrown by AggregationResponsePdu
                     AggregationResponsePdu aggregationResponsePdu = new AggregationResponsePdu(pdu);
-                    Logger.Warn(string.Format("PDU contains unexpected response payloads!{0}PDU:{0}{1}", Environment.NewLine, aggregationResponsePdu));
+                    Logger.Warn(string.Format("TCP response processor received unexpected response payloads!{0}PDU:{0}{1}", Environment.NewLine, aggregationResponsePdu));
                 }
             }
 

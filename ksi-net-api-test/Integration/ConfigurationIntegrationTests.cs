@@ -21,6 +21,7 @@ using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Service;
 using NUnit.Framework;
 using System;
+using System.Threading;
 
 namespace Guardtime.KSI.Test.Integration
 {
@@ -139,6 +140,72 @@ namespace Guardtime.KSI.Test.Integration
                     ksi.GetExtenderConfig();
                 }, "Invalid signing password should not prevent getting extnder config.");
             }
+        }
+
+        [Test]
+        public void HttpAsyncGetAggregatorConfigTest()
+        {
+            if (TestSetup.PduVersion == PduVersion.v1)
+            {
+                return;
+            }
+
+            KsiService service = GetHttpKsiService();
+            ManualResetEvent waitHandle = new ManualResetEvent(false);
+            AggregatorConfig config = null;
+            object testObject = new object();
+            bool isAsyncCorrect = false;
+
+            service.BeginGetAggregatorConfig(delegate(IAsyncResult ar)
+            {
+                try
+                {
+                    isAsyncCorrect = ar.AsyncState == testObject;
+                    config = service.EndGetAggregatorConfig(ar);
+                }
+                finally
+                {
+                    waitHandle.Set();
+                }
+            }, testObject);
+
+            waitHandle.WaitOne();
+
+            Assert.IsNotNull(config, "Aggregator configuration should not be null.");
+            Assert.AreEqual(true, isAsyncCorrect, "Unexpected async state.");
+        }
+
+        [Test]
+        public void HttpAsyncGetExtenderConfigTest()
+        {
+            if (TestSetup.PduVersion == PduVersion.v1)
+            {
+                return;
+            }
+
+            KsiService service = GetHttpKsiService();
+            ManualResetEvent waitHandle = new ManualResetEvent(false);
+            ExtenderConfig config = null;
+            object testObject = new object();
+            bool isAsyncCorrect = false;
+
+            service.BeginGetExtenderConfig(delegate(IAsyncResult ar)
+            {
+                try
+                {
+                    isAsyncCorrect = ar.AsyncState == testObject;
+                    config = service.EndGetExtenderConfig(ar);
+                }
+                finally
+                {
+                    waitHandle.Set();
+                }
+            }, testObject);
+
+            waitHandle.WaitOne();
+
+            Assert.IsNotNull(config, "Extender configuration should not be null.");
+            Assert.AreEqual(true, isAsyncCorrect, "Unexpected async state.");
         }
     }
 }
