@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Publication;
@@ -29,6 +30,13 @@ namespace Guardtime.KSI.Test.Service
 {
     public class StaticServiceTestsBase
     {
+        protected static Ksi GetStaticKsi(string requestResultFile, ulong requestId = 0, IKsiSignatureFactory ksiSignatureFactory = null, PduVersion pduVersion = PduVersion.v2,
+                                          HashAlgorithm signingMacAlgorithm = null, HashAlgorithm extendingMacAlgorithm = null)
+        {
+            return GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, requestResultFile)), requestId, ksiSignatureFactory, pduVersion, signingMacAlgorithm,
+                extendingMacAlgorithm);
+        }
+
         protected static Ksi GetStaticKsi(byte[] requestResult, ulong requestId = 0, IKsiSignatureFactory ksiSignatureFactory = null, PduVersion pduVersion = PduVersion.v2,
                                           HashAlgorithm signingMacAlgorithm = null, HashAlgorithm extendingMacAlgorithm = null)
         {
@@ -41,9 +49,9 @@ namespace Guardtime.KSI.Test.Service
                 new Ksi(
                     new TestKsiService(
                         protocol,
-                        new ServiceCredentials(Properties.Settings.Default.HttpSigningServiceUser, Properties.Settings.Default.HttpSigningServicePass, signingMacAlgorithm),
+                        new ServiceCredentials("user", "pass", signingMacAlgorithm),
                         protocol,
-                        new ServiceCredentials(Properties.Settings.Default.HttpExtendingServiceUser, Properties.Settings.Default.HttpExtendingServicePass, extendingMacAlgorithm),
+                        new ServiceCredentials("user", "pass", extendingMacAlgorithm),
                         protocol,
                         new PublicationsFileFactory(
                             new PkiTrustStoreProvider(new X509Store(StoreName.Root),

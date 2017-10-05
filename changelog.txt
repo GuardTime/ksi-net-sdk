@@ -1,3 +1,8 @@
+Version 3.10
+2017-10-04 3.10.X
+
+* IMPROVEMENT: Added HMAC algorithm to app.config. Split HTTP and TCP configurations. Removed configuration values from static tests. (KSINETAPI-131)
+
 Version 3.9
 2017-09-12 3.9.369
 

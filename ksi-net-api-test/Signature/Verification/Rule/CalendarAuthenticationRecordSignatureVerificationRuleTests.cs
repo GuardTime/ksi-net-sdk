@@ -73,7 +73,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
 
             // Check signature with no calendar authentication record
             using (FileStream stream =
-                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record),
+                new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record),
                     FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
@@ -97,7 +97,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
 
             // Check signature with invalid certificate id
             using (FileStream stream =
-                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+                new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -119,7 +119,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                 CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
             // Check legacy signature to verify calendar authentication record with and without publications file. With publications file should succeed.
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Legacy_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -140,7 +140,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                 CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
             // Check legacy signature to verify calendar authentication record with and without publications file. With publications file should succeed.
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Legacy_Ok), FileMode.Open))
             {
                 TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
                 testPublicationsFile.CertificateRecords.Add(
@@ -166,7 +166,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                 CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
             // Check signature and verify calendar authentication record
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok), FileMode.Open))
             {
                 TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
                 testPublicationsFile.CertificateRecords.Add(
@@ -193,7 +193,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
 
             // Check invalid signature with invalid calendar authentication record signature
             using (FileStream stream =
-                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Invalid_Calendar_Authentication_Record_Invalid_Signature), FileMode.Open))
+                new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Invalid_Calendar_Authentication_Record_Invalid_Signature), FileMode.Open))
             {
                 TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
                 testPublicationsFile.CertificateRecords.Add(

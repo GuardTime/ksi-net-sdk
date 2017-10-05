@@ -32,12 +32,12 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="loginId">login ID</param>
         /// <param name="loginKey">login key</param>
-        /// <param name="macAlgorithm">MAC calculation algorithm of outgoing and incoming messages</param>
-        public ServiceCredentials(string loginId, byte[] loginKey, HashAlgorithm macAlgorithm = null)
+        /// <param name="hmacAlgorithm">HMAC calculation algorithm of outgoing and incoming messages</param>
+        public ServiceCredentials(string loginId, byte[] loginKey, HashAlgorithm hmacAlgorithm = null)
         {
             LoginId = loginId;
             LoginKey = loginKey;
-            MacAlgorithm = macAlgorithm;
+            HmacAlgorithm = hmacAlgorithm;
         }
 
         /// <summary>
@@ -45,12 +45,12 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="loginId">login ID</param>
         /// <param name="loginKey">login key</param>
-        /// <param name="macAlgorithm">MAC calculation algorithm of outgoing and incoming messages</param>
-        public ServiceCredentials(string loginId, string loginKey, HashAlgorithm macAlgorithm = null)
+        /// <param name="hmacAlgorithm">HMAC calculation algorithm of outgoing and incoming messages</param>
+        public ServiceCredentials(string loginId, string loginKey, HashAlgorithm hmacAlgorithm = null)
         {
             LoginId = loginId;
             LoginKey = Util.EncodeNullTerminatedUtf8String(loginKey);
-            MacAlgorithm = macAlgorithm;
+            HmacAlgorithm = hmacAlgorithm;
         }
 
         /// <summary>
@@ -66,6 +66,6 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     MAC calculation algorithm of outgoing and incoming messages
         /// </summary>
-        public HashAlgorithm MacAlgorithm { get; }
+        public HashAlgorithm HmacAlgorithm { get; }
     }
 }

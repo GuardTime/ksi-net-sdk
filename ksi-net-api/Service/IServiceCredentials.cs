@@ -39,6 +39,6 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     MAC calculation algorithm of outgoing and incoming messages
         /// </summary>
-        HashAlgorithm MacAlgorithm { get; }
+        HashAlgorithm HmacAlgorithm { get; }
     }
 }
