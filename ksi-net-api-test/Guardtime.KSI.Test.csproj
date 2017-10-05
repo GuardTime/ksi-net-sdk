@@ -133,6 +133,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="Integration\SharedBetweenSDKsTests.cs" />
     <Compile Include="Hashing\DataHasherTests.cs" />
     <Compile Include="Hashing\DataHashTests.cs" />

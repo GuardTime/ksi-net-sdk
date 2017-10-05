@@ -17,35 +17,11 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
-using Guardtime.KSI.Hashing;
-
-namespace Guardtime.KSI.Service
+namespace Guardtime.KSI.Test
 {
-    /// <summary>
-    ///     KSI service settings interface.
-    /// </summary>
-    public interface IServiceCredentials
+    public static class TestConstants
     {
-        /// <summary>
-        ///     Login ID.
-        /// </summary>
-        string LoginId { get; }
-
-        /// <summary>
-        ///     Login key.
-        /// </summary>
-        byte[] LoginKey { get; }
-
-        /// <summary>
-        ///     HMAC calculation algorithm of outgoing and incoming messages
-        /// </summary>
-        [Obsolete("Use HmacAlgorithm instead.", false)]
-        HashAlgorithm MacAlgorithm { get; }
-
-        /// <summary>
-        ///     HMAC calculation algorithm of outgoing and incoming messages.
-        /// </summary>
-        HashAlgorithm HmacAlgorithm { get; }
+        public const string ServiceUser = "user";
+        public const string ServicePass = "pass";
     }
 }

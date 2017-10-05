@@ -49,9 +49,9 @@ namespace Guardtime.KSI.Test.Service
                 new Ksi(
                     new TestKsiService(
                         protocol,
-                        new ServiceCredentials("user", "pass", signingMacAlgorithm),
+                        new ServiceCredentials(TestConstants.ServiceUser, TestConstants.ServicePass, signingMacAlgorithm),
                         protocol,
-                        new ServiceCredentials("user", "pass", extendingMacAlgorithm),
+                        new ServiceCredentials(TestConstants.ServiceUser, TestConstants.ServicePass, extendingMacAlgorithm),
                         protocol,
                         new PublicationsFileFactory(
                             new PkiTrustStoreProvider(new X509Store(StoreName.Root),
