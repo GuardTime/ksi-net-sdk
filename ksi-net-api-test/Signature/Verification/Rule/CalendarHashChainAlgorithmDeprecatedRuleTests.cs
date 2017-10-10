@@ -73,40 +73,6 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             }
         }
 
-        [Test]
-        public void TestSignatureWithOkSha1CalendarAlgorithm()
-        {
-            CalendarHashChainAlgorithmDeprecatedRule rule = new CalendarHashChainAlgorithmDeprecatedRule();
 
-            // Check signature with SHA1 calendar hash chain algorithm before deprecation time
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Sha1CalendarRightLinkAlgorithm_2016), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream),
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
-        }
-
-        [Test]
-        public void TestSignatureWithDeprecatedCalendarAlgorithm()
-        {
-            CalendarHashChainAlgorithmDeprecatedRule rule = new CalendarHashChainAlgorithmDeprecatedRule();
-
-            // Check signature with SHA1 calendar hash chain algorithm after deprecation time
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Sha1CalendarRightLinkAlgorithm_2017), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream),
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
-            }
-        }
     }
 }

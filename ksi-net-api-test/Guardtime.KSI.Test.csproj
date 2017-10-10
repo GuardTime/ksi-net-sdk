@@ -732,24 +732,6 @@
     <None Include="resources\signature\ksi-signature\ksi-signature-invalid-chain-index-mismatch.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature\sha1-as-aggregation-algo-2016-01.ksig">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\ksi-signature\sha1-as-aggregation-algo-2017.ksig">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\ksi-signature\sha1-as-calendar-algo-2016-01.ksig">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\ksi-signature\sha1-as-calendar-algo-2017.ksig">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\ksi-signature\sha1-as-input-algo-2016-01.ksig">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\ksi-signature\sha1-as-input-algo-2017.ksig">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="resources\signature\rfc3161-record\rfc3161-record-invalid-extra-tag.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -808,24 +790,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\rfc3161-record\rfc3161-record-ok.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\rfc3161-record\rfc3161-sha1-as-input-hash-2016-01.ksig">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\rfc3161-record\rfc3161-sha1-as-input-hash-2017.ksig">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\rfc3161-record\rfc3161-sha1-in-sig-atr-2016-01.ksig">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\rfc3161-record\rfc3161-sha1-in-sig-atr-2017.ksig">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\rfc3161-record\rfc3161-sha1-in-tst-algo-2016-01.ksig">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\rfc3161-record\rfc3161-sha1-in-tst-algo-2017.ksig">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\shared\internal-policy-signatures\aggregation-chain\invalid-signature-aggr-chain-aggr-algo-has-deprecated-algorithm.tlv">

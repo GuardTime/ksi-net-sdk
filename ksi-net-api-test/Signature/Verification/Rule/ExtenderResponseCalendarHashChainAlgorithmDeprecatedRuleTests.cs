@@ -62,29 +62,10 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         [Test]
         public void TestSignatureWithOkCalendarAlgorithms()
         {
-            // Check extender response calendar hash chains that use valid hash algorithms
-            TestSignature(Properties.Resources.KsiSignature_Ok, VerificationResultCode.Ok);
-        }
-
-        [Test]
-        public void TestSignatureWithOkSha1CalendarAlgorithm()
-        {
-            // Check extender response with SHA1 calendar hash chain algorithm before deprecation time
-            TestSignature(Properties.Resources.KsiSignature_Sha1CalendarRightLinkAlgorithm_2016, VerificationResultCode.Ok);
-        }
-
-        [Test]
-        public void TestSignatureWithDeprecatedCalendarAlgorithm()
-        {
-            // Check extender response with SHA1 calendar hash chain algorithm after deprecation time
-            TestSignature(Properties.Resources.KsiSignature_Sha1CalendarRightLinkAlgorithm_2017, VerificationResultCode.Na);
-        }
-
-        private static void TestSignature(string signaturePath, VerificationResultCode resultCode)
-        {
+            // Check extender response calendar hash algorithm
             ExtenderResponseCalendarHashChainAlgorithmDeprecatedRule rule = new ExtenderResponseCalendarHashChainAlgorithmDeprecatedRule();
 
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, signaturePath), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 IKsiSignature ksiSignature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream);
 
@@ -101,7 +82,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                 };
 
                 VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(resultCode, verificationResult.ResultCode);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
         }
     }

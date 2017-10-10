@@ -72,49 +72,5 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
         }
-
-        [Test]
-        public void TestSignatureWithOkSha1RightLinkAlgorithm()
-        {
-            CalendarHashChainAlgorithmObsoleteRule rule = new CalendarHashChainAlgorithmObsoleteRule();
-
-            // Check signature with SHA1 calendar right link hash algorithm before obsolete time
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Sha1CalendarRightLinkAlgorithm_2016), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream),
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
-        }
-
-        /// <summary>
-        /// This test is used to test calendar right link hash algorithms after obsolete date.
-        /// </summary>
-        [Test]
-        public void TestSignatureWithObsoleteRightLinkAlgorithm()
-        {
-            // We cannot really use this test until a hash algorithm gets obsolete date.          
-            // Until then the test can be used if 1467331200 is added as obsolete date to SHA-1 algorithm
-            return;
-
-            CalendarHashChainAlgorithmObsoleteRule rule = new CalendarHashChainAlgorithmObsoleteRule();
-
-            // Check signature with SHA1 calendar right link algorithm after obsolete time
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Sha1CalendarRightLinkAlgorithm_2017), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream),
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-                Assert.AreEqual(VerificationError.Int16, verificationResult.VerificationError);
-            }
-        }
     }
 }

@@ -72,42 +72,5 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
         }
-
-        [Test]
-        public void TestSignatureWithOkSha1AggregationAlgorithm()
-        {
-            AggregationHashChainAlgorithmDeprecatedRule rule = new AggregationHashChainAlgorithmDeprecatedRule();
-
-            // Check signature with SHA1 aggregation hash chain aggregation algorithm before deprecation time
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Sha1AggregationChainAlgorithm_2016), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream),
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
-        }
-
-        [Test]
-        public void TestSignatureWithDeprecatedAggregationAlgorithm()
-        {
-            AggregationHashChainAlgorithmDeprecatedRule rule = new AggregationHashChainAlgorithmDeprecatedRule();
-
-            // Check signature with SHA1 aggregation hash chain aggregation algorithm after deprecation time
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Sha1AggregationChainAlgorithm_2017), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream),
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-                Assert.AreEqual(VerificationError.Int15, verificationResult.VerificationError);
-            }
-        }
     }
 }
