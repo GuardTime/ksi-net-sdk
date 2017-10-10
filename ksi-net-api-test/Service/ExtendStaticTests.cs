@@ -44,7 +44,7 @@ namespace Guardtime.KSI.Test.Service
             IKsiSignature signature = new KsiSignatureFactory().Create(
                 File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
 
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu)), 1043101455);
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_RequestId_1043101455)), 1043101455);
 
             ksi.Extend(signature);
         }
@@ -77,7 +77,7 @@ namespace Guardtime.KSI.Test.Service
             IKsiSignature signature = new KsiSignatureFactory().Create(
                 File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
 
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu)), 1043101455, null, PduVersion.v1);
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_RequestId_1043101455)), 1043101455, null, PduVersion.v1);
 
             KsiServiceUnexpectedResponseFormatException ex = Assert.Throws<KsiServiceUnexpectedResponseFormatException>(delegate
             {
@@ -112,7 +112,7 @@ namespace Guardtime.KSI.Test.Service
             IKsiSignature signature = new KsiSignatureFactory().Create(
                 File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
 
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu)), 1234567890);
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_RequestId_1043101455)), 1234567890);
 
             KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
             {
@@ -313,7 +313,7 @@ namespace Guardtime.KSI.Test.Service
             IKsiSignature signature = new KsiSignatureFactory().Create(
                 File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
 
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu)), 1043101455, null,
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_RequestId_1043101455)), 1043101455, null,
                 PduVersion.v2, null, HashAlgorithm.Sha2512);
 
             KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate

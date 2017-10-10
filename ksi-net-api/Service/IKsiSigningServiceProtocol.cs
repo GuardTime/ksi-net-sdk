@@ -32,7 +32,7 @@ namespace Guardtime.KSI.Service
         /// <param name="data">aggregation request bytes</param>
         /// <param name="requestId">request id</param>
         /// <param name="callback">callback when response is ready</param>
-        /// <param name="asyncState">async state object</param>
+        /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         IAsyncResult BeginSign(byte[] data, ulong requestId, AsyncCallback callback, object asyncState);
 
@@ -59,5 +59,10 @@ namespace Guardtime.KSI.Service
         /// <param name="asyncResult">async result</param>
         /// <returns>response bytes</returns>
         byte[] EndGetAggregatorConfig(IAsyncResult asyncResult);
+
+        /// <summary>
+        /// Aggregator location url
+        /// </summary>
+        string AggregatorLocation { get; }
     }
 }

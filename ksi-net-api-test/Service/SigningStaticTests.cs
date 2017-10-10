@@ -41,7 +41,7 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void SignStaticTest()
         {
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu)), 1584727637);
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_RequestId_1584727637)), 1584727637);
 
             ksi.Sign(new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
         }
@@ -63,7 +63,7 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void SignStaticInvalidPduResponseVersionTest()
         {
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu)), 1584727637, null, PduVersion.v1);
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_RequestId_1584727637)), 1584727637, null, PduVersion.v1);
 
             KsiServiceUnexpectedResponseFormatException ex = Assert.Throws<KsiServiceUnexpectedResponseFormatException>(delegate
             {
@@ -104,7 +104,7 @@ namespace Guardtime.KSI.Test.Service
         public void SignStaticResponseWithWrongRequestIdTest()
         {
             // Response has additional unknown non-ciritcal payload.
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu)), 1234567890);
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_RequestId_1584727637)), 1234567890);
 
             KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
             {
@@ -260,7 +260,7 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void SignStaticInvalidMacAlgorithmTest()
         {
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu)), 1584727637, null, PduVersion.v2,
+            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_RequestId_1584727637)), 1584727637, null, PduVersion.v2,
                 HashAlgorithm.Sha2512);
 
             KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
