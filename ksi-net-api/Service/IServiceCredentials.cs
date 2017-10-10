@@ -17,7 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
 using Guardtime.KSI.Hashing;
 
 namespace Guardtime.KSI.Service
@@ -38,14 +37,8 @@ namespace Guardtime.KSI.Service
         byte[] LoginKey { get; }
 
         /// <summary>
-        ///     HMAC calculation algorithm of outgoing and incoming messages
+        ///     MAC calculation algorithm of outgoing and incoming messages
         /// </summary>
-        [Obsolete("Use HmacAlgorithm instead.", false)]
         HashAlgorithm MacAlgorithm { get; }
-
-        /// <summary>
-        ///     HMAC calculation algorithm of outgoing and incoming messages.
-        /// </summary>
-        HashAlgorithm HmacAlgorithm { get; }
     }
 }

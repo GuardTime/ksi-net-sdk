@@ -104,8 +104,8 @@ namespace Guardtime.KSI.Service
             _ksiSignatureFactory = ksiSignatureFactory;
             PduVersion = pduVersion;
 
-            _signingMacAlgorithm = _signingServiceCredentials?.HmacAlgorithm ?? DefaultMacAlgorithm;
-            _extendingMacAlgorithm = _extendingServiceCredentials?.HmacAlgorithm ?? DefaultMacAlgorithm;
+            _signingMacAlgorithm = _signingServiceCredentials?.MacAlgorithm ?? DefaultMacAlgorithm;
+            _extendingMacAlgorithm = _extendingServiceCredentials?.MacAlgorithm ?? DefaultMacAlgorithm;
         }
 
         private bool IsLegacyPduVersion => PduVersion == PduVersion.v1;

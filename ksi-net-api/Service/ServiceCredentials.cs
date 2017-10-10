@@ -17,7 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Utils;
 
@@ -33,12 +32,12 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="loginId">login ID</param>
         /// <param name="loginKey">login key</param>
-        /// <param name="hmacAlgorithm">HMAC calculation algorithm of outgoing and incoming messages</param>
-        public ServiceCredentials(string loginId, byte[] loginKey, HashAlgorithm hmacAlgorithm = null)
+        /// <param name="macAlgorithm">MAC calculation algorithm of outgoing and incoming messages</param>
+        public ServiceCredentials(string loginId, byte[] loginKey, HashAlgorithm macAlgorithm = null)
         {
             LoginId = loginId;
             LoginKey = loginKey;
-            HmacAlgorithm = hmacAlgorithm;
+            MacAlgorithm = macAlgorithm;
         }
 
         /// <summary>
@@ -46,12 +45,12 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="loginId">login ID</param>
         /// <param name="loginKey">login key</param>
-        /// <param name="hmacAlgorithm">HMAC calculation algorithm of outgoing and incoming messages</param>
-        public ServiceCredentials(string loginId, string loginKey, HashAlgorithm hmacAlgorithm = null)
+        /// <param name="macAlgorithm">MAC calculation algorithm of outgoing and incoming messages</param>
+        public ServiceCredentials(string loginId, string loginKey, HashAlgorithm macAlgorithm = null)
         {
             LoginId = loginId;
             LoginKey = Util.EncodeNullTerminatedUtf8String(loginKey);
-            HmacAlgorithm = hmacAlgorithm;
+            MacAlgorithm = macAlgorithm;
         }
 
         /// <summary>
@@ -65,14 +64,8 @@ namespace Guardtime.KSI.Service
         public byte[] LoginKey { get; }
 
         /// <summary>
-        ///     HMAC calculation algorithm of outgoing and incoming messages.
+        ///     MAC calculation algorithm of outgoing and incoming messages
         /// </summary>
-        [Obsolete("Use HmacAlgorithm instead.", false)]
-        public HashAlgorithm MacAlgorithm => HmacAlgorithm;
-
-        /// <summary>
-        ///     HMAC calculation algorithm of outgoing and incoming messages.
-        /// </summary>
-        public HashAlgorithm HmacAlgorithm { get; }
+        public HashAlgorithm MacAlgorithm { get; }
     }
 }
