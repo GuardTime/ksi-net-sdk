@@ -1,6 +1,7 @@
 Version 3.10
 2017-10-04 3.10.X
 
+* IMPROVEMENT: Added new verification error code INT-17 (SINETAPI-134)
 * IMPROVEMENT: Handling of deprecated and obsolete hash functions (KSINETAPI-127)
 
 Version 3.9
