@@ -28,12 +28,12 @@ using NUnit.Framework;
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
-    public class CalendarHashChainAlgorithmObsoleteTests
+    public class Rfc3161RecordOutputHashAlgorithmDeprecatedRuleTests
     {
         [Test]
         public void TestMissingContext()
         {
-            CalendarHashChainAlgorithmObsoleteRule rule = new CalendarHashChainAlgorithmObsoleteRule();
+            Rfc3161RecordOutputHashAlgorithmDeprecatedRule rule = new Rfc3161RecordOutputHashAlgorithmDeprecatedRule();
 
             // Argument null exception when no context
             Assert.Throws<ArgumentNullException>(delegate
@@ -45,7 +45,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         [Test]
         public void TestContextMissingSignature()
         {
-            CalendarHashChainAlgorithmObsoleteRule rule = new CalendarHashChainAlgorithmObsoleteRule();
+            Rfc3161RecordOutputHashAlgorithmDeprecatedRule rule = new Rfc3161RecordOutputHashAlgorithmDeprecatedRule();
 
             // Verification exception on missing KSI signature 
             Assert.Throws<KsiVerificationException>(delegate
@@ -56,16 +56,32 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         }
 
         [Test]
-        public void TestSignatureWithOkAlgorithms()
+        public void TestNonRfc3161Signature()
         {
-            CalendarHashChainAlgorithmObsoleteRule rule = new CalendarHashChainAlgorithmObsoleteRule();
+            Rfc3161RecordOutputHashAlgorithmDeprecatedRule rule = new Rfc3161RecordOutputHashAlgorithmDeprecatedRule();
 
-            // Check with calendar hash chains that use valid hash algorithms
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
                     Signature = new KsiSignatureFactory().Create(stream),
+                };
+
+                VerificationResult verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            }
+        }
+
+        [Test]
+        public void TestRfc3161SignatureWithCorrectHashAlgorithms()
+        {
+            Rfc3161RecordOutputHashAlgorithmDeprecatedRule rule = new Rfc3161RecordOutputHashAlgorithmDeprecatedRule();
+            // test using not deprecated hash algorithms
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok), FileMode.Open))
+            {
+                TestVerificationContext context = new TestVerificationContext()
+                {
+                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream),
                 };
 
                 VerificationResult verificationResult = rule.Verify(context);

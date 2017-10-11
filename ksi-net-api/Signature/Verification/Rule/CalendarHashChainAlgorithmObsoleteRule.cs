@@ -45,8 +45,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 if (link.Value.Algorithm.IsObsolete(calendarHashChain.PublicationTime))
                 {
-                    Logger.Debug("Calendar hash chain right link algorithm is obsolete at publication time. Algorithm: {0}; Publication time: {1}",
-                        link.Value.Algorithm, calendarHashChain.PublicationTime);
+                    Logger.Debug("Calendar hash chain contains obsolete aggregation algorithm at publication time. Algorithm: {0}; Publication time: {1}",
+                        link.Value.Algorithm.Name, calendarHashChain.PublicationTime);
                     return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int16);
                 }
 

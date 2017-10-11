@@ -36,7 +36,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 if (aggregationHashChain.AggregationAlgorithm.IsDeprecated(aggregationHashChain.AggregationTime))
                 {
                     Logger.Debug("Aggregation hash chain aggregation algorithm was deprecated at aggregation time. Algorithm: {0}; Aggregation time: {1}",
-                        aggregationHashChain.AggregationAlgorithm, aggregationHashChain.AggregationTime);
+                        aggregationHashChain.AggregationAlgorithm.Name, aggregationHashChain.AggregationTime);
                     return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int15);
                 }
             }

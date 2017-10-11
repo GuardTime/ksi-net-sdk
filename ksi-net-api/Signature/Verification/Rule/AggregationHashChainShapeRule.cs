@@ -24,9 +24,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// <summary>
     ///     Rule checks that shape of the aggregation hash chain matches with chain index.
     /// </summary>
-    public sealed class AggregationHashChainShapeRule : VerificationRule
+    public class AggregationHashChainShapeRule : VerificationRule
     {
-        
         /// <see cref="VerificationRule.Verify" />
         public override VerificationResult Verify(IVerificationContext context)
         {

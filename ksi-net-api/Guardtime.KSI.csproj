@@ -182,6 +182,8 @@
     <Compile Include="Signature\IKsiSignatureFactory.cs" />
     <Compile Include="Signature\LegacyIdentity.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainAlgorithmDeprecatedRule.cs" />
+    <Compile Include="Signature\Verification\Rule\AggregationChainInputHashVerificationRule.cs" />
+    <Compile Include="Signature\Verification\Rule\AggregationHashChainIndexRule.cs" />
     <Compile Include="Signature\Verification\Rule\CalendarHashChainAlgorithmDeprecatedRule.cs" />
     <Compile Include="Signature\Verification\Rule\CalendarHashChainAlgorithmObsoleteRule.cs" />
     <Compile Include="Signature\Verification\Rule\ExtenderResponseCalendarHashChainAlgorithmDeprecatedRule.cs" />
@@ -191,6 +193,7 @@
     <Compile Include="Signature\Verification\Rule\DocumentHashLevelVerificationRule.cs" />
     <Compile Include="Signature\Verification\Rule\DocumentHashVerificationRule.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainIndexSuccessorRule.cs" />
+    <Compile Include="Signature\Verification\Rule\Rfc3161RecordOutputHashAlgorithmDeprecatedRule.cs" />
     <Compile Include="Signature\Verification\Rule\Rfc3161RecordHashAlgorithmDeprecatedRule.cs" />
     <Compile Include="Signature\Verification\Rule\Rfc3161RecordAggregationTimeRule.cs" />
     <Compile Include="Signature\Verification\Rule\Rfc3161RecordChainIndexRule.cs" />
@@ -279,7 +282,7 @@
     <Compile Include="Signature\Verification\Rule\CalendarHashChainInputHashVerificationRule.cs" />
     <Compile Include="Signature\Verification\Policy\InternalVerificationPolicy.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainConsistencyRule.cs" />
-    <Compile Include="Signature\Verification\Rule\Rfc3161OutputHashVerificationRule.cs" />
+    <Compile Include="Signature\Verification\Rule\Rfc3161RecordOutputHashVerificationRule.cs" />
     <Compile Include="Signature\Verification\IVerificationContext.cs" />
     <Compile Include="Signature\Verification\VerificationContext.cs" />
     <Compile Include="Signature\Verification\VerificationError.cs" />

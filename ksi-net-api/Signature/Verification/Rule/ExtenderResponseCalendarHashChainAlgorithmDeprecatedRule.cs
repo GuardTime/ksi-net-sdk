@@ -39,8 +39,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (deprecatedHashAlgorithm != null)
             {
-                Logger.Debug("Extender response calendar hash chain right link algorithm is deprecated at publication time. Algorithm: {0}; Publication time: {1}",
-                    deprecatedHashAlgorithm, extendedCalendarHashChain.PublicationTime);
+                Logger.Debug("Extender response calendar hash chain contains deprecated aggregation algorithm at publication time. Algorithm: {0}; Publication time: {1}",
+                    deprecatedHashAlgorithm.Name, extendedCalendarHashChain.PublicationTime);
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Na, VerificationError.Gen02);
             }
 

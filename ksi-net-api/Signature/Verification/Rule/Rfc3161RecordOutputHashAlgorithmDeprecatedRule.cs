@@ -22,10 +22,10 @@ using Guardtime.KSI.Hashing;
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
     /// <summary>
-    ///     This rule verifies RFC3161 output hash equals to aggregation chain input hash. 
+    ///     Verifies that RFC3161 record output hash algorithm was not deprecated at the aggregation time. 
     ///     If RFC3161 record is not present then <see cref="VerificationResultCode.Ok" /> is returned.
     /// </summary>
-    public sealed class Rfc3161OutputHashVerificationRule : VerificationRule
+    public class Rfc3161RecordOutputHashAlgorithmDeprecatedRule : VerificationRule
     {
         /// <see cref="VerificationRule.Verify" />
         public override VerificationResult Verify(IVerificationContext context)
@@ -37,15 +37,17 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
             }
 
-            DataHash aggregationHashChainInputHash = GetAggregationHashChains(signature, false)[0].InputHash;
+            AggregationHashChain aggregationHashChain = GetAggregationHashChains(signature, false)[0];
+            HashAlgorithm hashAlgorithm = aggregationHashChain.InputHash.Algorithm;
+            ulong aggregationTime = aggregationHashChain.AggregationTime;
 
-            DataHash inputHash = KsiProvider.CreateDataHasher(aggregationHashChainInputHash.Algorithm)
-                                            .AddData(signature.Rfc3161Record.GetOutputHash().Imprint)
-                                            .GetHash();
+            if (hashAlgorithm.IsDeprecated(aggregationTime))
+            {
+                Logger.Debug("RFC3161 output hash algorithm was deprecated at aggregation time. Algorithm: {0}; Aggregation time: {1}", hashAlgorithm.Name, aggregationTime);
+                return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int17);
+            }
 
-            return inputHash != aggregationHashChainInputHash
-                ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int01)
-                : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
+            return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
         }
     }
 }

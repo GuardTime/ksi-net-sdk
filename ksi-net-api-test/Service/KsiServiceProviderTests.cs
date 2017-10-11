@@ -42,7 +42,7 @@ namespace Guardtime.KSI.Test.Service
                 KsiProvider.CreateHmacHasher(HashAlgorithm.Sha1);
             });
 
-            Assert.That(ex.Message.StartsWith("Given hash algorithm cannot be used for calculating HMAC because it has deprecated since date set."),
+            Assert.That(ex.Message.StartsWith("Hash algorithm SHA1 is deprecated since 1.07.2016 and can not be used for HMAC."),
                 "Unexpected exception message: " + ex.Message);
         }
     }

@@ -34,7 +34,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (inputHash.Algorithm.IsDeprecated(signature.AggregationTime))
             {
-                Logger.Debug("Input hash algorithm was deprecated at aggregation time. Algorithm: {0}; Aggregation time: {1}", inputHash.Algorithm, signature.AggregationTime);
+                Logger.Debug("Input hash algorithm was deprecated at aggregation time. Algorithm: {0}; Aggregation time: {1}", inputHash.Algorithm.Name, signature.AggregationTime);
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int13);
             }
 

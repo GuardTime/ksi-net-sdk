@@ -198,7 +198,7 @@
     <Compile Include="Signature\Verification\Policy\InternalVerificationPolicyTests.cs" />
     <Compile Include="Signature\Verification\Rule\ExtenderResponseCalendarHashChainAlgorithmDeprecatedRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\CalendarHashChainAlgorithmDeprecatedRuleTests.cs" />
-    <Compile Include="Signature\Verification\Rule\CalendarHashChainAlgorithmObsoleteTests.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarHashChainAlgorithmObsoleteRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainAlgorithmDeprecatedRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\InputHashAlgorithmDeprecatedRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\InputHashAlgorithmVerificationRuleTests.cs" />
@@ -206,6 +206,7 @@
     <Compile Include="Signature\Verification\Rule\DocumentHashLevelVerificationRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\DocumentHashVerificationRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainIndexSuccessorRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\Rfc3161RecordOutputHashAlgorithmDeprecatedRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\Rfc3161RecordHashAlgorithmDeprecatedRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\Rfc3161RecordAggregationTimeRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\Rfc3161RecordChainIndexRuleTests.cs" />
@@ -221,7 +222,7 @@
     <Compile Include="Signature\Rfc3161RecordTests.cs" />
     <Compile Include="Signature\SignatureDataTests.cs" />
     <Compile Include="Signature\TestKsiSignature.cs" />
-    <Compile Include="Signature\Verification\Rule\Rfc3161OutputHashVerificationRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\Rfc3161RecordOutputHashVerificationRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainConsistencyRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainTimeConsistencyRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\CalendarAuthenticationRecordAggregationHashRuleTests.cs" />
@@ -997,6 +998,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\shared\internal-policy-signatures\rfc3161-record\invalid-signature-rfc3161-aggr-time-no-value.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\internal-policy-signatures\rfc3161-record\invalid-signature-rfc3161-and-aggregation-input-hash-has-deprecated-algorithm.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\shared\internal-policy-signatures\rfc3161-record\invalid-signature-rfc3161-chain-index-has-child-element.tlv">

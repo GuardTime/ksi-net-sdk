@@ -17,9 +17,11 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Hashing
 {
@@ -100,7 +102,20 @@ namespace Guardtime.KSI.Hashing
             Length = length;
             Status = status;
             _alternatives = alternatives;
-            _deprecatedSince = deprecatedSince;
+
+            if (!deprecatedSince.HasValue)
+            {
+                _deprecatedSince = obsoleteSince;
+            }
+            else if (!obsoleteSince.HasValue)
+            {
+                _deprecatedSince = deprecatedSince;
+            }
+            else
+            {
+                _deprecatedSince = deprecatedSince > obsoleteSince ? obsoleteSince : deprecatedSince;
+            }
+
             _obsoleteSince = obsoleteSince;
         }
 
@@ -130,13 +145,23 @@ namespace Guardtime.KSI.Hashing
         public bool HasDeprecatedSinceDate => _deprecatedSince.HasValue;
 
         /// <summary>
+        /// Returns deprecated since date. 
+        /// </summary>
+        public DateTime? DeprecatedSinceDate => _deprecatedSince.HasValue ? Util.ConvertUnixTimeToDateTime(_deprecatedSince.Value) : (DateTime?)null;
+
+        /// <summary>
         /// Returns true if the algorithm is deprecated at the given date
         /// </summary>
         /// <returns></returns>
         public bool IsDeprecated(ulong date)
         {
-            return _deprecatedSince.HasValue && date >= _deprecatedSince.Value;
+            return (_deprecatedSince.HasValue && date >= _deprecatedSince.Value) || IsObsolete(date);
         }
+
+        /// <summary>
+        /// Returns deprecatobsoleteed since date.
+        /// </summary>
+        public DateTime? ObsoleteSinceDate => _obsoleteSince.HasValue ? Util.ConvertUnixTimeToDateTime(_obsoleteSince.Value) : (DateTime?)null;
 
         /// <summary>
         /// Returns true if the algorithm has obsolete since date set.

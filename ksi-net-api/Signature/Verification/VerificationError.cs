@@ -127,6 +127,12 @@ namespace Guardtime.KSI.Signature.Verification
         public static readonly VerificationError Int16 = new VerificationError("INT-16", "Calendar hash chain hash algorithm was obsolete at publication time");
 
         /// <summary>
+        ///     The RFC3161 compatibility record output hash algorithm was deprecated at the time of signing.
+        /// </summary>
+        public static readonly VerificationError Int17 = new VerificationError("INT-17",
+            "The RFC3161 compatibility record output hash algorithm was deprecated at the time of signing");
+
+        /// <summary>
         ///     Extender response calendar root hash mismatch error.
         /// </summary>
         public static readonly VerificationError Pub01 = new VerificationError("PUB-01", "Extender response calendar root hash mismatch");

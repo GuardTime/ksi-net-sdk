@@ -56,7 +56,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         }
 
         [Test]
-        public void TestSignatureWithOkCalendarAlgorithms()
+        public void TestOkCalendarAlgorithms()
         {
             CalendarHashChainAlgorithmDeprecatedRule rule = new CalendarHashChainAlgorithmDeprecatedRule();
 
@@ -72,7 +72,5 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
         }
-
-
     }
 }

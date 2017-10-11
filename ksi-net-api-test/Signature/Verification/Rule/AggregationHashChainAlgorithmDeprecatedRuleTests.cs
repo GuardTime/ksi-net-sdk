@@ -56,7 +56,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         }
 
         [Test]
-        public void TestSignatureWithOkAlgorithms()
+        public void TestOkAlgorithms()
         {
             AggregationHashChainAlgorithmDeprecatedRule rule = new AggregationHashChainAlgorithmDeprecatedRule();
 

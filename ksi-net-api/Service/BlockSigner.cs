@@ -63,12 +63,13 @@ namespace Guardtime.KSI.Service
             {
                 if (hashAlgorithm.HasDeprecatedSinceDate)
                 {
-                    throw new HashingException("Given hash algorithm cannot be used because it has deprecated since date set. Algorithm: " + hashAlgorithm.Name);
+                    throw new HashingException(string.Format("Hash algorithm {0} is deprecated since {1:d} and can not be used.", hashAlgorithm.Name,
+                        hashAlgorithm.DeprecatedSinceDate));
                 }
 
                 if (hashAlgorithm.HasObsoleteSinceDate)
                 {
-                    throw new HashingException("Given hash algorithm cannot be used because it has obsolete since date set. Algorithm: " + hashAlgorithm.Name);
+                    throw new HashingException(string.Format("Hash algorithm {0} is obsolete since {1:d} and can not be used.", hashAlgorithm.Name, hashAlgorithm.ObsoleteSinceDate));
                 }
 
                 _hashAlgorithm = hashAlgorithm;

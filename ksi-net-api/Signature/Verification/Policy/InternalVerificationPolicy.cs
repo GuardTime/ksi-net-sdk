@@ -31,39 +31,69 @@ namespace Guardtime.KSI.Signature.Verification.Policy
         /// </summary>
         public InternalVerificationPolicy()
         {
-            // Verify aggregation chain
-            FirstRule = new InputHashAlgorithmVerificationRule() // Gen-04
+            FirstRule = GetInputVerificationRules(
+                GetRfc3161Rules(
+                    GetAggregationChainRules(
+                        // Verify calendar hash chain if exists
+                        new CalendarHashChainExistenceRule()
+                            .OnSuccess(GetCalendarChainRules(
+                                // Verify calendar auth record if exists
+                                new CalendarAuthenticationRecordExistenceRule()
+                                    .OnSuccess(CalendarAuthRecordRules)
+                                    // No calendar auth record. Verify publication record.
+                                    .OnNa(PublicationRules)))
+                            // No calendar hash chain
+                            .OnNa(new OkResultRule()))));
+        }
+
+        private static VerificationRule GetInputVerificationRules(VerificationRule innerSuccessRules)
+        {
+            return new InputHashAlgorithmVerificationRule() // Gen-04
                 .OnSuccess(new DocumentHashVerificationRule() // Gen-01
                     .OnSuccess(new DocumentHashLevelVerificationRule() // Gen-03
                         .OnSuccess(new InputHashAlgorithmDeprecatedRule() // Int-13
-                            .OnSuccess(new Rfc3161RecordHashAlgorithmDeprecatedRule() // Int-14
-                                .OnSuccess(new Rfc3161OutputHashVerificationRule() // Int-01
-                                    .OnSuccess(new Rfc3161RecordAggregationTimeRule() // Int-02
-                                        .OnSuccess(new Rfc3161RecordChainIndexRule() // Int-12
-                                            .OnSuccess(new AggregationHashChainIndexSuccessorRule() // Int-12
-                                                .OnSuccess(new AggregationHashChainMetadataRule() // Int-11
-                                                    .OnSuccess(new AggregationHashChainAlgorithmDeprecatedRule() // Int-15
-                                                        .OnSuccess(new AggregationHashChainConsistencyRule() // Int-01
-                                                            .OnSuccess(new AggregationHashChainTimeConsistencyRule() // Int-02
-                                                                .OnSuccess(new AggregationHashChainShapeRule() // Int-10
-                                                                    // Verify calendar hash chain.
-                                                                    .OnSuccess(new CalendarHashChainExistenceRule()
-                                                                        .OnSuccess(new CalendarHashChainInputHashVerificationRule() // Int-03
-                                                                            .OnSuccess(new CalendarHashChainAggregationTimeRule() // Int-04
-                                                                                .OnSuccess(new CalendarHashChainRegistrationTimeRule() // Int-05
-                                                                                    .OnSuccess(new CalendarHashChainAlgorithmObsoleteRule() // Int-16
-                                                                                        // Verify calendar auth record
-                                                                                        .OnSuccess(new CalendarAuthenticationRecordExistenceRule()
-                                                                                            .OnSuccess(new CalendarAuthenticationRecordAggregationTimeRule() // Int-06
-                                                                                                .OnSuccess(new CalendarAuthenticationRecordAggregationHashRule())) // Int-08
-                                                                                            // No calendar auth record. Verify publication record.
-                                                                                            .OnNa(new SignaturePublicationRecordExistenceRule()
-                                                                                                .OnSuccess(new SignaturePublicationRecordPublicationTimeRule() // Int-07
-                                                                                                    .OnSuccess(new SignaturePublicationRecordPublicationHashRule())) // Int-09
-                                                                                                // No publication record
-                                                                                                .OnNa(new OkResultRule())))))))
-                                                                        // No calendar hash chain
-                                                                        .OnNa(new OkResultRule())))))))))))))));
+                            .OnSuccess(innerSuccessRules))));
         }
+
+        private static VerificationRule GetRfc3161Rules(VerificationRule innerSuccessRules)
+        {
+            return new Rfc3161RecordHashAlgorithmDeprecatedRule() // Int-14
+                .OnSuccess(new Rfc3161RecordOutputHashAlgorithmDeprecatedRule() // Int-17
+                    .OnSuccess(new Rfc3161RecordOutputHashVerificationRule() // Int-01
+                        .OnSuccess(new Rfc3161RecordAggregationTimeRule() // Int-02
+                            .OnSuccess(new Rfc3161RecordChainIndexRule() // Int-12
+                                .OnSuccess(innerSuccessRules)))));
+        }
+
+        private static VerificationRule GetAggregationChainRules(VerificationRule innerSuccessRules)
+        {
+            return new AggregationHashChainIndexSuccessorRule() // Int-12
+                .OnSuccess(new AggregationHashChainMetadataRule() // Int-11
+                    .OnSuccess(new AggregationHashChainAlgorithmDeprecatedRule() // Int-15
+                        .OnSuccess(new AggregationHashChainConsistencyRule() // Int-01
+                            .OnSuccess(new AggregationHashChainTimeConsistencyRule() // Int-02
+                                .OnSuccess(new AggregationHashChainShapeRule() // Int-10
+                                    .OnSuccess(innerSuccessRules))))));
+        }
+
+        private static VerificationRule GetCalendarChainRules(VerificationRule innerSuccessRules)
+        {
+            return new CalendarHashChainInputHashVerificationRule() // Int-03
+                .OnSuccess(new CalendarHashChainAggregationTimeRule() // Int-04
+                    .OnSuccess(new CalendarHashChainRegistrationTimeRule() // Int-05
+                        .OnSuccess(new CalendarHashChainAlgorithmObsoleteRule() // Int-16
+                            .OnSuccess(innerSuccessRules))));
+        }
+
+        private static VerificationRule CalendarAuthRecordRules =>
+            new CalendarAuthenticationRecordAggregationTimeRule() // Int-06
+                .OnSuccess(new CalendarAuthenticationRecordAggregationHashRule()); // Int-08
+
+        private static VerificationRule PublicationRules =>
+            new SignaturePublicationRecordExistenceRule()
+                .OnSuccess(new SignaturePublicationRecordPublicationTimeRule() // Int-07
+                    .OnSuccess(new SignaturePublicationRecordPublicationHashRule())) // Int-09
+                // No publication record
+                .OnNa(new OkResultRule());
     }
 }

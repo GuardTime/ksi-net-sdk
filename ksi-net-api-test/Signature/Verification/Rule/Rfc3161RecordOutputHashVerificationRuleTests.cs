@@ -28,12 +28,12 @@ using NUnit.Framework;
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
-    public class Rfc3161OutputHashVerificationRuleTests
+    public class Rfc3161RecordOutputHashVerificationRuleTests
     {
         [Test]
         public void TestMissingContext()
         {
-            Rfc3161OutputHashVerificationRule rule = new Rfc3161OutputHashVerificationRule();
+            Rfc3161RecordOutputHashVerificationRule rule = new Rfc3161RecordOutputHashVerificationRule();
 
             // Argument null exception when no context
             Assert.Throws<ArgumentNullException>(delegate
@@ -45,7 +45,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         [Test]
         public void TestContextMissingSignature()
         {
-            Rfc3161OutputHashVerificationRule rule = new Rfc3161OutputHashVerificationRule();
+            Rfc3161RecordOutputHashVerificationRule rule = new Rfc3161RecordOutputHashVerificationRule();
 
             // Verification exception on missing KSI signature 
             Assert.Throws<KsiVerificationException>(delegate
@@ -59,7 +59,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         [Test]
         public void TestRfc3161Signature()
         {
-            Rfc3161OutputHashVerificationRule rule = new Rfc3161OutputHashVerificationRule();
+            Rfc3161RecordOutputHashVerificationRule rule = new Rfc3161RecordOutputHashVerificationRule();
 
             // Check legacy signature 
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok), FileMode.Open))
@@ -77,7 +77,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         [Test]
         public void TestRfc3161SignatureInvalidInput()
         {
-            Rfc3161OutputHashVerificationRule rule = new Rfc3161OutputHashVerificationRule();
+            Rfc3161RecordOutputHashVerificationRule rule = new Rfc3161RecordOutputHashVerificationRule();
 
             // Check legacy signature with invalid input hash
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Invalid_Input), FileMode.Open))
@@ -96,7 +96,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         [Test]
         public void TestSignature()
         {
-            Rfc3161OutputHashVerificationRule rule = new Rfc3161OutputHashVerificationRule();
+            Rfc3161RecordOutputHashVerificationRule rule = new Rfc3161RecordOutputHashVerificationRule();
 
             // Check signature 
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))

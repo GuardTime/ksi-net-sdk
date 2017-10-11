@@ -72,12 +72,14 @@ namespace Guardtime.KSI.Service
 
             if (hash.Algorithm.HasDeprecatedSinceDate)
             {
-                throw new KsiServiceException("Given data hash cannot be signed because the hash algorithm has deprecated since date set. Algorithm: " + hash.Algorithm.Name);
+                throw new KsiServiceException(string.Format("Hash algorithm {0} is deprecated since {1:d} and can not be used for signing.", hash.Algorithm.Name,
+                    hash.Algorithm.DeprecatedSinceDate));
             }
 
             if (hash.Algorithm.HasObsoleteSinceDate)
             {
-                throw new KsiServiceException("Given data hash cannot be signed because the hash algorithm has obsolete since date set. Algorithm: " + hash.Algorithm.Name);
+                throw new KsiServiceException(string.Format("Hash algorithm {0} is obsolete since {1:d} and can not be used for signing.", hash.Algorithm.Name,
+                    hash.Algorithm.DeprecatedSinceDate));
             }
 
             if (_signingServiceProtocol == null)

@@ -32,18 +32,18 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (signature.IsRfc3161Signature)
             {
+                if (signature.Rfc3161Record.TstInfoAlgorithm != null && signature.Rfc3161Record.TstInfoAlgorithm.IsDeprecated(signature.Rfc3161Record.AggregationTime))
+                {
+                    Logger.Debug("Hash algorithm used to hash the TSTInfo structure was deprecated at aggregation time. Algorithm: {0}; Aggregation time: {1}",
+                        signature.Rfc3161Record.TstInfoAlgorithm.Name, signature.Rfc3161Record.AggregationTime);
+                    return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int14);
+                }
+
                 if (signature.Rfc3161Record.SignedAttributesAlgorithm != null &&
                     signature.Rfc3161Record.SignedAttributesAlgorithm.IsDeprecated(signature.Rfc3161Record.AggregationTime))
                 {
                     Logger.Debug("Hash algorithm used to hash the SignedAttributes structure was deprecated at aggregation time. Algorithm: {0}; Aggregation time: {1}",
                         signature.Rfc3161Record.SignedAttributesAlgorithm.Name, signature.Rfc3161Record.AggregationTime);
-                    return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int14);
-                }
-
-                if (signature.Rfc3161Record.TstInfoAlgorithm != null && signature.Rfc3161Record.TstInfoAlgorithm.IsDeprecated(signature.Rfc3161Record.AggregationTime))
-                {
-                    Logger.Debug("Hash algorithm used to hash the TSTInfo structure was deprecated at aggregation time. Algorithm: {0}; Aggregation time: {1}",
-                        signature.Rfc3161Record.TstInfoAlgorithm.Name, signature.Rfc3161Record.AggregationTime);
                     return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int14);
                 }
             }

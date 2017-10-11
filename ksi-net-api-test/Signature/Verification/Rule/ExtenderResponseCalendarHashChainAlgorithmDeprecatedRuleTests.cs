@@ -60,7 +60,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         }
 
         [Test]
-        public void TestSignatureWithOkCalendarAlgorithms()
+        public void TestOkCalendarAlgorithms()
         {
             // Check extender response calendar hash algorithm
             ExtenderResponseCalendarHashChainAlgorithmDeprecatedRule rule = new ExtenderResponseCalendarHashChainAlgorithmDeprecatedRule();

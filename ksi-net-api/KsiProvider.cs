@@ -89,12 +89,12 @@ namespace Guardtime.KSI
 
             if (algorithm.HasDeprecatedSinceDate)
             {
-                throw new HashingException("Given hash algorithm cannot be used for calculating HMAC because it has deprecated since date set. Algorithm: " + algorithm.Name);
+                throw new HashingException(string.Format("Hash algorithm {0} is deprecated since {1:d} and can not be used for HMAC.", algorithm.Name, algorithm.DeprecatedSinceDate));
             }
 
             if (algorithm.HasObsoleteSinceDate)
             {
-                throw new HashingException("Given hash algorithm cannot be used for calculating HMAC because it has obsolete since date set. Algorithm: " + algorithm.Name);
+                throw new HashingException(string.Format("Hash algorithm {0} is obsolete since {1:d} and can not be used for HMAC.", algorithm.Name, algorithm.ObsoleteSinceDate));
             }
 
             return _cryptoProvider.CreateHmacHasher(algorithm);

@@ -328,7 +328,7 @@ namespace Guardtime.KSI.Test.Integration
                 new BlockSigner(HttpKsiService, HashAlgorithm.Sha1);
             });
 
-            Assert.That(ex.Message.StartsWith("Given hash algorithm cannot be used because it has deprecated since date set."),
+            Assert.That(ex.Message.StartsWith("Hash algorithm SHA1 is deprecated since 1.07.2016 and can not be used."),
                 "Unexpected exception message: " + ex.Message);
         }
 

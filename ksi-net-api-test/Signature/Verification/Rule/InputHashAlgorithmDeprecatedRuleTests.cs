@@ -74,7 +74,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         }
 
         [Test]
-        public void TestSignatureWithOkInputHashAlgorithm()
+        public void TestOkInputHashAlgorithm()
         {
             InputHashAlgorithmDeprecatedRule rule = new InputHashAlgorithmDeprecatedRule();
 
