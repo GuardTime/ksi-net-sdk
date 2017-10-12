@@ -47,6 +47,16 @@ namespace Guardtime.KSI.Service
         private readonly HashAlgorithm _extendingMacAlgorithm;
 
         /// <summary>
+        /// Aggregator configuration changed event
+        /// </summary>
+        public event EventHandler<AggregatorConfigChangedEventArgs> AggregatorConfigChanged;
+
+        /// <summary>
+        /// Extender configuration changed event
+        /// </summary>
+        public event EventHandler<ExtenderConfigChangedEventArgs> ExtenderConfigChanged;
+
+        /// <summary>
         ///     Create KSI service with service protocol and service settings.
         /// </summary>
         /// <param name="signingServiceProtocol">signing service protocol</param>
@@ -62,7 +72,7 @@ namespace Guardtime.KSI.Service
                           IServiceCredentials extendingServiceCredentials,
                           IKsiPublicationsFileServiceProtocol publicationsFileServiceProtocol,
                           IPublicationsFileFactory publicationsFileFactory,
-                          PduVersion pduVersion = DefaultPduVersion)
+                          PduVersion pduVersion)
             :
                 this(signingServiceProtocol,
                     signingServiceCredentials,
@@ -84,16 +94,16 @@ namespace Guardtime.KSI.Service
         /// <param name="extendingServiceCredentials">extending service credentials</param>
         /// <param name="publicationsFileServiceProtocol">publications file protocol</param>
         /// <param name="publicationsFileFactory">publications file factory</param>
-        /// <param name="ksiSignatureFactory">ksi signature factory</param>
-        /// <param name="pduVersion">PDU version</param>
+        /// <param name="ksiSignatureFactory">KSI signature factory used when creating a KSI signature</param>
+        /// <param name="pduVersion">PDU version to be used</param>
         public KsiService(IKsiSigningServiceProtocol signingServiceProtocol,
                           IServiceCredentials signingServiceCredentials,
                           IKsiExtendingServiceProtocol extendingServiceProtocol,
                           IServiceCredentials extendingServiceCredentials,
                           IKsiPublicationsFileServiceProtocol publicationsFileServiceProtocol,
                           IPublicationsFileFactory publicationsFileFactory,
-                          IKsiSignatureFactory ksiSignatureFactory,
-                          PduVersion pduVersion = DefaultPduVersion)
+                          IKsiSignatureFactory ksiSignatureFactory = null,
+                          PduVersion? pduVersion = null)
         {
             _signingServiceProtocol = signingServiceProtocol;
             _signingServiceCredentials = signingServiceCredentials;
@@ -101,8 +111,8 @@ namespace Guardtime.KSI.Service
             _extendingServiceCredentials = extendingServiceCredentials;
             _publicationsFileServiceProtocol = publicationsFileServiceProtocol;
             _publicationsFileFactory = publicationsFileFactory;
-            _ksiSignatureFactory = ksiSignatureFactory;
-            PduVersion = pduVersion;
+            _ksiSignatureFactory = ksiSignatureFactory ?? new KsiSignatureFactory();
+            PduVersion = pduVersion ?? DefaultPduVersion;
 
             _signingMacAlgorithm = _signingServiceCredentials?.MacAlgorithm ?? DefaultMacAlgorithm;
             _extendingMacAlgorithm = _extendingServiceCredentials?.MacAlgorithm ?? DefaultMacAlgorithm;
@@ -138,5 +148,29 @@ namespace Guardtime.KSI.Service
             }
             return serviceAsyncResult;
         }
+
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        public override string ToString()
+        {
+            return string.Format("KsiService (signing: {0}; extending: {1}; publications file: {2})", _signingServiceProtocol, _extendingServiceProtocol,
+                _publicationsFileServiceProtocol);
+        }
+
+        /// <summary>
+        /// Aggregator location url
+        /// </summary>
+        public string AggregatorLocation => _signingServiceProtocol?.AggregatorLocation;
+
+        /// <summary>
+        /// Extender location url
+        /// </summary>
+        public string ExtenderLocation => _extendingServiceProtocol?.ExtenderLocation;
+
+        /// <summary>
+        /// Publications file location url
+        /// </summary>
+        public string PublicationsFileLocation => _publicationsFileServiceProtocol?.PublicationsFileLocation;
     }
 }

@@ -68,7 +68,7 @@ namespace Guardtime.KSI.Test.Service
         public void ExtenderConfigRequestInvalidStaticTest()
         {
             // pdu does not contain extender config payload
-            Ksi ksi = GetStaticKsi(Resources.KsiService_ExtendResponsePdu);
+            Ksi ksi = GetStaticKsi(Resources.KsiService_ExtendResponsePdu_RequestId_1043101455);
 
             KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
             {

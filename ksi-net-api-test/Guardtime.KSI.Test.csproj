@@ -140,6 +140,11 @@
     <Compile Include="Hashing\HashAlgorithmTests.cs" />
     <Compile Include="Integration\PublicationsFileIntegrationTests.cs" />
     <Compile Include="Service\TcpResponseProcessorTests.cs" />
+    <Compile Include="Service\HighAvailability\HAExtenderConfigStaticTests.cs" />
+    <Compile Include="Service\HighAvailability\HAAggregatorConfigStaticTests.cs" />
+    <Compile Include="Service\HighAvailability\HAExtendingStaticTests.cs" />
+    <Compile Include="Service\HighAvailability\HAPublicationsFileRequestStaticTests.cs" />
+    <Compile Include="Service\HighAvailability\HASigningStaticTests.cs" />
     <Compile Include="Service\TreeBuilderPrintTreeTests.cs" />
     <Compile Include="Integration\ConfigurationIntegrationTests.cs" />
     <Compile Include="Integration\IntegrationTests.cs" />
@@ -298,6 +303,9 @@
     <None Include="resources\service\aggregation-response-pdu-with-unknown-non-critical-payload.tlv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="resources\service\aggregation-response-pdu-2.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="resources\service\aggregator-config-response-pdu-0x0-int.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -347,6 +355,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\service\aggregation-response-pdu-error-payload.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\service\extend-response-pdu-2.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\service\extend-response-pdu-invalid-signature.tlv">

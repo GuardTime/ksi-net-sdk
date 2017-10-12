@@ -87,7 +87,7 @@ namespace Guardtime.KSI.Test.Service
         public void AggregatorConfigRequestInvalidStaticTest()
         {
             // pdu does not contain aggregator config payload
-            Ksi ksi = GetStaticKsi(Resources.KsiService_AggregationResponsePdu);
+            Ksi ksi = GetStaticKsi(Resources.KsiService_AggregationResponsePdu_RequestId_1584727637);
 
             KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
             {

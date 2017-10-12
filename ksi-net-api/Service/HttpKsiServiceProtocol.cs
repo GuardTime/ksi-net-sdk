@@ -139,12 +139,27 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        ///     Begin extending request.
+        /// Aggregator location url
+        /// </summary>
+        public string AggregatorLocation => _signingUrl;
+
+        /// <summary>
+        /// Extender location url
+        /// </summary>
+        public string ExtenderLocation => _extendingUrl;
+
+        /// <summary>
+        /// Publications file location url
+        /// </summary>
+        public string PublicationsFileLocation => _publicationsFileUrl;
+
+        /// <summary>
+        ///     Begin extend request.
         /// </summary>
         /// <param name="data">extending request bytes</param>
         /// <param name="requestId">request id</param>
         /// <param name="callback">callback when extending signature is finished</param>
-        /// <param name="asyncState">async state object</param>
+        /// <param name="asyncState">callback async state object</param>
         /// <returns>HTTP KSI service async result</returns>
         public IAsyncResult BeginExtend(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
@@ -253,7 +268,7 @@ namespace Guardtime.KSI.Service
         ///     Begin get publications file.
         /// </summary>
         /// <param name="callback">callback when publications file is downloaded</param>
-        /// <param name="asyncState">async state object</param>
+        /// <param name="asyncState">callback async state object</param>
         /// <returns>HTTP KSI service async result</returns>
         public IAsyncResult BeginGetPublicationsFile(AsyncCallback callback, object asyncState)
         {
@@ -354,7 +369,7 @@ namespace Guardtime.KSI.Service
         /// <param name="data">aggregation request bytes</param>
         /// <param name="requestId"></param>
         /// <param name="callback">callback when creating signature is finished</param>
-        /// <param name="asyncState">async state object</param>
+        /// <param name="asyncState">callback async state object</param>
         /// <returns>HTTP KSI service async result</returns>
         public IAsyncResult BeginSign(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {

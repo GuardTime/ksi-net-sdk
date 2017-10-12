@@ -30,7 +30,17 @@ namespace Guardtime.KSI.Service
     public interface IKsiService
     {
         /// <summary>
-        ///     Sync create signature with given data hash.
+        /// Aggregator configuration changed event
+        /// </summary>
+        event EventHandler<AggregatorConfigChangedEventArgs> AggregatorConfigChanged;
+
+        /// <summary>
+        /// Extender configuration changed event
+        /// </summary>
+        event EventHandler<ExtenderConfigChangedEventArgs> ExtenderConfigChanged;
+
+        /// <summary>
+        ///     Create signature with given data hash (sync).
         /// </summary>
         /// <param name="hash">data hash</param>
         /// <param name="level">the level value of the aggregation tree node</param>
@@ -42,7 +52,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="hash">data hash</param>
         /// <param name="callback">callback when creating signature is finished</param>
-        /// <param name="asyncState">async state object</param>
+        /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         IAsyncResult BeginSign(DataHash hash, AsyncCallback callback, object asyncState);
 
@@ -52,7 +62,7 @@ namespace Guardtime.KSI.Service
         /// <param name="hash">data hash</param>
         /// <param name="level">the level value of the aggregation tree node</param>
         /// <param name="callback">callback when creating signature is finished</param>
-        /// <param name="asyncState">async state object</param>
+        /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         IAsyncResult BeginSign(DataHash hash, uint level, AsyncCallback callback, object asyncState);
 
@@ -79,8 +89,8 @@ namespace Guardtime.KSI.Service
         /// <summary>
         /// Begin get additional aggregator configuration data (async)
         /// </summary>
-        /// <param name="callback"></param>
-        /// <param name="asyncState"></param>
+        /// <param name="callback">callback when aggregator configuration request is finished</param>
+        /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         IAsyncResult BeginGetAggregatorConfig(AsyncCallback callback, object asyncState);
 
@@ -111,7 +121,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
         /// <param name="callback">callback when extending signature is finished</param>
-        /// <param name="asyncState">async state object</param>
+        /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         IAsyncResult BeginExtend(ulong aggregationTime, AsyncCallback callback, object asyncState);
 
@@ -121,7 +131,7 @@ namespace Guardtime.KSI.Service
         /// <param name="aggregationTime">aggregation time</param>
         /// <param name="publicationTime">publication time</param>
         /// <param name="callback">callback when extending signature is finished</param>
-        /// <param name="asyncState">async state object</param>
+        /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         IAsyncResult BeginExtend(ulong aggregationTime, ulong publicationTime, AsyncCallback callback, object asyncState);
 
@@ -141,8 +151,8 @@ namespace Guardtime.KSI.Service
         /// <summary>
         /// Begin get additional extender configuration data (async)
         /// </summary>
-        /// <param name="callback"></param>
-        /// <param name="asyncState"></param>
+        /// <param name="callback">callback when extender configuration request is finished</param>
+        /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         IAsyncResult BeginGetExtenderConfig(AsyncCallback callback, object asyncState);
 
@@ -163,7 +173,7 @@ namespace Guardtime.KSI.Service
         ///     Begin get publications file (async).
         /// </summary>
         /// <param name="callback">callback when publications file is downloaded</param>
-        /// <param name="asyncState">async state object</param>
+        /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         IAsyncResult BeginGetPublicationsFile(AsyncCallback callback, object asyncState);
 
@@ -173,5 +183,20 @@ namespace Guardtime.KSI.Service
         /// <param name="asyncResult">async result</param>
         /// <returns>publications file</returns>
         IPublicationsFile EndGetPublicationsFile(IAsyncResult asyncResult);
+
+        /// <summary>
+        /// Aggregator location url
+        /// </summary>
+        string AggregatorLocation { get; }
+
+        /// <summary>
+        /// Extender location url
+        /// </summary>
+        string ExtenderLocation { get; }
+
+        /// <summary>
+        /// Publications file location url
+        /// </summary>
+        string PublicationsFileLocation { get; }
     }
 }
