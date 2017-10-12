@@ -76,11 +76,6 @@ namespace Guardtime.KSI.Test.Signature
         {
             IKsiSignature signature;
 
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok_With_Publication_Record), FileMode.Open))
-            {
-                signature = new KsiSignatureFactory().Create(stream);
-            }
-
             KsiSignatureFactory signatureFactory = new KsiSignatureFactory(new PublicationBasedVerificationPolicy(),
                 new TestVerificationContext()
                 {

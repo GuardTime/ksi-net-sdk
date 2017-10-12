@@ -560,7 +560,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
             AggregationResponsePdu pdu = TestUtil.GetCompositeTag<AggregationResponsePdu>(Constants.AggregationResponsePdu.TagType, childTags.ToArray());
 
             MethodInfo m = pdu.GetType().GetMethod("SetMacValue", BindingFlags.Instance | BindingFlags.NonPublic);
-            m.Invoke(pdu, new object[] { HashAlgorithm.Sha2256, Util.EncodeNullTerminatedUtf8String(Settings.Default.HttpSigningServicePass) });
+            m.Invoke(pdu, new object[] { HashAlgorithm.Sha2256, Util.EncodeNullTerminatedUtf8String(TestConstants.ServicePass) });
 
             MemoryStream stream = new MemoryStream();
             using (TlvWriter writer = new TlvWriter(stream))

@@ -144,9 +144,11 @@ namespace Guardtime.KSI.Test.Integration
                 service =
                     new TestKsiService(
                         protocol,
-                        new ServiceCredentials(Properties.Settings.Default.HttpSigningServiceUser, Properties.Settings.Default.HttpSigningServicePass, HashAlgorithm.Sha2256),
+                        new ServiceCredentials(Properties.Settings.Default.HttpSigningServiceUser, Properties.Settings.Default.HttpSigningServicePass,
+                            GetHashAlgorithm(Properties.Settings.Default.HttpSigningServiceHmacAlgorithm)),
                         protocol,
-                        new ServiceCredentials(Properties.Settings.Default.HttpExtendingServiceUser, Properties.Settings.Default.HttpExtendingServicePass, HashAlgorithm.Sha2256),
+                        new ServiceCredentials(Properties.Settings.Default.HttpExtendingServiceUser, Properties.Settings.Default.HttpExtendingServicePass,
+                            GetHashAlgorithm(Properties.Settings.Default.HttpExtendingServiceHmacAlgorithm)),
                         protocol,
                         new PublicationsFileFactory(
                             new PkiTrustStoreProvider(new X509Store(StoreName.Root),

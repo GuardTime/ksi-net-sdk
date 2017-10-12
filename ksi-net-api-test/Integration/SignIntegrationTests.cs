@@ -540,9 +540,10 @@ namespace Guardtime.KSI.Test.Integration
 
             KsiService service = new KsiService(
                 tcp,
-                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
-                http,
-                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
+                new ServiceCredentials(Settings.Default.TcpSigningServiceUser, Settings.Default.TcpSigningServicePass,
+                    GetHashAlgorithm(Settings.Default.TcpSigningServiceHmacAlgorithm)),
+                null,
+                null,
                 http,
                 new PublicationsFileFactory(
                     new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),

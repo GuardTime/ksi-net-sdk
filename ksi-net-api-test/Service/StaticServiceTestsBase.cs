@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Publication;
@@ -30,6 +31,13 @@ namespace Guardtime.KSI.Test.Service
 {
     public class StaticServiceTestsBase
     {
+        protected static Ksi GetStaticKsi(string requestResultFile, ulong requestId = 0, IKsiSignatureFactory ksiSignatureFactory = null, PduVersion pduVersion = PduVersion.v2,
+                                          HashAlgorithm signingMacAlgorithm = null, HashAlgorithm extendingMacAlgorithm = null)
+        {
+            return GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, requestResultFile)), requestId, ksiSignatureFactory, pduVersion, signingMacAlgorithm,
+                extendingMacAlgorithm);
+        }
+
         protected static Ksi GetStaticKsi(byte[] requestResult, ulong requestId = 0, IKsiSignatureFactory ksiSignatureFactory = null, PduVersion pduVersion = PduVersion.v2,
                                           HashAlgorithm signingMacAlgorithm = null, HashAlgorithm extendingMacAlgorithm = null)
         {
@@ -45,15 +53,16 @@ namespace Guardtime.KSI.Test.Service
                 RequestResult = requestResult,
             };
 
-            return new TestKsiService(
-                protocol,
-                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass, signingMacAlgorithm),
-                protocol,
-                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass, extendingMacAlgorithm),
-                protocol,
-                new PublicationsFileFactory(
-                    new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))), requestId, pduVersion);
+            return
+                new TestKsiService(
+                    protocol,
+                    new ServiceCredentials(TestConstants.ServiceUser, TestConstants.ServicePass, signingMacAlgorithm),
+                    protocol,
+                    new ServiceCredentials(TestConstants.ServiceUser, TestConstants.ServicePass, extendingMacAlgorithm),
+                    protocol,
+                    new PublicationsFileFactory(
+                        new PkiTrustStoreProvider(new X509Store(StoreName.Root),
+                            CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))), requestId, pduVersion);
         }
     }
 }
