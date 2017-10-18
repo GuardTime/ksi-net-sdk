@@ -60,7 +60,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         {
             CalendarHashChainAlgorithmDeprecatedRule rule = new CalendarHashChainAlgorithmDeprecatedRule();
 
-            // Check with calendar hash chains that use valid hash algorithms
+            // Check with calendar hash chains that use hash algorithms without deprecated date
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
@@ -70,6 +70,42 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
 
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            }
+        }
+
+        [Test]
+        public void TestOkAlgorithmBeforeDeprecatedDate()
+        {
+            CalendarHashChainAlgorithmDeprecatedRule rule = new CalendarHashChainAlgorithmDeprecatedRule();
+
+            // Check with calendar hash chains that use hash algorithms with deprecated date and publication time is before deprecated date
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Sha1CalendarRightLinkAlgorithm_2016), FileMode.Open))
+            {
+                TestVerificationContext context = new TestVerificationContext()
+                {
+                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream),
+                };
+
+                VerificationResult verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            }
+        }
+
+        [Test]
+        public void TestInvalidAlgorithmAfterDeprecatedDate()
+        {
+            CalendarHashChainAlgorithmDeprecatedRule rule = new CalendarHashChainAlgorithmDeprecatedRule();
+
+            // Check with calendar hash chains that use hash algorithms with deprecated date and publication time is after deprecated date
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Sha1CalendarRightLinkAlgorithm_2017), FileMode.Open))
+            {
+                TestVerificationContext context = new TestVerificationContext()
+                {
+                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream),
+                };
+
+                VerificationResult verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
             }
         }
     }

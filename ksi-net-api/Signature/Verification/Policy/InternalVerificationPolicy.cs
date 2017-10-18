@@ -35,10 +35,10 @@ namespace Guardtime.KSI.Signature.Verification.Policy
                 GetRfc3161Rules(
                     GetAggregationChainRules(
                         // Verify calendar hash chain if exists
-                        new CalendarHashChainExistenceRule()
+                        new CalendarHashChainExistenceRule() // Gen-02
                             .OnSuccess(GetCalendarChainRules(
                                 // Verify calendar auth record if exists
-                                new CalendarAuthenticationRecordExistenceRule()
+                                new CalendarAuthenticationRecordExistenceRule() // Gen-02
                                     .OnSuccess(CalendarAuthRecordRules)
                                     // No calendar auth record. Verify publication record.
                                     .OnNa(PublicationRules)))
@@ -59,9 +59,9 @@ namespace Guardtime.KSI.Signature.Verification.Policy
         {
             return new Rfc3161RecordHashAlgorithmDeprecatedRule() // Int-14
                 .OnSuccess(new Rfc3161RecordOutputHashAlgorithmDeprecatedRule() // Int-17
-                    .OnSuccess(new Rfc3161RecordOutputHashVerificationRule() // Int-01
-                        .OnSuccess(new Rfc3161RecordAggregationTimeRule() // Int-02
-                            .OnSuccess(new Rfc3161RecordChainIndexRule() // Int-12
+                    .OnSuccess(new Rfc3161RecordChainIndexRule() // Int-12
+                        .OnSuccess(new Rfc3161RecordOutputHashVerificationRule() // Int-01
+                            .OnSuccess(new Rfc3161RecordAggregationTimeRule() // Int-02
                                 .OnSuccess(innerSuccessRules)))));
         }
 
@@ -90,7 +90,7 @@ namespace Guardtime.KSI.Signature.Verification.Policy
                 .OnSuccess(new CalendarAuthenticationRecordAggregationHashRule()); // Int-08
 
         private static VerificationRule PublicationRules =>
-            new SignaturePublicationRecordExistenceRule()
+            new SignaturePublicationRecordExistenceRule() // Gen-02
                 .OnSuccess(new SignaturePublicationRecordPublicationTimeRule() // Int-07
                     .OnSuccess(new SignaturePublicationRecordPublicationHashRule())) // Int-09
                 // No publication record

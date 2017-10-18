@@ -287,8 +287,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 if (link.Value.Algorithm.IsDeprecated(calendarHashChain.PublicationTime))
                 {
-                    return                    link.Value.Algorithm;
-
+                    return link.Value.Algorithm;
                 }
 
                 link = linksEnumerator.MoveNext() ? linksEnumerator.Current : null;

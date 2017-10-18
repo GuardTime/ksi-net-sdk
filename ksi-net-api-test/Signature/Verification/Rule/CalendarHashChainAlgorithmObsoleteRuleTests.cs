@@ -18,8 +18,11 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
@@ -60,7 +63,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         {
             CalendarHashChainAlgorithmObsoleteRule rule = new CalendarHashChainAlgorithmObsoleteRule();
 
-            // Check with calendar hash chains that use valid hash algorithms
+            // Check with calendar hash chains that use hash algorithms without obsolete date
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
@@ -71,6 +74,82 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
             }
+        }
+
+        [Test]
+        public void TestOkAlgorithmBeforeObsoleteDate()
+        {
+            AddObsoleteAlgorithm();
+
+            CalendarHashChainAlgorithmObsoleteRule rule = new CalendarHashChainAlgorithmObsoleteRule();
+
+            // Check with calendar hash chains that use hash algorithms with obsolete date and publication time is before obsolete date
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Obsolete_Calendar_Chain_Algorithm_2016), FileMode.Open))
+            {
+                TestVerificationContext context = new TestVerificationContext()
+                {
+                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream),
+                };
+
+                VerificationResult verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            }
+        }
+
+        [Test]
+        public void TestInvalidAlgorithmAfterObsoleteDate()
+        {
+            AddObsoleteAlgorithm();
+
+            CalendarHashChainAlgorithmObsoleteRule rule = new CalendarHashChainAlgorithmObsoleteRule();
+
+            // Check with calendar hash chains that use hash algorithms with obsolete date and publication time is after obsolete date
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Obsolete_Calendar_Chain_Algorithm_2017), FileMode.Open))
+            {
+                TestVerificationContext context = new TestVerificationContext()
+                {
+                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream),
+                };
+
+                VerificationResult verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+                Assert.AreEqual(VerificationError.Int16, verificationResult.VerificationError);
+            }
+        }
+
+        private static void AddObsoleteAlgorithm()
+        {
+            const int id = 0x7d;
+            if (HashAlgorithm.GetById(id) != null)
+            {
+                return;
+            }
+
+            Type type = typeof(HashAlgorithm);
+            FieldInfo info = type.GetField("Values", BindingFlags.NonPublic | BindingFlags.Static);
+
+            if (info == null)
+            {
+                throw new Exception("Cannot get static variable Values from HashAlgorithm.");
+            }
+
+            HashAlgorithm[] values = (HashAlgorithm[])info.GetValue(null);
+
+            Type[] paramTypes = new Type[] { typeof(string), typeof(byte), typeof(int), typeof(HashAlgorithm.AlgorithmStatus), typeof(string[]), typeof(ulong?), typeof(ulong?) };
+
+            object[] paramValues = new object[] { "TEST_ALGO", (byte)id, 10, HashAlgorithm.AlgorithmStatus.Normal, null, (ulong?)1467331200, (ulong?)1467331200 };
+
+            Type t = typeof(HashAlgorithm);
+
+            ConstructorInfo ci = t.GetConstructor(
+                BindingFlags.Instance | BindingFlags.NonPublic,
+                null, paramTypes, null);
+
+            HashAlgorithm testHashAlgorithm = (HashAlgorithm)ci.Invoke(paramValues);
+
+            List<HashAlgorithm> list = new List<HashAlgorithm>(values) { testHashAlgorithm };
+
+            info.SetValue(null, list.ToArray());
         }
     }
 }

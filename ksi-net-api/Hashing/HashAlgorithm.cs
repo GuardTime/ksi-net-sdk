@@ -159,14 +159,9 @@ namespace Guardtime.KSI.Hashing
         }
 
         /// <summary>
-        /// Returns deprecatobsoleteed since date.
+        /// Returns obsolete since date.
         /// </summary>
         public DateTime? ObsoleteSinceDate => _obsoleteSince.HasValue ? Util.ConvertUnixTimeToDateTime(_obsoleteSince.Value) : (DateTime?)null;
-
-        /// <summary>
-        /// Returns true if the algorithm has obsolete since date set.
-        /// </summary>
-        public bool HasObsoleteSinceDate => _obsoleteSince.HasValue;
 
         /// <summary>
         /// Returns true if the algorithm is obsolete at the given date

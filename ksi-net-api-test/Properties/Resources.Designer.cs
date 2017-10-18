@@ -1277,6 +1277,24 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-siganture-obsolete-calendar-algo-2016-01.tlv.
+        /// </summary>
+        internal static string KsiSignature_Obsolete_Calendar_Chain_Algorithm_2016 {
+            get {
+                return ResourceManager.GetString("KsiSignature_Obsolete_Calendar_Chain_Algorithm_2016", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-siganture-obsolete-calendar-algo-2017.tlv.
+        /// </summary>
+        internal static string KsiSignature_Obsolete_Calendar_Chain_Algorithm_2017 {
+            get {
+                return ResourceManager.GetString("KsiSignature_Obsolete_Calendar_Chain_Algorithm_2017", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-ok.tlv.
         /// </summary>
         internal static string KsiSignature_Ok {
@@ -1345,6 +1363,132 @@ namespace Guardtime.KSI.Test.Properties {
         internal static string KsiSignature_Ok_With_Publication_Record {
             get {
                 return ResourceManager.GetString("KsiSignature_Ok_With_Publication_Record", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/rfc3161-record/rfc3161-sha1-as-input-hash-2016-01.tlv.
+        /// </summary>
+        internal static string KsiSignature_Rfc3161Record_Sha1InputHashAlgorithm_2016 {
+            get {
+                return ResourceManager.GetString("KsiSignature_Rfc3161Record_Sha1InputHashAlgorithm_2016", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/rfc3161-record/rfc3161-sha1-as-input-hash-2017.tlv.
+        /// </summary>
+        internal static string KsiSignature_Rfc3161Record_Sha1InputHashAlgorithm_2017 {
+            get {
+                return ResourceManager.GetString("KsiSignature_Rfc3161Record_Sha1InputHashAlgorithm_2017", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/rfc3161-record/rfc3161-sha1-as-output-hash-2016-01.tlv.
+        /// </summary>
+        internal static string KsiSignature_Rfc3161Record_Sha1OutputHashAlgorithm_2016 {
+            get {
+                return ResourceManager.GetString("KsiSignature_Rfc3161Record_Sha1OutputHashAlgorithm_2016", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/rfc3161-record/rfc3161-sha1-as-output-hash-2017.tlv.
+        /// </summary>
+        internal static string KsiSignature_Rfc3161Record_Sha1OutputHashAlgorithm_2017 {
+            get {
+                return ResourceManager.GetString("KsiSignature_Rfc3161Record_Sha1OutputHashAlgorithm_2017", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/rfc3161-record/rfc3161-sha1-in-sig-atr-2016-01.tlv.
+        /// </summary>
+        internal static string KsiSignature_Rfc3161Record_Sha1SignedAttrAlgorithm_2016 {
+            get {
+                return ResourceManager.GetString("KsiSignature_Rfc3161Record_Sha1SignedAttrAlgorithm_2016", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/rfc3161-record/rfc3161-sha1-in-sig-atr-2017.tlv.
+        /// </summary>
+        internal static string KsiSignature_Rfc3161Record_Sha1SignedAttrAlgorithm_2017 {
+            get {
+                return ResourceManager.GetString("KsiSignature_Rfc3161Record_Sha1SignedAttrAlgorithm_2017", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/rfc3161-record/rfc3161-sha1-in-tst-algo-2016-01.tlv.
+        /// </summary>
+        internal static string KsiSignature_Rfc3161Record_Sha1TstInfoAlgorithm_2016 {
+            get {
+                return ResourceManager.GetString("KsiSignature_Rfc3161Record_Sha1TstInfoAlgorithm_2016", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/rfc3161-record/rfc3161-sha1-in-tst-algo-2017.tlv.
+        /// </summary>
+        internal static string KsiSignature_Rfc3161Record_Sha1TstInfoAlgorithm_2017 {
+            get {
+                return ResourceManager.GetString("KsiSignature_Rfc3161Record_Sha1TstInfoAlgorithm_2017", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/sha1-as-aggregation-algo-2016-01.tlv.
+        /// </summary>
+        internal static string KsiSignature_Sha1AggregationChainAlgorithm_2016 {
+            get {
+                return ResourceManager.GetString("KsiSignature_Sha1AggregationChainAlgorithm_2016", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/sha1-as-aggregation-algo-2017.tlv.
+        /// </summary>
+        internal static string KsiSignature_Sha1AggregationChainAlgorithm_2017 {
+            get {
+                return ResourceManager.GetString("KsiSignature_Sha1AggregationChainAlgorithm_2017", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/sha1-as-calendar-algo-2016-01.tlv.
+        /// </summary>
+        internal static string KsiSignature_Sha1CalendarRightLinkAlgorithm_2016 {
+            get {
+                return ResourceManager.GetString("KsiSignature_Sha1CalendarRightLinkAlgorithm_2016", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/sha1-as-calendar-algo-2017.tlv.
+        /// </summary>
+        internal static string KsiSignature_Sha1CalendarRightLinkAlgorithm_2017 {
+            get {
+                return ResourceManager.GetString("KsiSignature_Sha1CalendarRightLinkAlgorithm_2017", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/sha1-as-input-algo-2016-01.tlv.
+        /// </summary>
+        internal static string KsiSignature_Sha1InputAlgorithm_2016 {
+            get {
+                return ResourceManager.GetString("KsiSignature_Sha1InputAlgorithm_2016", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/sha1-as-input-algo-2017.tlv.
+        /// </summary>
+        internal static string KsiSignature_Sha1InputAlgorithm_2017 {
+            get {
+                return ResourceManager.GetString("KsiSignature_Sha1InputAlgorithm_2017", resourceCulture);
             }
         }
         

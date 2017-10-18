@@ -33,13 +33,12 @@ namespace Guardtime.KSI.Signature.Verification.Policy
         /// </summary>
         public KeyBasedVerificationPolicy(X509Store trustStore, ICertificateSubjectRdnSelector certificateRdnSelector)
         {
-            // Check for internal verification
             FirstRule = new InternalVerificationPolicy()
-                .OnSuccess(new CalendarHashChainExistenceRule()
-                    .OnSuccess(new CalendarHashChainAlgorithmDeprecatedRule()
-                        .OnSuccess(new CalendarAuthenticationRecordExistenceRule()
-                            .OnSuccess(new CertificateExistenceRule() // key-01
-                                .OnSuccess(new CalendarAuthenticationRecordSignatureVerificationRule(trustStore, certificateRdnSelector)))))); // key-02, key-03
+                .OnSuccess(new CalendarHashChainExistenceRule() // Gen-02
+                    .OnSuccess(new CalendarHashChainAlgorithmDeprecatedRule() // Gen-02
+                        .OnSuccess(new CalendarAuthenticationRecordExistenceRule() // Gen-02
+                            .OnSuccess(new CertificateExistenceRule() // Key-01
+                                .OnSuccess(new CalendarAuthenticationRecordSignatureVerificationRule(trustStore, certificateRdnSelector)))))); // Key-02, Key-03
         }
     }
 }

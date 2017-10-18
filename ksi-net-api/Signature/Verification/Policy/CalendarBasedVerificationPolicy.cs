@@ -35,8 +35,8 @@ namespace Guardtime.KSI.Signature.Verification.Policy
                 .OnSuccess(new ExtendedSignatureCalendarChainAggregationTimeRule()); // Cal-03
 
             FirstRule = new InternalVerificationPolicy()
-                .OnSuccess(new CalendarHashChainExistenceRule()
-                    .OnSuccess(new SignaturePublicationRecordExistenceRule()
+                .OnSuccess(new CalendarHashChainExistenceRule() // // Gen-02
+                    .OnSuccess(new SignaturePublicationRecordExistenceRule() // Gen-02
                         .OnSuccess(new ExtendedSignatureCalendarChainRootHashRule() // Cal-01
                             .OnSuccess(verificationRule))
                         .OnNa(new ExtendedSignatureAggregationChainRightLinksMatchesRule() // Cal-4

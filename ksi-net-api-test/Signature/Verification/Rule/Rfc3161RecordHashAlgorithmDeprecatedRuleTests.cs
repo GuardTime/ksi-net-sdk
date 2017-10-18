@@ -60,6 +60,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         {
             Rfc3161RecordHashAlgorithmDeprecatedRule rule = new Rfc3161RecordHashAlgorithmDeprecatedRule();
 
+            // test using non-legacy signature
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
@@ -73,10 +74,10 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         }
 
         [Test]
-        public void TestRfc3161SignatureWithCorrectHashAlgorithms()
+        public void TestOkAlgorithms()
         {
             Rfc3161RecordHashAlgorithmDeprecatedRule rule = new Rfc3161RecordHashAlgorithmDeprecatedRule();
-            // test using not deprecated hash algorithms
+            // test using hash algorithms without deprecated date
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
@@ -86,6 +87,82 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
 
                 VerificationResult verificationResult = rule.Verify(context);
                 Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            }
+        }
+
+        [Test]
+        public void TestTstInfoAlgorithmBeforeDeprecatedDate()
+        {
+            Rfc3161RecordHashAlgorithmDeprecatedRule rule = new Rfc3161RecordHashAlgorithmDeprecatedRule();
+
+            // test with TstInfo that use hash algorithm with deprecated date and aggregation time is before deprecated date
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Rfc3161Record_Sha1TstInfoAlgorithm_2016), FileMode.Open))
+            {
+                TestVerificationContext context = new TestVerificationContext()
+                {
+                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream),
+                };
+
+                VerificationResult verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            }
+        }
+
+        [Test]
+        public void TestTstInfoAlgorithmBeforeAfterDate()
+        {
+            Rfc3161RecordHashAlgorithmDeprecatedRule rule = new Rfc3161RecordHashAlgorithmDeprecatedRule();
+
+            // test with TstInfo that use hash algorithm with deprecated date and aggregation time is after deprecated date
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Rfc3161Record_Sha1TstInfoAlgorithm_2017), FileMode.Open))
+            {
+                TestVerificationContext context = new TestVerificationContext()
+                {
+                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream),
+                };
+
+                VerificationResult verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+                Assert.AreEqual(VerificationError.Int14, verificationResult.VerificationError);
+            }
+        }
+
+        [Test]
+        public void TestSignedAttrAlgorithmBeforeDeprecatedDate()
+        {
+            Rfc3161RecordHashAlgorithmDeprecatedRule rule = new Rfc3161RecordHashAlgorithmDeprecatedRule();
+
+            // test with SignedAttributes that use hash algorithm with deprecated date and aggregation time is before deprecated date
+            using (
+                FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Rfc3161Record_Sha1SignedAttrAlgorithm_2016), FileMode.Open))
+            {
+                TestVerificationContext context = new TestVerificationContext()
+                {
+                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream),
+                };
+
+                VerificationResult verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            }
+        }
+
+        [Test]
+        public void TestSignedAttrAlgorithmBeforeAfterDate()
+        {
+            Rfc3161RecordHashAlgorithmDeprecatedRule rule = new Rfc3161RecordHashAlgorithmDeprecatedRule();
+
+            // test with SignedAttributes that use hash algorithm with deprecated date and aggregation time is after deprecated date
+            using (
+                FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Rfc3161Record_Sha1SignedAttrAlgorithm_2017), FileMode.Open))
+            {
+                TestVerificationContext context = new TestVerificationContext()
+                {
+                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream),
+                };
+
+                VerificationResult verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+                Assert.AreEqual(VerificationError.Int14, verificationResult.VerificationError);
             }
         }
     }

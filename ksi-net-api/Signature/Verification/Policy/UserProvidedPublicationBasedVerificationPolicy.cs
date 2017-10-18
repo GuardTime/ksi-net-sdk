@@ -33,19 +33,17 @@ namespace Guardtime.KSI.Signature.Verification.Policy
             /// </summary>
             public UserProvidedPublicationBasedVerificationPolicy()
             {
-                VerificationRule verificationRule = new UserProvidedPublicationCreationTimeVerificationRule()
-                    .OnSuccess(new ExtendingPermittedVerificationRule()
-                        .OnSuccess(new ExtenderResponseCalendarHashChainAlgorithmDeprecatedRule()
-                            .OnSuccess(new UserProvidedPublicationHashMatchesExtendedResponseRule()
-                                .OnSuccess(new UserProvidedPublicationHashMatchesExtendedResponseRule()
-                                    .OnSuccess(new UserProvidedPublicationTimeMatchesExtendedResponseRule()
-                                        .OnSuccess(new UserProvidedPublicationExtendedSignatureInputHashRule()))))));
+                VerificationRule verificationRule = new UserProvidedPublicationCreationTimeVerificationRule() // Gen-02
+                    .OnSuccess(new ExtendingPermittedVerificationRule() // Gen-02
+                        .OnSuccess(new ExtenderResponseCalendarHashChainAlgorithmDeprecatedRule() // Gen-02
+                            .OnSuccess(new UserProvidedPublicationHashMatchesExtendedResponseRule() // Pub-01
+                                .OnSuccess(new UserProvidedPublicationTimeMatchesExtendedResponseRule() // Pub-02
+                                    .OnSuccess(new UserProvidedPublicationExtendedSignatureInputHashRule()))))); // Pub-03
 
-                FirstRule = new UserProvidedPublicationExistenceRule()
-                    .OnSuccess(new SignaturePublicationRecordExistenceRule()
-                        .OnSuccess(new UserProvidedPublicationVerificationRule()
-                            .OnSuccess(new CalendarHashChainAlgorithmDeprecatedRule()
-                                .OnNa(verificationRule))
+                FirstRule = new UserProvidedPublicationExistenceRule() // Gen-02
+                    .OnSuccess(new SignaturePublicationRecordExistenceRule() // Gen-02
+                        .OnSuccess(new UserProvidedPublicationVerificationRule() // Pub-04, Gen-02
+                            .OnSuccess(new CalendarHashChainAlgorithmDeprecatedRule()) // Gen-02
                             .OnNa(verificationRule))
                         .OnNa(verificationRule));
             }

@@ -60,12 +60,31 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         }
 
         [Test]
-        public void TestOkCalendarAlgorithms()
+        public void TestOkAlgorithm()
         {
-            // Check extender response calendar hash algorithm
+            // Check extender response calendar hash chains that use hash algorithms without deprecated date
+            TestSignature(Properties.Resources.KsiSignature_Ok, VerificationResultCode.Ok);
+        }
+
+        [Test]
+        public void TestOkAlgorithmBeforeDeprecatedDate()
+        {
+            // Check extender response calendar hash chain that use hash algorithms with deprecated date and publication time is before deprecated date
+            TestSignature(Properties.Resources.KsiSignature_Sha1CalendarRightLinkAlgorithm_2016, VerificationResultCode.Ok);
+        }
+
+        [Test]
+        public void TestInvalidAlgorithmAfterDeprecatedDate()
+        {
+            // Check extender response calendar hash chain that use hash algorithms with deprecated date and publication time is after deprecated date
+            TestSignature(Properties.Resources.KsiSignature_Sha1CalendarRightLinkAlgorithm_2017, VerificationResultCode.Na);
+        }
+
+        private static void TestSignature(string signaturePath, VerificationResultCode resultCode)
+        {
             ExtenderResponseCalendarHashChainAlgorithmDeprecatedRule rule = new ExtenderResponseCalendarHashChainAlgorithmDeprecatedRule();
 
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, signaturePath), FileMode.Open))
             {
                 IKsiSignature ksiSignature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream);
 
@@ -82,7 +101,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                 };
 
                 VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+                Assert.AreEqual(resultCode, verificationResult.ResultCode);
             }
         }
     }
