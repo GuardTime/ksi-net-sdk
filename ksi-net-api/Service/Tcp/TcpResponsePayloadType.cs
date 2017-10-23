@@ -32,7 +32,17 @@ namespace Guardtime.KSI.Service.Tcp
         /// <summary>
         /// Aggregator configuration request response payload
         /// </summary>
-        Config,
+        AggregatorConfig,
+
+        /// <summary>
+        /// Extending request response payload
+        /// </summary>
+        Extending,
+
+        /// <summary>
+        /// Extender configuration request response payload
+        /// </summary>
+        ExtenderConfig,
 
         /// <summary>
         /// Error payload

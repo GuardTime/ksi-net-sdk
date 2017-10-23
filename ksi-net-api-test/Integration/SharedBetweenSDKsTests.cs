@@ -42,7 +42,7 @@ namespace Guardtime.KSI.Test.Integration
     /// Tests that are shared between C, Java and .NET SDKs.
     /// </summary>
     [TestFixture]
-    public class SharedBetweenSdksTests : IntegrationTests
+    public class SharedBetweenSdksTests
     {
         private static IPublicationsFile _pubsFile;
         private const string ValidSignatureDir = "resources/signature/shared/valid-signatures/";
@@ -133,7 +133,7 @@ namespace Guardtime.KSI.Test.Integration
 
             if (string.IsNullOrEmpty(testingRow.ResourceFile))
             {
-                service = GetHttpKsiService();
+                service = IntegrationTests.GetHttpKsiService();
             }
             else
             {
@@ -209,7 +209,7 @@ namespace Guardtime.KSI.Test.Integration
             return list.ToArray();
         }
 
-        private static IPublicationsFile PubsFile => _pubsFile ?? (_pubsFile = GetHttpKsiService().GetPublicationsFile());
+        private static IPublicationsFile PubsFile => _pubsFile ?? (_pubsFile = IntegrationTests.GetHttpKsiService().GetPublicationsFile());
 
         private static IPublicationsFile GetPublicationsFile(string path)
         {

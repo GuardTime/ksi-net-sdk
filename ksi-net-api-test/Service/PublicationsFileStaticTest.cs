@@ -17,7 +17,9 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.Security.Cryptography.X509Certificates;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Test.Crypto;
@@ -30,7 +32,7 @@ namespace Guardtime.KSI.Test.Service
     /// Publications file tests with static response
     /// </summary>
     [TestFixture]
-    public class PublicationsFileStaticTest
+    public class PublicationsFileStaticTest : StaticServiceTestsBase
     {
         /// <summary>
         /// Test signing and verifying
@@ -44,14 +46,43 @@ namespace Guardtime.KSI.Test.Service
             Assert.AreEqual(1484438400, pubFile.GetLatestPublication().PublicationData.PublicationTime, "Unexpected last publication time");
         }
 
+        [Test]
+        public void EndGetPublicationsFileArgumentNullTest()
+        {
+            KsiService service = GetKsiService();
+
+            Assert.Throws<ArgumentNullException>(delegate
+            {
+                service.EndGetPublicationsFile(null);
+            });
+        }
+
+        [Test]
+        public void EndGetPublicationsFileInvalidArgumentTest()
+        {
+            KsiService service = GetKsiService();
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                service.EndGetPublicationsFile(new TestAsyncResult());
+            });
+
+            Assert.That(ex.Message.StartsWith("Invalid asyncResult type:"), "Unexpected exception message: " + ex.Message);
+        }
+
         private static Ksi GetKsi()
+        {
+            return new Ksi(GetKsiService());
+        }
+
+        private static KsiService GetKsiService()
         {
             TestKsiServiceProtocol protocol = new TestKsiServiceProtocol();
 
-            return new Ksi(new KsiService(protocol, new ServiceCredentials("test", "test"), protocol, new ServiceCredentials("test", "test"), protocol,
+            return new KsiService(protocol, new ServiceCredentials("test", "test"), protocol, new ServiceCredentials("test", "test"), protocol,
                 new PublicationsFileFactory(
                     new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com")))));
+                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))));
         }
     }
 }

@@ -110,7 +110,7 @@ namespace Guardtime.KSI.Service
         ///     Begin extend to latest publication (async).
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
-        /// <param name="callback">callback when extending signature is finished</param>
+        /// <param name="callback">callback when extending request is finished</param>
         /// <param name="asyncState">async state object</param>
         /// <returns>async result</returns>
         IAsyncResult BeginExtend(ulong aggregationTime, AsyncCallback callback, object asyncState);
@@ -120,7 +120,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
         /// <param name="publicationTime">publication time</param>
-        /// <param name="callback">callback when extending signature is finished</param>
+        /// <param name="callback">callback when extending request is finished</param>
         /// <param name="asyncState">async state object</param>
         /// <returns>async result</returns>
         IAsyncResult BeginExtend(ulong aggregationTime, ulong publicationTime, AsyncCallback callback, object asyncState);

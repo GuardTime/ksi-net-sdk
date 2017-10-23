@@ -28,7 +28,7 @@ namespace Guardtime.KSI.Test.Integration
     [TestFixture]
     public class ConfigurationIntegrationTests : IntegrationTests
     {
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
         public void GetAggregatorConfigTest(Ksi ksi)
         {
             if (TestSetup.PduVersion == PduVersion.v1)
@@ -46,7 +46,7 @@ namespace Guardtime.KSI.Test.Integration
             }
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
         public void GetAggregatorConfigTcpTest(Ksi ksi)
         {
             KsiService service = GetTcpKsiService();
@@ -76,8 +76,8 @@ namespace Guardtime.KSI.Test.Integration
             }
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidExtendingUrl))]
-        public void GetAggregatorConfigSuccessWithInvalidSigningUrlTest(Ksi ksi)
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsiWithInvalidExtendingUrl))]
+        public void GetAggregatorConfigSuccessWithInvalidExtendingUrlTest(Ksi ksi)
         {
             if (TestSetup.PduVersion != PduVersion.v1)
             {
@@ -88,7 +88,7 @@ namespace Guardtime.KSI.Test.Integration
             }
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidExtendingPass))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiListWithInvalidExtendingPass))]
         public void GetAggregatorConfigSuccessWithInvalidSigningPassTest(Ksi ksi)
         {
             if (TestSetup.PduVersion != PduVersion.v1)
@@ -100,7 +100,7 @@ namespace Guardtime.KSI.Test.Integration
             }
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
         public void GetExtenderConfig(Ksi ksi)
         {
             if (TestSetup.PduVersion == PduVersion.v1)
@@ -118,8 +118,8 @@ namespace Guardtime.KSI.Test.Integration
             }
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidSigningUrl))]
-        public void GetExtenderConfigSuccessWithInvalidSigningUrlTest(Ksi ksi)
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsiWithInvalidSigningUrl))]
+        public void HttpGetExtenderConfigSuccessWithInvalidSigningUrlTest(Ksi ksi)
         {
             if (TestSetup.PduVersion != PduVersion.v1)
             {
@@ -130,7 +130,7 @@ namespace Guardtime.KSI.Test.Integration
             }
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidSigningPass))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiListWithInvalidSigningPass))]
         public void GetExtenderConfigSuccessWithInvalidSigningPassTest(Ksi ksi)
         {
             if (TestSetup.PduVersion != PduVersion.v1)
@@ -142,15 +142,14 @@ namespace Guardtime.KSI.Test.Integration
             }
         }
 
-        [Test]
-        public void HttpAsyncGetAggregatorConfigTest()
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiServices))]
+        public void AsyncGetAggregatorConfigTest(KsiService service)
         {
             if (TestSetup.PduVersion == PduVersion.v1)
             {
                 return;
             }
 
-            KsiService service = GetHttpKsiService();
             ManualResetEvent waitHandle = new ManualResetEvent(false);
             AggregatorConfig config = null;
             object testObject = new object();
@@ -175,15 +174,14 @@ namespace Guardtime.KSI.Test.Integration
             Assert.AreEqual(true, isAsyncCorrect, "Unexpected async state.");
         }
 
-        [Test]
-        public void HttpAsyncGetExtenderConfigTest()
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiServices))]
+        public void HttpAsyncGetExtenderConfigTest(KsiService service)
         {
             if (TestSetup.PduVersion == PduVersion.v1)
             {
                 return;
             }
 
-            KsiService service = GetHttpKsiService();
             ManualResetEvent waitHandle = new ManualResetEvent(false);
             ExtenderConfig config = null;
             object testObject = new object();

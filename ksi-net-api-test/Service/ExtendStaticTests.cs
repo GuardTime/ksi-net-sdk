@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
@@ -342,6 +343,30 @@ namespace Guardtime.KSI.Test.Service
             });
 
             Assert.That(ex.Message.StartsWith("HMAC algorithm mismatch."), "Unexpected exception message: " + ex.Message);
+        }
+
+        [Test]
+        public void EndExtendArgumentNullTest()
+        {
+            IKsiService service = GetStaticKsiService(new byte[] { 0 });
+
+            Assert.Throws<ArgumentNullException>(delegate
+            {
+                service.EndExtend(null);
+            });
+        }
+
+        [Test]
+        public void EndExtendInvalidArgumentTest()
+        {
+            IKsiService service = GetStaticKsiService(new byte[] { 0 });
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                service.EndExtend(new TestAsyncResult());
+            });
+
+            Assert.That(ex.Message.StartsWith("Invalid asyncResult type:"), "Unexpected exception message: " + ex.Message);
         }
     }
 }

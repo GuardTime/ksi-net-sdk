@@ -32,6 +32,16 @@ namespace Guardtime.KSI.Service.Tcp
         /// <summary>
         /// Aggregator configuration request
         /// </summary>
-        AggregatorConfig
+        AggregatorConfig,
+
+        /// <summary>
+        /// Extending request
+        /// </summary>
+        Extending,
+
+        /// <summary>
+        /// Extender configuration request
+        /// </summary>
+        ExtenderConfig
     };
 }
