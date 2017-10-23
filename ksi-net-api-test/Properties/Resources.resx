@@ -546,8 +546,11 @@
   <data name="Signature_Wrong_Cert_ID" xml:space="preserve">
     <value>resources/signature/integration-test-signatures/NewSignature-CalAuth-WrongCertID.ksig</value>
   </data>
-  <data name="KsiService_AggregationResponsePdu" xml:space="preserve">
+  <data name="KsiService_AggregationResponsePdu_RequestId_1584727637" xml:space="preserve">
     <value>resources/service/aggregation-response-pdu.tlv</value>
+  </data>
+  <data name="KsiService_AggregationResponsePdu_RequestId_1584727638" xml:space="preserve">
+    <value>resources/service/aggregation-response-pdu-2.tlv</value>
   </data>
   <data name="KsiService_AggregationResponsePdu_Invalid_Signature" xml:space="preserve">
     <value>resources/service/aggregation-response-pdu-invalid-signature.tlv</value>
@@ -564,8 +567,11 @@
   <data name="KsiService_AggregatorConfigResponsePdu_With_Acknowledgment" xml:space="preserve">
     <value>resources/service/aggregator-config-response-pdu-with-acknowledgment.tlv</value>
   </data>
-  <data name="KsiService_ExtendResponsePdu" xml:space="preserve">
+  <data name="KsiService_ExtendResponsePdu_RequestId_1043101455" xml:space="preserve">
     <value>resources/service/extend-response-pdu.tlv</value>
+  </data>
+  <data name="KsiService_ExtendResponsePdu_RequestId_1043101454" xml:space="preserve">
+    <value>resources/service/extend-response-pdu-2.tlv</value>
   </data>
   <data name="KsiService_ExtendResponsePdu_Invalid_Signature" xml:space="preserve">
     <value>resources/service/extend-response-pdu-invalid-signature.tlv</value>

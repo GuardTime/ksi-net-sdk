@@ -20,7 +20,6 @@
 using System;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
-using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Trust
 {

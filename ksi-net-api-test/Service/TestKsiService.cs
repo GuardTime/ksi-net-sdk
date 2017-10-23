@@ -24,13 +24,15 @@ namespace Guardtime.KSI.Test.Service
 {
     public class TestKsiService : KsiService
     {
-        private readonly ulong _requestId;
+        public TestKsiServiceProtocol SigningServiceProtocol { get; }
+        public TestKsiServiceProtocol ExtendingServiceProtocol { get; }
+        public ulong RequestId { get; set; }
 
-        public TestKsiService(IKsiSigningServiceProtocol signingServiceProtocol,
+        public TestKsiService(TestKsiServiceProtocol signingServiceProtocol,
                               IServiceCredentials signingServiceCredentials,
-                              IKsiExtendingServiceProtocol extendingServiceProtocol,
+                              TestKsiServiceProtocol extendingServiceProtocol,
                               IServiceCredentials extendingServiceCredentials,
-                              IKsiPublicationsFileServiceProtocol publicationsFileServiceProtocol,
+                              TestKsiServiceProtocol publicationsFileServiceProtocol,
                               IPublicationsFileFactory publicationsFileFactory,
                               ulong requestId,
                               PduVersion pduVersion)
@@ -43,12 +45,14 @@ namespace Guardtime.KSI.Test.Service
                     publicationsFileFactory,
                     pduVersion)
         {
-            _requestId = requestId;
+            SigningServiceProtocol = signingServiceProtocol;
+            ExtendingServiceProtocol = extendingServiceProtocol;
+            RequestId = requestId;
         }
 
         protected override ulong GenerateRequestId()
         {
-            return _requestId;
+            return RequestId;
         }
     }
 }

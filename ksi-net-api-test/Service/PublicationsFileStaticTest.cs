@@ -20,6 +20,7 @@
 using System;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Test.Crypto;
@@ -79,7 +80,8 @@ namespace Guardtime.KSI.Test.Service
         {
             TestKsiServiceProtocol protocol = new TestKsiServiceProtocol();
 
-            return new KsiService(protocol, new ServiceCredentials("test", "test"), protocol, new ServiceCredentials("test", "test"), protocol,
+            return new KsiService(protocol, new ServiceCredentials("test", "test", HashAlgorithm.Sha2256), protocol, new ServiceCredentials("test", "test", HashAlgorithm.Sha2256),
+                protocol,
                 new PublicationsFileFactory(
                     new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                         CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))));

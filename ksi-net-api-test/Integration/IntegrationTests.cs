@@ -35,11 +35,16 @@ namespace Guardtime.KSI.Test.Integration
             GetHttpKsiService()
         };
 
-        public static KsiService[] KsiServices = new KsiService[]
+        public static KsiService[] KsiServices = GetKsiServices();
+
+        public static KsiService[] GetKsiServices()
         {
-            GetHttpKsiService(),
-            GetTcpKsiService()
-        };
+            return new KsiService[]
+            {
+                GetHttpKsiService(),
+                GetTcpKsiService()
+            };
+        }
 
         protected static object[] KsiServicesWithInvalidExtendingPass = new object[]
         {
@@ -82,9 +87,11 @@ namespace Guardtime.KSI.Test.Integration
         {
             new Ksi(new KsiService(
                 GetHttpKsiServiceProtocolInvalidUrls(),
-                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
+                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpSigningServiceHmacAlgorithm)),
                 GetHttpKsiServiceProtocol(),
-                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
+                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpExtendingServiceHmacAlgorithm)),
                 GetHttpKsiServiceProtocol(),
                 new PublicationsFileFactory(
                     new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
@@ -95,9 +102,11 @@ namespace Guardtime.KSI.Test.Integration
         {
             new Ksi(new KsiService(
                 GetHttpKsiServiceProtocol(),
-                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
+                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpSigningServiceHmacAlgorithm)),
                 GetHttpKsiServiceProtocolInvalidUrls(),
-                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
+                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpExtendingServiceHmacAlgorithm)),
                 GetHttpKsiServiceProtocol(),
                 new PublicationsFileFactory(
                     new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
@@ -109,9 +118,11 @@ namespace Guardtime.KSI.Test.Integration
             new Ksi(
                 new KsiService(
                     GetHttpKsiServiceProtocol(),
-                    new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
+                    new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass,
+                        TestUtil.GetHashAlgorithm(Settings.Default.HttpSigningServiceHmacAlgorithm)),
                     GetHttpKsiServiceProtocol(),
-                    new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
+                    new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass,
+                        TestUtil.GetHashAlgorithm(Settings.Default.HttpExtendingServiceHmacAlgorithm)),
                     GetHttpKsiServiceProtocolInvalidUrls(),
                     new PublicationsFileFactory(
                         new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
@@ -122,9 +133,11 @@ namespace Guardtime.KSI.Test.Integration
         {
             new Ksi(new KsiService(
                 GetTcpKsiServiceProtocolInvalidSigningPort(),
-                new ServiceCredentials(Settings.Default.TcpSigningServiceUser, Settings.Default.TcpSigningServicePass),
+                new ServiceCredentials(Settings.Default.TcpSigningServiceUser, Settings.Default.TcpSigningServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.TcpSigningServiceHmacAlgorithm)),
                 GetTcpKsiServiceProtocolInvalidSigningPort(),
-                new ServiceCredentials(Settings.Default.TcpExtendingServiceUser, Settings.Default.TcpExtendingServicePass),
+                new ServiceCredentials(Settings.Default.TcpExtendingServiceUser, Settings.Default.TcpExtendingServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.TcpExtendingServiceHmacAlgorithm)),
                 GetHttpKsiServiceProtocol(),
                 new PublicationsFileFactory(
                     new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
@@ -135,9 +148,11 @@ namespace Guardtime.KSI.Test.Integration
         {
             new Ksi(new KsiService(
                 GetTcpKsiServiceProtocolInvalidExtendingPort(),
-                new ServiceCredentials(Settings.Default.TcpSigningServiceUser, Settings.Default.TcpSigningServicePass),
+                new ServiceCredentials(Settings.Default.TcpSigningServiceUser, Settings.Default.TcpSigningServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.TcpSigningServiceHmacAlgorithm)),
                 GetTcpKsiServiceProtocolInvalidExtendingPort(),
-                new ServiceCredentials(Settings.Default.TcpExtendingServiceUser, Settings.Default.TcpExtendingServicePass),
+                new ServiceCredentials(Settings.Default.TcpExtendingServiceUser, Settings.Default.TcpExtendingServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.TcpExtendingServiceHmacAlgorithm)),
                 GetHttpKsiServiceProtocol(),
                 new PublicationsFileFactory(
                     new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
@@ -148,9 +163,11 @@ namespace Guardtime.KSI.Test.Integration
         {
             return new KsiService(
                 GetHttpKsiServiceProtocol(),
-                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
+                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpSigningServiceHmacAlgorithm)),
                 GetHttpKsiServiceProtocol(),
-                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
+                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpExtendingServiceHmacAlgorithm)),
                 GetHttpKsiServiceProtocol(),
                 new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                     CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))), pduVersion ?? TestSetup.PduVersion);
@@ -162,9 +179,11 @@ namespace Guardtime.KSI.Test.Integration
 
             return new KsiService(
                 tcpKsiServiceProtocol,
-                new ServiceCredentials(Settings.Default.TcpSigningServiceUser, Settings.Default.TcpSigningServicePass),
+                new ServiceCredentials(Settings.Default.TcpSigningServiceUser, Settings.Default.TcpSigningServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.TcpSigningServiceHmacAlgorithm)),
                 tcpKsiServiceProtocol,
-                new ServiceCredentials(Settings.Default.TcpExtendingServiceUser, Settings.Default.TcpExtendingServicePass),
+                new ServiceCredentials(Settings.Default.TcpExtendingServiceUser, Settings.Default.TcpExtendingServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.TcpExtendingServiceHmacAlgorithm)),
                 GetHttpKsiServiceProtocol(),
                 new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                     CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))), pduVersion ?? TestSetup.PduVersion);
@@ -174,9 +193,11 @@ namespace Guardtime.KSI.Test.Integration
         {
             return new KsiService(
                 GetHttpKsiServiceProtocol(),
-                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass + "x"),
+                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass + "x",
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpSigningServiceHmacAlgorithm)),
                 GetHttpKsiServiceProtocol(),
-                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
+                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpExtendingServiceHmacAlgorithm)),
                 GetHttpKsiServiceProtocol(),
                 new PublicationsFileFactory(
                     new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
@@ -188,9 +209,11 @@ namespace Guardtime.KSI.Test.Integration
         {
             return new KsiService(
                 GetTcpKsiServiceProtocol(),
-                new ServiceCredentials(Settings.Default.TcpSigningServiceUser, Settings.Default.TcpSigningServicePass + "x"),
+                new ServiceCredentials(Settings.Default.TcpSigningServiceUser, Settings.Default.TcpSigningServicePass + "x",
+                    TestUtil.GetHashAlgorithm(Settings.Default.TcpSigningServiceHmacAlgorithm)),
                 GetTcpKsiServiceProtocol(),
-                new ServiceCredentials(Settings.Default.TcpExtendingServiceUser, Settings.Default.TcpExtendingServicePass),
+                new ServiceCredentials(Settings.Default.TcpExtendingServiceUser, Settings.Default.TcpExtendingServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.TcpExtendingServiceHmacAlgorithm)),
                 GetHttpKsiServiceProtocol(),
                 new PublicationsFileFactory(
                     new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
@@ -202,9 +225,11 @@ namespace Guardtime.KSI.Test.Integration
         {
             return new KsiService(
                 GetHttpKsiServiceProtocol(),
-                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
+                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpSigningServiceHmacAlgorithm)),
                 GetHttpKsiServiceProtocol(),
-                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass + "x"),
+                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass + "x",
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpExtendingServiceHmacAlgorithm)),
                 GetHttpKsiServiceProtocol(),
                 new PublicationsFileFactory(
                     new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
@@ -216,9 +241,11 @@ namespace Guardtime.KSI.Test.Integration
         {
             return new KsiService(
                 GetTcpKsiServiceProtocol(),
-                new ServiceCredentials(Settings.Default.TcpSigningServiceUser, Settings.Default.TcpSigningServicePass),
+                new ServiceCredentials(Settings.Default.TcpSigningServiceUser, Settings.Default.TcpSigningServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.TcpSigningServiceHmacAlgorithm)),
                 GetTcpKsiServiceProtocol(),
-                new ServiceCredentials(Settings.Default.TcpExtendingServiceUser, Settings.Default.TcpExtendingServicePass + "x"),
+                new ServiceCredentials(Settings.Default.TcpExtendingServiceUser, Settings.Default.TcpExtendingServicePass + "x",
+                    TestUtil.GetHashAlgorithm(Settings.Default.TcpExtendingServiceHmacAlgorithm)),
                 GetHttpKsiServiceProtocol(),
                 new PublicationsFileFactory(
                     new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
@@ -230,9 +257,11 @@ namespace Guardtime.KSI.Test.Integration
         {
             return new KsiService(
                 new HttpKsiServiceProtocol(null, Settings.Default.HttpExtendingServiceUrl, Settings.Default.HttpPublicationsFileUrl, 10000),
-                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
+                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpSigningServiceHmacAlgorithm)),
                 GetHttpKsiServiceProtocol(),
-                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
+                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpExtendingServiceHmacAlgorithm)),
                 GetHttpKsiServiceProtocol(),
                 new PublicationsFileFactory(
                     new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
@@ -244,9 +273,11 @@ namespace Guardtime.KSI.Test.Integration
         {
             return new KsiService(
                 GetHttpKsiServiceProtocol(),
-                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
+                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpSigningServiceHmacAlgorithm)),
                 new HttpKsiServiceProtocol(Settings.Default.HttpSigningServiceUrl, null, Settings.Default.HttpPublicationsFileUrl, 10000),
-                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
+                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpExtendingServiceHmacAlgorithm)),
                 GetHttpKsiServiceProtocol(),
                 new PublicationsFileFactory(
                     new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
@@ -258,9 +289,11 @@ namespace Guardtime.KSI.Test.Integration
         {
             return new KsiService(
                 GetHttpKsiServiceProtocol(),
-                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
+                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpSigningServiceHmacAlgorithm)),
                 GetHttpKsiServiceProtocol(),
-                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
+                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpExtendingServiceHmacAlgorithm)),
                 GetHttpKsiServiceProtocol(),
                 new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                     CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))));

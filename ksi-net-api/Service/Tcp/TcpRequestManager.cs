@@ -86,6 +86,12 @@ namespace Guardtime.KSI.Service.Tcp
         }
 
         /// <summary>
+        /// Server IP and port.
+        /// </summary>
+        public string ServiceLocation => _ipAddress + ":" + _port;
+        
+
+        /// <summary>
         /// Dispose TCP KSI service protocol. Close opened connection.
         /// </summary>
         public void Dispose()

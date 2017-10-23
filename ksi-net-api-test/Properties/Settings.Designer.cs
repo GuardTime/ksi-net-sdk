@@ -22,5 +22,185 @@ namespace Guardtime.KSI.Test.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public int PduVersion {
+            get {
+                return ((int)(this["PduVersion"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://verify.guardtime.com/ksi-publications.bin")]
+        public string HttpPublicationsFileUrl {
+            get {
+                return ((string)(this["HttpPublicationsFileUrl"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://signing.service.url")]
+        public string HttpSigningServiceUrl {
+            get {
+                return ((string)(this["HttpSigningServiceUrl"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("user")]
+        public string HttpSigningServiceUser {
+            get {
+                return ((string)(this["HttpSigningServiceUser"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("pass")]
+        public string HttpSigningServicePass {
+            get {
+                return ((string)(this["HttpSigningServicePass"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("sha256")]
+        public string HttpSigningServiceHmacAlgorithm {
+            get {
+                return ((string)(this["HttpSigningServiceHmacAlgorithm"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://extending.service.url")]
+        public string HttpExtendingServiceUrl {
+            get {
+                return ((string)(this["HttpExtendingServiceUrl"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("user")]
+        public string HttpExtendingServiceUser {
+            get {
+                return ((string)(this["HttpExtendingServiceUser"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("pass")]
+        public string HttpExtendingServicePass {
+            get {
+                return ((string)(this["HttpExtendingServicePass"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("sha256")]
+        public string HttpExtendingServiceHmacAlgorithm {
+            get {
+                return ((string)(this["HttpExtendingServiceHmacAlgorithm"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("123.123.123.123")]
+        public string TcpSigningServiceIp {
+            get {
+                return ((string)(this["TcpSigningServiceIp"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1234")]
+        public ushort TcpSigningServicePort {
+            get {
+                return ((ushort)(this["TcpSigningServicePort"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("user")]
+        public string TcpSigningServiceUser {
+            get {
+                return ((string)(this["TcpSigningServiceUser"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("pass")]
+        public string TcpSigningServicePass {
+            get {
+                return ((string)(this["TcpSigningServicePass"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("sha256")]
+        public string TcpSigningServiceHmacAlgorithm {
+            get {
+                return ((string)(this["TcpSigningServiceHmacAlgorithm"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("123.123.123.123")]
+        public string TcpExtendingServiceIp {
+            get {
+                return ((string)(this["TcpExtendingServiceIp"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1234")]
+        public ushort TcpExtendingServicePort {
+            get {
+                return ((ushort)(this["TcpExtendingServicePort"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("user")]
+        public string TcpExtendingServiceUser {
+            get {
+                return ((string)(this["TcpExtendingServiceUser"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("pass")]
+        public string TcpExtendingServicePass {
+            get {
+                return ((string)(this["TcpExtendingServicePass"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("sha256")]
+        public string TcpExtendingServiceHmacAlgorithm {
+            get {
+                return ((string)(this["TcpExtendingServiceHmacAlgorithm"]));
+            }
+        }
     }
 }

@@ -57,9 +57,9 @@ namespace Guardtime.KSI.Test.Service
             return
                 new TestKsiService(
                     protocol,
-                    new ServiceCredentials(Properties.Settings.Default.HttpSigningServiceUser, Properties.Settings.Default.HttpSigningServicePass, signingMacAlgorithm),
+                    new ServiceCredentials(TestConstants.ServiceUser, TestConstants.ServicePass, signingMacAlgorithm),
                     protocol,
-                    new ServiceCredentials(Properties.Settings.Default.HttpExtendingServiceUser, Properties.Settings.Default.HttpExtendingServicePass, extendingMacAlgorithm),
+                    new ServiceCredentials(TestConstants.ServiceUser, TestConstants.ServicePass, extendingMacAlgorithm),
                     protocol,
                     new PublicationsFileFactory(
                         new PkiTrustStoreProvider(new X509Store(StoreName.Root),

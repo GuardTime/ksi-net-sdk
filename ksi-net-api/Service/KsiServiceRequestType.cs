@@ -24,9 +24,24 @@ namespace Guardtime.KSI.Service
     /// </summary>
     public enum KsiServiceRequestType
     {
+        /// <summary>
+        /// Signing request
+        /// </summary>
         Sign,
+
+        /// <summary>
+        /// Aggregator configuration request
+        /// </summary>
         AggregatorConfig,
+
+        /// <summary>
+        /// Extending request
+        /// </summary>
         Extend,
+
+        /// <summary>
+        /// Extender configuration request
+        /// </summary>
         ExtenderConfig
     }
 }

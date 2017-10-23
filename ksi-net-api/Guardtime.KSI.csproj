@@ -89,7 +89,9 @@
     <Compile Include="Crypto\ICryptoSignatureVerifier.cs" />
     <Compile Include="Crypto\CertificateSubjectRdn.cs" />
     <Compile Include="Exceptions\BlockSigningException.cs" />
+    <Compile Include="Exceptions\HAKsiSubServiceException.cs" />
     <Compile Include="Exceptions\HashingException.cs" />
+    <Compile Include="Exceptions\HAKsiServiceException.cs" />
     <Compile Include="Exceptions\KsiServiceUnexpectedResponseFormatException.cs" />
     <Compile Include="Exceptions\KsiSignatureInvalidContentException.cs" />
     <Compile Include="Exceptions\KsiException.cs" />
@@ -136,6 +138,17 @@
     <Compile Include="Publication\PublicationsFile.cs" />
     <Compile Include="Publication\PublicationData.cs" />
     <Compile Include="Service\KsiServiceAsyncResult.cs" />
+    <Compile Include="Service\AbstractConfig.cs" />
+    <Compile Include="Service\ExtenderConfigChangedEventArgs.cs" />
+    <Compile Include="Service\AggregatorConfigChangedEventArgs.cs" />
+    <Compile Include="Service\HighAvailability\HAExtenderConfigRequestRunner.cs" />
+    <Compile Include="Service\HighAvailability\HAAsyncResult.cs" />
+    <Compile Include="Service\HighAvailability\HAPublicationsFileRequestRunner.cs" />
+    <Compile Include="Service\HighAvailability\HAKsiService.cs" />
+    <Compile Include="Service\HighAvailability\HARequestRunner.cs" />
+    <Compile Include="Service\HighAvailability\HAAggregatorConfigRequestRunner.cs" />
+    <Compile Include="Service\HighAvailability\HAExtendRequestRunner.cs" />
+    <Compile Include="Service\HighAvailability\HASignRequestRunner.cs" />
     <Compile Include="Service\KsiServiceRequestType.cs" />
     <Compile Include="Service\KsiServiceResponseParser.cs" />
     <Compile Include="Service\AggregatorConfig.cs" />
