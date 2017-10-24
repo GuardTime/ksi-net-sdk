@@ -240,8 +240,11 @@ namespace Guardtime.KSI.Test.Integration
             Assert.AreEqual("Server responded with error message. Status: 258; Message: The request could not be authenticated.", ex.Message);
         }
 
+        /// <summary>
+        /// Test signing hash while extending service pass is invalid which should not prevent signing.
+        /// </summary>
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiListWithInvalidExtendingPass))]
-        public void SignHashWithInvalidExtendingPassTest(Ksi ksi)
+        public void SignHashSuccessWithInvalidExtendingPassTest(Ksi ksi)
         {
             Assert.DoesNotThrow(delegate
             {
@@ -354,6 +357,18 @@ namespace Guardtime.KSI.Test.Integration
             Assert.That(ex.InnerException.Message.StartsWith("The remote name could not be resolved"), "Unexpected inner exception message: " + ex.InnerException.Message);
         }
 
+        /// <summary>
+        /// Test signing hash via HTTP while extending service url is invalid which should not prevent signing.
+        /// </summary>
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsiWithInvalidExtendingUrl))]
+        public void HttpSignHashSuccessWithInvalidExtendingUrlTest(Ksi ksi)
+        {
+            Assert.DoesNotThrow(delegate
+            {
+                SignHash(ksi);
+            }, "Invalid exteding pass should not prevent signing.");
+        }
+
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpKsiWithInvalidSigningPort))]
         public void TcpSignHashWithInvalidPortTest(Ksi ksi)
         {
@@ -367,8 +382,11 @@ namespace Guardtime.KSI.Test.Integration
                 "Unexpected inner exception message: " + ex.InnerException.Message);
         }
 
+        /// <summary>
+        /// Test signing hash via TCP while extending service port is invalid which should not prevent signing.
+        /// </summary>
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpKsiWithInvalidExtendingPort))]
-        public void TcpSignHashWithInvalidExtendingPortTest(Ksi ksi)
+        public void TcpSignHashSuccessWithInvalidExtendingPortTest(Ksi ksi)
         {
             Assert.DoesNotThrow(delegate
             {

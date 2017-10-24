@@ -54,8 +54,11 @@ namespace Guardtime.KSI.Test.Integration
             }
         }
 
+        /// <summary>
+        /// Test extending while signing service pass is invalid which should not prevent extending.
+        /// </summary>
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiListWithInvalidSigningPass))]
-        public void ExtendWithInvalidSigningPassTest(Ksi ksi)
+        public void ExtendSuccessWithInvalidSigningPassTest(Ksi ksi)
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
@@ -424,8 +427,11 @@ namespace Guardtime.KSI.Test.Integration
             }
         }
 
+        /// <summary>
+        /// Test extending via HTTP while signing service url is invalid which should not prevent extending.
+        /// </summary>
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsiWithInvalidSigningUrl))]
-        public void HttpExtendWithInvalidSigningUrlTest(Ksi ksi)
+        public void HttpExtendSuccessWithInvalidSigningUrlTest(Ksi ksi)
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
@@ -456,8 +462,11 @@ namespace Guardtime.KSI.Test.Integration
             }
         }
 
+        /// <summary>
+        /// Test extending via TCP while signing service port is invalid which should not prevent extending.
+        /// </summary>
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpKsiWithInvalidSigningPort))]
-        public void TcpExtendWithInvalidExtendingPortTest(Ksi ksi)
+        public void TcpExtendSuccessWithInvalidSigningPortTest(Ksi ksi)
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
@@ -466,7 +475,7 @@ namespace Guardtime.KSI.Test.Integration
                 Assert.DoesNotThrow(delegate
                 {
                     ksi.Extend(ksiSignature);
-                }, "Invalid signing port should not prevent signing.");
+                }, "Invalid signing port should not prevent extending.");
             }
         }
 

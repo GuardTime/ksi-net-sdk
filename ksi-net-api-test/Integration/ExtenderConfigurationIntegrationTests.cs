@@ -46,6 +46,9 @@ namespace Guardtime.KSI.Test.Integration
             }
         }
 
+        /// <summary>
+        /// Test getting extender config while signing service pass is invalid which should not prevent getting extender config.
+        /// </summary>
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiListWithInvalidSigningPass))]
         public void GetExtenderConfigSuccessWithInvalidSigningPassTest(Ksi ksi)
         {
@@ -122,7 +125,7 @@ namespace Guardtime.KSI.Test.Integration
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsiWithInvalidExtendingUrl))]
-        public void HttpGetExtenderConfigSuccessWithInvalidUrlTest(Ksi ksi)
+        public void HttpGetExtenderConfigWithInvalidUrlTest(Ksi ksi)
         {
             if (TestSetup.PduVersion == PduVersion.v1)
             {
@@ -146,6 +149,9 @@ namespace Guardtime.KSI.Test.Integration
             }
         }
 
+        /// <summary>
+        /// Test getting extender config via HTTP while signing service url is invalid which should not prevent getting extender config.
+        /// </summary>
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsiWithInvalidSigningUrl))]
         public void HttpGetExtenderConfigSuccessWithInvalidSigningUrlTest(Ksi ksi)
         {
@@ -171,13 +177,16 @@ namespace Guardtime.KSI.Test.Integration
                 "Unexpected inner exception message: " + ex.InnerException.Message);
         }
 
+        /// <summary>
+        /// Test getting extender config via TCP while signing service port is invalid which should not prevent getting extender config.
+        /// </summary>
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpKsiWithInvalidSigningPort))]
-        public void TcpGetExtenderConfigWithInvalidSigningPortTest(Ksi ksi)
+        public void TcpGetExtenderConfigSuccessWithInvalidSigningPortTest(Ksi ksi)
         {
             Assert.DoesNotThrow(delegate
             {
                 ksi.GetExtenderConfig();
-            }, "Invalid signing port should not prevent signing.");
+            }, "Invalid signing port should not prevent getting extender config.");
         }
     }
 }

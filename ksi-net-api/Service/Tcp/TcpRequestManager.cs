@@ -333,7 +333,7 @@ namespace Guardtime.KSI.Service.Tcp
                 // Read data from the remote device.
                 bytesRead = _socket.EndReceive(ar);
 
-                if (bytesRead == 0) // eg. when server closes the connection 
+                if (bytesRead == 0) // eg. when server closes the connection because of idle time
                 {
                     if (!_isReceivingRetry)
                     {

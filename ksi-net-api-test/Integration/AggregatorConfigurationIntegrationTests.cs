@@ -46,6 +46,9 @@ namespace Guardtime.KSI.Test.Integration
             }
         }
 
+        /// <summary>
+        /// Test getting aggregator config while extending service pass is invalid which should not prevent getting aggregator config.
+        /// </summary>
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiListWithInvalidExtendingPass))]
         public void GetAggregatorConfigSuccessWithInvalidExtendingPassTest(Ksi ksi)
         {
@@ -146,6 +149,9 @@ namespace Guardtime.KSI.Test.Integration
             }
         }
 
+        /// <summary>
+        /// Test getting aggregator config via HTTP while extending service url is invalid which should not getting aggregator config.
+        /// </summary>
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsiWithInvalidExtendingUrl))]
         public void HttpGetAggregatorConfigSuccessWithInvalidExtendingUrlTest(Ksi ksi)
         {
@@ -169,6 +175,18 @@ namespace Guardtime.KSI.Test.Integration
             Assert.IsNotNull(ex.InnerException, "Inner exception should not be null");
             Assert.That(ex.InnerException.Message.StartsWith("No connection could be made because the target machine actively refused it"),
                 "Unexpected inner exception message: " + ex.InnerException.Message);
+        }
+
+        /// <summary>
+        /// Test getting aggregator config via TCP while extending service port is invalid which should not prevent getting aggregator config.
+        /// </summary>
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpKsiWithInvalidExtendingPort))]
+        public void TcpGetAggregatorConfigSuccessWithInvalidExtendingPortTest(Ksi ksi)
+        {
+            Assert.DoesNotThrow(delegate
+            {
+                ksi.GetAggregatorConfig();
+            }, "Invalid exteding port should not prevent signing.");
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpKsiWithInvalidExtendingPort))]
