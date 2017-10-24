@@ -17,31 +17,37 @@
  * reserves and retains all trademark rights.
  */
 
-namespace Guardtime.KSI.Service.Tcp
+namespace Guardtime.KSI.Service
 {
     /// <summary>
-    /// TCP request types
+    /// Class containing KSI service response payload info (payload type and request ID)
     /// </summary>
-    public enum TcpRequestType
+    public class KsiServiceResponsePayloadInfo
     {
         /// <summary>
-        /// Aggregation request
+        /// Create KSI service response payload info
         /// </summary>
-        Aggregation,
+        /// <param name="responsePayloadType"></param>
+        /// <param name="requestId"></param>
+        public KsiServiceResponsePayloadInfo(KsiServiceResponsePayloadType responsePayloadType, ulong? requestId = null)
+        {
+            ResponsePayloadType = responsePayloadType;
+            RequestId = requestId;
+        }
 
         /// <summary>
-        /// Aggregator configuration request
+        /// TCP response payload type
         /// </summary>
-        AggregatorConfig,
+        public KsiServiceResponsePayloadType ResponsePayloadType { get; }
 
         /// <summary>
-        /// Extending request
+        /// Request ID
         /// </summary>
-        Extending,
+        public ulong? RequestId { get; }
 
         /// <summary>
-        /// Extender configuration request
+        /// Returns a string that represents the current object.
         /// </summary>
-        ExtenderConfig
-    };
+        public override string ToString() => string.Format("[Type: {0}; RequestId: {1}]", ResponsePayloadType, RequestId);
+    }
 }

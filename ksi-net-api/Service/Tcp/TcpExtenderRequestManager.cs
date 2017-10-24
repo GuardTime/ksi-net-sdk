@@ -49,7 +49,7 @@ namespace Guardtime.KSI.Service.Tcp
         /// <returns>TCP KSI service async result</returns>
         public IAsyncResult BeginExtend(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
-            return BeginRequest(TcpRequestType.Extending, data, requestId, callback, asyncState);
+            return BeginRequest(KsiServiceRequestType.Extend, data, requestId, callback, asyncState);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace Guardtime.KSI.Service.Tcp
         /// <returns>TCP KSI service async result</returns>
         public IAsyncResult BeginGetExtenderConfig(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
-            return BeginRequest(TcpRequestType.ExtenderConfig, data, requestId, callback, asyncState);
+            return BeginRequest(KsiServiceRequestType.ExtenderConfig, data, requestId, callback, asyncState);
         }
 
         /// <summary>

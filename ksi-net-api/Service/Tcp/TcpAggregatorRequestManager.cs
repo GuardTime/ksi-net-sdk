@@ -49,7 +49,7 @@ namespace Guardtime.KSI.Service.Tcp
         /// <returns>TCP KSI service async result</returns>
         public IAsyncResult BeginSign(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
-            return BeginRequest(TcpRequestType.Aggregation, data, requestId, callback, asyncState);
+            return BeginRequest(KsiServiceRequestType.Sign, data, requestId, callback, asyncState);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace Guardtime.KSI.Service.Tcp
         /// <returns>TCP KSI service async result</returns>
         public IAsyncResult BeginGetAggregatorConfig(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
-            return BeginRequest(TcpRequestType.AggregatorConfig, data, requestId, callback, asyncState);
+            return BeginRequest(KsiServiceRequestType.AggregatorConfig, data, requestId, callback, asyncState);
         }
 
         /// <summary>

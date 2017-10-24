@@ -183,12 +183,11 @@
     <Compile Include="Service\Tcp\TcpAsyncResultCollection.cs" />
     <Compile Include="Service\Tcp\TcpAggregatorRequestManager.cs" />
     <Compile Include="Service\Tcp\TcpRequestManager.cs" />
-    <Compile Include="Service\Tcp\TcpResponsePayloadType.cs" />
+    <Compile Include="Service\KsiServiceResponsePayloadType.cs" />
     <Compile Include="Service\Tcp\TcpResponseProcessor.cs" />
     <Compile Include="Service\TcpKsiServiceProtocol.cs" />
     <Compile Include="Service\Tcp\TcpKsiServiceAsyncResult.cs" />
-    <Compile Include="Service\Tcp\TcpRequestType.cs" />
-    <Compile Include="Service\Tcp\TcpResponsePayloadInfo.cs" />
+    <Compile Include="Service\KsiServiceResponsePayloadInfo.cs" />
     <Compile Include="Service\TreeBuilder.cs" />
     <Compile Include="Signature\AggregationHashChain.Metadata.cs" />
     <Compile Include="Signature\AggregationHashChain.Link.cs" />

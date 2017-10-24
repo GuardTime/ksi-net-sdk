@@ -121,7 +121,7 @@ namespace Guardtime.KSI.Service.Tcp
         /// <param name="callback">callback when request is finished</param>
         /// <param name="asyncState">async state object</param>
         /// <returns></returns>
-        protected IAsyncResult BeginRequest(TcpRequestType requestType, byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
+        protected IAsyncResult BeginRequest(KsiServiceRequestType requestType, byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
             if (_isDisposed)
             {

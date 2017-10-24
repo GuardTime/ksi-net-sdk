@@ -34,7 +34,7 @@ namespace Guardtime.KSI.Service.Tcp
         /// <param name="requestId">Request ID</param>
         /// <param name="callback">callback when TCP request is finished</param>
         /// <param name="asyncState">callback async state object</param>
-        public TcpKsiServiceAsyncResult(TcpRequestType requestType, byte[] postData, ulong requestId, AsyncCallback callback, object asyncState)
+        public TcpKsiServiceAsyncResult(KsiServiceRequestType requestType, byte[] postData, ulong requestId, AsyncCallback callback, object asyncState)
             : base(postData, requestId, callback, asyncState)
         {
             RequestType = requestType;
@@ -43,6 +43,6 @@ namespace Guardtime.KSI.Service.Tcp
         /// <summary>
         /// TCP request type (signing, extending, configuration request)
         /// </summary>
-        public TcpRequestType RequestType { get; }
+        public KsiServiceRequestType RequestType { get; }
     }
 }

@@ -28,7 +28,8 @@ using NLog;
 namespace Guardtime.KSI.Service.Tcp
 {
     /// <summary>
-    /// Class for processing TCP request response bytes. Corresponding async results are searched and marked as done.
+    /// Class for processing TCP request response bytes.
+    /// Corresponding async results are searched and marked as done when parsing data received via TCP.
     /// </summary>
     public class TcpResponseProcessor
     {
@@ -39,7 +40,7 @@ namespace Guardtime.KSI.Service.Tcp
         /// <summary>
         /// Create TCP request response processor instance
         /// </summary>
-        /// <param name="asyncResults"></param>
+        /// <param name="asyncResults">Collection of async results associated with TCP requests. Corresponding async results are searched and marked as done when parsing data received via TCP.</param>
         public TcpResponseProcessor(TcpAsyncResultCollection asyncResults)
         {
             _asyncResults = asyncResults;
@@ -112,7 +113,7 @@ namespace Guardtime.KSI.Service.Tcp
             using (TlvReader reader = new TlvReader(new MemoryStream(pduBytes)))
             {
                 // iterate over all payloads in PDU
-                foreach (TcpResponsePayloadInfo payloadInfo in GetResponsePayloadInfos(reader.ReadTag()))
+                foreach (KsiServiceResponsePayloadInfo payloadInfo in GetResponsePayloadInfos(reader.ReadTag()))
                 {
                     isPayloadFound = true;
                     bool asyncResultFound = false;
@@ -155,15 +156,15 @@ namespace Guardtime.KSI.Service.Tcp
         /// </summary>
         /// <param name="payloadInfo">Response payload info</param>
         /// <returns></returns>
-        private List<TcpKsiServiceAsyncResult> GetAsyncResults(TcpResponsePayloadInfo payloadInfo)
+        private List<TcpKsiServiceAsyncResult> GetAsyncResults(KsiServiceResponsePayloadInfo payloadInfo)
         {
             List<TcpKsiServiceAsyncResult> list = new List<TcpKsiServiceAsyncResult>();
             ulong[] keys = _asyncResults.GetKeys();
 
             switch (payloadInfo.ResponsePayloadType)
             {
-                case TcpResponsePayloadType.Aggregation:
-                case TcpResponsePayloadType.Extending:
+                case KsiServiceResponsePayloadType.Aggregation:
+                case KsiServiceResponsePayloadType.Extending:
                     foreach (ulong key in keys)
                     {
                         if (key == payloadInfo.RequestId)
@@ -175,37 +176,37 @@ namespace Guardtime.KSI.Service.Tcp
                                 continue;
                             }
 
-                           list.Add( asyncResult);
+                            list.Add(asyncResult);
                         }
                     }
                     break;
 
-                case TcpResponsePayloadType.AggregatorConfig:
+                case KsiServiceResponsePayloadType.AggregatorConfig:
                     // return all async results of all aggregator configuration requests 
                     foreach (ulong key in keys)
                     {
                         TcpKsiServiceAsyncResult asyncResult = _asyncResults.GetValue(key);
 
-                        if (asyncResult?.RequestType == TcpRequestType.AggregatorConfig)
+                        if (asyncResult?.RequestType == KsiServiceRequestType.AggregatorConfig)
                         {
                             list.Add(asyncResult);
                         }
                     }
                     break;
 
-                case TcpResponsePayloadType.ExtenderConfig:
+                case KsiServiceResponsePayloadType.ExtenderConfig:
                     // return all async results of all extender configuration requests 
                     foreach (ulong key in keys)
                     {
                         TcpKsiServiceAsyncResult asyncResult = _asyncResults.GetValue(key);
 
-                        if (asyncResult?.RequestType == TcpRequestType.ExtenderConfig)
+                        if (asyncResult?.RequestType == KsiServiceRequestType.ExtenderConfig)
                         {
                             list.Add(asyncResult);
                         }
                     }
                     break;
-                case TcpResponsePayloadType.Error:
+                case KsiServiceResponsePayloadType.Error:
                     foreach (ulong key in keys)
                     {
                         TcpKsiServiceAsyncResult asyncResult = _asyncResults.GetValue(key);
@@ -228,26 +229,26 @@ namespace Guardtime.KSI.Service.Tcp
         /// </summary>
         /// <param name="pdu"></param>
         /// <returns></returns>
-        private List<TcpResponsePayloadInfo> GetResponsePayloadInfos(RawTag pdu)
+        private List<KsiServiceResponsePayloadInfo> GetResponsePayloadInfos(RawTag pdu)
         {
             switch (pdu.Type)
             {
                 case Constants.AggregationResponsePdu.TagType:
                     return GetAggregatorResponsePayloadInfos(pdu);
                 case Constants.LegacyAggregationPdu.TagType:
-                    return new List<TcpResponsePayloadInfo>() { GetLegacyAggregatorResponsePayloadInfos(pdu) };
+                    return new List<KsiServiceResponsePayloadInfo>() { GetLegacyAggregatorResponsePayloadInfos(pdu) };
                 case Constants.ExtendResponsePdu.TagType:
                     return GetExtenderResponsePayloadInfos(pdu);
                 case Constants.LegacyExtendPdu.TagType:
-                    return new List<TcpResponsePayloadInfo>() { GetLegacyExtenderResponsePayloadInfos(pdu) };
+                    return new List<KsiServiceResponsePayloadInfo>() { GetLegacyExtenderResponsePayloadInfos(pdu) };
                 default:
                     throw new KsiServiceProtocolException("Unknown response PDU type: " + pdu.Type);
             }
         }
 
-        private static List<TcpResponsePayloadInfo> GetAggregatorResponsePayloadInfos(RawTag pdu)
+        private static List<KsiServiceResponsePayloadInfo> GetAggregatorResponsePayloadInfos(RawTag pdu)
         {
-            List<TcpResponsePayloadInfo> list = new List<TcpResponsePayloadInfo>();
+            List<KsiServiceResponsePayloadInfo> list = new List<KsiServiceResponsePayloadInfo>();
             IEnumerable<RawTag> children = GetChildren(pdu.Value);
 
             bool containsUnknownPayload = false;
@@ -261,14 +262,14 @@ namespace Guardtime.KSI.Service.Tcp
                         {
                             throw new KsiServiceProtocolException("Cannot find request id tag from aggregation response payload.");
                         }
-                        list.Add(new TcpResponsePayloadInfo(TcpResponsePayloadType.Aggregation, new IntegerTag(requestIdTag).Value));
+                        list.Add(new KsiServiceResponsePayloadInfo(KsiServiceResponsePayloadType.Aggregation, new IntegerTag(requestIdTag).Value));
                         break;
 
                     case Constants.AggregatorConfigResponsePayload.TagType:
-                        list.Add(new TcpResponsePayloadInfo(TcpResponsePayloadType.AggregatorConfig));
+                        list.Add(new KsiServiceResponsePayloadInfo(KsiServiceResponsePayloadType.AggregatorConfig));
                         break;
                     case Constants.ErrorPayload.TagType:
-                        list.Add(new TcpResponsePayloadInfo(TcpResponsePayloadType.Error));
+                        list.Add(new KsiServiceResponsePayloadInfo(KsiServiceResponsePayloadType.Error));
                         break;
                     case Constants.PduHeader.TagType:
                     case Constants.Pdu.MacTagType:
@@ -289,9 +290,9 @@ namespace Guardtime.KSI.Service.Tcp
             return list;
         }
 
-        private static List<TcpResponsePayloadInfo> GetExtenderResponsePayloadInfos(RawTag pdu)
+        private static List<KsiServiceResponsePayloadInfo> GetExtenderResponsePayloadInfos(RawTag pdu)
         {
-            List<TcpResponsePayloadInfo> list = new List<TcpResponsePayloadInfo>();
+            List<KsiServiceResponsePayloadInfo> list = new List<KsiServiceResponsePayloadInfo>();
             IEnumerable<RawTag> children = GetChildren(pdu.Value);
 
             bool containsUnknownPayload = false;
@@ -305,14 +306,14 @@ namespace Guardtime.KSI.Service.Tcp
                         {
                             throw new KsiServiceProtocolException("Cannot find request id tag from extender response payload.");
                         }
-                        list.Add(new TcpResponsePayloadInfo(TcpResponsePayloadType.Extending, new IntegerTag(requestIdTag).Value));
+                        list.Add(new KsiServiceResponsePayloadInfo(KsiServiceResponsePayloadType.Extending, new IntegerTag(requestIdTag).Value));
                         break;
 
                     case Constants.ExtenderConfigResponsePayload.TagType:
-                        list.Add(new TcpResponsePayloadInfo(TcpResponsePayloadType.ExtenderConfig));
+                        list.Add(new KsiServiceResponsePayloadInfo(KsiServiceResponsePayloadType.ExtenderConfig));
                         break;
                     case Constants.ErrorPayload.TagType:
-                        list.Add(new TcpResponsePayloadInfo(TcpResponsePayloadType.Error));
+                        list.Add(new KsiServiceResponsePayloadInfo(KsiServiceResponsePayloadType.Error));
                         break;
                     case Constants.PduHeader.TagType:
                     case Constants.Pdu.MacTagType:
@@ -333,7 +334,7 @@ namespace Guardtime.KSI.Service.Tcp
             return list;
         }
 
-        private static TcpResponsePayloadInfo GetLegacyAggregatorResponsePayloadInfos(RawTag pdu)
+        private static KsiServiceResponsePayloadInfo GetLegacyAggregatorResponsePayloadInfos(RawTag pdu)
         {
             RawTag payload = GetTagByType(pdu.Value, Constants.AggregationResponsePayload.LegacyTagType, Constants.LegacyAggregationErrorPayload.TagType);
 
@@ -345,15 +346,15 @@ namespace Guardtime.KSI.Service.Tcp
                     {
                         throw new KsiServiceProtocolException("Cannot find request id tag from legacy aggregation response payload.");
                     }
-                    return new TcpResponsePayloadInfo(TcpResponsePayloadType.Aggregation, new IntegerTag(requestIdTag).Value);
+                    return new KsiServiceResponsePayloadInfo(KsiServiceResponsePayloadType.Aggregation, new IntegerTag(requestIdTag).Value);
                 case Constants.LegacyAggregationErrorPayload.TagType:
-                    return new TcpResponsePayloadInfo(TcpResponsePayloadType.Error);
+                    return new KsiServiceResponsePayloadInfo(KsiServiceResponsePayloadType.Error);
                 default:
                     throw new KsiServiceProtocolException("Cannot find a known payload from legacy PDU.");
             }
         }
 
-        private static TcpResponsePayloadInfo GetLegacyExtenderResponsePayloadInfos(RawTag pdu)
+        private static KsiServiceResponsePayloadInfo GetLegacyExtenderResponsePayloadInfos(RawTag pdu)
         {
             RawTag payload = GetTagByType(pdu.Value, Constants.ExtendResponsePayload.LegacyTagType, Constants.LegacyExtendErrorPayload.TagType);
 
@@ -365,9 +366,9 @@ namespace Guardtime.KSI.Service.Tcp
                     {
                         throw new KsiServiceProtocolException("Cannot find request id tag from legacy extender response payload.");
                     }
-                    return new TcpResponsePayloadInfo(TcpResponsePayloadType.Extending, new IntegerTag(requestIdTag).Value);
+                    return new KsiServiceResponsePayloadInfo(KsiServiceResponsePayloadType.Extending, new IntegerTag(requestIdTag).Value);
                 case Constants.LegacyExtendErrorPayload.TagType:
-                    return new TcpResponsePayloadInfo(TcpResponsePayloadType.Error);
+                    return new KsiServiceResponsePayloadInfo(KsiServiceResponsePayloadType.Error);
                 default:
                     throw new KsiServiceProtocolException("Cannot find a known payload from legacy PDU.");
             }
