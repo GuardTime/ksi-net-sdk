@@ -42,9 +42,9 @@ namespace Guardtime.KSI.Service.Tcp
         /// <summary>
         ///    Begin extending request.
         /// </summary>
-        /// <param name="data">aggregation request bytes</param>
+        /// <param name="data">extending request bytes</param>
         /// <param name="requestId">request id</param>
-        /// <param name="callback">callback when creating signature is finished</param>
+        /// <param name="callback">callback when extending request is finished</param>
         /// <param name="asyncState">async state object</param>
         /// <returns>TCP KSI service async result</returns>
         public IAsyncResult BeginExtend(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
@@ -55,9 +55,9 @@ namespace Guardtime.KSI.Service.Tcp
         /// <summary>
         ///       Begin extender configuration request.
         /// </summary>
-        /// <param name="data">aggregation request bytes</param>
+        /// <param name="data">extender configuration request bytes</param>
         /// <param name="requestId">request id</param>
-        /// <param name="callback">callback when creating signature is finished</param>
+        /// <param name="callback">callback when extender configuration request is finished</param>
         /// <param name="asyncState">async state object</param>
         /// <returns>TCP KSI service async result</returns>
         public IAsyncResult BeginGetExtenderConfig(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)

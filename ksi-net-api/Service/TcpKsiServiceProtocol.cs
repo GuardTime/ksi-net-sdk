@@ -94,7 +94,7 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///    Begin signing request.
         /// </summary>
-        /// <param name="data">aggregation request bytes</param>
+        /// <param name="data">signing request bytes</param>
         /// <param name="requestId">request id</param>
         /// <param name="callback">callback when creating signature is finished</param>
         /// <param name="asyncState">callback async state object</param>
@@ -108,9 +108,9 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///       Begin aggregator configuration request.
         /// </summary>
-        /// <param name="data">aggregation request bytes</param>
+        /// <param name="data">aggregator configuration  request bytes</param>
         /// <param name="requestId">request id</param>
-        /// <param name="callback">callback when creating signature is finished</param>
+        /// <param name="callback">callback when aggregator configuration request is finished</param>
         /// <param name="asyncState">async state object</param>
         /// <returns>TCP KSI service async result</returns>
         public IAsyncResult BeginGetAggregatorConfig(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
@@ -158,9 +158,9 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Begin extender configuration request.
         /// </summary>
-        /// <param name="data">extending request bytes</param>
+        /// <param name="data">extender configuration request bytes</param>
         /// <param name="requestId">request id</param>
-        /// <param name="callback">callback when extending request is finished</param>
+        /// <param name="callback">callback when extender configuration request is finished</param>
         /// <param name="asyncState">async state object</param>
         /// <returns>TCP KSI service async result</returns>
         public IAsyncResult BeginGetExtenderConfig(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)

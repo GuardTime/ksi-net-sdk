@@ -228,7 +228,7 @@ namespace Guardtime.KSI.Service
         /// <summary>
         /// Begin get additional extender configuration data (async)
         /// </summary>
-        /// <param name="callback">callback when extnder configuration request is finished</param>
+        /// <param name="callback">callback when extender configuration request is finished</param>
         /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         public IAsyncResult BeginGetExtenderConfig(AsyncCallback callback, object asyncState)

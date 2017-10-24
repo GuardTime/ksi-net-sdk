@@ -89,7 +89,6 @@ namespace Guardtime.KSI.Service.Tcp
         /// Server IP and port.
         /// </summary>
         public string ServiceLocation => _ipAddress + ":" + _port;
-        
 
         /// <summary>
         /// Dispose TCP KSI service protocol. Close opened connection.
@@ -334,7 +333,7 @@ namespace Guardtime.KSI.Service.Tcp
                 // Read data from the remote device.
                 bytesRead = _socket.EndReceive(ar);
 
-                if (bytesRead == 0)
+                if (bytesRead == 0) // eg. when server closes the connection 
                 {
                     if (!_isReceivingRetry)
                     {

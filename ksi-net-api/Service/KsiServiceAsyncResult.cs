@@ -41,8 +41,8 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="postData">Posted bytes</param>
         /// <param name="requestId">Request ID</param>
-        /// <param name="callback">Callback</param>
-        /// <param name="asyncState">Async state</param>
+        /// <param name="callback">callback when KSI request is finished</param>
+        /// <param name="asyncState">callback async state object</param>
         public KsiServiceAsyncResult(byte[] postData, ulong requestId, AsyncCallback callback, object asyncState)
         {
             PostData = postData;

@@ -54,7 +54,7 @@ namespace Guardtime.KSI.Test.Integration
                 Assert.DoesNotThrow(delegate
                 {
                     ksi.GetExtenderConfig();
-                }, "Invalid signing password should not prevent getting extnder config.");
+                }, "Invalid signing password should not prevent getting extender config.");
             }
         }
 
@@ -154,7 +154,7 @@ namespace Guardtime.KSI.Test.Integration
                 Assert.DoesNotThrow(delegate
                 {
                     ksi.GetExtenderConfig();
-                }, "Invalid signing url should not prevent getting extnder config.");
+                }, "Invalid signing url should not prevent getting extender config.");
             }
         }
 

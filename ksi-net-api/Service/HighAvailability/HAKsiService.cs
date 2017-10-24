@@ -296,7 +296,7 @@ namespace Guardtime.KSI.Service.HighAvailability
         /// Sends the request to all the sub-services in parallel. First successful response is used. Request fails only if all the sub-services fail.
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
-        /// <param name="callback">callback when extending signature is finished</param>
+        /// <param name="callback">callback when extending request is finished</param>
         /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         public IAsyncResult BeginExtend(ulong aggregationTime, AsyncCallback callback, object asyncState)
@@ -311,7 +311,7 @@ namespace Guardtime.KSI.Service.HighAvailability
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
         /// <param name="publicationTime">publication time</param>
-        /// <param name="callback">callback when extending signature is finished</param>
+        /// <param name="callback">callback when extending request is finished</param>
         /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         public IAsyncResult BeginExtend(ulong aggregationTime, ulong publicationTime, AsyncCallback callback, object asyncState)
@@ -346,7 +346,7 @@ namespace Guardtime.KSI.Service.HighAvailability
         /// Begin get additional extender configuration data (async)
         /// Sends the request to all the sub-services in parallel. Successful responses are consolidated and the consolidated result is returned. Request fails only if all the sub-services fail.
         /// </summary>
-        /// <param name="callback">callback when extnder configuration request is finished</param>
+        /// <param name="callback">callback when extender configuration request is finished</param>
         /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         public IAsyncResult BeginGetExtenderConfig(AsyncCallback callback, object asyncState)
