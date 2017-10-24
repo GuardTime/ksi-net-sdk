@@ -1,6 +1,7 @@
 Version 3.10
 2017-10-04 3.10.X
 
+* IMPROVEMENT: Added ability to make KSI extension requests over TCP/IP (KSINETAPI-129)
 * IMPROVEMENT: Added HMAC algorithm setting to app.config (KSINETAPI-131)
 * IMPROVEMENT: Split HTTP and TCP configurations.
 

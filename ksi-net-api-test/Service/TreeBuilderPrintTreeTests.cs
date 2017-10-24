@@ -21,7 +21,6 @@ using System;
 using System.Collections.Generic;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Service;
-using Guardtime.KSI.Test.Integration;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 

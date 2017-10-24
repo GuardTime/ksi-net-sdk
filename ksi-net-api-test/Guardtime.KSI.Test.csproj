@@ -134,6 +134,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Integration\AggregatorConfigurationIntegrationTests.cs" />
     <Compile Include="Integration\SharedBetweenSDKsTests.cs" />
     <Compile Include="Hashing\DataHasherTests.cs" />
     <Compile Include="Hashing\DataHashTests.cs" />
@@ -146,7 +147,7 @@
     <Compile Include="Service\HighAvailability\HAPublicationsFileRequestStaticTests.cs" />
     <Compile Include="Service\HighAvailability\HASigningStaticTests.cs" />
     <Compile Include="Service\TreeBuilderPrintTreeTests.cs" />
-    <Compile Include="Integration\ConfigurationIntegrationTests.cs" />
+    <Compile Include="Integration\ExtenderConfigurationIntegrationTests.cs" />
     <Compile Include="Integration\IntegrationTests.cs" />
     <Compile Include="Integration\ExtendIntegrationTests.cs" />
     <Compile Include="Integration\SignIntegrationTests.cs" />
