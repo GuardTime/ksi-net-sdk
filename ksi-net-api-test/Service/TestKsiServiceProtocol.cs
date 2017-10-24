@@ -33,7 +33,9 @@ namespace Guardtime.KSI.Test.Service
 
         public IAsyncResult BeginSign(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
-            return new AsyncResult(requestId);
+            AsyncResult ar = new AsyncResult(requestId, asyncState);
+            callback?.Invoke(ar);
+            return ar;
         }
 
         public byte[] EndSign(IAsyncResult asyncResult)
@@ -51,9 +53,11 @@ namespace Guardtime.KSI.Test.Service
             return RequestResult;
         }
 
+        public string AggregatorLocation => "test.aggregator.location";
+
         public IAsyncResult BeginExtend(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
-            return new AsyncResult(requestId);
+            return new AsyncResult(requestId, asyncState);
         }
 
         public byte[] EndExtend(IAsyncResult asyncResult)
@@ -71,15 +75,21 @@ namespace Guardtime.KSI.Test.Service
             return RequestResult;
         }
 
+        public string ExtenderLocation => "test.extender.location";
+
         public IAsyncResult BeginGetPublicationsFile(AsyncCallback callback, object asyncState)
         {
-            return new AsyncResult(0);
+            return new AsyncResult(0, asyncState);
         }
+
+        public bool UseRequestResultAsPublicationsFileResponse { get; set; }
 
         public byte[] EndGetPublicationsFile(IAsyncResult asyncResult)
         {
-            return ReadFile(Resources.KsiPublicationsFile);
+            return UseRequestResultAsPublicationsFileResponse ? RequestResult : ReadFile(Resources.KsiPublicationsFile);
         }
+
+        public string PublicationsFileLocation => "test.publications.file.location";
 
         private static byte[] ReadFile(string file)
         {
@@ -93,7 +103,7 @@ namespace Guardtime.KSI.Test.Service
 
         private class AsyncResult : KsiServiceAsyncResult
         {
-            public AsyncResult(ulong requestId) : base(null, requestId, null, null)
+            public AsyncResult(ulong requestId, object asyncState = null) : base(null, requestId, null, asyncState)
             {
                 SetComplete();
             }

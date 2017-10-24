@@ -97,12 +97,17 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
+        /// Aggregator location url
+        /// </summary>
+        public string AggregatorLocation => _ipAddress + ":" + _port;
+
+        /// <summary>
         ///    Begin signing request.
         /// </summary>
         /// <param name="data">aggregation request bytes</param>
         /// <param name="requestId">request id</param>
         /// <param name="callback">callback when creating signature is finished</param>
-        /// <param name="asyncState">async state object</param>
+        /// <param name="asyncState">callback async state object</param>
         /// <returns>TCP KSI service async result</returns>
         public IAsyncResult BeginSign(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {

@@ -14,6 +14,9 @@
     <Setting Name="HttpSigningServicePass" Type="System.String" Scope="Application">
       <Value Profile="(Default)">pass</Value>
     </Setting>
+    <Setting Name="HttpSigningServiceHmacAlgorithm" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">sha256</Value>
+    </Setting>
     <Setting Name="HttpExtendingServiceUrl" Type="System.String" Scope="Application">
       <Value Profile="(Default)">http://extending.service.url</Value>
     </Setting>
@@ -23,14 +26,26 @@
     <Setting Name="HttpExtendingServicePass" Type="System.String" Scope="Application">
       <Value Profile="(Default)">pass</Value>
     </Setting>
+    <Setting Name="HttpExtendingServiceHmacAlgorithm" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">sha256</Value>
+    </Setting>
     <Setting Name="TcpSigningServiceUrl" Type="System.String" Scope="Application">
       <Value Profile="(Default)">signing.service.url</Value>
     </Setting>
     <Setting Name="TcpSigningServicePort" Type="System.UInt16" Scope="Application">
       <Value Profile="(Default)">1234</Value>
     </Setting>
+    <Setting Name="TcpSigningServiceUser" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">user</Value>
+    </Setting>
+    <Setting Name="TcpSigningServicePass" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">pass</Value>
+    </Setting>
+    <Setting Name="TcpSigningServiceHmacAlgorithm" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">sha256</Value>
+    </Setting>
     <Setting Name="PduVersion" Type="System.Int32" Scope="Application">
-      <Value Profile="(Default)">1</Value>
+      <Value Profile="(Default)">2</Value>
     </Setting>
   </Settings>
 </SettingsFile>
