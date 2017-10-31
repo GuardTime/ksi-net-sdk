@@ -42,7 +42,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         /// Test signing without signing services.
         /// </summary>
         [Test]
-        public void HASignWithoutServicesFailStaticTest()
+        public void HASignWithoutServicesFailTest()
         {
             IKsiService haService =
                 new HAKsiService(
@@ -68,7 +68,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         /// Test signing with single sub-service
         /// </summary>
         [Test]
-        public void HASignWithSingleServiceStaticTest()
+        public void HASignWithSingleServiceTest()
         {
             IKsiService haService =
                 new HAKsiService(
@@ -88,7 +88,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         /// Test signing with multiple sub-service.
         /// </summary>
         [Test]
-        public void HASignStaticTest()
+        public void HASignWithMutlipleServicesTest()
         {
             IKsiService haService =
                 new HAKsiService(
@@ -108,7 +108,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         /// Test get sign response payload
         /// </summary>
         [Test]
-        public void HASignWithPayloadResponseStaticTest()
+        public void HASignWithPayloadResponseTest()
         {
             IKsiService haService =
                 new HAKsiService(
@@ -129,7 +129,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         /// Test get sign response payload. 1 sec delay is added between request begin and end.
         /// </summary>
         [Test]
-        public void HASignWithPayloadResponseAndWaitStaticTest()
+        public void HASignWithPayloadResponseAndWaitTest()
         {
             IKsiService haService =
                 new HAKsiService(
@@ -151,7 +151,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         /// Test signing with all sub-requests failing.
         /// </summary>
         [Test]
-        public void HASignFailStaticTest()
+        public void HASignAllServicesFailTest()
         {
             IKsiService haService =
                 new HAKsiService(
@@ -175,7 +175,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         /// Test signing with invalid async result.
         /// </summary>
         [Test]
-        public void HASignWithInvalidAsyncResultFailStaticTest()
+        public void HASignWithInvalidAsyncResultFailTest()
         {
             IKsiService haService =
                 new HAKsiService(

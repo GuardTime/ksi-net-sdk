@@ -42,7 +42,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         /// Test publications file request without publications file services.
         /// </summary>
         [Test]
-        public void HAPublicationsFileRequestWithoutServicesFailStaticTest()
+        public void HAPublicationsFileRequestWithoutServicesFailTest()
         {
             IKsiService haService =
                 new HAKsiService(
@@ -68,7 +68,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         /// Test publications file request with single sub-service
         /// </summary>
         [Test]
-        public void HAPublicationsFileRequestWithSingleServiceStaticTest()
+        public void HAPublicationsFileRequestWithSingleServiceTest()
         {
             IKsiService haService =
                 new HAKsiService(
@@ -87,7 +87,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         /// Test publications file request with multiple sub-service.
         /// </summary>
         [Test]
-        public void HAPublicationsFileRequestStaticTest()
+        public void HAPublicationsFileRequestTest()
         {
             IKsiService haService =
                 new HAKsiService(
@@ -107,7 +107,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         /// Test publications file request with all sub-requests failing.
         /// </summary>
         [Test]
-        public void HAPublicationsFileRequestFailStaticTest()
+        public void HAPublicationsFileRequestFailTest()
         {
             IKsiService haService =
                 new HAKsiService(
@@ -132,7 +132,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         /// Test publications file request with invalid async result.
         /// </summary>
         [Test]
-        public void HAPublicationsFileRequestWithInvalidAsyncResultFailStaticTest()
+        public void HAPublicationsFileRequestWithInvalidAsyncResultFailTest()
         {
             IKsiService haService =
                 new HAKsiService(
