@@ -61,8 +61,8 @@ namespace Guardtime.KSI.Service
         byte[] EndGetAggregatorConfig(IAsyncResult asyncResult);
 
         /// <summary>
-        /// Aggregator location url
+        /// Aggregator address (url or ip)
         /// </summary>
-        string AggregatorLocation { get; }
+        string AggregatorAddress { get; }
     }
 }

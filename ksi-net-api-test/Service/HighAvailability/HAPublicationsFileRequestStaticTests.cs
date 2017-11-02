@@ -33,7 +33,7 @@ using NUnit.Framework;
 namespace Guardtime.KSI.Test.Service.HighAvailability
 {
     /// <summary>
-    /// High availability publications file request tests with static response
+    /// High availability service publications file request tests with static response
     /// </summary>
     [TestFixture]
     public class HAPublicationsFileRequestStaticTests : StaticServiceTestsBase
@@ -61,30 +61,11 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
                 haService.GetPublicationsFile();
             });
 
-            Assert.That(ex.Message.StartsWith("Sub-services are missing"), "Unexpected exception message: " + ex.Message);
+            Assert.That(ex.Message.StartsWith("Publications file service is missing"), "Unexpected exception message: " + ex.Message);
         }
 
         /// <summary>
-        /// Test publications file request with single sub-service
-        /// </summary>
-        [Test]
-        public void HAPublicationsFileRequestWithSingleServiceTest()
-        {
-            IKsiService haService =
-                new HAKsiService(
-                    null,
-                    null,
-                    new List<IKsiService>()
-                    {
-                        GetPublicationsFileService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile)))
-                    });
-
-            IPublicationsFile publicationsFile = haService.GetPublicationsFile();
-            Assert.AreEqual(1484438400, publicationsFile.GetLatestPublication().PublicationData.PublicationTime, "Unexpected last publication time");
-        }
-
-        /// <summary>
-        /// Test publications file request with multiple sub-service.
+        /// Test publications file request
         /// </summary>
         [Test]
         public void HAPublicationsFileRequestTest()
@@ -93,18 +74,15 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
                 new HAKsiService(
                     null,
                     null,
-                    new List<IKsiService>()
-                    {
-                        GetPublicationsFileService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile))),
-                        GetPublicationsFileService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile)))
-                    });
+                    GetPublicationsFileService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile)))
+                    );
 
             IPublicationsFile publicationsFile = haService.GetPublicationsFile();
-            Assert.IsNotNull(publicationsFile, "Publications file cannot be null.");
+            Assert.AreEqual(1484438400, publicationsFile.GetLatestPublication().PublicationData.PublicationTime, "Unexpected last publication time");
         }
 
         /// <summary>
-        /// Test publications file request with all sub-requests failing.
+        /// Test publications file request with request failing.
         /// </summary>
         [Test]
         public void HAPublicationsFileRequestFailTest()
@@ -113,44 +91,13 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
                 new HAKsiService(
                     null,
                     null,
-                    new List<IKsiService>()
-                    {
-                        GetPublicationsFileService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_RequestId_1584727637))),
-                        GetPublicationsFileService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_RequestId_1584727637))),
-                        GetPublicationsFileService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_RequestId_1043101455)))
-                    });
+                    GetPublicationsFileService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_RequestId_1584727637)))
+                    );
 
-            HAKsiServiceException ex = Assert.Throws<HAKsiServiceException>(delegate
+            Assert.Throws<PublicationsFileException>(delegate
             {
                 haService.GetPublicationsFile();
             });
-
-            Assert.That(ex.Message.StartsWith("All sub-requests failed"), "Unexpected exception message: " + ex.Message);
-        }
-
-        /// <summary>
-        /// Test publications file request with invalid async result.
-        /// </summary>
-        [Test]
-        public void HAPublicationsFileRequestWithInvalidAsyncResultFailTest()
-        {
-            IKsiService haService =
-                new HAKsiService(
-                    null,
-                    new List<IKsiService>()
-                    {
-                        GetStaticKsiService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_RequestId_1043101455)), 1043101455)
-                    },
-                    null);
-
-            HAKsiServiceException ex = Assert.Throws<HAKsiServiceException>(delegate
-            {
-                IAsyncResult ar = haService.BeginExtend(1455494400, null, null);
-                // send extending async result to publications file request ending
-                haService.EndGetPublicationsFile(ar);
-            });
-
-            Assert.That(ex.Message.StartsWith("Invalid async result. Containing invalid request runner"), "Unexpected exception message: " + ex.Message);
         }
 
         public IKsiService GetPublicationsFileService(byte[] requestResult)
