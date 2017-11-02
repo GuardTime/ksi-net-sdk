@@ -109,7 +109,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         }
 
         [Test]
-        public void TestTstInfoAlgorithmBeforeAfterDate()
+        public void TestTstInfoAlgorithmAfterDeprecatedDate()
         {
             Rfc3161RecordHashAlgorithmDeprecatedRule rule = new Rfc3161RecordHashAlgorithmDeprecatedRule();
 
@@ -147,7 +147,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         }
 
         [Test]
-        public void TestSignedAttrAlgorithmBeforeAfterDate()
+        public void TestSignedAttrAlgorithmAfterDeprecatedDate()
         {
             Rfc3161RecordHashAlgorithmDeprecatedRule rule = new Rfc3161RecordHashAlgorithmDeprecatedRule();
 
