@@ -17,19 +17,18 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.Collections.Generic;
+using System.IO;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Service.HighAvailability;
+using Guardtime.KSI.Signature;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
-using Guardtime.KSI.Test.Integration;
-using Guardtime.KSI.Signature;
-using System.IO;
-using Guardtime.KSI.Exceptions;
-using System;
 
-namespace Guardtime.KSI.Test.Service.HighAvailability
+namespace Guardtime.KSI.Test.Integration
 {
     /// <summary>
     /// High availability tests
@@ -37,15 +36,19 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
     [TestFixture]
     public class HATests : IntegrationTests
     {
-        private static List<IKsiService> signerServices = new List<IKsiService>()
-            {
-                GetHttpKsiServiceWithInvalidSigningPass(), GetHttpKsiService(), GetTcpKsiService()
-            };
+        private static readonly List<IKsiService> SigningServices = new List<IKsiService>()
+        {
+            GetHttpKsiServiceWithInvalidSigningPass(),
+            GetHttpKsiService(),
+            GetTcpKsiService()
+        };
 
-        private static List<IKsiService> extenderServices = new List<IKsiService>()
-            {
-                GetHttpKsiServiceWithInvalidExtendingPass(), GetTcpKsiService(), GetHttpKsiService()
-            };
+        private static readonly List<IKsiService> ExtendingServices = new List<IKsiService>()
+        {
+            GetHttpKsiServiceWithInvalidExtendingPass(),
+            GetTcpKsiService(),
+            GetHttpKsiService()
+        };
 
         /// <summary>
         /// Test signing TCP and HTTP signing services.
@@ -53,7 +56,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         [Test]
         public void HASignWithTcpAndHttpServicesTest()
         {
-            Ksi ksi = new Ksi(new HAKsiService(signerServices, null, null));
+            Ksi ksi = new Ksi(new HAKsiService(SigningServices, null, null));
             DataHash hash = new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"));
 
             IKsiSignature signature = ksi.Sign(hash);
@@ -69,7 +72,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         [Test]
         public void HASignWithLevelTest()
         {
-            Ksi ksi = new Ksi(new HAKsiService(signerServices, null, null));
+            Ksi ksi = new Ksi(new HAKsiService(SigningServices, null, null));
             DataHash hash = new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a10"));
 
             IKsiSignature signature = ksi.Sign(hash, 3);
@@ -83,9 +86,9 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         /// Get aggregator conf with TCP and HTTP sercices.
         /// </summary>
         [Test]
-        public void HASignerGetConfTest()
+        public void HAAggregatorGetConfTest()
         {
-            Ksi ksi = new Ksi(new HAKsiService(signerServices, null, null));
+            Ksi ksi = new Ksi(new HAKsiService(SigningServices, null, null));
             AggregatorConfig conf = ksi.GetAggregatorConfig();
             Assert.NotNull(conf);
         }
@@ -96,7 +99,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         [Test]
         public void HAExtendWithTcpAndHttpServicesTest()
         {
-            Ksi ksi = new Ksi(new HAKsiService(null, extenderServices, extenderServices));
+            Ksi ksi = new Ksi(new HAKsiService(null, ExtendingServices, ExtendingServices));
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
@@ -113,7 +116,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         [Test]
         public void HAExtendWithTcpAndHttpServicesAndNoPublicationsFileTest()
         {
-            Ksi ksi = new Ksi(new HAKsiService(null, extenderServices, null));
+            Ksi ksi = new Ksi(new HAKsiService(null, ExtendingServices, null));
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
@@ -132,7 +135,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         [Test]
         public void HAExtenderGetConfTest()
         {
-            Ksi ksi = new Ksi(new HAKsiService(null, extenderServices, null));
+            Ksi ksi = new Ksi(new HAKsiService(null, ExtendingServices, null));
             ExtenderConfig conf = ksi.GetExtenderConfig();
             Assert.NotNull(conf);
         }
@@ -143,9 +146,9 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         [Test]
         public void HARequestSubClientsTest()
         {
-            HAKsiService haService = new HAKsiService(signerServices, extenderServices, signerServices);
-            Assert.AreEqual(extenderServices, haService.ExtendingServices);
-            Assert.AreEqual(signerServices, haService.SigningServices);
+            HAKsiService haService = new HAKsiService(SigningServices, ExtendingServices, SigningServices);
+            Assert.AreEqual(ExtendingServices, haService.ExtendingServices);
+            Assert.AreEqual(SigningServices, haService.SigningServices);
         }
     }
 }
