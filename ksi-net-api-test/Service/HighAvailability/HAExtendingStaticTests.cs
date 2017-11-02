@@ -41,7 +41,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         /// Test extending with single sub-service
         /// </summary>
         [Test]
-        public void HAExtendingWithSingleServiceStaticTest()
+        public void HAExtendingWithSingleServiceTest()
         {
             IKsiService haService =
                 new HAKsiService(
@@ -62,7 +62,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         /// Test extending without extending services.
         /// </summary>
         [Test]
-        public void HAExtedWithoutServicesFailStaticTest()
+        public void HAExtedWithoutServicesFailTest()
         {
             IKsiService haService =
                 new HAKsiService(
@@ -88,7 +88,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         /// Test extending with multiple sub-service.
         /// </summary>
         [Test]
-        public void HAExtendStaticTest()
+        public void HAExtendWithMultipleServicesTest()
         {
             IKsiService haService =
                 new HAKsiService(
@@ -111,7 +111,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         /// Test aing with all sub-requests failing.
         /// </summary>
         [Test]
-        public void HAExtendFailStaticTest()
+        public void HAExtendAllServicesFailTest()
         {
             IKsiService haService =
                 new HAKsiService(
@@ -136,7 +136,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         /// Test extending with invalid async result.
         /// </summary>
         [Test]
-        public void HAExtendWithInvalidAsyncResultFailStaticTest()
+        public void HAExtendWithInvalidAsyncResultFailTest()
         {
             IKsiService haService =
                 new HAKsiService(

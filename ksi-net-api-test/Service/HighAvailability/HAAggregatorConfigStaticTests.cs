@@ -38,7 +38,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
     public class HAAggregatorConfigStaticTests : StaticServiceTestsBase
     {
         [Test]
-        public void HAAggregatorConfigRequestWithSingleServiceStaticTest()
+        public void HAAggregatorConfigRequestWithSingleServiceTest()
         {
             // Test getting aggregator configuration with single sub-service
             IKsiService haService = GetHAService(
@@ -60,7 +60,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         }
 
         [Test]
-        public void HAAggregatorConfigRequestStaticTest()
+        public void HAAggregatorConfigRequestTest()
         {
             // Test getting aggregator configuration with 1 successful and 2 unsuccessful sub-service responses 
 
@@ -84,7 +84,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         }
 
         [Test]
-        public void HAAggregatorConfigRequestUsingEventHandlerStaticTest()
+        public void HAAggregatorConfigRequestUsingEventHandlerTest()
         {
             // Test getting aggregator configuration with 1 successful and 2 unsuccessful sub-service responses. 
             // Get response using AggregatorConfigChanged event handler
@@ -119,7 +119,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         }
 
         [Test]
-        public void HAAggregatorConfigRequestFailStaticTest()
+        public void HAAggregatorConfigRequestFailSTest()
         {
             // Test getting aggregator configuration with all 3 sub-services responses failing
 
@@ -163,7 +163,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         }
 
         [Test]
-        public void HAGetConfig2ResultsTest1()
+        public void HAGetConfigTwoResultsTest1()
         {
             // Test getting aggregator configuration with 2 successful sub-service responses
 
@@ -188,7 +188,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         }
 
         [Test]
-        public void HAGetConfig2ResultsTest2()
+        public void HAGetConfigTwoResultsTest2()
         {
             // Test getting aggregator configuration with 2 successful sub-service responses
 
@@ -213,7 +213,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         }
 
         [Test]
-        public void HAGetConfig2ResultsTest3()
+        public void HAGetConfigTwoResultsTest3()
         {
             // Test getting aggregator configuration with 2 successful sub-service responses
 
@@ -237,7 +237,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         }
 
         [Test]
-        public void HAGetConfig2ResultsTest4()
+        public void HAGetConfigTwoResultsTest4()
         {
             // Test getting aggregator configuration with 2 successful sub-service responses
 
