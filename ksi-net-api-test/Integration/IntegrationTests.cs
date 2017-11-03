@@ -21,6 +21,7 @@ using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
+using Guardtime.KSI.Service.Tcp;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Test.Crypto;
 using Guardtime.KSI.Test.Properties;
@@ -132,10 +133,10 @@ namespace Guardtime.KSI.Test.Integration
         protected static Ksi[] TcpKsiWithInvalidSigningPort = new Ksi[]
         {
             new Ksi(new KsiService(
-                GetTcpKsiServiceProtocolInvalidSigningPort(),
+                GetTcpKsiSigningServiceProtocolInvalidPort(),
                 new ServiceCredentials(Settings.Default.TcpSigningServiceUser, Settings.Default.TcpSigningServicePass,
                     TestUtil.GetHashAlgorithm(Settings.Default.TcpSigningServiceHmacAlgorithm)),
-                GetTcpKsiServiceProtocolInvalidSigningPort(),
+                GetTcpKsiExtendingServiceProtocol(),
                 new ServiceCredentials(Settings.Default.TcpExtendingServiceUser, Settings.Default.TcpExtendingServicePass,
                     TestUtil.GetHashAlgorithm(Settings.Default.TcpExtendingServiceHmacAlgorithm)),
                 GetHttpKsiServiceProtocol(),
@@ -147,10 +148,10 @@ namespace Guardtime.KSI.Test.Integration
         protected static Ksi[] TcpKsiWithInvalidExtendingPort = new Ksi[]
         {
             new Ksi(new KsiService(
-                GetTcpKsiServiceProtocolInvalidExtendingPort(),
+                GetTcpKsiSigningServiceProtocol(),
                 new ServiceCredentials(Settings.Default.TcpSigningServiceUser, Settings.Default.TcpSigningServicePass,
                     TestUtil.GetHashAlgorithm(Settings.Default.TcpSigningServiceHmacAlgorithm)),
-                GetTcpKsiServiceProtocolInvalidExtendingPort(),
+                GetTcpKsiExtendingServiceProtocolInvalidPort(),
                 new ServiceCredentials(Settings.Default.TcpExtendingServiceUser, Settings.Default.TcpExtendingServicePass,
                     TestUtil.GetHashAlgorithm(Settings.Default.TcpExtendingServiceHmacAlgorithm)),
                 GetHttpKsiServiceProtocol(),
@@ -175,13 +176,11 @@ namespace Guardtime.KSI.Test.Integration
 
         protected static KsiService GetTcpKsiService(PduVersion? pduVersion = null)
         {
-            TcpKsiServiceProtocol tcpKsiServiceProtocol = GetTcpKsiServiceProtocol();
-
             return new KsiService(
-                tcpKsiServiceProtocol,
+                GetTcpKsiSigningServiceProtocol(),
                 new ServiceCredentials(Settings.Default.TcpSigningServiceUser, Settings.Default.TcpSigningServicePass,
                     TestUtil.GetHashAlgorithm(Settings.Default.TcpSigningServiceHmacAlgorithm)),
-                tcpKsiServiceProtocol,
+                GetTcpKsiExtendingServiceProtocol(),
                 new ServiceCredentials(Settings.Default.TcpExtendingServiceUser, Settings.Default.TcpExtendingServicePass,
                     TestUtil.GetHashAlgorithm(Settings.Default.TcpExtendingServiceHmacAlgorithm)),
                 GetHttpKsiServiceProtocol(),
@@ -208,10 +207,10 @@ namespace Guardtime.KSI.Test.Integration
         private static KsiService GetTcpKsiServiceWithInvalidSigningPass()
         {
             return new KsiService(
-                GetTcpKsiServiceProtocol(),
+                GetTcpKsiSigningServiceProtocol(),
                 new ServiceCredentials(Settings.Default.TcpSigningServiceUser, Settings.Default.TcpSigningServicePass + "x",
                     TestUtil.GetHashAlgorithm(Settings.Default.TcpSigningServiceHmacAlgorithm)),
-                GetTcpKsiServiceProtocol(),
+                GetTcpKsiExtendingServiceProtocol(),
                 new ServiceCredentials(Settings.Default.TcpExtendingServiceUser, Settings.Default.TcpExtendingServicePass,
                     TestUtil.GetHashAlgorithm(Settings.Default.TcpExtendingServiceHmacAlgorithm)),
                 GetHttpKsiServiceProtocol(),
@@ -240,10 +239,10 @@ namespace Guardtime.KSI.Test.Integration
         private static KsiService GetTcpKsiServiceWithInvalidExtendingPass()
         {
             return new KsiService(
-                GetTcpKsiServiceProtocol(),
+                GetTcpKsiSigningServiceProtocol(),
                 new ServiceCredentials(Settings.Default.TcpSigningServiceUser, Settings.Default.TcpSigningServicePass,
                     TestUtil.GetHashAlgorithm(Settings.Default.TcpSigningServiceHmacAlgorithm)),
-                GetTcpKsiServiceProtocol(),
+                GetTcpKsiExtendingServiceProtocol(),
                 new ServiceCredentials(Settings.Default.TcpExtendingServiceUser, Settings.Default.TcpExtendingServicePass + "x",
                     TestUtil.GetHashAlgorithm(Settings.Default.TcpExtendingServiceHmacAlgorithm)),
                 GetHttpKsiServiceProtocol(),
@@ -311,22 +310,24 @@ namespace Guardtime.KSI.Test.Integration
                     "http://invalid.publications.file.url", 10000);
         }
 
-        private static TcpKsiServiceProtocol GetTcpKsiServiceProtocol()
+        private static TcpKsiSigningServiceProtocol GetTcpKsiSigningServiceProtocol()
         {
-            return new TcpKsiServiceProtocol(IPAddress.Parse(Settings.Default.TcpSigningServiceIp),
-                Settings.Default.TcpSigningServicePort, IPAddress.Parse(Settings.Default.TcpExtendingServiceIp), Settings.Default.TcpExtendingServicePort, 10000);
+            return new TcpKsiSigningServiceProtocol(IPAddress.Parse(Settings.Default.TcpSigningServiceIp), Settings.Default.TcpSigningServicePort, 10000);
         }
 
-        private static TcpKsiServiceProtocol GetTcpKsiServiceProtocolInvalidSigningPort()
+        private static TcpKsiExtendingServiceProtocol GetTcpKsiExtendingServiceProtocol()
         {
-            return new TcpKsiServiceProtocol(IPAddress.Parse(Settings.Default.TcpSigningServiceIp), 2847,
-                IPAddress.Parse(Settings.Default.TcpExtendingServiceIp), Settings.Default.TcpExtendingServicePort, 10000);
+            return new TcpKsiExtendingServiceProtocol(IPAddress.Parse(Settings.Default.TcpExtendingServiceIp), Settings.Default.TcpExtendingServicePort, 10000);
         }
 
-        private static TcpKsiServiceProtocol GetTcpKsiServiceProtocolInvalidExtendingPort()
+        private static TcpKsiSigningServiceProtocol GetTcpKsiSigningServiceProtocolInvalidPort()
         {
-            return new TcpKsiServiceProtocol(IPAddress.Parse(Settings.Default.TcpSigningServiceIp), Settings.Default.TcpSigningServicePort,
-                IPAddress.Parse(Settings.Default.TcpExtendingServiceIp), 2847, 10000);
+            return new TcpKsiSigningServiceProtocol(IPAddress.Parse(Settings.Default.TcpSigningServiceIp), 2847, 10000);
+        }
+
+        private static TcpKsiExtendingServiceProtocol GetTcpKsiExtendingServiceProtocolInvalidPort()
+        {
+            return new TcpKsiExtendingServiceProtocol(IPAddress.Parse(Settings.Default.TcpExtendingServiceIp), 2847, 10000);
         }
     }
 }

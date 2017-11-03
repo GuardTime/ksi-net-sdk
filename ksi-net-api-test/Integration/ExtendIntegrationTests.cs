@@ -548,7 +548,7 @@ namespace Guardtime.KSI.Test.Integration
             IAsyncResult ar2 = service.BeginExtend(aggregationTime, null, null);
             service.EndExtend(ar1);
 
-            TcpKsiServiceProtocol tcp = GetTcpProtocol(service);
+            TcpKsiExtendingServiceProtocol tcp = GetTcpProtocol(service);
 
             Assert.IsNotNull(GetExtendingSocket(tcp), "Socket should not be null");
             tcp.Dispose();
@@ -570,9 +570,9 @@ namespace Guardtime.KSI.Test.Integration
             Assert.That(ex.Message.StartsWith("TCP KSI service protocol is disposed."), "Unexpected exception message: " + ex.Message);
         }
 
-        private static TcpKsiServiceProtocol GetTcpProtocol(KsiService service)
+        private static TcpKsiExtendingServiceProtocol GetTcpProtocol(KsiService service)
         {
-            return (TcpKsiServiceProtocol)typeof(KsiService).GetField("_extendingServiceProtocol", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(service);
+            return (TcpKsiExtendingServiceProtocol)typeof(KsiService).GetField("_extendingServiceProtocol", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(service);
         }
 
         private static Socket GetExtendingSocket(KsiService service)
@@ -580,11 +580,9 @@ namespace Guardtime.KSI.Test.Integration
             return GetExtendingSocket(GetTcpProtocol(service));
         }
 
-        private static Socket GetExtendingSocket(TcpKsiServiceProtocol tcp)
+        private static Socket GetExtendingSocket(TcpKsiExtendingServiceProtocol tcp)
         {
-            TcpExtenderRequestManager requestManager =
-                (TcpExtenderRequestManager)typeof(TcpKsiServiceProtocol).GetField("_extenderRequestManager", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(tcp);
-            return (Socket)typeof(TcpRequestManager).GetField("_socket", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(requestManager);
+            return (Socket)typeof(TcpKsiServiceProtocolBase).GetField("_socket", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(tcp);
         }
     }
 }

@@ -468,7 +468,7 @@ namespace Guardtime.KSI.Test.Integration
             IAsyncResult ar2 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("2f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
             service.EndSign(ar1);
 
-            TcpKsiServiceProtocol tcp = GetTcpProtocol(service);
+            TcpKsiSigningServiceProtocol tcp = GetTcpProtocol(service);
 
             Assert.IsNotNull(GetSigningSocket(tcp), "Socket should not be null");
             tcp.Dispose();
@@ -490,9 +490,9 @@ namespace Guardtime.KSI.Test.Integration
             Assert.That(ex.Message.StartsWith("TCP KSI service protocol is disposed."), "Unexpected exception message: " + ex.Message);
         }
 
-        private static TcpKsiServiceProtocol GetTcpProtocol(KsiService service)
+        private static TcpKsiSigningServiceProtocol GetTcpProtocol(KsiService service)
         {
-            return (TcpKsiServiceProtocol)typeof(KsiService).GetField("_signingServiceProtocol", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(service);
+            return (TcpKsiSigningServiceProtocol)typeof(KsiService).GetField("_signingServiceProtocol", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(service);
         }
 
         private static Socket GetSigningSocket(KsiService service)
@@ -500,11 +500,9 @@ namespace Guardtime.KSI.Test.Integration
             return GetSigningSocket(GetTcpProtocol(service));
         }
 
-        private static Socket GetSigningSocket(TcpKsiServiceProtocol tcp)
+        private static Socket GetSigningSocket(TcpKsiSigningServiceProtocol tcp)
         {
-            TcpAggregatorRequestManager requestManager =
-                (TcpAggregatorRequestManager)typeof(TcpKsiServiceProtocol).GetField("_aggregatorRequestManager", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(tcp);
-            return (Socket)typeof(TcpRequestManager).GetField("_socket", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(requestManager);
+            return (Socket)typeof(TcpKsiServiceProtocolBase).GetField("_socket", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(tcp);
         }
     }
 }

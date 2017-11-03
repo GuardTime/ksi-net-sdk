@@ -31,7 +31,7 @@ namespace Guardtime.KSI.Service.Tcp
     /// All requests and responses go through one socket that is kept opened for future requests.
     /// If a request fails (eg. socket is closed by server) it will be repeated once more with a new freshly connected socket.
     /// </summary>
-    public class TcpRequestManager : IDisposable
+    public class TcpKsiServiceProtocolBase : IDisposable
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly uint _requestTimeOut = 10000;
@@ -55,7 +55,7 @@ namespace Guardtime.KSI.Service.Tcp
         /// <param name="port">Service port</param>
         /// <param name="requestTimeout">request timeout in milliseconds</param>
         /// <param name="bufferSize">size of buffer to be used when receiving data</param>
-        public TcpRequestManager(IPAddress ipAddress, ushort port, uint? requestTimeout = null, uint? bufferSize = null)
+        public TcpKsiServiceProtocolBase(IPAddress ipAddress, ushort port, uint? requestTimeout = null, uint? bufferSize = null)
         {
             if (ipAddress == null)
             {
@@ -88,7 +88,7 @@ namespace Guardtime.KSI.Service.Tcp
         /// <summary>
         /// Server IP and port.
         /// </summary>
-        public string ServiceLocation => _ipAddress + ":" + _port;
+        protected string ServiceAddress => _ipAddress + ":" + _port;
 
         /// <summary>
         /// Dispose TCP KSI service protocol. Close opened connection.

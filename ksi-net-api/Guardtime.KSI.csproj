@@ -179,10 +179,10 @@
     <Compile Include="Service\LegacyExtendPdu.cs" />
     <Compile Include="Service\LegacyPdu.cs" />
     <Compile Include="Service\PduVersion.cs" />
-    <Compile Include="Service\Tcp\TcpExtenderRequestManager.cs" />
+    <Compile Include="Service\Tcp\TcpKsiExtendingServiceProtocol.cs" />
+    <Compile Include="Service\Tcp\TcpKsiSigningServiceProtocol.cs" />
     <Compile Include="Service\Tcp\TcpAsyncResultCollection.cs" />
-    <Compile Include="Service\Tcp\TcpAggregatorRequestManager.cs" />
-    <Compile Include="Service\Tcp\TcpRequestManager.cs" />
+    <Compile Include="Service\Tcp\TcpKsiServiceProtocolBase.cs" />
     <Compile Include="Service\KsiServiceResponsePayloadType.cs" />
     <Compile Include="Service\Tcp\TcpResponseProcessor.cs" />
     <Compile Include="Service\TcpKsiServiceProtocol.cs" />

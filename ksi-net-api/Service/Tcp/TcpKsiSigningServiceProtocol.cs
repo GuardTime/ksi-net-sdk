@@ -23,66 +23,74 @@ using System.Net;
 namespace Guardtime.KSI.Service.Tcp
 {
     /// <summary>
-    /// Manages TCP requests to an extender.
+    /// TCP KSI signing service protocol.
+    /// Responsible for making TCP requests to aggregator.
+    /// All requests and responses go through one socket that is kept opened for future requests.
+    /// If a request fails (eg. socket is closed by server) it will be repeated once more with a new freshly connected socket.
     /// </summary>
-    public class TcpExtenderRequestManager : TcpRequestManager
+    public class TcpKsiSigningServiceProtocol : TcpKsiServiceProtocolBase, IKsiSigningServiceProtocol
     {
         /// <summary>
-        ///     Create TCP KSI service protocol
+        ///     Create TCP KSI signing service protocol
         /// </summary>
         /// <param name="ipAddress">Service IP address</param>
         /// <param name="port">Service port</param>
         /// <param name="requestTimeout">request timeout in milliseconds</param>
         /// <param name="bufferSize">size of buffer to be used when receiving data</param>
-        public TcpExtenderRequestManager(IPAddress ipAddress, ushort port, uint? requestTimeout = null, uint? bufferSize = null)
+        public TcpKsiSigningServiceProtocol(IPAddress ipAddress, ushort port, uint? requestTimeout = null, uint? bufferSize = null)
             : base(ipAddress, port, requestTimeout, bufferSize)
         {
         }
 
         /// <summary>
-        ///    Begin extending request.
+        ///    Begin signing request.
         /// </summary>
-        /// <param name="data">extending request bytes</param>
+        /// <param name="data">signing request bytes</param>
         /// <param name="requestId">request id</param>
-        /// <param name="callback">callback when extending request is finished</param>
+        /// <param name="callback">callback when creating signature is finished</param>
         /// <param name="asyncState">async state object</param>
         /// <returns>TCP KSI service async result</returns>
-        public IAsyncResult BeginExtend(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
+        public IAsyncResult BeginSign(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
-            return BeginRequest(KsiServiceRequestType.Extend, data, requestId, callback, asyncState);
+            return BeginRequest(KsiServiceRequestType.Sign, data, requestId, callback, asyncState);
         }
 
         /// <summary>
-        ///       Begin extender configuration request.
+        ///       Begin aggregator configuration request.
         /// </summary>
-        /// <param name="data">extender configuration request bytes</param>
+        /// <param name="data">aggregator configuration request bytes</param>
         /// <param name="requestId">request id</param>
-        /// <param name="callback">callback when extender configuration request is finished</param>
+        /// <param name="callback">callback when aggregator configuration request is finished</param>
         /// <param name="asyncState">async state object</param>
         /// <returns>TCP KSI service async result</returns>
-        public IAsyncResult BeginGetExtenderConfig(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
+        public IAsyncResult BeginGetAggregatorConfig(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
-            return BeginRequest(KsiServiceRequestType.ExtenderConfig, data, requestId, callback, asyncState);
+            return BeginRequest(KsiServiceRequestType.AggregatorConfig, data, requestId, callback, asyncState);
         }
 
         /// <summary>
-        ///     End extending request.
+        ///     End signing request.
         /// </summary>
         /// <param name="ar">TCP KSI service async result</param>
         /// <returns>response bytes</returns>
-        public byte[] EndExtend(IAsyncResult ar)
+        public byte[] EndSign(IAsyncResult ar)
         {
             return EndRequest(ar);
         }
 
         /// <summary>
-        ///     End extender configuration request.
+        ///     End aggregator configuration request.
         /// </summary>
         /// <param name="ar">async result</param>
         /// <returns>response bytes</returns>
-        public byte[] EndGetExtenderConfig(IAsyncResult ar)
+        public byte[] EndGetAggregatorConfig(IAsyncResult ar)
         {
             return EndRequest(ar);
         }
+
+        /// <summary>
+        /// Aggregator ip and port.
+        /// </summary>
+        public string AggregatorLocation => ServiceAddress;
     }
 }
