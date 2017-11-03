@@ -130,19 +130,24 @@ namespace Guardtime.KSI.Signature
         public PublicationData PublicationData => _publicationData ?? (_publicationData = new PublicationData(_publicationTime.Value, OutputHash));
 
         /// <summary>
-        /// Get enumerable 
+        /// Get left links enumerator
         /// </summary>
         /// <returns></returns>
-        public IEnumerator<Link> GetRightLinksEnumerator()
+        public IEnumerator<Link> GetLeftLinksEnumerator()
         {
-            return GetRightLinksEnumerable(_chain).GetEnumerator();
+            return GetLinksEnumerable(_chain, LinkDirection.Left).GetEnumerator();
         }
 
         private static IEnumerable<Link> GetRightLinksEnumerable(IList<Link> chain)
         {
+            return GetLinksEnumerable(chain, LinkDirection.Right);
+        }
+
+        private static IEnumerable<Link> GetLinksEnumerable(IList<Link> chain, LinkDirection direction)
+        {
             for (int i = 0; i < chain.Count; i++)
             {
-                if (chain[i].Direction == LinkDirection.Right)
+                if (chain[i].Direction == direction)
                 {
                     yield return chain[i];
                 }

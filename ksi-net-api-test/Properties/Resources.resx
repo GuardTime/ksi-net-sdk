@@ -687,10 +687,10 @@
   <data name="KsiSignature_Sha1InputAlgorithm_2017" xml:space="preserve">
     <value>resources/signature/ksi-signature/sha1-as-input-algo-2017.tlv</value>
   </data>
-  <data name="KsiSignature_Sha1CalendarRightLinkAlgorithm_2016" xml:space="preserve">
+  <data name="KsiSignature_Sha1CalendarLeftLinkAlgorithm_2016" xml:space="preserve">
     <value>resources/signature/ksi-signature/sha1-as-calendar-algo-2016-01.tlv</value>
   </data>
-  <data name="KsiSignature_Sha1CalendarRightLinkAlgorithm_2017" xml:space="preserve">
+  <data name="KsiSignature_Sha1CalendarLeftLinkAlgorithm_2017" xml:space="preserve">
     <value>resources/signature/ksi-signature/sha1-as-calendar-algo-2017.tlv</value>
   </data>
   <data name="KsiSignature_Rfc3161Record_Sha1InputHashAlgorithm_2016" xml:space="preserve">

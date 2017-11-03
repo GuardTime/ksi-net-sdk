@@ -280,7 +280,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         /// <returns></returns>
         public HashAlgorithm GetDeprecatedHashAlgorithm(CalendarHashChain calendarHashChain)
         {
-            IEnumerator<CalendarHashChain.Link> linksEnumerator = calendarHashChain.GetRightLinksEnumerator();
+            IEnumerator<CalendarHashChain.Link> linksEnumerator = calendarHashChain.GetLeftLinksEnumerator();
             CalendarHashChain.Link link = linksEnumerator.MoveNext() ? linksEnumerator.Current : null;
 
             while (link != null)

@@ -38,7 +38,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
             }
 
-            IEnumerator<CalendarHashChain.Link> linksEnumerator = calendarHashChain.GetRightLinksEnumerator();
+            IEnumerator<CalendarHashChain.Link> linksEnumerator = calendarHashChain.GetLeftLinksEnumerator();
             CalendarHashChain.Link link = linksEnumerator.MoveNext() ? linksEnumerator.Current : null;
 
             while (link != null)

@@ -1477,18 +1477,18 @@ namespace Guardtime.KSI.Test.Properties {
         /// <summary>
         ///   Looks up a localized string similar to resources/signature/ksi-signature/sha1-as-calendar-algo-2016-01.tlv.
         /// </summary>
-        internal static string KsiSignature_Sha1CalendarRightLinkAlgorithm_2016 {
+        internal static string KsiSignature_Sha1CalendarLeftLinkAlgorithm_2016 {
             get {
-                return ResourceManager.GetString("KsiSignature_Sha1CalendarRightLinkAlgorithm_2016", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Sha1CalendarLeftLinkAlgorithm_2016", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to resources/signature/ksi-signature/sha1-as-calendar-algo-2017.tlv.
         /// </summary>
-        internal static string KsiSignature_Sha1CalendarRightLinkAlgorithm_2017 {
+        internal static string KsiSignature_Sha1CalendarLeftLinkAlgorithm_2017 {
             get {
-                return ResourceManager.GetString("KsiSignature_Sha1CalendarRightLinkAlgorithm_2017", resourceCulture);
+                return ResourceManager.GetString("KsiSignature_Sha1CalendarLeftLinkAlgorithm_2017", resourceCulture);
             }
         }
         

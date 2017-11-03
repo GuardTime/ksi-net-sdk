@@ -70,14 +70,14 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         public void TestOkAlgorithmBeforeDeprecatedDate()
         {
             // Check extender response calendar hash chain that use hash algorithms with deprecated date and publication time is before deprecated date
-            TestSignature(Properties.Resources.KsiSignature_Sha1CalendarRightLinkAlgorithm_2016, VerificationResultCode.Ok);
+            TestSignature(Properties.Resources.KsiSignature_Sha1CalendarLeftLinkAlgorithm_2016, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestInvalidAlgorithmAfterDeprecatedDate()
         {
             // Check extender response calendar hash chain that use hash algorithms with deprecated date and publication time is after deprecated date
-            TestSignature(Properties.Resources.KsiSignature_Sha1CalendarRightLinkAlgorithm_2017, VerificationResultCode.Na);
+            TestSignature(Properties.Resources.KsiSignature_Sha1CalendarLeftLinkAlgorithm_2017, VerificationResultCode.Na);
         }
 
         private static void TestSignature(string signaturePath, VerificationResultCode resultCode)

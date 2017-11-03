@@ -79,7 +79,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             CalendarHashChainAlgorithmDeprecatedRule rule = new CalendarHashChainAlgorithmDeprecatedRule();
 
             // Check with calendar hash chains that use hash algorithms with deprecated date and publication time is before deprecated date
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Sha1CalendarRightLinkAlgorithm_2016), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Sha1CalendarLeftLinkAlgorithm_2016), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -97,7 +97,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             CalendarHashChainAlgorithmDeprecatedRule rule = new CalendarHashChainAlgorithmDeprecatedRule();
 
             // Check with calendar hash chains that use hash algorithms with deprecated date and publication time is after deprecated date
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Sha1CalendarRightLinkAlgorithm_2017), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Sha1CalendarLeftLinkAlgorithm_2017), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
