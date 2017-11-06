@@ -185,18 +185,18 @@ namespace Guardtime.KSI.Service
         IPublicationsFile EndGetPublicationsFile(IAsyncResult asyncResult);
 
         /// <summary>
-        /// Aggregator location url
+        /// Aggregator address
         /// </summary>
-        string AggregatorLocation { get; }
+        string AggregatorAddress { get; }
 
         /// <summary>
-        /// Extender location url
+        /// Extender address
         /// </summary>
-        string ExtenderLocation { get; }
+        string ExtenderAddress { get; }
 
         /// <summary>
-        /// Publications file location url
+        /// Publications file url
         /// </summary>
-        string PublicationsFileLocation { get; }
+        string PublicationsFileAddress { get; }
     }
 }

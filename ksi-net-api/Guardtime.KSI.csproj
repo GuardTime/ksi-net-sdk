@@ -143,7 +143,6 @@
     <Compile Include="Service\AggregatorConfigChangedEventArgs.cs" />
     <Compile Include="Service\HighAvailability\HAExtenderConfigRequestRunner.cs" />
     <Compile Include="Service\HighAvailability\HAAsyncResult.cs" />
-    <Compile Include="Service\HighAvailability\HAPublicationsFileRequestRunner.cs" />
     <Compile Include="Service\HighAvailability\HAKsiService.cs" />
     <Compile Include="Service\HighAvailability\HARequestRunner.cs" />
     <Compile Include="Service\HighAvailability\HAAggregatorConfigRequestRunner.cs" />

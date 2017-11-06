@@ -50,6 +50,8 @@ namespace Guardtime.KSI.Test.Integration
             GetHttpKsiService()
         };
 
+        private static readonly IKsiService PublicationsFileService = GetHttpKsiService();
+
         /// <summary>
         /// Test signing TCP and HTTP signing services.
         /// </summary>
@@ -99,7 +101,7 @@ namespace Guardtime.KSI.Test.Integration
         [Test]
         public void HAExtendWithTcpAndHttpServicesTest()
         {
-            Ksi ksi = new Ksi(new HAKsiService(null, ExtendingServices, ExtendingServices));
+            Ksi ksi = new Ksi(new HAKsiService(null, ExtendingServices, PublicationsFileService));
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
@@ -125,7 +127,7 @@ namespace Guardtime.KSI.Test.Integration
                     ksi.Extend(ksiSignature);
                 });
                 Assert.IsFalse(ksiSignature.IsExtended);
-                Assert.That(ex.Message.StartsWith("Sub-services are missing"), "Unexpected exception message: " + ex.Message);
+                Assert.That(ex.Message.StartsWith("Publications file service is missing"), "Unexpected exception message: " + ex.Message);
             }
         }
 
@@ -146,7 +148,7 @@ namespace Guardtime.KSI.Test.Integration
         [Test]
         public void HARequestSubClientsTest()
         {
-            HAKsiService haService = new HAKsiService(SigningServices, ExtendingServices, SigningServices);
+            HAKsiService haService = new HAKsiService(SigningServices, ExtendingServices, PublicationsFileService);
             Assert.AreEqual(ExtendingServices, haService.ExtendingServices);
             Assert.AreEqual(SigningServices, haService.SigningServices);
         }

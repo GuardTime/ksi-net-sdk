@@ -97,9 +97,9 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        /// Aggregator location url
+        /// Aggregator ip address and port
         /// </summary>
-        public string AggregatorLocation => _ipAddress + ":" + _port;
+        public string AggregatorAddress => _ipAddress + ":" + _port;
 
         /// <summary>
         ///    Begin signing request.

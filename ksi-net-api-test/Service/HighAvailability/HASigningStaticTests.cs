@@ -51,10 +51,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
                     {
                         GetStaticKsiService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_RequestId_1584727637)), 1),
                     },
-                    new List<IKsiService>()
-                    {
-                        GetStaticKsiService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_RequestId_1584727637)), 1),
-                    });
+                    GetStaticKsiService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_RequestId_1584727637)), 1));
 
             HAKsiServiceException ex = Assert.Throws<HAKsiServiceException>(delegate
             {
