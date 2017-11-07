@@ -266,6 +266,18 @@ namespace Guardtime.KSI.Test.Integration
                     CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))));
         }
 
+        protected static KsiService GetService(PduVersion version, HashAlgorithm aggregatorHmacAlgo, HashAlgorithm extenderHmacAlgo)
+        {
+            return new KsiService(
+                    new HttpKsiServiceProtocol(Settings.Default.HttpSigningServiceUrl, Settings.Default.HttpExtendingServiceUrl, Settings.Default.HttpPublicationsFileUrl, 10000),
+                        new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass, aggregatorHmacAlgo),
+                    new HttpKsiServiceProtocol(Settings.Default.HttpSigningServiceUrl, Settings.Default.HttpExtendingServiceUrl, Settings.Default.HttpPublicationsFileUrl, 10000),
+                        new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass, extenderHmacAlgo),
+                    new HttpKsiServiceProtocol(Settings.Default.HttpSigningServiceUrl, Settings.Default.HttpExtendingServiceUrl, Settings.Default.HttpPublicationsFileUrl, 10000),
+                        new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
+                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))), version);
+        }
+
         protected class TestAsyncResult : IAsyncResult
         {
             public object AsyncState => null;

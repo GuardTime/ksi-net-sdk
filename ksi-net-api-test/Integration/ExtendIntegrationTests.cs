@@ -29,6 +29,7 @@ using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
 using Guardtime.KSI.Test.Signature.Verification;
 using NUnit.Framework;
+using Guardtime.KSI.Hashing;
 
 namespace Guardtime.KSI.Test.Integration
 {
@@ -443,6 +444,33 @@ namespace Guardtime.KSI.Test.Integration
             });
 
             Assert.That(ex.Message.StartsWith("Invalid asyncResult type:"), "Unexpected exception message: " + ex.Message);
+        }
+
+        [Test]
+        public void UseDeprecatedHmacAlgoTest()
+        {
+            KsiService service = GetService(PduVersion.v2, HashAlgorithm.Sha2256, HashAlgorithm.Sha1);
+            Ksi ksi = new Ksi(service);
+
+            HashingException ex = Assert.Throws<HashingException>(delegate
+            {
+                service.Extend(1510056000L);
+            });
+
+            Assert.AreEqual("Hash algorithm SHA1 is deprecated since 01.07.2016 and can not be used for HMAC.", ex.Message);
+        }
+
+        [Test]
+        public void LergacyUseDeprecatedHmacAlgoTest()
+        {
+            KsiService service = GetService(PduVersion.v1, HashAlgorithm.Sha2256, HashAlgorithm.Sha1);
+
+            HashingException ex = Assert.Throws<HashingException>(delegate
+            {
+                service.Extend(1510056000L);
+            });
+
+            Assert.AreEqual("Hash algorithm SHA1 is deprecated since 01.07.2016 and can not be used for HMAC.", ex.Message);
         }
     }
 }
