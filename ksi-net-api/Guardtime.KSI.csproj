@@ -184,6 +184,7 @@
     <Compile Include="Service\Tcp\TcpAsyncResultCollection.cs" />
     <Compile Include="Service\Tcp\TcpKsiServiceProtocolBase.cs" />
     <Compile Include="Service\KsiServiceResponsePayloadType.cs" />
+    <Compile Include="Service\Tcp\TcpRequestType.cs" />
     <Compile Include="Service\Tcp\TcpResponseProcessor.cs" />
     <Compile Include="Service\TcpKsiServiceProtocol.cs" />
     <Compile Include="Service\Tcp\TcpKsiServiceAsyncResult.cs" />

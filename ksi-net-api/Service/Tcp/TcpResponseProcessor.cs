@@ -125,14 +125,14 @@ namespace Guardtime.KSI.Service.Tcp
                         if (!asyncResult.IsCompleted)
                         {
                             asyncResult.ResultStream = new MemoryStream(pduBytes);
-                            Logger.Debug("Response payload received. Request type: {0}; Response payload type: {1}; (request id: {2}).", asyncResult.RequestType,
+                            Logger.Debug("Response payload received. Request type: {0}; Response payload type: {1}; (request id: {2}).", asyncResult.ServiceRequestType,
                                 payloadInfo.ResponsePayloadType, asyncResult.RequestId);
                             asyncResult.SetComplete();
                         }
                         else
                         {
                             Logger.Debug("AsyncResult already marked as Completed. Request type: {0}; Response payload type: {1}; (request id: {2}).",
-                                asyncResult.RequestType, payloadInfo.ResponsePayloadType, asyncResult.RequestId);
+                                asyncResult.ServiceRequestType, payloadInfo.ResponsePayloadType, asyncResult.RequestId);
                         }
 
                         _asyncResults.Remove(asyncResult);
@@ -187,7 +187,7 @@ namespace Guardtime.KSI.Service.Tcp
                     {
                         TcpKsiServiceAsyncResult asyncResult = _asyncResults.GetValue(key);
 
-                        if (asyncResult?.RequestType == KsiServiceRequestType.AggregatorConfig)
+                        if (asyncResult?.ServiceRequestType == KsiServiceRequestType.AggregatorConfig)
                         {
                             list.Add(asyncResult);
                         }
@@ -200,7 +200,7 @@ namespace Guardtime.KSI.Service.Tcp
                     {
                         TcpKsiServiceAsyncResult asyncResult = _asyncResults.GetValue(key);
 
-                        if (asyncResult?.RequestType == KsiServiceRequestType.ExtenderConfig)
+                        if (asyncResult?.ServiceRequestType == KsiServiceRequestType.ExtenderConfig)
                         {
                             list.Add(asyncResult);
                         }
