@@ -91,6 +91,6 @@ namespace Guardtime.KSI.Service.Tcp
         /// <summary>
         /// Extender ip and port
         /// </summary>
-        public string ExtenderLocation => ServiceAddress;
+        public string ExtenderAddress => ServiceAddress;
     }
 }

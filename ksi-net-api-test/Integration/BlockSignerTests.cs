@@ -19,13 +19,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
-using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature;
@@ -293,9 +291,9 @@ namespace Guardtime.KSI.Test.Integration
         /// </summary>
         /// <param name="ksi"></param>
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsi))]
-        public void BlockSignerGetUniSignaturesOfGivenHashesWithSha1Test(Ksi ksi)
+        public void BlockSignerGetUniSignaturesOfGivenHashesWithSha512Test(Ksi ksi)
         {
-            BlockSigner blockSigner = new BlockSigner(GetHttpKsiService(), HashAlgorithm.Sha1);
+            BlockSigner blockSigner = new BlockSigner(GetHttpKsiService(), HashAlgorithm.Sha2512);
             IdentityMetadata metadata = new IdentityMetadata("test client id");
             List<DataHash> hashes = new List<DataHash>
             {
@@ -313,17 +311,31 @@ namespace Guardtime.KSI.Test.Integration
 
             foreach (IKsiSignature ksiSignature in blockSigner.Sign())
             {
-                VerifyChainAlgorithm(ksiSignature, HashAlgorithm.Sha1);
+                VerifyChainAlgorithm(ksiSignature, HashAlgorithm.Sha2512);
                 Verify(ksi, ksiSignature, hashes[i++]);
             }
+        }
+
+        /// <summary>
+        /// Testing with deprecated hash algorithm
+        /// </summary>
+        /// <param name="ksi"></param>
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
+        public void BlockSignerWithDeprecatedHashAlgorithmTest(Ksi ksi)
+        {
+            Exception ex = Assert.Throws<HashingException>(delegate
+            {
+                new BlockSigner(GetHttpKsiService(), HashAlgorithm.Sha1);
+            });
+
+            Assert.That(ex.Message.StartsWith("Hash algorithm SHA1 is deprecated since 1.07.2016 and can not be used."),
+                "Unexpected exception message: " + ex.Message);
         }
 
         private static void VerifyChainAlgorithm(IKsiSignature ksiSignature, HashAlgorithm expectedAlgorithm)
         {
             AggregationHashChain aggregationHashChain = ksiSignature.GetAggregationHashChains()[0];
-            IntegerTag id = aggregationHashChain.GetType().InvokeMember("_aggrAlgorithmId", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.GetField, null,
-                aggregationHashChain, null) as IntegerTag;
-            Assert.AreEqual(expectedAlgorithm.Id, id.Value, "Aggregation hash chain hash algorithm should match");
+            Assert.AreEqual(expectedAlgorithm.Id, aggregationHashChain.AggregationAlgorithm.Id, "Aggregation hash chain hash algorithm should match");
         }
 
         /// <summary>

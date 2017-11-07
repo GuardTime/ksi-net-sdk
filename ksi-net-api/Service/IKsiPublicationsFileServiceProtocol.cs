@@ -42,8 +42,8 @@ namespace Guardtime.KSI.Service
         byte[] EndGetPublicationsFile(IAsyncResult asyncResult);
 
         /// <summary>
-        /// Publications file location url
+        /// Publications file url
         /// </summary>
-        string PublicationsFileLocation { get; }
+        string PublicationsFileAddress { get; }
     }
 }

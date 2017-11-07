@@ -312,6 +312,23 @@ namespace Guardtime.KSI.Test.Service
             Assert.That(ex.Message.StartsWith("Could not parse response message"), "Unexpected exception message: " + ex.Message);
         }
 
+        /// <summary>
+        /// Test signing with deprecated input hash algorithm.
+        /// </summary>
+        [Test]
+        public void SignStaticWithDeprecatedInputHashAlgorithmTest()
+        {
+            Ksi ksi = GetStaticKsi(new byte[] { });
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                ksi.Sign(new DataHash(Base16.Decode("0011A700B0C8066C47ECBA05ED37BC14DCADB23855")));
+            });
+
+            Assert.That(ex.Message.StartsWith("Hash algorithm SHA1 is deprecated since 1.07.2016 and can not be used for signing."),
+                "Unexpected exception message: " + ex.Message);
+        }
+
         [Test]
         public void EndSignArgumentNullTest()
         {

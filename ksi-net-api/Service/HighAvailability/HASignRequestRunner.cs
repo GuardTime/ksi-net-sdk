@@ -85,7 +85,7 @@ namespace Guardtime.KSI.Service.HighAvailability
         /// <param name="service">sub-service</param>
         protected override string SubServiceToString(IKsiService service)
         {
-            return "Signing service: " + service.AggregatorLocation;
+            return "Signing service: " + service.AggregatorAddress;
         }
 
         /// <summary>

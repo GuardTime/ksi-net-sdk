@@ -31,7 +31,6 @@ namespace Guardtime.KSI.Signature.Verification.Policy
         /// </summary>
         public PublicationBasedVerificationPolicy()
         {
-            // Check for internal verification
             FirstRule = new InternalVerificationPolicy()
                 .OnSuccess(new UserProvidedPublicationExistenceRule()
                     .OnSuccess(new UserProvidedPublicationBasedVerificationPolicy())

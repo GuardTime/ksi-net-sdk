@@ -61,8 +61,8 @@ namespace Guardtime.KSI.Service
         byte[] EndGetExtenderConfig(IAsyncResult asyncResult);
 
         /// <summary>
-        /// Extender location url
+        /// Extender address (url or ip)
         /// </summary>
-        string ExtenderLocation { get; }
+        string ExtenderAddress { get; }
     }
 }

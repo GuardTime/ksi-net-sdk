@@ -91,6 +91,6 @@ namespace Guardtime.KSI.Service.Tcp
         /// <summary>
         /// Aggregator ip and port.
         /// </summary>
-        public string AggregatorLocation => ServiceAddress;
+        public string AggregatorAddress => ServiceAddress;
     }
 }

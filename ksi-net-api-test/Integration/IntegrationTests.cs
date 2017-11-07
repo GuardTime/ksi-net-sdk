@@ -188,7 +188,7 @@ namespace Guardtime.KSI.Test.Integration
                     CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))), pduVersion ?? TestSetup.PduVersion);
         }
 
-        private static KsiService GetHttpKsiServiceWithInvalidSigningPass()
+        protected static KsiService GetHttpKsiServiceWithInvalidSigningPass()
         {
             return new KsiService(
                 GetHttpKsiServiceProtocol(),
@@ -220,7 +220,7 @@ namespace Guardtime.KSI.Test.Integration
                 TestSetup.PduVersion);
         }
 
-        private static KsiService GetHttpKsiServiceWithInvalidExtendingPass()
+        protected static KsiService GetHttpKsiServiceWithInvalidExtendingPass()
         {
             return new KsiService(
                 GetHttpKsiServiceProtocol(),

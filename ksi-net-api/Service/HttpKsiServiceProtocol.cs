@@ -120,19 +120,19 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        /// Aggregator location url
+        /// Aggregator url
         /// </summary>
-        public string AggregatorLocation => _signingUrl;
+        public string AggregatorAddress => _signingUrl;
 
         /// <summary>
-        /// Extender location url
+        /// Extender url
         /// </summary>
-        public string ExtenderLocation => _extendingUrl;
+        public string ExtenderAddress => _extendingUrl;
 
         /// <summary>
-        /// Publications file location url
+        /// Publications file url
         /// </summary>
-        public string PublicationsFileLocation => _publicationsFileUrl;
+        public string PublicationsFileAddress => _publicationsFileUrl;
 
         /// <summary>
         ///     Begin extend request.
