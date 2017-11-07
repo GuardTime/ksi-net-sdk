@@ -69,7 +69,7 @@ namespace Guardtime.KSI.Service.HighAvailability
         /// <param name="service">sub-service</param>
         protected override string SubServiceToString(IKsiService service)
         {
-            return "Extending service: " + service.ExtenderLocation;
+            return "Extending service: " + service.ExtenderAddress;
         }
 
         /// <summary>
@@ -171,14 +171,14 @@ namespace Guardtime.KSI.Service.HighAvailability
                 return currentCalendarLastTime;
             }
 
-            if (!calendarFirstTime.HasValue)
+            if (newCalendarLastTime < MinCalendarTime)
             {
                 Logger.Warn("Received calendar last time '{0}' from an extender. Will not use it as values before {1} ({2}) are not sane.", newCalendarLastTime, MinCalendarTime,
                     Util.ConvertUnixTimeToDateTime(MinCalendarTime));
                 return currentCalendarLastTime;
             }
 
-            if (newCalendarLastTime < calendarFirstTime)
+            if (calendarFirstTime.HasValue && newCalendarLastTime < calendarFirstTime)
             {
                 Logger.Warn("Received calendar last time '{0}' from an extender. Will not use it as values before calendar first time ({1}) are not sane.", newCalendarLastTime,
                     calendarFirstTime);

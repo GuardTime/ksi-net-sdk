@@ -53,7 +53,7 @@ namespace Guardtime.KSI.Test.Service
             return RequestResult;
         }
 
-        public string AggregatorLocation => "test.aggregator.location";
+        public string AggregatorAddress => "test.aggregator.address";
 
         public IAsyncResult BeginExtend(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
@@ -75,7 +75,7 @@ namespace Guardtime.KSI.Test.Service
             return RequestResult;
         }
 
-        public string ExtenderLocation => "test.extender.location";
+        public string ExtenderAddress => "test.extender.address";
 
         public IAsyncResult BeginGetPublicationsFile(AsyncCallback callback, object asyncState)
         {
@@ -89,7 +89,7 @@ namespace Guardtime.KSI.Test.Service
             return UseRequestResultAsPublicationsFileResponse ? RequestResult : ReadFile(Resources.KsiPublicationsFile);
         }
 
-        public string PublicationsFileLocation => "test.publications.file.location";
+        public string PublicationsFileAddress => "test.publications.file.address";
 
         private static byte[] ReadFile(string file)
         {

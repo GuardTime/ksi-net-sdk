@@ -38,7 +38,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
     public class HAExtenderConfigStaticTests : StaticServiceTestsBase
     {
         [Test]
-        public void HAExtenderConfigRequestWithSingleServiceStaticTest()
+        public void HAExtenderConfigRequestWithSingleServiceTest()
         {
             // Test getting extender configuration with single sub-service
             IKsiService haService = GetHAService(
@@ -59,7 +59,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         }
 
         [Test]
-        public void HAExtenderConfigRequestStaticTest()
+        public void HAExtenderConfigRequestTest()
         {
             // Test getting extender configuration with 1 successful and 2 unsuccessful sub-service responses 
 
@@ -83,7 +83,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         }
 
         [Test]
-        public void HAExtenderConfigRequestUsingEventHandlerStaticTest()
+        public void HAExtenderConfigRequestUsingEventHandlerTest()
         {
             // Test getting extender configuration with 1 successful and 2 unsuccessful sub-service responses. 
             // Get response using ExtenderConfigChanged event handler
@@ -118,7 +118,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         }
 
         [Test]
-        public void HAExtenderConfigRequestFailStaticTest()
+        public void HAExtenderConfigRequestFailTest()
         {
             // Test getting extender configuration with all 3 sub-services responses failing
 
@@ -162,7 +162,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         }
 
         [Test]
-        public void HAGetConfig2ResultsTest1()
+        public void HAGetConfigTwoResultsTest1()
         {
             // Test getting extender configuration with 2 successful sub-service responses
 
@@ -186,7 +186,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         }
 
         [Test]
-        public void HAGetConfig2ResultsTest2()
+        public void HAGetConfigTwoResultsTest2()
         {
             // Test getting extender configuration with 2 successful sub-service responses
 
@@ -210,7 +210,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         }
 
         [Test]
-        public void HAGetConfig2ResultsTest3()
+        public void HAGetConfigTwoResultsTest3()
         {
             // Test getting extender configuration with 2 successful sub-service responses
 
@@ -233,7 +233,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         }
 
         [Test]
-        public void HAGetConfig2ResultsTest4()
+        public void HAGetConfigTwoResultsTest4()
         {
             // Test getting extender configuration with 2 successful sub-service responses
 

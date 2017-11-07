@@ -140,6 +140,7 @@
     <Compile Include="Hashing\HashAlgorithmTests.cs" />
     <Compile Include="Integration\PublicationsFileIntegrationTests.cs" />
     <Compile Include="Service\KsiServiceProviderTests.cs" />
+    <Compile Include="Integration\HATests.cs" />
     <Compile Include="Service\TcpResponseProcessorTests.cs" />
     <Compile Include="Service\HighAvailability\HAExtenderConfigStaticTests.cs" />
     <Compile Include="Service\HighAvailability\HAAggregatorConfigStaticTests.cs" />

@@ -47,8 +47,8 @@ namespace Guardtime.KSI.Service
         /// Create new aggregator configuration data instance
         /// </summary>
         /// <param name="maxLevel">Maximum level value that the nodes in the client's aggregation tree are allowed to have</param>
-        /// <param name="aggregationAlgorithm">Identifier of the hash function that the client is recommended to use in its aggregation trees</param>
-        /// <param name="aggregationPeriod">Recommended duration of client's aggregation round, in milliseconds</param>
+        /// <param name="aggregationAlgorithm">Identifier of the hash function that the aggregator is using for aggregation tree computation</param>
+        /// <param name="aggregationPeriod">Aggregation periond in milliseconds</param>
         /// <param name="maxRequests">Maximum number of requests the client is allowed to send within one parent server's aggregation round</param>
         /// <param name="parentsUris">Parent server URI (may be several parent servers)</param>
         public AggregatorConfig(ulong? maxLevel, ulong? aggregationAlgorithm, ulong? aggregationPeriod, ulong? maxRequests, IList<string> parentsUris) : base(parentsUris)
@@ -65,12 +65,12 @@ namespace Guardtime.KSI.Service
         public ulong? MaxLevel { get; }
 
         /// <summary>
-        /// Identifier of the hash function that the client is recommended to use in its aggregation trees
+        /// Identifier of the hash function that the aggregator is using for aggregation tree computation
         /// </summary>
         public ulong? AggregationAlgorithm { get; }
 
         /// <summary>
-        /// Recommended duration of client's aggregation round, in milliseconds
+        /// Aggregation periond in milliseconds
         /// </summary>
         public ulong? AggregationPeriod { get; }
 
