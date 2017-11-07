@@ -17,38 +17,15 @@
  * reserves and retains all trademark rights.
  */
 
-using System.Collections.ObjectModel;
-using NLog;
+using System;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
     /// <summary>
     ///     Rule checks that shape of the aggregation hash chain matches with chain index.
     /// </summary>
-    public sealed class AggregationHashChainIndexRule : VerificationRule
+    [Obsolete("Use AggregationHashChainShapeRule instead.", false)]
+    public sealed class AggregationHashChainIndexRule : AggregationHashChainShapeRule
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
-        /// <see cref="VerificationRule.Verify" />
-        public override VerificationResult Verify(IVerificationContext context)
-        {
-            ReadOnlyCollection<AggregationHashChain> aggregationHashChains = GetAggregationHashChains(GetSignature(context), true);
-
-            foreach (AggregationHashChain aggregationHashChain in aggregationHashChains)
-            {
-                ulong[] chainIndex = aggregationHashChain.GetChainIndex();
-                ulong calculatedValue = aggregationHashChain.CalcLocationPointer();
-                ulong valueInChain = chainIndex[chainIndex.Length - 1];
-
-                if (valueInChain != calculatedValue)
-                {
-                    Logger.Warn("The shape of the aggregation hash chain does not match with the chain index. Calculated location pointer: {0}; Value in chain: {1}",
-                        calculatedValue, valueInChain);
-                    return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int10);
-                }
-            }
-
-            return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
-        }
     }
 }

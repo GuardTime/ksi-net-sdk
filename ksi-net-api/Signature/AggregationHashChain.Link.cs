@@ -168,6 +168,11 @@ namespace Guardtime.KSI.Signature
             public Metadata Metadata => _metadata;
 
             /// <summary>
+            /// Get sibling hash
+            /// </summary>
+            public DataHash SiblingHash => _siblingHash?.Value;
+
+            /// <summary>
             /// Get link identity
             /// </summary>
             /// <returns></returns>

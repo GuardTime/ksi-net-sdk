@@ -18,7 +18,6 @@
  */
 
 using Guardtime.KSI.Publication;
-using NLog;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
@@ -27,8 +26,6 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class UserProvidedPublicationVerificationRule : VerificationRule
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
         /// <see cref="VerificationRule.Verify" />
         public override VerificationResult Verify(IVerificationContext context)
         {

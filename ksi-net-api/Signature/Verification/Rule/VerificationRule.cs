@@ -18,9 +18,12 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Publication;
+using NLog;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
@@ -32,6 +35,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         private VerificationRule _onFailure;
         private VerificationRule _onNa;
         private VerificationRule _onSuccess;
+
+        protected static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// Get rule name.
@@ -251,7 +256,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         }
 
         /// <summary>
-        /// Get publication record from publications file that is nearest to the given time .
+        /// Get publication record from publications file that is nearest to the given time.
         /// </summary>
         /// <param name="publicationsFile">publications file</param>
         /// <param name="time">time</param>
@@ -266,6 +271,29 @@ namespace Guardtime.KSI.Signature.Verification.Rule
                 throw new KsiVerificationException("No publication record found after given time in publications file: " + time + ".");
             }
             return publicationRecord;
+        }
+
+        /// <summary>
+        /// Get first deprecated hash algorithm from calendar hash chain.
+        /// </summary>
+        /// <param name="calendarHashChain"></param>
+        /// <returns></returns>
+        public HashAlgorithm GetDeprecatedHashAlgorithm(CalendarHashChain calendarHashChain)
+        {
+            IEnumerator<CalendarHashChain.Link> linksEnumerator = calendarHashChain.GetLeftLinksEnumerator();
+            CalendarHashChain.Link link = linksEnumerator.MoveNext() ? linksEnumerator.Current : null;
+
+            while (link != null)
+            {
+                if (link.Value.Algorithm.IsDeprecated(calendarHashChain.PublicationTime))
+                {
+                    return link.Value.Algorithm;
+                }
+
+                link = linksEnumerator.MoveNext() ? linksEnumerator.Current : null;
+            }
+
+            return null;
         }
     }
 }

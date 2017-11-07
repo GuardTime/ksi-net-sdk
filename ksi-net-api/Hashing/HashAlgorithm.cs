@@ -17,9 +17,11 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Utils;
 
 namespace Guardtime.KSI.Hashing
 {
@@ -57,6 +59,8 @@ namespace Guardtime.KSI.Hashing
         private static readonly HashAlgorithm[] Values;
 
         private readonly string[] _alternatives;
+        private readonly ulong? _deprecatedSince;
+        private readonly ulong? _obsoleteSince;
 
         /// <summary>
         ///     Static constructor for creating lookup table for names.
@@ -83,7 +87,10 @@ namespace Guardtime.KSI.Hashing
         /// <param name="length">algorithm value length</param>
         /// <param name="status">algorithm status</param>
         /// <param name="alternatives">algorithm alternative names</param>
-        private HashAlgorithm(string name, byte id, int length, AlgorithmStatus status, string[] alternatives = null)
+        /// <param name="deprecatedSince">date from which the algorithm is deprecated</param>
+        /// <param name="obsoleteSince">date from which the algorithm is obsolete</param>
+        private HashAlgorithm(string name, byte id, int length, AlgorithmStatus status, string[] alternatives = null, ulong? deprecatedSince = null,
+                              ulong? obsoleteSince = null)
         {
             if (alternatives == null)
             {
@@ -95,6 +102,21 @@ namespace Guardtime.KSI.Hashing
             Length = length;
             Status = status;
             _alternatives = alternatives;
+
+            if (!deprecatedSince.HasValue)
+            {
+                _deprecatedSince = obsoleteSince;
+            }
+            else if (!obsoleteSince.HasValue)
+            {
+                _deprecatedSince = deprecatedSince;
+            }
+            else
+            {
+                _deprecatedSince = deprecatedSince > obsoleteSince ? obsoleteSince : deprecatedSince;
+            }
+
+            _obsoleteSince = obsoleteSince;
         }
 
         /// <summary>
@@ -116,6 +138,39 @@ namespace Guardtime.KSI.Hashing
         ///     Return status of the algorithm.
         /// </summary>
         public AlgorithmStatus Status { get; }
+
+        /// <summary>
+        /// Returns true if the algorithm has deprecated since date set.
+        /// </summary>
+        public bool HasDeprecatedSinceDate => _deprecatedSince.HasValue;
+
+        /// <summary>
+        /// Returns deprecated since date. 
+        /// </summary>
+        public DateTime? DeprecatedSinceDate => _deprecatedSince.HasValue ? Util.ConvertUnixTimeToDateTime(_deprecatedSince.Value) : (DateTime?)null;
+
+        /// <summary>
+        /// Returns true if the algorithm is deprecated at the given date
+        /// </summary>
+        /// <returns></returns>
+        public bool IsDeprecated(ulong date)
+        {
+            return (_deprecatedSince.HasValue && date >= _deprecatedSince.Value) || IsObsolete(date);
+        }
+
+        /// <summary>
+        /// Returns obsolete since date.
+        /// </summary>
+        public DateTime? ObsoleteSinceDate => _obsoleteSince.HasValue ? Util.ConvertUnixTimeToDateTime(_obsoleteSince.Value) : (DateTime?)null;
+
+        /// <summary>
+        /// Returns true if the algorithm is obsolete at the given date
+        /// </summary>
+        /// <returns></returns>
+        public bool IsObsolete(ulong date)
+        {
+            return _obsoleteSince.HasValue && date >= _obsoleteSince.Value;
+        }
 
         /// <summary>
         ///     Get hash algorithm by id/code.

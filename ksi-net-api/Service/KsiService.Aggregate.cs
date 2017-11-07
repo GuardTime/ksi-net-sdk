@@ -70,6 +70,12 @@ namespace Guardtime.KSI.Service
                 throw new ArgumentNullException(nameof(hash));
             }
 
+            if (hash.Algorithm.HasDeprecatedSinceDate)
+            {
+                throw new KsiServiceException(string.Format("Hash algorithm {0} is deprecated since {1:d} and can not be used for signing.", hash.Algorithm.Name,
+                    hash.Algorithm.DeprecatedSinceDate));
+            }
+
             if (_signingServiceProtocol == null)
             {
                 throw new KsiServiceException("Signing service protocol is missing from service.");

@@ -18,7 +18,6 @@
  */
 
 using System.Collections.ObjectModel;
-using NLog;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
@@ -28,8 +27,6 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class AggregationHashChainConsistencyRule : VerificationRule
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
         /// <see cref="VerificationRule.Verify" />
         public override VerificationResult Verify(IVerificationContext context)
         {
@@ -45,7 +42,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
                 if (aggregationHashChain.InputHash != chainResult.Hash)
                 {
-                    Logger.Warn("Previous aggregation hash chain output hash {0} does not match current input hash {1}.", chainResult.Hash, aggregationHashChain.InputHash);
+                    Logger.Debug("Previous aggregation hash chain output hash {0} does not match current input hash {1}.", chainResult.Hash, aggregationHashChain.InputHash);
                     return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int01);
                 }
 

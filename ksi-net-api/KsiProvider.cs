@@ -87,6 +87,11 @@ namespace Guardtime.KSI
             CheckCryptoProvider();
             ValidateHashAlgorithm(algorithm);
 
+            if (algorithm.HasDeprecatedSinceDate)
+            {
+                throw new HashingException(string.Format("Hash algorithm {0} is deprecated since {1:d} and can not be used for HMAC.", algorithm.Name, algorithm.DeprecatedSinceDate));
+            }
+
             return _cryptoProvider.CreateHmacHasher(algorithm);
         }
 

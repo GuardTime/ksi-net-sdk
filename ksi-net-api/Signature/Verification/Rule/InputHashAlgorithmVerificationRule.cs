@@ -18,7 +18,6 @@
  */
 
 using Guardtime.KSI.Hashing;
-using NLog;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
@@ -29,8 +28,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class InputHashAlgorithmVerificationRule : VerificationRule
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
+      
         /// <see cref="VerificationRule.Verify" />
         public override VerificationResult Verify(IVerificationContext context)
         {
@@ -46,7 +44,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (documentHash.Algorithm != inputHash.Algorithm)
             {
-                Logger.Warn("Wrong input hash algorithm. Expected {0}, found {1}", documentHash.Algorithm, inputHash.Algorithm);
+                Logger.Debug("Wrong input hash algorithm. Expected {0}, found {1}", documentHash.Algorithm, inputHash.Algorithm);
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Gen04);
             }
 

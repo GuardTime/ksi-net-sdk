@@ -38,7 +38,7 @@ namespace Guardtime.KSI.Crypto.Microsoft.Crypto
             if (time.HasValue)
             {
                 DateTime signTime = Utils.Util.ConvertUnixTimeToDateTime(time.Value);
-                if (certificate.NotBefore > signTime || certificate.NotAfter < signTime)
+                if (certificate.NotBefore.ToUniversalTime() > signTime || certificate.NotAfter.ToUniversalTime() < signTime)
                 {
                     throw new PkiVerificationFailedCertNotValidException(string.Format("Certificate not valid at {0}.", signTime));
                 }

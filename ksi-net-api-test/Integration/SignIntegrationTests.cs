@@ -52,6 +52,23 @@ namespace Guardtime.KSI.Test.Integration
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        public void HttpSignSm3HashTest(Ksi ksi)
+        {
+            DataHash hash = new DataHash(HashAlgorithm.Sm3, Base16.Decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"));
+            IKsiSignature signature = ksi.Sign(hash);
+
+            VerificationContext verificationContext = new VerificationContext(signature)
+            {
+                DocumentHash = hash,
+                PublicationsFile = ksi.GetPublicationsFile()
+            };
+            KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
+                CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
+            VerificationResult verificationResult = policy.Verify(verificationContext);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode, "Signature should verify with key based policy");
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
         public void HttpSignHashWithLevelTest(Ksi ksi)
         {
             DataHash documentHash = new DataHash(HashAlgorithm.Sha2256, Base16.Decode("9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"));
