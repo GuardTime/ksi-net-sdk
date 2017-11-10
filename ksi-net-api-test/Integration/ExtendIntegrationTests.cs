@@ -457,7 +457,7 @@ namespace Guardtime.KSI.Test.Integration
                 service.Extend(1510056000L);
             });
 
-            Assert.AreEqual("Hash algorithm SHA1 is deprecated since 01.07.2016 and can not be used for HMAC.", ex.Message);
+            Assert.AreEqual("Hash algorithm SHA1 is deprecated since 1.07.2016 and can not be used for HMAC.", ex.Message);
         }
 
         [Test]
@@ -470,7 +470,7 @@ namespace Guardtime.KSI.Test.Integration
                 service.Extend(1510056000L);
             });
 
-            Assert.AreEqual("Hash algorithm SHA1 is deprecated since 01.07.2016 and can not be used for HMAC.", ex.Message);
+            Assert.AreEqual("Hash algorithm SHA1 is deprecated since 1.07.2016 and can not be used for HMAC.", ex.Message);
         }
     }
 }

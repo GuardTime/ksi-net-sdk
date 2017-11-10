@@ -277,7 +277,7 @@ namespace Guardtime.KSI.Test.Integration
                 SignHash(ksi);
             });
 
-            Assert.AreEqual("Hash algorithm SHA1 is deprecated since 01.07.2016 and can not be used for HMAC.", ex.Message);
+            Assert.AreEqual("Hash algorithm SHA1 is deprecated since 1.07.2016 and can not be used for HMAC.", ex.Message);
         }
 
         [Test]
@@ -291,7 +291,7 @@ namespace Guardtime.KSI.Test.Integration
                 SignHash(ksi);
             });
 
-            Assert.AreEqual("Hash algorithm SHA1 is deprecated since 01.07.2016 and can not be used for HMAC.", ex.Message);
+            Assert.AreEqual("Hash algorithm SHA1 is deprecated since 1.07.2016 and can not be used for HMAC.", ex.Message);
         }
 
         public void ParallelSigningTest(Ksi ksi)
