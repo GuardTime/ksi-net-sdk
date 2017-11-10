@@ -25,6 +25,15 @@ namespace Guardtime.KSI.Test.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public int PduVersion {
+            get {
+                return ((int)(this["PduVersion"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("http://verify.guardtime.com/ksi-publications.bin")]
         public string HttpPublicationsFileUrl {
             get {
@@ -106,10 +115,10 @@ namespace Guardtime.KSI.Test.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("signing.service.url")]
-        public string TcpSigningServiceUrl {
+        [global::System.Configuration.DefaultSettingValueAttribute("123.123.123.123")]
+        public string TcpSigningServiceIp {
             get {
-                return ((string)(this["TcpSigningServiceUrl"]));
+                return ((string)(this["TcpSigningServiceIp"]));
             }
         }
         
@@ -151,10 +160,46 @@ namespace Guardtime.KSI.Test.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2")]
-        public int PduVersion {
+        [global::System.Configuration.DefaultSettingValueAttribute("123.123.123.123")]
+        public string TcpExtendingServiceIp {
             get {
-                return ((int)(this["PduVersion"]));
+                return ((string)(this["TcpExtendingServiceIp"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1234")]
+        public ushort TcpExtendingServicePort {
+            get {
+                return ((ushort)(this["TcpExtendingServicePort"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("user")]
+        public string TcpExtendingServiceUser {
+            get {
+                return ((string)(this["TcpExtendingServiceUser"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("pass")]
+        public string TcpExtendingServicePass {
+            get {
+                return ((string)(this["TcpExtendingServicePass"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("sha256")]
+        public string TcpExtendingServiceHmacAlgorithm {
+            get {
+                return ((string)(this["TcpExtendingServiceHmacAlgorithm"]));
             }
         }
     }

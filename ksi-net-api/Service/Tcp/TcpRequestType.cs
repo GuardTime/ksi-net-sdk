@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright 2013-2017 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
@@ -17,11 +17,14 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
+
 namespace Guardtime.KSI.Service.Tcp
 {
     /// <summary>
     /// TCP request types
     /// </summary>
+    [Obsolete("Use KsiServiceRequestType instead.")]
     public enum TcpRequestType
     {
         /// <summary>

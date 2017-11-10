@@ -27,10 +27,10 @@ using NLog;
 namespace Guardtime.KSI.Service
 {
     /// <summary>
-    ///     HTTP KSI service protocol.
+    /// HTTP KSI service protocol.
+    /// Responsible for making HTTP requests to aggregator and extender and requesting publications file.
     /// </summary>
-    public class HttpKsiServiceProtocol : IKsiSigningServiceProtocol, IKsiExtendingServiceProtocol,
-                                          IKsiPublicationsFileServiceProtocol
+    public class HttpKsiServiceProtocol : IKsiSigningServiceProtocol, IKsiExtendingServiceProtocol, IKsiPublicationsFileServiceProtocol
     {
         private readonly int _bufferSize = 8192;
         private readonly string _extendingUrl;
@@ -47,57 +47,38 @@ namespace Guardtime.KSI.Service
         /// <param name="signingUrl">signing url</param>
         /// <param name="extendingUrl">extending url</param>
         /// <param name="publicationsFileUrl">publications file url</param>
-        public HttpKsiServiceProtocol(string signingUrl, string extendingUrl, string publicationsFileUrl)
+        /// <param name="proxyUrl">proxy url</param>
+        /// <param name="proxyCredential">credentials for proxy</param>
+        public HttpKsiServiceProtocol(string signingUrl, string extendingUrl, string publicationsFileUrl, string proxyUrl, NetworkCredential proxyCredential)
+            : this(signingUrl, extendingUrl, publicationsFileUrl, null, proxyUrl, proxyCredential)
+        {
+        }
+
+        /// <summary>
+        ///     Create HTTP KSI service protocol with given url-s and request timeout
+        /// </summary>
+        /// <param name="signingUrl">signing url</param>
+        /// <param name="extendingUrl">extending url</param>
+        /// <param name="publicationsFileUrl">publications file url</param>
+        /// <param name="requestTimeout">request timeout</param>
+        /// <param name="proxyUrl">proxy url</param>
+        /// <param name="proxyCredential">credentials for proxy</param>
+        public HttpKsiServiceProtocol(string signingUrl, string extendingUrl, string publicationsFileUrl,
+                                      int? requestTimeout = null, string proxyUrl = null, NetworkCredential proxyCredential = null)
         {
             _signingUrl = signingUrl;
             _extendingUrl = extendingUrl;
             _publicationsFileUrl = publicationsFileUrl;
-        }
 
-        /// <summary>
-        ///     Create HTTP KSI service protocol with given url-s
-        /// </summary>
-        /// <param name="signingUrl">signing url</param>
-        /// <param name="extendingUrl">extending url</param>
-        /// <param name="publicationsFileUrl">publications file url</param>
-        /// <param name="proxyUrl">proxy url</param>
-        /// <param name="proxyCredential">credentials for proxy</param>
-        public HttpKsiServiceProtocol(string signingUrl, string extendingUrl, string publicationsFileUrl, string proxyUrl, NetworkCredential proxyCredential)
-            : this(signingUrl, extendingUrl, publicationsFileUrl)
-        {
-            _proxyUrl = proxyUrl;
-            _proxyCredential = proxyCredential;
-        }
-
-        /// <summary>
-        ///     Create HTTP KSI service protocol with given url-s and request timeout
-        /// </summary>
-        /// <param name="signingUrl">signing url</param>
-        /// <param name="extendingUrl">extending url</param>
-        /// <param name="publicationsFileUrl">publications file url</param>
-        /// <param name="requestTimeout">request timeout</param>
-        public HttpKsiServiceProtocol(string signingUrl, string extendingUrl, string publicationsFileUrl,
-                                      int requestTimeout) : this(signingUrl, extendingUrl, publicationsFileUrl)
-        {
-            if (requestTimeout < 0)
+            if (requestTimeout.HasValue)
             {
-                throw new KsiServiceProtocolException("Request timeout should be in milliseconds, but was (" + requestTimeout + ").");
+                if (requestTimeout.Value < 0)
+                {
+                    throw new KsiServiceProtocolException("Request timeout should be in milliseconds, but was (" + requestTimeout + ").");
+                }
+                _requestTimeOut = requestTimeout.Value;
             }
-            _requestTimeOut = requestTimeout;
-        }
 
-        /// <summary>
-        ///     Create HTTP KSI service protocol with given url-s and request timeout
-        /// </summary>
-        /// <param name="signingUrl">signing url</param>
-        /// <param name="extendingUrl">extending url</param>
-        /// <param name="publicationsFileUrl">publications file url</param>
-        /// <param name="requestTimeout">request timeout</param>
-        /// <param name="proxyUrl">proxy url</param>
-        /// <param name="proxyCredential">credentials for proxy</param>
-        public HttpKsiServiceProtocol(string signingUrl, string extendingUrl, string publicationsFileUrl,
-                                      int requestTimeout, string proxyUrl, NetworkCredential proxyCredential) : this(signingUrl, extendingUrl, publicationsFileUrl, requestTimeout)
-        {
             _proxyUrl = proxyUrl;
             _proxyCredential = proxyCredential;
         }
@@ -158,7 +139,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="data">extending request bytes</param>
         /// <param name="requestId">request id</param>
-        /// <param name="callback">callback when extending signature is finished</param>
+        /// <param name="callback">callback when extending request is finished</param>
         /// <param name="asyncState">callback async state object</param>
         /// <returns>HTTP KSI service async result</returns>
         public IAsyncResult BeginExtend(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
@@ -169,9 +150,9 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Begin extender configuration request.
         /// </summary>
-        /// <param name="data">extending request bytes</param>
+        /// <param name="data">extender configuration request bytes</param>
         /// <param name="requestId">request id</param>
-        /// <param name="callback">callback when extending signature is finished</param>
+        /// <param name="callback">callback when extender configuration request is finished</param>
         /// <param name="asyncState">async state object</param>
         /// <returns>HTTP KSI service async result</returns>
         public IAsyncResult BeginGetExtenderConfig(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
@@ -181,6 +162,16 @@ namespace Guardtime.KSI.Service
 
         private IAsyncResult BeginExtenderRequest(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
+            return BeginRequest(_extendingUrl, data, requestId, callback, asyncState);
+        }
+
+        private IAsyncResult BeginRequest(string url, byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
+        {
+            if (string.IsNullOrEmpty(url))
+            {
+                throw new KsiServiceProtocolException("Service url is missing.");
+            }
+
             if (data == null)
             {
                 throw new ArgumentNullException(nameof(data));
@@ -191,7 +182,7 @@ namespace Guardtime.KSI.Service
 
             try
             {
-                request = WebRequest.Create(_extendingUrl) as HttpWebRequest;
+                request = WebRequest.Create(url) as HttpWebRequest;
 
                 if (request == null)
                 {
@@ -209,8 +200,8 @@ namespace Guardtime.KSI.Service
 
             if (request == null || webRequestException != null)
             {
-                string message = "Begin extend http request failed. Invalid extending service HTTP URL(\"" + _extendingUrl + "\").";
-                Logger.Warn(message + " " + webRequestException);
+                string message = "Begin http request failed. Invalid service URL: " + url;
+                Logger.Warn(message + Environment.NewLine + webRequestException);
                 throw new KsiServiceProtocolException(message, webRequestException);
             }
 
@@ -220,7 +211,7 @@ namespace Guardtime.KSI.Service
 
             HttpKsiServiceAsyncResult httpAsyncResult = new HttpKsiServiceAsyncResult(request, data, requestId, callback, asyncState);
 
-            Logger.Debug("Begin extend http request (request id: {0}).", httpAsyncResult.RequestId);
+            Logger.Debug("Begin http request (request id: {0}).", httpAsyncResult.RequestId);
 
             request.BeginGetRequestStream(GetRequestStreamCallback, httpAsyncResult);
             ThreadPool.RegisterWaitForSingleObject(httpAsyncResult.BeginWaitHandle, EndBeginCallback, httpAsyncResult, _requestTimeOut, true);
@@ -366,7 +357,7 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Begin signing request.
         /// </summary>
-        /// <param name="data">aggregation request bytes</param>
+        /// <param name="data">signing request bytes</param>
         /// <param name="requestId"></param>
         /// <param name="callback">callback when creating signature is finished</param>
         /// <param name="asyncState">callback async state object</param>
@@ -379,9 +370,9 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Begin aggregator configuration request.
         /// </summary>
-        /// <param name="data">aggregation request bytes</param>
+        /// <param name="data">aggregator configuration request bytes</param>
         /// <param name="requestId">request id</param>
-        /// <param name="callback">callback when creating signature is finished</param>
+        /// <param name="callback">callback when aggregator configuration request is finished</param>
         /// <param name="asyncState">async state object</param>
         /// <returns>HTTP KSI service async result</returns>
         public IAsyncResult BeginGetAggregatorConfig(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
@@ -391,50 +382,7 @@ namespace Guardtime.KSI.Service
 
         private IAsyncResult BeginAggregatorRequest(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
-            if (data == null)
-            {
-                throw new ArgumentNullException(nameof(data));
-            }
-
-            HttpWebRequest request = null;
-            Exception webRequestException = null;
-
-            try
-            {
-                request = WebRequest.Create(_signingUrl) as HttpWebRequest;
-
-                if (request == null)
-                {
-                    throw new KsiException("Invalid http web request: null.");
-                }
-
-                InitProxySettings(request);
-                request.KeepAlive = false;
-                request.ServicePoint.Expect100Continue = false;
-            }
-            catch (Exception e)
-            {
-                webRequestException = e;
-            }
-
-            if (request == null || webRequestException != null)
-            {
-                string message = "Begin sign http request failed. Invalid signing service HTTP URL(\"" + _signingUrl + "\").";
-                Logger.Warn(message + " " + webRequestException);
-                throw new KsiServiceProtocolException(message, webRequestException);
-            }
-
-            request.Method = WebRequestMethods.Http.Post;
-            request.ContentType = "application/ksi-request";
-            request.ContentLength = data.Length;
-
-            HttpKsiServiceAsyncResult httpAsyncResult = new HttpKsiServiceAsyncResult(request, data, requestId, callback, asyncState);
-
-            Logger.Debug("Begin sign http request (request id: {0}).", httpAsyncResult.RequestId);
-
-            request.BeginGetRequestStream(GetRequestStreamCallback, httpAsyncResult);
-            ThreadPool.RegisterWaitForSingleObject(httpAsyncResult.BeginWaitHandle, EndBeginCallback, httpAsyncResult, _requestTimeOut, true);
-            return httpAsyncResult;
+            return BeginRequest(_signingUrl, data, requestId, callback, asyncState);
         }
 
         /// <summary>

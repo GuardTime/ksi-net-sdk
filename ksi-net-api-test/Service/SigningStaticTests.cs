@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Service;
@@ -326,6 +327,30 @@ namespace Guardtime.KSI.Test.Service
 
             Assert.That(ex.Message.StartsWith("Hash algorithm SHA1 is deprecated since 1.07.2016 and can not be used for signing."),
                 "Unexpected exception message: " + ex.Message);
+        }
+
+        [Test]
+        public void EndSignArgumentNullTest()
+        {
+            IKsiService service = GetStaticKsiService(new byte[] { 0 });
+
+            Assert.Throws<ArgumentNullException>(delegate
+            {
+                service.EndSign(null);
+            });
+        }
+
+        [Test]
+        public void EndSignInvalidArgumentTest()
+        {
+            IKsiService service = GetStaticKsiService(new byte[] { 0 });
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                service.EndSign(new TestAsyncResult());
+            });
+
+            Assert.That(ex.Message.StartsWith("Invalid asyncResult type:"), "Unexpected exception message: " + ex.Message);
         }
     }
 }

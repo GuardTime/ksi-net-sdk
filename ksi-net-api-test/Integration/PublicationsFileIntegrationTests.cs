@@ -29,49 +29,29 @@ namespace Guardtime.KSI.Test.Integration
 {
     public class PublicationsFileIntegrationTests : IntegrationTests
     {
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsi))]
         public void GetPublicationsFileTest(Ksi ksi)
         {
             IPublicationsFile publicationsFile = ksi.GetPublicationsFile();
 
             PublicationRecordInPublicationFile latest = publicationsFile.GetLatestPublication();
-            if (latest == null)
-            {
-                Assert.True(true);
-                return;
-            }
-
             PublicationRecordInPublicationFile prev = publicationsFile.GetNearestPublicationRecord(latest.PublicationData.PublicationTime - 35 * 24 * 3600);
-
             Assert.True(latest.PublicationData.PublicationTime > prev.PublicationData.PublicationTime);
-
             prev = publicationsFile.GetNearestPublicationRecord(Util.ConvertUnixTimeToDateTime(latest.PublicationData.PublicationTime).AddDays(-35));
-
             Assert.True(latest.PublicationData.PublicationTime > prev.PublicationData.PublicationTime);
         }
 
-        [Test]
-        public void EndGetPublicationsFileArgumentNullTest()
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsiWithInvalidPublicationsFileUrl))]
+        public void GetPublicationsFileWithInvalidUrlTest(Ksi ksi)
         {
-            KsiService service = GetHttpKsiService();
-
-            Assert.Throws<ArgumentNullException>(delegate
+            Exception ex = Assert.Throws<KsiServiceProtocolException>(delegate
             {
-                service.EndGetPublicationsFile(null);
-            });
-        }
-
-        [Test]
-        public void EndGetPublicationsFileInvalidArgumentTest()
-        {
-            KsiService service = GetHttpKsiService();
-
-            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
-            {
-                service.EndGetPublicationsFile(new TestAsyncResult());
+                ksi.GetPublicationsFile();
             });
 
-            Assert.That(ex.Message.StartsWith("Invalid asyncResult type:"), "Unexpected exception message: " + ex.Message);
+            Assert.That(ex.Message.StartsWith("Get publication http response failed"), "Unexpected exception message: " + ex.Message);
+            Assert.IsNotNull(ex.InnerException, "Inner exception should not be null");
+            Assert.That(ex.InnerException.Message.StartsWith("The remote name could not be resolved"), "Unexpected inner exception message: " + ex.InnerException.Message);
         }
 
         [Test]

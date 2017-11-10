@@ -1,4 +1,4 @@
-﻿/*nameof(GetKsiService()TestCases))]
+﻿/*
  * Copyright 2013-2017 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
@@ -21,7 +21,6 @@ using System;
 using System.Collections.Generic;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Service;
-using Guardtime.KSI.Test.Integration;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
@@ -395,8 +394,8 @@ namespace Guardtime.KSI.Test.Service
                 TreeVisualizer.PrintTree(builder.GetTreeRoot()));
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(IntegrationTests.HttpTestCases))]
-        public void TreeBuilderWithLevel6Element2PrintTreeTest(Ksi ksi)
+        [Test]
+        public void TreeBuilderWithLevel6Element2PrintTreeTest()
         {
             TreeBuilder builder = new TreeBuilder(HashAlgorithm.Default);
             IdentityMetadata metadata = new IdentityMetadata("test client id");
@@ -440,8 +439,8 @@ namespace Guardtime.KSI.Test.Service
                 TreeVisualizer.PrintTree(builder.GetTreeRoot()));
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(IntegrationTests.HttpTestCases))]
-        public void TreeBuilderWithLevelPrintTree5ElementTest(Ksi ksi)
+        [Test]
+        public void TreeBuilderWithLevelPrintTree5ElementTest()
         {
             TreeBuilder builder = new TreeBuilder(HashAlgorithm.Default);
 
@@ -477,8 +476,8 @@ namespace Guardtime.KSI.Test.Service
                 TreeVisualizer.PrintTree(builder.GetTreeRoot()));
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(IntegrationTests.HttpTestCases))]
-        public void TreeBuilderWithLevelPrintTree4ElementTest(Ksi ksi)
+        [Test]
+        public void TreeBuilderWithLevelPrintTree4ElementTest()
         {
             TreeBuilder builder = new TreeBuilder(HashAlgorithm.Default);
 
@@ -517,8 +516,8 @@ namespace Guardtime.KSI.Test.Service
                 TreeVisualizer.PrintTree(builder.GetTreeRoot()));
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(IntegrationTests.HttpTestCases))]
-        public void TreeBuilderWithLevelAndBlindingMaskPrintTreeTest(Ksi ksi)
+        [Test]
+        public void TreeBuilderWithLevelAndBlindingMaskPrintTreeTest()
         {
             TreeBuilder builder = new TreeBuilder(HashAlgorithm.Default);
             IdentityMetadata metadata = new IdentityMetadata("test client id");

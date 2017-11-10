@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 
 namespace Guardtime.KSI.Test
@@ -60,6 +61,23 @@ namespace Guardtime.KSI.Test
             field.SetValue(value, new List<ITlvTag>(childTags));
 
             return value;
+        }
+
+        public static HashAlgorithm GetHashAlgorithm(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                return HashAlgorithm.Default;
+            }
+
+            HashAlgorithm algorithm = HashAlgorithm.GetByName(name);
+
+            if (algorithm == null)
+            {
+                throw new Exception("Invalid hmac algorithm name value in config. Name: " + name);
+            }
+
+            return algorithm;
         }
     }
 }

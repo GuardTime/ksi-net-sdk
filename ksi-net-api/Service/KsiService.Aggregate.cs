@@ -271,7 +271,7 @@ namespace Guardtime.KSI.Service
                 serviceAsyncResult.AsyncWaitHandle.WaitOne();
             }
 
-            byte[] data = _signingServiceProtocol.EndSign(serviceAsyncResult);
+            byte[] data = _signingServiceProtocol.EndGetAggregatorConfig(serviceAsyncResult);
             PduPayload payload = AggregatorConfigRequestResponseParser.Parse(data);
             AggregatorConfigResponsePayload configResponsePayload = payload as AggregatorConfigResponsePayload;
 

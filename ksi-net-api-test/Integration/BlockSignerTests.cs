@@ -43,7 +43,7 @@ namespace Guardtime.KSI.Test.Integration
         /// Testing getting uni-signatures of lots of randomly generated hashes
         /// </summary>
         /// <param name="ksi"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsi))]
         public void BlockSignerGetUniSignaturesOfManyRandomHashesTest(Ksi ksi)
         {
             int k = 7;
@@ -60,7 +60,7 @@ namespace Guardtime.KSI.Test.Integration
                 hashes.Add(hasher.GetHash());
             }
 
-            BlockSigner blockSigner = new BlockSigner(HttpKsiService);
+            BlockSigner blockSigner = new BlockSigner(GetHttpKsiService());
 
             foreach (DataHash hash in hashes)
             {
@@ -80,10 +80,10 @@ namespace Guardtime.KSI.Test.Integration
         /// Testing getting uni-signatures of given hashes.
         /// </summary>
         /// <param name="ksi"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsi))]
         public void BlockSignerGetUniSignaturesOfGivenHashesTest(Ksi ksi)
         {
-            BlockSigner blockSigner = new BlockSigner(HttpKsiService);
+            BlockSigner blockSigner = new BlockSigner(GetHttpKsiService());
             IdentityMetadata metadata = new IdentityMetadata("test client id");
             List<DataHash> hashes = new List<DataHash>
             {
@@ -106,10 +106,10 @@ namespace Guardtime.KSI.Test.Integration
             }
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsi))]
         public void BlockSignerSignOneHashTest(Ksi ksi)
         {
-            BlockSigner blockSigner = new BlockSigner(HttpKsiService);
+            BlockSigner blockSigner = new BlockSigner(GetHttpKsiService());
             DataHash hash = new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2"));
 
             blockSigner.Add(hash);
@@ -125,10 +125,10 @@ namespace Guardtime.KSI.Test.Integration
             Verify(ksi, signature, hash);
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsi))]
         public void BlockSignerSignOneHashWithLevelTest(Ksi ksi)
         {
-            BlockSigner blockSigner = new BlockSigner(HttpKsiService);
+            BlockSigner blockSigner = new BlockSigner(GetHttpKsiService());
             DataHash hash = new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2"));
 
             blockSigner.Add(hash, null, 2);
@@ -145,10 +145,10 @@ namespace Guardtime.KSI.Test.Integration
             Verify(ksi, signature, hash);
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsi))]
         public void BlockSignerSignOneWithMetadaHashTest(Ksi ksi)
         {
-            BlockSigner blockSigner = new BlockSigner(HttpKsiService);
+            BlockSigner blockSigner = new BlockSigner(GetHttpKsiService());
             DataHash hash = new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2"));
             IdentityMetadata metadata = new IdentityMetadata("test client id");
 
@@ -165,10 +165,10 @@ namespace Guardtime.KSI.Test.Integration
             Verify(ksi, signature, hash);
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsi))]
         public void BlockSignerSignOneHashWithBlindingMaskTest(Ksi ksi)
         {
-            BlockSigner blockSigner = new BlockSigner(HttpKsiService, true, new byte[] { 1, 2, 3 });
+            BlockSigner blockSigner = new BlockSigner(GetHttpKsiService(), true, new byte[] { 1, 2, 3 });
             DataHash hash = new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2"));
 
             blockSigner.Add(hash);
@@ -188,10 +188,10 @@ namespace Guardtime.KSI.Test.Integration
         /// Testing getting uni-signatures of given hashes wiht given level
         /// </summary>
         /// <param name="ksi"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsi))]
         public void BlockSignerGetUniSignaturesOfGivenHashesWithLevelTest(Ksi ksi)
         {
-            BlockSigner blockSigner = new BlockSigner(HttpKsiService);
+            BlockSigner blockSigner = new BlockSigner(GetHttpKsiService());
             IdentityMetadata metadata = new IdentityMetadata("test client id");
             List<DataHash> hashes = new List<DataHash>
             {
@@ -227,10 +227,10 @@ namespace Guardtime.KSI.Test.Integration
         /// Testing getting uni-signatures of given hashes wiht given level
         /// </summary>
         /// <param name="ksi"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsi))]
         public void BlockSignerGetUniSignaturesOfGivenHashesWithLevelAndBlindingMaskTest(Ksi ksi)
         {
-            BlockSigner blockSigner = new BlockSigner(HttpKsiService, true, new byte[] { 1, 2, 3 });
+            BlockSigner blockSigner = new BlockSigner(GetHttpKsiService(), true, new byte[] { 1, 2, 3 });
             IdentityMetadata metadata = new IdentityMetadata("test client id");
             List<DataHash> hashes = new List<DataHash>
             {
@@ -265,10 +265,10 @@ namespace Guardtime.KSI.Test.Integration
         /// Testing custom signature factory. Automatic verification fails.
         /// </summary>
         /// <param name="ksi"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsi))]
         public void BlockSignerCustomSignatureFactoryTest(Ksi ksi)
         {
-            BlockSigner blockSigner = new BlockSigner(HttpKsiService, null, new KsiSignatureFactory(
+            BlockSigner blockSigner = new BlockSigner(GetHttpKsiService(), null, new KsiSignatureFactory(
                 new PublicationBasedVerificationPolicy(),
                 new TestVerificationContext()
                 {
@@ -290,10 +290,10 @@ namespace Guardtime.KSI.Test.Integration
         /// Testing getting uni-signatures of given hashes.
         /// </summary>
         /// <param name="ksi"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsi))]
         public void BlockSignerGetUniSignaturesOfGivenHashesWithSha512Test(Ksi ksi)
         {
-            BlockSigner blockSigner = new BlockSigner(HttpKsiService, HashAlgorithm.Sha2512);
+            BlockSigner blockSigner = new BlockSigner(GetHttpKsiService(), HashAlgorithm.Sha2512);
             IdentityMetadata metadata = new IdentityMetadata("test client id");
             List<DataHash> hashes = new List<DataHash>
             {
@@ -320,12 +320,12 @@ namespace Guardtime.KSI.Test.Integration
         /// Testing with deprecated hash algorithm
         /// </summary>
         /// <param name="ksi"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
         public void BlockSignerWithDeprecatedHashAlgorithmTest(Ksi ksi)
         {
             Exception ex = Assert.Throws<HashingException>(delegate
             {
-                new BlockSigner(HttpKsiService, HashAlgorithm.Sha1);
+                new BlockSigner(GetHttpKsiService(), HashAlgorithm.Sha1);
             });
 
             Assert.That(ex.Message.StartsWith("Hash algorithm SHA1 is deprecated since 1.07.2016 and can not be used."),
@@ -342,7 +342,7 @@ namespace Guardtime.KSI.Test.Integration
         /// Test getting uni-signatures in parallel threads
         /// </summary>
         /// <param name="ksi"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsi))]
         public void BlockSignerGetUniSignaturesParallelTest(Ksi ksi)
         {
             ManualResetEvent waitHandle = new ManualResetEvent(false);
@@ -364,7 +364,7 @@ namespace Guardtime.KSI.Test.Integration
                 {
                     Console.WriteLine("Document count: " + k);
 
-                    BlockSigner blockSigner = new BlockSigner(HttpKsiService);
+                    BlockSigner blockSigner = new BlockSigner(GetHttpKsiService());
                     List<DataHash> hashes = new List<DataHash>();
 
                     byte[] buffer = new byte[10];
@@ -453,7 +453,7 @@ namespace Guardtime.KSI.Test.Integration
         }
 
         /// <param name="ksi"></param>
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsi))]
         public void BlockSignerTreeHeightLimitTest(Ksi ksi)
         {
             IdentityMetadata metadata = new IdentityMetadata("test client id", "test machine id");
@@ -488,7 +488,7 @@ namespace Guardtime.KSI.Test.Integration
             for (int index = 0; index < list.Count; index++)
             {
                 HeightTestData data = list[index];
-                BlockSigner blockSigner = new BlockSigner(HttpKsiService, null, null, data.MaxHeight);
+                BlockSigner blockSigner = new BlockSigner(GetHttpKsiService(), null, null, data.MaxHeight);
                 bool success = false;
 
                 Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");

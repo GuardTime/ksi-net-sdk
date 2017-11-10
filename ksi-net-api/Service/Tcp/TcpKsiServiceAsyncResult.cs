@@ -29,20 +29,40 @@ namespace Guardtime.KSI.Service.Tcp
         /// <summary>
         /// Create TCP KSI service async result instance
         /// </summary>
-        /// <param name="requestType">Request type</param>
+        /// <param name="serviceRequestType">Service request type</param>
         /// <param name="postData">Posted bytes</param>
         /// <param name="requestId">Request ID</param>
-        /// <param name="callback">Callback</param>
-        /// <param name="asyncState">Async state</param>
-        public TcpKsiServiceAsyncResult(TcpRequestType requestType, byte[] postData, ulong requestId, AsyncCallback callback, object asyncState)
+        /// <param name="callback">callback when TCP request is finished</param>
+        /// <param name="asyncState">callback async state object</param>
+        public TcpKsiServiceAsyncResult(KsiServiceRequestType serviceRequestType, byte[] postData, ulong requestId, AsyncCallback callback, object asyncState)
             : base(postData, requestId, callback, asyncState)
         {
-            RequestType = requestType;
+            ServiceRequestType = serviceRequestType;
         }
 
         /// <summary>
-        /// TCP request type (signing, extending, configuration request etc.)
+        /// TCP request type
         /// </summary>
-        public TcpRequestType RequestType { get; }
+        [Obsolete("Use ServiceRequestType instead.")]
+        public TcpRequestType RequestType
+        {
+            get
+            {
+                switch (ServiceRequestType)
+                {
+                    case KsiServiceRequestType.Sign:
+                        return TcpRequestType.Aggregation;
+                    case KsiServiceRequestType.AggregatorConfig:
+                        return TcpRequestType.AggregatorConfig;
+                    default:
+                        throw new ArgumentException("Cannot convert request type: " + ServiceRequestType);
+                }
+            }
+        }
+
+        /// <summary>
+        /// TCP request type (signing, extending, configuration request)
+        /// </summary>
+        public KsiServiceRequestType ServiceRequestType { get; }
     }
 }

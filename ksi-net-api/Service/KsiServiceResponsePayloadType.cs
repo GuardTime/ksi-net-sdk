@@ -17,12 +17,12 @@
  * reserves and retains all trademark rights.
  */
 
-namespace Guardtime.KSI.Service.Tcp
+namespace Guardtime.KSI.Service
 {
     /// <summary>
-    /// Paylaod types returned by TCP response
+    /// Paylaod types returned by KSI service.
     /// </summary>
-    public enum TcpResponsePayloadType
+    public enum KsiServiceResponsePayloadType
     {
         /// <summary>
         /// Aggregation request response payload
@@ -32,7 +32,17 @@ namespace Guardtime.KSI.Service.Tcp
         /// <summary>
         /// Aggregator configuration request response payload
         /// </summary>
-        Config,
+        AggregatorConfig,
+
+        /// <summary>
+        /// Extending request response payload
+        /// </summary>
+        Extending,
+
+        /// <summary>
+        /// Extender configuration request response payload
+        /// </summary>
+        ExtenderConfig,
 
         /// <summary>
         /// Error payload

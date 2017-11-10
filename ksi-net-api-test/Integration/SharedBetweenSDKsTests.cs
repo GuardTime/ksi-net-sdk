@@ -42,7 +42,7 @@ namespace Guardtime.KSI.Test.Integration
     /// Tests that are shared between C, Java and .NET SDKs.
     /// </summary>
     [TestFixture]
-    public class SharedBetweenSdksTests : IntegrationTests
+    public class SharedBetweenSdksTests
     {
         private static IPublicationsFile _pubsFile;
         private const string ValidSignatureDir = "resources/signature/shared/valid-signatures/";
@@ -140,7 +140,7 @@ namespace Guardtime.KSI.Test.Integration
 
             if (string.IsNullOrEmpty(testingRow.ResourceFile))
             {
-                service = GetHttpKsiService();
+                service = IntegrationTests.GetHttpKsiService();
             }
             else
             {
@@ -152,10 +152,10 @@ namespace Guardtime.KSI.Test.Integration
                     new TestKsiService(
                         protocol,
                         new ServiceCredentials(Properties.Settings.Default.HttpSigningServiceUser, Properties.Settings.Default.HttpSigningServicePass,
-                            GetHashAlgorithm(Properties.Settings.Default.HttpSigningServiceHmacAlgorithm)),
+                            TestUtil.GetHashAlgorithm(Properties.Settings.Default.HttpSigningServiceHmacAlgorithm)),
                         protocol,
                         new ServiceCredentials(Properties.Settings.Default.HttpExtendingServiceUser, Properties.Settings.Default.HttpExtendingServicePass,
-                            GetHashAlgorithm(Properties.Settings.Default.HttpExtendingServiceHmacAlgorithm)),
+                          TestUtil.GetHashAlgorithm(Properties.Settings.Default.HttpExtendingServiceHmacAlgorithm)),
                         protocol,
                         new PublicationsFileFactory(
                             new PkiTrustStoreProvider(new X509Store(StoreName.Root),
@@ -223,7 +223,7 @@ namespace Guardtime.KSI.Test.Integration
             return list.ToArray();
         }
 
-        private static IPublicationsFile PubsFile => _pubsFile ?? (_pubsFile = GetHttpKsiService().GetPublicationsFile());
+        private static IPublicationsFile PubsFile => _pubsFile ?? (_pubsFile = IntegrationTests.GetHttpKsiService().GetPublicationsFile());
 
         private static IPublicationsFile GetPublicationsFile(string path)
         {

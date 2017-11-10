@@ -2,6 +2,9 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Guardtime.KSI.Test.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
+    <Setting Name="PduVersion" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">2</Value>
+    </Setting>
     <Setting Name="HttpPublicationsFileUrl" Type="System.String" Scope="Application">
       <Value Profile="(Default)">http://verify.guardtime.com/ksi-publications.bin</Value>
     </Setting>
@@ -29,8 +32,8 @@
     <Setting Name="HttpExtendingServiceHmacAlgorithm" Type="System.String" Scope="Application">
       <Value Profile="(Default)">sha256</Value>
     </Setting>
-    <Setting Name="TcpSigningServiceUrl" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">signing.service.url</Value>
+    <Setting Name="TcpSigningServiceIp" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">123.123.123.123</Value>
     </Setting>
     <Setting Name="TcpSigningServicePort" Type="System.UInt16" Scope="Application">
       <Value Profile="(Default)">1234</Value>
@@ -44,8 +47,20 @@
     <Setting Name="TcpSigningServiceHmacAlgorithm" Type="System.String" Scope="Application">
       <Value Profile="(Default)">sha256</Value>
     </Setting>
-    <Setting Name="PduVersion" Type="System.Int32" Scope="Application">
-      <Value Profile="(Default)">2</Value>
+    <Setting Name="TcpExtendingServiceIp" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">123.123.123.123</Value>
+    </Setting>
+    <Setting Name="TcpExtendingServicePort" Type="System.UInt16" Scope="Application">
+      <Value Profile="(Default)">1234</Value>
+    </Setting>
+    <Setting Name="TcpExtendingServiceUser" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">user</Value>
+    </Setting>
+    <Setting Name="TcpExtendingServicePass" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">pass</Value>
+    </Setting>
+    <Setting Name="TcpExtendingServiceHmacAlgorithm" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">sha256</Value>
     </Setting>
   </Settings>
 </SettingsFile>
