@@ -154,8 +154,9 @@ namespace Guardtime.KSI.Service
         /// </summary>
         public override string ToString()
         {
-            return string.Format("KsiService (signing: {0}; extending: {1}; publications file: {2})", _signingServiceProtocol, _extendingServiceProtocol,
-                _publicationsFileServiceProtocol);
+            return string.Format("KsiService (signing: {0}; extending: {1}; publications file: {2})", _signingServiceProtocol?.AggregatorAddress,
+                _extendingServiceProtocol?.ExtenderAddress,
+                _publicationsFileServiceProtocol?.PublicationsFileAddress);
         }
 
         /// <summary>

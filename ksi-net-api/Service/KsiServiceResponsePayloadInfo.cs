@@ -17,19 +17,19 @@
  * reserves and retains all trademark rights.
  */
 
-namespace Guardtime.KSI.Service.Tcp
+namespace Guardtime.KSI.Service
 {
     /// <summary>
-    /// Class containing response payload info (payload type and request ID)
+    /// Class containing KSI service response payload info (payload type and request ID)
     /// </summary>
-    public class TcpResponsePayloadInfo
+    public class KsiServiceResponsePayloadInfo
     {
         /// <summary>
-        /// Create TCP response payload info
+        /// Create KSI service response payload info
         /// </summary>
         /// <param name="responsePayloadType"></param>
         /// <param name="requestId"></param>
-        public TcpResponsePayloadInfo(TcpResponsePayloadType responsePayloadType, ulong? requestId = null)
+        public KsiServiceResponsePayloadInfo(KsiServiceResponsePayloadType responsePayloadType, ulong? requestId = null)
         {
             ResponsePayloadType = responsePayloadType;
             RequestId = requestId;
@@ -38,7 +38,7 @@ namespace Guardtime.KSI.Service.Tcp
         /// <summary>
         /// TCP response payload type
         /// </summary>
-        public TcpResponsePayloadType ResponsePayloadType { get; }
+        public KsiServiceResponsePayloadType ResponsePayloadType { get; }
 
         /// <summary>
         /// Request ID

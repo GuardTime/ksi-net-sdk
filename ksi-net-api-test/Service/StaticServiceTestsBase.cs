@@ -17,14 +17,15 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Test.Crypto;
-using Guardtime.KSI.Test.Properties;
 using Guardtime.KSI.Trust;
 
 namespace Guardtime.KSI.Test.Service
@@ -63,6 +64,17 @@ namespace Guardtime.KSI.Test.Service
                     new PublicationsFileFactory(
                         new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                             CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))), requestId, pduVersion);
+        }
+
+        protected class TestAsyncResult : IAsyncResult
+        {
+            public object AsyncState => null;
+
+            public WaitHandle AsyncWaitHandle => new ManualResetEvent(false);
+
+            public bool CompletedSynchronously => false;
+
+            public bool IsCompleted => false;
         }
     }
 }

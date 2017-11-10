@@ -56,7 +56,7 @@ namespace Guardtime.KSI.Service
         ///     Begin extend to latest publication (async).
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
-        /// <param name="callback">callback when extending signature is finished</param>
+        /// <param name="callback">callback when extending request is finished</param>
         /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         public IAsyncResult BeginExtend(ulong aggregationTime, AsyncCallback callback, object asyncState)
@@ -74,7 +74,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
         /// <param name="publicationTime">publication time</param>
-        /// <param name="callback">callback when extending signature is finished</param>
+        /// <param name="callback">callback when extending request is finished</param>
         /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         public IAsyncResult BeginExtend(ulong aggregationTime, ulong publicationTime, AsyncCallback callback,
@@ -92,7 +92,7 @@ namespace Guardtime.KSI.Service
         ///     Begin extend.
         /// </summary>
         /// <param name="payload">extend request payload</param>
-        /// <param name="callback">callback when extending signature is finished</param>
+        /// <param name="callback">callback when extending request is finished</param>
         /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         private IAsyncResult BeginExtend(ExtendRequestPayload payload, AsyncCallback callback, object asyncState)
@@ -228,7 +228,7 @@ namespace Guardtime.KSI.Service
         /// <summary>
         /// Begin get additional extender configuration data (async)
         /// </summary>
-        /// <param name="callback">callback when extnder configuration request is finished</param>
+        /// <param name="callback">callback when extender configuration request is finished</param>
         /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         public IAsyncResult BeginGetExtenderConfig(AsyncCallback callback, object asyncState)
