@@ -167,27 +167,6 @@ namespace Guardtime.KSI.Test.Integration
                 CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
             return policy.Verify(verificationContext);
         }
-        
-        public VerificationResult SignedHashVerifyWithInvalidHash(Ksi ksi)
-        {
-            using (MemoryStream memoryStream = new MemoryStream(Encoding.UTF8.GetBytes("test")))
-            {
-                IDataHasher dataHasher = CryptoTestFactory.CreateDataHasher(HashAlgorithm.Sha2256);
-                dataHasher.AddData(memoryStream);
-                IKsiSignature signature = ksi.Sign(dataHasher.GetHash());
-
-                VerificationContext verificationContext = new VerificationContext(signature)
-                {
-                    DocumentHash = new DataHash(HashAlgorithm.Sha2256,
-                        Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")),
-                    PublicationsFile = ksi.GetPublicationsFile()
-                };
-                KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
-                    CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
-
-                return policy.Verify(verificationContext);
-            }
-        }
 
         [Test]
         public void UseDeprecatedHmacAlgoTest()
