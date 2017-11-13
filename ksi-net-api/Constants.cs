@@ -40,6 +40,8 @@ namespace Guardtime.KSI
         /// </summary>
         public const byte BitsInByte = 8;
 
+        public const string DateFormat = "yyyy-MM-dd";
+
         public static class Tlv
         {
             /// <summary>

@@ -168,6 +168,36 @@ namespace Guardtime.KSI.Test.Integration
             return policy.Verify(verificationContext);
         }
 
+        [Test]
+        public void UseDeprecatedHmacAlgoTest()
+        {
+            KsiService service = GetService(PduVersion.v2, HashAlgorithm.Sha1, HashAlgorithm.Sha2256);
+            Ksi ksi = new Ksi(service);
+
+            HashingException ex = Assert.Throws<HashingException>(delegate
+            {
+                SignHash(ksi);
+            });
+
+            Assert.That(ex.Message.StartsWith("Hash algorithm SHA1 is deprecated since 2016-07-01 and can not be used for HMAC"),
+                "Unexpected inner exception message: " + ex.Message);
+        }
+
+        [Test]
+        public void LergacyUseDeprecatedHmacAlgoTest()
+        {
+            KsiService service = GetService(PduVersion.v1, HashAlgorithm.Sha1, HashAlgorithm.Sha2256);
+            Ksi ksi = new Ksi(service);
+
+            HashingException ex = Assert.Throws<HashingException>(delegate
+            {
+                SignHash(ksi);
+            });
+
+            Assert.That(ex.Message.StartsWith("Hash algorithm SHA1 is deprecated since 2016-07-01 and can not be used for HMAC"),
+                "Unexpected inner exception message: " + ex.Message);
+        }
+
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
         public void ParallelSigningTest(Ksi ksi)
         {

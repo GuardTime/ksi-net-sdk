@@ -325,7 +325,7 @@ namespace Guardtime.KSI.Test.Service
                 ksi.Sign(new DataHash(Base16.Decode("0011A700B0C8066C47ECBA05ED37BC14DCADB23855")));
             });
 
-            Assert.That(ex.Message.StartsWith("Hash algorithm SHA1 is deprecated since 1.07.2016 and can not be used for signing."),
+            Assert.That(ex.Message.StartsWith("Hash algorithm SHA1 is deprecated since 2016-07-01 and can not be used for signing."),
                 "Unexpected exception message: " + ex.Message);
         }
 

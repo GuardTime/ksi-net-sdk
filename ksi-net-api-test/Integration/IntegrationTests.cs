@@ -26,6 +26,7 @@ using Guardtime.KSI.Signature;
 using Guardtime.KSI.Test.Crypto;
 using Guardtime.KSI.Test.Properties;
 using Guardtime.KSI.Trust;
+using Guardtime.KSI.Hashing;
 
 namespace Guardtime.KSI.Test.Integration
 {
@@ -297,7 +298,19 @@ namespace Guardtime.KSI.Test.Integration
                 new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                     CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))));
         }
-
+        
+        protected static KsiService GetService(PduVersion version, HashAlgorithm aggregatorHmacAlgo, HashAlgorithm extenderHmacAlgo)
+        {
+            return new KsiService(
+                    new HttpKsiServiceProtocol(Settings.Default.HttpSigningServiceUrl, Settings.Default.HttpExtendingServiceUrl, Settings.Default.HttpPublicationsFileUrl, 10000),
+                        new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass, aggregatorHmacAlgo),
+                    new HttpKsiServiceProtocol(Settings.Default.HttpSigningServiceUrl, Settings.Default.HttpExtendingServiceUrl, Settings.Default.HttpPublicationsFileUrl, 10000),
+                        new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass, extenderHmacAlgo),
+                    new HttpKsiServiceProtocol(Settings.Default.HttpSigningServiceUrl, Settings.Default.HttpExtendingServiceUrl, Settings.Default.HttpPublicationsFileUrl, 10000),
+                        new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
+                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))), version);
+        }
+        
         private static HttpKsiServiceProtocol GetHttpKsiServiceProtocol()
         {
             return new HttpKsiServiceProtocol(Settings.Default.HttpSigningServiceUrl, Settings.Default.HttpExtendingServiceUrl, Settings.Default.HttpPublicationsFileUrl, 10000);
