@@ -167,7 +167,7 @@ namespace Guardtime.KSI.Test.Integration
                 CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
             return policy.Verify(verificationContext);
         }
-        
+
         public VerificationResult SignedHashVerifyWithInvalidHash(Ksi ksi)
         {
             using (MemoryStream memoryStream = new MemoryStream(Encoding.UTF8.GetBytes("test")))
@@ -200,7 +200,8 @@ namespace Guardtime.KSI.Test.Integration
                 SignHash(ksi);
             });
 
-            Assert.That(ex.Message.StartsWith("Hash algorithm SHA1 is deprecated since 1.07.2016 and can not be used for HMAC"), "Unexpected inner exception message: " + ex.Message);
+            Assert.That(ex.Message.StartsWith("Hash algorithm SHA1 is deprecated since 2016-07-01 and can not be used for HMAC"),
+                "Unexpected inner exception message: " + ex.Message);
         }
 
         [Test]
@@ -214,7 +215,8 @@ namespace Guardtime.KSI.Test.Integration
                 SignHash(ksi);
             });
 
-            Assert.That(ex.Message.StartsWith("Hash algorithm SHA1 is deprecated since 1.07.2016 and can not be used for HMAC"), "Unexpected inner exception message: " + ex.Message);
+            Assert.That(ex.Message.StartsWith("Hash algorithm SHA1 is deprecated since 2016-07-01 and can not be used for HMAC"),
+                "Unexpected inner exception message: " + ex.Message);
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
