@@ -596,7 +596,8 @@ namespace Guardtime.KSI.Test.Integration
             {
                 service.Extend(1510056000L);
             });
-            Assert.That(ex.Message.StartsWith("Hash algorithm SHA1 is deprecated since 1.07.2016 and can not be used for HMAC"), "Unexpected inner exception message: " + ex.Message);
+            Assert.That(ex.Message.StartsWith("Hash algorithm SHA1 is deprecated since 2016-07-01 and can not be used for HMAC"),
+                "Unexpected inner exception message: " + ex.Message);
         }
 
         [Test]
@@ -609,7 +610,8 @@ namespace Guardtime.KSI.Test.Integration
                 service.Extend(1510056000L);
             });
 
-            Assert.That(ex.Message.StartsWith("Hash algorithm SHA1 is deprecated since 1.07.2016 and can not be used for HMAC"), "Unexpected inner exception message: " + ex.Message);
+            Assert.That(ex.Message.StartsWith("Hash algorithm SHA1 is deprecated since 2016-07-01 and can not be used for HMAC"),
+                "Unexpected inner exception message: " + ex.Message);
         }
     }
 }
