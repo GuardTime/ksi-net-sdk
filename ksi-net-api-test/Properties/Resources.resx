@@ -648,6 +648,15 @@
   <data name="KsiSignature_Invalid_Not_Valid_Cert" xml:space="preserve">
     <value>resources/signature/ksi-signature/ksi-signature-invalid-not-valid-cert.tlv</value>
   </data>
+  <data name="KsiSignature_Ok_Calendar_Auth_Record_Pkcs7_Signature" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-ok-calendar-auth-record-pkcs7-signature.tlv</value>
+  </data>
+  <data name="KsiSignature_Invalid_Calendar_Auth_Record_Pkcs7_Signature" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-calendar-auth-record-pkcs7-signature.tlv</value>
+  </data>
+  <data name="KsiSignature_Invalid_Calendar_Auth_Record_Pkcs7_Signature_Not_Valid_Cert" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-calendar-auth-record-pkcs7-signature-cert-not-valid.tlv</value>
+  </data>
   <data name="SignatureData_Invalid_Leading_Zero" xml:space="preserve">
     <value>resources/signature/signaturedata/signature-data-invalid-leading-zero.tlv</value>
   </data>

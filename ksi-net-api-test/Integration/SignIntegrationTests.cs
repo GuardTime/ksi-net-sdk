@@ -65,8 +65,7 @@ namespace Guardtime.KSI.Test.Integration
                 DocumentHash = documentHash,
                 PublicationsFile = ksi.GetPublicationsFile()
             };
-            KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
-                CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
+            KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy();
             VerificationResult verificationResult = policy.Verify(verificationContext);
             Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode, "Signature should verify with key based policy");
         }
@@ -83,8 +82,7 @@ namespace Guardtime.KSI.Test.Integration
                     Base16.Decode("D439459856BEF5ED25772646F73A70A841FC078D3CBBC24AB7F47C464683768D")),
                 PublicationsFile = ksi.GetPublicationsFile()
             };
-            KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
-                CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
+            KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy();
             VerificationResult verificationResult = policy.Verify(verificationContext);
             Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode, "Signature should verify with key based policy");
         }
@@ -107,8 +105,7 @@ namespace Guardtime.KSI.Test.Integration
                     Base16.Decode("D439459856BEF5ED25772646F73A70A841FC078D3CBBC24AB7F47C464683768D")),
                 PublicationsFile = ksi.GetPublicationsFile()
             };
-            KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
-                CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
+            KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy();
             VerificationResult verificationResult = policy.Verify(verificationContext);
             Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode, "Signature should verify with key based policy");
         }
@@ -211,8 +208,7 @@ namespace Guardtime.KSI.Test.Integration
                 DocumentHash = hash,
                 PublicationsFile = ksi.GetPublicationsFile()
             };
-            KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
-                CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
+            KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy();
             return policy.Verify(verificationContext);
         }
 
@@ -230,9 +226,7 @@ namespace Guardtime.KSI.Test.Integration
                         Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")),
                     PublicationsFile = ksi.GetPublicationsFile()
                 };
-                KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
-                    CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
-
+                KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy();
                 return policy.Verify(verificationContext);
             }
         }

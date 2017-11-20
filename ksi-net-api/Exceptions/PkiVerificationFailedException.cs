@@ -22,7 +22,7 @@ using System;
 namespace Guardtime.KSI.Exceptions
 {
     /// <summary>
-    ///     PKI signature verification failed exception.
+    ///     Exception thrown when PKI signature verification fails.
     /// </summary>
     [Serializable]
     public class PkiVerificationFailedException : PkiVerificationException
@@ -40,8 +40,15 @@ namespace Guardtime.KSI.Exceptions
         /// </summary>
         /// <param name="message">exception message</param>
         /// <param name="innerException">inner exception</param>
-        public PkiVerificationFailedException(string message, Exception innerException) : base(message, innerException)
+        /// <param name="additionalInfo">Additional information</param>
+        public PkiVerificationFailedException(string message, Exception innerException, string additionalInfo = null) : base(message, innerException)
         {
+            AdditionalInfo = additionalInfo;
         }
+
+        /// <summary>
+        /// Additional information.
+        /// </summary>
+        public string AdditionalInfo { get; }
     }
 }

@@ -22,6 +22,7 @@ using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Utils;
+using NLog;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
@@ -32,23 +33,23 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class CalendarAuthenticationRecordSignatureVerificationRule : VerificationRule
     {
-        private readonly X509Store _trustStore;
-        private readonly ICertificateSubjectRdnSelector _certificateRdnSelector;
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// Create calendar authentication record signature verification rule.
+        /// </summary>
+        public CalendarAuthenticationRecordSignatureVerificationRule()
+        {
+        }
 
         /// <summary>
         /// Create calendar authentication record signature verification rule.
         /// </summary>
         /// <param name="trustStore">trust store</param>
         /// <param name="certificateRdnSelector">certificate rdn selector</param>
+        [Obsolete("Use CalendarAuthenticationRecordSignatureVerificationRule() instead.")]
         public CalendarAuthenticationRecordSignatureVerificationRule(X509Store trustStore, ICertificateSubjectRdnSelector certificateRdnSelector)
         {
-            if (certificateRdnSelector == null)
-            {
-                throw new ArgumentNullException(nameof(certificateRdnSelector));
-            }
-
-            _trustStore = trustStore;
-            _certificateRdnSelector = certificateRdnSelector;
         }
 
         /// <see cref="VerificationRule.Verify" />
@@ -65,8 +66,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             }
 
             byte[] signedBytes = calendarAuthenticationRecord.PublicationData.Encode();
-            ICryptoSignatureVerifier cryptoSignatureVerifier = CryptoSignatureVerifierFactory.GetCryptoSignatureVerifierByOid(signatureData.SignatureType, _trustStore,
-                _certificateRdnSelector);
+            ICryptoSignatureVerifier cryptoSignatureVerifier = CryptoSignatureVerifierFactory.GetCryptoSignatureVerifierByOid(signatureData.SignatureType);
             CryptoSignatureVerificationData data = new CryptoSignatureVerificationData(certificateBytes, signature.AggregationTime);
 
             try
@@ -77,8 +77,13 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             {
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Key03);
             }
-            catch (PkiVerificationFailedException)
+            catch (PkiVerificationFailedException ex)
             {
+                Logger.Debug("Could not validate signature.{0}Signature type: {1}{0}{2}{0}{3}",
+                    Environment.NewLine,
+                    signatureData.SignatureType,
+                    ex,
+                    ex.AdditionalInfo);
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Key02);
             }
 

@@ -20,15 +20,15 @@
 namespace Guardtime.KSI.Crypto
 {
     /// <summary>
-    /// Certificate subject RDN selector.
+    /// Certificate subject RDN selector for checking if certificate subject contains specific RDN.
     /// </summary>
     public interface ICertificateSubjectRdnSelector
     {
         /// <summary>
-        /// Checks if certificate contains rdn selectors
+        /// Checks if certificate subject contains specific RDN.
         /// </summary>
         /// <param name="certificate">certificate to check</param>
-        /// <returns></returns>
+        /// <returns>True if subject certificate subject contains specified RDN.</returns>
         bool IsMatch(object certificate);
     }
 }

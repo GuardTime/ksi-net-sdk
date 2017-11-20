@@ -1051,6 +1051,24 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-calendar-auth-record-pkcs7-signature.tlv.
+        /// </summary>
+        internal static string KsiSignature_Invalid_Calendar_Auth_Record_Pkcs7_Signature {
+            get {
+                return ResourceManager.GetString("KsiSignature_Invalid_Calendar_Auth_Record_Pkcs7_Signature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-calendar-auth-record-pkcs7-signature-cert-not-valid.tlv.
+        /// </summary>
+        internal static string KsiSignature_Invalid_Calendar_Auth_Record_Pkcs7_Signature_Not_Valid_Cert {
+            get {
+                return ResourceManager.GetString("KsiSignature_Invalid_Calendar_Auth_Record_Pkcs7_Signature_Not_Valid_Cert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-calendar-authentication-record-invalid-publication-hash.tlv.
         /// </summary>
         internal static string KsiSignature_Invalid_Calendar_Authentication_Record_Invalid_Publication_Hash {
@@ -1300,6 +1318,15 @@ namespace Guardtime.KSI.Test.Properties {
         internal static string KsiSignature_Ok {
             get {
                 return ResourceManager.GetString("KsiSignature_Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-ok-calendar-auth-record-pkcs7-signature.tlv.
+        /// </summary>
+        internal static string KsiSignature_Ok_Calendar_Auth_Record_Pkcs7_Signature {
+            get {
+                return ResourceManager.GetString("KsiSignature_Ok_Calendar_Auth_Record_Pkcs7_Signature", resourceCulture);
             }
         }
         

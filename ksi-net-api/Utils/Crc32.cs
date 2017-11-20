@@ -18,7 +18,6 @@
  */
 
 using System;
-using Guardtime.KSI.Exceptions;
 
 namespace Guardtime.KSI.Utils
 {

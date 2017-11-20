@@ -24,7 +24,6 @@ using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Test.Crypto;
-using Guardtime.KSI.Test.Properties;
 using Guardtime.KSI.Trust;
 
 namespace Guardtime.KSI.Test.Service
