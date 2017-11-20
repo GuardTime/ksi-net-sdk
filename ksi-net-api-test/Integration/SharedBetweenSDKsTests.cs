@@ -41,12 +41,13 @@ namespace Guardtime.KSI.Test.Integration
     /// Tests that are shared between C, Java and .NET SDKs.
     /// </summary>
     [TestFixture]
-    public class SharedBetweenSdksTests : IntegrationTests
+    public class SharedBetweenSdksTests
     {
         private static IPublicationsFile _pubsFile;
         private const string ValidSignatureDir = "resources/signature/shared/valid-signatures/";
         private const string InvalidSignatureDir = "resources/signature/shared/invalid-signatures/";
         private const string PolicyVerificationDir = "resources/signature/shared/policy-verification-signatures/";
+        private const string InternalPolicyVerificationDir = "resources/signature/shared/internal-policy-signatures/";
 
         [Test, TestCaseSource(nameof(GetInvalidSignatureTestData))]
         public void TestInvalidSignatures(TestingRow row)
@@ -58,6 +59,12 @@ namespace Guardtime.KSI.Test.Integration
         public void TestValidSignatures(TestingRow row)
         {
             RunTests(row, ValidSignatureDir);
+        }
+
+        [Test, TestCaseSource(nameof(GetInternalPolicyVerificationSignatureTestData))]
+        public void TestInternalPolicies(TestingRow row)
+        {
+            RunTests(row, InternalPolicyVerificationDir);
         }
 
         [Test, TestCaseSource(nameof(GetPolicyVerificationSignatureTestData))]
@@ -128,7 +135,7 @@ namespace Guardtime.KSI.Test.Integration
 
             if (string.IsNullOrEmpty(testingRow.ResourceFile))
             {
-                service = GetHttpKsiService();
+                service = IntegrationTests.GetHttpKsiService();
             }
             else
             {
@@ -140,10 +147,10 @@ namespace Guardtime.KSI.Test.Integration
                     new TestKsiService(
                         protocol,
                         new ServiceCredentials(Properties.Settings.Default.HttpSigningServiceUser, Properties.Settings.Default.HttpSigningServicePass,
-                            GetHashAlgorithm(Properties.Settings.Default.HttpSigningServiceHmacAlgorithm)),
+                            TestUtil.GetHashAlgorithm(Properties.Settings.Default.HttpSigningServiceHmacAlgorithm)),
                         protocol,
                         new ServiceCredentials(Properties.Settings.Default.HttpExtendingServiceUser, Properties.Settings.Default.HttpExtendingServicePass,
-                            GetHashAlgorithm(Properties.Settings.Default.HttpExtendingServiceHmacAlgorithm)),
+                          TestUtil.GetHashAlgorithm(Properties.Settings.Default.HttpExtendingServiceHmacAlgorithm)),
                         protocol,
                         new PublicationsFileFactory(
                             new PkiTrustStoreProvider(new X509Store(StoreName.Root),
@@ -182,6 +189,11 @@ namespace Guardtime.KSI.Test.Integration
             return GetSignatureTestData(ValidSignatureDir + "signature-results.csv");
         }
 
+        public static TestingRow[] GetInternalPolicyVerificationSignatureTestData()
+        {
+            return GetSignatureTestData(InternalPolicyVerificationDir + "internal-policy-results.csv");
+        }
+
         public static TestingRow[] GetPolicyVerificationSignatureTestData()
         {
             return GetSignatureTestData(PolicyVerificationDir + "policy-verification-results.csv");
@@ -206,7 +218,7 @@ namespace Guardtime.KSI.Test.Integration
             return list.ToArray();
         }
 
-        private static IPublicationsFile PubsFile => _pubsFile ?? (_pubsFile = GetHttpKsiService().GetPublicationsFile());
+        private static IPublicationsFile PubsFile => _pubsFile ?? (_pubsFile = IntegrationTests.GetHttpKsiService().GetPublicationsFile());
 
         private static IPublicationsFile GetPublicationsFile(string path)
         {
@@ -254,36 +266,30 @@ namespace Guardtime.KSI.Test.Integration
                 s = args[8];
                 if (!string.IsNullOrEmpty(s))
                 {
-                    RegistrationTime = ulong.Parse(s);
+                    AggregationTime = ulong.Parse(s);
                 }
 
                 s = args[9];
                 if (!string.IsNullOrEmpty(s))
                 {
-                    AggregationTime = ulong.Parse(s);
+                    PublicationTime = ulong.Parse(s);
                 }
 
                 s = args[10];
                 if (!string.IsNullOrEmpty(s))
                 {
-                    PublicationTime = ulong.Parse(s);
-                }
-
-                s = args[11];
-                if (!string.IsNullOrEmpty(s))
-                {
                     PublicationData = new PublicationData(s);
                 }
 
-                s = args[12];
+                s = args[11];
                 if (!string.IsNullOrEmpty(s) && s.ToUpper() == "TRUE")
                 {
                     IsExtendingAllowed = true;
                 }
 
-                ResourceFile = args[13];
+                ResourceFile = args[12];
 
-                PublicationsFilePath = args[14];
+                PublicationsFilePath = args[13];
 
                 TestIndex = index;
             }
@@ -297,7 +303,6 @@ namespace Guardtime.KSI.Test.Integration
             public DataHash InputHash { get; }
             public DataHash CalendarHashChainInput { get; }
             public DataHash CalendarHashChainOutput { get; }
-            public ulong RegistrationTime { get; }
             public ulong AggregationTime { get; }
             public ulong PublicationTime { get; }
             public PublicationData PublicationData { get; }

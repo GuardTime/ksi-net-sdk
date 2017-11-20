@@ -42,12 +42,12 @@ namespace Guardtime.KSI.Signature.Verification.Policy
         /// </summary>
         public KeyBasedVerificationPolicy()
         {
-            // Check for internal verification
             FirstRule = new InternalVerificationPolicy()
-                .OnSuccess(new CalendarHashChainExistenceRule()
-                    .OnSuccess(new CalendarAuthenticationRecordExistenceRule()
-                        .OnSuccess(new CertificateExistenceRule()
-                            .OnSuccess(new CalendarAuthenticationRecordSignatureVerificationRule()))));
+                .OnSuccess(new CalendarHashChainExistenceRule() // Gen-02
+                    .OnSuccess(new CalendarHashChainAlgorithmDeprecatedRule() // Gen-02
+                        .OnSuccess(new CalendarAuthenticationRecordExistenceRule() // Gen-02
+                            .OnSuccess(new CertificateExistenceRule() // Key-01
+                                .OnSuccess(new CalendarAuthenticationRecordSignatureVerificationRule()))))); // Key-02, Key-03
         }
     }
 }

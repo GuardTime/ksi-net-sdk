@@ -19,23 +19,27 @@
 
 using System;
 using System.IO;
+using System.Net.Sockets;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
+using Guardtime.KSI.Service.Tcp;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
 using Guardtime.KSI.Test.Signature.Verification;
 using NUnit.Framework;
+using Guardtime.KSI.Hashing;
 
 namespace Guardtime.KSI.Test.Integration
 {
     [TestFixture]
     public class ExtendIntegrationTests : IntegrationTests
     {
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidExtendingPass))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiListWithInvalidExtendingPass))]
         public void ExtendInvalidPassTest(Ksi ksi)
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
@@ -51,39 +55,10 @@ namespace Guardtime.KSI.Test.Integration
             }
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidExtendingUrl))]
-        public void ExtendInvalidUrlTest(Ksi ksi)
-        {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
-            {
-                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
-
-                Exception ex = Assert.Throws<KsiServiceProtocolException>(delegate
-                {
-                    ksi.Extend(ksiSignature);
-                });
-
-                Assert.That(ex.Message.StartsWith("Request failed"), "Unexpected exception message: " + ex.Message);
-                Assert.IsNotNull(ex.InnerException, "Inner exception should not be null");
-                Assert.That(ex.InnerException.Message.StartsWith("The remote name could not be resolved"), "Unexpected inner exception message: " + ex.InnerException.Message);
-            }
-        }
-
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidSigningUrl))]
-        public void ExtendSuccessWithInvalidSigningUrlTest(Ksi ksi)
-        {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
-            {
-                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
-
-                Assert.DoesNotThrow(delegate
-                {
-                    ksi.Extend(ksiSignature);
-                }, "Invalid signing url should not prevent extending.");
-            }
-        }
-
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCasesInvalidSigningPass))]
+        /// <summary>
+        /// Test extending while signing service pass is invalid which should not prevent extending.
+        /// </summary>
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiListWithInvalidSigningPass))]
         public void ExtendSuccessWithInvalidSigningPassTest(Ksi ksi)
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
@@ -97,7 +72,7 @@ namespace Guardtime.KSI.Test.Integration
             }
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
         public void ExtendAndVerifyTest(Ksi ksi)
         {
             PublicationBasedVerificationPolicy rule = new PublicationBasedVerificationPolicy();
@@ -118,7 +93,7 @@ namespace Guardtime.KSI.Test.Integration
             }
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
         public void ExtendInvalidSignatureTest(Ksi ksi)
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Invalid_Aggregation_Chain_Input_Hash), FileMode.Open))
@@ -136,7 +111,7 @@ namespace Guardtime.KSI.Test.Integration
             }
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
         public void ExtendAndVerifyToUserProvidedPublicationTest(Ksi ksi)
         {
             PublicationBasedVerificationPolicy rule = new PublicationBasedVerificationPolicy();
@@ -158,7 +133,7 @@ namespace Guardtime.KSI.Test.Integration
             }
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
         public void ExtendAndVerifyToUserProvidedPublicationNotInPublicationsFileTest(Ksi ksi)
         {
             PublicationBasedVerificationPolicy rule = new PublicationBasedVerificationPolicy();
@@ -181,7 +156,7 @@ namespace Guardtime.KSI.Test.Integration
             }
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
         public void InvalidExtendAndVerifyToUserProvidedPublicationFromTestCoreTest(Ksi ksi)
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
@@ -200,8 +175,8 @@ namespace Guardtime.KSI.Test.Integration
             }
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
-        public void InvalidExtendToUserProvidedPublicationFromTestCoreAllowExtendingTest(Ksi ksi)
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsiService))]
+        public void InvalidExtendToUserProvidedPublicationFromTestCoreAllowExtendingTest(KsiService service)
         {
             PublicationBasedVerificationPolicy rule = new PublicationBasedVerificationPolicy();
 
@@ -216,7 +191,7 @@ namespace Guardtime.KSI.Test.Integration
                 {
                     IsExtendingAllowed = true,
                     UserPublication = publicationData,
-                    KsiService = HttpKsiService
+                    KsiService = service
                 };
 
                 VerificationResult verificationResult = rule.Verify(context);
@@ -225,7 +200,7 @@ namespace Guardtime.KSI.Test.Integration
             }
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
         public void InvalidExtendToUserProvidedPublicationTest(Ksi ksi)
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
@@ -244,7 +219,7 @@ namespace Guardtime.KSI.Test.Integration
             }
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
         public void ExtendToOtherExtendedSignatureAndVerifyWithUserProvidedPublication(Ksi ksi)
         {
             using (FileStream signatureToExtend = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open),
@@ -259,7 +234,7 @@ namespace Guardtime.KSI.Test.Integration
             }
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
         public void ExtendToNearestPublicationTest(Ksi ksi)
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
@@ -273,7 +248,7 @@ namespace Guardtime.KSI.Test.Integration
             }
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
         public void ParallelExtendingTest(Ksi ksi)
         {
             ManualResetEvent waitHandle = new ManualResetEvent(false);
@@ -342,8 +317,8 @@ namespace Guardtime.KSI.Test.Integration
             Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " All done.");
         }
 
-        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpTestCases))]
-        public void ExtendInvalidPduFormatTest(Ksi ksi)
+        [Test]
+        public void ExtendInvalidPduFormatTest()
         {
             KsiService service = GetHttpKsiService(PduVersion.v2);
 
@@ -359,11 +334,9 @@ namespace Guardtime.KSI.Test.Integration
             }
         }
 
-        [Test]
-        public void HttpAsyncExtendTest()
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiServices))]
+        public void AsyncExtendTest(KsiService service)
         {
-            KsiService service = GetHttpKsiService();
-
             ManualResetEvent waitHandle = new ManualResetEvent(false);
             CalendarHashChain cal = null;
 
@@ -389,11 +362,9 @@ namespace Guardtime.KSI.Test.Integration
             Assert.AreEqual(true, isAsyncCorrect, "Unexpected async state.");
         }
 
-        [Test]
-        public void HttpAsyncExtendWithInvalidPassTest()
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiServicesWithInvalidExtendingPass))]
+        public void AsyncExtendWithInvalidPassTest(KsiService service)
         {
-            KsiService service = GetHttpKsiServiceWithInvalidExtendingPass();
-
             ManualResetEvent waitHandle = new ManualResetEvent(false);
             Exception ex = null;
             CalendarHashChain cal = null;
@@ -422,27 +393,225 @@ namespace Guardtime.KSI.Test.Integration
         }
 
         [Test]
-        public void EndExtendArgumentNullTest()
+        public void HttpExtendMissingUrlTest()
         {
-            KsiService service = GetHttpKsiService();
+            Ksi ksi = new Ksi(GetHttpKsiServiceWithoutExtendingUrl());
 
-            Assert.Throws<ArgumentNullException>(delegate
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
-                service.EndExtend(null);
-            });
+                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+
+                Exception ex = Assert.Throws<KsiServiceProtocolException>(delegate
+                {
+                    ksi.Extend(ksiSignature);
+                });
+
+                Assert.That(ex.Message.StartsWith("Service url is missing"), "Unexpected exception message: " + ex.Message);
+            }
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsiWithInvalidExtendingUrl))]
+        public void HttpExtendInvalidUrlTest(Ksi ksi)
+        {
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            {
+                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+
+                Exception ex = Assert.Throws<KsiServiceProtocolException>(delegate
+                {
+                    ksi.Extend(ksiSignature);
+                });
+
+                Assert.That(ex.Message.StartsWith("Request failed"), "Unexpected exception message: " + ex.Message);
+                Assert.IsNotNull(ex.InnerException, "Inner exception should not be null");
+                Assert.That(ex.InnerException.Message.StartsWith("The remote name could not be resolved"), "Unexpected inner exception message: " + ex.InnerException.Message);
+            }
+        }
+
+        /// <summary>
+        /// Test extending via HTTP while signing service url is invalid which should not prevent extending.
+        /// </summary>
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsiWithInvalidSigningUrl))]
+        public void HttpExtendSuccessWithInvalidSigningUrlTest(Ksi ksi)
+        {
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            {
+                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+
+                Assert.DoesNotThrow(delegate
+                {
+                    ksi.Extend(ksiSignature);
+                }, "Invalid signing url should not prevent extending.");
+            }
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpKsiWithInvalidExtendingPort))]
+        public void TcpExtendWithInvalidPortTest(Ksi ksi)
+        {
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            {
+                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+
+                Exception ex = Assert.Throws<KsiServiceProtocolException>(delegate
+                {
+                    ksi.Extend(ksiSignature);
+                });
+                Assert.That(ex.Message.StartsWith("Completing connection failed"), "Unexpected exception message: " + ex.Message);
+                Assert.IsNotNull(ex.InnerException, "Inner exception should not be null");
+                Assert.That(ex.InnerException.Message.StartsWith("No connection could be made because the target machine actively refused it"),
+                    "Unexpected inner exception message: " + ex.InnerException.Message);
+            }
+        }
+
+        /// <summary>
+        /// Test extending via TCP while signing service port is invalid which should not prevent extending.
+        /// </summary>
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpKsiWithInvalidSigningPort))]
+        public void TcpExtendSuccessWithInvalidSigningPortTest(Ksi ksi)
+        {
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            {
+                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+
+                Assert.DoesNotThrow(delegate
+                {
+                    ksi.Extend(ksiSignature);
+                }, "Invalid signing port should not prevent extending.");
+            }
         }
 
         [Test]
-        public void EndExtendInvalidArgumentTest()
+        public void TcpExtendWithReusedSocketTest()
         {
-            KsiService service = GetHttpKsiService();
+            KsiService service = GetTcpKsiService();
+            ulong aggregationTime = 1455478441;
 
-            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            IAsyncResult ar1 = service.BeginExtend(aggregationTime, null, null);
+            IAsyncResult ar2 = service.BeginExtend(aggregationTime, null, null);
+
+            CalendarHashChain cal1 = service.EndExtend(ar1);
+            Assert.AreEqual(aggregationTime, cal1.AggregationTime, "Unexpected calendar aggregation time");
+            CalendarHashChain cal2 = service.EndExtend(ar2);
+            Assert.AreEqual(aggregationTime, cal2.AggregationTime, "Unexpected calendar aggregation time");
+
+            Socket socket1 = GetExtendingSocket(service);
+
+            IAsyncResult ar3 = service.BeginExtend(aggregationTime, null, null);
+            IAsyncResult ar4 = service.BeginExtend(aggregationTime, null, null);
+
+            CalendarHashChain cal3 = service.EndExtend(ar3);
+            Assert.AreEqual(aggregationTime, cal3.AggregationTime, "Unexpected calendar aggregation time");
+            CalendarHashChain cal4 = service.EndExtend(ar4);
+            Assert.AreEqual(aggregationTime, cal4.AggregationTime, "Unexpected calendar aggregation time");
+
+            Socket socket2 = GetExtendingSocket(service);
+
+            Assert.AreEqual(socket1, socket2, "Sockets should be equal");
+        }
+
+        [Test]
+        public void TcpExtendesWithSocketReuseAndTimeoutTest()
+        {
+            KsiService service = GetTcpKsiService();
+            ulong aggregationTime = 1455478441;
+
+            IAsyncResult ar1 = service.BeginExtend(aggregationTime, null, null);
+
+            CalendarHashChain cal1 = service.EndExtend(ar1);
+            Socket socket1 = GetExtendingSocket(service);
+
+            Assert.AreEqual(aggregationTime, cal1.AggregationTime, "Unexpected calendar aggregation time");
+
+            Socket socket2 = GetExtendingSocket(service);
+
+            Assert.AreEqual(socket1, socket2, "Sockets should be equal");
+
+            // after 20 sec server will close connection
+            Thread.Sleep(23000);
+
+            IAsyncResult ar2 = service.BeginExtend(aggregationTime, null, null);
+
+            CalendarHashChain cal2 = service.EndExtend(ar2);
+            Assert.AreEqual(aggregationTime, cal2.AggregationTime, "Unexpected calendar aggregation time");
+
+            socket2 = GetExtendingSocket(service);
+
+            Assert.AreNotEqual(socket1, socket2, "Sockets should not be equal");
+        }
+
+        [Test]
+        public void TcpExtendesWithDisposedServiceProtocolTest()
+        {
+            KsiService service = GetTcpKsiService();
+            ulong aggregationTime = 1455478441;
+
+            IAsyncResult ar1 = service.BeginExtend(aggregationTime, null, null);
+            IAsyncResult ar2 = service.BeginExtend(aggregationTime, null, null);
+            service.EndExtend(ar1);
+
+            TcpKsiExtendingServiceProtocol tcp = GetTcpProtocol(service);
+
+            Assert.IsNotNull(GetExtendingSocket(tcp), "Socket should not be null");
+            tcp.Dispose();
+
+            Assert.IsNull(GetExtendingSocket(tcp), "Socket should be null");
+
+            KsiServiceProtocolException ex = Assert.Throws<KsiServiceProtocolException>(delegate
             {
-                service.EndExtend(new TestAsyncResult());
+                service.EndExtend(ar2);
             });
 
-            Assert.That(ex.Message.StartsWith("Invalid asyncResult type:"), "Unexpected exception message: " + ex.Message);
+            Assert.That(ex.Message.StartsWith("TCP KSI service protocol is disposed."), "Unexpected exception message: " + ex.Message);
+
+            ex = Assert.Throws<KsiServiceProtocolException>(delegate
+            {
+                service.BeginExtend(aggregationTime, null, null);
+            });
+
+            Assert.That(ex.Message.StartsWith("TCP KSI service protocol is disposed."), "Unexpected exception message: " + ex.Message);
+        }
+
+        private static TcpKsiExtendingServiceProtocol GetTcpProtocol(KsiService service)
+        {
+            return (TcpKsiExtendingServiceProtocol)typeof(KsiService).GetField("_extendingServiceProtocol", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(service);
+        }
+
+        private static Socket GetExtendingSocket(KsiService service)
+        {
+            return GetExtendingSocket(GetTcpProtocol(service));
+        }
+
+        private static Socket GetExtendingSocket(TcpKsiExtendingServiceProtocol tcp)
+        {
+            return (Socket)typeof(TcpKsiServiceProtocolBase).GetField("_socket", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(tcp);
+        }
+
+        [Test]
+        public void UseDeprecatedHmacAlgoTest()
+        {
+            KsiService service = GetService(PduVersion.v2, HashAlgorithm.Sha2256, HashAlgorithm.Sha1);
+            Ksi ksi = new Ksi(service);
+
+            HashingException ex = Assert.Throws<HashingException>(delegate
+            {
+                service.Extend(1510056000L);
+            });
+            Assert.That(ex.Message.StartsWith("Hash algorithm SHA1 is deprecated since 2016-07-01 and can not be used for HMAC"),
+                "Unexpected inner exception message: " + ex.Message);
+        }
+
+        [Test]
+        public void LergacyUseDeprecatedHmacAlgoTest()
+        {
+            KsiService service = GetService(PduVersion.v1, HashAlgorithm.Sha2256, HashAlgorithm.Sha1);
+
+            HashingException ex = Assert.Throws<HashingException>(delegate
+            {
+                service.Extend(1510056000L);
+            });
+
+            Assert.That(ex.Message.StartsWith("Hash algorithm SHA1 is deprecated since 2016-07-01 and can not be used for HMAC"),
+                "Unexpected inner exception message: " + ex.Message);
         }
     }
 }

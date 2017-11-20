@@ -70,6 +70,12 @@ namespace Guardtime.KSI.Service
                 throw new ArgumentNullException(nameof(hash));
             }
 
+            if (hash.Algorithm.HasDeprecatedSinceDate)
+            {
+                throw new KsiServiceException(string.Format("Hash algorithm {0} is deprecated since {1} and can not be used for signing.", hash.Algorithm.Name,
+                    hash.Algorithm.DeprecatedSinceDate?.ToString(Constants.DateFormat)));
+            }
+
             if (_signingServiceProtocol == null)
             {
                 throw new KsiServiceException("Signing service protocol is missing from service.");
@@ -265,7 +271,7 @@ namespace Guardtime.KSI.Service
                 serviceAsyncResult.AsyncWaitHandle.WaitOne();
             }
 
-            byte[] data = _signingServiceProtocol.EndSign(serviceAsyncResult);
+            byte[] data = _signingServiceProtocol.EndGetAggregatorConfig(serviceAsyncResult);
             PduPayload payload = AggregatorConfigRequestResponseParser.Parse(data);
             AggregatorConfigResponsePayload configResponsePayload = payload as AggregatorConfigResponsePayload;
 

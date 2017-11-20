@@ -29,9 +29,9 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Begin signing request.
         /// </summary>
-        /// <param name="data">aggregation request bytes</param>
+        /// <param name="data">signing request bytes</param>
         /// <param name="requestId">request id</param>
-        /// <param name="callback">callback when response is ready</param>
+        /// <param name="callback">callback when aggregation request is finished</param>
         /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         IAsyncResult BeginSign(byte[] data, ulong requestId, AsyncCallback callback, object asyncState);
@@ -46,9 +46,9 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Begin aggregator configuration request.
         /// </summary>
-        /// <param name="data">aggregation request bytes</param>
+        /// <param name="data">aggregator configuration request bytes</param>
         /// <param name="requestId">request id</param>
-        /// <param name="callback">callback when response is ready</param>
+        /// <param name="callback">callback when aggregator configuration request is finished</param>
         /// <param name="asyncState">async state object</param>
         /// <returns>async result</returns>
         IAsyncResult BeginGetAggregatorConfig(byte[] data, ulong requestId, AsyncCallback callback, object asyncState);
@@ -61,8 +61,8 @@ namespace Guardtime.KSI.Service
         byte[] EndGetAggregatorConfig(IAsyncResult asyncResult);
 
         /// <summary>
-        /// Aggregator location url
+        /// Aggregator address (url or ip)
         /// </summary>
-        string AggregatorLocation { get; }
+        string AggregatorAddress { get; }
     }
 }

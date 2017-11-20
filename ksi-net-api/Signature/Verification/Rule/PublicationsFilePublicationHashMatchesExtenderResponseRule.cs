@@ -37,7 +37,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             if (publicationRecord == null)
             {
                 // if suitable publication record does not exist in publications file then return NA
-                return new VerificationResult(GetRuleName(), VerificationResultCode.Na);
+                return new VerificationResult(GetRuleName(), VerificationResultCode.Na, VerificationError.Gen02);
             }
 
             CalendarHashChain extendedCalendarHashChain = GetExtendedCalendarHashChain(context, publicationRecord.PublicationData.PublicationTime);

@@ -18,17 +18,15 @@
  */
 
 using System.Collections.ObjectModel;
-using NLog;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
     /// <summary>
     ///     This rule verifies that aggregation hash chain aggregation time and RFC3161 record aggregation time match.
+    ///     If RFC3161 record is not present then <see cref="VerificationResultCode.Ok" /> is returned.
     /// </summary>
     public sealed class Rfc3161RecordAggregationTimeRule : VerificationRule
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
         /// <see cref="VerificationRule.Verify" />
         public override VerificationResult Verify(IVerificationContext context)
         {
@@ -40,7 +38,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
                 if (aggregationHashChains[0].AggregationTime != signature.Rfc3161Record.AggregationTime)
                 {
-                    Logger.Warn("Aggregation hash chain aggregation time and RFC 3161 aggregation time mismatch.");
+                    Logger.Debug("Aggregation hash chain aggregation time and RFC 3161 aggregation time mismatch.");
 
                     return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int02);
                 }

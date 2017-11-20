@@ -120,7 +120,7 @@ namespace Guardtime.KSI.Service
         ///     Begin extend to latest publication (async).
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
-        /// <param name="callback">callback when extending signature is finished</param>
+        /// <param name="callback">callback when extending request is finished</param>
         /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         IAsyncResult BeginExtend(ulong aggregationTime, AsyncCallback callback, object asyncState);
@@ -130,7 +130,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
         /// <param name="publicationTime">publication time</param>
-        /// <param name="callback">callback when extending signature is finished</param>
+        /// <param name="callback">callback when extending request is finished</param>
         /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         IAsyncResult BeginExtend(ulong aggregationTime, ulong publicationTime, AsyncCallback callback, object asyncState);
@@ -185,18 +185,18 @@ namespace Guardtime.KSI.Service
         IPublicationsFile EndGetPublicationsFile(IAsyncResult asyncResult);
 
         /// <summary>
-        /// Aggregator location url
+        /// Aggregator address
         /// </summary>
-        string AggregatorLocation { get; }
+        string AggregatorAddress { get; }
 
         /// <summary>
-        /// Extender location url
+        /// Extender address
         /// </summary>
-        string ExtenderLocation { get; }
+        string ExtenderAddress { get; }
 
         /// <summary>
-        /// Publications file location url
+        /// Publications file url
         /// </summary>
-        string PublicationsFileLocation { get; }
+        string PublicationsFileAddress { get; }
     }
 }

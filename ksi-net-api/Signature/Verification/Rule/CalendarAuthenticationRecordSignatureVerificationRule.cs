@@ -22,7 +22,6 @@ using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Utils;
-using NLog;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
@@ -33,8 +32,6 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class CalendarAuthenticationRecordSignatureVerificationRule : VerificationRule
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
         /// <summary>
         /// Create calendar authentication record signature verification rule.
         /// </summary>
@@ -66,24 +63,33 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             }
 
             byte[] signedBytes = calendarAuthenticationRecord.PublicationData.Encode();
-            ICryptoSignatureVerifier cryptoSignatureVerifier = CryptoSignatureVerifierFactory.GetCryptoSignatureVerifierByOid(signatureData.SignatureType);
-            CryptoSignatureVerificationData data = new CryptoSignatureVerificationData(certificateBytes, signature.AggregationTime);
 
             try
             {
+                ICryptoSignatureVerifier cryptoSignatureVerifier = CryptoSignatureVerifierFactory.GetCryptoSignatureVerifierByOid(signatureData.SignatureType);
+                CryptoSignatureVerificationData data = new CryptoSignatureVerificationData(certificateBytes, signature.AggregationTime);
                 cryptoSignatureVerifier.Verify(signedBytes, signatureData.GetSignatureValue(), data);
             }
-            catch (PkiVerificationFailedCertNotValidException)
+            catch (PkiVerificationFailedCertNotValidException ex)
             {
+                Logger.Debug(ex);
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Key03);
             }
             catch (PkiVerificationFailedException ex)
             {
-                Logger.Debug("Could not validate signature.{0}Signature type: {1}{0}{2}{0}{3}",
+                Logger.Debug("Could not verify signature.{0}Signature type: {1}{0}{2}{0}{3}",
                     Environment.NewLine,
                     signatureData.SignatureType,
                     ex,
                     ex.AdditionalInfo);
+                return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Key02);
+            }
+            catch (PkiVerificationErrorException ex)
+            {
+                Logger.Debug("Signature verification error.{0}Signature type: {1}{0}{2}",
+                    Environment.NewLine,
+                    signatureData.SignatureType,
+                    ex);
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Key02);
             }
 

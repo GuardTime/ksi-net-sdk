@@ -57,12 +57,12 @@ namespace Guardtime.KSI.Service.HighAvailability
         /// <summary>
         /// Create high availability KSI service
         /// </summary>
-        /// <param name="signingServices">List of signing services</param>
-        /// <param name="extendingServices">List of extending services</param>
-        /// <param name="publicationsFileServices">List of publications file services</param>
+        /// <param name="signingServices">List of signing services. Max 3 allowed.</param>
+        /// <param name="extendingServices">List of extending services. Max 3 allowed.</param>
+        /// <param name="publicationsFileService">Publications file service</param>
         public HAKsiService(IList<IKsiService> signingServices,
                             IList<IKsiService> extendingServices,
-                            IList<IKsiService> publicationsFileServices)
+                            IKsiService publicationsFileService)
         {
             if (signingServices != null)
             {
@@ -102,34 +102,23 @@ namespace Guardtime.KSI.Service.HighAvailability
                 ExtendingServices = new ReadOnlyCollection<IKsiService>(new List<IKsiService>());
             }
 
-            if (publicationsFileServices != null)
-            {
-                if (publicationsFileServices.Count > 3)
-                {
-                    throw new HAKsiServiceException("Cannot use more than 3 publications file services.");
-                }
-                PublicationsFileServices = new ReadOnlyCollection<IKsiService>(publicationsFileServices);
-            }
-            else
-            {
-                PublicationsFileServices = new ReadOnlyCollection<IKsiService>(new List<IKsiService>());
-            }
+            PublicationsFileService = publicationsFileService;
         }
 
         /// <summary>
-        /// Collection of signing sub-services. Max 3 allowed.
+        /// Collection of signing sub-services. 
         /// </summary>
         public ReadOnlyCollection<IKsiService> SigningServices { get; }
 
         /// <summary>
-        /// Collection of extending sub-services. Max 3 allowed.
+        /// Collection of extending sub-services.
         /// </summary>
         public ReadOnlyCollection<IKsiService> ExtendingServices { get; }
 
         /// <summary>
-        /// Collection of publications file sub-services. Max 3 allowed.
+        /// Publications file service. 
         /// </summary>
-        public ReadOnlyCollection<IKsiService> PublicationsFileServices { get; }
+        public IKsiService PublicationsFileService { get; }
 
         /// <summary>
         /// Create signature with given data hash (sync). 
@@ -296,7 +285,7 @@ namespace Guardtime.KSI.Service.HighAvailability
         /// Sends the request to all the sub-services in parallel. First successful response is used. Request fails only if all the sub-services fail.
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
-        /// <param name="callback">callback when extending signature is finished</param>
+        /// <param name="callback">callback when extending request is finished</param>
         /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         public IAsyncResult BeginExtend(ulong aggregationTime, AsyncCallback callback, object asyncState)
@@ -311,7 +300,7 @@ namespace Guardtime.KSI.Service.HighAvailability
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
         /// <param name="publicationTime">publication time</param>
-        /// <param name="callback">callback when extending signature is finished</param>
+        /// <param name="callback">callback when extending request is finished</param>
         /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         public IAsyncResult BeginExtend(ulong aggregationTime, ulong publicationTime, AsyncCallback callback, object asyncState)
@@ -346,7 +335,7 @@ namespace Guardtime.KSI.Service.HighAvailability
         /// Begin get additional extender configuration data (async)
         /// Sends the request to all the sub-services in parallel. Successful responses are consolidated and the consolidated result is returned. Request fails only if all the sub-services fail.
         /// </summary>
-        /// <param name="callback">callback when extnder configuration request is finished</param>
+        /// <param name="callback">callback when extender configuration request is finished</param>
         /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         public IAsyncResult BeginGetExtenderConfig(AsyncCallback callback, object asyncState)
@@ -420,8 +409,12 @@ namespace Guardtime.KSI.Service.HighAvailability
         /// <returns>async result</returns>
         public IAsyncResult BeginGetPublicationsFile(AsyncCallback callback, object asyncState)
         {
-            Logger.Debug("Begin HA publications file request.");
-            return new HAPublicationsFileRequestRunner(PublicationsFileServices).BeginRequest(callback, asyncState);
+            if (PublicationsFileService == null)
+            {
+                throw new HAKsiServiceException("Publications file service is missing.");
+            }
+
+            return PublicationsFileService.BeginGetPublicationsFile(callback, asyncState);
         }
 
         /// <summary>
@@ -431,58 +424,50 @@ namespace Guardtime.KSI.Service.HighAvailability
         /// <returns>publications file</returns>
         public IPublicationsFile EndGetPublicationsFile(IAsyncResult asyncResult)
         {
-            HAAsyncResult ar = GetHAAsyncResult(asyncResult);
-            HAPublicationsFileRequestRunner runner = GetRequestRunner<HAPublicationsFileRequestRunner>(ar);
-            return runner.EndPublucationsFile(ar);
+            if (PublicationsFileService == null)
+            {
+                throw new HAKsiServiceException("Publications file service is missing.");
+            }
+
+            return PublicationsFileService.EndGetPublicationsFile(asyncResult);
         }
 
         /// <summary>
-        /// Aggregator location urls of sub-services
+        /// List of aggregator sub-service addresses
         /// </summary>
-        public string AggregatorLocation
+        public string AggregatorAddress
         {
             get
             {
                 StringBuilder sb = new StringBuilder();
                 foreach (IKsiService service in SigningServices)
                 {
-                    sb.Append(service.AggregatorLocation + "; ");
+                    sb.Append(service.AggregatorAddress + "; ");
                 }
                 return sb.ToString();
             }
         }
 
         /// <summary>
-        /// Extender location urls of sub-services
+        /// List of extender sub-service addresses
         /// </summary>
-        public string ExtenderLocation
+        public string ExtenderAddress
         {
             get
             {
                 StringBuilder sb = new StringBuilder();
                 foreach (IKsiService service in ExtendingServices)
                 {
-                    sb.Append(service.ExtenderLocation + "; ");
+                    sb.Append(service.ExtenderAddress + "; ");
                 }
                 return sb.ToString();
             }
         }
 
         /// <summary>
-        /// Publications file locations of sub-services
+        /// Publications file url
         /// </summary>
-        public string PublicationsFileLocation
-        {
-            get
-            {
-                StringBuilder sb = new StringBuilder();
-                foreach (IKsiService service in PublicationsFileServices)
-                {
-                    sb.Append(service.PublicationsFileLocation + "; ");
-                }
-                return sb.ToString();
-            }
-        }
+        public string PublicationsFileAddress => PublicationsFileService?.PublicationsFileAddress;
 
         private static HAAsyncResult GetHAAsyncResult(IAsyncResult asyncResult)
         {
@@ -524,7 +509,7 @@ namespace Guardtime.KSI.Service.HighAvailability
             {
                 try
                 {
-                    Logger.Debug("Sub-service AggregationConfig changed: " + e.AggregatorConfig + "; Sub-service: " + e.KsiService.AggregatorLocation);
+                    Logger.Debug("Sub-service AggregationConfig changed: " + e.AggregatorConfig + "; Sub-service: " + e.KsiService.AggregatorAddress);
 
                     if (e.AggregatorConfig == null)
                     {
@@ -554,7 +539,7 @@ namespace Guardtime.KSI.Service.HighAvailability
                 }
 
                 AggregatorConfig config = _currentAggregatorConfigList[service];
-                Logger.Debug("AggregatorConfig in cache: " + config + "; Sub-service: " + service.AggregatorLocation);
+                Logger.Debug("AggregatorConfig in cache: " + config + "; Sub-service: " + service.AggregatorAddress);
                 mergedConfig = HAAggregatorConfigRequestRunner.MergeConfigs(mergedConfig, config);
             }
 
@@ -581,7 +566,7 @@ namespace Guardtime.KSI.Service.HighAvailability
             {
                 try
                 {
-                    Logger.Debug("Sub-service ExtenderConfig changed: " + e.ExtenderConfig + "; Sub-service: " + e.KsiService.ExtenderLocation);
+                    Logger.Debug("Sub-service ExtenderConfig changed: " + e.ExtenderConfig + "; Sub-service: " + e.KsiService.ExtenderAddress);
 
                     if (e.ExtenderConfig == null)
                     {
@@ -612,7 +597,7 @@ namespace Guardtime.KSI.Service.HighAvailability
                 }
 
                 ExtenderConfig config = _currentExtenderConfigList[service];
-                Logger.Debug("ExtenderConfig in cache: " + config + "; Sub-service: " + service.ExtenderLocation);
+                Logger.Debug("ExtenderConfig in cache: " + config + "; Sub-service: " + service.ExtenderAddress);
                 mergedConfig = HAExtenderConfigRequestRunner.MergeConfigs(mergedConfig, config);
             }
 

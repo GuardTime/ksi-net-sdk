@@ -205,13 +205,13 @@ namespace Guardtime.KSI.Utils
         }
 
         /// <summary>
-        ///     Convert unix time to DateTime.
+        ///     Convert unix time to UTC DateTime.
         /// </summary>
         /// <param name="time">unix time</param>
         /// <returns>time as DateTime</returns>
         public static DateTime ConvertUnixTimeToDateTime(ulong time)
         {
-            return new DateTime(1970, 1, 1, 0, 0, 0) + TimeSpan.FromSeconds(time);
+            return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc) + TimeSpan.FromSeconds(time);
         }
 
         /// <summary>

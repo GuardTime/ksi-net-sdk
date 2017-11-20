@@ -29,7 +29,7 @@ namespace Guardtime.KSI.Signature
     /// <summary>
     ///     Calendar hash chain TLV element
     /// </summary>
-    public sealed class CalendarHashChain : CompositeTag
+    public sealed partial class CalendarHashChain : CompositeTag
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
@@ -129,11 +129,25 @@ namespace Guardtime.KSI.Signature
         /// </summary>
         public PublicationData PublicationData => _publicationData ?? (_publicationData = new PublicationData(_publicationTime.Value, OutputHash));
 
+        /// <summary>
+        /// Get left links enumerator
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerator<Link> GetLeftLinksEnumerator()
+        {
+            return GetLinksEnumerable(_chain, LinkDirection.Left).GetEnumerator();
+        }
+
         private static IEnumerable<Link> GetRightLinksEnumerable(IList<Link> chain)
+        {
+            return GetLinksEnumerable(chain, LinkDirection.Right);
+        }
+
+        private static IEnumerable<Link> GetLinksEnumerable(IList<Link> chain, LinkDirection direction)
         {
             for (int i = 0; i < chain.Count; i++)
             {
-                if (chain[i].Direction == LinkDirection.Right)
+                if (chain[i].Direction == direction)
                 {
                     yield return chain[i];
                 }
@@ -259,29 +273,6 @@ namespace Guardtime.KSI.Signature
             n |= (n >> 16);
             n |= (n >> 32);
             return n - (n >> 1);
-        }
-
-        /// <summary>
-        ///     Calendar hash chain link object which is imprint containing link direction
-        /// </summary>
-        private class Link : ImprintTag
-        {
-            public Link(ITlvTag tag) : base(tag)
-            {
-                CheckTagType((uint)LinkDirection.Right, (uint)LinkDirection.Left);
-
-                switch (Type)
-                {
-                    case (uint)LinkDirection.Left:
-                        Direction = LinkDirection.Left;
-                        break;
-                    case (uint)LinkDirection.Right:
-                        Direction = LinkDirection.Right;
-                        break;
-                }
-            }
-
-            public LinkDirection Direction { get; }
         }
     }
 }

@@ -60,6 +60,13 @@ namespace Guardtime.KSI.Service
             }
 
             _hashAlgorithm = hashAlgorithm ?? HashAlgorithm.Default;
+
+            if (_hashAlgorithm.HasDeprecatedSinceDate)
+            {
+                throw new HashingException(string.Format("Hash algorithm {0} is deprecated since {1} and can not be used.", _hashAlgorithm.Name,
+                    _hashAlgorithm.DeprecatedSinceDate?.ToString(Constants.DateFormat)));
+            }
+
             _ksiService = ksiService;
             _signatureFactory = signatureFactory ?? new KsiSignatureFactory();
             _treeBuilder = new TreeBuilder(_hashAlgorithm, maxTreeHeight);

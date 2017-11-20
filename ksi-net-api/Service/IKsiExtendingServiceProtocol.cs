@@ -31,7 +31,7 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="data">extend request bytes</param>
         /// <param name="requestId">request id</param>
-        /// <param name="callback">callback when response is ready</param>
+        /// <param name="callback">callback when extending request is finished</param>
         /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         IAsyncResult BeginExtend(byte[] data, ulong requestId, AsyncCallback callback, object asyncState);
@@ -46,9 +46,9 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Begin extender configuration request.
         /// </summary>
-        /// <param name="data">extend request bytes</param>
+        /// <param name="data">extender configuration request bytes</param>
         /// <param name="requestId">request id</param>
-        /// <param name="callback">callback when response is ready</param>
+        /// <param name="callback">callback when extender configuration request is finished</param>
         /// <param name="asyncState">async state object</param>
         /// <returns>async result</returns>
         IAsyncResult BeginGetExtenderConfig(byte[] data, ulong requestId, AsyncCallback callback, object asyncState);
@@ -61,8 +61,8 @@ namespace Guardtime.KSI.Service
         byte[] EndGetExtenderConfig(IAsyncResult asyncResult);
 
         /// <summary>
-        /// Extender location url
+        /// Extender address (url or ip)
         /// </summary>
-        string ExtenderLocation { get; }
+        string ExtenderAddress { get; }
     }
 }
