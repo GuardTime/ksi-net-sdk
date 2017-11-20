@@ -1060,6 +1060,15 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-calendar-auth-record-pkcs7-signature-modified-bytes.tlv.
+        /// </summary>
+        internal static string KsiSignature_Invalid_Calendar_Auth_Record_Pkcs7_Signature_Modified_Bytes {
+            get {
+                return ResourceManager.GetString("KsiSignature_Invalid_Calendar_Auth_Record_Pkcs7_Signature_Modified_Bytes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-calendar-auth-record-pkcs7-signature-cert-not-valid.tlv.
         /// </summary>
         internal static string KsiSignature_Invalid_Calendar_Auth_Record_Pkcs7_Signature_Not_Valid_Cert {

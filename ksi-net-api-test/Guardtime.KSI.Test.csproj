@@ -653,6 +653,9 @@
     <None Include="resources\signature\ksi-signature\ksi-signature-invalid-calendar-auth-record-pkcs7-signature-cert-not-valid.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-calendar-auth-record-pkcs7-signature-modified-bytes.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="resources\signature\ksi-signature\ksi-signature-invalid-calendar-auth-record-pkcs7-signature.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

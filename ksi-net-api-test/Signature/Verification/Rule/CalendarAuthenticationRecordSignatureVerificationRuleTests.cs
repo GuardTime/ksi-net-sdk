@@ -291,6 +291,39 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         }
 
         /// <summary>
+        /// Test with PKCS#7 calendar auth record signature. Signature bytes modified.
+        /// </summary>
+        [Test]
+        public void TestWithInvalidPkcs7CalendarAuthenticationRecordSignatureModifiedBytes()
+        {
+            // valid from 2016.01.01 - 2026.01.01
+            string encodedCert =
+                "308201A730820110A003020102021000F8E5378C0921B3E4729551F1ED8819300D06092A864886F70D01010B050030123110300E06035504030C0774657374696E67301E170D3136303130313030303030305A170D3236303130313030303030305A30123110300E06035504030C0774657374696E6730819F300D06092A864886F70D010101050003818D0030818902818100E66DC137E4F856EADB0D47C280BED297D70191287919FD6EBF1195DF5E821EA867F861E551A37762E3CAEBB32B1DE7E0143529F1678A87BCE2C8E5D5185F25EEC3ABC7E295EEBC64EFE4BC8ADB412A99D3F9125D30C45F887632DE4B95AA169B79D1A6FD4E735255632341ED41B5BFA828975A4F1501B02C2277CA15BD470DAB0203010001300D06092A864886F70D01010B0500038181007949A893A98EA5CF5902B75B62F8DD9219387B7E9BB10A563E85D6176C0E4DF11E9AE76E74F9445EA2B753C9B624AE1C4BBC6F68752E4576A80081C0C2EB9DFD54AEE82557E6FF67A6877FCC911CA86CE7A1051893F193B7E7CD893EEC54BDE8191696A90AC5645615C6AC9BAADF20E736F5B7BBFFBE0125A4B2C6E9020BCDCF";
+            byte[] certId = new byte[] { 1, 2, 3 };
+
+            CalendarAuthenticationRecordSignatureVerificationRule rule = new CalendarAuthenticationRecordSignatureVerificationRule();
+
+            // Check signature and verify calendar authentication record
+            using (
+                FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Invalid_Calendar_Auth_Record_Pkcs7_Signature_Modified_Bytes),
+                    FileMode.Open))
+            {
+                TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
+                testPublicationsFile.CertificateRecords.Add(GetCertificateRecord(certId, Base16.Decode(encodedCert)));
+
+                TestVerificationContext context = new TestVerificationContext()
+                {
+                    Signature = new KsiSignatureFactory().Create(stream),
+                    PublicationsFile = testPublicationsFile
+                };
+
+                VerificationResult verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+                Assert.AreEqual(VerificationError.Key02, verificationResult.VerificationError);
+            }
+        }
+
+        /// <summary>
         /// Test with PKCS#7 calendar auth record signature. Signature and certificate do not match.
         /// </summary>
         [Test]
