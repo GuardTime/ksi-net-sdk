@@ -38,6 +38,13 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         /// <summary>
         /// Create calendar authentication record signature verification rule.
         /// </summary>
+        public CalendarAuthenticationRecordSignatureVerificationRule()
+        {
+        }
+
+        /// <summary>
+        /// Create calendar authentication record signature verification rule.
+        /// </summary>
         /// <param name="trustStore">trust store</param>
         /// <param name="certificateRdnSelector">certificate rdn selector</param>
         public CalendarAuthenticationRecordSignatureVerificationRule(X509Store trustStore, ICertificateSubjectRdnSelector certificateRdnSelector)

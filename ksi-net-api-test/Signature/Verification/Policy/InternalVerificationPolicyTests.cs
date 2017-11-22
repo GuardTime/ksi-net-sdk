@@ -18,6 +18,7 @@
  */
 
 using System.IO;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
@@ -31,6 +32,23 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
     [TestFixture]
     public class InternalVerificationPolicyTests
     {
+        [Test]
+        public void VerifyWithoutSignature()
+        {
+            InternalVerificationPolicy policy = new InternalVerificationPolicy();
+
+            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
+            {
+                TestVerificationContext context = new TestVerificationContext()
+                {
+                    DocumentHash = new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D"))
+                };
+                VerificationResult verificationResult = policy.Verify(context);
+            });
+
+            Assert.That(ex.Message, Does.StartWith("Invalid signature in context: null"));
+        }
+
         [Test]
         public void InternalVerificationPolicyOkTest()
         {

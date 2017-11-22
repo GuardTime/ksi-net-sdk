@@ -27,7 +27,7 @@ namespace Guardtime.KSI.Signature.Verification.Policy
     public partial class PublicationBasedVerificationPolicy : VerificationPolicy
     {
         /// <summary>
-        ///     Create publication based verification policy and add rules to it.
+        ///     Create publication based verification policy.
         /// </summary>
         public PublicationBasedVerificationPolicy()
         {

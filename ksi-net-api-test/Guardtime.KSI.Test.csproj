@@ -134,6 +134,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Signature\Verification\Policy\DefaultVerificationPolicyTests.cs" />
     <Compile Include="Integration\AggregatorConfigurationIntegrationTests.cs" />
     <Compile Include="Integration\SharedBetweenSDKsTests.cs" />
     <Compile Include="Hashing\DataHasherTests.cs" />

@@ -186,7 +186,7 @@ namespace Guardtime.KSI.Service
 
                 if (request == null)
                 {
-                    throw new KsiException("Invalid http web request: null.");
+                    throw new KsiServiceProtocolException("Invalid http web request: null.");
                 }
 
                 InitProxySettings(request);
@@ -272,7 +272,7 @@ namespace Guardtime.KSI.Service
 
                 if (request == null)
                 {
-                    throw new KsiException("Invalid http web request: null.");
+                    throw new KsiServiceProtocolException("Invalid http web request: null.");
                 }
 
                 InitProxySettings(request);

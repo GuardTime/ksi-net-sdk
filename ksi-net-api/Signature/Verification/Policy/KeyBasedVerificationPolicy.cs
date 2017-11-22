@@ -29,16 +29,29 @@ namespace Guardtime.KSI.Signature.Verification.Policy
     public class KeyBasedVerificationPolicy : VerificationPolicy
     {
         /// <summary>
-        ///     Create key based verification policy and add rules to it.
+        ///     Create key based verification policy.
         /// </summary>
-        public KeyBasedVerificationPolicy(X509Store trustStore, ICertificateSubjectRdnSelector certificateRdnSelector)
+        public KeyBasedVerificationPolicy(X509Store trustStore, ICertificateSubjectRdnSelector certificateRdnSelector) : this()
+        {
+        }
+
+        /// <summary>
+        ///     Create key based verification policy.
+        /// </summary>
+        public KeyBasedVerificationPolicy()
         {
             FirstRule = new InternalVerificationPolicy()
-                .OnSuccess(new CalendarHashChainExistenceRule() // Gen-02
-                    .OnSuccess(new CalendarHashChainAlgorithmDeprecatedRule() // Gen-02
-                        .OnSuccess(new CalendarAuthenticationRecordExistenceRule() // Gen-02
-                            .OnSuccess(new CertificateExistenceRule() // Key-01
-                                .OnSuccess(new CalendarAuthenticationRecordSignatureVerificationRule(trustStore, certificateRdnSelector)))))); // Key-02, Key-03
+                .OnSuccess(PolicyWithoutInternalVerification);
         }
+
+        /// <summary>
+        /// Key based verification policy without using internalt verification policy.
+        /// </summary>
+        internal static VerificationRule PolicyWithoutInternalVerification =>
+            new CalendarHashChainExistenceRule() // Gen-02
+                .OnSuccess(new CalendarHashChainAlgorithmDeprecatedRule() // Gen-02
+                    .OnSuccess(new CalendarAuthenticationRecordExistenceRule() // Gen-02
+                        .OnSuccess(new CertificateExistenceRule() // Key-01
+                            .OnSuccess(new CalendarAuthenticationRecordSignatureVerificationRule())))); // Key-02, Key-03
     }
 }
