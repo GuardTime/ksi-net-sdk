@@ -35,23 +35,28 @@ namespace Guardtime.KSI.Signature.Verification.Policy
         {
         }
 
+        internal KeyBasedVerificationPolicy(bool excludeInternalPolicy)
+        {
+            FirstRule = excludeInternalPolicy ? GetRules() : new InternalVerificationPolicy().OnSuccess(GetRules());
+        }
+
         /// <summary>
         ///     Create key based verification policy.
         /// </summary>
         public KeyBasedVerificationPolicy()
         {
             FirstRule = new InternalVerificationPolicy()
-                .OnSuccess(PolicyWithoutInternalVerification);
+                .OnSuccess(GetRules());
         }
 
-        /// <summary>
-        /// Key based verification policy without using internalt verification policy.
-        /// </summary>
-        internal static VerificationRule PolicyWithoutInternalVerification =>
-            new CalendarHashChainExistenceRule() // Gen-02
+        private static VerificationRule GetRules()
+        {
+            VerificationRule verificationRule = new CalendarHashChainExistenceRule() // Gen-02
                 .OnSuccess(new CalendarHashChainAlgorithmDeprecatedRule() // Gen-02
                     .OnSuccess(new CalendarAuthenticationRecordExistenceRule() // Gen-02
                         .OnSuccess(new CertificateExistenceRule() // Key-01
                             .OnSuccess(new CalendarAuthenticationRecordSignatureVerificationRule())))); // Key-02, Key-03
+            return verificationRule;
+        }
     }
 }

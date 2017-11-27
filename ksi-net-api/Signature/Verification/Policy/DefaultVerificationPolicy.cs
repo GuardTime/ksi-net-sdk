@@ -38,7 +38,7 @@ namespace Guardtime.KSI.Signature.Verification.Policy
         public DefaultVerificationPolicy()
         {
             FirstRule = new PublicationBasedVerificationPolicy()
-                .OnNa(KeyBasedVerificationPolicy.PolicyWithoutInternalVerification);
+                .OnNa(new KeyBasedVerificationPolicy(true));
         }
 
         /// <summary>
@@ -56,6 +56,33 @@ namespace Guardtime.KSI.Signature.Verification.Policy
         public override VerificationResult Verify(IVerificationContext context)
         {
             return base.Verify(context);
+        }
+
+        /// <summary>
+        /// Verify given KSI signature.
+        /// At first the signature is verified against given publications file. 
+        /// If suitable publication is not found in publications file then key based verification is done.
+        /// </summary>
+        /// <param name="ksiSignature">KSI signature to be verified.</param>
+        /// <param name="publicationsFile">Publications file.</param>
+        /// <returns>verification result</returns>
+        public VerificationResult Verify(IKsiSignature ksiSignature, IPublicationsFile publicationsFile)
+        {
+            if (ksiSignature == null)
+            {
+                throw new ArgumentNullException(nameof(ksiSignature));
+            }
+
+            if (publicationsFile == null)
+            {
+                throw new ArgumentNullException(nameof(publicationsFile));
+            }
+
+            return base.Verify(new VerificationContext()
+            {
+                Signature = ksiSignature,
+                PublicationsFile = publicationsFile,
+            });
         }
 
         /// <summary>
@@ -87,7 +114,38 @@ namespace Guardtime.KSI.Signature.Verification.Policy
             return base.Verify(new VerificationContext()
             {
                 Signature = ksiSignature,
+                DocumentHash = documentHash,
                 PublicationsFile = publicationsFile,
+            });
+        }
+
+        /// <summary>
+        /// Verify given KSI signature.
+        /// At first the signature is verified against given publications file. Publications file is downloaded using given KSI service.
+        /// If suitable publication is not found in publications file then the KSI signature is extended if extending is allowed.
+        /// If extending is not allowed or not possible then key based verification is done.
+        /// </summary>
+        /// <param name="ksiSignature">KSI signature to be verified.</param>
+        /// <param name="ksiService">KSI services for downloading publications file and extending KSI signature if needed.</param>
+        /// <returns>verification result</returns>
+        public VerificationResult Verify(IKsiSignature ksiSignature, IKsiService ksiService)
+        {
+            if (ksiSignature == null)
+            {
+                throw new ArgumentNullException(nameof(ksiSignature));
+            }
+
+            if (ksiService == null)
+            {
+                throw new ArgumentNullException(nameof(ksiService));
+            }
+
+            return base.Verify(new VerificationContext()
+            {
+                Signature = ksiSignature,
+                PublicationsFile = ksiService.GetPublicationsFile(),
+                KsiService = ksiService,
+                IsExtendingAllowed = true
             });
         }
 
@@ -118,11 +176,11 @@ namespace Guardtime.KSI.Signature.Verification.Policy
                 throw new ArgumentNullException(nameof(ksiService));
             }
 
-            IPublicationsFile publicationsFile = ksiService.GetPublicationsFile();
             return base.Verify(new VerificationContext()
             {
                 Signature = ksiSignature,
-                PublicationsFile = publicationsFile,
+                DocumentHash = documentHash,
+                PublicationsFile = ksiService.GetPublicationsFile(),
                 KsiService = ksiService,
                 IsExtendingAllowed = true
             });

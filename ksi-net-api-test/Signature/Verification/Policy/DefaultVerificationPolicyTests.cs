@@ -28,7 +28,6 @@ using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
 using Guardtime.KSI.Test.Properties;
 using Guardtime.KSI.Test.Service;
-using Guardtime.KSI.Test.Signature.Verification.Rule;
 using Guardtime.KSI.Test.Trust;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
@@ -46,7 +45,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
             KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
             {
                 // no signature in context
-                TestVerificationContext context = new TestVerificationContext();
+                VerificationContext context = new VerificationContext();
                 policy.Verify(context);
             });
 
@@ -118,7 +117,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         }
 
         [Test]
-        public void VerifyWithoutPublications()
+        public void VerifyWithoutPublicationsInContext()
         {
             DefaultVerificationPolicy policy = new DefaultVerificationPolicy();
             VerificationContext context = new VerificationContext()
@@ -185,7 +184,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
 
             Assert.AreEqual(VerificationResultCode.Ok, result.ResultCode, "Unexpected verification result code.");
             Assert.AreEqual(1, result.ChildResults.Count, "Invalid child result count.");
-            Assert.AreEqual(nameof(PublicationBasedVerificationPolicy), result.ChildResults[0].RuleName, "Unexpected first child result rule.");
+            Assert.AreEqual(nameof(PublicationBasedVerificationPolicy), result.ChildResults[result.ChildResults.Count - 1].RuleName, "Unexpected last child result rule.");
         }
 
         /// <summary>
@@ -202,7 +201,24 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
 
             Assert.AreEqual(VerificationResultCode.Ok, result.ResultCode, "Unexpected verification result code.");
             Assert.AreEqual(1, result.ChildResults.Count, "Invalid child result count.");
-            Assert.AreEqual(nameof(PublicationBasedVerificationPolicy), result.ChildResults[0].RuleName, "Unexpected first child result rule.");
+            Assert.AreEqual(nameof(PublicationBasedVerificationPolicy), result.ChildResults[result.ChildResults.Count - 1].RuleName, "Unexpected last child result rule.");
+        }
+
+        /// <summary>
+        /// Signature is verified with publications file, but document hash is invalid. Method Verify with publications file is used.
+        /// </summary>
+        [Test]
+        public void VerifyWithPublicationsFileInvalidDocumentHash()
+        {
+            DefaultVerificationPolicy policy = new DefaultVerificationPolicy();
+
+            VerificationResult result = policy.Verify(GetSignature(Resources.KsiSignature_Ok_Extended),
+                // invalid document hash
+                new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2")),
+                GetPublicationsFile());
+
+            Assert.AreEqual(VerificationResultCode.Fail, result.ResultCode);
+            Assert.AreEqual(VerificationError.Gen01, result.VerificationError);
         }
 
         /// <summary>
@@ -222,7 +238,8 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
             VerificationResult result = policy.Verify(context);
 
             Assert.AreEqual(VerificationResultCode.Ok, result.ResultCode, "Unexpected verification result code.");
-            Assert.Less(1, result.ChildResults.Count, "Invalid child result count");
+            Assert.AreEqual(2, result.ChildResults.Count, "Invalid child result count.");
+            Assert.AreEqual(nameof(KeyBasedVerificationPolicy), result.ChildResults[result.ChildResults.Count - 1].RuleName, "Unexpected last child result rule.");
         }
 
         /// <summary>
@@ -238,7 +255,8 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
                 GetPublicationsFile());
 
             Assert.AreEqual(VerificationResultCode.Ok, result.ResultCode, "Unexpected verification result code.");
-            Assert.Less(1, result.ChildResults.Count, "Invalid child result count");
+            Assert.AreEqual(2, result.ChildResults.Count, "Invalid child result count.");
+            Assert.AreEqual(nameof(KeyBasedVerificationPolicy), result.ChildResults[result.ChildResults.Count - 1].RuleName, "Unexpected last child result rule.");
         }
 
         /// <summary>
@@ -261,7 +279,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
 
             Assert.AreEqual(VerificationResultCode.Ok, result.ResultCode, "Unexpected verification result code.");
             Assert.AreEqual(1, result.ChildResults.Count, "Invalid child result count.");
-            Assert.AreEqual(nameof(PublicationBasedVerificationPolicy), result.ChildResults[0].RuleName, "Unexpected first child result rule.");
+            Assert.AreEqual(nameof(PublicationBasedVerificationPolicy), result.ChildResults[result.ChildResults.Count - 1].RuleName, "Unexpected last child result rule.");
         }
 
         /// <summary>
@@ -278,7 +296,24 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
 
             Assert.AreEqual(VerificationResultCode.Ok, result.ResultCode, "Unexpected verification result code.");
             Assert.AreEqual(1, result.ChildResults.Count, "Invalid child result count.");
-            Assert.AreEqual(nameof(PublicationBasedVerificationPolicy), result.ChildResults[0].RuleName, "Unexpected first child result rule.");
+            Assert.AreEqual(nameof(PublicationBasedVerificationPolicy), result.ChildResults[result.ChildResults.Count - 1].RuleName, "Unexpected last child result rule.");
+        }
+
+        /// <summary>
+        /// Invalid document hash. Method Verify with KSI service is used.
+        /// </summary>
+        [Test]
+        public void VerifyUsingKsiServiceInvalidDocumentHash()
+        {
+            DefaultVerificationPolicy policy = new DefaultVerificationPolicy();
+
+            VerificationResult result = policy.Verify(GetSignature(Resources.KsiSignature_Ok),
+                // invalid document hash
+                new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2")),
+                GetStaticKsiService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_RequestId_1043101455)), 1043101455));
+
+            Assert.AreEqual(VerificationResultCode.Fail, result.ResultCode);
+            Assert.AreEqual(VerificationError.Gen01, result.VerificationError);
         }
 
         /// <summary>
@@ -289,7 +324,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         {
             DefaultVerificationPolicy policy = new DefaultVerificationPolicy();
 
-            TestVerificationContext context = new TestVerificationContext()
+            VerificationContext context = new VerificationContext()
             {
                 Signature = GetSignature(Resources.KsiSignature_Invalid_Not_Valid_Cert),
                 PublicationsFile = GetPublicationsFile()
