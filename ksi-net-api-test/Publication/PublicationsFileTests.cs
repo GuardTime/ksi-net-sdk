@@ -37,7 +37,7 @@ namespace Guardtime.KSI.Test.Publication
     public class PublicationsFileTests
     {
         [Test]
-        public void TestCreatePublicationsFileFromFileEmail()
+        public void CreatePublicationsFileFromFileWithEmail()
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
             {
@@ -47,7 +47,7 @@ namespace Guardtime.KSI.Test.Publication
         }
 
         [Test]
-        public void TestCreatePublicationsFileFromFileOu()
+        public void CreatePublicationsFileFromFileWithOu()
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
             {
@@ -57,7 +57,7 @@ namespace Guardtime.KSI.Test.Publication
         }
 
         [Test]
-        public void TestCreatePublicationsFileFromFileLongEmailName()
+        public void CreatePublicationsFileFromFileWithLongEmailName()
         {
             if (CryptoTestFactory.ProviderType == CryptoProviderType.BouncyCastle)
             {
@@ -78,7 +78,7 @@ namespace Guardtime.KSI.Test.Publication
         }
 
         [Test]
-        public void TestCreatePublicationsFileFromFileWithOid()
+        public void CreatePublicationsFileFromFileWithOid()
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
             {
@@ -88,7 +88,37 @@ namespace Guardtime.KSI.Test.Publication
         }
 
         [Test]
-        public void TestCreatePublicationsFileFromFileInvalidName()
+        public void CreatePublicationsFileFromFileWithoutRdn()
+        {
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
+            {
+                ArgumentException ex = Assert.Throws<ArgumentException>(delegate
+                {
+                    new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
+                        CryptoTestFactory.CreateCertificateSubjectRdnSelector())).Create(stream);
+                });
+
+                Assert.That(ex.Message, Does.StartWith("At least one RDN must be given"));
+            }
+        }
+
+        [Test]
+        public void CreatePublicationsFileFromFileWithEmptyRdn()
+        {
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
+            {
+                ArgumentException ex = Assert.Throws<ArgumentException>(delegate
+                {
+                    new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
+                        CryptoTestFactory.CreateCertificateSubjectRdnSelector(""))).Create(stream);
+                });
+
+                Assert.That(ex.Message, Does.StartWith("RDN cannot be empty"));
+            }
+        }
+
+        [Test]
+        public void CreatePublicationsFileFromFileWithInvalidName()
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
             {
@@ -98,12 +128,13 @@ namespace Guardtime.KSI.Test.Publication
                         CryptoTestFactory.CreateCertificateSubjectRdnSelector("EEE=publications@guardtime.com"))).Create(stream);
                 });
 
-                Assert.That(ex.Message, Does.Contain("is invalid.") | Does.Contain("Unknown object id"));
+                // separate error messages for microsoft and bouncycastle crypto
+                Assert.That(ex.Message, Does.StartWith("Invalid RDN:") | Does.Contain("Unknown object id"));
             }
         }
 
         [Test]
-        public void TestCreatePublicationsFileFromFileInvalidEmail()
+        public void CreatePublicationsFileFromFileWithInvalidEmail()
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
             {
@@ -118,7 +149,7 @@ namespace Guardtime.KSI.Test.Publication
         }
 
         [Test]
-        public void TestCreatePublicationsFileFromFileInvalidOu()
+        public void CreatePublicationsFileFromFileWithInvalidOu()
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
             {
@@ -133,7 +164,7 @@ namespace Guardtime.KSI.Test.Publication
         }
 
         [Test]
-        public void TestCreatePublicationsFileFromFileInvalidEmailWithOid()
+        public void CreatePublicationsFileFromFileWithOidAndInvalidEmail()
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
             {
@@ -148,7 +179,7 @@ namespace Guardtime.KSI.Test.Publication
         }
 
         [Test]
-        public void TestCreatePublicationsFileFromFileInvalidOid()
+        public void CreatePublicationsFileFromFileWithInvalidOid()
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
             {
@@ -167,7 +198,74 @@ namespace Guardtime.KSI.Test.Publication
         }
 
         [Test]
-        public void TestCreatePublicationsFileFromFileMultipleRdns()
+        public void CreatePublicationsFileFromFileWithInvalidOidInRdnString()
+        {
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
+            {
+                Exception ex = Assert.Catch<Exception>(delegate
+                {
+                    new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
+                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("1.2.840.113549.1.9.1X=publications@guardtime.com")))
+                        .Create(stream);
+                });
+
+                // separate error messages for microsoft and bouncycastle crypto
+                Assert.That(ex.Message, Does.StartWith("Invalid RDN:") | Does.Contain("not an OID"));
+            }
+        }
+
+        [Test]
+        public void CreatePublicationsFileFromFileWithInvalidRdnString()
+        {
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
+            {
+                Exception ex = Assert.Catch<Exception>(delegate
+                {
+                    new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
+                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("something")))
+                        .Create(stream);
+                });
+
+                // separate error messages for microsoft and bouncycastle crypto
+                Assert.That(ex.Message, Does.StartWith("Invalid RDN:") | Does.Contain("badly formated"));
+            }
+        }
+
+        [Test]
+        public void CreatePublicationsFileFromFileWithMultipleRdnStrings()
+        {
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
+            {
+                new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
+                    CryptoTestFactory.CreateCertificateSubjectRdnSelector("1.2.840.113549.1.9.1=publications@guardtime.com", "OU=Verified Email: publications@guardtime.com")))
+                    .Create(stream);
+            }
+        }
+
+        [Test]
+        public void CreatePublicationsFileFromFileWithMultipleSameRdnString()
+        {
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
+            {
+                new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
+                    CryptoTestFactory.CreateCertificateSubjectRdnSelector("1.2.840.113549.1.9.1=publications@guardtime.com", "1.2.840.113549.1.9.1=publications@guardtime.com")))
+                    .Create(stream);
+            }
+        }
+
+        [Test]
+        public void CreatePublicationsFileFromFileWithMultipleRdnStringsOnOneField()
+        {
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
+            {
+                new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
+                    CryptoTestFactory.CreateCertificateSubjectRdnSelector("1.2.840.113549.1.9.1=publications@guardtime.com,OU=Verified Email: publications@guardtime.com")))
+                    .Create(stream);
+            }
+        }
+
+        [Test]
+        public void CreatePublicationsFileFromFileWithMultipleRdns()
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
             {
@@ -182,7 +280,7 @@ namespace Guardtime.KSI.Test.Publication
         }
 
         [Test]
-        public void TestCreatePublicationsFileFromFileMultipleRdnsInvalidOu()
+        public void CreatePublicationsFileFromFileWithMultipleRdnsInvalidOu()
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
             {
@@ -202,7 +300,7 @@ namespace Guardtime.KSI.Test.Publication
         }
 
         [Test]
-        public void TestFindCertificateById()
+        public void FindCertificateById()
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
             {
@@ -216,7 +314,7 @@ namespace Guardtime.KSI.Test.Publication
         }
 
         [Test]
-        public void TestGetLatestPublication()
+        public void GetLatestPublication()
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
             {

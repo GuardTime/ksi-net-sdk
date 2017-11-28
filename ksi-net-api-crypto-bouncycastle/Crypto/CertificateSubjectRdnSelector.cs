@@ -27,16 +27,16 @@ using Org.BouncyCastle.X509;
 namespace Guardtime.KSI.Crypto.BouncyCastle.Crypto
 {
     /// <summary>
-    /// Certificate subject rdn selector.
+    /// Certificate subject RDN selector. Used for verifying that certificate subject contains given RDN.
     /// </summary>
     public class CertificateSubjectRdnSelector : ICertificateSubjectRdnSelector
     {
         private readonly X509Name _subjectDn;
 
         /// <summary>
-        /// Create certificate subject rdn selector instance.
+        /// Create certificate subject RDN selector instance.
         /// </summary>
-        /// <param name="rdnList">Certificate subject rdn list. Special chars must be escaped in rdn value.</param>
+        /// <param name="rdnList">List of expected RDNs. Special chars must be escaped in RDN value.</param>
         public CertificateSubjectRdnSelector(IList<CertificateSubjectRdn> rdnList)
         {
             if (rdnList == null)
@@ -46,7 +46,7 @@ namespace Guardtime.KSI.Crypto.BouncyCastle.Crypto
 
             if (rdnList.Count == 0)
             {
-                throw new ArgumentException("List cannot be empty.", nameof(rdnList));
+                throw new ArgumentException("RDN list cannot be empty.", nameof(rdnList));
             }
 
             List<DerObjectIdentifier> oidList = new List<DerObjectIdentifier>();
@@ -70,21 +70,35 @@ namespace Guardtime.KSI.Crypto.BouncyCastle.Crypto
         }
 
         /// <summary>
-        /// Create certificate subject rdn selector instance.
+        /// Create certificate subject RDN selector instance.
         /// </summary>
-        /// <param name="subjectDn">Certificate subject DN.</param>
-        public CertificateSubjectRdnSelector(string subjectDn)
+        /// <param name="rdn">Expected RDN. Special chars must be escaped in RDN value.</param>
+        public CertificateSubjectRdnSelector(params string[] rdn)
         {
-            if (string.IsNullOrEmpty(subjectDn))
+            if (rdn.Length == 0)
             {
-                throw new ArgumentException("Value cannot be empty", nameof(subjectDn));
+                throw new ArgumentException("At least one RDN must be given.");
             }
 
-            _subjectDn = new X509Name(subjectDn);
+            string s = "";
+            foreach (string d in rdn)
+            {
+                if (string.IsNullOrEmpty(d))
+                {
+                    throw new ArgumentException("RDN cannot be empty.");
+                }
+
+                if (!string.IsNullOrEmpty(s))
+                {
+                    s += ",";
+                }
+                s += d;
+            }
+            _subjectDn = new X509Name(s);
         }
 
         /// <summary>
-        /// Checks if certificate contains rdn selectors
+        /// Checks if certificate subject contains specified RDNs.
         /// </summary>
         /// <param name="certificate">certificate to check</param>
         /// <returns></returns>
@@ -94,7 +108,7 @@ namespace Guardtime.KSI.Crypto.BouncyCastle.Crypto
         }
 
         /// <summary>
-        /// Checks if certificate contains rdn selectors
+        /// Checks if certificate subject contains specified RDNs.
         /// </summary>
         /// <param name="certificate">certificate to check</param>
         /// <returns></returns>

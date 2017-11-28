@@ -22,12 +22,12 @@ using System;
 namespace Guardtime.KSI.Crypto
 {
     /// <summary>
-    /// Crypto signature verification data
+    /// Data to be used when verifying a crypo signature.
     /// </summary>
     public class CryptoSignatureVerificationData
     {
         /// <summary>
-        /// Certificate bytes
+        /// Trust anchor certificate bytes
         /// </summary>
         public byte[] CertificateBytes { get; }
 
@@ -39,8 +39,8 @@ namespace Guardtime.KSI.Crypto
         /// <summary>
         /// Create crypto signature verification data instance
         /// </summary>
-        /// <param name="certificate">certificate bytes</param>
-        /// <param name="signTime">time of signing</param>
+        /// <param name="certificate">Trust anchor certificate bytes</param>
+        /// <param name="signTime">Time of signing. If the time is given then it will be used for checking if certificate was valid at the given time.</param>
         public CryptoSignatureVerificationData(byte[] certificate, ulong? signTime = null)
         {
             if (certificate == null)

@@ -43,6 +43,17 @@ namespace Guardtime.KSI.Crypto.Microsoft
         /// Get PKCS#7 crypto signature verifier.
         /// </summary>
         /// <returns>PKCS#7 verifier</returns>
+        public ICryptoSignatureVerifier CreatePkcs7CryptoSignatureVerifier()
+        {
+            return new Pkcs7CryptoSignatureVerifier();
+        }
+
+        /// <summary>
+        /// Get PKCS#7 crypto signature verifier.
+        /// <param name="trustStoreCertificates">Trust anchors to verify signature against</param>
+        /// <param name="certificateRdnSelector">Certificate subject RDN selector for verifying certificate subject against specified RDN.</param>
+        /// </summary>
+        /// <returns>PKCS#7 verifier</returns>
         public ICryptoSignatureVerifier CreatePkcs7CryptoSignatureVerifier(X509Certificate2Collection trustStoreCertificates, ICertificateSubjectRdnSelector certificateRdnSelector)
         {
             return new Pkcs7CryptoSignatureVerifier(trustStoreCertificates, certificateRdnSelector);

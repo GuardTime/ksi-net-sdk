@@ -19,7 +19,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 using Guardtime.KSI.Exceptions;
@@ -29,7 +28,6 @@ using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
-using Guardtime.KSI.Test.Crypto;
 using Guardtime.KSI.Test.Signature.Verification.Rule;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
@@ -439,8 +437,7 @@ namespace Guardtime.KSI.Test.Integration
                 throw new Exception("Metadata padding is missing.");
             }
 
-            KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
-                CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
+            KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy();
 
             VerificationResult verificationResult = policy.Verify(verificationContext);
             if (verificationResult.ResultCode != VerificationResultCode.Ok)

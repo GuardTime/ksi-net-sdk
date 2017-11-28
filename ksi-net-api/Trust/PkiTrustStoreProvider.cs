@@ -24,7 +24,7 @@ using Guardtime.KSI.Crypto;
 namespace Guardtime.KSI.Trust
 {
     /// <summary>
-    ///     PKI trust store provider.
+    ///     PKI trust store provider. Used for verifying x509 signatures.
     /// </summary>
     public class PkiTrustStoreProvider : IPkiTrustProvider
     {
@@ -34,10 +34,15 @@ namespace Guardtime.KSI.Trust
         /// <summary>
         /// Create PKI trust store provider instance.
         /// </summary>
-        /// <param name="trustStore">trust anchors</param>
-        /// <param name="certificateRdnSelector">certificate subject rdn selector</param>
+        /// <param name="trustStore">Trust anchors</param>
+        /// <param name="certificateRdnSelector">Certificate subject RDN selector for verifying certificate subject.</param>
         public PkiTrustStoreProvider(X509Store trustStore, ICertificateSubjectRdnSelector certificateRdnSelector)
         {
+            if (trustStore == null)
+            {
+                throw new ArgumentNullException(nameof(trustStore));
+            }
+
             if (certificateRdnSelector == null)
             {
                 throw new ArgumentNullException(nameof(certificateRdnSelector));
@@ -50,8 +55,8 @@ namespace Guardtime.KSI.Trust
         /// <summary>
         ///     Verify bytes with x509 signature.
         /// </summary>
-        /// <param name="signedBytes"></param>
-        /// <param name="signatureBytes"></param>
+        /// <param name="signedBytes">Bytes to be verified</param>
+        /// <param name="signatureBytes">Byte array containing signature</param>
         public void Verify(byte[] signedBytes, byte[] signatureBytes)
         {
             if (signedBytes == null)

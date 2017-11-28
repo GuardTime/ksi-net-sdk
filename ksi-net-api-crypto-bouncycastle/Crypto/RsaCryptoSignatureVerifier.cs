@@ -76,12 +76,26 @@ namespace Guardtime.KSI.Crypto.BouncyCastle.Crypto
                 throw new PkiVerificationErrorException("Certificate in data parameter cannot be null.");
             }
 
+            X509Certificate certificate;
+
             try
             {
-                X509Certificate certificate = new X509CertificateParser().ReadCertificate(certificateBytes);
+                certificate = new X509CertificateParser().ReadCertificate(certificateBytes);
+            }
+            catch (Exception e)
+            {
+                throw new PkiVerificationErrorException("Could not create certificate from given bytes.", e);
+            }
 
-                CertificateTimeVerifier.Verify(certificate, data.SignTime);
+            if (certificate == null)
+            {
+                throw new PkiVerificationErrorException("Could not create certificate from given bytes.");
+            }
 
+            CertificateTimeVerifier.Verify(certificate, data.SignTime);
+
+            try
+            {
                 ISigner signer = SignerUtilities.GetSigner(_algorithm + "withRSA");
                 signer.Init(false, certificate.GetPublicKey());
                 signer.BlockUpdate(signedBytes, 0, signedBytes.Length);
@@ -90,10 +104,6 @@ namespace Guardtime.KSI.Crypto.BouncyCastle.Crypto
                 {
                     throw new PkiVerificationFailedException("Failed to verify RSA signature.");
                 }
-            }
-            catch (PkiVerificationFailedCertNotValidException)
-            {
-                throw;
             }
             catch (PkiVerificationFailedException)
             {
