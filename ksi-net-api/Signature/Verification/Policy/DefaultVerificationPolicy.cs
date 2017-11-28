@@ -28,7 +28,7 @@ namespace Guardtime.KSI.Signature.Verification.Policy
     /// Recommended default policy for verifying KSI signatures.
     /// When verifying a signature at first it is verified against given document hash and publications file. 
     /// If suitable publication is not found in publications file then the KSI signature is extended (if extending is allowed).
-    /// If extending is not allowed or not possible then key based verification is done.
+    /// If extending is not allowed or not yet possible then key based verification is done.
     /// </summary>
     public class DefaultVerificationPolicy : VerificationPolicy
     {
@@ -122,8 +122,8 @@ namespace Guardtime.KSI.Signature.Verification.Policy
         /// <summary>
         /// Verify given KSI signature.
         /// At first the signature is verified against given publications file. Publications file is downloaded using given KSI service.
-        /// If suitable publication is not found in publications file then the KSI signature is extended if extending is allowed.
-        /// If extending is not allowed or not possible then key based verification is done.
+        /// If suitable publication is not found in publications file then the KSI signature is extended.
+        /// If extending is not yet possible then key based verification is done.
         /// </summary>
         /// <param name="ksiSignature">KSI signature to be verified.</param>
         /// <param name="ksiService">KSI services for downloading publications file and extending KSI signature if needed.</param>
@@ -152,8 +152,8 @@ namespace Guardtime.KSI.Signature.Verification.Policy
         /// <summary>
         /// Verify given KSI signature.
         /// At first the signature is verified against given document hash and publications file. Publications file is downloaded using given KSI service.
-        /// If suitable publication is not found in publications file then the KSI signature is extended if extending is allowed.
-        /// If extending is not allowed or not possible then key based verification is done.
+        /// If suitable publication is not found in publications file then the KSI signature is extended.
+        /// If extending is not yet possible then key based verification is done.
         /// </summary>
         /// <param name="ksiSignature">KSI signature to be verified.</param>
         /// <param name="documentHash">Document hash</param>
