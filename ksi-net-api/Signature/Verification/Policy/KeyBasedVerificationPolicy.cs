@@ -30,24 +30,34 @@ namespace Guardtime.KSI.Signature.Verification.Policy
     public class KeyBasedVerificationPolicy : VerificationPolicy
     {
         /// <summary>
-        ///     Create key based verification policy and add rules to it.
+        ///     Create key based verification policy.
         /// </summary>
         [Obsolete("Use KeyBasedVerificationPolicy() instead.")]
         public KeyBasedVerificationPolicy(X509Store trustStore, ICertificateSubjectRdnSelector certificateRdnSelector) : this()
         {
         }
 
+        internal KeyBasedVerificationPolicy(bool excludeInternalPolicy)
+        {
+            FirstRule = excludeInternalPolicy ? GetRules() : new InternalVerificationPolicy().OnSuccess(GetRules());
+        }
+
         /// <summary>
-        ///     Create key based verification policy and add rules to it.
+        ///     Create key based verification policy.
         /// </summary>
         public KeyBasedVerificationPolicy()
         {
             FirstRule = new InternalVerificationPolicy()
-                .OnSuccess(new CalendarHashChainExistenceRule() // Gen-02
-                    .OnSuccess(new CalendarHashChainAlgorithmDeprecatedRule() // Gen-02
-                        .OnSuccess(new CalendarAuthenticationRecordExistenceRule() // Gen-02
-                            .OnSuccess(new CertificateExistenceRule() // Key-01
-                                .OnSuccess(new CalendarAuthenticationRecordSignatureVerificationRule()))))); // Key-02, Key-03
+                .OnSuccess(GetRules());
+        }
+
+        private static VerificationRule GetRules()
+        {
+            return new CalendarHashChainExistenceRule() // Gen-02
+                .OnSuccess(new CalendarHashChainAlgorithmDeprecatedRule() // Gen-02
+                    .OnSuccess(new CalendarAuthenticationRecordExistenceRule() // Gen-02
+                        .OnSuccess(new CertificateExistenceRule() // Key-01
+                            .OnSuccess(new CalendarAuthenticationRecordSignatureVerificationRule())))); // Key-02, Key-03
         }
     }
 }

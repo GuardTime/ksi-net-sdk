@@ -18,6 +18,7 @@
  */
 
 using System;
+using Guardtime.KSI.Signature.Verification;
 
 namespace Guardtime.KSI.Exceptions
 {
@@ -43,5 +44,10 @@ namespace Guardtime.KSI.Exceptions
         public KsiVerificationException(string message, Exception innerException) : base(message, innerException)
         {
         }
+
+        /// <summary>
+        /// Verification result
+        /// </summary>
+        public VerificationResult VerificationResult { get; set; }
     }
 }

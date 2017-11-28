@@ -42,10 +42,10 @@ namespace Guardtime.KSI.Test.Service
         protected static Ksi GetStaticKsi(byte[] requestResult, ulong requestId = 0, IKsiSignatureFactory ksiSignatureFactory = null, PduVersion pduVersion = PduVersion.v2,
                                           HashAlgorithm signingMacAlgorithm = null, HashAlgorithm extendingMacAlgorithm = null)
         {
-            return new Ksi(GetStaticKsiService(requestResult, requestId, ksiSignatureFactory, pduVersion, signingMacAlgorithm, extendingMacAlgorithm), ksiSignatureFactory);
+            return new Ksi(GetStaticKsiService(requestResult, requestId, pduVersion, signingMacAlgorithm, extendingMacAlgorithm), ksiSignatureFactory);
         }
 
-        protected static IKsiService GetStaticKsiService(byte[] requestResult, ulong requestId = 0, IKsiSignatureFactory ksiSignatureFactory = null,
+        protected static IKsiService GetStaticKsiService(byte[] requestResult, ulong requestId = 0,
                                                          PduVersion pduVersion = PduVersion.v2,
                                                          HashAlgorithm signingMacAlgorithm = null, HashAlgorithm extendingMacAlgorithm = null)
         {

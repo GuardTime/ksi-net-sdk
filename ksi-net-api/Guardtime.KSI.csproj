@@ -196,6 +196,7 @@
     <Compile Include="Signature\IIdentity.cs" />
     <Compile Include="Signature\IKsiSignatureFactory.cs" />
     <Compile Include="Signature\LegacyIdentity.cs" />
+    <Compile Include="Signature\Verification\Policy\DefaultVerificationPolicy.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainAlgorithmDeprecatedRule.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationChainInputHashVerificationRule.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainIndexRule.cs" />

@@ -27,7 +27,7 @@ namespace Guardtime.KSI.Signature.Verification.Policy
     public class InternalVerificationPolicy : VerificationPolicy
     {
         /// <summary>
-        ///     Create internal verification policy and add rules to it.
+        ///     Create internal verification policy.
         /// </summary>
         public InternalVerificationPolicy()
         {

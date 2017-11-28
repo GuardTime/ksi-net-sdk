@@ -136,6 +136,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Trust\RsaCryptoSignatureVerifierTests.cs" />
     <Compile Include="Trust\Pkcs7CryptoSignatureVerifierTests.cs" />
+    <Compile Include="Signature\Verification\Policy\DefaultVerificationPolicyTests.cs" />
     <Compile Include="Integration\AggregatorConfigurationIntegrationTests.cs" />
     <Compile Include="Integration\SharedBetweenSDKsTests.cs" />
     <Compile Include="Hashing\DataHasherTests.cs" />
