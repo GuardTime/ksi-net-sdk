@@ -20,15 +20,15 @@
 namespace Guardtime.KSI.Trust
 {
     /// <summary>
-    ///     PKI trust provider interface.
+    ///     PKI trust provider interface. Used when verifying x509 signatures.
     /// </summary>
     public interface IPkiTrustProvider
     {
         /// <summary>
         ///     Verify bytes with x509 signature.
         /// </summary>
-        /// <param name="signedBytes"></param>
-        /// <param name="signatureBytes"></param>
+        /// <param name="signedBytes">Bytes to be verified</param>
+        /// <param name="signatureBytes">Byte array containing signature</param>
         void Verify(byte[] signedBytes, byte[] signatureBytes);
     }
 }

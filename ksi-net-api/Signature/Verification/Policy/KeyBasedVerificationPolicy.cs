@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Signature.Verification.Rule;
@@ -31,14 +32,22 @@ namespace Guardtime.KSI.Signature.Verification.Policy
         /// <summary>
         ///     Create key based verification policy and add rules to it.
         /// </summary>
-        public KeyBasedVerificationPolicy(X509Store trustStore, ICertificateSubjectRdnSelector certificateRdnSelector)
+        [Obsolete("Use KeyBasedVerificationPolicy() instead.")]
+        public KeyBasedVerificationPolicy(X509Store trustStore, ICertificateSubjectRdnSelector certificateRdnSelector) : this()
+        {
+        }
+
+        /// <summary>
+        ///     Create key based verification policy and add rules to it.
+        /// </summary>
+        public KeyBasedVerificationPolicy()
         {
             FirstRule = new InternalVerificationPolicy()
                 .OnSuccess(new CalendarHashChainExistenceRule() // Gen-02
                     .OnSuccess(new CalendarHashChainAlgorithmDeprecatedRule() // Gen-02
                         .OnSuccess(new CalendarAuthenticationRecordExistenceRule() // Gen-02
                             .OnSuccess(new CertificateExistenceRule() // Key-01
-                                .OnSuccess(new CalendarAuthenticationRecordSignatureVerificationRule(trustStore, certificateRdnSelector)))))); // Key-02, Key-03
+                                .OnSuccess(new CalendarAuthenticationRecordSignatureVerificationRule()))))); // Key-02, Key-03
         }
     }
 }

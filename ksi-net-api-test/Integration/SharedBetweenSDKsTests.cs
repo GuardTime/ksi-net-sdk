@@ -21,7 +21,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
-using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Publication;
@@ -105,11 +104,7 @@ namespace Guardtime.KSI.Test.Integration
                     break;
                 case "key":
                     Verify(testingRow,
-                        new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
-                            CryptoTestFactory.CreateCertificateSubjectRdnSelector(new List<CertificateSubjectRdn>
-                            {
-                                new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com")
-                            })),
+                        new KeyBasedVerificationPolicy(),
                         verificationContext);
                     break;
                 case "internal":

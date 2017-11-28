@@ -115,14 +115,14 @@ namespace Guardtime.KSI.Test.Crypto
             }
         }
 
-        public static ICertificateSubjectRdnSelector CreateCertificateSubjectRdnSelector(string subjectDn)
+        public static ICertificateSubjectRdnSelector CreateCertificateSubjectRdnSelector(params string[] rdn)
         {
             switch (ProviderType)
             {
                 case CryptoProviderType.BouncyCastle:
-                    return new KSI.Crypto.BouncyCastle.Crypto.CertificateSubjectRdnSelector(subjectDn);
+                    return new KSI.Crypto.BouncyCastle.Crypto.CertificateSubjectRdnSelector(rdn);
                 case CryptoProviderType.Microsoft:
-                    return new KSI.Crypto.Microsoft.Crypto.CertificateSubjectRdnSelector(subjectDn);
+                    return new KSI.Crypto.Microsoft.Crypto.CertificateSubjectRdnSelector(rdn);
                 default:
                     return null;
             }

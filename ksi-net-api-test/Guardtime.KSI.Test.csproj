@@ -134,6 +134,8 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Trust\RsaCryptoSignatureVerifierTests.cs" />
+    <Compile Include="Trust\Pkcs7CryptoSignatureVerifierTests.cs" />
     <Compile Include="Integration\AggregatorConfigurationIntegrationTests.cs" />
     <Compile Include="Integration\SharedBetweenSDKsTests.cs" />
     <Compile Include="Hashing\DataHasherTests.cs" />
@@ -648,6 +650,15 @@
     <None Include="resources\signature\ksi-signature\ksi-signature-invalid-aggregation-root-hash.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-calendar-auth-record-pkcs7-signature-cert-not-valid.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-calendar-auth-record-pkcs7-signature-modified-bytes.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-calendar-auth-record-pkcs7-signature.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="resources\signature\ksi-signature\ksi-signature-invalid-calendar-authentication-record-invalid-publication-hash.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -691,6 +702,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\ksi-signature\ksi-signature-level-correction-3.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\ksi-signature\ksi-signature-ok-calendar-auth-record-pkcs7-signature.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\ksi-signature\ksi-signature-ok-extended.tlv">
