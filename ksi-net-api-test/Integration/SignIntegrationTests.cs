@@ -21,7 +21,6 @@ using System;
 using System.IO;
 using System.Net.Sockets;
 using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using Guardtime.KSI.Exceptions;
@@ -58,8 +57,7 @@ namespace Guardtime.KSI.Test.Integration
                 DocumentHash = hash,
                 PublicationsFile = ksi.GetPublicationsFile()
             };
-            KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy(new X509Store(StoreName.Root),
-                CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
+            KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy();
             VerificationResult verificationResult = policy.Verify(verificationContext);
             Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode, "Signature should verify with key based policy");
         }

@@ -590,7 +590,6 @@ namespace Guardtime.KSI.Test.Integration
         public void UseDeprecatedHmacAlgoTest()
         {
             KsiService service = GetService(PduVersion.v2, HashAlgorithm.Sha2256, HashAlgorithm.Sha1);
-            Ksi ksi = new Ksi(service);
 
             HashingException ex = Assert.Throws<HashingException>(delegate
             {

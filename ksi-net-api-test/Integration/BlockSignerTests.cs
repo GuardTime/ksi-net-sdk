@@ -456,8 +456,6 @@ namespace Guardtime.KSI.Test.Integration
             IdentityMetadata metadata = new IdentityMetadata("test client id", "test machine id");
             DataHash hash = new DataHash(Base16.Decode("0114F9189A45A30D856029F9537FD20C9C7342B82A2D949072AB195D95D7B32ECB"));
 
-            List<int> a = new List<int> { 1, 2 };
-
             List<HeightTestData> list = new List<HeightTestData>()
             {
                 new HeightTestData(new List<uint> { 1 }, null, 0, 0),

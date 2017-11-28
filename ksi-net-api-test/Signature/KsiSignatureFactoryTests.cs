@@ -97,12 +97,10 @@ namespace Guardtime.KSI.Test.Signature
         [Test]
         public void CreateFromStreamAndDoNotVerifyInvalidSignatureTest()
         {
-            IKsiSignature signature;
-
             // Check invalid signature
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Invalid_Aggregation_Chain_Index_Mismatch), FileMode.Open))
             {
-                signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream);
+                new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream);
             }
         }
 
