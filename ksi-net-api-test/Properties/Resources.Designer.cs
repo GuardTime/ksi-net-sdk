@@ -19,7 +19,7 @@ namespace Guardtime.KSI.Test.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -543,15 +543,6 @@ namespace Guardtime.KSI.Test.Properties {
         internal static string AggregationHashChainMetadataWithPadding2 {
             get {
                 return ResourceManager.GetString("AggregationHashChainMetadataWithPadding2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/signature/integration-test-signatures/all-wrong-hash-chains-in-signature.ksig.
-        /// </summary>
-        internal static string All_Wrong_Chains_Invalid_Signature {
-            get {
-                return ResourceManager.GetString("All_Wrong_Chains_Invalid_Signature", resourceCulture);
             }
         }
         
@@ -1777,6 +1768,15 @@ namespace Guardtime.KSI.Test.Properties {
         internal static string Rfc3161Record_Ok {
             get {
                 return ResourceManager.GetString("Rfc3161Record_Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/shared/valid-signatures/signature-only-aggregation-chains.ksig.
+        /// </summary>
+        internal static string Signature_Only_Aggregtion_Chains {
+            get {
+                return ResourceManager.GetString("Signature_Only_Aggregtion_Chains", resourceCulture);
             }
         }
         
