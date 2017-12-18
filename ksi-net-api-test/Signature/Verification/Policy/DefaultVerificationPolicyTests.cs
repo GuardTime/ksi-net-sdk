@@ -336,7 +336,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         }
 
         [Test]
-        public void VerifySignatureWithAggregationChainsOnlyNA()
+        public void VerifySignatureWithAggregationChainsOnly()
         {
             DefaultVerificationPolicy policy = new DefaultVerificationPolicy();
 

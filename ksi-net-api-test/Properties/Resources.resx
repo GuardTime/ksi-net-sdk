@@ -543,9 +543,6 @@
   <data name="Signature_Only_Aggregtion_Chains" xml:space="preserve">
     <value>resources/signature/shared/valid-signatures/signature-only-aggregation-chains.ksig</value>
   </data>
-  <data name="Signature_Wrong_Cert_ID" xml:space="preserve">
-    <value>resources/signature/integration-test-signatures/NewSignature-CalAuth-WrongCertID.ksig</value>
-  </data>
   <data name="KsiService_AggregationResponsePdu_RequestId_1584727637" xml:space="preserve">
     <value>resources/service/aggregation-response-pdu.tlv</value>
   </data>
