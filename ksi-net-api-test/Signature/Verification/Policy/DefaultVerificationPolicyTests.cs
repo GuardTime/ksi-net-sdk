@@ -337,6 +337,18 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
             Assert.AreEqual(VerificationError.Key03, verificationResult.VerificationError);
         }
 
+        [Test]
+        public void VerifySignatureWithAggregationChainsOnly()
+        {
+            DefaultVerificationPolicy policy = new DefaultVerificationPolicy();
+
+            VerificationResult verificationResult = policy.Verify(GetSignature(Resources.Signature_Only_Aggregtion_Chains), GetPublicationsFile());
+            Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
+            Assert.AreEqual(VerificationError.Gen02, verificationResult.VerificationError);
+            Assert.AreEqual(2, verificationResult.ChildResults.Count, "Invalid child result count.");
+        }
+
+
         private static IKsiSignature GetSignature(string path)
         {
             KsiSignatureFactory signatureFactory = new KsiSignatureFactory(new EmptyVerificationPolicy());

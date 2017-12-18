@@ -547,15 +547,6 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/integration-test-signatures/all-wrong-hash-chains-in-signature.ksig.
-        /// </summary>
-        internal static string All_Wrong_Chains_Invalid_Signature {
-            get {
-                return ResourceManager.GetString("All_Wrong_Chains_Invalid_Signature", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to resources/signature/calendar-authentication-record/calendar-authentication-record-invalid-extra-tag.tlv.
         /// </summary>
         internal static string CalendarAuthenticationRecord_Invalid_Extra_Tag {
@@ -1781,11 +1772,11 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/integration-test-signatures/NewSignature-CalAuth-WrongCertID.ksig.
+        ///   Looks up a localized string similar to resources/signature/shared/valid-signatures/signature-only-aggregation-chains.ksig.
         /// </summary>
-        internal static string Signature_Wrong_Cert_ID {
+        internal static string Signature_Only_Aggregtion_Chains {
             get {
-                return ResourceManager.GetString("Signature_Wrong_Cert_ID", resourceCulture);
+                return ResourceManager.GetString("Signature_Only_Aggregtion_Chains", resourceCulture);
             }
         }
         
