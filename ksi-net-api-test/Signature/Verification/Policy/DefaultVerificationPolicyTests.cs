@@ -342,12 +342,11 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         {
             DefaultVerificationPolicy policy = new DefaultVerificationPolicy();
 
-            VerificationResult verificationResult = policy.Verify(GetSignature(Resources.Signature_Only_Aggregtion_Chains), GetPublicationsFile());
+            VerificationResult verificationResult = policy.Verify(GetSignature(Resources.Signature_Only_Aggregtion_Chains), null, GetPublicationsFile());
             Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
             Assert.AreEqual(VerificationError.Gen02, verificationResult.VerificationError);
             Assert.AreEqual(2, verificationResult.ChildResults.Count, "Invalid child result count.");
         }
-
 
         private static IKsiSignature GetSignature(string path)
         {
