@@ -60,33 +60,6 @@ namespace Guardtime.KSI.Signature.Verification.Policy
 
         /// <summary>
         /// Verify given KSI signature.
-        /// At first the signature is verified against given publications file. 
-        /// If suitable publication is not found in publications file then key based verification is done.
-        /// </summary>
-        /// <param name="ksiSignature">KSI signature to be verified.</param>
-        /// <param name="publicationsFile">Publications file.</param>
-        /// <returns>verification result</returns>
-        public VerificationResult Verify(IKsiSignature ksiSignature, IPublicationsFile publicationsFile)
-        {
-            if (ksiSignature == null)
-            {
-                throw new ArgumentNullException(nameof(ksiSignature));
-            }
-
-            if (publicationsFile == null)
-            {
-                throw new ArgumentNullException(nameof(publicationsFile));
-            }
-
-            return base.Verify(new VerificationContext()
-            {
-                Signature = ksiSignature,
-                PublicationsFile = publicationsFile,
-            });
-        }
-
-        /// <summary>
-        /// Verify given KSI signature.
         /// At first the signature is verified against given document hash and publications file. 
         /// If suitable publication is not found in publications file then key based verification is done.
         /// </summary>
@@ -101,11 +74,6 @@ namespace Guardtime.KSI.Signature.Verification.Policy
                 throw new ArgumentNullException(nameof(ksiSignature));
             }
 
-            if (documentHash == null)
-            {
-                throw new ArgumentNullException(nameof(documentHash));
-            }
-
             if (publicationsFile == null)
             {
                 throw new ArgumentNullException(nameof(publicationsFile));
@@ -116,36 +84,6 @@ namespace Guardtime.KSI.Signature.Verification.Policy
                 Signature = ksiSignature,
                 DocumentHash = documentHash,
                 PublicationsFile = publicationsFile,
-            });
-        }
-
-        /// <summary>
-        /// Verify given KSI signature.
-        /// At first the signature is verified against given publications file. Publications file is downloaded using given KSI service.
-        /// If suitable publication is not found in publications file then the KSI signature is extended.
-        /// If extending is not yet possible then key based verification is done.
-        /// </summary>
-        /// <param name="ksiSignature">KSI signature to be verified.</param>
-        /// <param name="ksiService">KSI services for downloading publications file and extending KSI signature if needed.</param>
-        /// <returns>verification result</returns>
-        public VerificationResult Verify(IKsiSignature ksiSignature, IKsiService ksiService)
-        {
-            if (ksiSignature == null)
-            {
-                throw new ArgumentNullException(nameof(ksiSignature));
-            }
-
-            if (ksiService == null)
-            {
-                throw new ArgumentNullException(nameof(ksiService));
-            }
-
-            return base.Verify(new VerificationContext()
-            {
-                Signature = ksiSignature,
-                PublicationsFile = ksiService.GetPublicationsFile(),
-                KsiService = ksiService,
-                IsExtendingAllowed = true
             });
         }
 
@@ -164,11 +102,6 @@ namespace Guardtime.KSI.Signature.Verification.Policy
             if (ksiSignature == null)
             {
                 throw new ArgumentNullException(nameof(ksiSignature));
-            }
-
-            if (documentHash == null)
-            {
-                throw new ArgumentNullException(nameof(documentHash));
             }
 
             if (ksiService == null)
