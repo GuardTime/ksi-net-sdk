@@ -85,38 +85,6 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         }
 
         [Test]
-        public void VerifyWithDocumentHashNull1()
-        {
-            DefaultVerificationPolicy policy = new DefaultVerificationPolicy();
-
-            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
-            {
-                // document hash is null
-                policy.Verify(GetSignature(Resources.KsiSignature_Ok_Extended),
-                    null,
-                    GetPublicationsFile());
-            });
-
-            Assert.AreEqual("documentHash", ex.ParamName);
-        }
-
-        [Test]
-        public void VerifyWithDocumentHashNull2()
-        {
-            DefaultVerificationPolicy policy = new DefaultVerificationPolicy();
-
-            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
-            {
-                // document hash is null
-                policy.Verify(GetSignature(Resources.KsiSignature_Ok_Extended),
-                    null,
-                    GetStaticKsiService(new byte[] { }));
-            });
-
-            Assert.AreEqual("documentHash", ex.ParamName);
-        }
-
-        [Test]
         public void VerifyWithoutPublicationsInContext()
         {
             DefaultVerificationPolicy policy = new DefaultVerificationPolicy();
@@ -197,6 +165,23 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
 
             VerificationResult result = policy.Verify(GetSignature(Resources.KsiSignature_Ok_Extended),
                 new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")),
+                GetPublicationsFile());
+
+            Assert.AreEqual(VerificationResultCode.Ok, result.ResultCode, "Unexpected verification result code.");
+            Assert.AreEqual(1, result.ChildResults.Count, "Invalid child result count.");
+            Assert.AreEqual(nameof(PublicationBasedVerificationPolicy), result.ChildResults[result.ChildResults.Count - 1].RuleName, "Unexpected last child result rule.");
+        }
+
+        /// <summary>
+        /// Signature is verified with publications file. Method Verify with publications file is used. Document hash is null.
+        /// </summary>
+        [Test]
+        public void VerifyWithPublicationsFileWithoutDataHash()
+        {
+            DefaultVerificationPolicy policy = new DefaultVerificationPolicy();
+
+            VerificationResult result = policy.Verify(GetSignature(Resources.KsiSignature_Ok_Extended),
+                null,
                 GetPublicationsFile());
 
             Assert.AreEqual(VerificationResultCode.Ok, result.ResultCode, "Unexpected verification result code.");
@@ -292,6 +277,23 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
 
             VerificationResult result = policy.Verify(GetSignature(Resources.KsiSignature_Ok),
                 new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")),
+                GetStaticKsiService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_RequestId_1043101455)), 1043101455));
+
+            Assert.AreEqual(VerificationResultCode.Ok, result.ResultCode, "Unexpected verification result code.");
+            Assert.AreEqual(1, result.ChildResults.Count, "Invalid child result count.");
+            Assert.AreEqual(nameof(PublicationBasedVerificationPolicy), result.ChildResults[result.ChildResults.Count - 1].RuleName, "Unexpected last child result rule.");
+        }
+
+        /// <summary>
+        /// Signature verifies against publications file after automatic extending. Method Verify with KSI service is used. Document hash is null.
+        /// </summary>
+        [Test]
+        public void VerifyWithExtendingAndPublicationsFileWithoutDataHash()
+        {
+            DefaultVerificationPolicy policy = new DefaultVerificationPolicy();
+
+            VerificationResult result = policy.Verify(GetSignature(Resources.KsiSignature_Ok),
+                null,
                 GetStaticKsiService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_RequestId_1043101455)), 1043101455));
 
             Assert.AreEqual(VerificationResultCode.Ok, result.ResultCode, "Unexpected verification result code.");
