@@ -31,9 +31,25 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         public override VerificationResult Verify(IVerificationContext context)
         {
             IKsiSignature signature = GetSignature(context);
-            PublicationData publicationData = context.UserPublication != null
-                ? GetUserPublication(context)
-                : GetNearestPublicationRecord(GetPublicationsFile(context), signature.AggregationTime).PublicationData;
+            PublicationData publicationData;
+
+            if (context.UserPublication != null)
+            {
+                publicationData = context.UserPublication;
+            }
+            else
+            {
+                PublicationRecordInPublicationFile publicationRecord = GetNearestPublicationRecord(GetPublicationsFile(context), signature.AggregationTime, true);
+
+                if (publicationRecord == null)
+                {
+                    // if suitable publication record does not exist in publications file then return NA
+                    return new VerificationResult(GetRuleName(), VerificationResultCode.Na, VerificationError.Gen02);
+                }
+
+                publicationData = publicationRecord.PublicationData;
+            }
+
             CalendarHashChain extendedCalendarHashChain = GetExtendedCalendarHashChain(context, publicationData.PublicationTime);
             HashAlgorithm deprecatedHashAlgorithm = GetDeprecatedHashAlgorithm(extendedCalendarHashChain);
 

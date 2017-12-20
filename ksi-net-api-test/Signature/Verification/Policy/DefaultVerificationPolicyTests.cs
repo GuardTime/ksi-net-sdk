@@ -285,6 +285,50 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         }
 
         /// <summary>
+        /// Signature is verified with key based policy after automatic extending. Method Verify with publications file is used.
+        /// </summary>
+        [Test]
+        public void VerifyWithExtendingAndKey1()
+        {
+            DefaultVerificationPolicy policy = new DefaultVerificationPolicy();
+            VerificationResult result = policy.Verify(GetSignature(Resources.KsiSignature_Ok_20171219), null, GetPublicationsFile(Resources.KsiPublicationsFile_201712));
+
+            Assert.AreEqual(VerificationResultCode.Ok, result.ResultCode, "Unexpected verification result code.");
+            Assert.AreEqual(2, result.ChildResults.Count, "Invalid child result count.");
+            Assert.AreEqual(nameof(KeyBasedVerificationPolicy), result.ChildResults[result.ChildResults.Count - 1].RuleName, "Unexpected last child result rule.");
+        }
+
+        /// <summary>
+        /// Signature is verified with key based policy after automatic extending. Method Verify with KSI service is used.
+        /// </summary>
+        [Test]
+        public void VerifyWithExtendingAndKey2()
+        {
+            DefaultVerificationPolicy policy = new DefaultVerificationPolicy();
+
+            TestKsiServiceProtocol protocol = new TestKsiServiceProtocol
+            {
+                PublicationsFileBytes = File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile_201712))
+            };
+
+            TestKsiService staticKsiService = new TestKsiService(
+                null,
+                null,
+                protocol,
+                new ServiceCredentials(TestConstants.ServiceUser, TestConstants.ServicePass),
+                protocol,
+                new PublicationsFileFactory(new TestPkiTrustProvider()),
+                1043101455,
+                PduVersion.v2);
+
+            VerificationResult result = policy.Verify(GetSignature(Resources.KsiSignature_Ok_20171219), null, staticKsiService);
+
+            Assert.AreEqual(VerificationResultCode.Ok, result.ResultCode, "Unexpected verification result code.");
+            Assert.AreEqual(2, result.ChildResults.Count, "Invalid child result count.");
+            Assert.AreEqual(nameof(KeyBasedVerificationPolicy), result.ChildResults[result.ChildResults.Count - 1].RuleName, "Unexpected last child result rule.");
+        }
+
+        /// <summary>
         /// Signature verifies against publications file after automatic extending. Method Verify with KSI service is used. Document hash is null.
         /// </summary>
         [Test]
@@ -357,9 +401,9 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
             }
         }
 
-        private IPublicationsFile GetPublicationsFile()
+        private IPublicationsFile GetPublicationsFile(string path = null)
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, path ?? Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
             {
                 return new PublicationsFileFactory(new TestPkiTrustProvider()).Create(stream);
             }

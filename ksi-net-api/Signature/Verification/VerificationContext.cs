@@ -133,6 +133,8 @@ namespace Guardtime.KSI.Signature.Verification
                     {
                         return _calendarHashChainCache[cacheKey];
                     }
+
+                    _calendarHashChainCache.Remove(cacheKey);
                 }
             }
 

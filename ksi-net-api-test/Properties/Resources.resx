@@ -303,6 +303,9 @@
   <data name="KsiSignature_Ok" xml:space="preserve">
     <value>resources/signature/ksi-signature/ksi-signature-ok.tlv</value>
   </data>
+  <data name="KsiSignature_Ok_20171219" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-ok-2017-12-19.tlv</value>
+  </data>
   <data name="KsiSignature_Ok_New" xml:space="preserve">
     <value>resources/signature/ksi-signature/ksi-signature-ok-new.tlv</value>
   </data>
@@ -629,6 +632,9 @@
   </data>
   <data name="PkiTrustProvider_IdenTrustCert" xml:space="preserve">
     <value>resources/trust/pkitrustprovider/identrust.pem</value>
+  </data>
+  <data name="KsiPublicationsFile_201712" xml:space="preserve">
+    <value>resources/publication/publicationsfile/ksi-publications-2017-12.bin</value>
   </data>
   <data name="KsiPublicationsFile" xml:space="preserve">
     <value>resources/publication/publicationsfile/ksi-publications.bin</value>
