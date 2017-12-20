@@ -23,12 +23,10 @@ using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
-using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
 using Guardtime.KSI.Test.Properties;
 using Guardtime.KSI.Test.Service;
-using Guardtime.KSI.Test.Trust;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
@@ -62,7 +60,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
                 // signature is null
                 policy.Verify(null,
                     new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")),
-                    GetPublicationsFile());
+                    TestUtil.GetPublicationsFile());
             });
 
             Assert.AreEqual("ksiSignature", ex.ParamName);
@@ -90,7 +88,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
             DefaultVerificationPolicy policy = new DefaultVerificationPolicy();
             VerificationContext context = new VerificationContext()
             {
-                Signature = GetSignature(Resources.KsiSignature_Ok_Extended),
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_Extended),
             };
 
             KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
@@ -110,7 +108,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
             ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 // publications file is null
-                policy.Verify(GetSignature(Resources.KsiSignature_Ok_Extended),
+                policy.Verify(TestUtil.GetSignature(Resources.KsiSignature_Ok_Extended),
                     new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")),
                     (IPublicationsFile)null);
             });
@@ -126,7 +124,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
             ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 // ksi service is null
-                policy.Verify(GetSignature(Resources.KsiSignature_Ok_Extended),
+                policy.Verify(TestUtil.GetSignature(Resources.KsiSignature_Ok_Extended),
                     new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")),
                     (IKsiService)null);
             });
@@ -143,9 +141,9 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
             DefaultVerificationPolicy policy = new DefaultVerificationPolicy();
             VerificationContext context = new VerificationContext()
             {
-                Signature = GetSignature(Resources.KsiSignature_Ok_Extended),
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_Extended),
                 DocumentHash = new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")),
-                PublicationsFile = GetPublicationsFile()
+                PublicationsFile = TestUtil.GetPublicationsFile()
             };
 
             VerificationResult result = policy.Verify(context);
@@ -163,9 +161,9 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         {
             DefaultVerificationPolicy policy = new DefaultVerificationPolicy();
 
-            VerificationResult result = policy.Verify(GetSignature(Resources.KsiSignature_Ok_Extended),
+            VerificationResult result = policy.Verify(TestUtil.GetSignature(Resources.KsiSignature_Ok_Extended),
                 new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")),
-                GetPublicationsFile());
+                TestUtil.GetPublicationsFile());
 
             Assert.AreEqual(VerificationResultCode.Ok, result.ResultCode, "Unexpected verification result code.");
             Assert.AreEqual(1, result.ChildResults.Count, "Invalid child result count.");
@@ -180,9 +178,9 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         {
             DefaultVerificationPolicy policy = new DefaultVerificationPolicy();
 
-            VerificationResult result = policy.Verify(GetSignature(Resources.KsiSignature_Ok_Extended),
+            VerificationResult result = policy.Verify(TestUtil.GetSignature(Resources.KsiSignature_Ok_Extended),
                 null,
-                GetPublicationsFile());
+                TestUtil.GetPublicationsFile());
 
             Assert.AreEqual(VerificationResultCode.Ok, result.ResultCode, "Unexpected verification result code.");
             Assert.AreEqual(1, result.ChildResults.Count, "Invalid child result count.");
@@ -197,10 +195,10 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         {
             DefaultVerificationPolicy policy = new DefaultVerificationPolicy();
 
-            VerificationResult result = policy.Verify(GetSignature(Resources.KsiSignature_Ok_Extended),
+            VerificationResult result = policy.Verify(TestUtil.GetSignature(Resources.KsiSignature_Ok_Extended),
                 // invalid document hash
                 new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2")),
-                GetPublicationsFile());
+                TestUtil.GetPublicationsFile());
 
             Assert.AreEqual(VerificationResultCode.Fail, result.ResultCode);
             Assert.AreEqual(VerificationError.Gen01, result.VerificationError);
@@ -215,9 +213,9 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
             DefaultVerificationPolicy policy = new DefaultVerificationPolicy();
             VerificationContext context = new VerificationContext()
             {
-                Signature = GetSignature(Resources.KsiSignature_Ok),
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Ok),
                 DocumentHash = new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")),
-                PublicationsFile = GetPublicationsFile()
+                PublicationsFile = TestUtil.GetPublicationsFile()
             };
 
             VerificationResult result = policy.Verify(context);
@@ -235,9 +233,9 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         {
             DefaultVerificationPolicy policy = new DefaultVerificationPolicy();
 
-            VerificationResult result = policy.Verify(GetSignature(Resources.KsiSignature_Ok),
+            VerificationResult result = policy.Verify(TestUtil.GetSignature(Resources.KsiSignature_Ok),
                 new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")),
-                GetPublicationsFile());
+                TestUtil.GetPublicationsFile());
 
             Assert.AreEqual(VerificationResultCode.Ok, result.ResultCode, "Unexpected verification result code.");
             Assert.AreEqual(2, result.ChildResults.Count, "Invalid child result count.");
@@ -253,9 +251,9 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
             DefaultVerificationPolicy policy = new DefaultVerificationPolicy();
             VerificationContext context = new VerificationContext()
             {
-                Signature = GetSignature(Resources.KsiSignature_Ok),
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Ok),
                 DocumentHash = new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")),
-                PublicationsFile = GetPublicationsFile(),
+                PublicationsFile = TestUtil.GetPublicationsFile(),
                 KsiService = GetStaticKsiService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_RequestId_1043101455)), 1043101455),
                 IsExtendingAllowed = true
             };
@@ -275,7 +273,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         {
             DefaultVerificationPolicy policy = new DefaultVerificationPolicy();
 
-            VerificationResult result = policy.Verify(GetSignature(Resources.KsiSignature_Ok),
+            VerificationResult result = policy.Verify(TestUtil.GetSignature(Resources.KsiSignature_Ok),
                 new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")),
                 GetStaticKsiService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_RequestId_1043101455)), 1043101455));
 
@@ -292,7 +290,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         {
             DefaultVerificationPolicy policy = new DefaultVerificationPolicy();
 
-            VerificationResult result = policy.Verify(GetSignature(Resources.KsiSignature_Ok),
+            VerificationResult result = policy.Verify(TestUtil.GetSignature(Resources.KsiSignature_Ok),
                 null,
                 GetStaticKsiService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_RequestId_1043101455)), 1043101455));
 
@@ -309,7 +307,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         {
             DefaultVerificationPolicy policy = new DefaultVerificationPolicy();
 
-            VerificationResult result = policy.Verify(GetSignature(Resources.KsiSignature_Ok),
+            VerificationResult result = policy.Verify(TestUtil.GetSignature(Resources.KsiSignature_Ok),
                 // invalid document hash
                 new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2")),
                 GetStaticKsiService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_RequestId_1043101455)), 1043101455));
@@ -328,8 +326,8 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
 
             VerificationContext context = new VerificationContext()
             {
-                Signature = GetSignature(Resources.KsiSignature_Invalid_Not_Valid_Cert),
-                PublicationsFile = GetPublicationsFile()
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Invalid_Not_Valid_Cert),
+                PublicationsFile = TestUtil.GetPublicationsFile()
             };
 
             VerificationResult verificationResult = policy.Verify(context);
@@ -342,27 +340,10 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         {
             DefaultVerificationPolicy policy = new DefaultVerificationPolicy();
 
-            VerificationResult verificationResult = policy.Verify(GetSignature(Resources.Signature_Only_Aggregtion_Chains), null, GetPublicationsFile());
+            VerificationResult verificationResult = policy.Verify(TestUtil.GetSignature(Resources.Signature_Only_Aggregtion_Chains), null, TestUtil.GetPublicationsFile());
             Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
             Assert.AreEqual(VerificationError.Gen02, verificationResult.VerificationError);
             Assert.AreEqual(2, verificationResult.ChildResults.Count, "Invalid child result count.");
-        }
-
-        private static IKsiSignature GetSignature(string path)
-        {
-            KsiSignatureFactory signatureFactory = new KsiSignatureFactory(new EmptyVerificationPolicy());
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, path), FileMode.Open))
-            {
-                return signatureFactory.Create(stream);
-            }
-        }
-
-        private IPublicationsFile GetPublicationsFile()
-        {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
-            {
-                return new PublicationsFileFactory(new TestPkiTrustProvider()).Create(stream);
-            }
         }
     }
 }

@@ -134,6 +134,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Integration\KsiVerificationTests.cs" />
     <Compile Include="Trust\RsaCryptoSignatureVerifierTests.cs" />
     <Compile Include="Trust\Pkcs7CryptoSignatureVerifierTests.cs" />
     <Compile Include="Signature\Verification\Policy\DefaultVerificationPolicyTests.cs" />

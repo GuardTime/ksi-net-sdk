@@ -24,6 +24,8 @@ using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature;
+using Guardtime.KSI.Signature.Verification;
+using Guardtime.KSI.Signature.Verification.Policy;
 
 namespace Guardtime.KSI
 {
@@ -54,17 +56,7 @@ namespace Guardtime.KSI
         }
 
         /// <summary>
-        ///     Sign document hash.
-        ///     <example>
-        ///         Equals to following code
-        ///         <code>
-        /// KsiProvider.SetCryptoProvider(new MicrosoftCryptoProvider()); 
-        /// DataHash hash;
-        /// KsiService ksiService;
-        /// 
-        /// IKsiSignature signature = ksiService.Sign(hash);
-        /// </code>
-        ///     </example>
+        /// Sign document hash.
         /// </summary>
         /// <param name="hash">document hash</param>
         /// <param name="level">The document hash node level value in the aggregation tree</param>
@@ -80,11 +72,12 @@ namespace Guardtime.KSI
         }
 
         /// <summary>
-        /// Sign document
+        /// Sign document hash.
         /// </summary>
         /// <param name="stream">Stream containing document bytes</param>
+        /// <param name="level">The document hash node level value in the aggregation tree</param>
         /// <returns></returns>
-        public IKsiSignature Sign(Stream stream)
+        public IKsiSignature Sign(Stream stream, uint level = 0)
         {
             if (stream == null)
             {
@@ -93,15 +86,16 @@ namespace Guardtime.KSI
 
             IDataHasher dataHasher = KsiProvider.CreateDataHasher();
             dataHasher.AddData(stream);
-            return _ksiService.Sign(dataHasher.GetHash());
+            return _ksiService.Sign(dataHasher.GetHash(), level);
         }
 
         /// <summary>
-        /// Sign document
+        /// Sign document hash.
         /// </summary>
         /// <param name="documentBytes">Document bytes</param>
+        /// <param name="level">The document hash node level value in the aggregation tree</param>
         /// <returns></returns>
-        public IKsiSignature Sign(byte[] documentBytes)
+        public IKsiSignature Sign(byte[] documentBytes, uint level = 0)
         {
             if (documentBytes == null)
             {
@@ -110,7 +104,7 @@ namespace Guardtime.KSI
 
             IDataHasher dataHasher = KsiProvider.CreateDataHasher();
             dataHasher.AddData(documentBytes);
-            return _ksiService.Sign(dataHasher.GetHash());
+            return _ksiService.Sign(dataHasher.GetHash(), level);
         }
 
         /// <summary>
@@ -124,18 +118,6 @@ namespace Guardtime.KSI
 
         /// <summary>
         ///     Extend signature to publication.
-        ///     <example>
-        ///         Equals to following code
-        ///         <code>
-        /// KsiProvider.SetCryptoProvider(new MicrosoftCryptoProvider()); 
-        /// KsiService ksiService;
-        /// IKsiSignature signature;
-        /// PublicationRecord publicationRecord;
-        /// 
-        /// CalendarHashChain calendarHashChain = ksiService.Extend(signature.AggregationTime, publicationRecord.PublicationData.PublicationTime);
-        /// IKsiSignature extendedSignature = signature.Extend(calendarHashChain, publicationRecord);
-        /// </code>
-        ///     </example>
         /// </summary>
         /// <param name="signature">KSI signature</param>
         /// <param name="publicationRecord">publication</param>
@@ -158,18 +140,6 @@ namespace Guardtime.KSI
 
         /// <summary>
         ///     Extend signature to publication.
-        ///     <example>
-        ///         Equals to following code
-        ///         <code>
-        /// KsiProvider.SetCryptoProvider(new MicrosoftCryptoProvider()); 
-        /// KsiService ksiService;
-        /// IKsiSignature signature;
-        /// PublicationRecord publicationRecord;
-        /// 
-        /// CalendarHashChain calendarHashChain = ksiService.Extend(signature.AggregationTime, publicationRecord.PublicationData.PublicationTime);
-        /// IKsiSignature extendedSignature = signature.Extend(calendarHashChain, publicationRecord);
-        /// </code>
-        ///     </example>
         /// </summary>
         /// <param name="signature">KSI signature</param>
         /// <param name="publicationRecord">publication</param>
@@ -246,15 +216,6 @@ namespace Guardtime.KSI
 
         /// <summary>
         ///     Get publications file.
-        ///     <example>
-        ///         Equals to following code
-        ///         <code>
-        /// KsiProvider.SetCryptoProvider(new MicrosoftCryptoProvider()); 
-        /// KsiService ksiService;
-        /// 
-        /// IPublicationsFile publicationsFile = ksiService.GetPublicationsFile();
-        /// </code>
-        ///     </example>
         /// </summary>
         /// <returns>publications file</returns>
         public IPublicationsFile GetPublicationsFile()
@@ -274,6 +235,33 @@ namespace Guardtime.KSI
             _publicationsFileLoadTime = DateTime.Now;
 
             return _publicationsFile;
+        }
+
+        /// <summary>
+        /// Verify KSI signature using verification policy and context.
+        /// If KsiService is not included in the context then it is added automatically.
+        /// </summary>
+        /// <param name="policy">Verification policy</param>
+        /// <param name="context">Verification context. If KsiService is not included in the context then it is added automatically.</param>
+        /// <returns></returns>
+        public VerificationResult Verify(VerificationPolicy policy, IVerificationContext context)
+        {
+            if (context.KsiService == null)
+            {
+                context.KsiService = _ksiService;
+            }
+            return policy.Verify(context);
+        }
+
+        /// <summary>
+        /// Verify KSI signature using DefaultVerificationPolicy with extending allowed.
+        /// </summary>
+        /// <param name="ksiSignature">KSI signature to be verified.</param>
+        /// <param name="documentHash">Document hash</param>
+        /// <returns></returns>
+        public VerificationResult Verify(IKsiSignature ksiSignature, DataHash documentHash = null)
+        {
+            return new DefaultVerificationPolicy().Verify(ksiSignature, documentHash, _ksiService);
         }
     }
 }
