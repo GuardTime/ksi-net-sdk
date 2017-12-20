@@ -736,6 +736,15 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/publication/publicationsfile/ksi-publications-2017-12.bin.
+        /// </summary>
+        internal static string KsiPublicationsFile_201712 {
+            get {
+                return ResourceManager.GetString("KsiPublicationsFile_201712", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/service/aggregation-response-pdu-with-only-unknown-non-critical-payload.tlv.
         /// </summary>
         internal static string KsiSerice_AggregationResponseUnknownNonCriticalPayload {
@@ -1336,6 +1345,15 @@ namespace Guardtime.KSI.Test.Properties {
         internal static string KsiSignature_Ok {
             get {
                 return ResourceManager.GetString("KsiSignature_Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-ok-2017-12-19.tlv.
+        /// </summary>
+        internal static string KsiSignature_Ok_20171219 {
+            get {
+                return ResourceManager.GetString("KsiSignature_Ok_20171219", resourceCulture);
             }
         }
         

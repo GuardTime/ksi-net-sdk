@@ -27,6 +27,7 @@ using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
 using Guardtime.KSI.Test.Properties;
 using Guardtime.KSI.Test.Service;
+using Guardtime.KSI.Test.Trust;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
@@ -280,6 +281,36 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
             Assert.AreEqual(VerificationResultCode.Ok, result.ResultCode, "Unexpected verification result code.");
             Assert.AreEqual(1, result.ChildResults.Count, "Invalid child result count.");
             Assert.AreEqual(nameof(PublicationBasedVerificationPolicy), result.ChildResults[result.ChildResults.Count - 1].RuleName, "Unexpected last child result rule.");
+        }
+
+        /// <summary>
+        /// Not extended signature is verified with key based policy because publications file does not containt suitable publication. 
+        /// </summary>
+        [Test]
+        public void VerifyWithExtendingAndKey()
+        {
+            DefaultVerificationPolicy policy = new DefaultVerificationPolicy();
+
+            TestKsiServiceProtocol protocol = new TestKsiServiceProtocol
+            {
+                PublicationsFileBytes = File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile_201712))
+            };
+
+            TestKsiService staticKsiService = new TestKsiService(
+                null,
+                null,
+                protocol,
+                new ServiceCredentials(TestConstants.ServiceUser, TestConstants.ServicePass),
+                protocol,
+                new PublicationsFileFactory(new TestPkiTrustProvider()),
+                1043101455,
+                PduVersion.v2);
+
+            VerificationResult result = policy.Verify(TestUtil. GetSignature(Resources.KsiSignature_Ok_20171219), null, staticKsiService);
+
+            Assert.AreEqual(VerificationResultCode.Ok, result.ResultCode, "Unexpected verification result code.");
+            Assert.AreEqual(2, result.ChildResults.Count, "Invalid child result count.");
+            Assert.AreEqual(nameof(KeyBasedVerificationPolicy), result.ChildResults[result.ChildResults.Count - 1].RuleName, "Unexpected last child result rule.");
         }
 
         /// <summary>
