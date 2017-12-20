@@ -285,7 +285,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         }
 
         /// <summary>
-        /// Signature is verified with key based policy after automatic extending. Method Verify with publications file is used.
+        /// Not extended signature is verified with key based policy because extending is not allowed. Method Verify with publications file is used.
         /// </summary>
         [Test]
         public void VerifyWithExtendingAndKey1()
@@ -299,7 +299,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         }
 
         /// <summary>
-        /// Signature is verified with key based policy after automatic extending. Method Verify with KSI service is used.
+        /// Not extended signature is verified with key based policy because publications file does not containt suitable publication. Method Verify with KSI service is used.
         /// </summary>
         [Test]
         public void VerifyWithExtendingAndKey2()
