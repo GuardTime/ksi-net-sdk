@@ -285,24 +285,10 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
         }
 
         /// <summary>
-        /// Signature is verified with key based policy after automatic extending. Method Verify with publications file is used.
+        /// Not extended signature is verified with key based policy because publications file does not containt suitable publication. 
         /// </summary>
         [Test]
-        public void VerifyWithExtendingAndKey1()
-        {
-            DefaultVerificationPolicy policy = new DefaultVerificationPolicy();
-            VerificationResult result = policy.Verify(GetSignature(Resources.KsiSignature_Ok_20171219), null, GetPublicationsFile(Resources.KsiPublicationsFile_201712));
-
-            Assert.AreEqual(VerificationResultCode.Ok, result.ResultCode, "Unexpected verification result code.");
-            Assert.AreEqual(2, result.ChildResults.Count, "Invalid child result count.");
-            Assert.AreEqual(nameof(KeyBasedVerificationPolicy), result.ChildResults[result.ChildResults.Count - 1].RuleName, "Unexpected last child result rule.");
-        }
-
-        /// <summary>
-        /// Signature is verified with key based policy after automatic extending. Method Verify with KSI service is used.
-        /// </summary>
-        [Test]
-        public void VerifyWithExtendingAndKey2()
+        public void VerifyWithExtendingAndKey()
         {
             DefaultVerificationPolicy policy = new DefaultVerificationPolicy();
 
