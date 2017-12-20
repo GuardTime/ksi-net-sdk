@@ -47,11 +47,11 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
                 new HAKsiService(
                     new List<IKsiService>()
                     {
-                        GetPublicationsFileService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile)))
+                        GetPublicationsFileService()
                     },
                     new List<IKsiService>()
                     {
-                        GetPublicationsFileService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile)))
+                        GetPublicationsFileService()
                     },
                     null);
 
@@ -73,7 +73,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
                 new HAKsiService(
                     null,
                     null,
-                    GetPublicationsFileService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile)))
+                    GetPublicationsFileService()
                     );
 
             IPublicationsFile publicationsFile = haService.GetPublicationsFile();
@@ -99,11 +99,11 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
             });
         }
 
-        public IKsiService GetPublicationsFileService(byte[] requestResult)
+        public IKsiService GetPublicationsFileService(byte[] requestResult = null)
         {
             return new TestKsiService(
                 null, null, null, null,
-                new TestKsiServiceProtocol { RequestResult = requestResult, UseRequestResultAsPublicationsFileResponse = true },
+                new TestKsiServiceProtocol { PublicationsFileBytes = requestResult },
                 new PublicationsFileFactory(
                     new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                         CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))), 0, PduVersion.v1);

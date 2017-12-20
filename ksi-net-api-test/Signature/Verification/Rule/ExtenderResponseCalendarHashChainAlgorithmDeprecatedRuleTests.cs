@@ -104,5 +104,26 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                 Assert.AreEqual(resultCode, verificationResult.ResultCode);
             }
         }
+
+        [Test]
+        public void TestPublicationsFileMissingNewerPublicationRecord()
+        {
+            ExtenderResponseCalendarHashChainAlgorithmDeprecatedRule rule = new ExtenderResponseCalendarHashChainAlgorithmDeprecatedRule();
+
+            // Check no publication found after current signature
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            {
+                TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
+
+                TestVerificationContext context = new TestVerificationContext()
+                {
+                    Signature = new KsiSignatureFactory().Create(stream),
+                    PublicationsFile = testPublicationsFile,
+                };
+
+                VerificationResult verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
+            }
+        }
     }
 }

@@ -31,6 +31,11 @@ namespace Guardtime.KSI.Test.Service
         /// </summary>
         public byte[] RequestResult { get; set; }
 
+        /// <summary>
+        /// Return publications file bytes.
+        /// </summary>
+        public byte[] PublicationsFileBytes { get; set; }
+
         public IAsyncResult BeginSign(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
             AsyncResult ar = new AsyncResult(requestId, asyncState);
@@ -82,11 +87,9 @@ namespace Guardtime.KSI.Test.Service
             return new AsyncResult(0, asyncState);
         }
 
-        public bool UseRequestResultAsPublicationsFileResponse { get; set; }
-
         public byte[] EndGetPublicationsFile(IAsyncResult asyncResult)
         {
-            return UseRequestResultAsPublicationsFileResponse ? RequestResult : ReadFile(Resources.KsiPublicationsFile);
+            return PublicationsFileBytes ?? ReadFile(Resources.KsiPublicationsFile);
         }
 
         public string PublicationsFileAddress => "test.publications.file.address";

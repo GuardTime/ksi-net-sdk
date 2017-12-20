@@ -300,6 +300,9 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="resources\publication\publicationsfile\ksi-publications-2017-12.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="resources\service\aggregation-response-pdu-with-conf.tlv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -337,9 +340,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\publication\publicationrecord\pub-record-invalid-hash-18-09-2014.bin">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\publication\publicationsfile\ksi-publications-2016-02.bin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\publication\publicationsfile\ksi-publications.bin">
@@ -703,6 +703,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\ksi-signature\ksi-signature-level-correction-3.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\ksi-signature\ksi-signature-ok-2017-12-19.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\ksi-signature\ksi-signature-ok-calendar-auth-record-pkcs7-signature.tlv">
