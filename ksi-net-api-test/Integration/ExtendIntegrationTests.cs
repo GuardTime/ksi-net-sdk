@@ -94,6 +94,28 @@ namespace Guardtime.KSI.Test.Integration
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
+        public void ExtendAndVerifySignatureWithAggregationChainsOnly(Ksi ksi)
+        {
+            PublicationBasedVerificationPolicy rule = new PublicationBasedVerificationPolicy();
+
+            // signature contains only aggregation chains
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_Only_Aggregtion_Chains), FileMode.Open))
+            {
+                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+                IKsiSignature extendedSignature = ksi.Extend(ksiSignature);
+                PublicationData publicationData = ksi.GetPublicationsFile().GetNearestPublicationRecord(ksiSignature.AggregationTime).PublicationData;
+
+                VerificationContext context = new VerificationContext(extendedSignature)
+                {
+                    UserPublication = publicationData
+                };
+
+                VerificationResult verificationResult = rule.Verify(context);
+                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            }
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
         public void ExtendInvalidSignatureTest(Ksi ksi)
         {
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Invalid_Aggregation_Chain_Input_Hash), FileMode.Open))
