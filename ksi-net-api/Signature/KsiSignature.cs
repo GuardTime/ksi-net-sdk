@@ -304,6 +304,11 @@ namespace Guardtime.KSI.Signature
                 throw new ArgumentNullException(nameof(calendarHashChain));
             }
 
+            if (publicationRecord == null)
+            {
+                publicationRecord = new PublicationRecordInSignature(false, false, calendarHashChain.PublicationData);
+            }
+
             if (signatureFactory == null)
             {
                 signatureFactory = new KsiSignatureFactory();
@@ -316,8 +321,6 @@ namespace Guardtime.KSI.Signature
                     switch (childTag.Type)
                     {
                         case Constants.CalendarHashChain.TagType:
-                            writer.WriteTag(calendarHashChain);
-                            break;
                         case Constants.CalendarAuthenticationRecord.TagType:
                         case Constants.PublicationRecord.TagTypeInSignature:
                             break;
@@ -327,10 +330,8 @@ namespace Guardtime.KSI.Signature
                     }
                 }
 
-                if (publicationRecord != null)
-                {
-                    writer.WriteTag(publicationRecord);
-                }
+                writer.WriteTag(calendarHashChain);
+                writer.WriteTag(publicationRecord);
 
                 try
                 {
