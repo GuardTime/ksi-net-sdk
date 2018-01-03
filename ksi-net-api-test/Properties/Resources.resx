@@ -543,7 +543,7 @@
   <data name="AggregationHashChainMetadataWithPadding2" xml:space="preserve">
     <value>resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataWithPadding2.ksig</value>
   </data>
-  <data name="Signature_Only_Aggregtion_Chains" xml:space="preserve">
+  <data name="KsiSignature_Ok_Only_Aggregtion_Chains" xml:space="preserve">
     <value>resources/signature/shared/valid-signatures/signature-only-aggregation-chains.ksig</value>
   </data>
   <data name="KsiService_AggregationResponsePdu_RequestId_1584727637" xml:space="preserve">

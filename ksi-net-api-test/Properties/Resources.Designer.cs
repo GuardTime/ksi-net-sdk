@@ -1421,6 +1421,15 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/shared/valid-signatures/signature-only-aggregation-chains.ksig.
+        /// </summary>
+        internal static string KsiSignature_Ok_Only_Aggregtion_Chains {
+            get {
+                return ResourceManager.GetString("KsiSignature_Ok_Only_Aggregtion_Chains", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-ok-with-mixed-aggregation-chains.tlv.
         /// </summary>
         internal static string KsiSignature_Ok_With_Mixed_Aggregation_Chains {
@@ -1795,15 +1804,6 @@ namespace Guardtime.KSI.Test.Properties {
         internal static string Rfc3161Record_Ok {
             get {
                 return ResourceManager.GetString("Rfc3161Record_Ok", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/signature/shared/valid-signatures/signature-only-aggregation-chains.ksig.
-        /// </summary>
-        internal static string Signature_Only_Aggregtion_Chains {
-            get {
-                return ResourceManager.GetString("Signature_Only_Aggregtion_Chains", resourceCulture);
             }
         }
         
