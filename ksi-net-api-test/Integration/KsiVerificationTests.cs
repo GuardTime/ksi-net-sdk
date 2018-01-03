@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
@@ -42,6 +43,76 @@ namespace Guardtime.KSI.Test.Integration
         }
 
         /// <summary>
+        /// Verifying null signature. 
+        /// </summary>
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsi))]
+        public void VerifyWithSignatureNull(Ksi ksi)
+        {
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                ksi.Verify(null);
+            });
+
+            Assert.AreEqual("ksiSignature", ex.ParamName);
+        }
+
+        /// <summary>
+        /// Verifying signature null and publications file not null.
+        /// </summary>
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsi))]
+        public void VerifyWithSignatureNull2(Ksi ksi)
+        {
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                ksi.Verify(null, null, TestUtil.GetPublicationsFile());
+            });
+
+            Assert.AreEqual("ksiSignature", ex.ParamName);
+        }
+
+        /// <summary>
+        /// Verifying with policy null. 
+        /// </summary>
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsi))]
+        public void VerifyWithVerificationPolicyNull(Ksi ksi)
+        {
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                ksi.Verify((VerificationPolicy)null, null);
+            });
+
+            Assert.AreEqual("policy", ex.ParamName);
+        }
+
+        /// <summary>
+        /// Verifying with verification context null. 
+        /// </summary>
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsi))]
+        public void VerifyWithVerificationContextNull(Ksi ksi)
+        {
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                ksi.Verify(new DefaultVerificationPolicy(), null);
+            });
+
+            Assert.AreEqual("context", ex.ParamName);
+        }
+
+        /// <summary>
+        /// Verifying with publications file null. 
+        /// </summary>
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsi))]
+        public void VerifyWithPublicationsFileNull(Ksi ksi)
+        {
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                ksi.Verify(TestUtil.GetSignature(Resources.KsiSignature_Ok), null, null);
+            });
+
+            Assert.AreEqual("publicationsFile", ex.ParamName);
+        }
+
+        /// <summary>
         /// Signature is verified using DefaultVerificationPolicy with document hash. 
         /// </summary>
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsi))]
@@ -54,7 +125,30 @@ namespace Guardtime.KSI.Test.Integration
         }
 
         /// <summary>
-        /// Signature verification faield using DefaultVerificationPolicy with document hash. 
+        /// Signature is verified using DefaultVerificationPolicy with publications file. 
+        /// </summary>
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsi))]
+        public void VerifyWithPublicationsFile(Ksi ksi)
+        {
+            VerificationResult result = ksi.Verify(TestUtil.GetSignature(Resources.KsiSignature_Ok), null, TestUtil.GetPublicationsFile());
+            Assert.AreEqual(VerificationResultCode.Ok, result.ResultCode, "Unexpected verification result code.");
+            Assert.AreEqual(nameof(DefaultVerificationPolicy), result.RuleName, "Unexpected policy used.");
+        }
+
+        /// <summary>
+        /// Signature is verified using DefaultVerificationPolicy with document hash and publications file. 
+        /// </summary>
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsi))]
+        public void VerifyWithDocumentHashAndPublicationsFile(Ksi ksi)
+        {
+            VerificationResult result = ksi.Verify(TestUtil.GetSignature(Resources.KsiSignature_Ok),
+                new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")), TestUtil.GetPublicationsFile());
+            Assert.AreEqual(VerificationResultCode.Ok, result.ResultCode, "Unexpected verification result code.");
+            Assert.AreEqual(nameof(DefaultVerificationPolicy), result.RuleName, "Unexpected policy used.");
+        }
+
+        /// <summary>
+        /// Signature verification failed using DefaultVerificationPolicy with document hash. 
         /// </summary>
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsi))]
         public void VerifyFailWithInvalidDocumentHash(Ksi ksi)
@@ -87,6 +181,19 @@ namespace Guardtime.KSI.Test.Integration
             DataHash documentHash = new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D"));
             IKsiSignature signature = ksi.Sign(documentHash);
             VerificationResult result = ksi.Verify(signature, documentHash);
+            Assert.AreEqual(VerificationResultCode.Ok, result.ResultCode, "Unexpected verification result code.");
+            Assert.AreEqual(nameof(DefaultVerificationPolicy), result.RuleName, "Unexpected policy used.");
+        }
+
+        /// <summary>
+        /// Freshly created signature is verified using DefaultVerificationPolicy with publications file. 
+        /// </summary>
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsi))]
+        public void VerifyNewSignatureWithPublicationsFile(Ksi ksi)
+        {
+            DataHash documentHash = new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D"));
+            IKsiSignature signature = ksi.Sign(documentHash);
+            VerificationResult result = ksi.Verify(signature, null, ksi.GetPublicationsFile());
             Assert.AreEqual(VerificationResultCode.Ok, result.ResultCode, "Unexpected verification result code.");
             Assert.AreEqual(nameof(DefaultVerificationPolicy), result.RuleName, "Unexpected policy used.");
         }

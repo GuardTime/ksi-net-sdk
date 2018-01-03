@@ -60,7 +60,6 @@ namespace Guardtime.KSI.Test.Signature
                 "Invalid signature identity. Path: " + Properties.Resources.KsiSignature_Ok_With_Mixed_Aggregation_Chains);
             Assert.AreEqual("GT :: testA :: taavi-test :: anon", signature.GetIdentity().Select(i => i.ClientId).Aggregate((current, next) => current + " :: " + next),
                 "Invalid signature identity returned by GetIdentity. Path: " + Properties.Resources.KsiSignature_Ok_With_Mixed_Aggregation_Chains);
-
         }
 
         [Test]

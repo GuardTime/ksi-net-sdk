@@ -124,18 +124,12 @@ namespace Guardtime.KSI
         /// <returns>extended KSI signature</returns>
         public IKsiSignature Extend(IKsiSignature signature, PublicationRecordInPublicationFile publicationRecord)
         {
-            if (signature == null)
-            {
-                throw new ArgumentNullException(nameof(signature));
-            }
-
             if (publicationRecord == null)
             {
                 throw new ArgumentNullException(nameof(publicationRecord));
             }
 
-            CalendarHashChain calendarHashChain = _ksiService.Extend(signature.AggregationTime, publicationRecord.PublicationData.PublicationTime);
-            return signature.Extend(calendarHashChain, publicationRecord, _ksiSignatureFactoryForExtending);
+            return Extend(signature, publicationRecord.ConvertToPublicationRecordInSignature());
         }
 
         /// <summary>
@@ -168,23 +162,16 @@ namespace Guardtime.KSI
         /// <returns>extended KSI signature</returns>
         public IKsiSignature Extend(IKsiSignature signature, PublicationData publicationData)
         {
-            if (signature == null)
-            {
-                throw new ArgumentNullException(nameof(signature));
-            }
-
             if (publicationData == null)
             {
                 throw new ArgumentNullException(nameof(publicationData));
             }
 
-            CalendarHashChain calendarHashChain = _ksiService.Extend(signature.AggregationTime, publicationData.PublicationTime);
-            PublicationRecordInSignature publicationRecord = new PublicationRecordInSignature(false, false, publicationData);
-            return signature.Extend(calendarHashChain, publicationRecord, _ksiSignatureFactoryForExtending);
+            return Extend(signature, new PublicationRecordInSignature(false, false, publicationData));
         }
 
         /// <summary>
-        ///     Extend signature to closest publication.
+        ///     Extend signature to nearest publication record in publications file subsequent to signature aggregation time.
         /// </summary>
         /// <param name="signature">KSI signature</param>
         /// <returns>extended KSI signature</returns>
@@ -239,18 +226,41 @@ namespace Guardtime.KSI
 
         /// <summary>
         /// Verify KSI signature using verification policy and context.
-        /// If KsiService is not included in the context then it is added automatically.
+        /// If context indicates that extending is allowed but KsiService is not included then KsiService is added automatically.
         /// </summary>
         /// <param name="policy">Verification policy</param>
-        /// <param name="context">Verification context. If KsiService is not included in the context then it is added automatically.</param>
+        /// <param name="context">Verification context. If context indicates that extending is allowed but KsiService is not included then KsiService is added automatically.</param>
         /// <returns></returns>
         public VerificationResult Verify(VerificationPolicy policy, IVerificationContext context)
         {
-            if (context.KsiService == null)
+            if (policy == null)
+            {
+                throw new ArgumentNullException(nameof(policy));
+            }
+
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            if (context.IsExtendingAllowed && context.KsiService == null)
             {
                 context.KsiService = _ksiService;
             }
+
             return policy.Verify(context);
+        }
+
+        /// <summary>
+        /// Verify KSI signature using DefaultVerificationPolicy with publications file. Extending not allowed.
+        /// </summary>
+        /// <param name="ksiSignature">KSI signature to be verified.</param>
+        /// <param name="documentHash">Document hash</param>
+        /// <param name="publicationsFile">Publications file.</param>
+        /// <returns></returns>
+        public VerificationResult Verify(IKsiSignature ksiSignature, DataHash documentHash, IPublicationsFile publicationsFile)
+        {
+            return new DefaultVerificationPolicy().Verify(ksiSignature, documentHash, publicationsFile);
         }
 
         /// <summary>

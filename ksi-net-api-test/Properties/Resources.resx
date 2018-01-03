@@ -615,6 +615,9 @@
   <data name="KsiService_AggregationResponsePdu_SignedLevel2_LevelCorrection1" xml:space="preserve">
     <value>resources/service/aggregation-response-pdu-with-level-correction-1.tlv</value>
   </data>
+  <data name="KsiService_AggregationResponsePdu_SignedZeroBytes" xml:space="preserve">
+    <value>resources/service/aggregation-response-pdu-signed-zero-bytes.tlv</value>
+  </data>
   <data name="PkiTrustProvider_CustomCertInvalid" xml:space="preserve">
     <value>resources/trust/pkitrustprovider/custom-cert-invalid.pem</value>
   </data>

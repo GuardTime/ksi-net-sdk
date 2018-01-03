@@ -18,6 +18,7 @@
  */
 
 using System;
+using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Service;
@@ -43,6 +44,95 @@ namespace Guardtime.KSI.Test.Service
         {
             Ksi ksi = GetStaticKsi(Resources.KsiService_AggregationResponsePdu_RequestId_1584727637, 1584727637);
             ksi.Sign(new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
+        }
+
+        /// <summary>
+        /// Test signing with data hash null.
+        /// </summary>
+        [Test]
+        public void SignStaticDataHashNullTest()
+        {
+            Ksi ksi = GetStaticKsi(Resources.KsiService_AggregationResponsePdu_RequestId_1584727637, 1584727637);
+
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                ksi.Sign((DataHash)null);
+            });
+
+            Assert.AreEqual("hash", ex.ParamName);
+        }
+
+        /// <summary>
+        /// Test signing with byte array null.
+        /// </summary>
+        [Test]
+        public void SignStaticByteArrayNullTest()
+        {
+            Ksi ksi = GetStaticKsi(Resources.KsiService_AggregationResponsePdu_RequestId_1584727637, 1584727637);
+
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                ksi.Sign((byte[])null);
+            });
+
+            Assert.AreEqual("documentBytes", ex.ParamName);
+        }
+
+        /// <summary>
+        /// Test signing with empty byte array.
+        /// </summary>
+        [Test]
+        public void SignStaticByteArrayEmptyTest()
+        {
+            Ksi ksi = GetStaticKsi(Resources.KsiService_AggregationResponsePdu_SignedZeroBytes, 6607061513599596791);
+            ksi.Sign(new byte[] { });
+        }
+
+        /// <summary>
+        /// Test signing with data stream null.
+        /// </summary>
+        [Test]
+        public void SignStaticStreamNullTest()
+        {
+            Ksi ksi = GetStaticKsi(Resources.KsiService_AggregationResponsePdu_RequestId_1584727637, 1584727637);
+
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                ksi.Sign((Stream)null);
+            });
+
+            Assert.AreEqual("stream", ex.ParamName);
+        }
+
+        /// <summary>
+        /// Test signing with empty data stream.
+        /// </summary>
+        [Test]
+        public void SignStaticStreamEmptyTest()
+        {
+            Ksi ksi = GetStaticKsi(Resources.KsiService_AggregationResponsePdu_SignedZeroBytes, 6607061513599596791);
+            using (MemoryStream stream = new MemoryStream())
+            {
+                ksi.Sign(stream);
+            }
+        }
+
+        /// <summary>
+        /// Test signing with closed data stream.
+        /// </summary>
+        [Test]
+        public void SignStaticStreamClosedTest()
+        {
+            Ksi ksi = GetStaticKsi(Resources.KsiService_AggregationResponsePdu_SignedZeroBytes, 6607061513599596791);
+            MemoryStream stream = new MemoryStream();
+            stream.Close();
+
+            ObjectDisposedException ex = Assert.Throws<ObjectDisposedException>(delegate
+            {
+                ksi.Sign(stream);
+            });
+
+            Assert.That(ex.Message.StartsWith("Cannot access a closed Stream."), "Unexpected exception message: " + ex.Message);
         }
 
         /// <summary>
