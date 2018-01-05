@@ -58,13 +58,13 @@ program, which hashes a message and outputs it in hex. The hash object will be a
         {
             KsiProvider.SetCryptoProvider(new MicrosoftCryptoProvider());
             string data1 = "Hello ";
-            string data2 = "nerd!";
+            string data2 = "world!";
 
-            IDataHasher hasher = new DataHasher();
-            hasher.AddData(Encoding.UTF8.GetBytes(data1));
-            hasher.AddData(Encoding.UTF8.GetBytes(data2));
+            DataHash documentHash = KsiProvider.CreateDataHasher()
+                                               .AddData(Encoding.UTF8.GetBytes(data1))
+                                               .AddData(Encoding.UTF8.GetBytes(data2))
+                                               .GetHash();
 
-            DataHash hash = hasher.GetHash();
             Console.WriteLine(hash);
         }
     }
@@ -93,13 +93,12 @@ simplified wrapper.
         {
             KsiProvider.SetCryptoProvider(new MicrosoftCryptoProvider());
             string data1 = "Hello ";
-            string data2 = "nerd!";
+            string data2 = "world!";
 
-            IDataHasher hasher = new DataHasher();
-            hasher.AddData(Encoding.UTF8.GetBytes(data1));
-            hasher.AddData(Encoding.UTF8.GetBytes(data2));
-
-            DataHash hash = hasher.GetHash();
+            DataHash documentHash = KsiProvider.CreateDataHasher()
+                                               .AddData(Encoding.UTF8.GetBytes(data1))
+                                               .AddData(Encoding.UTF8.GetBytes(data2))
+                                               .GetHash();
 
             // Creates http service protocol which can be used for signing, extending and getting publications file.
             HttpKsiServiceProtocol httpKsiServiceProtocol = new HttpKsiServiceProtocol("http://signing.service.url",
@@ -109,7 +108,7 @@ simplified wrapper.
             ServiceCredentials serviceCredentials = new ServiceCredentials("user", "pass");
 
             // Windows uses always its own trust store by default, so adding it is not required.
-            IPkiTrustProvider trustProvider = new PkiTrustStoreProvider(null,
+            IPkiTrustProvider trustProvider = new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                 new CertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
             // Create publications file factory.
@@ -125,7 +124,7 @@ simplified wrapper.
 
             Ksi ksi = new Ksi(ksiService);
             // Sign hash and retrieve signature.
-            IKsiSignature signature = ksi.Sign(hash);
+            IKsiSignature signature = ksi.Sign(documentHash);
         }
     }
 ```
@@ -133,12 +132,12 @@ simplified wrapper.
 To sign without simple wrapper is actually even easier. KSI class must be omitted and replaced with following code.
 
 ```cs
-    IKsiSignature signature = ksiService.Sign(hash);
+    IKsiSignature signature = ksiService.Sign(documentHash);
 ```
 
 ## Loading KSI Signature from binary stream ##
 Before it is possible to verify or extend the signature, it is necessary to read it to instance. Since usually the signature is stored into database or file, we need to open
-stream for given file or database entry. Following example shows how to read the signature from file.
+stream for given file or database entry. Following example shows how to read the signature from file and create data hash for verification.
 
 ```cs
     using Guardtime.KSI;
@@ -155,40 +154,80 @@ stream for given file or database entry. Following example shows how to read the
             KsiSignatureFactory signatureFactory = new KsiSignatureFactory();
 
             IKsiSignature signature;
-            using (FileStream stream = new FileStream("file path", FileMode.Open))
+            DataHash documentHash;
+
+            using (FileStream stream = new FileStream("path-to-signature-file.ksig", FileMode.Open))
             {
                 // Create signature from stream.
                 signature = signatureFactory.Create(stream);
+            }
+
+            using (FileStream stream = new FileStream("path-to-data-file", FileMode.Open))
+            {
+                // We need to compute the hash from the original data, to make sure it
+                // matches the one in the signature and has not been changed.
+                // Use the same algorithm as the input hash in the signature.
+                documentHash = KsiProvider.CreateDataHasher(signature.InputHash.Algorithm)
+                                          .AddData(stream)
+                                          .GetHash();
             }
         }
     }
 ```
 
 ## Verifying KSI signature ##
-Next logical step would be to verify the signature which was stored somewhere. There are 4 policies to verify the signature.
-* Calendar based - signature is verified against online calendar
- * Usage for policy:
-
+Next logical step would be to verify the signature which was stored somewhere. The simplest way is to use simple wrapper: 
 ```cs
-		CalendarBasedVerificationPolicy policy = new CalendarBasedVerificationPolicy();
+VerificationResult verificationResult = ksi.Verify(signature, documentHash);
+
+if (verificationResult.ResultCode != VerificationResultCode.Ok)
+{
+    throw new Exception("Signature verification failed! Error: " + verificationResult.VerificationError);
+}
 ```
 
-* Key based - signature is verified against PKI signature
- * Usage for policy: for bouncycastle full truststore has to be included in parameter, for windows built-in trust store is used
+Simple wrapper is using default verification policy. 
+Verifying using default verification policy without simple wrapper:
 
 ```cs
-        KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy(new X509Store(), 
-            new CertificateSubjectRdnSelector("E=publications@guardtime.com"));
+VerificationPolicy policy = new DefaultVerificationPolicy();
+VerificationContext context = new VerificationContext(signature)
+{
+    DocumentHash = documentHash,
+    PublicationsFile = ksiService.GetPublicationsFile(),
+    KsiService = ksiService,
+    IsExtendingAllowed = true
+};
+VerificationResult verificationResult = policy.Verify(context);
 ```
+There are 4 policies to verify KSI signature.
 
-* Publications based - signature is verified against publications file or user provided publication
- * Usage for policy:
+
+* Publications based - signature is verified against publications file or user provided publication:
 
 ```cs
-        PublicationBasedVerificationPolicy policy = new PublicationBasedVerificationPolicy();
+PublicationBasedVerificationPolicy policy = new PublicationBasedVerificationPolicy();
 ```
 
-Following code represents the verification against publications file and will print out the result.
+* Key based - signature is verified against PKI signature:
+
+```cs
+KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy();
+```
+
+* Calendar based - signature is verified against online calendar:
+```cs
+CalendarBasedVerificationPolicy policy = new CalendarBasedVerificationPolicy();
+```
+
+* Default verification policy - at first signature is verified against publications file, if this is not possible then key based verification is done.
+  As name says it is a recommended verification policy to be used by default.
+
+```cs
+DefaultVerificationPolicy policy = new DefaultVerificationPolicy();
+```
+
+Following code represents using default verification policy and will print out the result.
 
 ```cs
     using Guardtime.KSI;
@@ -212,9 +251,22 @@ Following code represents the verification against publications file and will pr
             KsiSignatureFactory signatureFactory = new KsiSignatureFactory();
 
             IKsiSignature signature;
-            using (FileStream stream = new FileStream("file path", FileMode.Open))
+            DataHash documentHash;
+
+            using (FileStream stream = new FileStream("path-to-signature-file.ksig", FileMode.Open))
             {
+                // Create signature from stream.
                 signature = signatureFactory.Create(stream);
+            }
+
+            using (FileStream stream = new FileStream("path-to-data-file", FileMode.Open))
+            {
+                // We need to compute the hash from the original data, to make sure it
+                // matches the one in the signature and has not been changed.
+                // Use the same algorithm as the input hash in the signature.
+                documentHash = KsiProvider.CreateDataHasher(signature.InputHash.Algorithm)
+                                          .AddData(stream)
+                                          .GetHash();
             }
 
             // Creates http service protocol which can be used for signing, extending and getting publications file.
@@ -225,7 +277,7 @@ Following code represents the verification against publications file and will pr
             ServiceCredentials serviceCredentials = new ServiceCredentials("user", "pass");
 
             // Windows uses always its own trust store by default, so adding it is not required.
-            IPkiTrustProvider trustProvider = new PkiTrustStoreProvider(null,
+            IPkiTrustProvider trustProvider = new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                 new CertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
             // Create publications file factory.
@@ -237,13 +289,8 @@ Following code represents the verification against publications file and will pr
 
             Ksi ksi = new Ksi(ksiService);
 
-            // Create verification context for necessary verification info.
-            VerificationContext context = new VerificationContext(signature);
-            context.KsiService = ksiService;
-            context.PublicationsFile = ksi.GetPublicationsFile();
-
-            // Verify against publication based verification policy.
-            VerificationResult result = ksi.Verify(context, new PublicationBasedVerificationPolicy());
+            // Verify using default verification policy.
+            VerificationResult result = ksi.Verify(signature, documentHash);
             Console.WriteLine(result.ResultCode);
         }
     }
@@ -252,13 +299,23 @@ Following code represents the verification against publications file and will pr
 To verify the signature without simple wrapper, KSI part should be replaced with following.
 
 ```cs
-    VerificationResult result = new PublicationBasedVerificationPolicy().Verify(context);
+            // Create verification context containing necessary verification info.
+            VerificationContext context = new VerificationContext(signature)
+            {
+                DocumentHash = documentHash,
+                KsiService = ksiService,
+                PublicationsFile = ksiService.GetPublicationsFile(),
+                IsExtendingAllowed = true
+            };
+
+            // Verify using default verification policy.
+            VerificationResult result = new DefaultVerificationPolicy().Verify(context);
+            Console.WriteLine(result.ResultCode);
 ```
 
 ## Extending KSI signature ##
 
-In following part, the KSI signature is loaded from bytes. Then it is verified like it was done in previous chapter and after that 
-it is extended to closest publication.
+In the following part, the KSI signature is loaded from bytes and extended to closest publication.
 
 ```cs
     using Guardtime.KSI;
@@ -295,7 +352,7 @@ it is extended to closest publication.
             ServiceCredentials serviceCredentials = new ServiceCredentials("user", "pass");
 
             // Windows uses always its own trust store by default, so adding it is not required.
-            IPkiTrustProvider trustProvider = new PkiTrustStoreProvider(null,
+            IPkiTrustProvider trustProvider = new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                 new CertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
             // Create publications file factory.
@@ -313,7 +370,7 @@ it is extended to closest publication.
     }
 ```
 
-Without simple wrapper you should use following commands instead of it.
+Without simple wrapper you should use following code instead.
 
 ```cs
     // Get closest publication from publications file.
@@ -326,7 +383,7 @@ Without simple wrapper you should use following commands instead of it.
     IKsiSignature extendedSignature = signature.Extend(calendarHashChain, publicationRecord);
 ```
 
-Also its possible to extend to specific publication record from publications file.
+It is also possible to extend to specific publication record from publications file.
 
 ```cs
     IKsiSignature extendedSignature = ksi.Extend(signature, publicationRecord);

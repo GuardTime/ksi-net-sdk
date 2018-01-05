@@ -18,11 +18,13 @@
  */
 
 using System;
+using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
+using Guardtime.KSI.Signature.Verification.Policy;
 using Guardtime.KSI.Test.Properties;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
@@ -42,7 +44,104 @@ namespace Guardtime.KSI.Test.Service
         public void SignStaticTest()
         {
             Ksi ksi = GetStaticKsi(Resources.KsiService_AggregationResponsePdu_RequestId_1584727637, 1584727637);
-            ksi.Sign(new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
+            DataHash dataHash = new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"));
+            IKsiSignature signature = ksi.Sign(dataHash);
+            Verify(signature, dataHash);
+        }
+
+        /// <summary>
+        /// Test signing with data hash null.
+        /// </summary>
+        [Test]
+        public void SignStaticDataHashNullTest()
+        {
+            Ksi ksi = GetStaticKsi(Resources.KsiService_AggregationResponsePdu_RequestId_1584727637, 1584727637);
+
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                ksi.Sign((DataHash)null);
+            });
+
+            Assert.AreEqual("hash", ex.ParamName);
+        }
+
+        /// <summary>
+        /// Test signing with byte array null.
+        /// </summary>
+        [Test]
+        public void SignStaticByteArrayNullTest()
+        {
+            Ksi ksi = GetStaticKsi(Resources.KsiService_AggregationResponsePdu_RequestId_1584727637, 1584727637);
+
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                ksi.Sign((byte[])null);
+            });
+
+            Assert.AreEqual("documentBytes", ex.ParamName);
+        }
+
+        /// <summary>
+        /// Test signing with empty byte array.
+        /// </summary>
+        [Test]
+        public void SignStaticByteArrayEmptyTest()
+        {
+            Ksi ksi = GetStaticKsi(Resources.KsiService_AggregationResponsePdu_SignedZeroBytes, 6607061513599596791);
+            byte[] documentBytes = new byte[] { };
+            IKsiSignature signature = ksi.Sign(documentBytes);
+            Verify(signature, KsiProvider.CreateDataHasher(HashAlgorithm.Default).AddData(documentBytes).GetHash());
+        }
+
+        /// <summary>
+        /// Test signing with data stream null.
+        /// </summary>
+        [Test]
+        public void SignStaticStreamNullTest()
+        {
+            Ksi ksi = GetStaticKsi(Resources.KsiService_AggregationResponsePdu_RequestId_1584727637, 1584727637);
+
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                ksi.Sign((Stream)null);
+            });
+
+            Assert.AreEqual("stream", ex.ParamName);
+        }
+
+        /// <summary>
+        /// Test signing with empty data stream.
+        /// </summary>
+        [Test]
+        public void SignStaticStreamEmptyTest()
+        {
+            Ksi ksi = GetStaticKsi(Resources.KsiService_AggregationResponsePdu_SignedZeroBytes, 6607061513599596791);
+            IKsiSignature signature;
+            using (MemoryStream stream = new MemoryStream())
+            {
+                signature = ksi.Sign(stream);
+            }
+
+            byte[] documentBytes = new byte[] { };
+            Verify(signature, KsiProvider.CreateDataHasher(HashAlgorithm.Default).AddData(documentBytes).GetHash());
+        }
+
+        /// <summary>
+        /// Test signing with closed data stream.
+        /// </summary>
+        [Test]
+        public void SignStaticStreamClosedTest()
+        {
+            Ksi ksi = GetStaticKsi(Resources.KsiService_AggregationResponsePdu_SignedZeroBytes, 6607061513599596791);
+            MemoryStream stream = new MemoryStream();
+            stream.Close();
+
+            ObjectDisposedException ex = Assert.Throws<ObjectDisposedException>(delegate
+            {
+                ksi.Sign(stream);
+            });
+
+            Assert.That(ex.Message.StartsWith("Cannot access a closed Stream."), "Unexpected exception message: " + ex.Message);
         }
 
         /// <summary>
@@ -52,7 +151,10 @@ namespace Guardtime.KSI.Test.Service
         public void LegacySignStaticTest()
         {
             Ksi ksi = GetStaticKsi(Resources.KsiService_LegacyAggregationResponsePdu, 318748698, null, PduVersion.v1);
-            ksi.Sign(new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
+
+            DataHash dataHash = new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"));
+            IKsiSignature signature = ksi.Sign(dataHash);
+            Verify(signature, dataHash);
         }
 
         /// <summary>
@@ -79,7 +181,9 @@ namespace Guardtime.KSI.Test.Service
         {
             // Response has multiple payloads (2 signature payloads and a configuration payload)
             Ksi ksi = GetStaticKsi(Resources.KsiService_AggregationResponsePdu_Multi_Payloads, 1584727637);
-            ksi.Sign(new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
+            DataHash dataHash = new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"));
+            IKsiSignature signature = ksi.Sign(dataHash);
+            Verify(signature, dataHash);
         }
 
         /// <summary>
@@ -90,7 +194,9 @@ namespace Guardtime.KSI.Test.Service
         {
             // Response has multiple payloads (1 signature payload, a config payload and an acknowledgment payload)
             Ksi ksi = GetStaticKsi(Resources.KsiService_AggregationResponsePdu_With_Config_And_Acknowledgment, 1584727637);
-            ksi.Sign(new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
+            DataHash dataHash = new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"));
+            IKsiSignature signature = ksi.Sign(dataHash);
+            Verify(signature, dataHash);
         }
 
         /// <summary>
@@ -118,7 +224,9 @@ namespace Guardtime.KSI.Test.Service
         {
             // Response has additional conf.
             Ksi ksi = GetStaticKsi(Resources.KsiSerice_AggregationResponseWithConf, 1584727637);
-            ksi.Sign(new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
+            DataHash dataHash = new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"));
+            IKsiSignature signature = ksi.Sign(dataHash);
+            Verify(signature, dataHash);
         }
 
         /// <summary>
@@ -129,7 +237,9 @@ namespace Guardtime.KSI.Test.Service
         {
             // Response has additional unknown non-ciritcal payload.
             Ksi ksi = GetStaticKsi(Resources.KsiSerice_AggregationResponseWithUnknownNonCriticalPayload, 1584727637);
-            ksi.Sign(new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
+            DataHash dataHash = new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"));
+            IKsiSignature signature = ksi.Sign(dataHash);
+            Verify(signature, dataHash);
         }
 
         /// <summary>
@@ -351,6 +461,17 @@ namespace Guardtime.KSI.Test.Service
             });
 
             Assert.That(ex.Message.StartsWith("Invalid asyncResult type:"), "Unexpected exception message: " + ex.Message);
+        }
+
+        private static void Verify(IKsiSignature signature, DataHash dataHash)
+        {
+            IVerificationContext context = new VerificationContext()
+            {
+                Signature = signature,
+                DocumentHash = dataHash
+            };
+            VerificationResult result = new InternalVerificationPolicy().Verify(context);
+            Assert.AreEqual(VerificationResultCode.Ok, result.ResultCode, "Unexpected verification result");
         }
     }
 }

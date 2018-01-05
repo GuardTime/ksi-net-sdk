@@ -208,19 +208,13 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         {
             CalendarAuthenticationRecordSignatureVerificationRule rule = new CalendarAuthenticationRecordSignatureVerificationRule();
 
-            IPublicationsFile pubsFile;
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
-            {
-                pubsFile = new PublicationsFileFactory(new TestPkiTrustProvider()).Create(stream);
-            }
-
             // Check invalid signature with cert that was not valid at aggregation time.
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Invalid_Not_Valid_Cert), FileMode.Open))
             {
                 VerificationContext context = new VerificationContext()
                 {
                     Signature = new KsiSignatureFactory().Create(stream),
-                    PublicationsFile = pubsFile
+                    PublicationsFile = TestUtil.GetPublicationsFile()
                 };
 
                 VerificationResult verificationResult = rule.Verify(context);

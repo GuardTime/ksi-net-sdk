@@ -21,11 +21,9 @@ using System.IO;
 using System.Linq;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
-using Guardtime.KSI.Publication;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
-using Guardtime.KSI.Test.Trust;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
@@ -70,14 +68,7 @@ namespace Guardtime.KSI.Test.Signature
             IKsiSignature extendedSignature = signature.Extend(calendarHashChain);
             Assert.True(extendedSignature.IsExtended, "IsExtended should be true.");
             Assert.AreEqual(1455494400, extendedSignature.PublicationRecord.PublicationData.PublicationTime, "Unexpected publication time");
-
-            IPublicationsFile pubsFile;
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
-            {
-                pubsFile = new PublicationsFileFactory(new TestPkiTrustProvider()).Create(stream);
-            }
-
-            VerificationResult result = new DefaultVerificationPolicy().Verify(extendedSignature, null, pubsFile);
+            VerificationResult result = new DefaultVerificationPolicy().Verify(extendedSignature, null, TestUtil.GetPublicationsFile());
             Assert.AreEqual(VerificationResultCode.Ok, result.ResultCode, "Unexpected verification result code.");
         }
 

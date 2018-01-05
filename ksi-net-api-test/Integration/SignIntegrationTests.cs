@@ -99,6 +99,25 @@ namespace Guardtime.KSI.Test.Integration
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
+        public void SignByteArrayWithLevelTest(Ksi ksi)
+        {
+            byte[] data = Encoding.UTF8.GetBytes("This is my document");
+            IKsiSignature signature = ksi.Sign(data, 3);
+
+            Assert.LessOrEqual(3, signature.GetAggregationHashChains()[0].GetChainLinks()[0].LevelCorrection, "Level correction is invalid.");
+
+            VerificationContext verificationContext = new VerificationContext(signature)
+            {
+                DocumentHash = new DataHash(HashAlgorithm.Sha2256,
+                    Base16.Decode("D439459856BEF5ED25772646F73A70A841FC078D3CBBC24AB7F47C464683768D")),
+                PublicationsFile = ksi.GetPublicationsFile()
+            };
+            KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy();
+            VerificationResult verificationResult = policy.Verify(verificationContext);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode, "Signature should verify with key based policy");
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
         public void SignWithStreamTest(Ksi ksi)
         {
             IKsiSignature signature;
@@ -109,6 +128,31 @@ namespace Guardtime.KSI.Test.Integration
                 stream.Seek(0, SeekOrigin.Begin);
                 signature = ksi.Sign(stream);
             }
+
+            VerificationContext verificationContext = new VerificationContext(signature)
+            {
+                DocumentHash = new DataHash(HashAlgorithm.Sha2256,
+                    Base16.Decode("D439459856BEF5ED25772646F73A70A841FC078D3CBBC24AB7F47C464683768D")),
+                PublicationsFile = ksi.GetPublicationsFile()
+            };
+            KeyBasedVerificationPolicy policy = new KeyBasedVerificationPolicy();
+            VerificationResult verificationResult = policy.Verify(verificationContext);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode, "Signature should verify with key based policy");
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
+        public void SignWithStreamAndLevelTest(Ksi ksi)
+        {
+            IKsiSignature signature;
+            using (MemoryStream stream = new MemoryStream())
+            {
+                byte[] data = Encoding.UTF8.GetBytes("This is my document");
+                stream.Write(data, 0, data.Length);
+                stream.Seek(0, SeekOrigin.Begin);
+                signature = ksi.Sign(stream, 3);
+            }
+
+            Assert.LessOrEqual(3, signature.GetAggregationHashChains()[0].GetChainLinks()[0].LevelCorrection, "Level correction is invalid.");
 
             VerificationContext verificationContext = new VerificationContext(signature)
             {

@@ -23,6 +23,11 @@ using System.IO;
 using System.Reflection;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
+using Guardtime.KSI.Publication;
+using Guardtime.KSI.Signature;
+using Guardtime.KSI.Test.Properties;
+using Guardtime.KSI.Test.Signature.Verification;
+using Guardtime.KSI.Test.Trust;
 
 namespace Guardtime.KSI.Test
 {
@@ -78,6 +83,23 @@ namespace Guardtime.KSI.Test
             }
 
             return algorithm;
+        }
+
+        public static IKsiSignature GetSignature(string path)
+        {
+            KsiSignatureFactory signatureFactory = new KsiSignatureFactory(new EmptyVerificationPolicy());
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, path), FileMode.Open))
+            {
+                return signatureFactory.Create(stream);
+            }
+        }
+
+        public static IPublicationsFile GetPublicationsFile()
+        {
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
+            {
+                return new PublicationsFileFactory(new TestPkiTrustProvider()).Create(stream);
+            }
         }
     }
 }

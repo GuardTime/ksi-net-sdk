@@ -862,6 +862,15 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/service/aggregation-response-pdu-signed-zero-bytes.tlv.
+        /// </summary>
+        internal static string KsiService_AggregationResponsePdu_SignedZeroBytes {
+            get {
+                return ResourceManager.GetString("KsiService_AggregationResponsePdu_SignedZeroBytes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/service/aggregation-response-pdu-with-config-and-acknowledgment.tlv.
         /// </summary>
         internal static string KsiService_AggregationResponsePdu_With_Config_And_Acknowledgment {
