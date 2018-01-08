@@ -16,19 +16,6 @@ and verifying the signatures.
 In your .NET project add reference to KSI .NET SDK and crypto provider to be used (You can use microsoft or bouncycastle crypto provider).
 Instead of adding references manually you can install packages "ksi-net-sdk" and "ksi-net-sdk-microsoft-crypto" using NuGet package manager.
 
-## Proxy Configuration
-
-To use proxy, add the respective parameters to the `HttpKsiServiceProtocol`, e.g.
-
-```
-var httpKsiServiceProtocol =
-    new HttpKsiServiceProtocol("http://signingservice_url",
-    "http://extendingservice_url",
-    "http://publicationsfile_url",
-    "http://proxy-url",
-    new NetworkCredential("proxy-user", "proxy-pass"));
-```
-
 ## Usage
 
 In order to get trial access to the KSI platform, go to [https://guardtime.com/blockchain-developers](https://guardtime.com/blockchain-developers).
@@ -41,9 +28,9 @@ KsiProvider.SetCryptoProvider(new MicrosoftCryptoProvider());
 //KsiProvider.SetCryptoProvider(new BouncyCastleCryptoProvider());
 
 // Create HTTP KSI service protocol
-var httpKsiServiceProtocol = new HttpKsiServiceProtocol("http://signingservice_url", "http://extendingservice_url", "http://publicationsfile_url");
+HttpKsiServiceProtocol httpKsiServiceProtocol = new HttpKsiServiceProtocol("http://signingservice_url", "http://extendingservice_url", "http://publicationsfile_url");
 // Create new KSI service
-var ksiService = new KsiService(
+IKsiService ksiService = new KsiService(
     httpKsiServiceProtocol, new ServiceCredentials("sign-user", "sign-pass"),
     httpKsiServiceProtocol, new ServiceCredentials("extend-user", "extend-pass"),
     httpKsiServiceProtocol,
@@ -78,6 +65,20 @@ If PDU version is not given then version v2 is used by default.
 
 If different PDU versions are needed for aggregating and extending then separate KsiServices should be used.
 
+**Proxy Configuration**:
+
+To use proxy, add the respective parameters to the `HttpKsiServiceProtocol`, e.g.
+
+```
+HttpKsiServiceProtocol httpKsiServiceProtocol =
+    new HttpKsiServiceProtocol("http://signingservice_url",
+    "http://extendingservice_url",
+    "http://publicationsfile_url",
+    "http://proxy-url",
+    new NetworkCredential("proxy-user", "proxy-pass"));
+```
+
+
 There are 2 ways to use KSI service, with and without simple API wrapper.
 
 **Example using simple wrapper**:
@@ -86,15 +87,18 @@ There are 2 ways to use KSI service, with and without simple API wrapper.
 // Create new simple wrapper
 Ksi ksi = new Ksi(ksiService);
 
-// Create new signature by signing given hash
-DataHash dataHash = new DataHash(Base16.Decode("010000000000000000000000000000000000000000000000000000000000000000"));
-IKsiSignature ksiSignature = ksi.Sign(dataHash);
+// Create new signature by signing document hash
+byte[] documentBytes = new byte[] { 1, 2, 3 };
+DataHash documentHash = KsiProvider.CreateDataHasher()
+                                    .AddData(documentBytes)
+                                    .GetHash();
+IKsiSignature signature = ksi.Sign(documentHash);
 
-// Load some older signature and extend it to closest publication
-ksiSignature = ksi.Extend(ksiSignature);
+// Extend an older signature to the closest publication
+IKsiSignature extendedSignature = ksi.Extend(signature);
 
 // Verify signature
-VerificationResult verificationResult = ksi.Verify(ksiSignature, dataHash);
+VerificationResult verificationResult = ksi.Verify(signature, documentHash);
 if (verificationResult.ResultCode != VerificationResultCode.Ok)
 {
     throw new Exception("Signature verification failed! Error: " + verificationResult.VerificationError);
@@ -104,20 +108,27 @@ if (verificationResult.ResultCode != VerificationResultCode.Ok)
 **Example without simple wrapper**:
 
 ```cs
-// Signing
-DataHash dataHash = new DataHash(Base16.Decode("010000000000000000000000000000000000000000000000000000000000000000"));
-IKsiSignature signature = ksiService.Sign(dataHash);
+// Create new signature by signing document hash
+byte[] documentBytes = new byte[] { 1, 2, 3 };
+DataHash documentHash = KsiProvider.CreateDataHasher()
+                                    .AddData(documentBytes)
+                                    .GetHash();
+IKsiSignature signature = ksiService.Sign(documentHash);
 
 // Getting publications file
 IPublicationsFile publicationsFile = ksiService.GetPublicationsFile();
 
-// Extending
+// Extend an older signature to the closest publication
 PublicationRecordInPublicationFile publicationRecord = publicationsFile.GetNearestPublicationRecord(signature.AggregationTime);
+if (publicationRecord == null)
+{
+    throw new Exception("No suitable publication yet.");
+}
 CalendarHashChain calendarHashChain = ksiService.Extend(signature.AggregationTime, publicationRecord.PublicationData.PublicationTime);
 IKsiSignature extendedSignature = signature.Extend(calendarHashChain, publicationRecord);
 
 // Verify signature
-VerificationResult verificationResult = new DefaultVerificationPolicy().Verify(extendedSignature, dataHash, ksiService);
+VerificationResult verificationResult = new DefaultVerificationPolicy().Verify(signature, documentHash, ksiService);
 if (verificationResult.ResultCode != VerificationResultCode.Ok)
 {
     throw new Exception("Signature verification failed! Error: " + verificationResult.VerificationError);

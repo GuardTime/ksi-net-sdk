@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <!-- The configuration and platform will be used to determine which assemblies to include from solution and
 				 project documentation sources -->
@@ -7,13 +7,13 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{d2c7c79d-a6e8-4d94-89b2-e76194744ebe}</ProjectGuid>
-    <SHFBSchemaVersion>2015.6.5.0</SHFBSchemaVersion>
+    <SHFBSchemaVersion>2017.9.26.0</SHFBSchemaVersion>
     <!-- AssemblyName, Name, and RootNamespace are not used by SHFB but Visual Studio adds them anyway -->
     <AssemblyName>Documentation</AssemblyName>
     <RootNamespace>Documentation</RootNamespace>
     <Name>Documentation</Name>
     <!-- SHFB properties -->
-    <FrameworkVersion>.NET Framework 4.5.1</FrameworkVersion>
+    <FrameworkVersion>.NET Framework 2.0</FrameworkVersion>
     <OutputPath>doc\</OutputPath>
     <HtmlHelpName>ksi-net-api</HtmlHelpName>
     <Language>en-US</Language>
@@ -45,10 +45,191 @@
     <NamespaceSummaries>
       <NamespaceSummaryItem name="Guardtime.KSI.Crypto" isDocumented="True" />
     </NamespaceSummaries>
-    <VisibleItems>ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, Protected, ProtectedInternalAsProtected</VisibleItems>
+    <VisibleItems>ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, Protected, ProtectedInternalAsProtected, EditorBrowsableNever, NonBrowsable</VisibleItems>
     <MissingTags>AutoDocumentDispose</MissingTags>
     <RootNamespaceTitle>
     </RootNamespaceTitle>
+    <ProjectSummary>&amp;lt%3bdiv&amp;gt%3b
+    &amp;lt%3bh1&amp;gt%3bKSI .NET SDK&amp;lt%3b/h1&amp;gt%3b
+    &amp;lt%3bp&amp;gt%3b
+        Guardtime Keyless Signature Infrastructure %28KSI%29 is an industrial scale blockchain platform that cryptographically
+        ensures data integrity and proves time of existence. Its keyless signatures, based on hash chains, link data to global
+        calendar blockchain. The checkpoints of the blockchain, published in newspapers and electronic media, enable long term
+        integrity of any digital asset without the need to trust any system. There are many applications for KSI, a classical
+        example is signing of any type of logs - system logs, financial transactions, call records, etc. For more,
+        see &amp;lt%3ba href=&amp;quot%3bhttps://guardtime.com/&amp;quot%3b rel=&amp;quot%3bnofollow noreferrer noopener&amp;quot%3b target=&amp;quot%3b_blank&amp;quot%3b&amp;gt%3bhttps://guardtime.com&amp;lt%3b/a&amp;gt%3b.
+    &amp;lt%3b/p&amp;gt%3b
+    &amp;lt%3bp&amp;gt%3b
+        The KSI .NET SDK is a software development kit for developers who want to integrate KSI with their .NET based applications
+        and systems. It provides an API for all KSI functionality, including the core functions - signing of data, extending
+        and verifying the signatures.
+    &amp;lt%3b/p&amp;gt%3b
+    &amp;lt%3bh2&amp;gt%3bInstallation&amp;lt%3b/h2&amp;gt%3b
+    &amp;lt%3bp&amp;gt%3b
+        In your .NET project add reference to KSI .NET SDK and crypto provider to be used %28You can use microsoft or bouncycastle crypto provider%29.
+        Instead of adding references manually you can install packages &amp;quot%3bksi-net-sdk&amp;quot%3b and &amp;quot%3bksi-net-sdk-microsoft-crypto&amp;quot%3b using NuGet package manager.
+    &amp;lt%3b/p&amp;gt%3b
+    &amp;lt%3bh2&amp;gt%3bUsage&amp;lt%3b/h2&amp;gt%3b
+    &amp;lt%3bp&amp;gt%3b
+        In order to get trial access to the KSI platform, go to &amp;lt%3ba href=&amp;quot%3bhttps://guardtime.com/blockchain-developers&amp;quot%3b rel=&amp;quot%3bnofollow noreferrer noopener&amp;quot%3b target=&amp;quot%3b_blank&amp;quot%3b&amp;gt%3bhttps://guardtime.com/blockchain-developers&amp;lt%3b/a&amp;gt%3b.
+    &amp;lt%3b/p&amp;gt%3b
+    &amp;lt%3bp&amp;gt%3b
+        &amp;lt%3bstrong&amp;gt%3bCreating ksiService&amp;lt%3b/strong&amp;gt%3b:
+    &amp;lt%3b/p&amp;gt%3b
+    &amp;lt%3bpre class=&amp;quot%3bcode highlight js-syntax-highlight csharp white&amp;quot%3b lang=&amp;quot%3bcsharp&amp;quot%3b v-pre=&amp;quot%3btrue&amp;quot%3b&amp;gt%3b&amp;lt%3bcode&amp;gt%3b// Set crypto provider to bouncycastle or microsoft
+KsiProvider.SetCryptoProvider%28new MicrosoftCryptoProvider%28%29%29%3b
+//KsiProvider.SetCryptoProvider%28new BouncyCastleCryptoProvider%28%29%29%3b
+// Create HTTP KSI service protocol
+HttpKsiServiceProtocol httpKsiServiceProtocol = new HttpKsiServiceProtocol%28&amp;quot%3bhttp://signingservice_url&amp;quot%3b, &amp;quot%3bhttp://extendingservice_url&amp;quot%3b, &amp;quot%3bhttp://publicationsfile_url&amp;quot%3b%29%3b
+// Create new KSI service
+IKsiService ksiService = new KsiService%28
+    httpKsiServiceProtocol, new ServiceCredentials%28&amp;quot%3bsign-user&amp;quot%3b, &amp;quot%3bsign-pass&amp;quot%3b%29,
+    httpKsiServiceProtocol, new ServiceCredentials%28&amp;quot%3bextend-user&amp;quot%3b, &amp;quot%3bextend-pass&amp;quot%3b%29,
+    httpKsiServiceProtocol,
+    new PublicationsFileFactory%28
+        new PkiTrustStoreProvider%28
+            new X509Store%28StoreName.Root%29,
+            new CertificateSubjectRdnSelector%28&amp;quot%3bE=publications%40guardtime.com&amp;quot%3b%29%29%29%29%3b&amp;lt%3b/code&amp;gt%3b&amp;lt%3b/pre&amp;gt%3b
+    &amp;lt%3bp&amp;gt%3b
+        &amp;lt%3bstrong&amp;gt%3bCreating ksiService and setting PDU version&amp;lt%3b/strong&amp;gt%3b:
+    &amp;lt%3b/p&amp;gt%3b
+    &amp;lt%3bpre class=&amp;quot%3bcode highlight js-syntax-highlight csharp white&amp;quot%3b lang=&amp;quot%3bcsharp&amp;quot%3b v-pre=&amp;quot%3btrue&amp;quot%3b&amp;gt%3b&amp;lt%3bcode&amp;gt%3b// Set crypto provider to bouncycastle or microsoft
+KsiProvider.SetCryptoProvider%28new MicrosoftCryptoProvider%28%29%29%3b
+//KsiProvider.SetCryptoProvider%28new BouncyCastleCryptoProvider%28%29%29%3b
+// Create HTTP KSI service protocol
+HttpKsiServiceProtocol httpKsiServiceProtocol = new HttpKsiServiceProtocol%28&amp;quot%3bhttp://signingservice_url&amp;quot%3b, &amp;quot%3bhttp://extendingservice_url&amp;quot%3b, &amp;quot%3bhttp://publicationsfile_url&amp;quot%3b%29%3b
+// Create new KSI service
+IKsiService ksiService = new KsiService%28
+    httpKsiServiceProtocol, new ServiceCredentials%28&amp;quot%3bsign-user&amp;quot%3b, &amp;quot%3bsign-pass&amp;quot%3b%29,
+    httpKsiServiceProtocol, new ServiceCredentials%28&amp;quot%3bextend-user&amp;quot%3b, &amp;quot%3bextend-pass&amp;quot%3b%29,
+    httpKsiServiceProtocol,
+    new PublicationsFileFactory%28
+        new PkiTrustStoreProvider%28
+            new X509Store%28StoreName.Root%29,
+            new CertificateSubjectRdnSelector%28&amp;quot%3bE=publications%40guardtime.com&amp;quot%3b%29%29%29,
+    PduVersion.v2%29%3b&amp;lt%3b/code&amp;gt%3b&amp;lt%3b/pre&amp;gt%3b
+    &amp;lt%3bp&amp;gt%3bIf PDU version is not given then version v2 is used by default.&amp;lt%3b/p&amp;gt%3b
+    &amp;lt%3bp&amp;gt%3bIf different PDU versions are needed for aggregating and extending then separate KsiServices should be used.&amp;lt%3b/p&amp;gt%3b
+    &amp;lt%3bp&amp;gt%3b
+        &amp;lt%3bstrong&amp;gt%3bProxy Configuration&amp;lt%3b/strong&amp;gt%3b
+    &amp;lt%3b/p&amp;gt%3b
+    &amp;lt%3bp&amp;gt%3b
+        To use proxy, add the respective parameters to the HttpKsiServiceProtocol, e.g.
+    &amp;lt%3b/p&amp;gt%3b
+    &amp;lt%3bpre&amp;gt%3b&amp;lt%3bcode&amp;gt%3bHttpKsiServiceProtocol httpKsiServiceProtocol =
+    new HttpKsiServiceProtocol%28&amp;quot%3bhttp://signingservice_url&amp;quot%3b,
+    &amp;quot%3bhttp://extendingservice_url&amp;quot%3b,
+    &amp;quot%3bhttp://publicationsfile_url&amp;quot%3b,
+    &amp;quot%3bhttp://proxy-url&amp;quot%3b,
+    new NetworkCredential%28&amp;quot%3bproxy-user&amp;quot%3b, &amp;quot%3bproxy-pass&amp;quot%3b%29%29%3b
+&amp;lt%3b/code&amp;gt%3b&amp;lt%3b/pre&amp;gt%3b
+    &amp;lt%3bp&amp;gt%3bThere are 2 ways to use KSI service, with and without simple API wrapper.&amp;lt%3b/p&amp;gt%3b
+    &amp;lt%3bp&amp;gt%3b
+        &amp;lt%3bstrong&amp;gt%3bExample using simple wrapper&amp;lt%3b/strong&amp;gt%3b:
+    &amp;lt%3b/p&amp;gt%3b
+    &amp;lt%3bpre class=&amp;quot%3bcode highlight js-syntax-highlight csharp white&amp;quot%3b lang=&amp;quot%3bcsharp&amp;quot%3b v-pre=&amp;quot%3btrue&amp;quot%3b&amp;gt%3b&amp;lt%3bcode&amp;gt%3b// Create new simple wrapper
+Ksi ksi = new Ksi%28ksiService%29%3b
+
+// Create new signature by signing document hash
+byte[] documentBytes = new byte[] { 1, 2, 3 }%3b
+DataHash documentHash = KsiProvider.CreateDataHasher%28%29
+                                   .AddData%28documentBytes%29
+                                   .GetHash%28%29%3b
+IKsiSignature signature = ksi.Sign%28documentHash%29%3b
+
+// Extend an older signature to the closest publication
+IKsiSignature extendedSignature = ksi.Extend%28signature%29%3b
+
+// Verify signature
+VerificationResult verificationResult = ksi.Verify%28signature, documentHash%29%3b
+if %28verificationResult.ResultCode != VerificationResultCode.Ok%29
+{
+    throw new Exception%28&amp;quot%3bSignature verification failed! Error: &amp;quot%3b + verificationResult.VerificationError%29%3b
+}&amp;lt%3b/code&amp;gt%3b&amp;lt%3b/pre&amp;gt%3b
+    &amp;lt%3bp&amp;gt%3b
+        &amp;lt%3bstrong&amp;gt%3bExample without simple wrapper&amp;lt%3b/strong&amp;gt%3b:
+    &amp;lt%3b/p&amp;gt%3b
+    &amp;lt%3bpre class=&amp;quot%3bcode highlight js-syntax-highlight csharp white&amp;quot%3b lang=&amp;quot%3bcsharp&amp;quot%3b v-pre=&amp;quot%3btrue&amp;quot%3b&amp;gt%3b&amp;lt%3bcode&amp;gt%3b// Create new signature by signing document hash
+byte[] documentBytes = new byte[] { 1, 2, 3 }%3b
+DataHash documentHash = KsiProvider.CreateDataHasher%28%29
+                                   .AddData%28documentBytes%29
+                                   .GetHash%28%29%3b
+IKsiSignature signature = ksiService.Sign%28documentHash%29%3b
+
+// Getting publications file
+IPublicationsFile publicationsFile = ksiService.GetPublicationsFile%28%29%3b
+
+// Extend an older signature to the closest publication
+PublicationRecordInPublicationFile publicationRecord = publicationsFile.GetNearestPublicationRecord%28signature.AggregationTime%29%3b
+if %28publicationRecord == null%29
+{
+    throw new Exception%28&amp;quot%3bNo suitable publication yet.&amp;quot%3b%29%3b
+}
+CalendarHashChain calendarHashChain = ksiService.Extend%28signature.AggregationTime, publicationRecord.PublicationData.PublicationTime%29%3b
+IKsiSignature extendedSignature = signature.Extend%28calendarHashChain, publicationRecord%29%3b
+
+// Verify signature
+VerificationResult verificationResult = new DefaultVerificationPolicy%28%29.Verify%28signature, documentHash, ksiService%29%3b
+if %28verificationResult.ResultCode != VerificationResultCode.Ok%29
+{
+    throw new Exception%28&amp;quot%3bSignature verification failed! Error: &amp;quot%3b + verificationResult.VerificationError%29%3b
+}&amp;lt%3b/code&amp;gt%3b&amp;lt%3b/pre&amp;gt%3b
+    &amp;lt%3bh2&amp;gt%3bDependencies&amp;lt%3b/h2&amp;gt%3b
+    &amp;lt%3btable&amp;gt%3b
+        &amp;lt%3bthead&amp;gt%3b
+        &amp;lt%3btr&amp;gt%3b
+            &amp;lt%3bth&amp;gt%3b
+                &amp;lt%3bstrong&amp;gt%3bDependency&amp;lt%3b/strong&amp;gt%3b
+            &amp;lt%3b/th&amp;gt%3b
+            &amp;lt%3bth&amp;gt%3b
+                &amp;lt%3bstrong&amp;gt%3bVersion&amp;lt%3b/strong&amp;gt%3b
+            &amp;lt%3b/th&amp;gt%3b
+            &amp;lt%3bth&amp;gt%3b
+                &amp;lt%3bstrong&amp;gt%3bLicense&amp;lt%3b/strong&amp;gt%3b
+            &amp;lt%3b/th&amp;gt%3b
+            &amp;lt%3bth&amp;gt%3b
+                &amp;lt%3bstrong&amp;gt%3bNotes&amp;lt%3b/strong&amp;gt%3b
+            &amp;lt%3b/th&amp;gt%3b
+        &amp;lt%3b/tr&amp;gt%3b
+        &amp;lt%3b/thead&amp;gt%3b
+        &amp;lt%3btbody&amp;gt%3b
+        &amp;lt%3btr&amp;gt%3b
+            &amp;lt%3btd&amp;gt%3bNLog&amp;lt%3b/td&amp;gt%3b
+            &amp;lt%3btd&amp;gt%3b2.1&amp;lt%3b/td&amp;gt%3b
+            &amp;lt%3btd&amp;gt%3b
+                &amp;lt%3ba href=&amp;quot%3bhttps://raw.githubusercontent.com/NLog/NLog/master/LICENSE.txt&amp;quot%3b rel=&amp;quot%3bnofollow noreferrer noopener&amp;quot%3b target=&amp;quot%3b_blank&amp;quot%3b&amp;gt%3bhttps://raw.githubusercontent.com/NLog/NLog/master/LICENSE.txt&amp;lt%3b/a&amp;gt%3b
+            &amp;lt%3b/td&amp;gt%3b
+            &amp;lt%3btd&amp;gt%3b&amp;lt%3b/td&amp;gt%3b
+        &amp;lt%3b/tr&amp;gt%3b
+        &amp;lt%3btr&amp;gt%3b
+            &amp;lt%3btd&amp;gt%3bBouncy Castle Crypto APIs for .Net&amp;lt%3b/td&amp;gt%3b
+            &amp;lt%3btd&amp;gt%3b1.8&amp;lt%3b/td&amp;gt%3b
+            &amp;lt%3btd&amp;gt%3b
+                MIT &amp;lt%3ba href=&amp;quot%3bhttp://www.bouncycastle.org/csharp/licence.html&amp;quot%3b rel=&amp;quot%3bnofollow noreferrer noopener&amp;quot%3b target=&amp;quot%3b_blank&amp;quot%3b&amp;gt%3bhttp://www.bouncycastle.org/csharp/licence.html&amp;lt%3b/a&amp;gt%3b
+            &amp;lt%3b/td&amp;gt%3b
+            &amp;lt%3btd&amp;gt%3bNot needed when KSI .NET SDK Microsoft cryptography provider is used&amp;lt%3b/td&amp;gt%3b
+        &amp;lt%3b/tr&amp;gt%3b
+        &amp;lt%3btr&amp;gt%3b
+            &amp;lt%3btd&amp;gt%3bNUnit&amp;lt%3b/td&amp;gt%3b
+            &amp;lt%3btd&amp;gt%3b3.0.1&amp;lt%3b/td&amp;gt%3b
+            &amp;lt%3btd&amp;gt%3b
+                &amp;lt%3ba href=&amp;quot%3bhttp://nunit.org/nuget/nunit3-license.txt&amp;quot%3b rel=&amp;quot%3bnofollow noreferrer noopener&amp;quot%3b target=&amp;quot%3b_blank&amp;quot%3b&amp;gt%3bhttp://nunit.org/nuget/nunit3-license.txt&amp;lt%3b/a&amp;gt%3b
+            &amp;lt%3b/td&amp;gt%3b
+            &amp;lt%3btd&amp;gt%3bRequired only for testing&amp;lt%3b/td&amp;gt%3b
+        &amp;lt%3b/tr&amp;gt%3b
+        &amp;lt%3b/tbody&amp;gt%3b
+    &amp;lt%3b/table&amp;gt%3b
+    &amp;lt%3bh2&amp;gt%3bCompatibility&amp;lt%3b/h2&amp;gt%3b
+    &amp;lt%3bp&amp;gt%3b.NET 2.0 or newer&amp;lt%3b/p&amp;gt%3b
+    &amp;lt%3bh2&amp;gt%3bContributing&amp;lt%3b/h2&amp;gt%3b
+    &amp;lt%3bp&amp;gt%3b
+        See &amp;lt%3ba href=&amp;quot%3bhttps://github.com/guardtime/ksi-net-sdk/blob/master/CONTRIBUTING.md&amp;quot%3b rel=&amp;quot%3bnofollow noreferrer noopener&amp;quot%3b target=&amp;quot%3b_blank&amp;quot%3b&amp;gt%3bCONTRIBUTING.md&amp;lt%3b/a&amp;gt%3b file.
+    &amp;lt%3b/p&amp;gt%3b
+    &amp;lt%3bh2&amp;gt%3bLicense&amp;lt%3b/h2&amp;gt%3b
+    &amp;lt%3bp&amp;gt%3b
+        See &amp;lt%3ba href=&amp;quot%3bhttps://github.com/guardtime/ksi-net-sdk/blob/master/LICENSE&amp;quot%3b rel=&amp;quot%3bnofollow noreferrer noopener&amp;quot%3b target=&amp;quot%3b_blank&amp;quot%3b&amp;gt%3bLICENSE&amp;lt%3b/a&amp;gt%3b file.
+    &amp;lt%3b/p&amp;gt%3b
+&amp;lt%3b/div&amp;gt%3b</ProjectSummary>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform
 			 the build.  The others are optional common platform types that may appear. -->
