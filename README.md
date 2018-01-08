@@ -135,6 +135,8 @@ if (verificationResult.ResultCode != VerificationResultCode.Ok)
 }
 ```
 
+More detailed tutorial is available here [TUTORIAL.md](https://github.com/guardtime/ksi-net-sdk/blob/master/TUTORIAL.md).
+
 The API full reference is available here [http://guardtime.github.io/ksi-net-sdk/](http://guardtime.github.io/ksi-net-sdk/).
 
 ## Dependencies
