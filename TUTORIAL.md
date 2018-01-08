@@ -9,6 +9,8 @@ This tutorial requires at least the basic knowledge of the C# programming langua
 NLog as external library. Also if necessary it is possible to use Bouncy Castle as crypto library instead of Microsoft.
 For that Bouncy Castle library is required in addition.
 
+In order to get trial access to the KSI platform, go to [https://guardtime.com/blockchain-developers](https://guardtime.com/blockchain-developers).
+
 ## Configuring ##
 
 If you will be signing serveral documents per second then consider setting max allowed http connections in your App.config file. 
@@ -27,7 +29,7 @@ The SDK can be used with a simple wrapper KSI, where all functionality is predef
 
 ## Setting up crypto provider ##
 First thing we must do is select crypto provider. At the moment there are 2 crypto providers available, Microsoft and
-Bouncy Castle. Also it is possible to define your own. To set up a crypto provider, following command has to be used.
+Bouncy Castle. It is also possible to define your own. To set up a crypto provider, following command has to be used.
 
 ```cs
     using Guardtime.KSI;
@@ -72,10 +74,12 @@ program, which hashes a message and outputs it in hex. The hash object will be a
 
 ## Signing the hash ##
 In this part it is assumed that document is hashed and DataHash object already exists. Before hash can be signed, it is
-required to configure the network client. A network client is an abstraction layer to communicate with the
-gateway (or aggregator). It can send signing and extending request and receive responses. Also it can download the
-publications file. In following tutorial the HTTP client is used. Result is KSI signature object. First example is using the
-simplified wrapper.
+required to configure a network client. A network client is an abstraction layer to communicate with the
+gateway (or aggregator). It can send signing and extending request and receive responses. It can also download the
+publications file. In following tutorial the HTTP client is used (`HttpKsiServiceProtocol`), but there is also TCP 
+client available (`TcpKsiServiceProtocol`). 
+
+Result of signing is a KSI signature object. First example is using the simplified wrapper.
 
 ```cs
     using Guardtime.KSI;
@@ -114,13 +118,10 @@ simplified wrapper.
             // Create publications file factory.
             PublicationsFileFactory publicationsFileFactory = new PublicationsFileFactory(trustProvider);
 
-            // Create KSI signature factory.
-            KsiSignatureFactory signatureFactory = new KsiSignatureFactory();
-
             // Create service for signing, getting extended calendar hash chain and verifying and getting publications file.
             KsiService ksiService = new KsiService(httpKsiServiceProtocol, serviceCredentials, httpKsiServiceProtocol,
                 serviceCredentials, httpKsiServiceProtocol,
-                publicationsFileFactory, signatureFactory);
+                publicationsFileFactory);
 
             Ksi ksi = new Ksi(ksiService);
             // Sign hash and retrieve signature.
@@ -221,7 +222,7 @@ CalendarBasedVerificationPolicy policy = new CalendarBasedVerificationPolicy();
 ```
 
 * Default verification policy - at first signature is verified against publications file, if this is not possible then key based verification is done.
-  As name says it is a recommended verification policy to be used by default.
+  It is a recommended verification policy to be used by default.
 
 ```cs
 DefaultVerificationPolicy policy = new DefaultVerificationPolicy();
@@ -285,7 +286,7 @@ Following code represents using default verification policy and will print out t
 
             // Create service for signing, getting extended calendar hash chain and verifying and getting publications file.
             KsiService ksiService = new KsiService(httpKsiServiceProtocol, serviceCredentials, httpKsiServiceProtocol,
-                serviceCredentials, httpKsiServiceProtocol, publicationsFileFactory, signatureFactory);
+                serviceCredentials, httpKsiServiceProtocol, publicationsFileFactory);
 
             Ksi ksi = new Ksi(ksiService);
 
@@ -360,7 +361,7 @@ In the following part, the KSI signature is loaded from bytes and extended to cl
 
             // Create service for signing, getting extended calendar hash chain and verifying and getting publications file.
             KsiService ksiService = new KsiService(httpKsiServiceProtocol, serviceCredentials, httpKsiServiceProtocol,
-                serviceCredentials, httpKsiServiceProtocol, publicationsFileFactory, signatureFactory);
+                serviceCredentials, httpKsiServiceProtocol, publicationsFileFactory);
 
             Ksi ksi = new Ksi(ksiService);
 
