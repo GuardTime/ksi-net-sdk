@@ -61,7 +61,7 @@ namespace Guardtime.KSI.Test.Service
         }
 
         [Test]
-        public void ToStringWithReponseTest()
+        public void ToStringWithResponseTest()
         {
             Assembly assembly = typeof(AggregationHashChain).Assembly;
             Type linkType = assembly.GetType("Guardtime.KSI.Signature.CalendarHashChain+Link");

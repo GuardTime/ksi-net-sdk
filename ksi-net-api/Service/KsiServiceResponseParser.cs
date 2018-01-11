@@ -51,7 +51,7 @@ namespace Guardtime.KSI.Service
         public event EventHandler<ExtenderConfigChangedEventArgs> ExtenderConfigChanged;
 
         /// <summary>
-        /// Create new KSI service reponse parser. 
+        /// Create new KSI service response parser. 
         /// </summary>
         /// <param name="pduVersion">PDU version</param>
         /// <param name="requestType">Request type of the response to be parsed</param>

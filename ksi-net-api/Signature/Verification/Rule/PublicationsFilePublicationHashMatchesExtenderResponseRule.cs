@@ -22,7 +22,7 @@ using Guardtime.KSI.Publication;
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
     /// <summary>
-    ///     Rule checks that publications file publication hash matches with extender reponse calendar hash chain root hash.
+    ///     Rule checks that publications file publication hash matches with extender response calendar hash chain root hash.
     /// </summary>
     public sealed class PublicationsFilePublicationHashMatchesExtenderResponseRule : VerificationRule
     {

@@ -143,10 +143,10 @@ namespace Guardtime.KSI.Service
         public IKsiSignature EndSign(IAsyncResult asyncResult)
         {
             KsiServiceAsyncResult serviceAsyncResult = GetKsiServiceAsyncResult(asyncResult);
-            SignRequestResponsePayload reponsePayload = GetSignResponsePayload(serviceAsyncResult);
+            SignRequestResponsePayload responsePayload = GetSignResponsePayload(serviceAsyncResult);
 
-            LegacyAggregationResponsePayload legacyPayload = reponsePayload as LegacyAggregationResponsePayload;
-            AggregationResponsePayload payload = reponsePayload as AggregationResponsePayload;
+            LegacyAggregationResponsePayload legacyPayload = responsePayload as LegacyAggregationResponsePayload;
+            AggregationResponsePayload payload = responsePayload as AggregationResponsePayload;
 
             IKsiSignature signature = legacyPayload != null
                 ? _ksiSignatureFactory.Create(legacyPayload, serviceAsyncResult.DocumentHash, serviceAsyncResult.Level)

@@ -60,7 +60,7 @@ namespace Guardtime.KSI.Test.Service
         }
 
         [Test]
-        public void ToStringWithReponseTest()
+        public void ToStringWithResponseTest()
         {
             AggregationResponsePdu tag = TestUtil.GetCompositeTag<AggregationResponsePdu>(Constants.AggregationResponsePdu.TagType,
                 new ITlvTag[]
