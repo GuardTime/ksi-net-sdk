@@ -104,18 +104,18 @@ Result of signing is a KSI signature object. First example is using the simplifi
                                                .AddData(Encoding.UTF8.GetBytes(data2))
                                                .GetHash();
 
-            // Creates http service protocol which can be used for signing, extending and getting publications file.
+            // Create http service protocol which can be used for signing, extending and getting publications file.
             HttpKsiServiceProtocol httpKsiServiceProtocol = new HttpKsiServiceProtocol("http://signing.service.url",
                 "http://extending.service.url", "http://verify.guardtime.com/ksi-publications.bin");
 
-            // Creates service settings which are used to access service.
+            // Create service settings which are used to access service.
             ServiceCredentials serviceCredentials = new ServiceCredentials("user", "pass");
 
-            // Windows uses always its own trust store by default, so adding it is not required.
+            // Create trust provider for verifying received publications file.
             IPkiTrustProvider trustProvider = new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                 new CertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
-            // Create publications file factory.
+            // Create publications file factory for creating publications file instance.
             PublicationsFileFactory publicationsFileFactory = new PublicationsFileFactory(trustProvider);
 
             // Create service for signing, getting extended calendar hash chain and verifying and getting publications file.
@@ -270,18 +270,18 @@ Following code represents using default verification policy and will print out t
                                           .GetHash();
             }
 
-            // Creates http service protocol which can be used for signing, extending and getting publications file.
+            // Create http service protocol which can be used for signing, extending and getting publications file.
             HttpKsiServiceProtocol httpKsiServiceProtocol = new HttpKsiServiceProtocol("http://signing.service.url",
                 "http://extending.service.url", "http://verify.guardtime.com/ksi-publications.bin");
 
-            // Creates service settings which are used to access service.
+            // Create service settings which are used to access service.
             ServiceCredentials serviceCredentials = new ServiceCredentials("user", "pass");
 
-            // Windows uses always its own trust store by default, so adding it is not required.
+            // Create trust provider for verifying received publications file.
             IPkiTrustProvider trustProvider = new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                 new CertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
-            // Create publications file factory.
+            // Create publications file factory for creating publications file instance.
             PublicationsFileFactory publicationsFileFactory = new PublicationsFileFactory(trustProvider);
 
             // Create service for signing, getting extended calendar hash chain and verifying and getting publications file.
@@ -345,18 +345,18 @@ In the following part, the KSI signature is loaded from bytes and extended to cl
                 signature = signatureFactory.Create(stream);
             }
 
-            // Creates http service protocol which can be used for signing, extending and getting publications file.
+            // Create http service protocol which can be used for signing, extending and getting publications file.
             HttpKsiServiceProtocol httpKsiServiceProtocol = new HttpKsiServiceProtocol("http://signing.service.url",
                 "http://extending.service.url", "http://verify.guardtime.com/ksi-publications.bin");
 
-            // Creates service settings which are used to access service.
+            // Create service settings which are used to access service.
             ServiceCredentials serviceCredentials = new ServiceCredentials("user", "pass");
 
-            // Windows uses always its own trust store by default, so adding it is not required.
+            // Create trust provider for verifying received publications file.
             IPkiTrustProvider trustProvider = new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                 new CertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
-            // Create publications file factory.
+            // Create publications file factory for creating publications file instance.
             PublicationsFileFactory publicationsFileFactory = new PublicationsFileFactory(trustProvider);
 
             // Create service for signing, getting extended calendar hash chain and verifying and getting publications file.
