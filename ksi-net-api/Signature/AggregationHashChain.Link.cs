@@ -49,7 +49,7 @@ namespace Guardtime.KSI.Signature
             /// <param name="siblingHash">Sibling hash value</param>
             /// <param name="metadata">Metadata element</param>
             /// <param name="levelCorrection">Level correction</param>
-            public Link(LinkDirection direction, DataHash siblingHash, Metadata metadata, ulong levelCorrection)
+            public Link(LinkDirection direction, DataHash siblingHash, Metadata metadata = null, ulong levelCorrection = 0)
                 : base((uint)direction, false, false, BuildChildTags(siblingHash, metadata, levelCorrection))
             {
             }

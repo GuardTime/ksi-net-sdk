@@ -31,6 +31,7 @@ namespace Guardtime.KSI.Test.Publication
         public bool Forward => false;
 
         public byte[] EncodeValueBytes;
+        public byte[] EncodedBytes;
 
         public List<PublicationRecordInPublicationFile> PublicationRecords = new List<PublicationRecordInPublicationFile>();
 
@@ -42,6 +43,11 @@ namespace Guardtime.KSI.Test.Publication
         public byte[] EncodeValue()
         {
             return EncodeValueBytes;
+        }
+
+        public byte[] Encode()
+        {
+            return EncodedBytes;
         }
 
         public byte[] FindCertificateById(byte[] certificateId)

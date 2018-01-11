@@ -40,6 +40,12 @@ namespace Guardtime.KSI.Parser
         bool Forward { get; }
 
         /// <summary>
+        ///     Encode TLV object.
+        /// </summary>
+        /// <returns>TLV object as bytes</returns>
+        byte[] Encode();
+
+        /// <summary>
         ///     Encode TLV object value.
         /// </summary>
         /// <returns>TLV object value as bytes</returns>

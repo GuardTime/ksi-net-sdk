@@ -37,7 +37,7 @@ namespace Guardtime.KSI.Parser
         /// Create new TLV tag builder.
         /// </summary>
         /// <param name="tag">TLV tag to be used as base tag</param>
-        public TlvTagBuilder(CompositeTag tag)
+        public TlvTagBuilder(ICompositeTag tag)
         {
             if (tag == null)
             {
@@ -57,16 +57,12 @@ namespace Guardtime.KSI.Parser
         /// <param name="nonCritical">Is TLV element non critical</param>
         /// <param name="forward">Is TLV element forwarded</param>
         /// <param name="childTags">child TLV element list</param>
-        public TlvTagBuilder(uint type, bool nonCritical, bool forward, ITlvTag[] childTags)
+        public TlvTagBuilder(uint type, bool nonCritical, bool forward, ITlvTag[] childTags = null)
         {
-            if (childTags == null)
-            {
-                throw new ArgumentNullException(nameof(childTags));
-            }
             _type = type;
             _nonCritical = nonCritical;
             _forward = forward;
-            _childTags = new List<ITlvTag>(childTags);
+            _childTags = childTags == null ? new List<ITlvTag>() : new List<ITlvTag>(childTags);
         }
 
         /// <summary>

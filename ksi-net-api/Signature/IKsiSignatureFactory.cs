@@ -31,7 +31,7 @@ namespace Guardtime.KSI.Signature
     public interface IKsiSignatureFactory
     {
         /// <summary>
-        ///     Get KSI signature instance from byte array.
+        ///     Create KSI signature instance from byte array.
         /// </summary>
         /// <param name="bytes">signature byte array</param>
         /// <param name="hash">Signed hash</param>
@@ -39,7 +39,7 @@ namespace Guardtime.KSI.Signature
         IKsiSignature Create(byte[] bytes, DataHash hash = null);
 
         /// <summary>
-        ///     Get KSI signature instance from content byte array.
+        ///     Create KSI signature instance from content byte array.
         /// </summary>
         /// <param name="contentBytes">signature content byte array</param>
         /// <param name="hash">Signed hash</param>
@@ -47,7 +47,7 @@ namespace Guardtime.KSI.Signature
         IKsiSignature CreateByContent(byte[] contentBytes, DataHash hash = null);
 
         /// <summary>
-        ///     Get KSI signature instance from stream.
+        ///     Create KSI signature instance from stream.
         /// </summary>
         /// <param name="stream">signature data stream</param>
         /// <param name="hash">Signed hash</param>
@@ -55,7 +55,7 @@ namespace Guardtime.KSI.Signature
         IKsiSignature Create(Stream stream, DataHash hash = null);
 
         /// <summary>
-        ///     Get KSI signature instance from aggregation response payload.
+        ///     Create KSI signature instance from aggregation response payload.
         /// </summary>
         /// <param name="payload">aggregation response payload</param>
         /// <param name="hash">Signed hash</param>
@@ -64,7 +64,7 @@ namespace Guardtime.KSI.Signature
         IKsiSignature Create(AggregationResponsePayload payload, DataHash hash, uint? level = null);
 
         /// <summary>
-        ///     Get KSI signature instance from aggregation response payload.
+        ///     Create KSI signature instance from aggregation response payload.
         /// </summary>
         /// <param name="payload">legacy aggregation response payload</param>
         /// <param name="hash">Signed hash</param>
@@ -73,7 +73,7 @@ namespace Guardtime.KSI.Signature
         IKsiSignature Create(LegacyAggregationResponsePayload payload, DataHash hash, uint? level = null);
 
         /// <summary>
-        /// Get KSI signature instance from tlv tags
+        /// Create KSI signature instance from tlv tags
         /// </summary>
         /// <param name="aggregationHashChains">Aggregation hash chain tlv elements</param>
         /// <param name="calendarHashChain">Calendar hash chain tlv element</param>
@@ -85,5 +85,16 @@ namespace Guardtime.KSI.Signature
         IKsiSignature Create(ICollection<AggregationHashChain> aggregationHashChains, CalendarHashChain calendarHashChain,
                              CalendarAuthenticationRecord calendarAuthenticationRecord, PublicationRecordInSignature publicationRecord,
                              Rfc3161Record rfc3161Record, DataHash hash);
+
+        /// <summary>
+        /// Create KSI signature instance from given signature by adding a new aggregation hash chain as the lowest level chain.
+        /// </summary>
+        /// <param name="signature">Base KSI signature</param>
+        /// <param name="inputHash">Input hash of the aggregation chain to be added.</param>
+        /// <param name="aggregationAlgorithm">Aggregation algorithm of the aggregation chain to be added.</param>
+        /// <param name="chainLinks">Hash chain links of the aggregation chain to be added.</param>
+        /// <returns></returns>
+        IKsiSignature CreateSignatureWithAggregationChain(IKsiSignature signature, DataHash inputHash, HashAlgorithm aggregationAlgorithm,
+                                                          AggregationHashChain.Link[] chainLinks);
     }
 }

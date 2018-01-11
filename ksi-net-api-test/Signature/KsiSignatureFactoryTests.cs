@@ -74,8 +74,6 @@ namespace Guardtime.KSI.Test.Signature
         [Test]
         public void CreateFromStreamAndVerifyWithPolicyInvalidTest()
         {
-            IKsiSignature signature;
-
             KsiSignatureFactory signatureFactory = new KsiSignatureFactory(new PublicationBasedVerificationPolicy(),
                 new TestVerificationContext()
                 {
@@ -87,7 +85,7 @@ namespace Guardtime.KSI.Test.Signature
                 // Check invalid signature
                 using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok_With_Publication_Record), FileMode.Open))
                 {
-                    signature = signatureFactory.Create(stream);
+                    signatureFactory.Create(stream);
                 }
             });
 
@@ -97,7 +95,7 @@ namespace Guardtime.KSI.Test.Signature
         [Test]
         public void CreateFromStreamAndDoNotVerifyInvalidSignatureTest()
         {
-            // Check invalid signature
+            // Do not verify invalid signature
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Invalid_Aggregation_Chain_Index_Mismatch), FileMode.Open))
             {
                 new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream);
@@ -133,6 +131,145 @@ namespace Guardtime.KSI.Test.Signature
                 signature.Rfc3161Record, signature.InputHash);
 
             Assert.AreEqual(signature.EncodeValue(), newSignature.EncodeValue(), "Signatures should be equal.");
+        }
+
+        [Test]
+        public void CreateSignatureWithAggregationChainTest()
+        {
+            // Base signature input hash: {SHA-256:[5A848EE304CBE6B858ABCCFA0E8397920C226FD18B9E5A34D0048F749B2DA0EC]}
+
+            /*                                     5A848EE
+                                 / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \
+                              5950DCA                                   D4F6E36
+                        / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                        / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \
+                     C9AF37D              \                      /                  \
+                     /    \                \                    /                    \
+                580192B  8D982C6        14F9189             680192B                9D982C6
+            */
+
+            IKsiSignature signature;
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok_LevelCorrection3), FileMode.Open))
+            {
+                signature = new KsiSignatureFactory().Create(stream);
+            }
+
+            CreateSignatureWithAggregationChainAndVerify(
+                signature,
+                new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2")),
+                new AggregationHashChain.Link[]
+                {
+                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("018D982C6911831201C5CF15E937514686A2169E2AD57BA36FD92CBEBD99A67E34"))),
+                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("0114F9189A45A30D856029F9537FD20C9C7342B82A2D949072AB195D95D7B32ECB"))),
+                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01D4F6E36871BA12449CA773F2A36F9C0112FC74EBE164C8278D213042C772E3AB"))),
+                });
+
+            CreateSignatureWithAggregationChainAndVerify(
+                signature,
+                new DataHash(Base16.Decode("018D982C6911831201C5CF15E937514686A2169E2AD57BA36FD92CBEBD99A67E34")),
+                new AggregationHashChain.Link[]
+                {
+                    new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2"))),
+                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("0114F9189A45A30D856029F9537FD20C9C7342B82A2D949072AB195D95D7B32ECB"))),
+                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01D4F6E36871BA12449CA773F2A36F9C0112FC74EBE164C8278D213042C772E3AB"))),
+                });
+
+            CreateSignatureWithAggregationChainAndVerify(
+                signature,
+                new DataHash(Base16.Decode("0114F9189A45A30D856029F9537FD20C9C7342B82A2D949072AB195D95D7B32ECB")),
+                new AggregationHashChain.Link[]
+                {
+                    new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01C9AF37DD9714B338C07A7C46ACBE2786876429F556D1A2F4CE383B6DAA018B83")), null, 1),
+                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01D4F6E36871BA12449CA773F2A36F9C0112FC74EBE164C8278D213042C772E3AB"))),
+                });
+
+            CreateSignatureWithAggregationChainAndVerify(
+                signature,
+                new DataHash(Base16.Decode("01680192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F1")),
+                new AggregationHashChain.Link[]
+                {
+                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("019D982C6911831201C5CF15E937514686A2169E2AD57BA36FD92CBEBD99A67E32")), null, 1),
+                    new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("015950DCA0E23E65EF56D68AF94718951567EBC2EF1F54357732530FC25D925340"))),
+                });
+
+            CreateSignatureWithAggregationChainAndVerify(
+                signature,
+                new DataHash(Base16.Decode("019D982C6911831201C5CF15E937514686A2169E2AD57BA36FD92CBEBD99A67E32")),
+                new AggregationHashChain.Link[]
+                {
+                    new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01680192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F1")), null, 1),
+                    new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("015950DCA0E23E65EF56D68AF94718951567EBC2EF1F54357732530FC25D925340"))),
+                });
+        }
+
+        [Test]
+        public void CreateSignatureWithAggregationChainFailWrongLevelCorrectionTest()
+        {
+            IKsiSignature signature;
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok_LevelCorrection3), FileMode.Open))
+            {
+                signature = new KsiSignatureFactory().Create(stream);
+            }
+
+            // new chain does not fit, base signature first level correction is not big enough
+            KsiException ex1 = Assert.Throws<KsiException>(delegate
+            {
+                CreateSignatureWithAggregationChainAndVerify(
+                    signature,
+                    new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2")),
+                    new AggregationHashChain.Link[]
+                    {
+                        new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("018D982C6911831201C5CF15E937514686A2169E2AD57BA36FD92CBEBD99A67E34")), null, 1),
+                        new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("0114F9189A45A30D856029F9537FD20C9C7342B82A2D949072AB195D95D7B32ECB"))),
+                        new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01D4F6E36871BA12449CA773F2A36F9C0112FC74EBE164C8278D213042C772E3AB"))),
+                    });
+            });
+
+            Assert.That(ex1.Message.StartsWith("The aggregation hash chain cannot be added as lowest level chain"), "Unexpected exception message: " + ex1.Message);
+
+            // new chain does not fit, base signature first level correction is not big enough
+            KsiException ex2 = Assert.Throws<KsiException>(delegate
+            {
+                CreateSignatureWithAggregationChainAndVerify(
+                    signature,
+                    new DataHash(Base16.Decode("019D982C6911831201C5CF15E937514686A2169E2AD57BA36FD92CBEBD99A67E32")),
+                    new AggregationHashChain.Link[]
+                    {
+                        new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01680192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F1")), null,
+                            2),
+                        new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("015950DCA0E23E65EF56D68AF94718951567EBC2EF1F54357732530FC25D925340"))),
+                    });
+            });
+
+            Assert.That(ex2.Message.StartsWith("The aggregation hash chain cannot be added as lowest level chain"), "Unexpected exception message: " + ex2.Message);
+
+            // invalid first link level correction
+            CreateSignatureWithAggregationChainAndVerify(
+                signature,
+                new DataHash(Base16.Decode("019D982C6911831201C5CF15E937514686A2169E2AD57BA36FD92CBEBD99A67E32")),
+                new AggregationHashChain.Link[]
+                {
+                    new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01680192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F1"))),
+                    new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("015950DCA0E23E65EF56D68AF94718951567EBC2EF1F54357732530FC25D925340"))),
+                },
+                VerificationError.Int01.Code);
+        }
+
+        private static void CreateSignatureWithAggregationChainAndVerify(IKsiSignature signature, DataHash inputHash, AggregationHashChain.Link[] links,
+                                                                         string expectedVerificationErrorCode = null)
+        {
+            IKsiSignature newSignature = new KsiSignatureFactory(new EmptyVerificationPolicy()).CreateSignatureWithAggregationChain(signature, inputHash, HashAlgorithm.Sha2256,
+                links);
+            VerificationResult result = new InternalVerificationPolicy().Verify(new VerificationContext(newSignature) { DocumentHash = inputHash });
+
+            if (string.IsNullOrEmpty(expectedVerificationErrorCode))
+            {
+                Assert.AreEqual(VerificationResultCode.Ok, result.ResultCode, "Unexpected verification result");
+            }
+            else
+            {
+                Assert.AreEqual(VerificationResultCode.Fail, result.ResultCode, "Unexpected verification result");
+                Assert.AreEqual(expectedVerificationErrorCode, result.VerificationError.Code, "Unexpected verification error code");
+            }
         }
     }
 }
