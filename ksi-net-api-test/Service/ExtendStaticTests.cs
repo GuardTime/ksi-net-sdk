@@ -148,7 +148,7 @@ namespace Guardtime.KSI.Test.Service
         public void ExtendStaticWithNonCriticalPayloadTest()
         {
             IKsiSignature signature = new KsiSignatureFactory().Create(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
-            Ksi ksi = GetStaticKsi(Resources.KsiSerice_ExtendResponseNonCriticalPayload, 1043101455);
+            Ksi ksi = GetStaticKsi(Resources.KsiService_ExtendResponseNonCriticalPayload, 1043101455);
             Verify(ksi.Extend(signature));
         }
 
@@ -159,7 +159,7 @@ namespace Guardtime.KSI.Test.Service
         public void ExtendStaticWithConfTest()
         {
             IKsiSignature signature = new KsiSignatureFactory().Create(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
-            Ksi ksi = GetStaticKsi(Resources.KsiSerice_ExtendResponseWithConf, 1043101455);
+            Ksi ksi = GetStaticKsi(Resources.KsiService_ExtendResponseWithConf, 1043101455);
             Verify(ksi.Extend(signature));
         }
 
@@ -170,7 +170,7 @@ namespace Guardtime.KSI.Test.Service
         public void ExtendStaticResponseHasOnlyUnknownNonCriticalPayloadTest()
         {
             IKsiSignature signature = new KsiSignatureFactory().Create(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
-            Ksi ksi = GetStaticKsi(Resources.KsiSerice_ExtenderResponseUnkownNonCriticalPayload, 1234567890);
+            Ksi ksi = GetStaticKsi(Resources.KsiService_ExtenderResponseUnkownNonCriticalPayload, 1234567890);
 
             KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
             {

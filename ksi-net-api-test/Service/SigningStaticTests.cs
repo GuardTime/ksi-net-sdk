@@ -223,7 +223,7 @@ namespace Guardtime.KSI.Test.Service
         public void SignStaticWithConfTest()
         {
             // Response has additional conf.
-            Ksi ksi = GetStaticKsi(Resources.KsiSerice_AggregationResponseWithConf, 1584727637);
+            Ksi ksi = GetStaticKsi(Resources.KsiService_AggregationResponseWithConf, 1584727637);
             DataHash dataHash = new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"));
             IKsiSignature signature = ksi.Sign(dataHash);
             Verify(signature, dataHash);
@@ -236,7 +236,7 @@ namespace Guardtime.KSI.Test.Service
         public void SignStaticWithUnknownNonCriticalPayloadTest()
         {
             // Response has additional unknown non-ciritcal payload.
-            Ksi ksi = GetStaticKsi(Resources.KsiSerice_AggregationResponseWithUnknownNonCriticalPayload, 1584727637);
+            Ksi ksi = GetStaticKsi(Resources.KsiService_AggregationResponseWithUnknownNonCriticalPayload, 1584727637);
             DataHash dataHash = new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"));
             IKsiSignature signature = ksi.Sign(dataHash);
             Verify(signature, dataHash);
@@ -249,7 +249,7 @@ namespace Guardtime.KSI.Test.Service
         public void SignStaticResponseHasOnlyUnknownNonCriticalPayloadTest()
         {
             // Response has only unknown non-ciritcal payload.
-            Ksi ksi = GetStaticKsi(Resources.KsiSerice_AggregationResponseUnknownNonCriticalPayload, 1234567890);
+            Ksi ksi = GetStaticKsi(Resources.KsiService_AggregationResponseUnknownNonCriticalPayload, 1234567890);
 
             KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
             {

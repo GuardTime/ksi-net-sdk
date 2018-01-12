@@ -669,22 +669,22 @@
   <data name="SignatureData_Invalid_Leading_Zero" xml:space="preserve">
     <value>resources/signature/signaturedata/signature-data-invalid-leading-zero.tlv</value>
   </data>
-  <data name="KsiSerice_AggregationResponseUnknownNonCriticalPayload" xml:space="preserve">
+  <data name="KsiService_AggregationResponseUnknownNonCriticalPayload" xml:space="preserve">
     <value>resources/service/aggregation-response-pdu-with-only-unknown-non-critical-payload.tlv</value>
   </data>
-  <data name="KsiSerice_AggregationResponseWithConf" xml:space="preserve">
+  <data name="KsiService_AggregationResponseWithConf" xml:space="preserve">
     <value>resources/service/aggregation-response-pdu-with-conf.tlv</value>
   </data>
-  <data name="KsiSerice_AggregationResponseWithUnknownNonCriticalPayload" xml:space="preserve">
+  <data name="KsiService_AggregationResponseWithUnknownNonCriticalPayload" xml:space="preserve">
     <value>resources/service/aggregation-response-pdu-with-unknown-non-critical-payload.tlv</value>
   </data>
-  <data name="KsiSerice_ExtenderResponseUnkownNonCriticalPayload" xml:space="preserve">
+  <data name="KsiService_ExtenderResponseUnkownNonCriticalPayload" xml:space="preserve">
     <value>resources/service/extender-response-with-only-unknown-non-critical-payload.tlv</value>
   </data>
-  <data name="KsiSerice_ExtendResponseNonCriticalPayload" xml:space="preserve">
+  <data name="KsiService_ExtendResponseNonCriticalPayload" xml:space="preserve">
     <value>resources/service/extend-response-pdu-unknown-non-critical-payload.tlv</value>
   </data>
-  <data name="KsiSerice_ExtendResponseWithConf" xml:space="preserve">
+  <data name="KsiService_ExtendResponseWithConf" xml:space="preserve">
     <value>resources/service/extend-response-with-conf.tlv</value>
   </data>
   <data name="KsiSignature_Obsolete_Calendar_Chain_Algorithm_2016" xml:space="preserve">
