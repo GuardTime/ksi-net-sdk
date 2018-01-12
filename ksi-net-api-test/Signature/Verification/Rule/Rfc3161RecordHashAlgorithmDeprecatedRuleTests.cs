@@ -36,10 +36,11 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             Rfc3161RecordHashAlgorithmDeprecatedRule rule = new Rfc3161RecordHashAlgorithmDeprecatedRule();
 
             // Argument null exception when no context
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 rule.Verify(null);
             });
+            Assert.AreEqual("context", ex.ParamName);
         }
 
         [Test]

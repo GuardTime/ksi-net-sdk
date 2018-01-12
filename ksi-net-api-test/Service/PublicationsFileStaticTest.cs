@@ -52,10 +52,11 @@ namespace Guardtime.KSI.Test.Service
         {
             KsiService service = GetKsiService();
 
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 service.EndGetPublicationsFile(null);
             });
+            Assert.AreEqual("asyncResult", ex.ParamName);
         }
 
         [Test]

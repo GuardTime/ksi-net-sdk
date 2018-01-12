@@ -37,10 +37,11 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             UserProvidedPublicationCreationTimeVerificationRule rule = new UserProvidedPublicationCreationTimeVerificationRule();
 
             // Argument null exception when no context
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 rule.Verify(null);
             });
+            Assert.AreEqual("context", ex.ParamName);
         }
 
         [Test]
@@ -63,7 +64,10 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             UserProvidedPublicationCreationTimeVerificationRule rule = new UserProvidedPublicationCreationTimeVerificationRule();
 
             // Check signature without calendar hash chain
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record), FileMode.Open))
+            using (
+                FileStream stream =
+                    new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record),
+                        FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {

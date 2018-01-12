@@ -40,10 +40,11 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             CertificateExistenceRule rule = new CertificateExistenceRule();
 
             // Argument null exception when no context
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 rule.Verify(null);
             });
+            Assert.AreEqual("context", ex.ParamName);
         }
 
         [Test]

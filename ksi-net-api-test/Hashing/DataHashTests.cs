@@ -79,19 +79,21 @@ namespace Guardtime.KSI.Test.Hashing
         [Test]
         public void TestDataHashCreateWithNullAlgorithm()
         {
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 new DataHash(null, new byte[] { });
             });
+            Assert.AreEqual("algorithm", ex.ParamName);
         }
 
         [Test]
         public void TestDataHashCreateWithNullValue()
         {
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 new DataHash(HashAlgorithm.Sha2256, null);
             });
+            Assert.AreEqual("valueBytes", ex.ParamName);
         }
 
         [Test]
@@ -106,10 +108,11 @@ namespace Guardtime.KSI.Test.Hashing
         [Test]
         public void TestDataHashCreateWithNullBytes()
         {
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 new DataHash(null);
             });
+            Assert.AreEqual("imprintBytes", ex.ParamName);
         }
 
         [Test]

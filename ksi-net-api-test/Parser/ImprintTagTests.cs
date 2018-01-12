@@ -171,19 +171,21 @@ namespace Guardtime.KSI.Test.Parser
         [Test]
         public void TestImprintTagCreateFromNullTag()
         {
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 new ImprintTag(null);
             });
+            Assert.AreEqual("tag", ex.ParamName);
         }
 
         [Test]
         public void TestImprintTagCreateWithNullValue()
         {
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 new ImprintTag(0x1, true, true, null);
             });
+            Assert.AreEqual("value", ex.ParamName);
         }
 
         private class ChildImprintTag : ImprintTag

@@ -27,7 +27,6 @@ using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
 using Guardtime.KSI.Test.Properties;
 using Guardtime.KSI.Test.Publication;
-using Guardtime.KSI.Test.Trust;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
@@ -42,10 +41,11 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             CalendarAuthenticationRecordSignatureVerificationRule rule = new CalendarAuthenticationRecordSignatureVerificationRule();
 
             // Argument null exception when no context
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 rule.Verify(null);
             });
+            Assert.AreEqual("context", ex.ParamName);
         }
 
         [Test]

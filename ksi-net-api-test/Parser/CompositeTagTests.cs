@@ -142,19 +142,21 @@ namespace Guardtime.KSI.Test.Parser
         [Test]
         public void TestCompositeTagAddNullValueToSpecificPosition()
         {
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 new CompositeTestTag(0x1, false, false, new ITlvTag[] { null });
             });
+            Assert.AreEqual("childTags", ex.ParamName);
         }
 
         [Test]
         public void TestCompositeTagCreateFromDataNullValue()
         {
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 new CompositeTestTag(0x1, false, false, null);
             });
+            Assert.AreEqual("childTags", ex.ParamName);
         }
 
         [Test]
@@ -175,10 +177,11 @@ namespace Guardtime.KSI.Test.Parser
         public void TestVerifyCriticalFlag()
         {
             CompositeTestTag tag = new CompositeTestTag(0x1, false, false, new ITlvTag[] { });
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 tag.VerifyCriticalFlagWithoutTag();
             });
+            Assert.AreEqual("tag", ex.ParamName);
         }
 
         private class ChildCompositeTestTag : CompositeTestTag

@@ -145,10 +145,12 @@ namespace Guardtime.KSI.Test.Hashing
         [Test]
         public void TestDataHasherWithAlgorithmNull()
         {
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 CryptoTestFactory.CreateDataHasher(null);
             });
+
+            Assert.AreEqual("algorithm", ex.ParamName);
         }
 
         [Test]
@@ -164,40 +166,44 @@ namespace Guardtime.KSI.Test.Hashing
         public void TestDataHasherWithNullBytes()
         {
             IDataHasher hasher = CryptoTestFactory.CreateDataHasher();
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 hasher.AddData((byte[])null);
             });
+            Assert.AreEqual("data", ex.ParamName);
         }
 
         [Test]
         public void TestDataHasherWithNullICollection()
         {
             IDataHasher hasher = CryptoTestFactory.CreateDataHasher();
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 hasher.AddData((byte[])null);
             });
+            Assert.AreEqual("data", ex.ParamName);
         }
 
         [Test]
         public void TestDataHasherWithNullBytesAndNoLength()
         {
             IDataHasher hasher = CryptoTestFactory.CreateDataHasher();
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 hasher.AddData(null, 0, 0);
             });
+            Assert.AreEqual("data", ex.ParamName);
         }
 
         [Test]
         public void TestDataHasherWithNullStream()
         {
             IDataHasher hasher = CryptoTestFactory.CreateDataHasher();
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 hasher.AddData((Stream)null);
             });
+            Assert.AreEqual("inStream", ex.ParamName);
         }
 
         [Test]

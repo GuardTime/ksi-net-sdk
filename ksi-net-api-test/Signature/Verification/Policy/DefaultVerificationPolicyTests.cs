@@ -306,7 +306,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
                 1043101455,
                 PduVersion.v2);
 
-            VerificationResult result = policy.Verify(TestUtil. GetSignature(Resources.KsiSignature_Ok_20171219), null, staticKsiService);
+            VerificationResult result = policy.Verify(TestUtil.GetSignature(Resources.KsiSignature_Ok_20171219), null, staticKsiService);
 
             Assert.AreEqual(VerificationResultCode.Ok, result.ResultCode, "Unexpected verification result code.");
             Assert.AreEqual(2, result.ChildResults.Count, "Invalid child result count.");

@@ -41,10 +41,11 @@ namespace Guardtime.KSI.Test.Signature
         [Test]
         public void CreateFromStreamFromNullInvalidTest()
         {
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 new KsiSignatureFactory().Create((Stream)null);
             });
+            Assert.AreEqual("stream", ex.ParamName);
         }
 
         [Test]

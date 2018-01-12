@@ -86,10 +86,11 @@ namespace Guardtime.KSI.Test.Parser
         [Test]
         public void TestIntegerTagCreateFromNullTag()
         {
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 new IntegerTag(null);
             });
+            Assert.AreEqual("tag", ex.ParamName);
         }
 
         private class ChildIntegerTag : IntegerTag
