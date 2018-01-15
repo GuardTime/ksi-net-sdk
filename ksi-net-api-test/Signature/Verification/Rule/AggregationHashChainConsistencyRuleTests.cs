@@ -49,21 +49,22 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             AggregationHashChainConsistencyRule rule = new AggregationHashChainConsistencyRule();
 
             // Verification exception on missing KSI signature 
-            Assert.Throws<KsiVerificationException>(delegate
+            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
             {
                 TestVerificationContext context = new TestVerificationContext();
 
                 rule.Verify(context);
             });
+            Assert.That(ex.Message, Does.StartWith("Invalid KSI signature in context: null"));
         }
 
         [Test]
-        public void TestSignatureWithoutAggregationHashChains()
+        public void TestSignatureWithoutAggregationHashChain()
         {
             AggregationHashChainConsistencyRule rule = new AggregationHashChainConsistencyRule();
 
             // Verification exception on missing KSI signature aggregation hash chain 
-            Assert.Throws<KsiVerificationException>(delegate
+            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -72,6 +73,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
 
                 rule.Verify(context);
             });
+            Assert.That(ex.Message, Does.StartWith("Aggregation hash chains are missing from KSI signature"));
         }
 
         [Test]

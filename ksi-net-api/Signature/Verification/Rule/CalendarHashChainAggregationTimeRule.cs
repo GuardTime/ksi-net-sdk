@@ -33,7 +33,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             IKsiSignature signature = GetSignature(context);
             CalendarHashChain calendarHashChain = GetCalendarHashChain(signature, true);
 
-            // If calendar hash chain is missing, verification successful
+            // If calendar hash chain is missing, verification is successful
             if (calendarHashChain == null)
             {
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);

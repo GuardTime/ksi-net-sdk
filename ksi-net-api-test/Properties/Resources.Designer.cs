@@ -745,60 +745,6 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/service/aggregation-response-pdu-with-only-unknown-non-critical-payload.tlv.
-        /// </summary>
-        internal static string KsiService_AggregationResponseUnknownNonCriticalPayload {
-            get {
-                return ResourceManager.GetString("KsiService_AggregationResponseUnknownNonCriticalPayload", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/service/aggregation-response-pdu-with-conf.tlv.
-        /// </summary>
-        internal static string KsiService_AggregationResponseWithConf {
-            get {
-                return ResourceManager.GetString("KsiService_AggregationResponseWithConf", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/service/aggregation-response-pdu-with-unknown-non-critical-payload.tlv.
-        /// </summary>
-        internal static string KsiService_AggregationResponseWithUnknownNonCriticalPayload {
-            get {
-                return ResourceManager.GetString("KsiService_AggregationResponseWithUnknownNonCriticalPayload", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/service/extender-response-with-only-unknown-non-critical-payload.tlv.
-        /// </summary>
-        internal static string KsiService_ExtenderResponseUnkownNonCriticalPayload {
-            get {
-                return ResourceManager.GetString("KsiService_ExtenderResponseUnkownNonCriticalPayload", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/service/extend-response-pdu-unknown-non-critical-payload.tlv.
-        /// </summary>
-        internal static string KsiService_ExtendResponseNonCriticalPayload {
-            get {
-                return ResourceManager.GetString("KsiService_ExtendResponseNonCriticalPayload", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/service/extend-response-with-conf.tlv.
-        /// </summary>
-        internal static string KsiService_ExtendResponseWithConf {
-            get {
-                return ResourceManager.GetString("KsiService_ExtendResponseWithConf", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to resources/service/aggregation-response-pdu-error-payload.tlv.
         /// </summary>
         internal static string KsiService_AggregationResponsePdu_ErrorPayload {
@@ -880,6 +826,33 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/service/aggregation-response-pdu-with-only-unknown-non-critical-payload.tlv.
+        /// </summary>
+        internal static string KsiService_AggregationResponseUnknownNonCriticalPayload {
+            get {
+                return ResourceManager.GetString("KsiService_AggregationResponseUnknownNonCriticalPayload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/aggregation-response-pdu-with-conf.tlv.
+        /// </summary>
+        internal static string KsiService_AggregationResponseWithConf {
+            get {
+                return ResourceManager.GetString("KsiService_AggregationResponseWithConf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/aggregation-response-pdu-with-unknown-non-critical-payload.tlv.
+        /// </summary>
+        internal static string KsiService_AggregationResponseWithUnknownNonCriticalPayload {
+            get {
+                return ResourceManager.GetString("KsiService_AggregationResponseWithUnknownNonCriticalPayload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/service/aggregator-config-response-pdu.tlv.
         /// </summary>
         internal static string KsiService_AggregatorConfigResponsePdu {
@@ -921,6 +894,24 @@ namespace Guardtime.KSI.Test.Properties {
         internal static string KsiService_ExtenderResponsePdu_ErrorPayload {
             get {
                 return ResourceManager.GetString("KsiService_ExtenderResponsePdu_ErrorPayload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/extender-response-with-only-unknown-non-critical-payload.tlv.
+        /// </summary>
+        internal static string KsiService_ExtenderResponseUnkownNonCriticalPayload {
+            get {
+                return ResourceManager.GetString("KsiService_ExtenderResponseUnkownNonCriticalPayload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/extend-response-pdu-unknown-non-critical-payload.tlv.
+        /// </summary>
+        internal static string KsiService_ExtendResponseNonCriticalPayload {
+            get {
+                return ResourceManager.GetString("KsiService_ExtendResponseNonCriticalPayload", resourceCulture);
             }
         }
         
@@ -975,6 +966,15 @@ namespace Guardtime.KSI.Test.Properties {
         internal static string KsiService_ExtendResponsePdu_RequestId_1043101455 {
             get {
                 return ResourceManager.GetString("KsiService_ExtendResponsePdu_RequestId_1043101455", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/extend-response-with-conf.tlv.
+        /// </summary>
+        internal static string KsiService_ExtendResponseWithConf {
+            get {
+                return ResourceManager.GetString("KsiService_ExtendResponseWithConf", resourceCulture);
             }
         }
         
@@ -1367,6 +1367,15 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-ok-Missing-publication-record-and-calendar-authentication-record.tlv.
+        /// </summary>
+        internal static string KsiSignature_Ok_AggregationHashChain_Only {
+            get {
+                return ResourceManager.GetString("KsiSignature_Ok_AggregationHashChain_Only", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-ok-calendar-auth-record-pkcs7-signature.tlv.
         /// </summary>
         internal static string KsiSignature_Ok_Calendar_Auth_Record_Pkcs7_Signature {
@@ -1399,15 +1408,6 @@ namespace Guardtime.KSI.Test.Properties {
         internal static string KsiSignature_Ok_LevelCorrection3 {
             get {
                 return ResourceManager.GetString("KsiSignature_Ok_LevelCorrection3", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-ok-Missing-publication-record-and-calendar-authentication-record.tlv.
-        /// </summary>
-        internal static string KsiSignature_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record {
-            get {
-                return ResourceManager.GetString("KsiSignature_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record", resourceCulture);
             }
         }
         

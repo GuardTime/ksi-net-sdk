@@ -53,12 +53,16 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             PublicationsFileSignaturePublicationMatchRule rule = new PublicationsFileSignaturePublicationMatchRule();
 
             // Verification exception on missing KSI signature
-            Assert.Throws<KsiVerificationException>(delegate
+            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
             {
-                TestVerificationContext context = new TestVerificationContext();
+                TestVerificationContext context = new TestVerificationContext()
+                {
+                    PublicationsFile = new TestPublicationsFile()
+                };
 
                 rule.Verify(context);
             });
+            Assert.That(ex.Message, Does.StartWith("Invalid KSI signature in context: null"));
         }
 
         [Test]
@@ -74,31 +78,33 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                     Signature = new KsiSignatureFactory().Create(stream)
                 };
 
-                Assert.Throws<KsiVerificationException>(delegate
+                KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
                 {
                     rule.Verify(context);
                 });
+                Assert.That(ex.Message, Does.StartWith("Invalid publications file in context: null"));
             }
         }
 
         [Test]
-        public void TestSignatureWithPublicationsFileMissingPublicationsRecord()
+        public void TestSignatureWithPublicationsFileMissingPublicationRecord()
         {
             PublicationsFileSignaturePublicationMatchRule rule = new PublicationsFileSignaturePublicationMatchRule();
 
-            // Check signature with not publications record
+            // Check signature without publication record
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
-                TestVerificationContextFaultyFunctions context = new TestVerificationContextFaultyFunctions()
+                TestVerificationContext context = new TestVerificationContext()
                 {
                     Signature = new KsiSignatureFactory().Create(stream),
                     PublicationsFile = new TestPublicationsFile()
                 };
 
-                Assert.Throws<KsiVerificationException>(delegate
+                KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
                 {
                     rule.Verify(context);
                 });
+                Assert.That(ex.Message, Does.StartWith("Invalid publication record in KSI signature: null"));
             }
         }
 

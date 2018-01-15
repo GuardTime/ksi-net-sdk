@@ -51,21 +51,22 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             CalendarHashChainAggregationTimeRule rule = new CalendarHashChainAggregationTimeRule();
 
             // Verification exception on missing KSI signature 
-            Assert.Throws<KsiVerificationException>(delegate
+            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
             {
                 TestVerificationContext context = new TestVerificationContext();
 
                 rule.Verify(context);
             });
+            Assert.That(ex.Message, Does.StartWith("Invalid KSI signature in context: null"));
         }
 
         [Test]
-        public void TestSignatureMissingAggregationHashChain()
+        public void TestSignatureWithoutAggregationHashChain()
         {
             CalendarHashChainAggregationTimeRule rule = new CalendarHashChainAggregationTimeRule();
 
             // Verification exception on missing KSI signature aggregation hash chain 
-            Assert.Throws<KsiVerificationException>(delegate
+            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -80,6 +81,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
 
                 rule.Verify(context);
             });
+            Assert.That(ex.Message, Does.StartWith("Aggregation hash chains are missing from KSI signature"));
         }
 
         [Test]
@@ -90,7 +92,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             // Check signature with no calendar hash chain
             using (
                 FileStream stream =
-                    new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record),
+                    new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_AggregationHashChain_Only),
                         FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()

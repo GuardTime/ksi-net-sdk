@@ -93,10 +93,12 @@ namespace Guardtime.KSI.Test.Parser
         {
             using (TlvReader reader = new TlvReader(new MemoryStream(new byte[] { 0x21 })))
             {
-                Assert.Throws<TlvException>(delegate
+                TlvException ex = Assert.Throws<TlvException>(delegate
                 {
                     reader.ReadTag();
-                }, "Premature end of data");
+                });
+
+                Assert.That(ex.Message, Does.StartWith("Premature end of input data"));
             }
         }
 
@@ -105,10 +107,11 @@ namespace Guardtime.KSI.Test.Parser
         {
             using (TlvReader reader = new TlvReader(new MemoryStream(new byte[] { 0x21, 0x2 })))
             {
-                Assert.Throws<TlvException>(delegate
+                TlvException ex = Assert.Throws<TlvException>(delegate
                 {
                     reader.ReadTag();
-                }, "Premature end of data");
+                });
+                Assert.That(ex.Message, Does.StartWith("Could not read TLV data with expected length"));
             }
         }
     }

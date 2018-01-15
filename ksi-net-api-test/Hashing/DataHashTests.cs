@@ -99,10 +99,11 @@ namespace Guardtime.KSI.Test.Hashing
         [Test]
         public void TestDataHashCreateWithInvalidValueLength()
         {
-            Assert.Throws<HashingException>(delegate
+            HashingException ex = Assert.Throws<HashingException>(delegate
             {
-                new DataHash(HashAlgorithm.Sha2256, new byte[] { });
+                new DataHash(HashAlgorithm.Sha2256, new byte[] { 1, 1 });
             });
+            Assert.That(ex.Message, Does.StartWith("Hash size(2) does not match SHA-256 size(32)"));
         }
 
         [Test]
@@ -118,28 +119,31 @@ namespace Guardtime.KSI.Test.Hashing
         [Test]
         public void TestDataHashCreateWithZeroLengthBytes()
         {
-            Assert.Throws<HashingException>(delegate
+            HashingException ex = Assert.Throws<HashingException>(delegate
             {
                 new DataHash(new byte[] { });
             });
+            Assert.That(ex.Message, Does.StartWith("Hash imprint is too short."));
         }
 
         [Test]
         public void TestDataHashCreateWithInvalidAlgorithmFromBytes()
         {
-            Assert.Throws<HashingException>(delegate
+            HashingException ex = Assert.Throws<HashingException>(delegate
             {
                 new DataHash(new byte[] { 255 });
             });
+            Assert.That(ex.Message, Does.StartWith("Hash algorithm id(255) is unknown"));
         }
 
         [Test]
         public void TestDataHashCreateWithInvalidValueLengthFromBytes()
         {
-            Assert.Throws<HashingException>(delegate
+            HashingException ex = Assert.Throws<HashingException>(delegate
             {
                 new DataHash(new byte[] { 1, 1, 2, 3, 4, 5, 6 });
             });
+            Assert.That(ex.Message, Does.StartWith("Hash size(6) does not match SHA-256 size(32)"));
         }
 
         private class ChildDataHash : DataHash

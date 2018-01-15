@@ -49,12 +49,13 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             SignaturePublicationRecordPublicationHashRule rule = new SignaturePublicationRecordPublicationHashRule();
 
             // Verification exception on missing KSI signature 
-            Assert.Throws<KsiVerificationException>(delegate
+            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
             {
                 TestVerificationContext context = new TestVerificationContext();
 
                 rule.Verify(context);
             });
+            Assert.That(ex.Message, Does.StartWith("Invalid KSI signature in context: null"));
         }
 
         [Test]
@@ -65,7 +66,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             // Check legacy signature for missing calendar hash chain and existing publication record
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok_With_Publication_Record), FileMode.Open))
             {
-                Assert.Throws<KsiVerificationException>(delegate
+                KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
                 {
                     IKsiSignature signature = new KsiSignatureFactory().Create(stream);
                     TestVerificationContext context = new TestVerificationContext()
@@ -78,6 +79,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
 
                     rule.Verify(context);
                 });
+                Assert.That(ex.Message, Does.StartWith("Calendar hash chain is missing from KSI signature"));
             }
         }
 
@@ -86,7 +88,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         {
             SignaturePublicationRecordPublicationHashRule rule = new SignaturePublicationRecordPublicationHashRule();
 
-            // Check signature without publications record
+            // Check signature without publication record
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
@@ -104,7 +106,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         {
             SignaturePublicationRecordPublicationHashRule rule = new SignaturePublicationRecordPublicationHashRule();
 
-            // Check legacy signature with publications record
+            // Check legacy signature with publication record
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok_With_Publication_Record), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
@@ -122,7 +124,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         {
             SignaturePublicationRecordPublicationHashRule rule = new SignaturePublicationRecordPublicationHashRule();
 
-            // Check signature with publications record
+            // Check signature with publication record
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_With_Publication_Record), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()

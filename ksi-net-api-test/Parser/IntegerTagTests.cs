@@ -77,10 +77,11 @@ namespace Guardtime.KSI.Test.Parser
         [Test]
         public void TestTlvTagCreateFromInvalidEncodeTlvTag()
         {
-            Assert.Throws<TlvException>(delegate
+            TlvException ex = Assert.Throws<TlvException>(delegate
             {
                 new IntegerTag(new InvalidEncodeTlvTag(0x0, false, false));
             });
+            Assert.That(ex.Message, Does.StartWith("Invalid TLV element encoded value: null"));
         }
 
         [Test]

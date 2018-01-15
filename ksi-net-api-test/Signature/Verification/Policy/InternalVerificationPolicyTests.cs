@@ -43,7 +43,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Policy
                 {
                     DocumentHash = new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D"))
                 };
-                VerificationResult verificationResult = policy.Verify(context);
+                policy.Verify(context);
             });
 
             Assert.That(ex.Message, Does.StartWith("Invalid signature in context: null"));

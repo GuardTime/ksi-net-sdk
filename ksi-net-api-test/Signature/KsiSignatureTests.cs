@@ -83,16 +83,10 @@ namespace Guardtime.KSI.Test.Signature
         }
 
         [Test]
-        public void TestKsiSignatureOkMissingCalendarHashChain()
+        public void TestKsiSignatureOkWithAggregationHashChainOnly()
         {
-            IKsiSignature signature = GetKsiSignatureFromFile(Properties.Resources.KsiSignature_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record);
+            IKsiSignature signature = GetKsiSignatureFromFile(Properties.Resources.KsiSignature_Ok_AggregationHashChain_Only);
             Assert.Null(signature.CalendarHashChain, "Calendar hash chain must be null");
-        }
-
-        [Test]
-        public void TestKsiSignatureOkMissingPublicationRecord()
-        {
-            IKsiSignature signature = GetKsiSignatureFromFile(Properties.Resources.KsiSignature_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record);
             Assert.Null(signature.PublicationRecord, "Publication record must be null");
             Assert.Null(signature.CalendarAuthenticationRecord, "Calendar authentication record must be null");
         }

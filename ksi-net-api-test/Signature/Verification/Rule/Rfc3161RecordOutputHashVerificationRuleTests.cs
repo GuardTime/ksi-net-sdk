@@ -49,12 +49,13 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             Rfc3161RecordOutputHashVerificationRule rule = new Rfc3161RecordOutputHashVerificationRule();
 
             // Verification exception on missing KSI signature 
-            Assert.Throws<KsiVerificationException>(delegate
+            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
             {
                 TestVerificationContext context = new TestVerificationContext();
 
                 rule.Verify(context);
             });
+            Assert.That(ex.Message, Does.StartWith("Invalid KSI signature in context: null"));
         }
 
         [Test]

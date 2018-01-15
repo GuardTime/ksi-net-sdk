@@ -49,12 +49,13 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             SignaturePublicationRecordPublicationTimeRule rule = new SignaturePublicationRecordPublicationTimeRule();
 
             // Verification exception on missing KSI signature 
-            Assert.Throws<KsiVerificationException>(delegate
+            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
             {
                 TestVerificationContext context = new TestVerificationContext();
 
                 rule.Verify(context);
             });
+            Assert.That(ex.Message, Does.StartWith("Invalid KSI signature in context: null"));
         }
 
         [Test]
@@ -65,7 +66,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             // Check signature with publication record and calendar hash chain is missing
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_With_Publication_Record), FileMode.Open))
             {
-                Assert.Throws<KsiVerificationException>(delegate
+                KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
                 {
                     IKsiSignature signature = new KsiSignatureFactory().Create(stream);
                     TestVerificationContext context = new TestVerificationContext()
@@ -78,6 +79,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
 
                     rule.Verify(context);
                 });
+                Assert.That(ex.Message, Does.StartWith("Calendar hash chain is missing from KSI signature"));
             }
         }
 
@@ -140,7 +142,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         {
             SignaturePublicationRecordPublicationTimeRule rule = new SignaturePublicationRecordPublicationTimeRule();
 
-            // Check invalid signature with invalid publications record
+            // Check invalid signature with invalid publication record
             using (FileStream stream =
                 new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Invalid_With_Invalid_Publication_Record_Time), FileMode.Open))
             {

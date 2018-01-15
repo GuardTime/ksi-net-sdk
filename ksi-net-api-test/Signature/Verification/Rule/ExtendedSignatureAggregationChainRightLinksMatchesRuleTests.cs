@@ -51,12 +51,13 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             ExtendedSignatureAggregationChainRightLinksMatchesRule rule = new ExtendedSignatureAggregationChainRightLinksMatchesRule();
 
             // Verification exception on missing KSI signature 
-            Assert.Throws<KsiVerificationException>(delegate
+            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
             {
                 TestVerificationContext context = new TestVerificationContext();
 
                 rule.Verify(context);
             });
+            Assert.That(ex.Message, Does.StartWith("Invalid KSI signature in context: null"));
         }
 
         [Test]
@@ -65,10 +66,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             ExtendedSignatureAggregationChainRightLinksMatchesRule rule = new ExtendedSignatureAggregationChainRightLinksMatchesRule();
 
             // Check signature without calendar chain
-            using (
-                FileStream stream =
-                    new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record),
-                        FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_AggregationHashChain_Only), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -79,10 +77,11 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                                 "010456C0D6A9020456C0D6A90521012C8149F374FDDCD5443456BC7E8FFA310B7FE090DAA98C0980B81EC2407FD0130821011A039DE0761EEC75F6CCB4B17720E0565AC694BB8B2211BB30B22DD9AC45F931082101F7D776798EFF2A0B75FFD135D45F2717C25909BAF482A04CF15F70C4E2BD75A7082101E994F25C01928F616C1D4B5F3715CD70586FAC3DF056E40FC88B5E7F3D11FBBF082101F5B1B5665B31B1CBE0EA66222E5905A43D7CB735ACDCF9D6C2931A23C1798797082101E47589DA097DA8C79A2B79D98A4DEA1484F28DB52A513AFD92166BF4894379C3082101F4C67A2D3BD0C46CF9064C3909A41A0D3178CCE6B729E700CFA240E4CF04984108210102459F392EBEE422991B251625C9E9E63C6394A8D1307EC9036BFCEB48E3F43108210182E16E325B51C2D8B29494DDB9DE3CB2718A8F135D8F2B1D1D2AD240A60B306F0821015234BB37CEAA00A36D44AABFC25215B1899573CE1A76827F070D7D2C68AF9DE608210136E2E89E8F3928F80A6D89AD666354E145473B2C6FF683F0796DAA68F2004545082101E44F0A3EA272C03DEFC1825D3148F0DC4060CF6BAF04F3ACD0B9AFA9EE52CAD5082101A0698E6B45EDEEAF9037E49F668114617CA60124F0FC416D017D06D78CA4295A082101A6F082B82280F3A6AFB14C8E39B7F57860B857B70CA57AFD35F40395EEB32458082101496FC0120D854E7534B992AB32EC3045B20D4BEE1BFBE4564FD092CEAFA08B72082101BB44FD36A5F3CDEE7B5C6DF3A6098A09E353335B6029F1477502588A7E37BE00")))
                 };
 
-                Assert.Throws<KsiVerificationException>(delegate
+                KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
                 {
                     rule.Verify(context);
                 });
+                Assert.That(ex.Message, Does.StartWith("Calendar hash chain is missing from KSI signature"));
             }
         }
 
@@ -94,15 +93,16 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             // Check invalid extended calendar chain when service returns null
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
-                TestVerificationContextFaultyFunctions context = new TestVerificationContextFaultyFunctions()
+                TestVerificationContext context = new TestVerificationContext()
                 {
                     Signature = new KsiSignatureFactory().Create(stream)
                 };
 
-                Assert.Throws<KsiVerificationException>(delegate
+                KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
                 {
                     rule.Verify(context);
                 });
+                Assert.That(ex.Message, Does.StartWith("Received invalid extended calendar hash chain from context extension function: null"));
             }
         }
 

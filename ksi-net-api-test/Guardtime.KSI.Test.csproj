@@ -258,7 +258,6 @@
     <Compile Include="Signature\Verification\Rule\SignaturePublicationRecordExistenceRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\SignaturePublicationRecordPublicationHashRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\SignaturePublicationRecordPublicationTimeRuleTests.cs" />
-    <Compile Include="Signature\Verification\Rule\TestVerificationContextFaultyFunctions.cs" />
     <Compile Include="Signature\Verification\Rule\TestVerificationContext.cs" />
     <Compile Include="Signature\Verification\Rule\UserProvidedPublicationCreationTimeVerificationRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\UserProvidedPublicationExistenceRuleTests.cs" />

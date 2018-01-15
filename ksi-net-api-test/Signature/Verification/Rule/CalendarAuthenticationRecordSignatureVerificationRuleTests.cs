@@ -54,11 +54,12 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             CalendarAuthenticationRecordSignatureVerificationRule rule = new CalendarAuthenticationRecordSignatureVerificationRule();
 
             // Verification exception on missing KSI signature
-            Assert.Throws<KsiVerificationException>(delegate
+            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
             {
                 TestVerificationContext context = new TestVerificationContext();
                 rule.Verify(context);
             });
+            Assert.That(ex.Message, Does.StartWith("Invalid KSI signature in context: null"));
         }
 
         [Test]
@@ -67,9 +68,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             CalendarAuthenticationRecordSignatureVerificationRule rule = new CalendarAuthenticationRecordSignatureVerificationRule();
 
             // Check signature with no calendar authentication record
-            using (FileStream stream =
-                new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record),
-                    FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok_AggregationHashChain_Only), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -77,10 +76,11 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                     PublicationsFile = new TestPublicationsFile()
                 };
 
-                Assert.Throws<KsiVerificationException>(delegate
+                KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
                 {
                     rule.Verify(context);
                 });
+                Assert.That(ex.Message, Does.StartWith("Invalid calendar authentication record in signature: null"));
             }
         }
 
@@ -99,19 +99,20 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                     PublicationsFile = new TestPublicationsFile()
                 };
 
-                Assert.Throws<KsiVerificationException>(delegate
+                KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
                 {
                     rule.Verify(context);
                 });
+                Assert.That(ex.Message, Does.StartWith("No certificate found in publications file with id:"));
             }
         }
 
         [Test]
-        public void TestRfc3161SignatureWithoutPublicationFile()
+        public void TestRfc3161SignatureWithoutPublicationsFile()
         {
             CalendarAuthenticationRecordSignatureVerificationRule rule = new CalendarAuthenticationRecordSignatureVerificationRule();
 
-            // Check legacy signature to verify calendar authentication record with and without publications file. With publications file should succeed.
+            // Check legacy signature without publications file. 
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Legacy_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
@@ -119,19 +120,20 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                     Signature = new KsiSignatureFactory().Create(stream)
                 };
 
-                Assert.Throws<KsiVerificationException>(delegate
+                KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
                 {
                     rule.Verify(context);
                 });
+                Assert.That(ex.Message, Does.StartWith("Invalid publications file in context: null"));
             }
         }
 
         [Test]
-        public void TestRfc3161SignatureWithPublicationFile()
+        public void TestRfc3161SignatureWithPublicationsFile()
         {
             CalendarAuthenticationRecordSignatureVerificationRule rule = new CalendarAuthenticationRecordSignatureVerificationRule();
 
-            // Check legacy signature to verify calendar authentication record with and without publications file. With publications file should succeed.
+            // Check legacy signature with publications file. 
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Legacy_Ok), FileMode.Open))
             {
                 TestPublicationsFile testPublicationsFile = new TestPublicationsFile();

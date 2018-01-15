@@ -162,15 +162,16 @@ namespace Guardtime.KSI.Test.Parser
         [Test]
         public void TestIsInvalidStructure()
         {
-            Assert.Throws<TlvException>(delegate
+            TlvException ex = Assert.Throws<TlvException>(delegate
             {
                 new CompositeTestTag(0x1, false, false,
                     new ITlvTag[]
                     {
-                        new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }),
-                        new RawTag(0x3, false, false, new byte[] { 0x3, 0x4 })
+                        new RawTag(0x2, false, false, new byte[] { 0x4, 0x5 }),
+                        new RawTag(0x3, false, false, new byte[] { 0x6, 0x7 })
                     });
             });
+            Assert.That(ex.Message, Does.StartWith("Unknown tag type (0x2)"));
         }
 
         [Test]

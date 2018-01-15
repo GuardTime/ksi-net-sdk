@@ -49,12 +49,13 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             Rfc3161RecordAggregationTimeRule rule = new Rfc3161RecordAggregationTimeRule();
 
             // Verification exception on missing KSI signature 
-            Assert.Throws<KsiVerificationException>(delegate
+            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
             {
                 TestVerificationContext context = new TestVerificationContext();
 
                 rule.Verify(context);
             });
+            Assert.That(ex.Message, Does.StartWith("Invalid KSI signature in context: null"));
         }
 
         [Test]
@@ -67,7 +68,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                 Rfc3161Record rfc3161Record = new KsiSignatureFactory().Create(stream).Rfc3161Record;
 
                 // Verification exception on missing KSI signature aggregation hash chain 
-                Assert.Throws<KsiVerificationException>(delegate
+                KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
                 {
                     TestVerificationContext context = new TestVerificationContext()
                     {
@@ -76,6 +77,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
 
                     rule.Verify(context);
                 });
+                Assert.That(ex.Message, Does.StartWith("Aggregation hash chains are missing from KSI signature"));
             }
         }
 

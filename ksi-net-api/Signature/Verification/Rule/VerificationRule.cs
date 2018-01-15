@@ -213,7 +213,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (publicationRecord == null)
             {
-                throw new KsiVerificationException("Invalid publications record in KSI signature: null.");
+                throw new KsiVerificationException("Invalid publication record in KSI signature: null.");
             }
 
             return publicationRecord;

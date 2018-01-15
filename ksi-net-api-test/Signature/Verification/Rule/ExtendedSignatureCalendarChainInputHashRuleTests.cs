@@ -51,12 +51,13 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             ExtendedSignatureCalendarChainInputHashRule rule = new ExtendedSignatureCalendarChainInputHashRule();
 
             // Verification exception on missing KSI signature 
-            Assert.Throws<KsiVerificationException>(delegate
+            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
             {
                 TestVerificationContext context = new TestVerificationContext();
 
                 rule.Verify(context);
             });
+            Assert.That(ex.Message, Does.StartWith("Invalid KSI signature in context: null"));
         }
 
         [Test]
@@ -67,7 +68,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             // Check signature without calendar chain
             using (
                 FileStream stream =
-                    new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record),
+                    new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_AggregationHashChain_Only),
                         FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
@@ -91,15 +92,16 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             // Check invalid extended calendar chain with faulty context functions
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
-                TestVerificationContextFaultyFunctions context = new TestVerificationContextFaultyFunctions()
+                TestVerificationContext context = new TestVerificationContext()
                 {
                     Signature = new KsiSignatureFactory().Create(stream)
                 };
 
-                Assert.Throws<KsiVerificationException>(delegate
+                KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
                 {
                     rule.Verify(context);
                 });
+                Assert.That(ex.Message, Does.StartWith("Received invalid extended calendar hash chain from context extension function: null"));
             }
         }
 

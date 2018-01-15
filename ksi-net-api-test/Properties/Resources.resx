@@ -336,7 +336,7 @@
   <data name="KsiSignature_Invalid_Missing_Aggregation_Hash_Chain" xml:space="preserve">
     <value>resources/signature/ksi-signature/ksi-signature-invalid-missing-aggregation-hash-chains.tlv</value>
   </data>
-  <data name="KsiSignature_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record" xml:space="preserve">
+  <data name="KsiSignature_Ok_AggregationHashChain_Only" xml:space="preserve">
     <value>resources/signature/ksi-signature/ksi-signature-ok-Missing-publication-record-and-calendar-authentication-record.tlv</value>
   </data>
   <data name="KsiSignature_Invalid_Multiple_Calendar_Authentication_Records" xml:space="preserve">

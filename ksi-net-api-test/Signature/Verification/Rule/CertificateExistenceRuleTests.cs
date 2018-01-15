@@ -53,12 +53,13 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             CertificateExistenceRule rule = new CertificateExistenceRule();
 
             // Verification exception on missing KSI signature 
-            Assert.Throws<KsiVerificationException>(delegate
+            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
             {
                 TestVerificationContext context = new TestVerificationContext();
 
                 rule.Verify(context);
             });
+            Assert.That(ex.Message, Does.StartWith("Invalid KSI signature in context: null"));
         }
 
         [Test]
@@ -78,10 +79,11 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                     PublicationsFile = new TestPublicationsFile()
                 };
 
-                Assert.Throws<KsiVerificationException>(delegate
+                KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
                 {
                     rule.Verify(context);
                 });
+                Assert.That(ex.Message, Does.StartWith("Invalid calendar authentication record in signature: null"));
             }
         }
 
@@ -90,7 +92,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         {
             CertificateExistenceRule rule = new CertificateExistenceRule();
 
-            // Check legacy signature with and without publications file. With publications file succeeds.
+            // Check legacy signature without publications file. 
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok), FileMode.Open))
             {
                 TestVerificationContext context = new TestVerificationContext()
@@ -98,10 +100,11 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                     Signature = new KsiSignatureFactory().Create(stream)
                 };
 
-                Assert.Throws<KsiVerificationException>(delegate
+                KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
                 {
                     rule.Verify(context);
                 });
+                Assert.That(ex.Message, Does.StartWith("Invalid publications file in context: null"));
             }
         }
 
@@ -110,7 +113,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         {
             CertificateExistenceRule rule = new CertificateExistenceRule();
 
-            // Check legacy signature with and without publications file. With publications file succeeds.
+            // Check legacy signature without publications file.
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok), FileMode.Open))
             {
                 TestPublicationsFile testPublicationsFile = new TestPublicationsFile();

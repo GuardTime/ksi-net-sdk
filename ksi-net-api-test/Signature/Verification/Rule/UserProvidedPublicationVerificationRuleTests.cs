@@ -50,12 +50,13 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
 
             // Verification exception on missing KSI signature 
-            Assert.Throws<KsiVerificationException>(delegate
+            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
             {
                 TestVerificationContext context = new TestVerificationContext();
 
                 rule.Verify(context);
             });
+            Assert.That(ex.Message, Does.StartWith("Invalid KSI signature in context: null"));
         }
 
         [Test]
@@ -64,7 +65,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
 
             // Verification exception on missing publication record
-            Assert.Throws<KsiVerificationException>(delegate
+            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
             {
                 TestVerificationContext context = new TestVerificationContext()
                 {
@@ -74,6 +75,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
 
                 rule.Verify(context);
             });
+            Assert.That(ex.Message, Does.StartWith("Invalid publication record in KSI signature: null"));
         }
 
         [Test]
@@ -89,10 +91,11 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                     Signature = new KsiSignatureFactory().Create(stream)
                 };
 
-                Assert.Throws<KsiVerificationException>(delegate
+                KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
                 {
                     rule.Verify(context);
                 });
+                Assert.That(ex.Message, Does.StartWith("Invalid user publication in context: null"));
             }
         }
 
@@ -103,15 +106,16 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             // Check invalid extended calendar chain from context extension function
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
-                TestVerificationContextFaultyFunctions context = new TestVerificationContextFaultyFunctions()
+                TestVerificationContext context = new TestVerificationContext()
                 {
                     Signature = new KsiSignatureFactory().Create(stream)
                 };
 
-                Assert.Throws<KsiVerificationException>(delegate
+                KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
                 {
                     rule.Verify(context);
                 });
+                Assert.That(ex.Message, Does.StartWith("Received invalid extended calendar hash chain from context extension function: null"));
             }
         }
 

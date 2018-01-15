@@ -81,7 +81,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         }
 
         /// <summary>
-        /// Test publications file request with request failing.
+        /// Test publications file request with invalid request.
         /// </summary>
         [Test]
         public void HAPublicationsFileRequestFailTest()
@@ -93,10 +93,12 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
                     GetPublicationsFileService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_RequestId_1584727637)))
                     );
 
-            Assert.Throws<PublicationsFileException>(delegate
+            PublicationsFileException ex = Assert.Throws<PublicationsFileException>(delegate
             {
                 haService.GetPublicationsFile();
             });
+
+            Assert.That(ex.Message, Does.StartWith("Publications file header is incorrect. Invalid publications file magic bytes"));
         }
 
         public IKsiService GetPublicationsFileService(byte[] requestResult = null)

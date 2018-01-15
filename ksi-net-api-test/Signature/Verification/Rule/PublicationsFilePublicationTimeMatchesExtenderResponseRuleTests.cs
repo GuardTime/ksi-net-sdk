@@ -53,12 +53,13 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             PublicationsFilePublicationTimeMatchesExtenderResponseRule rule = new PublicationsFilePublicationTimeMatchesExtenderResponseRule();
 
             // Verification exception on missing KSI signature 
-            Assert.Throws<KsiVerificationException>(delegate
+            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
             {
                 TestVerificationContext context = new TestVerificationContext();
 
                 rule.Verify(context);
             });
+            Assert.That(ex.Message, Does.StartWith("Invalid KSI signature in context: null"));
         }
 
         [Test]
@@ -74,36 +75,11 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                     Signature = new KsiSignatureFactory().Create(stream)
                 };
 
-                Assert.Throws<KsiVerificationException>(delegate
+                KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
                 {
                     rule.Verify(context);
                 });
-            }
-        }
-
-        [Test]
-        public void TestSignatureMissingCalendarHashChain()
-        {
-            PublicationsFilePublicationTimeMatchesExtenderResponseRule rule = new PublicationsFilePublicationTimeMatchesExtenderResponseRule();
-
-            // Check invalid calendar hash chain in signature: null
-            using (
-                FileStream stream =
-                    new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record),
-                        FileMode.Open))
-            {
-                TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
-
-                TestVerificationContextFaultyFunctions context = new TestVerificationContextFaultyFunctions()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream),
-                    PublicationsFile = testPublicationsFile
-                };
-
-                Assert.Throws<KsiVerificationException>(delegate
-                {
-                    rule.Verify(context);
-                });
+                Assert.That(ex.Message, Does.StartWith("Invalid publications file in context: null"));
             }
         }
 
@@ -116,17 +92,21 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
             {
                 TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
+                testPublicationsFile.NearestPublications.Add(1455478441,
+                    new PublicationRecordInPublicationFile(new RawTag(0x703, false, false,
+                        new PublicationData("AAAAAA-CT5VGY-AAPUCF-L3EKCC-NRSX56-AXIDFL-VZJQK4-WDCPOE-3KIWGB-XGPPM3-O5BIMW-REOVR4").Encode())));
 
-                TestVerificationContextFaultyFunctions context = new TestVerificationContextFaultyFunctions()
+                TestVerificationContext context = new TestVerificationContext()
                 {
                     Signature = new KsiSignatureFactory().Create(stream),
                     PublicationsFile = testPublicationsFile
                 };
 
-                Assert.Throws<KsiVerificationException>(delegate
+                KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
                 {
                     rule.Verify(context);
                 });
+                Assert.That(ex.Message, Does.StartWith("Received invalid extended calendar hash chain from context extension function: null"));
             }
         }
 
@@ -150,10 +130,11 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                                 "010453ED4D80020453B2A01D052101E8E1FB57586DFE67D5B541FCE6CFC78684E4C38ED87784D97FFA7FEB81DB7D1E08210153D8E4B360DDB59CE2C6028C5C502664C035165C8FB4462BF82340F550E7547C07210109867731331680C0A0605E59522C35060DD6BA1F741EB411FECE2D446F6E66C60821015744E0D040C744B1DB86070EB49051DE95F983E7288ED9F489C508B8B6DA6DF2082101736BA09B6108819611B3F6400415E7F778E21EAA412D1B769A048A657B9E98380821019D07C73BECEC4F37F05132C8695DED4D2EA27432DAB5A75E19739D42C667BD7B072101982F75FE7D976EF4F09334F9C74DAF0F8D9E6F21BC15E1E5B0459C5FB2CCDA94072101177769276EAED1F6E8975F53795CABC4E7AF15FA6E2EB82E953E75903125C5A70721011B3EF77E8A12037061A8D66C02C08017BE5989A5549C37AD29BE6DA1C91D22D3072101B3C58D951F365C7B5A3EA32D10C93681BE2587F43516172A9207F80BCF091C280721011A874BCCEC382D3E262FCBD45E98AC015D33EBA11A4BBA235EF4DD1CD74FB74D072101B79DEFB98B7399FE191777D9D5E7BD65EBFEB437A67E03410AA447129B0F904F072101D8309245A4A52C0A85C72855B217F941215B2FA4F9867D5BA7EE717609614BC5072101CC2DA8F01BC8E09E745717F574484D02772D1CAA711E11ACAEB336A3FBBA974708210181F5BA98D16F8A14B2B7E7C2D5FEE8FCD30D61731D097571ADF18BAF0285807C072101832753B33D49A83863338CE03FD7D11177344978754988963A6C3C8CDB31642F0821013110D9D04908F59E422A9C674721ABF6E78B5BFB9B62F98D38E35818D28110CA072101CE9DDC7F1BF91CAFFFA71867F9F988826DAA8C6157952228758FE5F21C6D106F082101C1DFAFE010C4D7046E143BBA14781F206D0026710C7B6D633A446B86750C54CE072101B5305FC528B235A33B32A4DD64575FED5802F7658F5FF8A4C0AA237EB50A98AE072101CEF6F8C65E2DD16E4ED42DA884B59886BB781D4047BC39FFD0771D5A5617E73F08210105D3A7B71DA6715B9B4F7DA5E4ECF52584B1A1A3451B814E4633C8894EC656CA08210142FEAC12960B2147E41C2C89663C2D05D11AECB43A5E646BB241F53C8BF00C0107210166142A0A4CA33B69C4F916234FD59B913FF92128F46A78748094FDCE3C06CFB90821016B303486CE63811ECCF8FB5EE071E471C574E661FBCAE366F8F4DC6ACFC79C400821011C102667AC4FBC8D91B99EF4A7C78BEE2448FF52AA6CD1D557595F23510E98EA082101FB79B43E0AA6BEE9173839C051D3D0DAC6F8EFBD487331B5B86A214C42FAA81C082101496FC0120D854E7534B992AB32EC3045B20D4BEE1BFBE4564FD092CEAFA08B72082101BB44FD36A5F3CDEE7B5C6DF3A6098A09E353335B6029F1477502588A7E37BE00")))
                 };
 
-                Assert.Throws<KsiVerificationException>(delegate
+                KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
                 {
                     rule.Verify(context);
                 });
+                Assert.That(ex.Message, Does.StartWith("No publication record found after given time in publications file"));
             }
         }
 
