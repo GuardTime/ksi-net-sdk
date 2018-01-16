@@ -18,11 +18,10 @@
  */
 
 using System;
-using System.IO;
 using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
+using Guardtime.KSI.Test.Properties;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
@@ -30,8 +29,6 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
     [TestFixture]
     public class AggregationHashChainMetadataRuleTests
     {
-        readonly KsiSignatureFactory _ksiSignatureFactory = new KsiSignatureFactory(new EmptyVerificationPolicy());
-
         [Test]
         public void TestMissingContext()
         {
@@ -54,7 +51,6 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
             {
                 TestVerificationContext context = new TestVerificationContext();
-
                 rule.Verify(context);
             });
             Assert.That(ex.Message, Does.StartWith("Invalid KSI signature in context: null"));
@@ -84,17 +80,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         [Test]
         public void TestAggregationHashChainMetadataWithPadding1()
         {
-            AggregationHashChainMetadataRule rule = new AggregationHashChainMetadataRule();
-
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = _ksiSignatureFactory.Create(
-                    new FileStream(Path.Combine(TestSetup.LocalPath,
-                        Properties.Resources.AggregationHashChainMetadataWithPadding1), FileMode.Open))
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            CreateAndVerify(Resources.AggregationHashChainMetadataWithPadding1, VerificationResultCode.Ok);
         }
 
         /// <summary>
@@ -103,17 +89,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         [Test]
         public void TestAggregationHashChainMetadataWithPadding2()
         {
-            AggregationHashChainMetadataRule rule = new AggregationHashChainMetadataRule();
-
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature =
-                    _ksiSignatureFactory.Create(new FileStream(Path.Combine(TestSetup.LocalPath,
-                        Properties.Resources.AggregationHashChainMetadataWithPadding2), FileMode.Open))
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            CreateAndVerify(Resources.AggregationHashChainMetadataWithPadding2, VerificationResultCode.Ok);
         }
 
         /// <summary>
@@ -122,17 +98,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         [Test]
         public void TestAggregationHashChainMetadataPaddingNotFirstFail()
         {
-            AggregationHashChainMetadataRule rule = new AggregationHashChainMetadataRule();
-
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature =
-                    _ksiSignatureFactory.Create(new FileStream(Path.Combine(TestSetup.LocalPath,
-                        Properties.Resources.AggregationHashChainMetadataPaddingNotFirstFail), FileMode.Open))
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+            CreateAndVerify(Resources.AggregationHashChainMetadataPaddingNotFirstFail, VerificationResultCode.Fail);
         }
 
         /// <summary>
@@ -141,17 +107,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         [Test]
         public void TestAggregationHashChainMetadataPaddingNotTlv8Fail()
         {
-            AggregationHashChainMetadataRule rule = new AggregationHashChainMetadataRule();
-
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature =
-                    _ksiSignatureFactory.Create(new FileStream(Path.Combine(TestSetup.LocalPath,
-                        Properties.Resources.AggregationHashChainMetadataPaddingNotTlv8Fail), FileMode.Open))
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+            CreateAndVerify(Resources.AggregationHashChainMetadataPaddingNotTlv8Fail, VerificationResultCode.Fail);
         }
 
         /// <summary>
@@ -160,17 +116,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         [Test]
         public void TestAggregationHashChainMetadataPaddingNotForwardFail()
         {
-            AggregationHashChainMetadataRule rule = new AggregationHashChainMetadataRule();
-
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature =
-                    _ksiSignatureFactory.Create(new FileStream(Path.Combine(TestSetup.LocalPath,
-                        Properties.Resources.AggregationHashChainMetadataPaddingNotForwardFail), FileMode.Open))
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+            CreateAndVerify(Resources.AggregationHashChainMetadataPaddingNotForwardFail, VerificationResultCode.Fail);
         }
 
         /// <summary>
@@ -179,17 +125,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         [Test]
         public void TestAggregationHashChainMetadataPaddingNotNonCriticalFail()
         {
-            AggregationHashChainMetadataRule rule = new AggregationHashChainMetadataRule();
-
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature =
-                    _ksiSignatureFactory.Create(new FileStream(Path.Combine(TestSetup.LocalPath,
-                        Properties.Resources.AggregationHashChainMetadataPaddingNotNonCriticalFail), FileMode.Open))
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+            CreateAndVerify(Resources.AggregationHashChainMetadataPaddingNotNonCriticalFail, VerificationResultCode.Fail);
         }
 
         /// <summary>
@@ -198,17 +134,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         [Test]
         public void TestAggregationHashChainMetadataPaddingNotForwardNotNonCriticalFail()
         {
-            AggregationHashChainMetadataRule rule = new AggregationHashChainMetadataRule();
-
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature =
-                    _ksiSignatureFactory.Create(new FileStream(Path.Combine(TestSetup.LocalPath,
-                        Properties.Resources.AggregationHashChainMetadataPaddingNotForwardNotNonCriticalFail), FileMode.Open))
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+            CreateAndVerify(Resources.AggregationHashChainMetadataPaddingNotForwardNotNonCriticalFail, VerificationResultCode.Fail);
         }
 
         /// <summary>
@@ -217,17 +143,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         [Test]
         public void TestAggregationHashChainMetadataUnknownPaddingValue1Fail()
         {
-            AggregationHashChainMetadataRule rule = new AggregationHashChainMetadataRule();
-
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature =
-                    _ksiSignatureFactory.Create(new FileStream(Path.Combine(TestSetup.LocalPath,
-                        Properties.Resources.AggregationHashChainMetadataUnknownPaddingValue1Fail), FileMode.Open))
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+            CreateAndVerify(Resources.AggregationHashChainMetadataUnknownPaddingValue1Fail, VerificationResultCode.Fail);
         }
 
         /// <summary>
@@ -236,17 +152,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         [Test]
         public void TestAggregationHashChainMetadataUnknownPaddingValue2Fail()
         {
-            AggregationHashChainMetadataRule rule = new AggregationHashChainMetadataRule();
-
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature =
-                    _ksiSignatureFactory.Create(new FileStream(Path.Combine(TestSetup.LocalPath,
-                        Properties.Resources.AggregationHashChainMetadataUnknownPaddingValue2Fail), FileMode.Open))
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+            CreateAndVerify(Resources.AggregationHashChainMetadataUnknownPaddingValue2Fail, VerificationResultCode.Fail);
         }
 
         /// <summary>
@@ -255,17 +161,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         [Test]
         public void TestAggregationHashChainMetadataUnknownPaddingValue3Fail()
         {
-            AggregationHashChainMetadataRule rule = new AggregationHashChainMetadataRule();
-
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature =
-                    _ksiSignatureFactory.Create(new FileStream(Path.Combine(TestSetup.LocalPath,
-                        Properties.Resources.AggregationHashChainMetadataUnknownPaddingValue3Fail), FileMode.Open))
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+            CreateAndVerify(Resources.AggregationHashChainMetadataUnknownPaddingValue3Fail, VerificationResultCode.Fail);
         }
 
         /// <summary>
@@ -274,17 +170,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         [Test]
         public void TestAggregationHashChainMetadataInvalidPaddingFail()
         {
-            AggregationHashChainMetadataRule rule = new AggregationHashChainMetadataRule();
-
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature =
-                    _ksiSignatureFactory.Create(new FileStream(Path.Combine(TestSetup.LocalPath,
-                        Properties.Resources.AggregationHashChainMetadataInvalidPaddingFail), FileMode.Open))
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+            CreateAndVerify(Resources.AggregationHashChainMetadataInvalidPaddingFail, VerificationResultCode.Fail);
         }
 
         /// <summary>
@@ -293,17 +179,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         [Test]
         public void TestAggregationHashChainMetadataWithoutPadding()
         {
-            AggregationHashChainMetadataRule rule = new AggregationHashChainMetadataRule();
-
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature =
-                    _ksiSignatureFactory.Create(new FileStream(Path.Combine(TestSetup.LocalPath,
-                        Properties.Resources.AggregationHashChainMetadataWithoutPadding), FileMode.Open))
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            CreateAndVerify(Resources.AggregationHashChainMetadataWithoutPadding, VerificationResultCode.Ok);
         }
 
         /// <summary>
@@ -312,17 +188,29 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         [Test]
         public void TestAggregationHashChainMetadataWithoutPaddingFail()
         {
+            CreateAndVerify(Resources.AggregationHashChainMetadataWithoutPaddingFail, VerificationResultCode.Fail);
+        }
+
+        private static void CreateAndVerify(string path, VerificationResultCode expectedResultCode)
+        {
             AggregationHashChainMetadataRule rule = new AggregationHashChainMetadataRule();
 
             TestVerificationContext context = new TestVerificationContext()
             {
-                Signature =
-                    _ksiSignatureFactory.Create(new FileStream(Path.Combine(TestSetup.LocalPath,
-                        Properties.Resources.AggregationHashChainMetadataWithoutPaddingFail), FileMode.Open))
+                Signature = TestUtil.GetSignature(path)
             };
 
+            Verify(rule, context, expectedResultCode, VerificationError.Int11.Code);
+        }
+
+        private static void Verify(AggregationHashChainMetadataRule rule, IVerificationContext context, VerificationResultCode expectedResultCode, string expectedErrorCode = null)
+        {
             VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+            Assert.AreEqual(expectedResultCode, verificationResult.ResultCode, "Unexpected verification result code");
+            if (expectedResultCode == VerificationResultCode.Fail)
+            {
+                Assert.AreEqual(expectedErrorCode, verificationResult.VerificationError.Code, "Unexpected verification error code");
+            }
         }
     }
 }

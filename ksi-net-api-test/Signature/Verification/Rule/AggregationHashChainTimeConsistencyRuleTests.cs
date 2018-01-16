@@ -18,11 +18,10 @@
  */
 
 using System;
-using System.IO;
 using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
+using Guardtime.KSI.Test.Properties;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
@@ -82,16 +81,13 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             AggregationHashChainTimeConsistencyRule rule = new AggregationHashChainTimeConsistencyRule();
 
             // Check legacy signature for aggregation hash chain time consistency
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream)
-                };
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Legacy_Ok)
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
         }
 
         [Test]
@@ -100,16 +96,13 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             AggregationHashChainTimeConsistencyRule rule = new AggregationHashChainTimeConsistencyRule();
 
             // Check signature for aggregation hash chain time consistency
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream)
-                };
+                Signature = TestUtil.GetSignature()
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
         }
 
         [Test]
@@ -118,18 +111,14 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             AggregationHashChainTimeConsistencyRule rule = new AggregationHashChainTimeConsistencyRule();
 
             // Check invalid signature for aggregation hash chain incosistency in time
-            using (FileStream stream =
-                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Invalid_Aggregation_Chain_Aggregation_Time_Mismatch), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream)
-                };
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Invalid_Aggregation_Chain_Aggregation_Time_Mismatch)
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-                Assert.AreEqual(VerificationError.Int02, verificationResult.VerificationError);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+            Assert.AreEqual(VerificationError.Int02, verificationResult.VerificationError);
         }
     }
 }

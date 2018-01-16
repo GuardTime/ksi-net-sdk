@@ -18,12 +18,11 @@
  */
 
 using System;
-using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
-using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
+using Guardtime.KSI.Test.Properties;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
@@ -84,19 +83,16 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
 
             // Check signature without user publication
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream)
-                };
+                Signature = TestUtil.GetSignature()
+            };
 
-                KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
-                {
-                    rule.Verify(context);
-                });
-                Assert.That(ex.Message, Does.StartWith("Invalid user publication in context: null"));
-            }
+            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
+            {
+                rule.Verify(context);
+            });
+            Assert.That(ex.Message, Does.StartWith("Invalid user publication in context: null"));
         }
 
         public void TestSignatureWithInvalidContextExtendFunctions()
@@ -104,19 +100,16 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
 
             // Check invalid extended calendar chain from context extension function
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream)
-                };
+                Signature = TestUtil.GetSignature()
+            };
 
-                KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
-                {
-                    rule.Verify(context);
-                });
-                Assert.That(ex.Message, Does.StartWith("Received invalid extended calendar hash chain from context extension function: null"));
-            }
+            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
+            {
+                rule.Verify(context);
+            });
+            Assert.That(ex.Message, Does.StartWith("Received invalid extended calendar hash chain from context extension function: null"));
         }
 
         [Test]
@@ -125,18 +118,15 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
 
             // Check invalid signature
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_With_Publication_Record), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream),
-                    // time and hash mismatch
-                    UserPublication = new PublicationData("AAAAAA-CVUWRI-AANGVK-SV7GJL-36LN65-AVJYZR-6XRZSL-HIMRH3-6GU7WR-YNRY7C-X2XEC3-YOVLRM")
-                };
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_With_Publication_Record),
+                // time and hash mismatch
+                UserPublication = new PublicationData("AAAAAA-CVUWRI-AANGVK-SV7GJL-36LN65-AVJYZR-6XRZSL-HIMRH3-6GU7WR-YNRY7C-X2XEC3-YOVLRM")
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
         }
 
         [Test]
@@ -145,19 +135,16 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
 
             // Check invalid signature
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_With_Publication_Record), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream),
-                    // time match but hash mismatch
-                    UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AANGVK-SV7GJL-36LN65-AVJYZR-6XRZSL-HIMRH3-6GU7WR-YNRY7C-X2XECY-WFQXRB")
-                };
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_With_Publication_Record),
+                // time match but hash mismatch
+                UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AANGVK-SV7GJL-36LN65-AVJYZR-6XRZSL-HIMRH3-6GU7WR-YNRY7C-X2XECY-WFQXRB")
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-                Assert.AreEqual(VerificationError.Pub04, verificationResult.VerificationError);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+            Assert.AreEqual(VerificationError.Pub04, verificationResult.VerificationError);
         }
 
         [Test]
@@ -166,17 +153,14 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
 
             // Check legacy signature with publication record
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok_With_Publication_Record), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream),
-                    UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K")
-                };
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Legacy_Ok_With_Publication_Record),
+                UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K")
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
         }
 
         [Test]
@@ -185,17 +169,14 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             UserProvidedPublicationVerificationRule rule = new UserProvidedPublicationVerificationRule();
 
             // Check signature with publication record
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_With_Publication_Record), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream),
-                    UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K")
-                };
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_With_Publication_Record),
+                UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K")
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
         }
     }
 }

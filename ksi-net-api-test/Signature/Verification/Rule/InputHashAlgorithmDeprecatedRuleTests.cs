@@ -18,11 +18,10 @@
  */
 
 using System;
-using System.IO;
 using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
+using Guardtime.KSI.Test.Properties;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
@@ -63,16 +62,13 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             InputHashAlgorithmDeprecatedRule rule = new InputHashAlgorithmDeprecatedRule();
 
             // Check legacy signature input hash that use hash algorithm without deprecated date
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream),
-                };
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Legacy_Ok)
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
         }
 
         [Test]
@@ -81,17 +77,13 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             InputHashAlgorithmDeprecatedRule rule = new InputHashAlgorithmDeprecatedRule();
 
             // Check legacy signature input hash that use hash algorithm with deprecated date and aggregation time is before deprecated date
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Rfc3161Record_Sha1InputHashAlgorithm_2016), FileMode.Open)
-                )
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream),
-                };
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Rfc3161Record_Sha1InputHashAlgorithm_2016)
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
         }
 
         [Test]
@@ -100,18 +92,14 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             InputHashAlgorithmDeprecatedRule rule = new InputHashAlgorithmDeprecatedRule();
 
             // Check legacy signature input hash that use hash algorithm with deprecated date and aggregation time is after deprecated date
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Rfc3161Record_Sha1InputHashAlgorithm_2017), FileMode.Open)
-                )
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream),
-                };
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Rfc3161Record_Sha1InputHashAlgorithm_2017)
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-                Assert.AreEqual(VerificationError.Int13, verificationResult.VerificationError);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+            Assert.AreEqual(VerificationError.Int13, verificationResult.VerificationError);
         }
 
         [Test]
@@ -120,16 +108,13 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             InputHashAlgorithmDeprecatedRule rule = new InputHashAlgorithmDeprecatedRule();
 
             // Check signature input hash that use hash algorithm without deprecated date
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream),
-                };
+                Signature = TestUtil.GetSignature()
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
         }
 
         [Test]
@@ -138,16 +123,13 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             InputHashAlgorithmDeprecatedRule rule = new InputHashAlgorithmDeprecatedRule();
 
             // Check signature input hash that use hash algorithm with deprecated date and aggregation time is before deprecated date
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Sha1InputAlgorithm_2016), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream),
-                };
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Sha1InputAlgorithm_2016)
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
         }
 
         [Test]
@@ -156,17 +138,14 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             InputHashAlgorithmDeprecatedRule rule = new InputHashAlgorithmDeprecatedRule();
 
             // Check signature input hash that use hash algorithm with deprecated date and aggregation time is after deprecated date
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Sha1InputAlgorithm_2017), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream),
-                };
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Sha1InputAlgorithm_2017)
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-                Assert.AreEqual(VerificationError.Int13, verificationResult.VerificationError);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+            Assert.AreEqual(VerificationError.Int13, verificationResult.VerificationError);
         }
     }
 }

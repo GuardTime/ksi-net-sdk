@@ -18,11 +18,10 @@
  */
 
 using System;
-using System.IO;
 using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
+using Guardtime.KSI.Test.Properties;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
@@ -64,16 +63,13 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             CalendarAuthenticationRecordExistenceRule rule = new CalendarAuthenticationRecordExistenceRule();
 
             // Check legacy signature for aggregation authentication record existence
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream)
-                };
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Legacy_Ok)
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
         }
 
         [Test]
@@ -82,16 +78,13 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             CalendarAuthenticationRecordExistenceRule rule = new CalendarAuthenticationRecordExistenceRule();
 
             // Check signature for aggregation authentication record existence
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream)
-                };
+                Signature = TestUtil.GetSignature()
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
         }
 
         [Test]
@@ -100,16 +93,13 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             CalendarAuthenticationRecordExistenceRule rule = new CalendarAuthenticationRecordExistenceRule();
 
             // Check signature without calendar authentication record
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_AggregationHashChain_Only), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream)
-                };
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_AggregationHashChain_Only)
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
         }
     }
 }

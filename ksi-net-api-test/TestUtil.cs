@@ -85,20 +85,27 @@ namespace Guardtime.KSI.Test
             return algorithm;
         }
 
-        public static IKsiSignature GetSignature(string path)
+        public static KsiSignature GetSignature(string path = null)
         {
-            KsiSignatureFactory signatureFactory = new KsiSignatureFactory(new EmptyVerificationPolicy());
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, path), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, path ?? Resources.KsiSignature_Ok), FileMode.Open))
             {
-                return signatureFactory.Create(stream);
+                return (KsiSignature)new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream);
             }
         }
 
-        public static IPublicationsFile GetPublicationsFile()
+        public static PublicationsFile GetPublicationsFile(string path = null)
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, path ?? Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
             {
-                return new PublicationsFileFactory(new TestPkiTrustProvider()).Create(stream);
+                return (PublicationsFile)new PublicationsFileFactory(new TestPkiTrustProvider()).Create(stream);
+            }
+        }
+
+        public static RawTag GetRawTag(string file)
+        {
+            using (TlvReader reader = new TlvReader(new FileStream(Path.Combine(TestSetup.LocalPath, file), FileMode.Open)))
+            {
+                return reader.ReadTag();
             }
         }
     }

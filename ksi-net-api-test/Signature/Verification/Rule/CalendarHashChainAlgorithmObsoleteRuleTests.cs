@@ -19,13 +19,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
-using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
+using Guardtime.KSI.Test.Properties;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
@@ -66,16 +65,13 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             CalendarHashChainAlgorithmObsoleteRule rule = new CalendarHashChainAlgorithmObsoleteRule();
 
             // Check with calendar hash chains that use hash algorithms without obsolete date
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream),
-                };
+                Signature = TestUtil.GetSignature()
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
         }
 
         [Test]
@@ -86,16 +82,13 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             CalendarHashChainAlgorithmObsoleteRule rule = new CalendarHashChainAlgorithmObsoleteRule();
 
             // Check with calendar hash chains that use hash algorithms with obsolete date and publication time is before obsolete date
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Obsolete_Calendar_Chain_Algorithm_2016), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream),
-                };
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Obsolete_Calendar_Chain_Algorithm_2016)
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
         }
 
         [Test]
@@ -106,17 +99,14 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             CalendarHashChainAlgorithmObsoleteRule rule = new CalendarHashChainAlgorithmObsoleteRule();
 
             // Check with calendar hash chains that use hash algorithms with obsolete date and publication time is after obsolete date
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Obsolete_Calendar_Chain_Algorithm_2017), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream),
-                };
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Obsolete_Calendar_Chain_Algorithm_2017)
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-                Assert.AreEqual(VerificationError.Int16, verificationResult.VerificationError);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+            Assert.AreEqual(VerificationError.Int16, verificationResult.VerificationError);
         }
 
         private static void AddObsoleteAlgorithm()

@@ -19,7 +19,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Service;
@@ -102,14 +101,11 @@ namespace Guardtime.KSI.Test.Integration
         public void HAExtendWithTcpAndHttpServicesTest()
         {
             Ksi ksi = new Ksi(new HAKsiService(null, ExtendingServices, PublicationsFileService));
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
-            {
-                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
-                IKsiSignature extenderSiganture = ksi.Extend(ksiSignature);
-                Assert.IsFalse(ksiSignature.IsExtended);
-                Assert.NotNull(extenderSiganture);
-                Assert.IsTrue(extenderSiganture.IsExtended);
-            }
+            IKsiSignature ksiSignature = TestUtil.GetSignature();
+            IKsiSignature extenderSiganture = ksi.Extend(ksiSignature);
+            Assert.IsFalse(ksiSignature.IsExtended);
+            Assert.NotNull(extenderSiganture);
+            Assert.IsTrue(extenderSiganture.IsExtended);
         }
 
         /// <summary>
@@ -119,16 +115,13 @@ namespace Guardtime.KSI.Test.Integration
         public void HAExtendWithTcpAndHttpServicesAndNoPublicationsFileTest()
         {
             Ksi ksi = new Ksi(new HAKsiService(null, ExtendingServices, null));
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            IKsiSignature ksiSignature = TestUtil.GetSignature();
+            Exception ex = Assert.Throws<HAKsiServiceException>(delegate
             {
-                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
-                Exception ex = Assert.Throws<HAKsiServiceException>(delegate
-                {
-                    ksi.Extend(ksiSignature);
-                });
-                Assert.IsFalse(ksiSignature.IsExtended);
-                Assert.That(ex.Message.StartsWith("Publications file service is missing"), "Unexpected exception message: " + ex.Message);
-            }
+                ksi.Extend(ksiSignature);
+            });
+            Assert.IsFalse(ksiSignature.IsExtended);
+            Assert.That(ex.Message.StartsWith("Publications file service is missing"), "Unexpected exception message: " + ex.Message);
         }
 
         /// <summary>

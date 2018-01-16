@@ -18,9 +18,7 @@
  */
 
 using System;
-using System.IO;
 using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
 using Guardtime.KSI.Test.Properties;
@@ -65,16 +63,13 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             SignaturePublicationRecordExistenceRule rule = new SignaturePublicationRecordExistenceRule();
 
             // Check legacy signature
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Legacy_Ok_With_Publication_Record), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext
             {
-                TestVerificationContext context = new TestVerificationContext
-                {
-                    Signature = new KsiSignatureFactory().Create(stream)
-                };
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Legacy_Ok_With_Publication_Record)
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
         }
 
         [Test]
@@ -83,16 +78,13 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             SignaturePublicationRecordExistenceRule rule = new SignaturePublicationRecordExistenceRule();
 
             // Check signature
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok_With_Publication_Record), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext
             {
-                TestVerificationContext context = new TestVerificationContext
-                {
-                    Signature = new KsiSignatureFactory().Create(stream)
-                };
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_With_Publication_Record)
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
         }
 
         [Test]
@@ -101,16 +93,13 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             SignaturePublicationRecordExistenceRule rule = new SignaturePublicationRecordExistenceRule();
 
             // Check invalid signature without publication record
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext
             {
-                TestVerificationContext context = new TestVerificationContext
-                {
-                    Signature = new KsiSignatureFactory().Create(stream)
-                };
+                Signature = TestUtil.GetSignature()
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
         }
     }
 }

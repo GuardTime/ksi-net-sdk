@@ -18,11 +18,11 @@
  */
 
 using System;
-using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
+using Guardtime.KSI.Test.Properties;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
@@ -62,39 +62,32 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         public void TestSignatureWithoutAggregationHashChain()
         {
             Rfc3161RecordChainIndexRule rule = new Rfc3161RecordChainIndexRule();
+            Rfc3161Record rfc3161Record = TestUtil.GetSignature(Resources.KsiSignature_Legacy_Ok).Rfc3161Record;
 
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok), FileMode.Open))
+            // Verification exception on missing KSI signature aggregation hash chain 
+            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
             {
-                Rfc3161Record rfc3161Record = new KsiSignatureFactory().Create(stream).Rfc3161Record;
-
-                // Verification exception on missing KSI signature aggregation hash chain 
-                KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
+                TestVerificationContext context = new TestVerificationContext()
                 {
-                    TestVerificationContext context = new TestVerificationContext()
-                    {
-                        Signature = new TestKsiSignature() { Rfc3161Record = rfc3161Record }
-                    };
+                    Signature = new TestKsiSignature() { Rfc3161Record = rfc3161Record }
+                };
 
-                    rule.Verify(context);
-                });
-                Assert.That(ex.Message, Does.StartWith("Aggregation hash chains are missing from KSI signature"));
-            }
+                rule.Verify(context);
+            });
+            Assert.That(ex.Message, Does.StartWith("Aggregation hash chains are missing from KSI signature"));
         }
 
         [Test]
         public void TestRfc3161RecordChainIndex()
         {
             Rfc3161RecordChainIndexRule rule = new Rfc3161RecordChainIndexRule();
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream)
-                };
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Legacy_Ok),
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
         }
 
         [Test]
@@ -102,18 +95,14 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         {
             Rfc3161RecordChainIndexRule rule = new Rfc3161RecordChainIndexRule();
 
-            using (FileStream stream =
-                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Invalid_Rfc3161_Chain_Index_Mismatch), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream)
-                };
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Invalid_Rfc3161_Chain_Index_Mismatch),
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-                Assert.AreEqual(VerificationError.Int12, verificationResult.VerificationError);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+            Assert.AreEqual(VerificationError.Int12, verificationResult.VerificationError);
         }
     }
 }

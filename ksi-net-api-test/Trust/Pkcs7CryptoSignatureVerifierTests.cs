@@ -254,12 +254,9 @@ namespace Guardtime.KSI.Test.Trust
         [Test]
         public void VerifyWithPublicationsFileCertTest()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.PkiTrustProvider_PubsFileCustomCert), FileMode.Open, FileAccess.Read))
-            {
-                PublicationsFile pubsFile = new PublicationsFileFactory(new TestPkiTrustProvider()).Create(stream) as PublicationsFile;
-                ICryptoSignatureVerifier verifier = KsiProvider.CreatePkcs7CryptoSignatureVerifier();
-                verifier.Verify(pubsFile.GetSignedBytes(), pubsFile.GetSignatureValue(), new CryptoSignatureVerificationData(GetFileBytes(Resources.PkiTrustProvider_CustomCert)));
-            }
+            PublicationsFile pubsFile = TestUtil.GetPublicationsFile(Resources.PkiTrustProvider_PubsFileCustomCert);
+            ICryptoSignatureVerifier verifier = KsiProvider.CreatePkcs7CryptoSignatureVerifier();
+            verifier.Verify(pubsFile.GetSignedBytes(), pubsFile.GetSignatureValue(), new CryptoSignatureVerificationData(GetFileBytes(Resources.PkiTrustProvider_CustomCert)));
         }
 
         private byte[] GetFileBytes(string path)

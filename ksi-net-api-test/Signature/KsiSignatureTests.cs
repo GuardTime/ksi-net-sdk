@@ -24,6 +24,7 @@ using Guardtime.KSI.Parser;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
+using Guardtime.KSI.Test.Properties;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
@@ -35,31 +36,31 @@ namespace Guardtime.KSI.Test.Signature
         [Test]
         public void TestKsiSignatureOk()
         {
-            IKsiSignature signature = GetKsiSignatureFromFile(Properties.Resources.KsiSignature_Ok);
+            IKsiSignature signature = GetKsiSignatureFromFile(Resources.KsiSignature_Ok);
             Assert.NotNull(signature.CalendarHashChain, "Calendar hash chain cannot be null");
         }
 
         [Test]
         public void TestKsiSignatureWithMixedAggregationChais()
         {
-            IKsiSignature signature = GetKsiSignatureFromFile(Properties.Resources.KsiSignature_Ok_With_Mixed_Aggregation_Chains);
+            IKsiSignature signature = GetKsiSignatureFromFile(Resources.KsiSignature_Ok_With_Mixed_Aggregation_Chains);
             Assert.NotNull(signature, "Signature cannot be null");
         }
 
         [Test]
         public void TestKsiSignatureIsExtended()
         {
-            IKsiSignature signature1 = GetKsiSignatureFromFile(Properties.Resources.KsiSignature_Ok_With_Mixed_Aggregation_Chains);
+            IKsiSignature signature1 = GetKsiSignatureFromFile(Resources.KsiSignature_Ok_With_Mixed_Aggregation_Chains);
             Assert.False(signature1.IsExtended, "IsExtended should be false.");
 
-            IKsiSignature signature2 = GetKsiSignatureFromFile(Properties.Resources.KsiSignature_Ok_With_Publication_Record);
+            IKsiSignature signature2 = GetKsiSignatureFromFile(Resources.KsiSignature_Ok_With_Publication_Record);
             Assert.True(signature2.IsExtended, "IsExtended should be true.");
         }
 
         [Test]
         public void TestKsiSignatureExtendWithoutPublicationRecord()
         {
-            IKsiSignature signature = GetKsiSignatureFromFile(Properties.Resources.KsiSignature_Ok);
+            IKsiSignature signature = GetKsiSignatureFromFile(Resources.KsiSignature_Ok);
             CalendarHashChain calendarHashChain =
                 new CalendarHashChain(new RawTag(Constants.CalendarHashChain.TagType, false, false,
                     Base16.Decode(
@@ -75,17 +76,17 @@ namespace Guardtime.KSI.Test.Signature
         [Test]
         public void TestKsiSignatureIdentity()
         {
-            IKsiSignature signature = GetKsiSignatureFromFile(Properties.Resources.KsiSignature_Ok_With_Mixed_Aggregation_Chains);
+            IKsiSignature signature = GetKsiSignatureFromFile(Resources.KsiSignature_Ok_With_Mixed_Aggregation_Chains);
             Assert.AreEqual("GT :: testA :: taavi-test :: anon", signature.Identity,
-                "Invalid signature identity. Path: " + Properties.Resources.KsiSignature_Ok_With_Mixed_Aggregation_Chains);
+                "Invalid signature identity. Path: " + Resources.KsiSignature_Ok_With_Mixed_Aggregation_Chains);
             Assert.AreEqual("GT :: testA :: taavi-test :: anon", signature.GetIdentity().Select(i => i.ClientId).Aggregate((current, next) => current + " :: " + next),
-                "Invalid signature identity returned by GetIdentity. Path: " + Properties.Resources.KsiSignature_Ok_With_Mixed_Aggregation_Chains);
+                "Invalid signature identity returned by GetIdentity. Path: " + Resources.KsiSignature_Ok_With_Mixed_Aggregation_Chains);
         }
 
         [Test]
         public void TestKsiSignatureOkWithAggregationHashChainOnly()
         {
-            IKsiSignature signature = GetKsiSignatureFromFile(Properties.Resources.KsiSignature_Ok_AggregationHashChain_Only);
+            IKsiSignature signature = GetKsiSignatureFromFile(Resources.KsiSignature_Ok_AggregationHashChain_Only);
             Assert.Null(signature.CalendarHashChain, "Calendar hash chain must be null");
             Assert.Null(signature.PublicationRecord, "Publication record must be null");
             Assert.Null(signature.CalendarAuthenticationRecord, "Calendar authentication record must be null");
@@ -94,7 +95,7 @@ namespace Guardtime.KSI.Test.Signature
         [Test]
         public void TestLegacyKsiSignatureOk()
         {
-            IKsiSignature signature = GetKsiSignatureFromFile(Properties.Resources.KsiSignature_Legacy_Ok);
+            IKsiSignature signature = GetKsiSignatureFromFile(Resources.KsiSignature_Legacy_Ok);
             Assert.IsTrue(signature.IsRfc3161Signature, "RFC3161 tag must exist");
         }
 
@@ -103,7 +104,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetKsiSignatureFromFile(Properties.Resources.KsiSignature_Invalid_Type);
+                GetKsiSignatureFromFile(Resources.KsiSignature_Invalid_Type);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Invalid tag type! Class: KsiSignature; Type: 0x899;"));
         }
 
@@ -112,7 +113,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetKsiSignatureFromFile(Properties.Resources.KsiSignature_Invalid_Contain_Publication_Record_And_Calendar_Authentication_Record);
+                GetKsiSignatureFromFile(Resources.KsiSignature_Invalid_Contain_Publication_Record_And_Calendar_Authentication_Record);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Only one from publication record or calendar authentication record is allowed in KSI signature"));
         }
 
@@ -121,7 +122,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetKsiSignatureFromFile(Properties.Resources.KsiSignature_Invalid_Extra_Tag);
+                GetKsiSignatureFromFile(Resources.KsiSignature_Invalid_Extra_Tag);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Unknown tag"));
         }
 
@@ -130,7 +131,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetKsiSignatureFromFile(Properties.Resources.KsiSignature_Invalid_Missing_Aggregation_Hash_Chain);
+                GetKsiSignatureFromFile(Resources.KsiSignature_Invalid_Missing_Aggregation_Hash_Chain);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Aggregation hash chains must exist in KSI signature"));
         }
 
@@ -139,7 +140,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetKsiSignatureFromFile(Properties.Resources.KsiSignature_Invalid_Missing_Calendar_Hash_Chain);
+                GetKsiSignatureFromFile(Resources.KsiSignature_Invalid_Missing_Calendar_Hash_Chain);
             },
                 Throws.TypeOf<TlvException>().With.Message.StartWith(
                     "No publication record or calendar authentication record is allowed in KSI signature if there is no calendar hash chain"));
@@ -150,7 +151,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetKsiSignatureFromFile(Properties.Resources.KsiSignature_Invalid_Multiple_Calendar_Authentication_Records);
+                GetKsiSignatureFromFile(Resources.KsiSignature_Invalid_Multiple_Calendar_Authentication_Records);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Only one from publication record or calendar authentication record is allowed in KSI signature"));
         }
 
@@ -159,7 +160,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetKsiSignatureFromFile(Properties.Resources.KsiSignature_Invalid_Multiple_Calendar_Hash_Chains);
+                GetKsiSignatureFromFile(Resources.KsiSignature_Invalid_Multiple_Calendar_Hash_Chains);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Only one calendar hash chain is allowed in KSI signature"));
         }
 
@@ -168,7 +169,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetKsiSignatureFromFile(Properties.Resources.KsiSignature_Invalid_Multiple_Publication_Records);
+                GetKsiSignatureFromFile(Resources.KsiSignature_Invalid_Multiple_Publication_Records);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Only one from publication record or calendar authentication record is allowed in KSI signature"));
         }
 
@@ -177,7 +178,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetKsiSignatureFromFile(Properties.Resources.KsiSignature_Invalid_Multiple_Rfc_3161_Records);
+                GetKsiSignatureFromFile(Resources.KsiSignature_Invalid_Multiple_Rfc_3161_Records);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Only one RFC 3161 record is allowed in KSI signature"));
         }
 
@@ -186,7 +187,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetKsiSignatureFromFile(Properties.Resources.KsiSignature_Invalid_Hash_Algorithm);
+                GetKsiSignatureFromFile(Resources.KsiSignature_Invalid_Hash_Algorithm);
             }, Throws.TypeOf<HashingException>().With.Message.StartWith("Invalid hash algorithm. Id: 3"));
         }
 

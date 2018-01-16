@@ -20,7 +20,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -28,6 +27,7 @@ using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Signature;
+using Guardtime.KSI.Test.Properties;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
@@ -39,14 +39,14 @@ namespace Guardtime.KSI.Test.Signature
         [Test]
         public void TestCreateAggregationHashChainOk()
         {
-            AggregationHashChain aggregationHashChain = GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Ok);
+            AggregationHashChain aggregationHashChain = GetAggregationHashChainFromFile(Resources.AggregationHashChain_Ok);
             Assert.AreEqual(9, aggregationHashChain.Count, "Invalid amount of child TLV objects");
         }
 
         [Test]
         public void TestCreateAggregationHashChainWithLinksOk()
         {
-            AggregationHashChain aggregationHashChain = GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Ok);
+            AggregationHashChain aggregationHashChain = GetAggregationHashChainFromFile(Resources.AggregationHashChain_Ok);
 
             new AggregationHashChain(1, new ulong[] { 1 }, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE")),
                 1, aggregationHashChain.GetChainLinks().ToArray());
@@ -136,25 +136,22 @@ namespace Guardtime.KSI.Test.Signature
         [Test]
         public void TestGetLocationPointerWithMixedAggregationChains()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_With_Mixed_Aggregation_Chains), FileMode.Open))
-            {
-                IKsiSignature signature = new KsiSignatureFactory().Create(stream);
-                ReadOnlyCollection<AggregationHashChain> hashChains = signature.GetAggregationHashChains();
-                ulong[] index = hashChains[0].GetChainIndex();
-                int i = index.Length - 1;
+            IKsiSignature signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_With_Mixed_Aggregation_Chains);
+            ReadOnlyCollection<AggregationHashChain> hashChains = signature.GetAggregationHashChains();
+            ulong[] index = hashChains[0].GetChainIndex();
+            int i = index.Length - 1;
 
-                foreach (AggregationHashChain chain in hashChains)
-                {
-                    ReadOnlyCollection<AggregationHashChain.Link> links = chain.GetChainLinks();
-                    Assert.AreEqual(index[i--], AggregationHashChain.CalcLocationPointer(links.ToArray()), "Location pointers do not match.");
-                }
+            foreach (AggregationHashChain chain in hashChains)
+            {
+                ReadOnlyCollection<AggregationHashChain.Link> links = chain.GetChainLinks();
+                Assert.AreEqual(index[i--], AggregationHashChain.CalcLocationPointer(links.ToArray()), "Location pointers do not match.");
             }
         }
 
         [Test]
         public void TestAggregationHashChainOkMissingOptionals()
         {
-            AggregationHashChain aggregationHashChain = GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Ok_Missing_Optionals);
+            AggregationHashChain aggregationHashChain = GetAggregationHashChainFromFile(Resources.AggregationHashChain_Ok_Missing_Optionals);
             Assert.AreEqual(8, aggregationHashChain.Count, "Invalid amount of child TLV objects");
         }
 
@@ -163,7 +160,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Extra_Tag);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Invalid_Extra_Tag);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Unknown tag"));
         }
 
@@ -172,7 +169,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Missing_Aggregation_Algorithm);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Invalid_Missing_Aggregation_Algorithm);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one algorithm must exist in aggregation hash chain"));
         }
 
@@ -181,7 +178,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Missing_Aggregation_Time);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Invalid_Missing_Aggregation_Time);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one aggregation time must exist in aggregation hash chain"));
         }
 
@@ -190,7 +187,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Missing_Chain_Index);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Invalid_Missing_Chain_Index);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Chain index is missing in aggregation hash chain"));
         }
 
@@ -199,7 +196,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Missing_Input_Hash);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Invalid_Missing_Input_Hash);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one input hash must exist in aggregation hash chain"));
         }
 
@@ -208,7 +205,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Missing_Links);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Invalid_Missing_Links);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Links are missing in aggregation hash chain"));
         }
 
@@ -217,7 +214,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Multiple_Aggregation_Algorithm);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Invalid_Multiple_Aggregation_Algorithm);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one algorithm must exist in aggregation hash chain"));
         }
 
@@ -226,7 +223,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Multiple_Aggregation_Time);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Invalid_Multiple_Aggregation_Time);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one aggregation time must exist in aggregation hash chain"));
         }
 
@@ -235,7 +232,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Multiple_Input_Data);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Invalid_Multiple_Input_Data);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Only one input data value is allowed in aggregation hash chain"));
         }
 
@@ -244,7 +241,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Multiple_Input_Hash);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Invalid_Multiple_Input_Hash);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one input hash must exist in aggregation hash chain"));
         }
 
@@ -253,14 +250,14 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Type);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Invalid_Type);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Invalid tag type! Class: AggregationHashChain; Type: 0x802;"));
         }
 
         [Test]
         public void TestAggregationHashChainLinkOkMissingOptionals()
         {
-            GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Ok_Missing_Optionals);
+            GetAggregationHashChainFromFile(Resources.AggregationHashChain_Link_Ok_Missing_Optionals);
         }
 
         [Test]
@@ -268,7 +265,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_All_Tags_Defined);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Link_Invalid_All_Tags_Defined);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one of three from sibling hash, legacy id or metadata must exist in aggregation hash chain link"));
         }
 
@@ -277,7 +274,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_Empty);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Link_Invalid_Empty);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one of three from sibling hash, legacy id or metadata must exist in aggregation hash chain link"));
         }
 
@@ -286,7 +283,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_Extra_Tag);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Link_Invalid_Extra_Tag);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Unknown tag"));
         }
 
@@ -295,7 +292,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_Metadata_Metahash_No_SiblingHash);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Link_Invalid_Metadata_Metahash_No_SiblingHash);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one of three from sibling hash, legacy id or metadata must exist in aggregation hash chain link"));
         }
 
@@ -304,7 +301,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_Multiple_LevelCorrection);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Link_Invalid_Multiple_LevelCorrection);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Only one levelcorrection value is allowed in aggregation hash chain link"));
         }
 
@@ -313,7 +310,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_Multiple_Metadata);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Link_Invalid_Multiple_Metadata);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one of three from sibling hash, legacy id or metadata must exist in aggregation hash chain link"));
         }
 
@@ -322,7 +319,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_Multiple_Metahash);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Link_Invalid_Multiple_Metahash);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one of three from sibling hash, legacy id or metadata must exist in aggregation hash chain link"));
         }
 
@@ -331,7 +328,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_Multiple_Siblinghash);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Link_Invalid_Multiple_Siblinghash);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one of three from sibling hash, legacy id or metadata must exist in aggregation hash chain link"));
         }
 
@@ -340,7 +337,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_SiblingHash_Metadata_No_MetaHash);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Link_Invalid_SiblingHash_Metadata_No_MetaHash);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one of three from sibling hash, legacy id or metadata must exist in aggregation hash chain link"));
         }
 
@@ -349,14 +346,14 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_SiblingHash_MetaHash_No_Metadata);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Link_Invalid_SiblingHash_MetaHash_No_Metadata);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one of three from sibling hash, legacy id or metadata must exist in aggregation hash chain link"));
         }
 
         [Test]
         public void TestAggregationHashChainMetadataOkMissingOptionals()
         {
-            GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Metadata_Ok_Missing_Optionals);
+            GetAggregationHashChainFromFile(Resources.AggregationHashChain_Metadata_Ok_Missing_Optionals);
         }
 
         [Test]
@@ -364,7 +361,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Metadata_Invalid_Extra_Tag);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Metadata_Invalid_Extra_Tag);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Unknown tag"));
         }
 
@@ -373,7 +370,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Metadata_Invalid_Missing_Client_id);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Metadata_Invalid_Missing_Client_id);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one client id must exist in aggregation hash chain link metadata"));
         }
 
@@ -382,7 +379,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Metadata_Invalid_Multiple_Client_Id);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Metadata_Invalid_Multiple_Client_Id);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one client id must exist in aggregation hash chain link metadata"));
         }
 
@@ -391,7 +388,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Metadata_Invalid_Multiple_Machine_Id);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Metadata_Invalid_Multiple_Machine_Id);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Only one machine id is allowed in aggregation hash chain link metadata"));
         }
 
@@ -400,7 +397,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Metadata_Invalid_Multiple_Request_Time);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Metadata_Invalid_Multiple_Request_Time);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Only one request time is allowed in aggregation hash chain link metadata"));
         }
 
@@ -409,7 +406,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Metadata_Invalid_Multiple_Sequence_Number);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Metadata_Invalid_Multiple_Sequence_Number);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Only one sequence number is allowed in aggregation hash chain link metadata"));
         }
 
@@ -546,12 +543,7 @@ namespace Guardtime.KSI.Test.Signature
 
         private static AggregationHashChain GetAggregationHashChainFromFile(string file)
         {
-            using (TlvReader reader = new TlvReader(new FileStream(Path.Combine(TestSetup.LocalPath, file), FileMode.Open)))
-            {
-                AggregationHashChain aggregationHashChain = new AggregationHashChain(reader.ReadTag());
-
-                return aggregationHashChain;
-            }
+            return new AggregationHashChain(TestUtil.GetRawTag(file));
         }
     }
 }

@@ -18,11 +18,11 @@
  */
 
 using System;
-using System.IO;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Signature;
+using Guardtime.KSI.Test.Properties;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Publication
@@ -33,21 +33,18 @@ namespace Guardtime.KSI.Test.Publication
         [Test]
         public void PublicationDataContentTest()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_Extended), FileMode.Open))
-            {
-                IKsiSignature signature = new KsiSignatureFactory().Create(stream);
-                PublicationRecordInSignature publicationRecord = signature.PublicationRecord;
+            IKsiSignature signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_Extended);
+            PublicationRecordInSignature publicationRecord = signature.PublicationRecord;
 
-                string code = publicationRecord.PublicationData.GetPublicationString();
-                DateTime date = publicationRecord.PublicationData.GetPublicationDate();
+            string code = publicationRecord.PublicationData.GetPublicationString();
+            DateTime date = publicationRecord.PublicationData.GetPublicationDate();
 
-                Assert.AreEqual("AAAAAA-CWYEKQ-AAIYPA-UJ4GRT-HXMFBE-OTB4AB-XH3PT3-KNIKGV-PYCJXU-HL2TN4-RG6SCC-3ZGSBM", code, "Publication string is invalid.");
-                Assert.AreEqual(new DateTime(2016, 2, 15), date, "Publication date is invalid.");
-                Assert.AreEqual(3, publicationRecord.PublicationReferences.Count, "Invalid publication reference count.");
-                Assert.AreEqual("Financial Times, ISSN: 0307-1766, 2016-02-17", publicationRecord.PublicationReferences[0], "Invalid first publication reference.");
-                Assert.AreEqual("Äripäev, ISSN: 1406-2585, 17.02.2016", publicationRecord.PublicationReferences[1], "Invalid second publication reference.");
-                Assert.AreEqual("https://twitter.com/Guardtime/status/699919571084558336", publicationRecord.PublicationReferences[2], "Invalid third publication reference.");
-            }
+            Assert.AreEqual("AAAAAA-CWYEKQ-AAIYPA-UJ4GRT-HXMFBE-OTB4AB-XH3PT3-KNIKGV-PYCJXU-HL2TN4-RG6SCC-3ZGSBM", code, "Publication string is invalid.");
+            Assert.AreEqual(new DateTime(2016, 2, 15), date, "Publication date is invalid.");
+            Assert.AreEqual(3, publicationRecord.PublicationReferences.Count, "Invalid publication reference count.");
+            Assert.AreEqual("Financial Times, ISSN: 0307-1766, 2016-02-17", publicationRecord.PublicationReferences[0], "Invalid first publication reference.");
+            Assert.AreEqual("Äripäev, ISSN: 1406-2585, 17.02.2016", publicationRecord.PublicationReferences[1], "Invalid second publication reference.");
+            Assert.AreEqual("https://twitter.com/Guardtime/status/699919571084558336", publicationRecord.PublicationReferences[2], "Invalid third publication reference.");
         }
 
         [Test]

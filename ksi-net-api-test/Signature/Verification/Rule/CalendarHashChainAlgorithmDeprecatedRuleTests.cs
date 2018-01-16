@@ -18,11 +18,10 @@
  */
 
 using System;
-using System.IO;
 using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
+using Guardtime.KSI.Test.Properties;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
@@ -63,16 +62,13 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             CalendarHashChainAlgorithmDeprecatedRule rule = new CalendarHashChainAlgorithmDeprecatedRule();
 
             // Check with calendar hash chains that use hash algorithms without deprecated date
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream),
-                };
+                Signature = TestUtil.GetSignature(),
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
         }
 
         [Test]
@@ -81,16 +77,13 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             CalendarHashChainAlgorithmDeprecatedRule rule = new CalendarHashChainAlgorithmDeprecatedRule();
 
             // Check with calendar hash chains that use hash algorithms with deprecated date and publication time is before deprecated date
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Sha1CalendarLeftLinkAlgorithm_2016), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream),
-                };
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Sha1CalendarLeftLinkAlgorithm_2016),
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
         }
 
         [Test]
@@ -99,16 +92,13 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             CalendarHashChainAlgorithmDeprecatedRule rule = new CalendarHashChainAlgorithmDeprecatedRule();
 
             // Check with calendar hash chains that use hash algorithms with deprecated date and publication time is after deprecated date
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Sha1CalendarLeftLinkAlgorithm_2017), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream),
-                };
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Sha1CalendarLeftLinkAlgorithm_2017),
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
         }
     }
 }

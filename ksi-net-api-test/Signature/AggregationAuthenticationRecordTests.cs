@@ -17,11 +17,11 @@
  * reserves and retains all trademark rights.
  */
 
-using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Signature;
+using Guardtime.KSI.Test.Properties;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Signature
@@ -32,7 +32,7 @@ namespace Guardtime.KSI.Test.Signature
         [Test]
         public void TestAggregationAuthenticationRecordOk()
         {
-            AggregationAuthenticationRecord aggregationAuthenticationRecord = GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Ok);
+            AggregationAuthenticationRecord aggregationAuthenticationRecord = GetAggregationAuthenticationRecordFromFile(Resources.AggregationAuthenticationRecord_Ok);
             Assert.AreEqual(5, aggregationAuthenticationRecord.Count, "Invalid amount of child TLV objects");
         }
 
@@ -41,7 +41,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Extra_Tag);
+                GetAggregationAuthenticationRecordFromFile(Resources.AggregationAuthenticationRecord_Invalid_Extra_Tag);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Unknown tag type"));
         }
 
@@ -50,7 +50,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Missing_Aggregation_Time);
+                GetAggregationAuthenticationRecordFromFile(Resources.AggregationAuthenticationRecord_Invalid_Missing_Aggregation_Time);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one aggregation time must exist in aggregation authentication record"));
         }
 
@@ -59,7 +59,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Missing_Chain_Index);
+                GetAggregationAuthenticationRecordFromFile(Resources.AggregationAuthenticationRecord_Invalid_Missing_Chain_Index);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Chain indexes must exist in aggregation authentication record"));
         }
 
@@ -68,7 +68,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Missing_Input_Hash);
+                GetAggregationAuthenticationRecordFromFile(Resources.AggregationAuthenticationRecord_Invalid_Missing_Input_Hash);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one input hash must exist in aggregation authentication record"));
         }
 
@@ -77,7 +77,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Missing_Signature_Data);
+                GetAggregationAuthenticationRecordFromFile(Resources.AggregationAuthenticationRecord_Invalid_Missing_Signature_Data);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one signature data must exist in aggregation authentication record"));
         }
 
@@ -86,7 +86,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Multiple_Aggregation_Time);
+                GetAggregationAuthenticationRecordFromFile(Resources.AggregationAuthenticationRecord_Invalid_Multiple_Aggregation_Time);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one aggregation time must exist in aggregation authentication record"));
         }
 
@@ -95,7 +95,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Multiple_Input_Hash);
+                GetAggregationAuthenticationRecordFromFile(Resources.AggregationAuthenticationRecord_Invalid_Multiple_Input_Hash);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one input hash must exist in aggregation authentication record"));
         }
 
@@ -104,7 +104,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Multiple_Signature_Data);
+                GetAggregationAuthenticationRecordFromFile(Resources.AggregationAuthenticationRecord_Invalid_Multiple_Signature_Data);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one signature data must exist in aggregation authentication record"));
         }
 
@@ -113,7 +113,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationAuthenticationRecordFromFile(Properties.Resources.AggregationAuthenticationRecord_Invalid_Type);
+                GetAggregationAuthenticationRecordFromFile(Resources.AggregationAuthenticationRecord_Invalid_Type);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Invalid tag type! Class: AggregationAuthenticationRecord; Type: 0x805;"));
         }
 
@@ -145,12 +145,7 @@ namespace Guardtime.KSI.Test.Signature
 
         private static AggregationAuthenticationRecord GetAggregationAuthenticationRecordFromFile(string file)
         {
-            using (TlvReader reader = new TlvReader(new FileStream(Path.Combine(TestSetup.LocalPath, file), FileMode.Open)))
-            {
-                AggregationAuthenticationRecord aggregationAuthenticationRecord = new AggregationAuthenticationRecord(reader.ReadTag());
-
-                return aggregationAuthenticationRecord;
-            }
+            return new AggregationAuthenticationRecord(TestUtil.GetRawTag(file));
         }
     }
 }

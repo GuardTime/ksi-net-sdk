@@ -18,11 +18,10 @@
  */
 
 using System;
-using System.IO;
 using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
+using Guardtime.KSI.Test.Properties;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
@@ -63,16 +62,13 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             AggregationHashChainAlgorithmDeprecatedRule rule = new AggregationHashChainAlgorithmDeprecatedRule();
 
             // Check with aggregation hash chains that use hash algorithms without deprecated date
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream),
-                };
+                Signature = TestUtil.GetSignature()
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
         }
 
         [Test]
@@ -81,16 +77,13 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             AggregationHashChainAlgorithmDeprecatedRule rule = new AggregationHashChainAlgorithmDeprecatedRule();
 
             // Check aggregation hash chains that use hash algorithms with deprecated date and aggregation time is before deprecated date
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Sha1AggregationChainAlgorithm_2016), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream),
-                };
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Sha1AggregationChainAlgorithm_2016)
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
         }
 
         [Test]
@@ -99,17 +92,14 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             AggregationHashChainAlgorithmDeprecatedRule rule = new AggregationHashChainAlgorithmDeprecatedRule();
 
             // Check aggregation hash chains that use hash algorithms with deprecated date and aggregation time is after deprecated date
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Sha1AggregationChainAlgorithm_2017), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream),
-                };
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Sha1AggregationChainAlgorithm_2017)
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-                Assert.AreEqual(VerificationError.Int15, verificationResult.VerificationError);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+            Assert.AreEqual(VerificationError.Int15, verificationResult.VerificationError);
         }
     }
 }
