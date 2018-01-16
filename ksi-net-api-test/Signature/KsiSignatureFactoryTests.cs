@@ -134,6 +134,27 @@ namespace Guardtime.KSI.Test.Signature
         }
 
         [Test]
+        public void CreateFromPartsWithoutCalendarHashChainFailTest()
+        {
+            KsiSignatureFactory signatureFactory = new KsiSignatureFactory();
+            IKsiSignature signature;
+
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok), FileMode.Open))
+            {
+                signature = new KsiSignatureFactory().Create(stream);
+            }
+
+            // create signature without calendar hash chain but with calendar auth record.
+            TlvException ex = Assert.Throws<TlvException>(delegate
+            {
+                signatureFactory.Create(signature.GetAggregationHashChains(), null, signature.CalendarAuthenticationRecord, signature.PublicationRecord,
+                    signature.Rfc3161Record, signature.InputHash);
+            });
+
+            Assert.That(ex.Message, Does.StartWith("No publication record or calendar authentication record is allowed in KSI signature if there is no calendar hash chain"));
+        }
+
+        [Test]
         public void CreateSignatureWithAggregationChainTest()
         {
             // Base signature input hash: {SHA-256:[5A848EE304CBE6B858ABCCFA0E8397920C226FD18B9E5A34D0048F749B2DA0EC]}
@@ -257,8 +278,8 @@ namespace Guardtime.KSI.Test.Signature
         private static void CreateSignatureWithAggregationChainAndVerify(IKsiSignature signature, DataHash inputHash, AggregationHashChain.Link[] links,
                                                                          string expectedVerificationErrorCode = null)
         {
-            IKsiSignature newSignature = new KsiSignatureFactory(new EmptyVerificationPolicy()).CreateSignatureWithAggregationChain(signature, inputHash, HashAlgorithm.Sha2256,
-                links);
+            IKsiSignature newSignature = new KsiSignatureFactory(
+                new EmptyVerificationPolicy()).CreateSignatureWithAggregationChain(signature, inputHash, HashAlgorithm.Sha2256, links);
             VerificationResult result = new InternalVerificationPolicy().Verify(new VerificationContext(newSignature) { DocumentHash = inputHash });
 
             if (string.IsNullOrEmpty(expectedVerificationErrorCode))

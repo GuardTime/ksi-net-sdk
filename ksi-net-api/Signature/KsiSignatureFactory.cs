@@ -157,6 +157,11 @@ namespace Guardtime.KSI.Signature
         {
             List<ITlvTag> childTags = new List<ITlvTag>();
 
+            if (aggregationHashChains == null)
+            {
+                throw new ArgumentException(nameof(aggregationHashChains));
+            }
+
             foreach (AggregationHashChain childTag in aggregationHashChains)
             {
                 childTags.Add(childTag);
@@ -165,15 +170,16 @@ namespace Guardtime.KSI.Signature
             if (calendarHashChain != null)
             {
                 childTags.Add(calendarHashChain);
+            }
 
-                if (publicationRecord != null)
-                {
-                    childTags.Add(publicationRecord);
-                }
-                else if (calendarAuthenticationRecord != null)
-                {
-                    childTags.Add(calendarAuthenticationRecord);
-                }
+            if (publicationRecord != null)
+            {
+                childTags.Add(publicationRecord);
+            }
+
+            if (calendarAuthenticationRecord != null)
+            {
+                childTags.Add(calendarAuthenticationRecord);
             }
 
             if (rfc3161Record != null)
@@ -196,15 +202,17 @@ namespace Guardtime.KSI.Signature
                                                                  AggregationHashChain.Link[] chainLinks)
         {
             AggregationHashChain lowestChain = signature.GetAggregationHashChains()[0];
+
+            // create chain index
             ulong[] firstLevelChainIndex = lowestChain.GetChainIndex();
             ulong[] chainIndex = new ulong[firstLevelChainIndex.Length + 1];
             Array.Copy(firstLevelChainIndex, 0, chainIndex, 0, firstLevelChainIndex.Length);
             chainIndex[chainIndex.Length - 1] = AggregationHashChain.CalcLocationPointer(chainLinks);
 
             // Create new lowest chain
-            AggregationHashChain newAggregationHashChain = new AggregationHashChain(lowestChain.AggregationTime, chainIndex, inputHash, aggregationAlgorithm.Id,
-                chainLinks);
+            AggregationHashChain newAggregationHashChain = new AggregationHashChain(lowestChain.AggregationTime, chainIndex, inputHash, aggregationAlgorithm.Id, chainLinks);
 
+            // check level correction
             AggregationHashChainResult chainResult = newAggregationHashChain.GetOutputHash(new AggregationHashChainResult(0, inputHash));
             ulong levelCorrection = lowestChain.GetChainLinks()[0].LevelCorrection;
 
