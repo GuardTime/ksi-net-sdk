@@ -13,7 +13,7 @@ In order to get trial access to the KSI platform, go to [https://guardtime.com/b
 
 ## Configuring ##
 
-If you will be signing serveral documents per second then consider setting max allowed http connections in your App.config file. 
+If signing several documents per second then consider setting max allowed http connections in your App.config file. 
 Bear in mind that one signing request takes around 1 second.
 
 ```xml
@@ -28,7 +28,7 @@ Bear in mind that one signing request takes around 1 second.
 The SDK can be used with a simple wrapper KSI, where all functionality is predefined. Following code will cover the both ways.
 
 ## Setting up crypto provider ##
-First thing we must do is select crypto provider. At the moment there are 2 crypto providers available, Microsoft and
+First, select the crypto provider. At the moment there are 2 crypto providers available, Microsoft and
 Bouncy Castle. It is also possible to define your own. To set up a crypto provider, following command has to be used.
 
 ```cs
@@ -73,11 +73,10 @@ program, which hashes a message and outputs it in hex. The hash object will be a
 ```
 
 ## Signing the hash ##
-In this part it is assumed that document is hashed and DataHash object already exists. Before hash can be signed, it is
-required to configure a network client. A network client is an abstraction layer to communicate with the
-gateway (or aggregator). It can send signing and extending request and receive responses. It can also download the
-publications file. In following tutorial the HTTP client is used (`HttpKsiServiceProtocol`), but there is also TCP 
-client available (`TcpKsiServiceProtocol`). 
+Before hash can be signed, it is required to configure a network client. A network client is an abstraction layer 
+to communicate with the gateway (or aggregator). It can send signing and extending request and receive responses. 
+It can also download the publications file. In following tutorial the HTTP client is used (`HttpKsiServiceProtocol`),
+but there is also TCP client available (`TcpKsiServiceProtocol`). 
 
 Result of signing is a KSI signature object. First example is using the simplified wrapper.
 
