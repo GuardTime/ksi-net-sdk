@@ -17,8 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
-using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
 using Guardtime.KSI.Test.Properties;
@@ -27,79 +25,35 @@ using NUnit.Framework;
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
-    public class AggregationHashChainAlgorithmDeprecatedRuleTests
+    public class AggregationHashChainAlgorithmDeprecatedRuleTests : RuleTestsBase
     {
-        [Test]
-        public void TestMissingContext()
-        {
-            AggregationHashChainAlgorithmDeprecatedRule rule = new AggregationHashChainAlgorithmDeprecatedRule();
-
-            // Argument null exception when no context
-            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
-            {
-                rule.Verify(null);
-            });
-            Assert.AreEqual("context", ex.ParamName);
-        }
+        public override VerificationRule Rule => new AggregationHashChainAlgorithmDeprecatedRule();
 
         [Test]
-        public void TestContextMissingSignature()
+        public void TestSignatureMissingAggregationHashChain()
         {
-            AggregationHashChainAlgorithmDeprecatedRule rule = new AggregationHashChainAlgorithmDeprecatedRule();
-
-            // Verification exception on missing KSI signature 
-            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
-            {
-                TestVerificationContext context = new TestVerificationContext();
-                rule.Verify(context);
-            });
-            Assert.That(ex.Message, Does.StartWith("Invalid KSI signature in context: null"));
+            TestSignatureMissingAggregationHashChain(null, true);
         }
 
         [Test]
         public void TestOkAlgorithms()
         {
-            AggregationHashChainAlgorithmDeprecatedRule rule = new AggregationHashChainAlgorithmDeprecatedRule();
-
             // Check with aggregation hash chains that use hash algorithms without deprecated date
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature()
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            CreateSignatureAndVerify(Resources.KsiSignature_Ok, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestOkAlgorithmBeforeDeprecatedDate()
         {
-            AggregationHashChainAlgorithmDeprecatedRule rule = new AggregationHashChainAlgorithmDeprecatedRule();
-
             // Check aggregation hash chains that use hash algorithms with deprecated date and aggregation time is before deprecated date
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature(Resources.KsiSignature_Sha1AggregationChainAlgorithm_2016)
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            CreateSignatureAndVerify(Resources.KsiSignature_Sha1AggregationChainAlgorithm_2016, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestInvalidAlgorithmAfterDeprecatedDate()
         {
-            AggregationHashChainAlgorithmDeprecatedRule rule = new AggregationHashChainAlgorithmDeprecatedRule();
-
             // Check aggregation hash chains that use hash algorithms with deprecated date and aggregation time is after deprecated date
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature(Resources.KsiSignature_Sha1AggregationChainAlgorithm_2017)
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-            Assert.AreEqual(VerificationError.Int15, verificationResult.VerificationError);
+            CreateSignatureAndVerify(Resources.KsiSignature_Sha1AggregationChainAlgorithm_2017, VerificationResultCode.Fail, VerificationError.Int15);
         }
     }
 }

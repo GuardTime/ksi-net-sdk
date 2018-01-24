@@ -17,8 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
-using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
 using Guardtime.KSI.Test.Properties;
@@ -27,98 +25,35 @@ using NUnit.Framework;
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
-    public class AggregationHashChainShapeRuleTests
+    public class AggregationHashChainShapeRuleTests : RuleTestsBase
     {
-        [Test]
-        public void TestMissingContext()
-        {
-            AggregationHashChainShapeRule rule = new AggregationHashChainShapeRule();
-
-            // Argument null exception when no context
-            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
-            {
-                rule.Verify(null);
-            });
-            Assert.AreEqual("context", ex.ParamName);
-        }
+        public override VerificationRule Rule => new AggregationHashChainShapeRule();
 
         [Test]
-        public void TestContextMissingSignature()
+        public void TestSignatureMissingAggregationHashChain()
         {
-            AggregationHashChainShapeRule rule = new AggregationHashChainShapeRule();
-
-            // Verification exception on missing KSI signature 
-            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
-            {
-                TestVerificationContext context = new TestVerificationContext();
-
-                rule.Verify(context);
-            });
-            Assert.That(ex.Message, Does.StartWith("Invalid KSI signature in context: null"));
-        }
-
-        [Test]
-        public void TestSignatureWithoutAggregationHashChain()
-        {
-            AggregationHashChainShapeRule rule = new AggregationHashChainShapeRule();
-
-            // Verification exception on missing KSI signature aggregation hash chain 
-            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new TestKsiSignature()
-                };
-
-                rule.Verify(context);
-            });
-            Assert.That(ex.Message, Does.StartWith("Aggregation hash chains are missing from KSI signature"));
+            TestSignatureMissingAggregationHashChain(null, true);
         }
 
         [Test]
         public void TestRfc3161SignatureAggregationHashChainIndex()
         {
-            AggregationHashChainShapeRule rule = new AggregationHashChainShapeRule();
-
             // Check legacy signature for aggregation hash chain index consistency
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature(Resources.KsiSignature_Legacy_Ok)
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            CreateSignatureAndVerify(Resources.KsiSignature_Legacy_Ok, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestSignatureAggregationHashChainIndex()
         {
-            AggregationHashChainShapeRule rule = new AggregationHashChainShapeRule();
-
             // Check signature for aggregation hash chain index consistency
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature()
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            CreateSignatureAndVerify(Resources.KsiSignature_Ok, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestInvalidSignatureAggregationHashChainIndex()
         {
-            AggregationHashChainShapeRule rule = new AggregationHashChainShapeRule();
-
             // Check invalid signature for aggregation hash chain inconsistency in index
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature(Resources.KsiSignature_Invalid_Aggregation_Chain_Index_Mismatch)
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-            Assert.AreEqual(VerificationError.Int10, verificationResult.VerificationError);
+            CreateSignatureAndVerify(Resources.KsiSignature_Invalid_Aggregation_Chain_Index_Mismatch, VerificationResultCode.Fail, VerificationError.Int10);
         }
     }
 }

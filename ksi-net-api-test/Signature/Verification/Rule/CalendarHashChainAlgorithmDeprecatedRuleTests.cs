@@ -17,8 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
-using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
 using Guardtime.KSI.Test.Properties;
@@ -27,78 +25,29 @@ using NUnit.Framework;
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
-    public class CalendarHashChainAlgorithmDeprecatedTests
+    public class CalendarHashChainAlgorithmDeprecatedTests : RuleTestsBase
     {
-        [Test]
-        public void TestMissingContext()
-        {
-            CalendarHashChainAlgorithmDeprecatedRule rule = new CalendarHashChainAlgorithmDeprecatedRule();
-
-            // Argument null exception when no context
-            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
-            {
-                rule.Verify(null);
-            });
-            Assert.AreEqual("context", ex.ParamName);
-        }
-
-        [Test]
-        public void TestContextMissingSignature()
-        {
-            CalendarHashChainAlgorithmDeprecatedRule rule = new CalendarHashChainAlgorithmDeprecatedRule();
-
-            // Verification exception on missing KSI signature 
-            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
-            {
-                TestVerificationContext context = new TestVerificationContext();
-                rule.Verify(context);
-            });
-            Assert.That(ex.Message, Does.StartWith("Invalid KSI signature in context: null"));
-        }
+        public override VerificationRule Rule => new CalendarHashChainAlgorithmDeprecatedRule();
 
         [Test]
         public void TestOkCalendarAlgorithms()
         {
-            CalendarHashChainAlgorithmDeprecatedRule rule = new CalendarHashChainAlgorithmDeprecatedRule();
-
             // Check with calendar hash chains that use hash algorithms without deprecated date
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature(),
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            CreateSignatureAndVerify(Resources.KsiSignature_Ok, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestOkAlgorithmBeforeDeprecatedDate()
         {
-            CalendarHashChainAlgorithmDeprecatedRule rule = new CalendarHashChainAlgorithmDeprecatedRule();
-
             // Check with calendar hash chains that use hash algorithms with deprecated date and publication time is before deprecated date
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature(Resources.KsiSignature_Sha1CalendarLeftLinkAlgorithm_2016),
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            CreateSignatureAndVerify(Resources.KsiSignature_Sha1CalendarLeftLinkAlgorithm_2016, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestInvalidAlgorithmAfterDeprecatedDate()
         {
-            CalendarHashChainAlgorithmDeprecatedRule rule = new CalendarHashChainAlgorithmDeprecatedRule();
-
             // Check with calendar hash chains that use hash algorithms with deprecated date and publication time is after deprecated date
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature(Resources.KsiSignature_Sha1CalendarLeftLinkAlgorithm_2017),
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
+            CreateSignatureAndVerify(Resources.KsiSignature_Sha1CalendarLeftLinkAlgorithm_2017, VerificationResultCode.Na);
         }
     }
 }

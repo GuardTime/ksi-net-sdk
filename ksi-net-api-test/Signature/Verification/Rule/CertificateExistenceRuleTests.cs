@@ -17,8 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
-using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Signature.Verification;
@@ -31,41 +29,13 @@ using NUnit.Framework;
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
-    public class CertificateExistenceRuleTests
+    public class CertificateExistenceRuleTests : RuleTestsBase
     {
-        [Test]
-        public void TestMissingContext()
-        {
-            CertificateExistenceRule rule = new CertificateExistenceRule();
-
-            // Argument null exception when no context
-            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
-            {
-                rule.Verify(null);
-            });
-            Assert.AreEqual("context", ex.ParamName);
-        }
-
-        [Test]
-        public void TestContextMissingSignature()
-        {
-            CertificateExistenceRule rule = new CertificateExistenceRule();
-
-            // Verification exception on missing KSI signature 
-            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
-            {
-                TestVerificationContext context = new TestVerificationContext();
-
-                rule.Verify(context);
-            });
-            Assert.That(ex.Message, Does.StartWith("Invalid KSI signature in context: null"));
-        }
+        public override VerificationRule Rule => new CertificateExistenceRule();
 
         [Test]
         public void TestSignatureMissingCalendarAuthRecord()
         {
-            CertificateExistenceRule rule = new CertificateExistenceRule();
-
             // Check signature with no calendar authentication record
             TestVerificationContext context = new TestVerificationContext()
             {
@@ -73,36 +43,18 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                 PublicationsFile = new TestPublicationsFile()
             };
 
-            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
-            {
-                rule.Verify(context);
-            });
-            Assert.That(ex.Message, Does.StartWith("Invalid calendar authentication record in signature: null"));
+            TestSignatureMissingCalendarAuthRecord(context);
         }
 
         [Test]
-        public void TestRfc3161SignatureWithoutPublicationsFile()
+        public void TestContextMissingPublicationsFile()
         {
-            CertificateExistenceRule rule = new CertificateExistenceRule();
-
-            // Check legacy signature without publications file. 
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature(Resources.KsiSignature_Legacy_Ok)
-            };
-
-            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
-            {
-                rule.Verify(context);
-            });
-            Assert.That(ex.Message, Does.StartWith("Invalid publications file in context: null"));
+            base.TestContextMissingPublicationsFile(TestUtil.GetSignature(Resources.KsiSignature_Ok));
         }
 
         [Test]
         public void TestRfc3161SignatureWithPublicationsFile()
         {
-            CertificateExistenceRule rule = new CertificateExistenceRule();
-
             // Check legacy signature without publications file.
             TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
             testPublicationsFile.CertificateRecords.Add(
@@ -116,15 +68,12 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                 PublicationsFile = testPublicationsFile
             };
 
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            Verify(context, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestSignatureWithPublicationsFile()
         {
-            CertificateExistenceRule rule = new CertificateExistenceRule();
-
             // Check signature for certificate existence in publications file with given id in calendar authentication record
             TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
             testPublicationsFile.CertificateRecords.Add(
@@ -138,15 +87,12 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                 PublicationsFile = testPublicationsFile
             };
 
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            Verify(context, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestSignatureWithPublicationsFileMissingCertificateId()
         {
-            CertificateExistenceRule rule = new CertificateExistenceRule();
-
             // Check invalid signature with invalid certificate id
             TestVerificationContext context = new TestVerificationContext()
             {
@@ -154,9 +100,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                 PublicationsFile = new TestPublicationsFile()
             };
 
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-            Assert.AreEqual(VerificationError.Key01, verificationResult.VerificationError);
+            Verify(context, VerificationResultCode.Fail, VerificationError.Key01);
         }
     }
 }

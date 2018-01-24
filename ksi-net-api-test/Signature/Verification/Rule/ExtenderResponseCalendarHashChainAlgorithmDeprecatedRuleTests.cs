@@ -17,107 +17,66 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
-using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Parser;
-using Guardtime.KSI.Publication;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
 using Guardtime.KSI.Test.Properties;
 using Guardtime.KSI.Test.Publication;
-using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
-    public class ExtenderResponseCalendarHashChainAlgorithmDeprecatedTests
+    public class ExtenderResponseCalendarHashChainAlgorithmDeprecatedTests : RuleTestsBase
     {
-        [Test]
-        public void TestMissingContext()
-        {
-            ExtenderResponseCalendarHashChainAlgorithmDeprecatedRule rule = new ExtenderResponseCalendarHashChainAlgorithmDeprecatedRule();
-
-            // Argument null exception when no context
-            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
-            {
-                rule.Verify(null);
-            });
-            Assert.AreEqual("context", ex.ParamName);
-        }
-
-        [Test]
-        public void TestContextMissingSignature()
-        {
-            ExtenderResponseCalendarHashChainAlgorithmDeprecatedRule rule = new ExtenderResponseCalendarHashChainAlgorithmDeprecatedRule();
-
-            // Verification exception on missing KSI signature 
-            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
-            {
-                TestVerificationContext context = new TestVerificationContext();
-                rule.Verify(context);
-            });
-            Assert.That(ex.Message, Does.StartWith("Invalid KSI signature in context: null"));
-        }
+        public override VerificationRule Rule => new ExtenderResponseCalendarHashChainAlgorithmDeprecatedRule();
 
         [Test]
         public void TestOkAlgorithm()
         {
             // Check extender response calendar hash chains that use hash algorithms without deprecated date
-            TestSignature(Resources.KsiSignature_Ok, VerificationResultCode.Ok);
+            Verify(Resources.KsiSignature_Ok, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestOkAlgorithmBeforeDeprecatedDate()
         {
             // Check extender response calendar hash chain that use hash algorithms with deprecated date and publication time is before deprecated date
-            TestSignature(Resources.KsiSignature_Sha1CalendarLeftLinkAlgorithm_2016, VerificationResultCode.Ok);
+            Verify(Resources.KsiSignature_Sha1CalendarLeftLinkAlgorithm_2016, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestInvalidAlgorithmAfterDeprecatedDate()
         {
             // Check extender response calendar hash chain that use hash algorithms with deprecated date and publication time is after deprecated date
-            TestSignature(Resources.KsiSignature_Sha1CalendarLeftLinkAlgorithm_2017, VerificationResultCode.Na);
-        }
-
-        private static void TestSignature(string signaturePath, VerificationResultCode resultCode)
-        {
-            ExtenderResponseCalendarHashChainAlgorithmDeprecatedRule rule = new ExtenderResponseCalendarHashChainAlgorithmDeprecatedRule();
-            IKsiSignature ksiSignature = TestUtil.GetSignature(signaturePath);
-            TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
-            testPublicationsFile.NearestPublications.Add(ksiSignature.AggregationTime,
-                new PublicationRecordInPublicationFile(new RawTag(0x703, false, false,
-                    Base16.Decode("3029020455ce349a04210115BA5EB48C064B198A09D37E8C022C281C1CA1E36216EA43E811DF51A7268013"))));
-
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = ksiSignature,
-                PublicationsFile = testPublicationsFile,
-                ExtendedCalendarHashChain = ksiSignature.CalendarHashChain
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(resultCode, verificationResult.ResultCode);
+            Verify(Resources.KsiSignature_Sha1CalendarLeftLinkAlgorithm_2017, VerificationResultCode.Na);
         }
 
         [Test]
         public void TestPublicationsFileMissingNewerPublicationRecord()
         {
-            ExtenderResponseCalendarHashChainAlgorithmDeprecatedRule rule = new ExtenderResponseCalendarHashChainAlgorithmDeprecatedRule();
-
             // Check no publication found after current signature
-            TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
-
             TestVerificationContext context = new TestVerificationContext()
             {
                 Signature = TestUtil.GetSignature(),
-                PublicationsFile = testPublicationsFile,
+                PublicationsFile = new TestPublicationsFile(),
             };
 
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
+            Verify(context, VerificationResultCode.Na);
+        }
+
+        private void Verify(string signaturePath, VerificationResultCode resultCode)
+        {
+            IKsiSignature signature = TestUtil.GetSignature(signaturePath);
+
+            TestVerificationContext context = new TestVerificationContext()
+            {
+                Signature = signature,
+                PublicationsFile = GetPublicationsFile(signature.AggregationTime, 1439577242, "0115BA5EB48C064B198A09D37E8C022C281C1CA1E36216EA43E811DF51A7268013"),
+                ExtendedCalendarHashChain = signature.CalendarHashChain
+            };
+
+            Verify(context, resultCode);
         }
     }
 }

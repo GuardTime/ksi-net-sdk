@@ -17,8 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
-using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
 using Guardtime.KSI.Test.Properties;
@@ -27,79 +25,29 @@ using NUnit.Framework;
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
-    public class CalendarAuthenticationRecordExistenceRuleTests
+    public class CalendarAuthenticationRecordExistenceRuleTests : RuleTestsBase
     {
-        [Test]
-        public void TestMissingContext()
-        {
-            CalendarAuthenticationRecordExistenceRule rule = new CalendarAuthenticationRecordExistenceRule();
-
-            // Argument null exception when no context
-            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
-            {
-                rule.Verify(null);
-            });
-            Assert.AreEqual("context", ex.ParamName);
-        }
-
-        [Test]
-        public void TestContextMissingSignature()
-        {
-            CalendarAuthenticationRecordExistenceRule rule = new CalendarAuthenticationRecordExistenceRule();
-
-            // Verification exception on missing KSI signature 
-            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
-            {
-                TestVerificationContext context = new TestVerificationContext();
-
-                rule.Verify(context);
-            });
-            Assert.That(ex.Message, Does.StartWith("Invalid KSI signature in context: null"));
-        }
+        public override VerificationRule Rule => new CalendarAuthenticationRecordExistenceRule();
 
         [Test]
         public void TestRfc3161SignatureAggregationAuthenticationRecord()
         {
-            CalendarAuthenticationRecordExistenceRule rule = new CalendarAuthenticationRecordExistenceRule();
-
             // Check legacy signature for aggregation authentication record existence
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature(Resources.KsiSignature_Legacy_Ok)
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            CreateSignatureAndVerify(Resources.KsiSignature_Legacy_Ok, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestSignatureAggregationAuthenticationRecord()
         {
-            CalendarAuthenticationRecordExistenceRule rule = new CalendarAuthenticationRecordExistenceRule();
-
             // Check signature for aggregation authentication record existence
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature()
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            CreateSignatureAndVerify(Resources.KsiSignature_Ok, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestSignatureMissingAggregationAuthenticationRecord()
         {
-            CalendarAuthenticationRecordExistenceRule rule = new CalendarAuthenticationRecordExistenceRule();
-
             // Check signature without calendar authentication record
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_AggregationHashChain_Only)
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
+            CreateSignatureAndVerify(Resources.KsiSignature_Ok_AggregationHashChain_Only, VerificationResultCode.Na);
         }
     }
 }

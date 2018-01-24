@@ -17,8 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
-using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
 using Guardtime.KSI.Test.Properties;
@@ -27,79 +25,29 @@ using NUnit.Framework;
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
-    public class SignaturePublicationRecordExistenceRuleTests
+    public class SignaturePublicationRecordExistenceRuleTests : RuleTestsBase
     {
-        [Test]
-        public void TestMissingContext()
-        {
-            SignaturePublicationRecordExistenceRule rule = new SignaturePublicationRecordExistenceRule();
-
-            // Argument null exception when no context
-            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
-            {
-                rule.Verify(null);
-            });
-            Assert.AreEqual("context", ex.ParamName);
-        }
-
-        [Test]
-        public void TestContextMissingSignature()
-        {
-            SignaturePublicationRecordExistenceRule rule = new SignaturePublicationRecordExistenceRule();
-
-            // Verification exception on missing KSI signature
-            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
-            {
-                TestVerificationContext context = new TestVerificationContext();
-
-                rule.Verify(context);
-            });
-            Assert.That(ex.Message, Does.StartWith("Invalid KSI signature in context: null"));
-        }
+        public override VerificationRule Rule => new SignaturePublicationRecordExistenceRule();
 
         [Test]
         public void TestRfc3161SignaturePublicationRecord()
         {
-            SignaturePublicationRecordExistenceRule rule = new SignaturePublicationRecordExistenceRule();
-
             // Check legacy signature
-            TestVerificationContext context = new TestVerificationContext
-            {
-                Signature = TestUtil.GetSignature(Resources.KsiSignature_Legacy_Ok_With_Publication_Record)
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            CreateSignatureAndVerify(Resources.KsiSignature_Legacy_Ok_With_Publication_Record, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestSignaturePublicationRecord()
         {
-            SignaturePublicationRecordExistenceRule rule = new SignaturePublicationRecordExistenceRule();
-
             // Check signature
-            TestVerificationContext context = new TestVerificationContext
-            {
-                Signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_With_Publication_Record)
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            CreateSignatureAndVerify(Resources.KsiSignature_Ok_With_Publication_Record, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestSignatureMissingPublicationRecord()
         {
-            SignaturePublicationRecordExistenceRule rule = new SignaturePublicationRecordExistenceRule();
-
-            // Check invalid signature without publication record
-            TestVerificationContext context = new TestVerificationContext
-            {
-                Signature = TestUtil.GetSignature()
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
+            // Check signature without publication record
+            CreateSignatureAndVerify(Resources.KsiSignature_Ok, VerificationResultCode.Na);
         }
     }
 }

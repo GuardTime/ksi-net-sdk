@@ -17,159 +17,44 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
-using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Parser;
-using Guardtime.KSI.Publication;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
 using Guardtime.KSI.Test.Properties;
 using Guardtime.KSI.Test.Publication;
-using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
-    public class PublicationsFileSignaturePublicationMatchRuleTests
+    public class PublicationsFileSignaturePublicationMatchRuleTests : RuleTestsBase
     {
-        [Test]
-        public void TestMissingContext()
-        {
-            PublicationsFileSignaturePublicationMatchRule rule = new PublicationsFileSignaturePublicationMatchRule();
+        public override VerificationRule Rule => new PublicationsFileSignaturePublicationMatchRule();
 
-            // Argument null exception when no context
-            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
-            {
-                rule.Verify(null);
-            });
-            Assert.AreEqual("context", ex.ParamName);
+        [Test]
+        public override void TestContextMissingSignature()
+        {
+            TestContextMissingSignature(new TestVerificationContext() { PublicationsFile = new TestPublicationsFile() });
         }
 
         [Test]
-        public void TestContextMissingSignature()
+        public void TestContextMissingPublicationsFile()
         {
-            PublicationsFileSignaturePublicationMatchRule rule = new PublicationsFileSignaturePublicationMatchRule();
-
-            // Verification exception on missing KSI signature
-            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    PublicationsFile = new TestPublicationsFile()
-                };
-
-                rule.Verify(context);
-            });
-            Assert.That(ex.Message, Does.StartWith("Invalid KSI signature in context: null"));
+            base.TestContextMissingPublicationsFile();
         }
 
         [Test]
-        public void TestMissingPublicationsFile()
+        public void TestSignatureMissingPublicationRecord()
         {
-            PublicationsFileSignaturePublicationMatchRule rule = new PublicationsFileSignaturePublicationMatchRule();
-
-            // No publications file defined
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature()
-            };
-
-            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
-            {
-                rule.Verify(context);
-            });
-            Assert.That(ex.Message, Does.StartWith("Invalid publications file in context: null"));
-        }
-
-        [Test]
-        public void TestSignatureWithPublicationsFileMissingPublicationRecord()
-        {
-            PublicationsFileSignaturePublicationMatchRule rule = new PublicationsFileSignaturePublicationMatchRule();
-
-            // Check signature without publication record
-            TestVerificationContext context = new TestVerificationContext()
+            TestSignatureMissingPublicationRecord(new TestVerificationContext()
             {
                 Signature = TestUtil.GetSignature(),
                 PublicationsFile = new TestPublicationsFile()
-            };
-
-            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
-            {
-                rule.Verify(context);
             });
-            Assert.That(ex.Message, Does.StartWith("Invalid publication record in KSI signature: null"));
-        }
-
-        [Test]
-        public void TestRfc3161SignatureWithPublicationsFilePublication()
-        {
-            PublicationsFileSignaturePublicationMatchRule rule = new PublicationsFileSignaturePublicationMatchRule();
-
-            // Check legacy signature
-            TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
-            testPublicationsFile.NearestPublications.Add(1439596800,
-                new PublicationRecordInPublicationFile(new RawTag(0x703, false, false,
-                    Base16.Decode("3029020455CE810004210115BA5EB48C064B198A09D37E8C022C281C1CA1E36216EA43E811DF51A7268013"))));
-
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature(Resources.KsiSignature_Legacy_Ok_With_Publication_Record),
-                PublicationsFile = testPublicationsFile
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-        }
-
-        [Test]
-        public void TestSignatureWithPublicationsFilePublication()
-        {
-            PublicationsFileSignaturePublicationMatchRule rule = new PublicationsFileSignaturePublicationMatchRule();
-
-            // Check signature publication record against publications file
-            TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
-            testPublicationsFile.NearestPublications.Add(1439596800,
-                new PublicationRecordInPublicationFile(new RawTag(0x703, false, false,
-                    Base16.Decode("3029020455CE810004210115BA5EB48C064B198A09D37E8C022C281C1CA1E36216EA43E811DF51A7268013"))));
-
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_With_Publication_Record),
-                PublicationsFile = testPublicationsFile
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-        }
-
-        [Test]
-        public void TestSignatureWithPublicationsFileInvalidPublication()
-        {
-            PublicationsFileSignaturePublicationMatchRule rule = new PublicationsFileSignaturePublicationMatchRule();
-
-            // Check signature publication record against publications file. Publication hash mismatch.
-            TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
-            testPublicationsFile.NearestPublications.Add(1439596800,
-                new PublicationRecordInPublicationFile(new RawTag(0x703, false, false,
-                    Base16.Decode("3029020455CE810004210115BA5EB48C064B198A09D37E8C022C281C1CA1E36216EA43E811DF51A7268014"))));
-
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_With_Publication_Record),
-                PublicationsFile = testPublicationsFile
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-            Assert.AreEqual(VerificationError.Pub05.Code, verificationResult.VerificationError.Code);
         }
 
         [Test]
         public void TestSignatureWithPubRecordMissingInPubFile()
         {
-            PublicationsFileSignaturePublicationMatchRule rule = new PublicationsFileSignaturePublicationMatchRule();
-
             // Check invalid signature with publication record missing in publications file
             TestVerificationContext context = new TestVerificationContext()
             {
@@ -177,29 +62,58 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                 PublicationsFile = new TestPublicationsFile()
             };
 
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
+            Verify(context, VerificationResultCode.Na);
         }
 
         [Test]
-        public void TestSignatureWithPubRecordMissingInPubFileButCanExtend()
+        public void TestRfc3161SignatureWithPublicationsFile()
         {
-            PublicationsFileSignaturePublicationMatchRule rule = new PublicationsFileSignaturePublicationMatchRule();
+            // Check legacy signature publication record against publications file
+            TestVerificationContext context = new TestVerificationContext()
+            {
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Legacy_Ok_With_Publication_Record),
+                PublicationsFile = GetPublicationsFile(1439596800, 1439596800, "0115BA5EB48C064B198A09D37E8C022C281C1CA1E36216EA43E811DF51A7268013")
+            };
 
-            // Check signature with publication record missing in publications file, but can be extended to a publication in publications file
-            TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
-            testPublicationsFile.NearestPublications.Add(1439596800,
-                new PublicationRecordInPublicationFile(new RawTag(0x703, false, false,
-                    Base16.Decode("3029020455ce349a04210115BA5EB48C064B198A09D37E8C022C281C1CA1E36216EA43E811DF51A7268013"))));
+            Verify(context, VerificationResultCode.Ok);
+        }
 
+        [Test]
+        public void TestSignatureWithPublicationsFile()
+        {
+            // Check signature publication record against publications file
             TestVerificationContext context = new TestVerificationContext()
             {
                 Signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_With_Publication_Record),
-                PublicationsFile = testPublicationsFile
+                PublicationsFile = GetPublicationsFile(1439596800, 1439596800, "0115BA5EB48C064B198A09D37E8C022C281C1CA1E36216EA43E811DF51A7268013")
             };
 
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
+            Verify(context, VerificationResultCode.Ok);
+        }
+
+        [Test]
+        public void TestSignatureWithPublicationHashMismatch()
+        {
+            // Check signature publication record against publications file. Publication hash mismatch.
+            TestVerificationContext context = new TestVerificationContext()
+            {
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_With_Publication_Record),
+                PublicationsFile = GetPublicationsFile(1439596800, 1439596800, "0125BA5EB48C064B198A09D37E8C022C281C1CA1E36216EA43E811DF51A7268014")
+            };
+
+            Verify(context, VerificationResultCode.Fail, VerificationError.Pub05);
+        }
+
+        [Test]
+        public void TestSignatureWithPublicationTimeMismatch()
+        {
+            // Check signature publication record against publications file. Publication time mismatch.
+            TestVerificationContext context = new TestVerificationContext()
+            {
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_With_Publication_Record),
+                PublicationsFile = GetPublicationsFile(1439596800, 1439597000, "0115BA5EB48C064B198A09D37E8C022C281C1CA1E36216EA43E811DF51A7268013")
+            };
+            Verify(context, VerificationResultCode.Na);
         }
     }
 }

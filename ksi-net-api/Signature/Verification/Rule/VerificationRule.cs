@@ -146,12 +146,12 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         {
             ReadOnlyCollection<AggregationHashChain> aggregationHashChains = signature.GetAggregationHashChains();
 
-            if (aggregationHashChains == null || (!canBeEmpty && aggregationHashChains.Count == 0))
+            if (!canBeEmpty && (aggregationHashChains == null || aggregationHashChains.Count == 0))
             {
                 throw new KsiVerificationException("Aggregation hash chains are missing from KSI signature.");
             }
 
-            return aggregationHashChains;
+            return aggregationHashChains ?? new ReadOnlyCollection<AggregationHashChain>(new AggregationHashChain[] { });
         }
 
         /// <summary>
@@ -197,7 +197,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             CalendarAuthenticationRecord calendarAuthenticationRecord = signature.CalendarAuthenticationRecord;
             if (calendarAuthenticationRecord == null)
             {
-                throw new KsiVerificationException("Invalid calendar authentication record in signature: null.");
+                throw new KsiVerificationException("Calendar authentication record in missing from KSI signature.");
             }
             return calendarAuthenticationRecord;
         }
@@ -213,7 +213,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (publicationRecord == null)
             {
-                throw new KsiVerificationException("Invalid publication record in KSI signature: null.");
+                throw new KsiVerificationException("Publication record is missing from KSI signature.");
             }
 
             return publicationRecord;

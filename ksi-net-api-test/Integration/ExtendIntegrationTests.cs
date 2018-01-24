@@ -65,14 +65,17 @@ namespace Guardtime.KSI.Test.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
         public void ExtendAndVerifyTest(Ksi ksi)
         {
-            PublicationBasedVerificationPolicy policy = new PublicationBasedVerificationPolicy();
+            //PublicationBasedVerificationPolicy policy = new PublicationBasedVerificationPolicy();
+            CalendarBasedVerificationPolicy policy = new CalendarBasedVerificationPolicy();
+
             IKsiSignature ksiSignature = TestUtil.GetSignature();
             IKsiSignature extendedSignature = ksi.Extend(ksiSignature);
             PublicationData publicationData = ksi.GetPublicationsFile().GetNearestPublicationRecord(ksiSignature.AggregationTime).PublicationData;
 
             VerificationContext context = new VerificationContext(extendedSignature)
             {
-                UserPublication = publicationData
+                UserPublication = publicationData,
+                KsiService = GetHttpKsiService()
             };
 
             VerificationResult verificationResult = policy.Verify(context);

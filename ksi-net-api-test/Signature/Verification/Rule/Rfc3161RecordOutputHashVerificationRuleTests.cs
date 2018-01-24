@@ -17,8 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
-using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
 using Guardtime.KSI.Test.Properties;
@@ -27,80 +25,29 @@ using NUnit.Framework;
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
-    public class Rfc3161RecordOutputHashVerificationRuleTests
+    public class Rfc3161RecordOutputHashVerificationRuleTests : RuleTestsBase
     {
-        [Test]
-        public void TestMissingContext()
-        {
-            Rfc3161RecordOutputHashVerificationRule rule = new Rfc3161RecordOutputHashVerificationRule();
-
-            // Argument null exception when no context
-            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
-            {
-                rule.Verify(null);
-            });
-            Assert.AreEqual("context", ex.ParamName);
-        }
-
-        [Test]
-        public void TestContextMissingSignature()
-        {
-            Rfc3161RecordOutputHashVerificationRule rule = new Rfc3161RecordOutputHashVerificationRule();
-
-            // Verification exception on missing KSI signature 
-            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
-            {
-                TestVerificationContext context = new TestVerificationContext();
-
-                rule.Verify(context);
-            });
-            Assert.That(ex.Message, Does.StartWith("Invalid KSI signature in context: null"));
-        }
+        public override VerificationRule Rule => new Rfc3161RecordOutputHashVerificationRule();
 
         [Test]
         public void TestRfc3161Signature()
         {
-            Rfc3161RecordOutputHashVerificationRule rule = new Rfc3161RecordOutputHashVerificationRule();
-
             // Check legacy signature 
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature(Resources.KsiSignature_Legacy_Ok)
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            CreateSignatureAndVerify(Resources.KsiSignature_Legacy_Ok, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestRfc3161SignatureInvalidInput()
         {
-            Rfc3161RecordOutputHashVerificationRule rule = new Rfc3161RecordOutputHashVerificationRule();
-
             // Check legacy signature with invalid input hash
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature(Resources.KsiSignature_Legacy_Invalid_Input)
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-            Assert.AreEqual(VerificationError.Int01, verificationResult.VerificationError);
+            CreateSignatureAndVerify(Resources.KsiSignature_Legacy_Invalid_Input, VerificationResultCode.Fail, VerificationError.Int01);
         }
 
         [Test]
-        public void TestSignature()
+        public void TestNonRfc3161Signature()
         {
-            Rfc3161RecordOutputHashVerificationRule rule = new Rfc3161RecordOutputHashVerificationRule();
-
             // Check signature 
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature()
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            CreateSignatureAndVerify(Resources.KsiSignature_Ok, VerificationResultCode.Ok);
         }
     }
 }

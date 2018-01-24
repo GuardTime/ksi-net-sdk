@@ -17,8 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
-using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
 using Guardtime.KSI.Test.Properties;
@@ -27,93 +25,36 @@ using NUnit.Framework;
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
-    public class Rfc3161RecordOutputHashAlgorithmDeprecatedRuleTests
+    public class Rfc3161RecordOutputHashAlgorithmDeprecatedRuleTests : RuleTestsBase
     {
-        [Test]
-        public void TestMissingContext()
-        {
-            Rfc3161RecordOutputHashAlgorithmDeprecatedRule rule = new Rfc3161RecordOutputHashAlgorithmDeprecatedRule();
-
-            // Argument null exception when no context
-            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
-            {
-                rule.Verify(null);
-            });
-            Assert.AreEqual("context", ex.ParamName);
-        }
-
-        [Test]
-        public void TestContextMissingSignature()
-        {
-            Rfc3161RecordOutputHashAlgorithmDeprecatedRule rule = new Rfc3161RecordOutputHashAlgorithmDeprecatedRule();
-
-            // Verification exception on missing KSI signature 
-            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
-            {
-                TestVerificationContext context = new TestVerificationContext();
-                rule.Verify(context);
-            });
-            Assert.That(ex.Message, Does.StartWith("Invalid KSI signature in context: null"));
-        }
+        public override VerificationRule Rule => new Rfc3161RecordOutputHashAlgorithmDeprecatedRule();
 
         [Test]
         public void TestNonRfc3161Signature()
         {
-            Rfc3161RecordOutputHashAlgorithmDeprecatedRule rule = new Rfc3161RecordOutputHashAlgorithmDeprecatedRule();
-
             // test using non-legacy signature
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature()
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            CreateSignatureAndVerify(Resources.KsiSignature_Sha1AggregationChainAlgorithm_2017, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestOkAlgorithms()
         {
-            Rfc3161RecordOutputHashAlgorithmDeprecatedRule rule = new Rfc3161RecordOutputHashAlgorithmDeprecatedRule();
             // test using output hash algorithm without deprecated date
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature(Resources.KsiSignature_Legacy_Ok),
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            CreateSignatureAndVerify(Resources.KsiSignature_Legacy_Ok, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestOkAlgorithmBeforeDeprecatedDate()
         {
-            InputHashAlgorithmDeprecatedRule rule = new InputHashAlgorithmDeprecatedRule();
-
             // test using output hash algorithm with deprecated date and aggregation time is before deprecated date
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature(Resources.KsiSignature_Rfc3161Record_Sha1OutputHashAlgorithm_2016),
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            CreateSignatureAndVerify(Resources.KsiSignature_Rfc3161Record_Sha1OutputHashAlgorithm_2016, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestInvalidAlgorithmAfterDeprecatedDate()
         {
-            InputHashAlgorithmDeprecatedRule rule = new InputHashAlgorithmDeprecatedRule();
-
             // test using output hash algorithm with deprecated date and aggregation time is after deprecated date
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature(Resources.KsiSignature_Rfc3161Record_Sha1OutputHashAlgorithm_2017),
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-            Assert.AreEqual(VerificationError.Int13, verificationResult.VerificationError);
+            CreateSignatureAndVerify(Resources.KsiSignature_Rfc3161Record_Sha1OutputHashAlgorithm_2017, VerificationResultCode.Fail, VerificationError.Int17);
         }
     }
 }

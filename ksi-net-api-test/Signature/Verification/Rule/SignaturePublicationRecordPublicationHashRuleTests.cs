@@ -17,8 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
-using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
 using Guardtime.KSI.Test.Properties;
@@ -27,116 +25,45 @@ using NUnit.Framework;
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
-    public class SignaturePublicationRecordPublicationHashRuleTests
+    public class SignaturePublicationRecordPublicationHashRuleTests : RuleTestsBase
     {
-        [Test]
-        public void TestMissingContext()
-        {
-            SignaturePublicationRecordPublicationHashRule rule = new SignaturePublicationRecordPublicationHashRule();
-
-            // Argument null exception when no context
-            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
-            {
-                rule.Verify(null);
-            });
-            Assert.AreEqual("context", ex.ParamName);
-        }
+        public override VerificationRule Rule => new SignaturePublicationRecordPublicationHashRule();
 
         [Test]
-        public void TestContextMissingSignature()
+        public void TestSignatureMissingCalendarHashChain()
         {
-            SignaturePublicationRecordPublicationHashRule rule = new SignaturePublicationRecordPublicationHashRule();
-
-            // Verification exception on missing KSI signature 
-            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
+            TestSignatureMissingCalendarHashChain(new TestKsiSignature()
             {
-                TestVerificationContext context = new TestVerificationContext();
-
-                rule.Verify(context);
+                PublicationRecord = TestUtil.GetSignature(Resources.KsiSignature_Ok_With_Publication_Record).PublicationRecord
             });
-            Assert.That(ex.Message, Does.StartWith("Invalid KSI signature in context: null"));
-        }
-
-        [Test]
-        public void TestRfc3161SignaturePublicationRecordAndMissingCalendarHashChain()
-        {
-            SignaturePublicationRecordPublicationHashRule rule = new SignaturePublicationRecordPublicationHashRule();
-
-            // Check legacy signature for missing calendar hash chain and existing publication record
-            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new TestKsiSignature()
-                    {
-                        PublicationRecord = TestUtil.GetSignature(Resources.KsiSignature_Legacy_Ok_With_Publication_Record).PublicationRecord
-                    }
-                };
-
-                rule.Verify(context);
-            });
-            Assert.That(ex.Message, Does.StartWith("Calendar hash chain is missing from KSI signature"));
         }
 
         [Test]
         public void TestSignatureMissingPublicationRecord()
         {
-            SignaturePublicationRecordPublicationHashRule rule = new SignaturePublicationRecordPublicationHashRule();
-
             // Check signature without publication record
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature()
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            CreateSignatureAndVerify(Resources.KsiSignature_Ok, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestRfc3161SignaturePublicationRecordHash()
         {
-            SignaturePublicationRecordPublicationHashRule rule = new SignaturePublicationRecordPublicationHashRule();
-
             // Check legacy signature with publication record
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature(Resources.KsiSignature_Legacy_Ok_With_Publication_Record)
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            CreateSignatureAndVerify(Resources.KsiSignature_Legacy_Ok_With_Publication_Record, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestSignaturePublicationRecordHash()
         {
-            SignaturePublicationRecordPublicationHashRule rule = new SignaturePublicationRecordPublicationHashRule();
-
             // Check signature with publication record
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_With_Publication_Record)
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            CreateSignatureAndVerify(Resources.KsiSignature_Ok_With_Publication_Record, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestSignatureInvalidPublicationRecordHash()
         {
-            SignaturePublicationRecordPublicationHashRule rule = new SignaturePublicationRecordPublicationHashRule();
-
             // Check invalid signature with invalid publication record
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature(Resources.KsiSignature_Invalid_With_Invalid_Publication_Record_Hash)
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-            Assert.AreEqual(VerificationError.Int09, verificationResult.VerificationError);
+            CreateSignatureAndVerify(Resources.KsiSignature_Invalid_With_Invalid_Publication_Record_Hash, VerificationResultCode.Fail, VerificationError.Int09);
         }
     }
 }

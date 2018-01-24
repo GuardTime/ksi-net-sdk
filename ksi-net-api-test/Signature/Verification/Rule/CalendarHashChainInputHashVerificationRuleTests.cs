@@ -17,8 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
-using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
 using Guardtime.KSI.Test.Properties;
@@ -27,95 +25,36 @@ using NUnit.Framework;
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
-    public class CalendarHashChainInputHashVerificationRuleTests
+    public class CalendarHashChainInputHashVerificationRuleTests : RuleTestsBase
     {
-        [Test]
-        public void TestMissingContext()
-        {
-            CalendarHashChainInputHashVerificationRule rule = new CalendarHashChainInputHashVerificationRule();
-
-            // Argument null exception when no context
-            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
-            {
-                rule.Verify(null);
-            });
-            Assert.AreEqual("context", ex.ParamName);
-        }
-
-        [Test]
-        public void TestContextMissingSignature()
-        {
-            CalendarHashChainInputHashVerificationRule rule = new CalendarHashChainInputHashVerificationRule();
-
-            // Verification exception on missing KSI signature 
-            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
-            {
-                TestVerificationContext context = new TestVerificationContext();
-
-                rule.Verify(context);
-            });
-            Assert.That(ex.Message, Does.StartWith("Invalid KSI signature in context: null"));
-        }
+        public override VerificationRule Rule => new CalendarHashChainInputHashVerificationRule();
 
         [Test]
         public void TestRfc3161SignatureCalendarHashChainInputHash()
         {
-            CalendarHashChainInputHashVerificationRule rule = new CalendarHashChainInputHashVerificationRule();
-
             // Check legacy signature calendar hash chain input hash
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature(Resources.KsiSignature_Legacy_Ok)
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            CreateSignatureAndVerify(Resources.KsiSignature_Legacy_Ok, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestSignatureCalendarHashChainInputHash()
         {
-            CalendarHashChainInputHashVerificationRule rule = new CalendarHashChainInputHashVerificationRule();
-
             // Check signature calendar hash chain input hash
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature()
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            CreateSignatureAndVerify(Resources.KsiSignature_Ok, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestSignatureMissingCalendarHashChain()
         {
-            CalendarHashChainInputHashVerificationRule rule = new CalendarHashChainInputHashVerificationRule();
-
             // Check signature without calendar chain
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_AggregationHashChain_Only)
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            CreateSignatureAndVerify(Resources.KsiSignature_Ok_AggregationHashChain_Only, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestSignatureCalendarHashChainInvalidInputHash()
         {
-            CalendarHashChainInputHashVerificationRule rule = new CalendarHashChainInputHashVerificationRule();
-
             // Check invalid signature with invalid calendar chain input hash
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature(Resources.KsiSignature_Invalid_Calendar_Chain_Input_Hash)
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-            Assert.AreEqual(VerificationError.Int03, verificationResult.VerificationError);
+            CreateSignatureAndVerify(Resources.KsiSignature_Invalid_Calendar_Chain_Input_Hash, VerificationResultCode.Fail, VerificationError.Int03);
         }
     }
 }

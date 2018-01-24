@@ -17,216 +17,114 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
 using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Parser;
-using Guardtime.KSI.Publication;
-using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
 using Guardtime.KSI.Test.Properties;
 using Guardtime.KSI.Test.Publication;
-using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
-    public class PublicationsFilePublicationTimeMatchesExtenderResponseRuleTests
+    public class PublicationsFilePublicationTimeMatchesExtenderResponseRuleTests : RuleTestsBase
     {
-        [Test]
-        public void TestMissingContext()
-        {
-            PublicationsFilePublicationTimeMatchesExtenderResponseRule rule = new PublicationsFilePublicationTimeMatchesExtenderResponseRule();
-
-            // Argument null exception when no context
-            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
-            {
-                rule.Verify(null);
-            });
-            Assert.AreEqual("context", ex.ParamName);
-        }
+        public override VerificationRule Rule => new PublicationsFilePublicationTimeMatchesExtenderResponseRule();
 
         [Test]
-        public void TestContextMissingSignature()
+        public void TestContextMissingPublicationsFile()
         {
-            PublicationsFilePublicationTimeMatchesExtenderResponseRule rule = new PublicationsFilePublicationTimeMatchesExtenderResponseRule();
-
-            // Verification exception on missing KSI signature 
-            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
-            {
-                TestVerificationContext context = new TestVerificationContext();
-
-                rule.Verify(context);
-            });
-            Assert.That(ex.Message, Does.StartWith("Invalid KSI signature in context: null"));
-        }
-
-        [Test]
-        public void TestMissingPublicationsFile()
-        {
-            PublicationsFilePublicationTimeMatchesExtenderResponseRule rule = new PublicationsFilePublicationTimeMatchesExtenderResponseRule();
-
-            // Invalid publications file in context: null
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature()
-            };
-
-            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
-            {
-                rule.Verify(context);
-            });
-            Assert.That(ex.Message, Does.StartWith("Invalid publications file in context: null"));
+            base.TestContextMissingPublicationsFile();
         }
 
         [Test]
         public void TestSignatureWithInvalidContextExtendFunctions()
         {
-            PublicationsFilePublicationTimeMatchesExtenderResponseRule rule = new PublicationsFilePublicationTimeMatchesExtenderResponseRule();
-
-            // Check invalid extended calendar chain
-            TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
-            testPublicationsFile.NearestPublications.Add(1455478441,
-                new PublicationRecordInPublicationFile(new RawTag(0x703, false, false,
-                    new PublicationData("AAAAAA-CT5VGY-AAPUCF-L3EKCC-NRSX56-AXIDFL-VZJQK4-WDCPOE-3KIWGB-XGPPM3-O5BIMW-REOVR4").Encode())));
-
+            // Check missing extended calendar chain
             TestVerificationContext context = new TestVerificationContext()
             {
-                Signature = TestUtil.GetSignature(),
-                PublicationsFile = testPublicationsFile
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Ok),
+                PublicationsFile = GetPublicationsFile(1455478441, 1455494400),
             };
 
-            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
-            {
-                rule.Verify(context);
-            });
-            Assert.That(ex.Message, Does.StartWith("Received invalid extended calendar hash chain from context extension function: null"));
+            TestSignatureWithInvalidContextExtendFunctions(context);
         }
 
         [Test]
         public void TestSignatureExtendMissingNewerPublication()
         {
-            PublicationsFilePublicationTimeMatchesExtenderResponseRule rule = new PublicationsFilePublicationTimeMatchesExtenderResponseRule();
-
             // Check no publication found after current signature
             TestVerificationContext context = new TestVerificationContext()
             {
                 Signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_New),
                 PublicationsFile = new TestPublicationsFile(),
-                ExtendedCalendarHashChain =
-                    new CalendarHashChain(new RawTag(Constants.CalendarHashChain.TagType, false, false,
-                        Base16.Decode(
-                            "010453ED4D80020453B2A01D052101E8E1FB57586DFE67D5B541FCE6CFC78684E4C38ED87784D97FFA7FEB81DB7D1E08210153D8E4B360DDB59CE2C6028C5C502664C035165C8FB4462BF82340F550E7547C07210109867731331680C0A0605E59522C35060DD6BA1F741EB411FECE2D446F6E66C60821015744E0D040C744B1DB86070EB49051DE95F983E7288ED9F489C508B8B6DA6DF2082101736BA09B6108819611B3F6400415E7F778E21EAA412D1B769A048A657B9E98380821019D07C73BECEC4F37F05132C8695DED4D2EA27432DAB5A75E19739D42C667BD7B072101982F75FE7D976EF4F09334F9C74DAF0F8D9E6F21BC15E1E5B0459C5FB2CCDA94072101177769276EAED1F6E8975F53795CABC4E7AF15FA6E2EB82E953E75903125C5A70721011B3EF77E8A12037061A8D66C02C08017BE5989A5549C37AD29BE6DA1C91D22D3072101B3C58D951F365C7B5A3EA32D10C93681BE2587F43516172A9207F80BCF091C280721011A874BCCEC382D3E262FCBD45E98AC015D33EBA11A4BBA235EF4DD1CD74FB74D072101B79DEFB98B7399FE191777D9D5E7BD65EBFEB437A67E03410AA447129B0F904F072101D8309245A4A52C0A85C72855B217F941215B2FA4F9867D5BA7EE717609614BC5072101CC2DA8F01BC8E09E745717F574484D02772D1CAA711E11ACAEB336A3FBBA974708210181F5BA98D16F8A14B2B7E7C2D5FEE8FCD30D61731D097571ADF18BAF0285807C072101832753B33D49A83863338CE03FD7D11177344978754988963A6C3C8CDB31642F0821013110D9D04908F59E422A9C674721ABF6E78B5BFB9B62F98D38E35818D28110CA072101CE9DDC7F1BF91CAFFFA71867F9F988826DAA8C6157952228758FE5F21C6D106F082101C1DFAFE010C4D7046E143BBA14781F206D0026710C7B6D633A446B86750C54CE072101B5305FC528B235A33B32A4DD64575FED5802F7658F5FF8A4C0AA237EB50A98AE072101CEF6F8C65E2DD16E4ED42DA884B59886BB781D4047BC39FFD0771D5A5617E73F08210105D3A7B71DA6715B9B4F7DA5E4ECF52584B1A1A3451B814E4633C8894EC656CA08210142FEAC12960B2147E41C2C89663C2D05D11AECB43A5E646BB241F53C8BF00C0107210166142A0A4CA33B69C4F916234FD59B913FF92128F46A78748094FDCE3C06CFB90821016B303486CE63811ECCF8FB5EE071E471C574E661FBCAE366F8F4DC6ACFC79C400821011C102667AC4FBC8D91B99EF4A7C78BEE2448FF52AA6CD1D557595F23510E98EA082101FB79B43E0AA6BEE9173839C051D3D0DAC6F8EFBD487331B5B86A214C42FAA81C082101496FC0120D854E7534B992AB32EC3045B20D4BEE1BFBE4564FD092CEAFA08B72082101BB44FD36A5F3CDEE7B5C6DF3A6098A09E353335B6029F1477502588A7E37BE00")))
             };
 
-            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
+            DoesThrow<KsiVerificationException>(delegate
             {
-                rule.Verify(context);
-            });
-            Assert.That(ex.Message, Does.StartWith("No publication record found after given time in publications file"));
+                Rule.Verify(context);
+            }, "No publication record found after given time in publications file");
         }
 
         [Test]
-        public void TestRfc3161SignatureWithPublicationFilePublicationTimeMatchesExtenderResponseTime()
+        public void TestRfc3161SignatureOk()
         {
-            PublicationsFilePublicationTimeMatchesExtenderResponseRule rule = new PublicationsFilePublicationTimeMatchesExtenderResponseRule();
-
             // Check legacy signature
-            TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
-            testPublicationsFile.NearestPublications.Add(1401915603,
-                new PublicationRecordInPublicationFile(new RawTag(0x703, false, false,
-                    new PublicationData("AAAAAA-CT5VGY-AAPUCF-L3EKCC-NRSX56-AXIDFL-VZJQK4-WDCPOE-3KIWGB-XGPPM3-O5BIMW-REOVR4").Encode())));
-
             TestVerificationContext context = new TestVerificationContext()
             {
-                Signature = TestUtil.GetSignature(Resources.KsiSignature_Legacy_Ok_With_Publication_Record),
-                PublicationsFile = testPublicationsFile,
-                ExtendedCalendarHashChain =
-                    new CalendarHashChain(new RawTag(Constants.CalendarHashChain.TagType, false, false,
-                        Base16.Decode(
-                            "010453ED4D800204538F88D3052101145C6CDA9F901A65C0B3C09896675928E1A85977280BF65C0A638C8A47BB358A082101D59926FE0A1BB9DA1C543BB83595327083D1B31BC924CF646126B84A1917B68908210193A28F9135B77A59A9272B52D770BCEC86A289DAB9AB04675DC686FDBAA1E2650721011576EBF50B7F57F291C630C4447F6C2D7C53FFB01B1A8E6D03C255B6D8192E1A072101351F142994A684EDEF7F36FC97D670CD44DAF657F0A364695E99AFE82A12185D0821011FA0610ABC70C14A57FB8AE7F7B3ACEF06158EFD7FEA72B8D283B6250816B9B80721011952CC826A54D06305221695780BA6D2A28A40E219A5E4E0286B6BF4786978F70821010B55DA6AC77E5E4D4DF01B3F7B7A4A54C40649EF8B7A6FFD374A35B0AFE6B172082101772BC22F2AE1EB91CE7004E08958110748DFD2DEBD0BDD52F1D4071728CC61F80721015F23E60BA799C079C32F70409EBADD170FFDCEE6EF9D07C0A8A42CE5AC7DE847072101C25AED220B4072B5BEC1E7CAF84D7B4E7336FE2F78B4BAB62989A20E60C3D126072101DDB4DB0658527FB6897B3C3142512B0637F0359B7FE164C0CEB7B5F16B655905082101449D3D06E1A50565F5C0D9523465804D268C74384B22E08D9B9AE239A23147F5072101E0276D72C61E4D161C90BE3AEEC3CF3E51870FFA8D373790D5561E901389551E0721013FCE89BD33B202C9F775E3CE59A272D8AD2B17F7A8C944C76F87FA040F9D16D70721015643670BDD1B6DEBBA05242FEB7423D7F29016401BE4C0F2E1AA9E824919E236082101DE0A153233AC4AB779C2DD9FB798937EA95728E9ABF12103BDC60BE2DB0DADE6082101A4A4B2F924477698DD230F25F8D8FA9F0FE9AB2AE6964F799E536C3FC396B5C4082101F965C19A6248ACFC6ADEF395208D352C1FBE3548484C747045FAE6FA7B98A471082101C6585B401E35921807FCD7E7312E5F317DD67A615D8ACA516F3DC47CD584D1520821014BEB537B59DA957DF787F0B48B313AB1565FF005B23F23A3C6B17EAC43A4EC2F0721014F91EC53886806917F95B6B901A7932A1ACB330E65068669B86908C302509DDF07210171247D359734FCF9DC706B1B1116D79266DCD4CAC6A84C32F575B34F366F3EA107210166142A0A4CA33B69C4F916234FD59B913FF92128F46A78748094FDCE3C06CFB90821016B303486CE63811ECCF8FB5EE071E471C574E661FBCAE366F8F4DC6ACFC79C400821011C102667AC4FBC8D91B99EF4A7C78BEE2448FF52AA6CD1D557595F23510E98EA082101FB79B43E0AA6BEE9173839C051D3D0DAC6F8EFBD487331B5B86A214C42FAA81C082101496FC0120D854E7534B992AB32EC3045B20D4BEE1BFBE4564FD092CEAFA08B72082101BB44FD36A5F3CDEE7B5C6DF3A6098A09E353335B6029F1477502588A7E37BE00")))
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Legacy_Ok),
+                PublicationsFile = GetPublicationsFile(1401915603, 1439596800),
+                ExtendedCalendarHashChain = TestUtil.GetSignature(Resources.KsiSignature_Legacy_Ok_With_Publication_Record).CalendarHashChain
             };
 
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            Verify(context, VerificationResultCode.Ok);
         }
 
         [Test]
-        public void TestSignatureWithPublicationFilePublicationTimeMatchesExtenderResponseTime()
+        public void TestSignatureOk()
         {
-            PublicationsFilePublicationTimeMatchesExtenderResponseRule rule = new PublicationsFilePublicationTimeMatchesExtenderResponseRule();
-
             // Check signature
-            TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
-            testPublicationsFile.NearestPublications.Add(1439577241,
-                new PublicationRecordInPublicationFile(new RawTag(0x703, false, false,
-                    new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K").Encode())));
-
             TestVerificationContext context = new TestVerificationContext()
             {
-                Signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_With_Publication_Record),
-                PublicationsFile = testPublicationsFile,
-                ExtendedCalendarHashChain =
-                    new CalendarHashChain(new RawTag(Constants.CalendarHashChain.TagType, false, false,
-                        Base16.Decode(
-                            "010455CE8100020455CE34990521012E86118343FBFF0422986896C42363DB331EBDE356303C1DFC3F33B2FDC39B08082101BBB4B47BBC16730790C32134C8348BB00F6C7E8B0B6AD1D7322AC4A551C3C3C8072101720063982B36DC97ED377CDF8424418D53FC221E26B5F93144E11EC1CBCFB89B072101C31C624EF0A9BA3610676B6D6043E6AF20A63B3D52DD06E4760255DB654CD90D082101EC0C7F4EDCB5E1445B7885D72B14D0098B5A2E1C976DE03A3C2860FCF49CEC8C082101B432DC9482ECF55C342C2457322BEC05F8D14903433DB1F2D27A5CDD763072BD07210156C6B60EAA9BC83651F467D081291AE8FAADF0B02EA15CFF8BCD5A270473A949072101CDEE2EC56716FC3DA6C2E649CBB2377B8F87FC60F886E47489C8300DCC75427A082101C1C76C217C16303BC173B477E0B35BC9D9038C8E0CEC9E425D02A8CE5C103729072101A10F9C1A094AADB477D86584B56FC72AC0E6F3404A918CDAB0C00F296F7C2D4F0721018E0DA56269B5BDB836DC1F83D6BF483F9E15850FD61329C5E208D5AEB4C33D820821014018FB1C9C9EFFD337B5676B87127CD0C1444E597FD7F291C06350706C9F2D730721011F45079065B8AE60A0A2E2F8C72EA46A3BA8023AA9B222E37B8DAE4F552E1D4F0821010BD3C2B20050366102CF8A040251BDF866BFD0CDEB59EB43ECF9470E1DE68D44082101CEBE36A36A2A33A3003FD3CE955575D4466B4CB525AAD78E5E0F7D3217C5FCE9072101389C588C3C983FE9E94AB1075619634590FF7C1D2E3D8965EBAB48CCAA293DEE0721017837EBEA5261CE9A1742D3CF3B9C65973A1214B03B0CCAC6F59A59724F6E7C370821014108F102F77702E5C467B330B634196B65E57F8354B4BB69898447A73F7D05A3082101FDF7DEFF598FA3608649BCC2FDE201655245DA192F2EA96D9A59822AEB3E76CC082101556C3B03730528CFC880F22611808771F37BE30E619876BD4191575CB781A8B908210113F40DCA06B1FCFC50DBDBC8800407CBFCBD99551B7E48B2E27B532E25B1F98E082101CDF3706B596D8F396EB80F24BB58CD9AF54AB491CE2EA374C58338AEDA8CC301082101B16FF759F8A8094777E6B9759A282F5513B8B476C1AD8A6B196364D4AECEFF63082101A6F082B82280F3A6AFB14C8E39B7F57860B857B70CA57AFD35F40395EEB32458082101496FC0120D854E7534B992AB32EC3045B20D4BEE1BFBE4564FD092CEAFA08B72082101BB44FD36A5F3CDEE7B5C6DF3A6098A09E353335B6029F1477502588A7E37BE00")))
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Ok),
+                PublicationsFile = GetPublicationsFile(1455478441, 1455494400),
+                ExtendedCalendarHashChain = TestUtil.GetSignature(Resources.KsiSignature_Ok_Extended).CalendarHashChain
             };
 
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            Verify(context, VerificationResultCode.Ok);
         }
 
         [Test]
-        public void TestSignatureWithPublicationFilePublicationTimeMatchesExtenderResponseTimeMismatch()
+        public void TestSignatureWithInvalidExtendedCalendarHashChainPublicationTime()
         {
-            PublicationsFilePublicationTimeMatchesExtenderResponseRule rule = new PublicationsFilePublicationTimeMatchesExtenderResponseRule();
-
             // Check publication record publication time with invalid extended calendar publication time
-            TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
-            testPublicationsFile.NearestPublications.Add(1439577241,
-                new PublicationRecordInPublicationFile(new RawTag(0x703, false, false,
-                    new PublicationData("AAAAAA-CT5VGY-AAPUCF-L3EKCC-NRSX56-AXIDFL-VZJQK4-WDCPOE-3KIWGB-XGPPM3-O5BIMW-REOVR4").Encode())));
-
             TestVerificationContext context = new TestVerificationContext()
             {
-                Signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_With_Publication_Record),
-                PublicationsFile = testPublicationsFile,
-                ExtendedCalendarHashChain =
-                    new CalendarHashChain(new RawTag(Constants.CalendarHashChain.TagType, false, false,
-                        Base16.Decode(
-                            "0104538FB3000204538F88D3052101145C6CDA9F901A65C0B3C09896675928E1A85977280BF65C0A638C8A47BB358A082101D59926FE0A1BB9DA1C543BB83595327083D1B31BC924CF646126B84A1917B68908210193A28F9135B77A59A9272B52D770BCEC86A289DAB9AB04675DC686FDBAA1E265072101000000000000000000000000000000000000000000000000000000000000000007210100000000000000000000000000000000000000000000000000000000000000000821011FA0610ABC70C14A57FB8AE7F7B3ACEF06158EFD7FEA72B8D283B6250816B9B807210100000000000000000000000000000000000000000000000000000000000000000821010B55DA6AC77E5E4D4DF01B3F7B7A4A54C40649EF8B7A6FFD374A35B0AFE6B172082101772BC22F2AE1EB91CE7004E08958110748DFD2DEBD0BDD52F1D4071728CC61F8072101000000000000000000000000000000000000000000000000000000000000000007210100000000000000000000000000000000000000000000000000000000000000000721010000000000000000000000000000000000000000000000000000000000000000082101449D3D06E1A50565F5C0D9523465804D268C74384B22E08D9B9AE239A23147F507210100000000000000000000000000000000000000000000000000000000000000000721010000000000000000000000000000000000000000000000000000000000000000082101DE0A153233AC4AB779C2DD9FB798937EA95728E9ABF12103BDC60BE2DB0DADE6082101A4A4B2F924477698DD230F25F8D8FA9F0FE9AB2AE6964F799E536C3FC396B5C4082101F965C19A6248ACFC6ADEF395208D352C1FBE3548484C747045FAE6FA7B98A471082101C6585B401E35921807FCD7E7312E5F317DD67A615D8ACA516F3DC47CD584D1520821014BEB537B59DA957DF787F0B48B313AB1565FF005B23F23A3C6B17EAC43A4EC2F0821016B303486CE63811ECCF8FB5EE071E471C574E661FBCAE366F8F4DC6ACFC79C400821011C102667AC4FBC8D91B99EF4A7C78BEE2448FF52AA6CD1D557595F23510E98EA082101FB79B43E0AA6BEE9173839C051D3D0DAC6F8EFBD487331B5B86A214C42FAA81C082101496FC0120D854E7534B992AB32EC3045B20D4BEE1BFBE4564FD092CEAFA08B72082101BB44FD36A5F3CDEE7B5C6DF3A6098A09E353335B6029F1477502588A7E37BE00")))
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Ok),
+                PublicationsFile = GetPublicationsFile(1455478441, 1455494401),
+                ExtendedCalendarHashChain = TestUtil.GetSignature(Resources.KsiSignature_Ok_Extended).CalendarHashChain
             };
 
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-            Assert.AreEqual(VerificationError.Pub02, verificationResult.VerificationError);
+            Verify(context, VerificationResultCode.Fail, VerificationError.Pub02);
         }
 
         [Test]
-        public void TestSignatureAggregationTimeWithExtendedCalendarHashChainRegistrationTime()
+        public void TestSignatureWithInvalidExtendedCalendarHashChainRegistrationTime()
         {
-            PublicationsFilePublicationTimeMatchesExtenderResponseRule rule = new PublicationsFilePublicationTimeMatchesExtenderResponseRule();
-
             // Check signature aggregation time with invalid extended calendar registration time
-            TestPublicationsFile testPublicationsFile = new TestPublicationsFile();
-            testPublicationsFile.NearestPublications.Add(1439577241,
-                new PublicationRecordInPublicationFile(new RawTag(0x703, false, false,
-                    new PublicationData("AAAAAA-CT5VGY-AAPUCF-L3EKCC-NRSX56-AXIDFL-VZJQK4-WDCPOE-3KIWGB-XGPPM3-O5BIMW-REOVR4").Encode())));
-
             TestVerificationContext context = new TestVerificationContext()
             {
-                Signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_With_Publication_Record),
-                PublicationsFile = testPublicationsFile,
-                ExtendedCalendarHashChain =
-                    new CalendarHashChain(new RawTag(Constants.CalendarHashChain.TagType, false, false,
-                        Base16.Decode(
-                            "010453ED4D80020453B2A01D052101E8E1FB57586DFE67D5B541FCE6CFC78684E4C38ED87784D97FFA7FEB81DB7D1E08210153D8E4B360DDB59CE2C6028C5C502664C035165C8FB4462BF82340F550E7547C08210109867731331680C0A0605E59522C35060DD6BA1F741EB411FECE2D446F6E66C60821015744E0D040C744B1DB86070EB49051DE95F983E7288ED9F489C508B8B6DA6DF2082101736BA09B6108819611B3F6400415E7F778E21EAA412D1B769A048A657B9E98380821019D07C73BECEC4F37F05132C8695DED4D2EA27432DAB5A75E19739D42C667BD7B072101982F75FE7D976EF4F09334F9C74DAF0F8D9E6F21BC15E1E5B0459C5FB2CCDA94072101177769276EAED1F6E8975F53795CABC4E7AF15FA6E2EB82E953E75903125C5A70721011B3EF77E8A12037061A8D66C02C08017BE5989A5549C37AD29BE6DA1C91D22D3072101B3C58D951F365C7B5A3EA32D10C93681BE2587F43516172A9207F80BCF091C280721011A874BCCEC382D3E262FCBD45E98AC015D33EBA11A4BBA235EF4DD1CD74FB74D072101B79DEFB98B7399FE191777D9D5E7BD65EBFEB437A67E03410AA447129B0F904F072101D8309245A4A52C0A85C72855B217F941215B2FA4F9867D5BA7EE717609614BC5072101CC2DA8F01BC8E09E745717F574484D02772D1CAA711E11ACAEB336A3FBBA974708210181F5BA98D16F8A14B2B7E7C2D5FEE8FCD30D61731D097571ADF18BAF0285807C072101832753B33D49A83863338CE03FD7D11177344978754988963A6C3C8CDB31642F0821013110D9D04908F59E422A9C674721ABF6E78B5BFB9B62F98D38E35818D28110CA072101CE9DDC7F1BF91CAFFFA71867F9F988826DAA8C6157952228758FE5F21C6D106F082101C1DFAFE010C4D7046E143BBA14781F206D0026710C7B6D633A446B86750C54CE072101B5305FC528B235A33B32A4DD64575FED5802F7658F5FF8A4C0AA237EB50A98AE072101CEF6F8C65E2DD16E4ED42DA884B59886BB781D4047BC39FFD0771D5A5617E73F08210105D3A7B71DA6715B9B4F7DA5E4ECF52584B1A1A3451B814E4633C8894EC656CA08210142FEAC12960B2147E41C2C89663C2D05D11AECB43A5E646BB241F53C8BF00C0107210166142A0A4CA33B69C4F916234FD59B913FF92128F46A78748094FDCE3C06CFB90821016B303486CE63811ECCF8FB5EE071E471C574E661FBCAE366F8F4DC6ACFC79C400821011C102667AC4FBC8D91B99EF4A7C78BEE2448FF52AA6CD1D557595F23510E98EA082101FB79B43E0AA6BEE9173839C051D3D0DAC6F8EFBD487331B5B86A214C42FAA81C082101496FC0120D854E7534B992AB32EC3045B20D4BEE1BFBE4564FD092CEAFA08B72082101BB44FD36A5F3CDEE7B5C6DF3A6098A09E353335B6029F1477502588A7E37BE00")))
+                Signature = new TestKsiSignature() { AggregationTime = 1455478440 },
+                PublicationsFile = GetPublicationsFile(1455478440, 1455494400),
+                ExtendedCalendarHashChain = TestUtil.GetSignature(Resources.KsiSignature_Ok_Extended).CalendarHashChain
             };
 
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-            Assert.AreEqual(VerificationError.Pub02, verificationResult.VerificationError);
+            Verify(context, VerificationResultCode.Fail, VerificationError.Pub02);
+        }
+
+        private static TestPublicationsFile GetPublicationsFile(ulong aggregationTime, ulong publicationTime)
+        {
+            return GetPublicationsFile(aggregationTime, publicationTime, "01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2");
         }
     }
 }

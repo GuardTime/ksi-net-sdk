@@ -1114,20 +1114,20 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-calendar-hash-chain-aggregation-time.tlv.
+        /// </summary>
+        internal static string KsiSignature_Invalid_Calendar_Chain_Aggregation_Time {
+            get {
+                return ResourceManager.GetString("KsiSignature_Invalid_Calendar_Chain_Aggregation_Time", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-calendar-hash-chain-input-hash.tlv.
         /// </summary>
         internal static string KsiSignature_Invalid_Calendar_Chain_Input_Hash {
             get {
                 return ResourceManager.GetString("KsiSignature_Invalid_Calendar_Chain_Input_Hash", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-calendar-hash-chain-publication-time.tlv.
-        /// </summary>
-        internal static string KsiSignature_Invalid_Calendar_Chain_Publication_Time {
-            get {
-                return ResourceManager.GetString("KsiSignature_Invalid_Calendar_Chain_Publication_Time", resourceCulture);
             }
         }
         
@@ -1273,15 +1273,6 @@ namespace Guardtime.KSI.Test.Properties {
         internal static string KsiSignature_Invalid_Type {
             get {
                 return ResourceManager.GetString("KsiSignature_Invalid_Type", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-aggregation-root-hash.tlv.
-        /// </summary>
-        internal static string KsiSignature_Invalid_With_Invalid_Aggregation_Root_Hash {
-            get {
-                return ResourceManager.GetString("KsiSignature_Invalid_With_Invalid_Aggregation_Root_Hash", resourceCulture);
             }
         }
         

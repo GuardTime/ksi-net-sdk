@@ -372,8 +372,8 @@
   <data name="KsiSignature_Invalid_Calendar_Chain_Input_Hash" xml:space="preserve">
     <value>resources/signature/ksi-signature/ksi-signature-invalid-calendar-hash-chain-input-hash.tlv</value>
   </data>
-  <data name="KsiSignature_Invalid_Calendar_Chain_Publication_Time" xml:space="preserve">
-    <value>resources/signature/ksi-signature/ksi-signature-invalid-calendar-hash-chain-publication-time.tlv</value>
+  <data name="KsiSignature_Invalid_Calendar_Chain_Aggregation_Time" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-calendar-hash-chain-aggregation-time.tlv</value>
   </data>
   <data name="KsiSignature_Invalid_Calendar_Chain_Registration_Time" xml:space="preserve">
     <value>resources/signature/ksi-signature/ksi-signature-invalid-calendar-hash-chain-registration-time.tlv</value>
@@ -383,9 +383,6 @@
   </data>
   <data name="KsiSignature_Invalid_With_Invalid_Publication_Record_Time" xml:space="preserve">
     <value>resources/signature/ksi-signature/ksi-signature-invalid-with-invalid-publication-record-time.tlv</value>
-  </data>
-  <data name="KsiSignature_Invalid_With_Invalid_Aggregation_Root_Hash" xml:space="preserve">
-    <value>resources/signature/ksi-signature/ksi-signature-invalid-aggregation-root-hash.tlv</value>
   </data>
   <data name="Rfc3161Record_Ok" xml:space="preserve">
     <value>resources/signature/rfc3161-record/rfc3161-record-ok.tlv</value>

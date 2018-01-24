@@ -42,7 +42,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
                 if (aggregationHashChain.InputHash != chainResult.Hash)
                 {
-                    Logger.Debug("Previous aggregation hash chain output hash {0} does not match current input hash {1}.", chainResult.Hash, aggregationHashChain.InputHash);
+                    Logger.Debug("Aggregation hash chains not consistent. Aggregation hash chain input hash {0} does not match previous aggregation hash chain output hash {1}.",
+                        aggregationHashChain.InputHash, chainResult.Hash);
                     return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int01);
                 }
 

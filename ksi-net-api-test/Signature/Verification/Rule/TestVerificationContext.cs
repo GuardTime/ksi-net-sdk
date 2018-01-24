@@ -27,6 +27,15 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     public class TestVerificationContext : IVerificationContext
     {
+        public TestVerificationContext()
+        {
+        }
+
+        public TestVerificationContext(IKsiSignature signature)
+        {
+            Signature = signature;
+        }
+
         public DataHash DocumentHash { get; set; }
         public uint DocumentHashLevel { get; set; }
         public IKsiSignature Signature { get; set; }

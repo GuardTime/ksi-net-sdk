@@ -20,7 +20,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
@@ -30,48 +29,15 @@ using NUnit.Framework;
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
-    public class CalendarHashChainAlgorithmObsoleteRuleTests
+    public class CalendarHashChainAlgorithmObsoleteRuleTests : RuleTestsBase
     {
-        [Test]
-        public void TestMissingContext()
-        {
-            CalendarHashChainAlgorithmObsoleteRule rule = new CalendarHashChainAlgorithmObsoleteRule();
-
-            // Argument null exception when no context
-            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
-            {
-                rule.Verify(null);
-            });
-            Assert.AreEqual("context", ex.ParamName);
-        }
-
-        [Test]
-        public void TestContextMissingSignature()
-        {
-            CalendarHashChainAlgorithmObsoleteRule rule = new CalendarHashChainAlgorithmObsoleteRule();
-
-            // Verification exception on missing KSI signature 
-            KsiVerificationException ex = Assert.Throws<KsiVerificationException>(delegate
-            {
-                TestVerificationContext context = new TestVerificationContext();
-                rule.Verify(context);
-            });
-            Assert.That(ex.Message, Does.StartWith("Invalid KSI signature in context: null"));
-        }
+        public override VerificationRule Rule => new CalendarHashChainAlgorithmObsoleteRule();
 
         [Test]
         public void TestOkAlgorithms()
         {
-            CalendarHashChainAlgorithmObsoleteRule rule = new CalendarHashChainAlgorithmObsoleteRule();
-
             // Check with calendar hash chains that use hash algorithms without obsolete date
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature()
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            CreateSignatureAndVerify(Resources.KsiSignature_Ok, VerificationResultCode.Ok);
         }
 
         [Test]
@@ -79,16 +45,8 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         {
             AddObsoleteAlgorithm();
 
-            CalendarHashChainAlgorithmObsoleteRule rule = new CalendarHashChainAlgorithmObsoleteRule();
-
             // Check with calendar hash chains that use hash algorithms with obsolete date and publication time is before obsolete date
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature(Resources.KsiSignature_Obsolete_Calendar_Chain_Algorithm_2016)
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+            CreateSignatureAndVerify(Resources.KsiSignature_Obsolete_Calendar_Chain_Algorithm_2016, VerificationResultCode.Ok);
         }
 
         [Test]
@@ -96,17 +54,8 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         {
             AddObsoleteAlgorithm();
 
-            CalendarHashChainAlgorithmObsoleteRule rule = new CalendarHashChainAlgorithmObsoleteRule();
-
             // Check with calendar hash chains that use hash algorithms with obsolete date and publication time is after obsolete date
-            TestVerificationContext context = new TestVerificationContext()
-            {
-                Signature = TestUtil.GetSignature(Resources.KsiSignature_Obsolete_Calendar_Chain_Algorithm_2017)
-            };
-
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-            Assert.AreEqual(VerificationError.Int16, verificationResult.VerificationError);
+            CreateSignatureAndVerify(Resources.KsiSignature_Obsolete_Calendar_Chain_Algorithm_2017, VerificationResultCode.Fail, VerificationError.Int16);
         }
 
         private static void AddObsoleteAlgorithm()
@@ -125,22 +74,18 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
                 throw new Exception("Cannot get static variable Values from HashAlgorithm.");
             }
 
-            HashAlgorithm[] values = (HashAlgorithm[])info.GetValue(null);
-
             Type[] paramTypes = new Type[] { typeof(string), typeof(byte), typeof(int), typeof(HashAlgorithm.AlgorithmStatus), typeof(string[]), typeof(ulong?), typeof(ulong?) };
+            ConstructorInfo ci = typeof(HashAlgorithm).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null, paramTypes, null);
 
+            if (ci == null)
+            {
+                throw new Exception("Cannot get HashAlgorithm constuctor.");
+            }
+
+            HashAlgorithm[] values = (HashAlgorithm[])info.GetValue(null);
             object[] paramValues = new object[] { "TEST_ALGO", (byte)id, 10, HashAlgorithm.AlgorithmStatus.Normal, null, (ulong?)1467331200, (ulong?)1467331200 };
-
-            Type t = typeof(HashAlgorithm);
-
-            ConstructorInfo ci = t.GetConstructor(
-                BindingFlags.Instance | BindingFlags.NonPublic,
-                null, paramTypes, null);
-
             HashAlgorithm testHashAlgorithm = (HashAlgorithm)ci.Invoke(paramValues);
-
             List<HashAlgorithm> list = new List<HashAlgorithm>(values) { testHashAlgorithm };
-
             info.SetValue(null, list.ToArray());
         }
     }

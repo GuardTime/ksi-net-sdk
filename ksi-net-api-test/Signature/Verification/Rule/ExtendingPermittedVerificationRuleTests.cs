@@ -17,7 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
 using NUnit.Framework;
@@ -25,39 +24,29 @@ using NUnit.Framework;
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
-    public class ExtendingPermittedVerificationRuleTests
+    public class ExtendingPermittedVerificationRuleTests : RuleTestsBase
     {
-        [Test]
-        public void TestMissingContext()
-        {
-            ExtendingPermittedVerificationRule rule = new ExtendingPermittedVerificationRule();
+        public override VerificationRule Rule => new ExtendingPermittedVerificationRule();
 
-            // Argument null exception when no context
-            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
-            {
-                rule.Verify(null);
-            });
-            Assert.AreEqual("context", ex.ParamName);
+        [Test]
+        public override void TestContextMissingSignature()
+        {
+            // signature is not needed
         }
 
         [Test]
         public void TestExtendingPermitted()
         {
-            ExtendingPermittedVerificationRule rule = new ExtendingPermittedVerificationRule();
-
             TestVerificationContext context = new TestVerificationContext { IsExtendingAllowed = true };
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
+
+            Verify(context, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestExtendingNotPermitted()
         {
-            ExtendingPermittedVerificationRule rule = new ExtendingPermittedVerificationRule();
-
             TestVerificationContext context = new TestVerificationContext { IsExtendingAllowed = false };
-            VerificationResult verificationResult = rule.Verify(context);
-            Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
+            Verify(context, VerificationResultCode.Na);
         }
     }
 }
