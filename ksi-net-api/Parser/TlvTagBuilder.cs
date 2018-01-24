@@ -37,7 +37,7 @@ namespace Guardtime.KSI.Parser
         /// Create new TLV tag builder.
         /// </summary>
         /// <param name="tag">TLV tag to be used as base tag</param>
-        public TlvTagBuilder(CompositeTag tag)
+        public TlvTagBuilder(ICompositeTag tag)
         {
             if (tag == null)
             {
