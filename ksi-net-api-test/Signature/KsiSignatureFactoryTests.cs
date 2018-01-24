@@ -168,11 +168,7 @@ namespace Guardtime.KSI.Test.Signature
                 580192B  8D982C6        14F9189             680192B                9D982C6
             */
 
-            IKsiSignature signature;
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok_LevelCorrection3), FileMode.Open))
-            {
-                signature = new KsiSignatureFactory().Create(stream);
-            }
+            IKsiSignature signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_LevelCorrection3);
 
             CreateSignatureWithAggregationChainAndVerify(
                 signature,
@@ -225,11 +221,7 @@ namespace Guardtime.KSI.Test.Signature
         [Test]
         public void CreateSignatureWithAggregationChainFailWrongLevelCorrectionTest()
         {
-            IKsiSignature signature;
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok_LevelCorrection3), FileMode.Open))
-            {
-                signature = new KsiSignatureFactory().Create(stream);
-            }
+            IKsiSignature signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_LevelCorrection3);
 
             // new chain does not fit, base signature first level correction is not big enough
             KsiException ex1 = Assert.Throws<KsiException>(delegate
@@ -245,7 +237,9 @@ namespace Guardtime.KSI.Test.Signature
                     });
             });
 
-            Assert.That(ex1.Message.StartsWith("The aggregation hash chain cannot be added as lowest level chain"), "Unexpected exception message: " + ex1.Message);
+            Assert.That(ex1.Message.StartsWith(
+                "The aggregation hash chain cannot be added as lowest level chain. It's output level (4) is bigger than level correction of the first link of the first aggregation hash chain of the base signature (3)"),
+                "Unexpected exception message: " + ex1.Message);
 
             // new chain does not fit, base signature first level correction is not big enough
             KsiException ex2 = Assert.Throws<KsiException>(delegate
@@ -261,18 +255,29 @@ namespace Guardtime.KSI.Test.Signature
                     });
             });
 
-            Assert.That(ex2.Message.StartsWith("The aggregation hash chain cannot be added as lowest level chain"), "Unexpected exception message: " + ex2.Message);
+            Assert.That(ex2.Message.StartsWith(
+                "The aggregation hash chain cannot be added as lowest level chain. It's output level (4) is bigger than level correction of the first link of the first aggregation hash chain of the base signature (3)"),
+                "Unexpected exception message: " + ex1.Message);
+        }
 
-            // invalid first link level correction
-            CreateSignatureWithAggregationChainAndVerify(
-                signature,
-                new DataHash(Base16.Decode("019D982C6911831201C5CF15E937514686A2169E2AD57BA36FD92CBEBD99A67E32")),
-                new AggregationHashChain.Link[]
-                {
-                    new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01680192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F1"))),
-                    new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("015950DCA0E23E65EF56D68AF94718951567EBC2EF1F54357732530FC25D925340"))),
-                },
-                VerificationError.Int01.Code);
+        [Test]
+        public void CreateSignatureWithAggregationChainFailHashMismatchTest()
+        {
+            // cannot add new aggregation hash chain, it's output hash and base signature input hash mismatch
+            KsiException ex = Assert.Throws<KsiException>(delegate
+            {
+                CreateSignatureWithAggregationChainAndVerify(
+                    TestUtil.GetSignature(Resources.KsiSignature_Ok_LevelCorrection3),
+                    new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2")),
+                    new AggregationHashChain.Link[]
+                    {
+                        new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("0114F9189A45A30D856029F9537FD20C9C7342B82A2D949072AB195D95D7B32ECB"))),
+                        new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01D4F6E36871BA12449CA773F2A36F9C0112FC74EBE164C8278D213042C772E3AB"))),
+                    });
+            });
+
+            Assert.That(ex.Message.StartsWith("The aggregation hash chain cannot be added as lowest level chain. It's output hash does not match base signature input hash"),
+                "Unexpected exception message: " + ex.Message);
         }
 
         private static void CreateSignatureWithAggregationChainAndVerify(IKsiSignature signature, DataHash inputHash, AggregationHashChain.Link[] links,

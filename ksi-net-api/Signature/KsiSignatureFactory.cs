@@ -218,26 +218,31 @@ namespace Guardtime.KSI.Signature
 
             if (chainResult.Level > levelCorrection)
             {
-                throw new KsiException(
-                    "The aggregation hash chain cannot be added as lowest level chain. The level correction of the first link of the first aggregation hash chain of the base signature is too small.");
+                throw new KsiException(string.Format(
+                    "The aggregation hash chain cannot be added as lowest level chain. It's output level ({0}) is bigger than level correction of the first link of the first aggregation hash chain of the base signature ({1}).",
+                    chainResult.Level, levelCorrection));
             }
 
-            TlvTagBuilder signatureBuilder = new TlvTagBuilder(Constants.KsiSignature.TagType, signature.NonCritical, signature.Forward);
+            if (chainResult.Hash != lowestChain.InputHash)
+            {
+                throw new KsiException("The aggregation hash chain cannot be added as lowest level chain. It's output hash does not match base signature input hash.");
+            }
+
+            // Create list on new signature child tags.
             // Add new aggregation hash chain as the first element.
-            signatureBuilder.AddChildTag(newAggregationHashChain);
-            // Add the chain that was initally the lowest (with corrected level correction)
-            signatureBuilder.AddChildTag(CreateAggregationHashChainWithLevelCorrection(lowestChain, levelCorrection - chainResult.Level));
+            // Add the chain that was initally the lowest (with corrected level correction) as second element
+            List<ITlvTag> childTags = new List<ITlvTag> { newAggregationHashChain, CreateAggregationHashChainWithLevelCorrection(lowestChain, levelCorrection - chainResult.Level) };
 
             foreach (ITlvTag tag in signature)
             {
-                // Add all the signature components except the hash chain that was initially the lowest.
+                // Add all the signature components except the chain that was initially the lowest.
                 if (!ReferenceEquals(tag, lowestChain))
                 {
-                    signatureBuilder.AddChildTag(tag);
+                    childTags.Add(tag);
                 }
             }
 
-            KsiSignature resultSignature = new KsiSignature(false, false, signatureBuilder.GetChildTags());
+            KsiSignature resultSignature = new KsiSignature(false, false, childTags.ToArray());
             Verify(resultSignature, inputHash);
             return resultSignature;
         }
