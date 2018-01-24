@@ -108,10 +108,11 @@ namespace Guardtime.KSI.Test.Parser
         {
             using (TlvWriter writer = new TlvWriter(new MemoryStream()))
             {
-                Assert.Throws<ArgumentOutOfRangeException>(delegate
+                ArgumentOutOfRangeException ex = Assert.Throws<ArgumentOutOfRangeException>(delegate
                 {
                     writer.WriteTag(new RawTag(0x2000, true, true, new byte[256]));
                 });
+                Assert.AreEqual("tag", ex.ParamName);
             }
         }
 
@@ -120,10 +121,11 @@ namespace Guardtime.KSI.Test.Parser
         {
             using (TlvWriter writer = new TlvWriter(new MemoryStream()))
             {
-                Assert.Throws<ArgumentOutOfRangeException>(delegate
+                ArgumentOutOfRangeException ex = Assert.Throws<ArgumentOutOfRangeException>(delegate
                 {
                     writer.WriteTag(new RawTag(0x1, true, true, new byte[ushort.MaxValue + 1]));
                 });
+                Assert.AreEqual("data", ex.ParamName);
             }
         }
 

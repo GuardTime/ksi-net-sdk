@@ -111,7 +111,7 @@ namespace Guardtime.KSI.Test.Service
         {
             Assert.That(delegate
             {
-                AggregationResponsePdu tag = TestUtil.GetCompositeTag<AggregationResponsePdu>(Constants.AggregationResponsePdu.TagType,
+                TestUtil.GetCompositeTag<AggregationResponsePdu>(Constants.AggregationResponsePdu.TagType,
                     new ITlvTag[]
                     {
                         TestUtil.GetCompositeTag<AggregationResponsePayload>(Constants.AggregationResponsePayload.TagType, new ITlvTag[]
@@ -140,7 +140,7 @@ namespace Guardtime.KSI.Test.Service
         {
             Assert.That(delegate
             {
-                AggregationResponsePdu tag = TestUtil.GetCompositeTag<AggregationResponsePdu>(Constants.AggregationResponsePdu.TagType,
+                TestUtil.GetCompositeTag<AggregationResponsePdu>(Constants.AggregationResponsePdu.TagType,
                     new ITlvTag[]
                     {
                         TestUtil.GetCompositeTag<PduHeader>(Constants.PduHeader.TagType,

@@ -17,154 +17,58 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
-using System.IO;
-using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
+using Guardtime.KSI.Test.Properties;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
-    public class InputHashAlgorithmDeprecatedRuleTests
+    public class InputHashAlgorithmDeprecatedRuleTests : RuleTestsBase
     {
-        [Test]
-        public void TestMissingContext()
-        {
-            InputHashAlgorithmDeprecatedRule rule = new InputHashAlgorithmDeprecatedRule();
-
-            // Argument null exception when no context
-            Assert.Throws<ArgumentNullException>(delegate
-            {
-                rule.Verify(null);
-            });
-        }
-
-        [Test]
-        public void TestContextMissingSignature()
-        {
-            InputHashAlgorithmDeprecatedRule rule = new InputHashAlgorithmDeprecatedRule();
-
-            // Verification exception on missing KSI signature 
-            Assert.Throws<KsiVerificationException>(delegate
-            {
-                TestVerificationContext context = new TestVerificationContext();
-                rule.Verify(context);
-            });
-        }
+        public override VerificationRule Rule => new InputHashAlgorithmDeprecatedRule();
 
         [Test]
         public void TestRfc3161SignatureWithOkAlgorithm()
         {
-            InputHashAlgorithmDeprecatedRule rule = new InputHashAlgorithmDeprecatedRule();
-
             // Check legacy signature input hash that use hash algorithm without deprecated date
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream),
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            CreateSignatureAndVerify(Resources.KsiSignature_Legacy_Ok, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestRfc3161SignatureWithOkAlgorithmBeforeDeprecatedDate()
         {
-            InputHashAlgorithmDeprecatedRule rule = new InputHashAlgorithmDeprecatedRule();
-
             // Check legacy signature input hash that use hash algorithm with deprecated date and aggregation time is before deprecated date
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Rfc3161Record_Sha1InputHashAlgorithm_2016), FileMode.Open)
-                )
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream),
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            CreateSignatureAndVerify(Resources.KsiSignature_Rfc3161Record_Sha1InputHashAlgorithm_2016, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestRfc3161SignatureWithInvalidAlgorithmAfterDeprecatedDate()
         {
-            InputHashAlgorithmDeprecatedRule rule = new InputHashAlgorithmDeprecatedRule();
-
             // Check legacy signature input hash that use hash algorithm with deprecated date and aggregation time is after deprecated date
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Rfc3161Record_Sha1InputHashAlgorithm_2017), FileMode.Open)
-                )
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream),
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-                Assert.AreEqual(VerificationError.Int13, verificationResult.VerificationError);
-            }
+            CreateSignatureAndVerify(Resources.KsiSignature_Rfc3161Record_Sha1InputHashAlgorithm_2017, VerificationResultCode.Fail, VerificationError.Int13);
         }
 
         [Test]
         public void TestOkAlgorithm()
         {
-            InputHashAlgorithmDeprecatedRule rule = new InputHashAlgorithmDeprecatedRule();
-
             // Check signature input hash that use hash algorithm without deprecated date
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream),
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            CreateSignatureAndVerify(Resources.KsiSignature_Ok, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestOkAlgorithmBeforeDeprecatedDate()
         {
-            InputHashAlgorithmDeprecatedRule rule = new InputHashAlgorithmDeprecatedRule();
-
             // Check signature input hash that use hash algorithm with deprecated date and aggregation time is before deprecated date
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Sha1InputAlgorithm_2016), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream),
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            CreateSignatureAndVerify(Resources.KsiSignature_Sha1InputAlgorithm_2016, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestInvalidAlgorithmAfterDeprecatedDate()
         {
-            InputHashAlgorithmDeprecatedRule rule = new InputHashAlgorithmDeprecatedRule();
-
             // Check signature input hash that use hash algorithm with deprecated date and aggregation time is after deprecated date
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Sha1InputAlgorithm_2017), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream),
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-                Assert.AreEqual(VerificationError.Int13, verificationResult.VerificationError);
-            }
+            CreateSignatureAndVerify(Resources.KsiSignature_Sha1InputAlgorithm_2017, VerificationResultCode.Fail, VerificationError.Int13);
         }
     }
 }

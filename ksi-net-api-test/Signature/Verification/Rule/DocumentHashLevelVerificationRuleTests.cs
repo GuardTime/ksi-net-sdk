@@ -17,182 +17,100 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
-using System.IO;
-using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
-using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
+using Guardtime.KSI.Test.Properties;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
-    public class DocumentHashLevelVerificationRuleTests
+    public class DocumentHashLevelVerificationRuleTests : RuleTestsBase
     {
-        [Test]
-        public void TestMissingContext()
-        {
-            DocumentHashLevelVerificationRule rule = new DocumentHashLevelVerificationRule();
-
-            // Argument null exception when no context
-            Assert.Throws<ArgumentNullException>(delegate
-            {
-                rule.Verify(null);
-            });
-        }
-
-        [Test]
-        public void TestContextMissingSignature()
-        {
-            DocumentHashLevelVerificationRule rule = new DocumentHashLevelVerificationRule();
-
-            // Verification exception on missing KSI signature 
-            Assert.Throws<KsiVerificationException>(delegate
-            {
-                TestVerificationContext context = new TestVerificationContext();
-
-                rule.Verify(context);
-            });
-        }
+        public override VerificationRule Rule => new DocumentHashLevelVerificationRule();
 
         [Test]
         public void TestDocumentHashWithNoLevel()
         {
-            DocumentHashLevelVerificationRule rule = new DocumentHashLevelVerificationRule();
-
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream),
-                    DocumentHash = new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D"))
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            CreateSignatureAndVerify(Resources.KsiSignature_Ok, new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")), VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestDocumentHashLevelZero()
         {
-            DocumentHashLevelVerificationRule rule = new DocumentHashLevelVerificationRule();
-
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream),
-                    DocumentHashLevel = 0,
-                    DocumentHash = new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D"))
-                };
+                Signature = TestUtil.GetSignature(),
+                DocumentHashLevel = 0,
+                DocumentHash = new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D"))
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            Verify(context, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestDocumentHashLevelInvalid()
         {
-            DocumentHashLevelVerificationRule rule = new DocumentHashLevelVerificationRule();
-
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream),
-                    DocumentHashLevel = 1,
-                    DocumentHash = new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D"))
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-                Assert.AreEqual(VerificationError.Gen03, verificationResult.VerificationError);
-            }
+                Signature = TestUtil.GetSignature(),
+                DocumentHashLevel = 1,
+                DocumentHash = new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D"))
+            };
+            Verify(context, VerificationResultCode.Fail, VerificationError.Gen03);
         }
 
         [Test]
         public void TestDocumentHashLevel3()
         {
-            DocumentHashLevelVerificationRule rule = new DocumentHashLevelVerificationRule();
-
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_LevelCorrection3), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream),
-                    DocumentHashLevel = 3,
-                    DocumentHash = new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D"))
-                };
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_LevelCorrection3),
+                DocumentHashLevel = 3,
+                DocumentHash = new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D"))
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            Verify(context, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestDocumentHashLevel3Invalid()
         {
-            DocumentHashLevelVerificationRule rule = new DocumentHashLevelVerificationRule();
-
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_LevelCorrection3), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream),
-                    DocumentHashLevel = 4,
-                    DocumentHash = new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D"))
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-                Assert.AreEqual(VerificationError.Gen03, verificationResult.VerificationError);
-            }
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_LevelCorrection3),
+                DocumentHashLevel = 4,
+                DocumentHash = new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D"))
+            };
+            Verify(context, VerificationResultCode.Fail, VerificationError.Gen03);
         }
 
         [Test]
         public void TestRfc3161DocumentHashLevelZero()
         {
-            DocumentHashLevelVerificationRule rule = new DocumentHashLevelVerificationRule();
-
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream),
-                    DocumentHashLevel = 0,
-                    DocumentHash =
-                        new DataHash(Base16.Decode("015466E3CBA14A843A5E93B78E3D6AB8D3491EDCAC7E06431CE1A7F49828C340C3"))
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Legacy_Ok),
+                DocumentHashLevel = 0,
+                DocumentHash =
+                    new DataHash(Base16.Decode("015466E3CBA14A843A5E93B78E3D6AB8D3491EDCAC7E06431CE1A7F49828C340C3"))
+            };
+            Verify(context, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestRfc3161DocumentHashLevelNotZero()
         {
-            DocumentHashLevelVerificationRule rule = new DocumentHashLevelVerificationRule();
-
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream),
-                    DocumentHashLevel = 1,
-                    DocumentHash =
-                        new DataHash(Base16.Decode("015466E3CBA14A843A5E93B78E3D6AB8D3491EDCAC7E06431CE1A7F49828C340C3"))
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-                Assert.AreEqual(VerificationError.Gen03, verificationResult.VerificationError);
-            }
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Legacy_Ok),
+                DocumentHashLevel = 1,
+                DocumentHash =
+                    new DataHash(Base16.Decode("015466E3CBA14A843A5E93B78E3D6AB8D3491EDCAC7E06431CE1A7F49828C340C3"))
+            };
+            Verify(context, VerificationResultCode.Fail, VerificationError.Gen03);
         }
     }
 }

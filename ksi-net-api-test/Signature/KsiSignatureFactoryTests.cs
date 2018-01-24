@@ -41,10 +41,11 @@ namespace Guardtime.KSI.Test.Signature
         [Test]
         public void CreateFromStreamFromNullInvalidTest()
         {
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 new KsiSignatureFactory().Create((Stream)null);
             });
+            Assert.AreEqual("stream", ex.ParamName);
         }
 
         [Test]
@@ -74,8 +75,6 @@ namespace Guardtime.KSI.Test.Signature
         [Test]
         public void CreateFromStreamAndVerifyWithPolicyInvalidTest()
         {
-            IKsiSignature signature;
-
             KsiSignatureFactory signatureFactory = new KsiSignatureFactory(new PublicationBasedVerificationPolicy(),
                 new TestVerificationContext()
                 {
@@ -87,7 +86,7 @@ namespace Guardtime.KSI.Test.Signature
                 // Check invalid signature
                 using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok_With_Publication_Record), FileMode.Open))
                 {
-                    signature = signatureFactory.Create(stream);
+                    signatureFactory.Create(stream);
                 }
             });
 

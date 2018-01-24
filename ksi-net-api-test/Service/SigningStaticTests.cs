@@ -444,10 +444,11 @@ namespace Guardtime.KSI.Test.Service
         {
             IKsiService service = GetStaticKsiService(new byte[] { 0 });
 
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 service.EndSign(null);
             });
+            Assert.AreEqual("asyncResult", ex.ParamName);
         }
 
         [Test]

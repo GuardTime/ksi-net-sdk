@@ -88,28 +88,31 @@ namespace Guardtime.KSI.Test.Parser
         [Test]
         public void TestTlvTagCreateFromNullData()
         {
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 new RawTag(0x1, false, false, null);
             });
+            Assert.AreEqual("value", ex.ParamName);
         }
 
         [Test]
         public void TestTlvTagCreateFromNullTag()
         {
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 new RawTag(null);
             });
+            Assert.AreEqual("tag", ex.ParamName);
         }
 
         [Test]
         public void TestTlvTagCreateFromInvalidEncodeTlvTag()
         {
-            Assert.Throws<TlvException>(delegate
+            TlvException ex = Assert.Throws<TlvException>(delegate
             {
                 new RawTag(new InvalidEncodeTlvTag(0x0, false, false));
             });
+            Assert.That(ex.Message, Does.StartWith("Invalid TLV element encoded value: null"));
         }
 
         private class ChildRawTag : RawTag

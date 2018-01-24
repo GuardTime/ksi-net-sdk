@@ -30,9 +30,9 @@ using Guardtime.KSI.Service.Tcp;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
-using Guardtime.KSI.Test.Signature.Verification;
 using NUnit.Framework;
 using Guardtime.KSI.Hashing;
+using Guardtime.KSI.Test.Properties;
 
 namespace Guardtime.KSI.Test.Integration
 {
@@ -42,17 +42,12 @@ namespace Guardtime.KSI.Test.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiListWithInvalidExtendingPass))]
         public void ExtendInvalidPassTest(Ksi ksi)
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            Exception ex = Assert.Throws<KsiServiceException>(delegate
             {
-                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+                ksi.Extend(TestUtil.GetSignature());
+            });
 
-                Exception ex = Assert.Throws<KsiServiceException>(delegate
-                {
-                    ksi.Extend(ksiSignature);
-                });
-
-                Assert.AreEqual("Server responded with error message. Status: 258; Message: Failed hmac check.", ex.Message);
-            }
+            Assert.AreEqual("Server responded with error message. Status: 258; Message: Failed hmac check.", ex.Message);
         }
 
         /// <summary>
@@ -61,36 +56,30 @@ namespace Guardtime.KSI.Test.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiListWithInvalidSigningPass))]
         public void ExtendSuccessWithInvalidSigningPassTest(Ksi ksi)
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            Assert.DoesNotThrow(delegate
             {
-                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
-
-                Assert.DoesNotThrow(delegate
-                {
-                    ksi.Extend(ksiSignature);
-                }, "Invalid signing pass should not prevent extending.");
-            }
+                ksi.Extend(TestUtil.GetSignature());
+            }, "Invalid signing pass should not prevent extending.");
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
         public void ExtendAndVerifyTest(Ksi ksi)
         {
-            PublicationBasedVerificationPolicy rule = new PublicationBasedVerificationPolicy();
+            //PublicationBasedVerificationPolicy policy = new PublicationBasedVerificationPolicy();
+            CalendarBasedVerificationPolicy policy = new CalendarBasedVerificationPolicy();
 
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            IKsiSignature ksiSignature = TestUtil.GetSignature();
+            IKsiSignature extendedSignature = ksi.Extend(ksiSignature);
+            PublicationData publicationData = ksi.GetPublicationsFile().GetNearestPublicationRecord(ksiSignature.AggregationTime).PublicationData;
+
+            VerificationContext context = new VerificationContext(extendedSignature)
             {
-                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
-                IKsiSignature extendedSignature = ksi.Extend(ksiSignature);
-                PublicationData publicationData = ksi.GetPublicationsFile().GetNearestPublicationRecord(ksiSignature.AggregationTime).PublicationData;
+                UserPublication = publicationData,
+                KsiService = GetHttpKsiService()
+            };
 
-                VerificationContext context = new VerificationContext(extendedSignature)
-                {
-                    UserPublication = publicationData
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            VerificationResult verificationResult = policy.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
@@ -99,175 +88,129 @@ namespace Guardtime.KSI.Test.Integration
             PublicationBasedVerificationPolicy rule = new PublicationBasedVerificationPolicy();
 
             // signature contains only aggregation chains
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_Only_Aggregtion_Chains), FileMode.Open))
+            IKsiSignature ksiSignature = TestUtil.GetSignature(Resources.KsiSignature_Ok_Only_Aggregtion_Chains);
+            IKsiSignature extendedSignature = ksi.Extend(ksiSignature);
+            PublicationData publicationData = ksi.GetPublicationsFile().GetNearestPublicationRecord(ksiSignature.AggregationTime).PublicationData;
+
+            VerificationContext context = new VerificationContext(extendedSignature)
             {
-                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
-                IKsiSignature extendedSignature = ksi.Extend(ksiSignature);
-                PublicationData publicationData = ksi.GetPublicationsFile().GetNearestPublicationRecord(ksiSignature.AggregationTime).PublicationData;
+                UserPublication = publicationData
+            };
 
-                VerificationContext context = new VerificationContext(extendedSignature)
-                {
-                    UserPublication = publicationData
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
         public void ExtendInvalidSignatureTest(Ksi ksi)
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Invalid_Aggregation_Chain_Input_Hash), FileMode.Open))
+            KsiSignatureInvalidContentException ex = Assert.Throws<KsiSignatureInvalidContentException>(delegate
             {
-                IKsiSignature ksiSignature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream);
+                ksi.Extend(TestUtil.GetSignature(Resources.KsiSignature_Invalid_Aggregation_Chain_Input_Hash));
+            });
 
-                KsiSignatureInvalidContentException ex = Assert.Throws<KsiSignatureInvalidContentException>(delegate
-                {
-                    ksi.Extend(ksiSignature);
-                });
-
-                Assert.That(ex.Message.StartsWith("Signature verification failed"), "Unexpected exception message: " + ex.Message);
-                Assert.IsNotNull(ex.Signature);
-                Assert.IsTrue(ex.Signature.IsExtended);
-            }
+            Assert.That(ex.Message.StartsWith("Signature verification failed"), "Unexpected exception message: " + ex.Message);
+            Assert.IsNotNull(ex.Signature);
+            Assert.IsTrue(ex.Signature.IsExtended);
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
         public void ExtendAndVerifyToUserProvidedPublicationTest(Ksi ksi)
         {
             PublicationBasedVerificationPolicy rule = new PublicationBasedVerificationPolicy();
+            PublicationData publicationData = new PublicationData("AAAAAA-CW45II-AAKWRK-F7FBNM-KB6FNV-DYYFW7-PJQN6F-JKZWBQ-3OQYZO-HCB7RA-YNYAGA-ODRL2V");
+            IKsiSignature extendedSignature = ksi.Extend(TestUtil.GetSignature(), publicationData);
 
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            VerificationContext context = new VerificationContext(extendedSignature)
             {
-                PublicationData publicationData = new PublicationData("AAAAAA-CW45II-AAKWRK-F7FBNM-KB6FNV-DYYFW7-PJQN6F-JKZWBQ-3OQYZO-HCB7RA-YNYAGA-ODRL2V");
+                UserPublication = publicationData
+            };
 
-                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
-                IKsiSignature extendedSignature = ksi.Extend(ksiSignature, publicationData);
-
-                VerificationContext context = new VerificationContext(extendedSignature)
-                {
-                    UserPublication = publicationData
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
         public void ExtendAndVerifyToUserProvidedPublicationNotInPublicationsFileTest(Ksi ksi)
         {
             PublicationBasedVerificationPolicy rule = new PublicationBasedVerificationPolicy();
+            // publication data that is not included in publications file. Time: 2016-07-12 00:00:00 UTC
+            PublicationData publicationData = new PublicationData("AAAAAA-CXQQZQ-AAPGJF-HGNMUN-DXEIQW-NJZZOE-J76OK4-BV3FKY-AEAWIP-KSPZPW-EJKVAI-JPOOR7");
+            IKsiSignature extendedSignature = ksi.Extend(TestUtil.GetSignature(), publicationData);
 
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            VerificationContext context = new VerificationContext(extendedSignature)
             {
-                // publication data that is not included in publications file. Time: 2016-07-12 00:00:00 UTC
-                PublicationData publicationData = new PublicationData("AAAAAA-CXQQZQ-AAPGJF-HGNMUN-DXEIQW-NJZZOE-J76OK4-BV3FKY-AEAWIP-KSPZPW-EJKVAI-JPOOR7");
+                UserPublication = publicationData
+            };
 
-                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
-                IKsiSignature extendedSignature = ksi.Extend(ksiSignature, publicationData);
-
-                VerificationContext context = new VerificationContext(extendedSignature)
-                {
-                    UserPublication = publicationData
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
         public void InvalidExtendAndVerifyToUserProvidedPublicationFromTestCoreTest(Ksi ksi)
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            // publication data from Test core, not included in publications file. Time: 2016-07-12 00:00:00 UTC
+            PublicationData publicationData = new PublicationData("AAAAAA-CXQQZQ-AAOSZH-ONCB4K-TFGPBW-R6S6TF-6EW4DU-4QMP7X-GI2VCO-TNGAZM-EV6AZR-464IOA");
+            KsiSignatureInvalidContentException ex = Assert.Throws<KsiSignatureInvalidContentException>(delegate
             {
-                // publication data from Test core, not included in publications file. Time: 2016-07-12 00:00:00 UTC
-                PublicationData publicationData = new PublicationData("AAAAAA-CXQQZQ-AAOSZH-ONCB4K-TFGPBW-R6S6TF-6EW4DU-4QMP7X-GI2VCO-TNGAZM-EV6AZR-464IOA");
+                ksi.Extend(TestUtil.GetSignature(), publicationData);
+            });
 
-                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
-
-                KsiSignatureInvalidContentException ex = Assert.Throws<KsiSignatureInvalidContentException>(delegate
-                {
-                    ksi.Extend(ksiSignature, publicationData);
-                });
-
-                Assert.AreEqual(VerificationError.Int09.Code, ex.VerificationResult.VerificationError.Code, "Invalid result code");
-            }
+            Assert.AreEqual(VerificationError.Int09.Code, ex.VerificationResult.VerificationError.Code, "Invalid result code");
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsiService))]
         public void InvalidExtendToUserProvidedPublicationFromTestCoreAllowExtendingTest(KsiService service)
         {
             PublicationBasedVerificationPolicy rule = new PublicationBasedVerificationPolicy();
-
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            // publication data from Test core. not included in publications file. Time: 2016-07-12 00:00:00 UTC
+            PublicationData publicationData = new PublicationData("AAAAAA-CXQQZQ-AAOSZH-ONCB4K-TFGPBW-R6S6TF-6EW4DU-4QMP7X-GI2VCO-TNGAZM-EV6AZR-464IOA");
+            VerificationContext context = new VerificationContext(TestUtil.GetSignature())
             {
-                // publication data from Test core. not included in publications file. Time: 2016-07-12 00:00:00 UTC
-                PublicationData publicationData = new PublicationData("AAAAAA-CXQQZQ-AAOSZH-ONCB4K-TFGPBW-R6S6TF-6EW4DU-4QMP7X-GI2VCO-TNGAZM-EV6AZR-464IOA");
+                IsExtendingAllowed = true,
+                UserPublication = publicationData,
+                KsiService = service
+            };
 
-                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
-
-                VerificationContext context = new VerificationContext(ksiSignature)
-                {
-                    IsExtendingAllowed = true,
-                    UserPublication = publicationData,
-                    KsiService = service
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-                Assert.AreEqual(VerificationError.Pub01, verificationResult.VerificationError);
-            }
+            VerificationResult verificationResult = rule.Verify(context);
+            Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
+            Assert.AreEqual(VerificationError.Pub01, verificationResult.VerificationError);
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
         public void InvalidExtendToUserProvidedPublicationTest(Ksi ksi)
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            // publication data with modified hash
+            PublicationData publicationData = new PublicationData("AAAAAA-CW45II-AAIYPA-UJ4GRT-HXMFBE-OTB4AB-XH3PT3-KNIKGV-PYCJXU-HL2TN4-RG6SCA-ZP3ZLX");
+            KsiSignatureInvalidContentException ex = Assert.Throws<KsiSignatureInvalidContentException>(delegate
             {
-                // publication data with modified hash
-                PublicationData publicationData = new PublicationData("AAAAAA-CW45II-AAIYPA-UJ4GRT-HXMFBE-OTB4AB-XH3PT3-KNIKGV-PYCJXU-HL2TN4-RG6SCA-ZP3ZLX");
+                ksi.Extend(TestUtil.GetSignature(), publicationData);
+            });
 
-                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
-
-                KsiSignatureInvalidContentException ex = Assert.Throws<KsiSignatureInvalidContentException>(delegate
-                {
-                    ksi.Extend(ksiSignature, publicationData);
-                });
-
-                Assert.AreEqual(VerificationError.Int09.Code, ex.VerificationResult.VerificationError.Code, "Unexpected result code");
-            }
+            Assert.AreEqual(VerificationError.Int09.Code, ex.VerificationResult.VerificationError.Code, "Unexpected result code");
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
         public void ExtendToOtherExtendedSignatureAndVerifyWithUserProvidedPublication(Ksi ksi)
         {
-            using (FileStream signatureToExtend = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open),
-                              signatureToGetPubRecord = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_Extended), FileMode.Open))
-            {
-                IKsiSignature ksiSignatureToExtend = new KsiSignatureFactory().Create(signatureToExtend);
-                IKsiSignature ksiSignatureForPublicationRecord = new KsiSignatureFactory().Create(signatureToGetPubRecord);
-                IKsiSignature extendedSignature = ksi.Extend(ksiSignatureToExtend, ksiSignatureForPublicationRecord.PublicationRecord);
+            IKsiSignature ksiSignatureToExtend = TestUtil.GetSignature();
+            IKsiSignature ksiSignatureForPublicationRecord = TestUtil.GetSignature(Resources.KsiSignature_Ok_Extended);
+            IKsiSignature extendedSignature = ksi.Extend(ksiSignatureToExtend, ksiSignatureForPublicationRecord.PublicationRecord);
 
-                Assert.AreEqual(ksiSignatureForPublicationRecord.PublicationRecord.PublicationData.PublicationHash,
-                    extendedSignature.PublicationRecord.PublicationData.PublicationHash);
-            }
+            Assert.AreEqual(ksiSignatureForPublicationRecord.PublicationRecord.PublicationData.PublicationHash,
+                extendedSignature.PublicationRecord.PublicationData.PublicationHash);
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
         public void ExtendToNearestPublicationTest(Ksi ksi)
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
-            {
-                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
-                IKsiSignature extendedToLatest = ksi.Extend(ksiSignature, ksi.GetPublicationsFile().GetLatestPublication());
-                IKsiSignature extendedToNearest = ksi.Extend(ksiSignature);
+            IKsiSignature ksiSignature = TestUtil.GetSignature();
+            IKsiSignature extendedToLatest = ksi.Extend(ksiSignature, ksi.GetPublicationsFile().GetLatestPublication());
+            IKsiSignature extendedToNearest = ksi.Extend(ksiSignature);
 
-                Assert.True(extendedToLatest.PublicationRecord.PublicationData.PublicationTime > extendedToNearest.PublicationRecord.PublicationData.PublicationTime);
-                Assert.AreEqual(1455494400, extendedToNearest.PublicationRecord.PublicationData.PublicationTime);
-            }
+            Assert.True(extendedToLatest.PublicationRecord.PublicationData.PublicationTime > extendedToNearest.PublicationRecord.PublicationData.PublicationTime);
+            Assert.AreEqual(1455494400, extendedToNearest.PublicationRecord.PublicationData.PublicationTime);
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
@@ -279,7 +222,7 @@ namespace Guardtime.KSI.Test.Integration
             string errorMessage = null;
             MemoryStream ms = new MemoryStream();
 
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok), FileMode.Open))
             {
                 stream.CopyTo(ms);
             }
@@ -419,35 +362,25 @@ namespace Guardtime.KSI.Test.Integration
         {
             Ksi ksi = new Ksi(GetHttpKsiServiceWithoutExtendingUrl());
 
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            Exception ex = Assert.Throws<KsiServiceProtocolException>(delegate
             {
-                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+                ksi.Extend(TestUtil.GetSignature());
+            });
 
-                Exception ex = Assert.Throws<KsiServiceProtocolException>(delegate
-                {
-                    ksi.Extend(ksiSignature);
-                });
-
-                Assert.That(ex.Message.StartsWith("Service url is missing"), "Unexpected exception message: " + ex.Message);
-            }
+            Assert.That(ex.Message.StartsWith("Service url is missing"), "Unexpected exception message: " + ex.Message);
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsiWithInvalidExtendingUrl))]
         public void HttpExtendInvalidUrlTest(Ksi ksi)
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            Exception ex = Assert.Throws<KsiServiceProtocolException>(delegate
             {
-                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
+                ksi.Extend(TestUtil.GetSignature());
+            });
 
-                Exception ex = Assert.Throws<KsiServiceProtocolException>(delegate
-                {
-                    ksi.Extend(ksiSignature);
-                });
-
-                Assert.That(ex.Message.StartsWith("Request failed"), "Unexpected exception message: " + ex.Message);
-                Assert.IsNotNull(ex.InnerException, "Inner exception should not be null");
-                Assert.That(ex.InnerException.Message.StartsWith("The remote name could not be resolved"), "Unexpected inner exception message: " + ex.InnerException.Message);
-            }
+            Assert.That(ex.Message.StartsWith("Request failed"), "Unexpected exception message: " + ex.Message);
+            Assert.IsNotNull(ex.InnerException, "Inner exception should not be null");
+            Assert.That(ex.InnerException.Message.StartsWith("The remote name could not be resolved"), "Unexpected inner exception message: " + ex.InnerException.Message);
         }
 
         /// <summary>
@@ -456,33 +389,23 @@ namespace Guardtime.KSI.Test.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsiWithInvalidSigningUrl))]
         public void HttpExtendSuccessWithInvalidSigningUrlTest(Ksi ksi)
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            Assert.DoesNotThrow(delegate
             {
-                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
-
-                Assert.DoesNotThrow(delegate
-                {
-                    ksi.Extend(ksiSignature);
-                }, "Invalid signing url should not prevent extending.");
-            }
+                ksi.Extend(TestUtil.GetSignature());
+            }, "Invalid signing url should not prevent extending.");
         }
 
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpKsiWithInvalidExtendingPort))]
         public void TcpExtendWithInvalidPortTest(Ksi ksi)
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            Exception ex = Assert.Throws<KsiServiceProtocolException>(delegate
             {
-                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
-
-                Exception ex = Assert.Throws<KsiServiceProtocolException>(delegate
-                {
-                    ksi.Extend(ksiSignature);
-                });
-                Assert.That(ex.Message.StartsWith("Completing connection failed"), "Unexpected exception message: " + ex.Message);
-                Assert.IsNotNull(ex.InnerException, "Inner exception should not be null");
-                Assert.That(ex.InnerException.Message.StartsWith("No connection could be made because the target machine actively refused it"),
-                    "Unexpected inner exception message: " + ex.InnerException.Message);
-            }
+                ksi.Extend(TestUtil.GetSignature());
+            });
+            Assert.That(ex.Message.StartsWith("Completing connection failed"), "Unexpected exception message: " + ex.Message);
+            Assert.IsNotNull(ex.InnerException, "Inner exception should not be null");
+            Assert.That(ex.InnerException.Message.StartsWith("No connection could be made because the target machine actively refused it"),
+                "Unexpected inner exception message: " + ex.InnerException.Message);
         }
 
         /// <summary>
@@ -491,15 +414,10 @@ namespace Guardtime.KSI.Test.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(TcpKsiWithInvalidSigningPort))]
         public void TcpExtendSuccessWithInvalidSigningPortTest(Ksi ksi)
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
+            Assert.DoesNotThrow(delegate
             {
-                IKsiSignature ksiSignature = new KsiSignatureFactory().Create(stream);
-
-                Assert.DoesNotThrow(delegate
-                {
-                    ksi.Extend(ksiSignature);
-                }, "Invalid signing port should not prevent extending.");
-            }
+                ksi.Extend(TestUtil.GetSignature());
+            }, "Invalid signing port should not prevent extending.");
         }
 
         [Test]
@@ -595,7 +513,13 @@ namespace Guardtime.KSI.Test.Integration
 
         private static TcpKsiExtendingServiceProtocol GetTcpProtocol(KsiService service)
         {
-            return (TcpKsiExtendingServiceProtocol)typeof(KsiService).GetField("_extendingServiceProtocol", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(service);
+            string fieldName = "_extendingServiceProtocol";
+            FieldInfo memberInfo = typeof(KsiService).GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance);
+            if (memberInfo != null)
+            {
+                return (TcpKsiExtendingServiceProtocol)memberInfo.GetValue(service);
+            }
+            throw new Exception("Could not get field info: " + fieldName);
         }
 
         private static Socket GetExtendingSocket(KsiService service)
@@ -605,7 +529,13 @@ namespace Guardtime.KSI.Test.Integration
 
         private static Socket GetExtendingSocket(TcpKsiExtendingServiceProtocol tcp)
         {
-            return (Socket)typeof(TcpKsiServiceProtocolBase).GetField("_socket", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(tcp);
+            string fieldName = "_socket";
+            FieldInfo memberInfo = typeof(TcpKsiServiceProtocolBase).GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance);
+            if (memberInfo != null)
+            {
+                return (Socket)memberInfo.GetValue(tcp);
+            }
+            throw new Exception("Could not get field info: " + fieldName);
         }
 
         [Test]

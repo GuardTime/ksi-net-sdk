@@ -135,6 +135,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Integration\KsiVerificationTests.cs" />
+    <Compile Include="Signature\Verification\Rule\RuleTestsBase.cs" />
     <Compile Include="Trust\RsaCryptoSignatureVerifierTests.cs" />
     <Compile Include="Trust\Pkcs7CryptoSignatureVerifierTests.cs" />
     <Compile Include="Signature\Verification\Policy\DefaultVerificationPolicyTests.cs" />
@@ -258,7 +259,6 @@
     <Compile Include="Signature\Verification\Rule\SignaturePublicationRecordExistenceRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\SignaturePublicationRecordPublicationHashRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\SignaturePublicationRecordPublicationTimeRuleTests.cs" />
-    <Compile Include="Signature\Verification\Rule\TestVerificationContextFaultyFunctions.cs" />
     <Compile Include="Signature\Verification\Rule\TestVerificationContext.cs" />
     <Compile Include="Signature\Verification\Rule\UserProvidedPublicationCreationTimeVerificationRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\UserProvidedPublicationExistenceRuleTests.cs" />
@@ -652,9 +652,6 @@
     <None Include="resources\signature\ksi-signature\ksi-signature-invalid-aggregation-chain-input-hash.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-aggregation-root-hash.tlv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="resources\signature\ksi-signature\ksi-signature-invalid-calendar-auth-record-pkcs7-signature-cert-not-valid.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -673,7 +670,7 @@
     <None Include="resources\signature\ksi-signature\ksi-signature-invalid-calendar-authentication-record-invalid-signature.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-calendar-hash-chain-publication-time.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-calendar-hash-chain-aggregation-time.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\ksi-signature\ksi-signature-invalid-calendar-hash-chain-registration-time.tlv">

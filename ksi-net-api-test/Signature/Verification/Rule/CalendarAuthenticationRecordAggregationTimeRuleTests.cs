@@ -17,146 +17,54 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
-using System.IO;
-using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
+using Guardtime.KSI.Test.Properties;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
-    public class CalendarAuthenticationRecordAggregationTimeRuleTests
+    public class CalendarAuthenticationRecordAggregationTimeRuleTests : RuleTestsBase
     {
-        readonly KsiSignatureFactory _ksiSignatureFactory = new KsiSignatureFactory(new EmptyVerificationPolicy());
+        public override VerificationRule Rule => new CalendarAuthenticationRecordAggregationTimeRule();
 
         [Test]
-        public void TestMissingContext()
+        public void TestSignatureMissingCalendarHashChain()
         {
-            CalendarAuthenticationRecordAggregationTimeRule rule = new CalendarAuthenticationRecordAggregationTimeRule();
-
-            // Argument null exception when no context
-            Assert.Throws<ArgumentNullException>(delegate
+            // Check signature for missing calendar hash chain and existing calendar authentication record
+            TestSignatureMissingCalendarHashChain(new TestKsiSignature()
             {
-                rule.Verify(null);
+                CalendarAuthenticationRecord = TestUtil.GetSignature(Resources.KsiSignature_Ok).CalendarAuthenticationRecord
             });
-        }
-
-        [Test]
-        public void TestContextMissingSignature()
-        {
-            CalendarAuthenticationRecordAggregationTimeRule rule = new CalendarAuthenticationRecordAggregationTimeRule();
-
-            // Verification exception on missing KSI signature 
-            Assert.Throws<KsiVerificationException>(delegate
-            {
-                TestVerificationContext context = new TestVerificationContext();
-
-                rule.Verify(context);
-            });
-        }
-
-        [Test]
-        public void TestRfc3161SignatureMissingCalendarHashChain()
-        {
-            CalendarAuthenticationRecordAggregationTimeRule rule = new CalendarAuthenticationRecordAggregationTimeRule();
-
-            // Check legacy signature for missing calendar hash chain and existing calendar authentication record
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok), FileMode.Open))
-            {
-                Assert.Throws<KsiVerificationException>(delegate
-                {
-                    IKsiSignature signature = _ksiSignatureFactory.Create(stream);
-                    TestVerificationContext context = new TestVerificationContext()
-                    {
-                        Signature = new TestKsiSignature()
-                        {
-                            CalendarAuthenticationRecord = signature.CalendarAuthenticationRecord
-                        }
-                    };
-
-                    rule.Verify(context);
-                });
-            }
         }
 
         [Test]
         public void TestRfc3161SignatureAuthenticationRecordAggregationTime()
         {
-            CalendarAuthenticationRecordAggregationTimeRule rule = new CalendarAuthenticationRecordAggregationTimeRule();
-
             // Check legacy signature for authentication record aggregation time
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = _ksiSignatureFactory.Create(stream)
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            CreateSignatureAndVerify(Resources.KsiSignature_Legacy_Ok, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestSignatureAuthenticationRecordAggregationTime()
         {
-            CalendarAuthenticationRecordAggregationTimeRule rule = new CalendarAuthenticationRecordAggregationTimeRule();
-
             // Check signature for calendar authentication record aggregation time
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = _ksiSignatureFactory.Create(stream)
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            CreateSignatureAndVerify(Resources.KsiSignature_Ok, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestSignatureMissingAuthenticationRecord()
         {
-            CalendarAuthenticationRecordAggregationTimeRule rule = new CalendarAuthenticationRecordAggregationTimeRule();
-
             // Check signature with no calendar authentication record
-            using (FileStream stream =
-                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record),
-                    FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = _ksiSignatureFactory.Create(stream)
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            CreateSignatureAndVerify(Resources.KsiSignature_Ok_AggregationHashChain_Only, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestSignatureWithInvalidPublicationTime()
         {
-            CalendarAuthenticationRecordAggregationTimeRule rule = new CalendarAuthenticationRecordAggregationTimeRule();
-
             // Check invalid signature with invalid publication time
-            using (FileStream stream =
-                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Invalid_Calendar_Authentication_Record_Invalid_Publication_Time),
-                    FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = _ksiSignatureFactory.Create(stream)
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-                Assert.AreEqual(VerificationError.Int06, verificationResult.VerificationError);
-            }
+            CreateSignatureAndVerify(Resources.KsiSignature_Invalid_Calendar_Authentication_Record_Invalid_Publication_Time, VerificationResultCode.Fail, VerificationError.Int06);
         }
     }
 }

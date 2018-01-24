@@ -142,7 +142,7 @@ namespace Guardtime.KSI.Test.Service
 
             Assert.That(delegate
             {
-                ExtendResponsePdu tag = TestUtil.GetCompositeTag<ExtendResponsePdu>(Constants.ExtendResponsePdu.TagType,
+                TestUtil.GetCompositeTag<ExtendResponsePdu>(Constants.ExtendResponsePdu.TagType,
                     new ITlvTag[]
                     {
                         TestUtil.GetCompositeTag<ExtendResponsePayload>(Constants.ExtendResponsePayload.TagType, new ITlvTag[]
@@ -188,7 +188,7 @@ namespace Guardtime.KSI.Test.Service
 
             Assert.That(delegate
             {
-                ExtendResponsePdu tag = TestUtil.GetCompositeTag<ExtendResponsePdu>(Constants.ExtendResponsePdu.TagType,
+                TestUtil.GetCompositeTag<ExtendResponsePdu>(Constants.ExtendResponsePdu.TagType,
                     new ITlvTag[]
                     {
                         TestUtil.GetCompositeTag<PduHeader>(Constants.PduHeader.TagType,

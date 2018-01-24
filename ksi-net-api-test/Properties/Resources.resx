@@ -336,7 +336,7 @@
   <data name="KsiSignature_Invalid_Missing_Aggregation_Hash_Chain" xml:space="preserve">
     <value>resources/signature/ksi-signature/ksi-signature-invalid-missing-aggregation-hash-chains.tlv</value>
   </data>
-  <data name="KsiSignature_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record" xml:space="preserve">
+  <data name="KsiSignature_Ok_AggregationHashChain_Only" xml:space="preserve">
     <value>resources/signature/ksi-signature/ksi-signature-ok-Missing-publication-record-and-calendar-authentication-record.tlv</value>
   </data>
   <data name="KsiSignature_Invalid_Multiple_Calendar_Authentication_Records" xml:space="preserve">
@@ -372,8 +372,8 @@
   <data name="KsiSignature_Invalid_Calendar_Chain_Input_Hash" xml:space="preserve">
     <value>resources/signature/ksi-signature/ksi-signature-invalid-calendar-hash-chain-input-hash.tlv</value>
   </data>
-  <data name="KsiSignature_Invalid_Calendar_Chain_Publication_Time" xml:space="preserve">
-    <value>resources/signature/ksi-signature/ksi-signature-invalid-calendar-hash-chain-publication-time.tlv</value>
+  <data name="KsiSignature_Invalid_Calendar_Chain_Aggregation_Time" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-calendar-hash-chain-aggregation-time.tlv</value>
   </data>
   <data name="KsiSignature_Invalid_Calendar_Chain_Registration_Time" xml:space="preserve">
     <value>resources/signature/ksi-signature/ksi-signature-invalid-calendar-hash-chain-registration-time.tlv</value>
@@ -383,9 +383,6 @@
   </data>
   <data name="KsiSignature_Invalid_With_Invalid_Publication_Record_Time" xml:space="preserve">
     <value>resources/signature/ksi-signature/ksi-signature-invalid-with-invalid-publication-record-time.tlv</value>
-  </data>
-  <data name="KsiSignature_Invalid_With_Invalid_Aggregation_Root_Hash" xml:space="preserve">
-    <value>resources/signature/ksi-signature/ksi-signature-invalid-aggregation-root-hash.tlv</value>
   </data>
   <data name="Rfc3161Record_Ok" xml:space="preserve">
     <value>resources/signature/rfc3161-record/rfc3161-record-ok.tlv</value>

@@ -576,7 +576,13 @@ namespace Guardtime.KSI.Test.Integration
 
         private static TcpKsiSigningServiceProtocol GetTcpProtocol(KsiService service)
         {
-            return (TcpKsiSigningServiceProtocol)typeof(KsiService).GetField("_signingServiceProtocol", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(service);
+            string fieldName = "_signingServiceProtocol";
+            FieldInfo memberInfo = typeof(KsiService).GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance);
+            if (memberInfo != null)
+            {
+                return (TcpKsiSigningServiceProtocol)memberInfo.GetValue(service);
+            }
+            throw new Exception("Could not get field info: " + fieldName);
         }
 
         private static Socket GetSigningSocket(KsiService service)
@@ -586,7 +592,13 @@ namespace Guardtime.KSI.Test.Integration
 
         private static Socket GetSigningSocket(TcpKsiSigningServiceProtocol tcp)
         {
-            return (Socket)typeof(TcpKsiServiceProtocolBase).GetField("_socket", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(tcp);
+            string fieldName = "_socket";
+            FieldInfo memberInfo = typeof(TcpKsiServiceProtocolBase).GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance);
+            if (memberInfo != null)
+            {
+                return (Socket)memberInfo.GetValue(tcp);
+            }
+            throw new Exception("Could not get field info: " + fieldName);
         }
     }
 }
