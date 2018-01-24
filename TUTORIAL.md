@@ -13,7 +13,7 @@ In order to get trial access to the KSI platform, go to [https://guardtime.com/b
 
 ## Configuring ##
 
-If signing several documents per second then consider setting max allowed http connections in your App.config file. 
+If several documents per second will be signed then it is recommended to set max allowed http connections in your App.config file. 
 Bear in mind that one signing request takes around 1 second.
 
 ```xml
@@ -28,7 +28,7 @@ Bear in mind that one signing request takes around 1 second.
 The SDK can be used with a simple wrapper KSI, where all functionality is predefined. Following code will cover the both ways.
 
 ## Setting up crypto provider ##
-First, select the crypto provider. At the moment there are 2 crypto providers available, Microsoft and
+First, select a crypto provider. At the moment there are 2 crypto providers available, Microsoft and
 Bouncy Castle. It is also possible to define your own. To set up a crypto provider, following command has to be used.
 
 ```cs
