@@ -200,8 +200,10 @@
     <Compile Include="Signature\Verification\Rule\AggregationHashChainAlgorithmDeprecatedRule.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationChainInputHashVerificationRule.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainIndexRule.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarAuthenticationRecordPublicationTimeRule.cs" />
     <Compile Include="Signature\Verification\Rule\CalendarHashChainAlgorithmDeprecatedRule.cs" />
     <Compile Include="Signature\Verification\Rule\CalendarHashChainAlgorithmObsoleteRule.cs" />
+    <Compile Include="Signature\Verification\Rule\ExtendedSignatureCalendarHashChainRightLinksMatchRule.cs" />
     <Compile Include="Signature\Verification\Rule\ExtenderResponseCalendarHashChainAlgorithmDeprecatedRule.cs" />
     <Compile Include="Signature\Verification\Rule\InputHashAlgorithmDeprecatedRule.cs" />
     <Compile Include="Signature\Verification\Rule\InputHashAlgorithmVerificationRule.cs" />

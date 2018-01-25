@@ -17,24 +17,17 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
+
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
-    /// <summary>
-    ///     Rule checks if extended signature aggregation hash chain links are with same structure and right links are equal to
-    ///     not extended signature right links.
-    /// </summary>
+    [Obsolete("Use ExtendedSignatureCalendarHashChainRightLinksMatchRule instead.")]
     public sealed class ExtendedSignatureAggregationChainRightLinksMatchesRule : VerificationRule
     {
         /// <see cref="VerificationRule.Verify" />
         public override VerificationResult Verify(IVerificationContext context)
         {
-            IKsiSignature signature = GetSignature(context);
-            ulong publicationTime = GetCalendarHashChain(signature).PublicationData.PublicationTime;
-            CalendarHashChain extendedCalendarHashChain = GetExtendedCalendarHashChain(context, publicationTime);
-
-            return GetCalendarHashChain(signature).AreRightLinksEqual(extendedCalendarHashChain)
-                ? new VerificationResult(GetRuleName(), VerificationResultCode.Ok)
-                : new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Cal04);
+            return new ExtendedSignatureCalendarHashChainRightLinksMatchRule().Verify(context);
         }
     }
 }
