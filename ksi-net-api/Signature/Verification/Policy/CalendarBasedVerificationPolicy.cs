@@ -39,7 +39,7 @@ namespace Guardtime.KSI.Signature.Verification.Policy
                     .OnSuccess(new SignaturePublicationRecordExistenceRule() // Gen-02
                         .OnSuccess(new ExtendedSignatureCalendarChainRootHashRule() // Cal-01
                             .OnSuccess(verificationRule))
-                        .OnNa(new ExtendedSignatureAggregationChainRightLinksMatchesRule() // Cal-4
+                        .OnNa(new ExtendedSignatureCalendarHashChainRightLinksMatchRule() // Cal-4
                             .OnSuccess(verificationRule)))
                     .OnNa(verificationRule));
         }

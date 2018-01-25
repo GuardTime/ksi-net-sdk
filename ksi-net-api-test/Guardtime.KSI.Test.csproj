@@ -239,7 +239,7 @@
     <Compile Include="Signature\Verification\Rule\AggregationHashChainConsistencyRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\AggregationHashChainTimeConsistencyRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\CalendarAuthenticationRecordAggregationHashRuleTests.cs" />
-    <Compile Include="Signature\Verification\Rule\CalendarAuthenticationRecordAggregationTimeRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\CalendarAuthenticationRecordPublicationTimeRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\CalendarAuthenticationRecordExistenceRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\CalendarAuthenticationRecordSignatureVerificationRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\CalendarHashChainAggregationTimeRuleTests.cs" />
@@ -247,7 +247,7 @@
     <Compile Include="Signature\Verification\Rule\CalendarHashChainInputHashVerificationRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\CalendarHashChainRegistrationTimeRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\CertificateExistenceRuleTests.cs" />
-    <Compile Include="Signature\Verification\Rule\ExtendedSignatureAggregationChainRightLinksMatchesRuleTests.cs" />
+    <Compile Include="Signature\Verification\Rule\ExtendedSignatureCalendarHashChainRightLinksMatchRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\ExtendedSignatureCalendarChainAggregationTimeRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\ExtendedSignatureCalendarChainInputHashRuleTests.cs" />
     <Compile Include="Signature\Verification\Rule\ExtendedSignatureCalendarChainRootHashRuleTests.cs" />

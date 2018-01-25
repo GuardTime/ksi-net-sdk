@@ -278,7 +278,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
         /// </summary>
         /// <param name="calendarHashChain"></param>
         /// <returns></returns>
-        public HashAlgorithm GetDeprecatedHashAlgorithm(CalendarHashChain calendarHashChain)
+        public static HashAlgorithm GetDeprecatedHashAlgorithm(CalendarHashChain calendarHashChain)
         {
             IEnumerator<CalendarHashChain.Link> linksEnumerator = calendarHashChain.GetLeftLinksEnumerator();
             CalendarHashChain.Link link = linksEnumerator.MoveNext() ? linksEnumerator.Current : null;

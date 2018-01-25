@@ -86,7 +86,7 @@ namespace Guardtime.KSI.Signature.Verification.Policy
         }
 
         private static VerificationRule CalendarAuthRecordRules =>
-            new CalendarAuthenticationRecordAggregationTimeRule() // Int-06
+            new CalendarAuthenticationRecordPublicationTimeRule() // Int-06
                 .OnSuccess(new CalendarAuthenticationRecordAggregationHashRule()); // Int-08
 
         private static VerificationRule PublicationRules =>
