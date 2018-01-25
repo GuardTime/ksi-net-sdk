@@ -237,6 +237,23 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             Verify(context, VerificationResultCode.Fail, VerificationError.Key03);
         }
 
+        /// <summary>
+        /// Test with PKCS#7 calendar auth record signature. Invalid cert bytes.
+        /// </summary>
+        [Test]
+        public void TestWithPkcs7InvalidCertBytes()
+        {
+            string encodedCert = "1234";
+            byte[] certId = new byte[] { 1, 2, 3 };
+
+            TestVerificationContext context = new TestVerificationContext()
+            {
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_Calendar_Auth_Record_Pkcs7_Signature),
+                PublicationsFile = GetPublicationsFile(certId, encodedCert)
+            };
+            Verify(context, VerificationResultCode.Fail, VerificationError.Key02);
+        }
+
         private CertificateRecord GetCertificateRecord(byte[] id, byte[] cert)
         {
             byte[] idTagBytes = new RawTag(Constants.CertificateRecord.CertificateIdTagType, false, false, id).Encode();
