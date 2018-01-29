@@ -65,8 +65,7 @@ namespace Guardtime.KSI.Test.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
         public void ExtendAndVerifyTest(Ksi ksi)
         {
-            //PublicationBasedVerificationPolicy policy = new PublicationBasedVerificationPolicy();
-            CalendarBasedVerificationPolicy policy = new CalendarBasedVerificationPolicy();
+            PublicationBasedVerificationPolicy policy = new PublicationBasedVerificationPolicy();
 
             IKsiSignature ksiSignature = TestUtil.GetSignature();
             IKsiSignature extendedSignature = ksi.Extend(ksiSignature);
