@@ -156,6 +156,58 @@ namespace Guardtime.KSI.Test.Signature
         }
 
         [Test]
+        public void CreateSignatureWithAggregationChainUsingMetadataAndLevelsTest()
+        {
+            // Base signature input hash: {SHA-256:[017238818675AC5DD8879E292BF8C6A11AF5B5F68EF61661580288E50EEA40F2C8]} with level of 5
+
+            /*                                5A848EE
+                                    /‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\
+                                 014024AA 1                     \
+                          /‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\              \
+                       0178BAFB 1              01979985           \
+                     /‾‾‾‾‾‾‾‾‾‾\           /‾‾‾‾‾‾‾‾‾‾‾‾\         \
+                04000000       test3   02000000 1       test2    05000000 4
+            */
+            IKsiSignature signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_Root_Signature);
+
+            CreateSignatureWithAggregationChainAndVerify(
+                signature,
+                new DataHash(Base16.Decode("04000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")),
+                new AggregationHashChain.Link[]
+                {
+                    new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.Metadata("test3"), 0),
+                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01979985EED807EC9E036D679D327B7BEFF0CA0D127524B0AD6EC37414EBE96258")), null, 1),
+                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("0500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")), null, 1)
+                });
+
+            CreateSignatureWithAggregationChainAndVerify(
+                signature,
+                new DataHash(Base16.Decode("020000000000000000000000000000000000000000")),
+                new AggregationHashChain.Link[]
+                {
+                    new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.Metadata("test2", "machine-id-1", 1, 1517236554764), 1),
+                    new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("0178BAFB1F3AF73B661F9C7B4ADC30DE5A7B715184A4543B200694101C1A8C0E02"))),
+                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("0500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")), null, 1)
+                });
+
+            CreateSignatureWithAggregationChainAndVerify(
+                signature,
+                new DataHash(Base16.Decode("0500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")),
+                new AggregationHashChain.Link[]
+                {
+                    new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("014024AA0B2367EBBC3E27B3C498B800C48AFD9A2623C1458A07D2D0ABA4387B3B")), null, 4)
+                });
+
+            CreateSignatureWithAggregationChainAndVerify(
+                signature,
+                new DataHash(Base16.Decode("0500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")),
+                new AggregationHashChain.Link[]
+                {
+                    new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("014024aa0b2367ebbc3e27b3c498b800c48afd9a2623c1458a07d2d0aba4387b3b")), null, 4)
+                });
+        }
+
+        [Test]
         public void CreateSignatureWithAggregationChainTest()
         {
             // Base signature input hash: {SHA-256:[5A848EE304CBE6B858ABCCFA0E8397920C226FD18B9E5A34D0048F749B2DA0EC]}
