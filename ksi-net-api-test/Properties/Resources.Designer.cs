@@ -1403,6 +1403,15 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-level-correction-5.ksi.
+        /// </summary>
+        internal static string KsiSignature_Ok_LevelCorrection5 {
+            get {
+                return ResourceManager.GetString("KsiSignature_Ok_LevelCorrection5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-ok-new.tlv.
         /// </summary>
         internal static string KsiSignature_Ok_New {
@@ -1417,15 +1426,6 @@ namespace Guardtime.KSI.Test.Properties {
         internal static string KsiSignature_Ok_Only_Aggregtion_Chains {
             get {
                 return ResourceManager.GetString("KsiSignature_Ok_Only_Aggregtion_Chains", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature/root-signature-with-level.ksi.
-        /// </summary>
-        internal static string KsiSignature_Ok_Root_Signature {
-            get {
-                return ResourceManager.GetString("KsiSignature_Ok_Root_Signature", resourceCulture);
             }
         }
         

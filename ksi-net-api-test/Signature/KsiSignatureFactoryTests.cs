@@ -168,7 +168,7 @@ namespace Guardtime.KSI.Test.Signature
                      /‾‾‾‾‾‾‾‾‾‾\           /‾‾‾‾‾‾‾‾‾‾‾‾\         \
                 04000000       test3   02000000 1       test2    05000000 4
             */
-            IKsiSignature signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_Root_Signature);
+            IKsiSignature signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_LevelCorrection5);
 
             CreateSignatureWithAggregationChainAndVerify(
                 signature,
@@ -204,70 +204,6 @@ namespace Guardtime.KSI.Test.Signature
                 new AggregationHashChain.Link[]
                 {
                     new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("014024aa0b2367ebbc3e27b3c498b800c48afd9a2623c1458a07d2d0aba4387b3b")), null, 4)
-                });
-        }
-
-        [Test]
-        public void CreateSignatureWithAggregationChainTest()
-        {
-            // Base signature input hash: {SHA-256:[5A848EE304CBE6B858ABCCFA0E8397920C226FD18B9E5A34D0048F749B2DA0EC]}
-
-            /*                                     5A848EE
-                                 / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \
-                              5950DCA                                   D4F6E36
-                        / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \                        / ‾‾‾‾‾‾‾‾‾‾‾‾‾‾ \
-                     C9AF37D              \                      /                  \
-                     /    \                \                    /                    \
-                580192B  8D982C6        14F9189             680192B                9D982C6
-            */
-
-            IKsiSignature signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_LevelCorrection3);
-
-            CreateSignatureWithAggregationChainAndVerify(
-                signature,
-                new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2")),
-                new AggregationHashChain.Link[]
-                {
-                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("018D982C6911831201C5CF15E937514686A2169E2AD57BA36FD92CBEBD99A67E34"))),
-                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("0114F9189A45A30D856029F9537FD20C9C7342B82A2D949072AB195D95D7B32ECB"))),
-                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01D4F6E36871BA12449CA773F2A36F9C0112FC74EBE164C8278D213042C772E3AB"))),
-                });
-
-            CreateSignatureWithAggregationChainAndVerify(
-                signature,
-                new DataHash(Base16.Decode("018D982C6911831201C5CF15E937514686A2169E2AD57BA36FD92CBEBD99A67E34")),
-                new AggregationHashChain.Link[]
-                {
-                    new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2"))),
-                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("0114F9189A45A30D856029F9537FD20C9C7342B82A2D949072AB195D95D7B32ECB"))),
-                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01D4F6E36871BA12449CA773F2A36F9C0112FC74EBE164C8278D213042C772E3AB"))),
-                });
-
-            CreateSignatureWithAggregationChainAndVerify(
-                signature,
-                new DataHash(Base16.Decode("0114F9189A45A30D856029F9537FD20C9C7342B82A2D949072AB195D95D7B32ECB")),
-                new AggregationHashChain.Link[]
-                {
-                    new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01C9AF37DD9714B338C07A7C46ACBE2786876429F556D1A2F4CE383B6DAA018B83")), null, 1),
-                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01D4F6E36871BA12449CA773F2A36F9C0112FC74EBE164C8278D213042C772E3AB"))),
-                });
-
-            CreateSignatureWithAggregationChainAndVerify(
-                signature,
-                new DataHash(Base16.Decode("01680192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F1")),
-                new AggregationHashChain.Link[]
-                {
-                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("019D982C6911831201C5CF15E937514686A2169E2AD57BA36FD92CBEBD99A67E32")), null, 1),
-                    new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("015950DCA0E23E65EF56D68AF94718951567EBC2EF1F54357732530FC25D925340"))),
-                });
-
-            CreateSignatureWithAggregationChainAndVerify(
-                signature,
-                new DataHash(Base16.Decode("019D982C6911831201C5CF15E937514686A2169E2AD57BA36FD92CBEBD99A67E32")),
-                new AggregationHashChain.Link[]
-                {
-                    new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01680192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F1")), null, 1),
-                    new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("015950DCA0E23E65EF56D68AF94718951567EBC2EF1F54357732530FC25D925340"))),
                 });
         }
 
