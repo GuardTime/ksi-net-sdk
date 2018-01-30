@@ -19,7 +19,7 @@ namespace Guardtime.KSI.Test.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -1399,6 +1399,15 @@ namespace Guardtime.KSI.Test.Properties {
         internal static string KsiSignature_Ok_LevelCorrection3 {
             get {
                 return ResourceManager.GetString("KsiSignature_Ok_LevelCorrection3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-level-correction-5.ksi.
+        /// </summary>
+        internal static string KsiSignature_Ok_LevelCorrection5 {
+            get {
+                return ResourceManager.GetString("KsiSignature_Ok_LevelCorrection5", resourceCulture);
             }
         }
         
