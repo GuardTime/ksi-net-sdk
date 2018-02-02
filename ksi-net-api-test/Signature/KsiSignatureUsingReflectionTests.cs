@@ -148,15 +148,6 @@ namespace Guardtime.KSI.Test.Signature
     TLV[0x9]:""Test publication reference 2""
     TLV[0xA]:""Test publication repository uri 1""
     TLV[0xA]:""Test publication repository uri 2""
-  TLV[0x804]:
-    TLV[0x2]:i1
-    TLV[0x3]:i0
-    TLV[0x5]:0x010102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F20
-    TLV[0xB]:
-      TLV[0x1]:""Test SignatureType""
-      TLV[0x2]:0x02
-      TLV[0x3]:0x03
-      TLV[0x4]:""Test CertificateRepositoryUri""
   TLV[0x806]:
     TLV[0x2]:i1
     TLV[0x3]:i1
@@ -280,15 +271,6 @@ namespace Guardtime.KSI.Test.Signature
     TLV[0x2]:i0
     TLV[0x5]:0x010102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F20
     TLV[0x7]:0x010102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F20
-  TLV[0x804]:
-    TLV[0x2]:i1
-    TLV[0x3]:i0
-    TLV[0x5]:0x010102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F20
-    TLV[0xB]:
-      TLV[0x1]:""Test SignatureType""
-      TLV[0x2]:0x02
-      TLV[0x3]:0x03
-      TLV[0x4]:""Test CertificateRepositoryUri""
   TLV[0x805]:
     TLV[0x10]:
       TLV[0x2]:i1
@@ -779,7 +761,10 @@ namespace Guardtime.KSI.Test.Signature
                                         new IntegerTag(Constants.PublicationData.PublicationTimeTagType, false, false, 1),
                                         new ImprintTag(Constants.PublicationData.PublicationHashTagType, false, false,
                                             new DataHash(HashAlgorithm.Sha2256,
-                                                new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
+                                                new byte[]
+                                                {
+                                                    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
+                                                })),
                                     }),
                                 TestUtil.GetCompositeTag<SignatureData>(Constants.SignatureData.TagType,
                                     new ITlvTag[]
@@ -799,7 +784,10 @@ namespace Guardtime.KSI.Test.Signature
                                         new IntegerTag(Constants.PublicationData.PublicationTimeTagType, false, false, 1),
                                         new ImprintTag(Constants.PublicationData.PublicationHashTagType, false, false,
                                             new DataHash(HashAlgorithm.Sha2256,
-                                                new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
+                                                new byte[]
+                                                {
+                                                    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
+                                                })),
                                     }),
                                 new StringTag(Constants.PublicationRecord.PublicationReferencesTagType, false, false, "Test publication reference 1"),
                                 new StringTag(Constants.PublicationRecord.PublicationReferencesTagType, false, false, "Test publication reference 2"),
@@ -1108,7 +1096,10 @@ namespace Guardtime.KSI.Test.Signature
                                         new IntegerTag(Constants.PublicationData.PublicationTimeTagType, false, false, 1),
                                         new ImprintTag(Constants.PublicationData.PublicationHashTagType, false, false,
                                             new DataHash(HashAlgorithm.Sha2256,
-                                                new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
+                                                new byte[]
+                                                {
+                                                    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
+                                                })),
                                     }),
                                 TestUtil.GetCompositeTag<SignatureData>(Constants.SignatureData.TagType,
                                     new ITlvTag[]
@@ -1128,7 +1119,10 @@ namespace Guardtime.KSI.Test.Signature
                                         new IntegerTag(Constants.PublicationData.PublicationTimeTagType, false, false, 1),
                                         new ImprintTag(Constants.PublicationData.PublicationHashTagType, false, false,
                                             new DataHash(HashAlgorithm.Sha2256,
-                                                new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
+                                                new byte[]
+                                                {
+                                                    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
+                                                })),
                                     }),
                                 new StringTag(Constants.PublicationRecord.PublicationReferencesTagType, false, false, "Test publication reference 1"),
                                 new StringTag(Constants.PublicationRecord.PublicationReferencesTagType, false, false, "Test publication reference 2"),
