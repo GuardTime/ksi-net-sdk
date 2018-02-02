@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
 using NUnit.Framework;
@@ -26,6 +27,72 @@ namespace Guardtime.KSI.Test.Publication
     [TestFixture]
     public class PublicationsFileHeaderTests
     {
+        [Test]
+        public void PublicationsFileHeaderTest()
+        {
+            PublicationsFileHeader tag = new PublicationsFileHeader(new TlvTagBuilder(Constants.PublicationsFileHeader.TagType, false, false,
+                new ITlvTag[]
+                {
+                    new IntegerTag(Constants.PublicationsFileHeader.VersionTagType, false, false, 1),
+                    new IntegerTag(Constants.PublicationsFileHeader.CreationTimeTagType, false, false, 2),
+                    new StringTag(Constants.PublicationsFileHeader.RepositoryUriTagType, false, false, "Test repository uri"),
+                }).BuildTag());
+
+            Assert.AreEqual(1, tag.Version, "Unexpected version value");
+            Assert.AreEqual(2, tag.CreationTime, "Unexpected creation time");
+            Assert.AreEqual("Test repository uri", tag.RepositoryUri, "Unexpected repository uri");
+        }
+
+        [Test]
+        public void PublicationsFileHeaderWithoutVersionTest()
+        {
+            TlvException ex = Assert.Throws<TlvException>(delegate
+            {
+                new PublicationsFileHeader(new TlvTagBuilder(Constants.PublicationsFileHeader.TagType, false, false,
+                    new ITlvTag[]
+                    {
+                        new IntegerTag(Constants.PublicationsFileHeader.CreationTimeTagType, false, false, 2),
+                        new StringTag(Constants.PublicationsFileHeader.RepositoryUriTagType, false, false, "Test repository uri"),
+                    }).BuildTag());
+            });
+
+            Assert.That(ex.Message, Does.StartWith("Exactly one version must exist in publications file header."));
+        }
+
+        [Test]
+        public void PublicationsFileHeaderWithoutCreationTimeTest()
+        {
+            TlvException ex = Assert.Throws<TlvException>(delegate
+            {
+                new PublicationsFileHeader(new TlvTagBuilder(Constants.PublicationsFileHeader.TagType, false, false,
+                    new ITlvTag[]
+                    {
+                        new IntegerTag(Constants.PublicationsFileHeader.VersionTagType, false, false, 1),
+                        new StringTag(Constants.PublicationsFileHeader.RepositoryUriTagType, false, false, "Test repository uri"),
+                    }).BuildTag());
+            });
+
+            Assert.That(ex.Message, Does.StartWith("Exactly one creation time must exist in publications file header."));
+        }
+
+        [Test]
+        public void PublicationsFileHeaderWithMultipleRepositoryUrisTest()
+        {
+            TlvException ex = Assert.Throws<TlvException>(delegate
+            {
+                new PublicationsFileHeader(new TlvTagBuilder(Constants.PublicationsFileHeader.TagType, false, false,
+                    new ITlvTag[]
+                    {
+                        new IntegerTag(Constants.PublicationsFileHeader.VersionTagType, false, false, 1),
+                        new IntegerTag(Constants.PublicationsFileHeader.CreationTimeTagType, false, false, 2),
+                        new StringTag(Constants.PublicationsFileHeader.RepositoryUriTagType, false, false, "Test repository uri 1"),
+                        new StringTag(Constants.PublicationsFileHeader.RepositoryUriTagType, false, false, "Test repository uri 2"),
+                    }).BuildTag());
+            });
+
+            Assert.That(ex.Message, Does.StartWith("Only one repository uri is allowed in publications file header."));
+        }
+
         [Test]
         public void ToStringTest()
         {

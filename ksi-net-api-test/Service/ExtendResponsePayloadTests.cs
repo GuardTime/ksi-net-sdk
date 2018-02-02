@@ -19,6 +19,7 @@
 
 using System;
 using System.Reflection;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Service;
@@ -30,6 +31,103 @@ namespace Guardtime.KSI.Test.Service
     [TestFixture]
     public class ExtendResponsePayloadTests
     {
+        [Test]
+        public void ExtendResponsePayloadTest()
+        {
+            ExtendResponsePayload payload = new ExtendResponsePayload(new TlvTagBuilder(Constants.ExtendResponsePayload.TagType, false, false,
+                new ITlvTag[]
+                {
+                    new IntegerTag(Constants.PduPayload.StatusTagType, false, false, 1),
+                    new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 2),
+                    new IntegerTag(Constants.ExtendResponsePayload.CalendarLastTimeTagType, false, false, 3),
+                }).BuildTag());
+
+            Assert.AreEqual(1, payload.Status, "Unexpected status");
+            Assert.AreEqual(2, payload.RequestId, "Unexpected request id");
+            Assert.AreEqual(3, payload.CalendarLastTime, "Unexpected calendar last time");
+        }
+
+        [Test]
+        public void ExtendResponsePayloadWithoutStatusCode()
+        {
+            TlvException ex = Assert.Throws<TlvException>(delegate
+            {
+                new ExtendResponsePayload(new TlvTagBuilder(Constants.ExtendResponsePayload.TagType, false, false,
+                    new ITlvTag[]
+                    {
+                        new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 2),
+                    }).BuildTag());
+            });
+
+            Assert.That(ex.Message, Does.StartWith("Exactly one status code must exist in response payload."));
+        }
+
+        [Test]
+        public void ExtendResponsePayloadWithMultipleErrors()
+        {
+            TlvException ex = Assert.Throws<TlvException>(delegate
+            {
+                new ExtendResponsePayload(new TlvTagBuilder(Constants.ExtendResponsePayload.TagType, false, false,
+                    new ITlvTag[]
+                    {
+                        new IntegerTag(Constants.PduPayload.StatusTagType, false, false, 0),
+                        new StringTag(Constants.PduPayload.ErrorMessageTagType, false, false, "Test error message 1."),
+                        new StringTag(Constants.PduPayload.ErrorMessageTagType, false, false, "Test error message 2."),
+                    }).BuildTag());
+            });
+
+            Assert.That(ex.Message, Does.StartWith("Only one error message is allowed in response payload"));
+        }
+
+        [Test]
+        public void ExtendResponsePayloadWithoutRequestId()
+        {
+            TlvException ex = Assert.Throws<TlvException>(delegate
+            {
+                new ExtendResponsePayload(new TlvTagBuilder(Constants.ExtendResponsePayload.TagType, false, false,
+                    new ITlvTag[]
+                    {
+                        new IntegerTag(Constants.PduPayload.StatusTagType, false, false, 0),
+                    }).BuildTag());
+            });
+
+            Assert.That(ex.Message, Does.StartWith("Exactly one request id must exist in response payload"));
+        }
+
+        [Test]
+        public void ExtendResponsePayloadWithMultipleCalendarLastTimes()
+        {
+            TlvException ex = Assert.Throws<TlvException>(delegate
+            {
+                new ExtendResponsePayload(new TlvTagBuilder(Constants.ExtendResponsePayload.TagType, false, false,
+                    new ITlvTag[]
+                    {
+                        new IntegerTag(Constants.PduPayload.StatusTagType, false, false, 0),
+                        new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 2),
+                        new IntegerTag(Constants.ExtendResponsePayload.CalendarLastTimeTagType, false, false, 1),
+                        new IntegerTag(Constants.ExtendResponsePayload.CalendarLastTimeTagType, false, false, 2),
+                    }).BuildTag());
+            });
+
+            Assert.That(ex.Message, Does.StartWith("Only one calendar last time is allowed in extend response payload"));
+        }
+
+        [Test]
+        public void ExtendResponsePayloadWithoutCalendarHashChain()
+        {
+            TlvException ex = Assert.Throws<TlvException>(delegate
+            {
+                new ExtendResponsePayload(new TlvTagBuilder(Constants.ExtendResponsePayload.TagType, false, false,
+                    new ITlvTag[]
+                    {
+                        new IntegerTag(Constants.PduPayload.StatusTagType, false, false, 0),
+                        new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 2),
+                    }).BuildTag());
+            });
+
+            Assert.That(ex.Message, Does.StartWith("Exactly one calendar hash chain must exist in extend response payload"));
+        }
+
         [Test]
         public void ToStringTest()
         {

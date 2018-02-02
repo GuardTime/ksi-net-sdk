@@ -74,7 +74,7 @@ namespace Guardtime.KSI.Service.Tcp
             {
                 if (bufferSize == 0)
                 {
-                    throw new KsiServiceProtocolException("Buffer size should be in positive integer, but was (" + bufferSize + ").");
+                    throw new KsiServiceProtocolException("Buffer size should be a positive integer, but was (" + bufferSize + ").");
                 }
 
                 _bufferSize = bufferSize.Value;

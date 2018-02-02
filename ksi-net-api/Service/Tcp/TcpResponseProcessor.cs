@@ -91,7 +91,7 @@ namespace Guardtime.KSI.Service.Tcp
 
                 if (!ProcessPdu(data))
                 {
-                    Logger.Warn("Unknown response TLV: " + Base16.Encode(data));
+                    Logger.Warn("Could not get payload from response PDU: " + Base16.Encode(data));
                 }
 
                 // remove already handled data

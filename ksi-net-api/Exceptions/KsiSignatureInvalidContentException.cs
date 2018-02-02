@@ -27,7 +27,7 @@ namespace Guardtime.KSI.Exceptions
     ///     KSI signature invalid content exception. Used when creating signature and signature automatic verification fails.
     /// </summary>
     [Serializable]
-    public class KsiSignatureInvalidContentException : Exception
+    public class KsiSignatureInvalidContentException : KsiException
     {
         /// <summary>
         ///     Create new KSI signature invalid content exception

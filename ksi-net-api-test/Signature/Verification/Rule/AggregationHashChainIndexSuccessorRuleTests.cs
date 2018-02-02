@@ -64,10 +64,10 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         }
 
         [Test]
-        public void TestInvalidSignatureFirstAggregationHashChainIndexLength()
+        public void TestInvalidSignatureHighestAggregationHashChainIndexLength()
         {
-            // First aggregation hash chain index length is not 1
-            CreateSignatureAndVerify(Resources.KsiSignature_Invalid_First_Aggregation_Chain_Index_Length, VerificationResultCode.Fail, VerificationError.Int12);
+            // The highest aggregation hash chain index length is not 1
+            CreateSignatureAndVerify(Resources.KsiSignature_Invalid_Highest_Aggregation_Chain_Index_Length, VerificationResultCode.Fail, VerificationError.Int12);
         }
     }
 }

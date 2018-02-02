@@ -106,11 +106,6 @@ namespace Guardtime.KSI.Publication
         /// <returns>publications file</returns>
         public IPublicationsFile Create(Stream stream)
         {
-            if (stream == null)
-            {
-                throw new ArgumentNullException(nameof(stream));
-            }
-
             return Create(stream, DefaultBufferSize);
         }
 

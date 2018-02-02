@@ -21,12 +21,15 @@ using System;
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
+using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
 using Guardtime.KSI.Test.Properties;
+using Guardtime.KSI.Test.Signature;
 using Guardtime.KSI.Test.Signature.Verification;
+using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Service
@@ -46,6 +49,103 @@ namespace Guardtime.KSI.Test.Service
             IKsiSignature signature = new KsiSignatureFactory().Create(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
             Ksi ksi = GetStaticKsi(Resources.KsiService_ExtendResponsePdu_RequestId_1043101455, 1043101455);
             Verify(ksi.Extend(signature));
+        }
+
+        /// <summary>
+        /// Test exteding with signature null
+        /// </summary>
+        [Test]
+        public void ExtendStaticWithoutSignatureTest()
+        {
+            Ksi ksi = GetStaticKsi(Resources.KsiService_ExtendResponsePdu_RequestId_1043101455, 1043101455);
+
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                ksi.Extend(null);
+            });
+
+            Assert.AreEqual("signature", ex.ParamName);
+        }
+
+        /// <summary>
+        /// Test exteding with signature null and publication data not null
+        /// </summary>
+        [Test]
+        public void ExtendStaticWithoutSignatureWithPublicationDataTest()
+        {
+            Ksi ksi = GetStaticKsi(Resources.KsiService_ExtendResponsePdu_RequestId_1043101455, 1043101455);
+
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                ksi.Extend(null, new PublicationData(123456789, new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D"))));
+            });
+
+            Assert.AreEqual("signature", ex.ParamName);
+        }
+
+        /// <summary>
+        /// Test exteding with publication data null
+        /// </summary>
+        [Test]
+        public void ExtendStaticWithPublicationDataNullTest()
+        {
+            Ksi ksi = GetStaticKsi(Resources.KsiService_ExtendResponsePdu_RequestId_1043101455, 1043101455);
+
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                ksi.Extend(new TestKsiSignature(), (PublicationData)null);
+            });
+
+            Assert.AreEqual("publicationData", ex.ParamName);
+        }
+
+        /// <summary>
+        /// Test exteding with publication record null
+        /// </summary>
+        [Test]
+        public void ExtendStaticWithPublicationRecordInPublicationsFileNullTest()
+        {
+            Ksi ksi = GetStaticKsi(Resources.KsiService_ExtendResponsePdu_RequestId_1043101455, 1043101455);
+
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                ksi.Extend(new TestKsiSignature(), (PublicationRecordInPublicationFile)null);
+            });
+
+            Assert.AreEqual("publicationRecord", ex.ParamName);
+        }
+
+        /// <summary>
+        /// Test exteding with publication record null
+        /// </summary>
+        [Test]
+        public void ExtendStaticWithPublicationRecordInSignatureNullTest()
+        {
+            Ksi ksi = GetStaticKsi(Resources.KsiService_ExtendResponsePdu_RequestId_1043101455, 1043101455);
+
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                ksi.Extend(new TestKsiSignature(), (PublicationRecordInSignature)null);
+            });
+
+            Assert.AreEqual("publicationRecord", ex.ParamName);
+        }
+
+        /// <summary>
+        /// Test exteding with no suitable publication yet in publications file.
+        /// </summary>
+        [Test]
+        public void ExtendStaticNoSuitablePublicationYetTest()
+        {
+            IKsiSignature signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_New);
+            Ksi ksi = GetStaticKsi(Resources.KsiService_ExtendResponsePdu_RequestId_1043101455, 1043101455);
+
+            KsiException ex = Assert.Throws<KsiException>(delegate
+            {
+                ksi.Extend(signature);
+            });
+
+            Assert.That(ex.Message.StartsWith("No suitable publication yet"), "Unexpected exception message: " + ex.Message);
         }
 
         /// <summary>
@@ -304,6 +404,33 @@ namespace Guardtime.KSI.Test.Service
         }
 
         [Test]
+        public void BeginExtendWithoutExtendingServiceProtocol()
+        {
+            KsiService service = new KsiService(null, null, null, null, null, null);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                service.BeginExtend(1, null, null);
+            });
+
+            Assert.That(ex.Message.StartsWith("Extending service protocol is missing from service"), "Unexpected exception message: " + ex.Message);
+        }
+
+        [Test]
+        public void BeginExtendWithoutExtendingServiceCredentials()
+        {
+            TestKsiServiceProtocol protocol = new TestKsiServiceProtocol();
+            KsiService service = new KsiService(null, null, protocol, null, null, null);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                service.BeginExtend(1, null, null);
+            });
+
+            Assert.That(ex.Message.StartsWith("Extending service credentials are missing."), "Unexpected exception message: " + ex.Message);
+        }
+
+        [Test]
         public void EndExtendArgumentNullTest()
         {
             IKsiService service = GetStaticKsiService(new byte[] { 0 });
@@ -316,7 +443,7 @@ namespace Guardtime.KSI.Test.Service
         }
 
         [Test]
-        public void EndExtendInvalidArgumentTest()
+        public void EndExtendInvalidAsyncResultTest()
         {
             IKsiService service = GetStaticKsiService(new byte[] { 0 });
 
@@ -326,6 +453,19 @@ namespace Guardtime.KSI.Test.Service
             });
 
             Assert.That(ex.Message.StartsWith("Invalid asyncResult type:"), "Unexpected exception message: " + ex.Message);
+        }
+
+        [Test]
+        public void EndExtendWithoutExtendingServiceProtocol()
+        {
+            KsiService service = new KsiService(null, null, null, null, null, null);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                service.EndExtend(new TestAsyncResult());
+            });
+
+            Assert.That(ex.Message.StartsWith("Extending service protocol is missing from service"), "Unexpected exception message: " + ex.Message);
         }
 
         private static void Verify(IKsiSignature signature)

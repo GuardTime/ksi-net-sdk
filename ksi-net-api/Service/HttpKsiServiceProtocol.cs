@@ -90,13 +90,13 @@ namespace Guardtime.KSI.Service
         /// <param name="extendingUrl">extending url</param>
         /// <param name="publicationsFileUrl">publications file url</param>
         /// <param name="requestTimeout">request timeout</param>
-        /// <param name="bufferSize">buffer size</param>
+        /// <param name="bufferSize">buffer size used when reading from web response stream</param>
         public HttpKsiServiceProtocol(string signingUrl, string extendingUrl, string publicationsFileUrl,
                                       int requestTimeout, int bufferSize) : this(signingUrl, extendingUrl, publicationsFileUrl, requestTimeout)
         {
             if (bufferSize < 0)
             {
-                throw new KsiServiceProtocolException("Buffer size should be in positive integer, but was (" + bufferSize + ").");
+                throw new KsiServiceProtocolException("Buffer size should be a positive integer, but was (" + bufferSize + ").");
             }
             _bufferSize = bufferSize;
         }
@@ -108,7 +108,7 @@ namespace Guardtime.KSI.Service
         /// <param name="extendingUrl">extending url</param>
         /// <param name="publicationsFileUrl">publications file url</param>
         /// <param name="requestTimeout">request timeout</param>
-        /// <param name="bufferSize">buffer size</param>
+        /// <param name="bufferSize">buffer size used when reading from web response stream</param>
         /// <param name="proxyUrl">proxy url</param>
         /// <param name="proxyCredential">credentials for proxy</param>
         public HttpKsiServiceProtocol(string signingUrl, string extendingUrl, string publicationsFileUrl,

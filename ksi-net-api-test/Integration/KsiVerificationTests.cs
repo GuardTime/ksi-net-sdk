@@ -125,6 +125,21 @@ namespace Guardtime.KSI.Test.Integration
         }
 
         /// <summary>
+        /// Signature is verified using DefaultVerificationPolicy with extending allowed. 
+        /// </summary>
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsi))]
+        public void VerifyWithExtendingAllowed(Ksi ksi)
+        {
+            VerificationResult result = ksi.Verify(new DefaultVerificationPolicy(), new VerificationContext(TestUtil.GetSignature(Resources.KsiSignature_Ok))
+            {
+                PublicationsFile = ksi.GetPublicationsFile(),
+                IsExtendingAllowed = true
+            });
+            Assert.AreEqual(VerificationResultCode.Ok, result.ResultCode, "Unexpected verification result code.");
+            Assert.AreEqual(nameof(DefaultVerificationPolicy), result.RuleName, "Unexpected policy used.");
+        }
+
+        /// <summary>
         /// Signature is verified using DefaultVerificationPolicy with publications file. 
         /// </summary>
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsi))]

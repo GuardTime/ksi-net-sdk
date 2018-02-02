@@ -529,6 +529,15 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataWithoutPaddingWithInvalidAlgorithm.ksig.
+        /// </summary>
+        internal static string AggregationHashChainMetadataWithoutPaddingWithInvalidAlgorithm {
+            get {
+                return ResourceManager.GetString("AggregationHashChainMetadataWithoutPaddingWithInvalidAlgorithm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataWithPadding1.ksig.
         /// </summary>
         internal static string AggregationHashChainMetadataWithPadding1 {
@@ -750,6 +759,15 @@ namespace Guardtime.KSI.Test.Properties {
         internal static string KsiService_AggregationResponsePdu_ErrorPayload {
             get {
                 return ResourceManager.GetString("KsiService_AggregationResponsePdu_ErrorPayload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/service/aggregation-response-pdu-invalid-mac.tlv.
+        /// </summary>
+        internal static string KsiService_AggregationResponsePdu_Invalid_Mac {
+            get {
+                return ResourceManager.GetString("KsiService_AggregationResponsePdu_Invalid_Mac", resourceCulture);
             }
         }
         
@@ -1160,20 +1178,20 @@ namespace Guardtime.KSI.Test.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-first-aggregation-chain-index-length.tlv.
-        /// </summary>
-        internal static string KsiSignature_Invalid_First_Aggregation_Chain_Index_Length {
-            get {
-                return ResourceManager.GetString("KsiSignature_Invalid_First_Aggregation_Chain_Index_Length", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-hash-algorithm.tlv.
         /// </summary>
         internal static string KsiSignature_Invalid_Hash_Algorithm {
             get {
                 return ResourceManager.GetString("KsiSignature_Invalid_Hash_Algorithm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-invalid-highest-aggregation-chain-index-length.tlv.
+        /// </summary>
+        internal static string KsiSignature_Invalid_Highest_Aggregation_Chain_Index_Length {
+            get {
+                return ResourceManager.GetString("KsiSignature_Invalid_Highest_Aggregation_Chain_Index_Length", resourceCulture);
             }
         }
         

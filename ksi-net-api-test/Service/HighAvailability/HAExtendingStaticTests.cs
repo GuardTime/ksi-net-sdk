@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
+using Guardtime.KSI.Parser;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Service.HighAvailability;
 using Guardtime.KSI.Signature;
@@ -72,7 +73,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
                     },
                     null,
                     GetStaticKsiService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_RequestId_1043101455)), 1)
-                    );
+                );
 
             HAKsiServiceException ex = Assert.Throws<HAKsiServiceException>(delegate
             {
@@ -99,10 +100,34 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
                     },
                     null);
 
+            Assert.AreEqual("test.extender.address; test.extender.address; test.extender.address; ", haService.ExtenderAddress, "Unexpected extender address.");
             CalendarHashChain cal = haService.Extend(123);
-
             Assert.AreEqual(1455478441, cal.AggregationTime, "Unexpected aggregation time.");
             Assert.AreEqual(1455494400, cal.PublicationTime, "Unexpected publication time.");
+        }
+
+        /// <summary>
+        /// Test with 4 sub-services. Max 3 is allowed.
+        /// </summary>
+        [Test]
+        public void HACreateServiceWith4SubServicesFailTest()
+        {
+            HAKsiServiceException ex = Assert.Throws<HAKsiServiceException>(delegate
+            {
+                IKsiService haService =
+                    new HAKsiService(
+                        null,
+                        new List<IKsiService>()
+                        {
+                            GetStaticKsiService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_RequestId_1043101455)), 1),
+                            GetStaticKsiService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_RequestId_1043101455)), 2),
+                            GetStaticKsiService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_RequestId_1043101455)), 1043101455),
+                            GetStaticKsiService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_RequestId_1043101455)), 1043101455)
+                        },
+                        null);
+            });
+
+            Assert.That(ex.Message.StartsWith("Cannot use more than 3 extending services"), "Unexpected exception message: " + ex.Message);
         }
 
         /// <summary>
@@ -153,6 +178,32 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
             });
 
             Assert.That(ex.Message.StartsWith("Invalid async result. Containing invalid request runner"), "Unexpected exception message: " + ex.Message);
+        }
+
+        /// <summary>
+        /// Test extending with invalid TLV in result list.
+        /// </summary>
+        [Test]
+        public void HAExtendWithInvalidResultTlvFailTest()
+        {
+            IKsiService haService =
+                new HAKsiService(
+                    null,
+                    new List<IKsiService>()
+                    {
+                        GetStaticKsiService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtenderConfigResponsePdu)), 1043101455)
+                    },
+                    null);
+
+            HAKsiServiceException ex = Assert.Throws<HAKsiServiceException>(delegate
+            {
+                HAAsyncResult ar = (HAAsyncResult)haService.BeginExtend(1455494400, null, null);
+                // add invalid result
+                ar.AddResultTlv(new IntegerTag(1, false, false, 1));
+                haService.EndExtend(ar);
+            });
+
+            Assert.That(ex.Message.StartsWith("Could not get request response of type " + typeof(CalendarHashChain)), "Unexpected exception message: " + ex.Message);
         }
     }
 }

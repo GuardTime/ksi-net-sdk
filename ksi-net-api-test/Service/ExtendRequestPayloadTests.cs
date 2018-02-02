@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Service;
 using NUnit.Framework;
@@ -27,14 +28,74 @@ namespace Guardtime.KSI.Test.Service
     public class ExtendRequestPayloadTests
     {
         [Test]
-        public void ToStringTest()
+        public void ExtendRequestPayloadTest()
         {
-            ExtendRequestPayload tag = TestUtil.GetCompositeTag<ExtendRequestPayload>(Constants.ExtendRequestPayload.TagType, new ITlvTag[]
+            ExtendRequestPayload tag = new ExtendRequestPayload(new TlvTagBuilder(Constants.ExtendRequestPayload.TagType, false, false, new ITlvTag[]
             {
                 new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 1),
                 new IntegerTag(Constants.ExtendRequestPayload.AggregationTimeTagType, false, false, 2),
                 new IntegerTag(Constants.ExtendRequestPayload.PublicationTimeTagType, false, false, 3),
+            }).BuildTag());
+
+            Assert.AreEqual(1, tag.RequestId, "Unexpected request id");
+            Assert.AreEqual(2, tag.AggregationTime, "Unexpected aggregation time");
+            Assert.AreEqual(3, tag.PublicationTime, "Unexpected publication time");
+        }
+
+        [Test]
+        public void ExtendRequestPayloadWithoutRequestId()
+        {
+            TlvException ex = Assert.Throws<TlvException>(delegate
+            {
+                new ExtendRequestPayload(new TlvTagBuilder(Constants.ExtendRequestPayload.TagType, false, false, new ITlvTag[]
+                {
+                    new IntegerTag(Constants.ExtendRequestPayload.AggregationTimeTagType, false, false, 2),
+                }).BuildTag());
             });
+
+            Assert.That(ex.Message, Does.StartWith("Exactly one request id must exist in extend request payload"));
+        }
+
+        [Test]
+        public void ExtendRequestPayloadWithoutAggregationTime()
+        {
+            TlvException ex = Assert.Throws<TlvException>(delegate
+            {
+                new ExtendRequestPayload(new TlvTagBuilder(Constants.ExtendRequestPayload.TagType, false, false, new ITlvTag[]
+                {
+                    new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 1),
+                }).BuildTag());
+            });
+
+            Assert.That(ex.Message, Does.StartWith("Exactly one aggregation time must exist in extend request payload"));
+        }
+
+        [Test]
+        public void ExtendRequestPayloadWithMultiplePublicationTimes()
+        {
+            TlvException ex = Assert.Throws<TlvException>(delegate
+            {
+                new ExtendRequestPayload(new TlvTagBuilder(Constants.ExtendRequestPayload.TagType, false, false, new ITlvTag[]
+                {
+                    new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 1),
+                    new IntegerTag(Constants.ExtendRequestPayload.AggregationTimeTagType, false, false, 2),
+                    new IntegerTag(Constants.ExtendRequestPayload.PublicationTimeTagType, false, false, 3),
+                    new IntegerTag(Constants.ExtendRequestPayload.PublicationTimeTagType, false, false, 3),
+                }).BuildTag());
+            });
+
+            Assert.That(ex.Message, Does.StartWith("Only one publication time is allowed in extend request payload."));
+        }
+
+        [Test]
+        public void ToStringTest()
+        {
+            ExtendRequestPayload tag = new ExtendRequestPayload(new TlvTagBuilder(Constants.ExtendRequestPayload.TagType, false, false, new ITlvTag[]
+            {
+                new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 1),
+                new IntegerTag(Constants.ExtendRequestPayload.AggregationTimeTagType, false, false, 2),
+                new IntegerTag(Constants.ExtendRequestPayload.PublicationTimeTagType, false, false, 3),
+            }).BuildTag());
 
             ExtendRequestPayload tag2 = new ExtendRequestPayload(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 

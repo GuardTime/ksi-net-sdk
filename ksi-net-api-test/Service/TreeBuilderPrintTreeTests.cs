@@ -29,6 +29,29 @@ namespace Guardtime.KSI.Test.Service
     [TestFixture]
     public class TreeBuilderPrintTreeTests
     {
+        [Test]
+        public void TreeBuilderInvalidMaxHeight()
+        {
+            ArgumentOutOfRangeException ex = Assert.Throws<ArgumentOutOfRangeException>(delegate
+            {
+                TreeBuilder builder = new TreeBuilder(HashAlgorithm.Default, 256);
+            });
+
+            Assert.AreEqual("maxTreeHeight", ex.ParamName);
+        }
+
+        [Test]
+        public void TreeBuilderAddNull()
+        {
+            TreeBuilder builder = new TreeBuilder(HashAlgorithm.Default);
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                builder.AddNode(null);
+            });
+
+            Assert.AreEqual("node", ex.ParamName);
+        }
+
         /// <summary>
         /// Test printing tree with 11 elements
         /// </summary>

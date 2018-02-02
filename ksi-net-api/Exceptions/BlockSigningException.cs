@@ -28,19 +28,11 @@ namespace Guardtime.KSI.Exceptions
     public class BlockSigningException : KsiException
     {
         /// <summary>
-        ///     Create new block signing exception with message.
-        /// </summary>
-        /// <param name="message">exception message</param>
-        public BlockSigningException(string message) : base(message)
-        {
-        }
-
-        /// <summary>
         ///     Create new block signing exception with message and inner exception.
         /// </summary>
         /// <param name="message">exception message</param>
         /// <param name="innerException">inner exception</param>
-        public BlockSigningException(string message, Exception innerException) : base(message, innerException)
+        public BlockSigningException(string message, Exception innerException = null) : base(message, innerException)
         {
         }
     }

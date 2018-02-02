@@ -113,8 +113,6 @@ namespace Guardtime.KSI.Service
             }
         }
 
-
-
         /// <summary>
         ///     Get request ID.
         /// </summary>

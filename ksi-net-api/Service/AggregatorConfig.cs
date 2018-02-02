@@ -84,24 +84,12 @@ namespace Guardtime.KSI.Service
         /// </summary>
         public override string ToString()
         {
-            string parentUrisString = null;
-
-            if (ParentsUris != null)
-            {
-                foreach (string uri in ParentsUris)
-                {
-                    if (parentUrisString != null)
-                    {
-                        parentUrisString += ", ";
-                    }
-
-                    parentUrisString += "'" + uri + "'";
-                }
-            }
 
             return string.Format("AggregatorConfig [{0},{1},{2},{3},[{4}]]", MaxLevel?.ToString() ?? "null", AggregationAlgorithm?.ToString() ?? "null",
-                AggregationPeriod?.ToString() ?? "null", MaxRequests?.ToString() ?? "null", parentUrisString);
+                AggregationPeriod?.ToString() ?? "null", MaxRequests?.ToString() ?? "null", GetParentUrisString());
         }
+
+
 
         /// <summary>
         ///     Compare current aggregator config against another config.

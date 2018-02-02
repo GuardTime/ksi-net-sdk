@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Guardtime.KSI.Exceptions;
@@ -37,6 +38,79 @@ namespace Guardtime.KSI.Test.Integration
     [TestFixture]
     public class BlockSignerTests : IntegrationTests
     {
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsi))]
+        public void BlockSignerWithoutServiceTest(Ksi ksi)
+        {
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                BlockSigner blockSigner = new BlockSigner(null, true, null);
+            });
+
+            Assert.AreEqual("ksiService", ex.ParamName, "Unexpected exception message");
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsi))]
+        public void BlockSignerWithoutRandomSeedTest(Ksi ksi)
+        {
+            BlockSigningException ex = Assert.Throws<BlockSigningException>(delegate
+            {
+                BlockSigner blockSigner = new BlockSigner(GetHttpKsiService(), true, null);
+            });
+            Assert.That(ex.Message, Does.StartWith("Random seed cannot be null when using blinding masks"), "Unexpected exception message");
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsi))]
+        public void BlockSignerAddWithoutHashTest(Ksi ksi)
+        {
+            BlockSigner blockSigner = new BlockSigner(GetHttpKsiService());
+
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                blockSigner.Add(null);
+            });
+
+            Assert.AreEqual("dataHash", ex.ParamName, "Unexpected exception message");
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsi))]
+        public void BlockSignerAddWithTreeTooHighTest(Ksi ksi)
+        {
+            BlockSigner blockSigner = new BlockSigner(GetHttpKsiService(), null, null, 1);
+            bool result = blockSigner.Add(new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2")));
+            Assert.IsTrue(result, "Unexpected add method result");
+            result = blockSigner.Add(new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2")));
+            Assert.IsTrue(result, "Unexpected add method result");
+            result = blockSigner.Add(new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2")));
+            Assert.IsFalse(result, "Unexpected add method result");
+        }
+
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsi))]
+        public void BlockSignerCannotAddHashAfterSignedTest(Ksi ksi)
+        {
+            BlockSigner blockSigner = new BlockSigner(GetHttpKsiService());
+
+            blockSigner.Add(new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2")));
+            blockSigner.Sign();
+
+            BlockSigningException ex = Assert.Throws<BlockSigningException>(delegate
+            {
+                blockSigner.Add(new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2")));
+            });
+            Assert.That(ex.Message, Does.StartWith("Signing process is started. Cannot add new items."), "Unexpected exception message");
+        }
+
+        /// <summary>
+        /// Testing getting uni-signatures of 0 hashes.
+        /// </summary>
+        /// <param name="ksi"></param>
+        [Test, TestCaseSource(typeof(IntegrationTests), nameof(HttpKsi))]
+        public void BlockSignerGetUniSignaturesWithoutHashesTest(Ksi ksi)
+        {
+            BlockSigner blockSigner = new BlockSigner(GetHttpKsiService());
+            IEnumerable<IKsiSignature> result = blockSigner.Sign();
+            Assert.AreEqual(0, result.Count(), "Unexpected signature count");
+        }
+
         /// <summary>
         /// Testing getting uni-signatures of lots of randomly generated hashes
         /// </summary>
@@ -117,7 +191,8 @@ namespace Guardtime.KSI.Test.Integration
             IKsiSignature signature = signatures.Current;
             Assert.False(signatures.MoveNext(), "Invalid signature count: > 1");
             Assert.Less(0, signature.GetAggregationHashChains()[0].GetChainLinks().Count, "Invalid links count.");
-            Assert.AreEqual(Properties.Settings.Default.HttpSigningServiceUser, signature.GetAggregationHashChains()[0].GetChainLinks()[0].Metadata.ClientId, "Unexpected metadata.");
+            Assert.AreEqual(Properties.Settings.Default.HttpSigningServiceUser, signature.GetAggregationHashChains()[0].GetChainLinks()[0].Metadata.ClientId,
+                "Unexpected metadata.");
 
             VerifyChainAlgorithm(signature, HashAlgorithm.Default);
             Verify(ksi, signature, hash);
@@ -136,7 +211,8 @@ namespace Guardtime.KSI.Test.Integration
             IKsiSignature signature = signatures.Current;
             Assert.False(signatures.MoveNext(), "Invalid signature count: > 1");
             Assert.Less(0, signature.GetAggregationHashChains()[0].GetChainLinks().Count, "Invalid links count.");
-            Assert.AreEqual(Properties.Settings.Default.HttpSigningServiceUser, signature.GetAggregationHashChains()[0].GetChainLinks()[0].Metadata.ClientId, "Unexpected metadata.");
+            Assert.AreEqual(Properties.Settings.Default.HttpSigningServiceUser, signature.GetAggregationHashChains()[0].GetChainLinks()[0].Metadata.ClientId,
+                "Unexpected metadata.");
             Assert.LessOrEqual(2, signature.GetAggregationHashChains()[0].GetChainLinks()[0].LevelCorrection, "Level correction is invalid.");
 
             VerifyChainAlgorithm(signature, HashAlgorithm.Default);

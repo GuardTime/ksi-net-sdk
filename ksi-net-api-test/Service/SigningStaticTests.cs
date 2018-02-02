@@ -38,6 +38,20 @@ namespace Guardtime.KSI.Test.Service
     public class SigningStaticTests : StaticServiceTestsBase
     {
         /// <summary>
+        /// Test creating Ksi with service null.
+        /// </summary>
+        [Test]
+        public void CreateKsiWithServiceNull()
+        {
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                Ksi ksi = new Ksi(null);
+            });
+
+            Assert.AreEqual("ksiService", ex.ParamName);
+        }
+
+        /// <summary>
         /// Test signing.
         /// </summary>
         [Test]
@@ -391,6 +405,22 @@ namespace Guardtime.KSI.Test.Service
         }
 
         /// <summary>
+        /// Test signing. Invalid HMAC.
+        /// </summary>
+        [Test]
+        public void SignStaticInvalidMacTest()
+        {
+            Ksi ksi = GetStaticKsi(Resources.KsiService_AggregationResponsePdu_Invalid_Mac, 1584727637);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                ksi.Sign(new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")));
+            });
+
+            Assert.That(ex.Message.StartsWith("Invalid MAC in response PDU."), "Unexpected exception message: " + ex.Message);
+        }
+
+        /// <summary>
         /// Test signing with invalid response PDU type.
         /// </summary>
         [Test]
@@ -440,6 +470,46 @@ namespace Guardtime.KSI.Test.Service
         }
 
         [Test]
+        public void BeginSignWithoutSigningServiceProtocol()
+        {
+            KsiService service = new KsiService(null, null, null, null, null, null);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                service.BeginSign(new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")), null, null);
+            });
+
+            Assert.That(ex.Message.StartsWith("Signing service protocol is missing from service"), "Unexpected exception message: " + ex.Message);
+        }
+
+        [Test]
+        public void BeginSignWithoutSigningServiceCredentials()
+        {
+            TestKsiServiceProtocol protocol = new TestKsiServiceProtocol();
+            KsiService service = new KsiService(protocol, null, null, null, null, null);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                service.BeginSign(new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")), null, null);
+            });
+
+            Assert.That(ex.Message.StartsWith("Signing service credentials are missing."), "Unexpected exception message: " + ex.Message);
+        }
+
+        [Test]
+        public void BeginSignWithHashNullTest()
+        {
+            TestKsiServiceProtocol protocol = new TestKsiServiceProtocol();
+            KsiService service = new KsiService(protocol, new ServiceCredentials(TestConstants.ServiceUser, TestConstants.ServicePass), null, null, null, null);
+
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                service.BeginSign(null, null, null);
+            });
+            Assert.AreEqual("hash", ex.ParamName);
+        }
+
+        [Test]
         public void EndSignArgumentNullTest()
         {
             IKsiService service = GetStaticKsiService(new byte[] { 0 });
@@ -452,7 +522,7 @@ namespace Guardtime.KSI.Test.Service
         }
 
         [Test]
-        public void EndSignInvalidArgumentTest()
+        public void EndSignInvalidAsyncResultTest()
         {
             IKsiService service = GetStaticKsiService(new byte[] { 0 });
 
@@ -462,6 +532,34 @@ namespace Guardtime.KSI.Test.Service
             });
 
             Assert.That(ex.Message.StartsWith("Invalid asyncResult type:"), "Unexpected exception message: " + ex.Message);
+        }
+
+        [Test]
+        public void EndSignWithoutSigningServiceProtocol()
+        {
+            IKsiService serviceBegin = GetStaticKsiService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_RequestId_1584727637)),
+                1584727637);
+            IAsyncResult asyncResult = serviceBegin.BeginSign(new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")), null, null);
+            KsiService serviceEnd = new KsiService(null, null, null, null, null, null);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                serviceEnd.EndSign(asyncResult);
+            });
+
+            Assert.That(ex.Message.StartsWith("Signing service protocol is missing from service"), "Unexpected exception message: " + ex.Message);
+        }
+
+        [Test]
+        public void EndSignWithSigningServiceProtocolResultNull()
+        {
+            KsiService service = new KsiService(new TestKsiServiceProtocol(), new ServiceCredentials(TestConstants.ServiceUser, TestConstants.ServicePass), null, null, null, null);
+
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                service.Sign(new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")));
+            });
+            Assert.AreEqual("data", ex.ParamName);
         }
 
         private static void Verify(IKsiSignature signature, DataHash dataHash)

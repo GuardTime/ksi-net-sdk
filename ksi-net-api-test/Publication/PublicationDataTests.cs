@@ -18,11 +18,11 @@
  */
 
 using System;
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
-using Guardtime.KSI.Signature;
-using Guardtime.KSI.Test.Properties;
+using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Publication
@@ -33,18 +33,51 @@ namespace Guardtime.KSI.Test.Publication
         [Test]
         public void PublicationDataContentTest()
         {
-            IKsiSignature signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_Extended);
-            PublicationRecordInSignature publicationRecord = signature.PublicationRecord;
+            PublicationData publicationData = new PublicationData(1455494400, new DataHash(Base16.Decode("018D982C6911831201C5CF15E937514686A2169E2AD57BA36FD92CBEBD99A67E34")));
+            Assert.AreEqual(new DateTime(2016, 2, 15), publicationData.GetPublicationDate(), "Publication date is invalid.");
+            Assert.AreEqual(new DataHash(Base16.Decode("018D982C6911831201C5CF15E937514686A2169E2AD57BA36FD92CBEBD99A67E34")), publicationData.PublicationHash,
+                "Unexpected publication hash.");
+        }
 
-            string code = publicationRecord.PublicationData.GetPublicationString();
-            DateTime date = publicationRecord.PublicationData.GetPublicationDate();
+        [Test]
+        public void PublicationDataFromPublicationStringTest()
+        {
+            PublicationData pub = new PublicationData("AAAAAA-CVZ2AQ-AANGVK-SV7GJL-36LN65-AVJYZR-6XRZSL-HIMRH3-6GU7WR-YNRY7C-X2XECY-WFQXRB");
+            Assert.AreEqual(new DataHash(Base16.Decode("01A6AAA55F992BDF96DF74154E331F5E3992CE8644FBF1A9FB470D8E3E2BEAE416")), pub.PublicationHash, "Unexpected publication hash.");
+            Assert.AreEqual(1439596800, pub.PublicationTime, "Unexpected publication time.");
+        }
 
-            Assert.AreEqual("AAAAAA-CWYEKQ-AAIYPA-UJ4GRT-HXMFBE-OTB4AB-XH3PT3-KNIKGV-PYCJXU-HL2TN4-RG6SCC-3ZGSBM", code, "Publication string is invalid.");
-            Assert.AreEqual(new DateTime(2016, 2, 15), date, "Publication date is invalid.");
-            Assert.AreEqual(3, publicationRecord.PublicationReferences.Count, "Invalid publication reference count.");
-            Assert.AreEqual("Financial Times, ISSN: 0307-1766, 2016-02-17", publicationRecord.PublicationReferences[0], "Invalid first publication reference.");
-            Assert.AreEqual("Äripäev, ISSN: 1406-2585, 17.02.2016", publicationRecord.PublicationReferences[1], "Invalid second publication reference.");
-            Assert.AreEqual("https://twitter.com/Guardtime/status/699919571084558336", publicationRecord.PublicationReferences[2], "Invalid third publication reference.");
+        [Test]
+        public void PublicationDataFromPublicationStringNullTest()
+        {
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                PublicationData pub = new PublicationData((string)null);
+            });
+
+            Assert.AreEqual("publicationString", ex.ParamName, "Unexpected exception message: " + ex.Message);
+        }
+
+        [Test]
+        public void PublicationDataFromPublicationStringTooShortTest()
+        {
+            TlvException ex = Assert.Throws<TlvException>(delegate
+            {
+                PublicationData pub = new PublicationData("AAAAAA");
+            });
+
+            Assert.That(ex.Message.StartsWith("Publication string base 32 decode failed"), "Unexpected exception message: " + ex.Message);
+        }
+
+        [Test]
+        public void PublicationDataFromPublicationStringInvalidCrc32Test()
+        {
+            TlvException ex = Assert.Throws<TlvException>(delegate
+            {
+                PublicationData pub = new PublicationData("AAAAAA-CVZ2AQ-AANGVK-SV7GJL-36LN65-AVJYZR-6XRZSL-HIMRH3-6GU7WR-YNRY7C-X2XECY-WFQXRA");
+            });
+
+            Assert.That(ex.Message.StartsWith("Publication string CRC 32 check failed"), "Unexpected exception message: " + ex.Message);
         }
 
         [Test]

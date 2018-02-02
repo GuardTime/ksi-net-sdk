@@ -29,6 +29,147 @@ namespace Guardtime.KSI.Test.Service
     public class AggregationPduTests
     {
         [Test]
+        public void AggregationRequestPduWithoutPayload()
+        {
+            TlvException ex = Assert.Throws<TlvException>(delegate
+            {
+                new AggregationRequestPdu(new TlvTagBuilder(Constants.AggregationRequestPdu.TagType, false, false, new ITlvTag[] { }).BuildTag());
+            });
+
+            Assert.That(ex.Message, Does.StartWith("Payloads are missing in PDU"));
+        }
+
+        [Test]
+        public void AggregationRequestPduWithMultipleHeaders()
+        {
+            TlvException ex = Assert.Throws<TlvException>(delegate
+            {
+                new AggregationRequestPdu(new TlvTagBuilder(Constants.AggregationRequestPdu.TagType, false, false,
+                    new ITlvTag[]
+                    {
+                        new AggregationRequestPayload(new TlvTagBuilder(Constants.AggregationRequestPayload.TagType, false, false,
+                            new ITlvTag[]
+                            {
+                                new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 1),
+                                new ImprintTag(Constants.AggregationRequestPayload.RequestHashTagType, false, false,
+                                    new DataHash(HashAlgorithm.Sha2256,
+                                        new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
+                                new IntegerTag(Constants.AggregationRequestPayload.RequestLevelTagType, false, false, 0),
+                            }).BuildTag()),
+                        new PduHeader(new TlvTagBuilder(Constants.PduHeader.TagType, false, false,
+                            new ITlvTag[]
+                            {
+                                new StringTag(Constants.PduHeader.LoginIdTagType, false, false, "Test Login Id 1"),
+                                new IntegerTag(Constants.PduHeader.InstanceIdTagType, false, false, 1),
+                                new IntegerTag(Constants.PduHeader.MessageIdTagType, false, false, 2)
+                            }).BuildTag()),
+                        new PduHeader(new TlvTagBuilder(Constants.PduHeader.TagType, false, false,
+                            new ITlvTag[]
+                            {
+                                new StringTag(Constants.PduHeader.LoginIdTagType, false, false, "Test Login Id 2"),
+                                new IntegerTag(Constants.PduHeader.InstanceIdTagType, false, false, 1),
+                                new IntegerTag(Constants.PduHeader.MessageIdTagType, false, false, 2)
+                            }).BuildTag()),
+                    }).BuildTag());
+            });
+
+            Assert.That(ex.Message, Does.StartWith("Exactly one header must exist in PDU"));
+        }
+
+        [Test]
+        public void AggregationRequestPduWithHeaderNotFirst()
+        {
+            TlvException ex = Assert.Throws<TlvException>(delegate
+            {
+                new AggregationRequestPdu(new TlvTagBuilder(Constants.AggregationRequestPdu.TagType, false, false,
+                    new ITlvTag[]
+                    {
+                        new AggregationRequestPayload(new TlvTagBuilder(Constants.AggregationRequestPayload.TagType, false, false,
+                            new ITlvTag[]
+                            {
+                                new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 1),
+                                new ImprintTag(Constants.AggregationRequestPayload.RequestHashTagType, false, false,
+                                    new DataHash(HashAlgorithm.Sha2256,
+                                        new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
+                                new IntegerTag(Constants.AggregationRequestPayload.RequestLevelTagType, false, false, 0),
+                            }).BuildTag()),
+                        new PduHeader(new TlvTagBuilder(Constants.PduHeader.TagType, false, false,
+                            new ITlvTag[]
+                            {
+                                new StringTag(Constants.PduHeader.LoginIdTagType, false, false, "Test Login Id"),
+                                new IntegerTag(Constants.PduHeader.InstanceIdTagType, false, false, 1),
+                                new IntegerTag(Constants.PduHeader.MessageIdTagType, false, false, 2)
+                            }).BuildTag()),
+                    }).BuildTag());
+            });
+
+            Assert.That(ex.Message, Does.StartWith("Header must be the first element in PDU"));
+        }
+
+        [Test]
+        public void AggregationRequestPduWithoutMac()
+        {
+            TlvException ex = Assert.Throws<TlvException>(delegate
+            {
+                new AggregationRequestPdu(new TlvTagBuilder(Constants.AggregationRequestPdu.TagType, false, false,
+                    new ITlvTag[]
+                    {
+                        new PduHeader(new TlvTagBuilder(Constants.PduHeader.TagType, false, false,
+                            new ITlvTag[]
+                            {
+                                new StringTag(Constants.PduHeader.LoginIdTagType, false, false, "Test Login Id"),
+                                new IntegerTag(Constants.PduHeader.InstanceIdTagType, false, false, 1),
+                                new IntegerTag(Constants.PduHeader.MessageIdTagType, false, false, 2)
+                            }).BuildTag()),
+                        new AggregationRequestPayload(new TlvTagBuilder(Constants.AggregationRequestPayload.TagType, false, false,
+                            new ITlvTag[]
+                            {
+                                new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 1),
+                                new ImprintTag(Constants.AggregationRequestPayload.RequestHashTagType, false, false,
+                                    new DataHash(HashAlgorithm.Sha2256,
+                                        new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
+                                new IntegerTag(Constants.AggregationRequestPayload.RequestLevelTagType, false, false, 0),
+                            }).BuildTag()),
+                    }).BuildTag());
+            });
+
+            Assert.That(ex.Message, Does.StartWith("Exactly one MAC must exist in PDU"));
+        }
+
+        [Test]
+        public void AggregationRequestPduWithMacNotLast()
+        {
+            TlvException ex = Assert.Throws<TlvException>(delegate
+            {
+                new AggregationRequestPdu(new TlvTagBuilder(Constants.AggregationRequestPdu.TagType, false, false,
+                    new ITlvTag[]
+                    {
+                        new PduHeader(new TlvTagBuilder(Constants.PduHeader.TagType, false, false,
+                            new ITlvTag[]
+                            {
+                                new StringTag(Constants.PduHeader.LoginIdTagType, false, false, "Test Login Id"),
+                                new IntegerTag(Constants.PduHeader.InstanceIdTagType, false, false, 1),
+                                new IntegerTag(Constants.PduHeader.MessageIdTagType, false, false, 2)
+                            }).BuildTag()),
+                        new ImprintTag(Constants.Pdu.MacTagType, false, false,
+                            new DataHash(HashAlgorithm.Sha2256,
+                                new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
+                        new AggregationRequestPayload(new TlvTagBuilder(Constants.AggregationRequestPayload.TagType, false, false,
+                            new ITlvTag[]
+                            {
+                                new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 1),
+                                new ImprintTag(Constants.AggregationRequestPayload.RequestHashTagType, false, false,
+                                    new DataHash(HashAlgorithm.Sha2256,
+                                        new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
+                                new IntegerTag(Constants.AggregationRequestPayload.RequestLevelTagType, false, false, 0),
+                            }).BuildTag()),
+                    }).BuildTag());
+            });
+
+            Assert.That(ex.Message, Does.StartWith("MAC must be the last element in PDU"));
+        }
+
+        [Test]
         public void ToStringWithRequestPayloadTest()
         {
             AggregationRequestPdu tag = TestUtil.GetCompositeTag<AggregationRequestPdu>(Constants.AggregationRequestPdu.TagType,
@@ -110,28 +251,28 @@ namespace Guardtime.KSI.Test.Service
         public void InvalidAggregationPduHeaderNotFirst()
         {
             Assert.That(delegate
-            {
-                TestUtil.GetCompositeTag<AggregationResponsePdu>(Constants.AggregationResponsePdu.TagType,
-                    new ITlvTag[]
-                    {
-                        TestUtil.GetCompositeTag<AggregationResponsePayload>(Constants.AggregationResponsePayload.TagType, new ITlvTag[]
+                {
+                    TestUtil.GetCompositeTag<AggregationResponsePdu>(Constants.AggregationResponsePdu.TagType,
+                        new ITlvTag[]
                         {
-                            new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 2),
-                            new IntegerTag(Constants.PduPayload.StatusTagType, false, false, 1),
-                            new StringTag(Constants.PduPayload.ErrorMessageTagType, false, false, "Test error message."),
-                        }),
-                        TestUtil.GetCompositeTag<PduHeader>(Constants.PduHeader.TagType,
-                            new ITlvTag[]
+                            TestUtil.GetCompositeTag<AggregationResponsePayload>(Constants.AggregationResponsePayload.TagType, new ITlvTag[]
                             {
-                                new StringTag(Constants.PduHeader.LoginIdTagType, false, false, "Test Login Id"),
-                                new IntegerTag(Constants.PduHeader.InstanceIdTagType, false, false, 1),
-                                new IntegerTag(Constants.PduHeader.MessageIdTagType, false, false, 2)
+                                new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 2),
+                                new IntegerTag(Constants.PduPayload.StatusTagType, false, false, 1),
+                                new StringTag(Constants.PduPayload.ErrorMessageTagType, false, false, "Test error message."),
                             }),
-                        new ImprintTag(Constants.Pdu.MacTagType, false, false,
-                            new DataHash(HashAlgorithm.Sha2256,
-                                new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
-                    });
-            }, Throws.Exception.InnerException.TypeOf<TlvException>().With.InnerException.Message.StartWith("Header must be the first element"),
+                            TestUtil.GetCompositeTag<PduHeader>(Constants.PduHeader.TagType,
+                                new ITlvTag[]
+                                {
+                                    new StringTag(Constants.PduHeader.LoginIdTagType, false, false, "Test Login Id"),
+                                    new IntegerTag(Constants.PduHeader.InstanceIdTagType, false, false, 1),
+                                    new IntegerTag(Constants.PduHeader.MessageIdTagType, false, false, 2)
+                                }),
+                            new ImprintTag(Constants.Pdu.MacTagType, false, false,
+                                new DataHash(HashAlgorithm.Sha2256,
+                                    new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
+                        });
+                }, Throws.Exception.InnerException.TypeOf<TlvException>().With.InnerException.Message.StartWith("Header must be the first element"),
                 "Creating AggregationPdu should fail when header is not the first element.");
         }
 
@@ -139,28 +280,28 @@ namespace Guardtime.KSI.Test.Service
         public void InvalidAggregationPduMacNotLast()
         {
             Assert.That(delegate
-            {
-                TestUtil.GetCompositeTag<AggregationResponsePdu>(Constants.AggregationResponsePdu.TagType,
-                    new ITlvTag[]
-                    {
-                        TestUtil.GetCompositeTag<PduHeader>(Constants.PduHeader.TagType,
-                            new ITlvTag[]
-                            {
-                                new StringTag(Constants.PduHeader.LoginIdTagType, false, false, "Test Login Id"),
-                                new IntegerTag(Constants.PduHeader.InstanceIdTagType, false, false, 1),
-                                new IntegerTag(Constants.PduHeader.MessageIdTagType, false, false, 2)
-                            }),
-                        new ImprintTag(Constants.Pdu.MacTagType, false, false,
-                            new DataHash(HashAlgorithm.Sha2256,
-                                new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
-                        TestUtil.GetCompositeTag<AggregationResponsePayload>(Constants.AggregationResponsePayload.TagType, new ITlvTag[]
+                {
+                    TestUtil.GetCompositeTag<AggregationResponsePdu>(Constants.AggregationResponsePdu.TagType,
+                        new ITlvTag[]
                         {
-                            new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 2),
-                            new IntegerTag(Constants.PduPayload.StatusTagType, false, false, 1),
-                            new StringTag(Constants.PduPayload.ErrorMessageTagType, false, false, "Test error message."),
-                        }),
-                    });
-            }, Throws.Exception.InnerException.TypeOf<TlvException>().With.InnerException.Message.StartWith("MAC must be the last element"),
+                            TestUtil.GetCompositeTag<PduHeader>(Constants.PduHeader.TagType,
+                                new ITlvTag[]
+                                {
+                                    new StringTag(Constants.PduHeader.LoginIdTagType, false, false, "Test Login Id"),
+                                    new IntegerTag(Constants.PduHeader.InstanceIdTagType, false, false, 1),
+                                    new IntegerTag(Constants.PduHeader.MessageIdTagType, false, false, 2)
+                                }),
+                            new ImprintTag(Constants.Pdu.MacTagType, false, false,
+                                new DataHash(HashAlgorithm.Sha2256,
+                                    new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
+                            TestUtil.GetCompositeTag<AggregationResponsePayload>(Constants.AggregationResponsePayload.TagType, new ITlvTag[]
+                            {
+                                new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 2),
+                                new IntegerTag(Constants.PduPayload.StatusTagType, false, false, 1),
+                                new StringTag(Constants.PduPayload.ErrorMessageTagType, false, false, "Test error message."),
+                            }),
+                        });
+                }, Throws.Exception.InnerException.TypeOf<TlvException>().With.InnerException.Message.StartWith("MAC must be the last element"),
                 "Creating AggregationPdu should fail when mac is not the last element.");
         }
     }

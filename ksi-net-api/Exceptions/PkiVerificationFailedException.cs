@@ -28,20 +28,12 @@ namespace Guardtime.KSI.Exceptions
     public class PkiVerificationFailedException : PkiVerificationException
     {
         /// <summary>
-        ///     Create new PKI signature verification failed exception with message.
-        /// </summary>
-        /// <param name="message">exception message</param>
-        public PkiVerificationFailedException(string message) : base(message)
-        {
-        }
-
-        /// <summary>
         ///     Create new PKI signature verification failed exception with message and inner exception.
         /// </summary>
         /// <param name="message">exception message</param>
         /// <param name="innerException">inner exception</param>
         /// <param name="additionalInfo">Additional information</param>
-        public PkiVerificationFailedException(string message, Exception innerException, string additionalInfo = null) : base(message, innerException)
+        public PkiVerificationFailedException(string message, Exception innerException = null, string additionalInfo = null) : base(message, innerException)
         {
             AdditionalInfo = additionalInfo;
         }

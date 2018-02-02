@@ -22,6 +22,7 @@ using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Test.Properties;
+using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Signature
@@ -34,6 +35,10 @@ namespace Guardtime.KSI.Test.Signature
         {
             AggregationAuthenticationRecord aggregationAuthenticationRecord = GetAggregationAuthenticationRecordFromFile(Resources.AggregationAuthenticationRecord_Ok);
             Assert.AreEqual(5, aggregationAuthenticationRecord.Count, "Invalid amount of child TLV objects");
+            Assert.AreEqual(1436440218, aggregationAuthenticationRecord.AggregationTime, "Unexpected aggregation time.");
+            Assert.AreEqual(new DataHash(Base16.Decode("0127ECD0A598E76F8A2FD264D427DF0A119903E8EAE384E478902541756F089DD1")), aggregationAuthenticationRecord.InputHash,
+                "Unexpected input hash.");
+            Assert.IsNotNull(aggregationAuthenticationRecord.SignatureData, "Unexpected signature data: null");
         }
 
         [Test]

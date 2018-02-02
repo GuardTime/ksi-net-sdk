@@ -17,9 +17,11 @@
  * reserves and retains all trademark rights.
  */
 
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Service;
+using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Service
@@ -28,16 +30,88 @@ namespace Guardtime.KSI.Test.Service
     public class AggregationRequestPayloadTests
     {
         [Test]
+        public void AggregationRequestPayloadTest()
+        {
+            AggregationRequestPayload tag = new AggregationRequestPayload(new TlvTagBuilder(Constants.AggregationRequestPayload.TagType, false, false,
+                new ITlvTag[]
+                {
+                    new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 1),
+                    new ImprintTag(Constants.AggregationRequestPayload.RequestHashTagType, false, false,
+                        new DataHash(HashAlgorithm.Sha2256,
+                            new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
+                    new IntegerTag(Constants.AggregationRequestPayload.RequestLevelTagType, false, false, 2),
+                }).BuildTag());
+
+            Assert.AreEqual(1, tag.RequestId, "Unexpected request id");
+            Assert.AreEqual(2, tag.RequestLevel, "Unexpected request level");
+            Assert.AreEqual(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("0102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F20")), tag.RequestHash,
+                "Unexpected request hash");
+        }
+
+        [Test]
+        public void AggregationRequestPayloadWithoutRequestId()
+        {
+            TlvException ex = Assert.Throws<TlvException>(delegate
+            {
+                new AggregationRequestPayload(new TlvTagBuilder(Constants.AggregationRequestPayload.TagType, false, false,
+                    new ITlvTag[]
+                    {
+                        new ImprintTag(Constants.AggregationRequestPayload.RequestHashTagType, false, false,
+                            new DataHash(HashAlgorithm.Sha2256,
+                                new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
+                    }).BuildTag());
+            });
+
+            Assert.That(ex.Message, Does.StartWith("Exactly one request id must exist in aggregation request payload"));
+        }
+
+        [Test]
+        public void AggregationRequestPayloadWithoutRequestHash()
+        {
+            TlvException ex = Assert.Throws<TlvException>(delegate
+            {
+                new AggregationRequestPayload(new TlvTagBuilder(Constants.AggregationRequestPayload.TagType, false, false,
+                    new ITlvTag[]
+                    {
+                        new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 1),
+                    }).BuildTag());
+            });
+
+            Assert.That(ex.Message, Does.StartWith("Exactly one request hash must exist in aggregation request payload"));
+        }
+
+        [Test]
+        public void AggregationRequestPayloadWithoutMultipleRequestLevels()
+        {
+            TlvException ex = Assert.Throws<TlvException>(delegate
+            {
+                new AggregationRequestPayload(new TlvTagBuilder(Constants.AggregationRequestPayload.TagType, false, false,
+                    new ITlvTag[]
+                    {
+                        new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 1),
+                        new ImprintTag(Constants.AggregationRequestPayload.RequestHashTagType, false, false,
+                            new DataHash(HashAlgorithm.Sha2256,
+                                new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
+                        new IntegerTag(Constants.AggregationRequestPayload.RequestLevelTagType, false, false, 2),
+                        new IntegerTag(Constants.AggregationRequestPayload.RequestLevelTagType, false, false, 2),
+                    }).BuildTag());
+            });
+
+            Assert.That(ex.Message, Does.StartWith("Only one request level is allowed in aggregation request payload"));
+        }
+
+        [Test]
         public void ToStringTest()
         {
-            AggregationRequestPayload tag = TestUtil.GetCompositeTag<AggregationRequestPayload>(Constants.AggregationRequestPayload.TagType, new ITlvTag[]
-            {
-                new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 1),
-                new ImprintTag(Constants.AggregationRequestPayload.RequestHashTagType, false, false,
-                    new DataHash(HashAlgorithm.Sha2256,
-                        new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
-                new IntegerTag(Constants.AggregationRequestPayload.RequestLevelTagType, false, false, 0),
-            });
+            AggregationRequestPayload tag = new AggregationRequestPayload(new TlvTagBuilder(Constants.AggregationRequestPayload.TagType, false, false,
+                new ITlvTag[]
+                {
+                    new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 1),
+                    new ImprintTag(Constants.AggregationRequestPayload.RequestHashTagType, false, false,
+                        new DataHash(HashAlgorithm.Sha2256,
+                            new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
+                    new IntegerTag(Constants.AggregationRequestPayload.RequestLevelTagType, false, false, 0),
+                }).BuildTag());
 
             AggregationRequestPayload tag2 = new AggregationRequestPayload(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 

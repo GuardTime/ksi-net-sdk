@@ -351,7 +351,19 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
                     GetExtenderConfigResponsePayload(4, new List<string>() { "uri-2" }, 1136073601, 2136073601)
                 });
 
-            haService.GetExtenderConfig();
+            ManualResetEvent waitHandle = new ManualResetEvent(false);
+
+            haService.ExtenderConfigChanged += delegate
+            {
+            };
+
+            ExtenderConfig resultConf = haService.GetExtenderConfig();
+            waitHandle.WaitOne(1000);
+
+            Assert.AreEqual(4, resultConf.MaxRequests, "Unexpected max requests value");
+            Assert.AreEqual(1, resultConf.ParentsUris.Count, "Unexpected parent uri count");
+            Assert.AreEqual(1136073601, resultConf.CalendarFirstTime, "Unexpected calendar first time value");
+            Assert.AreEqual(2136073601, resultConf.CalendarLastTime, "Unexpected calendar last time value");
 
             // change first service response so that request fails
             ((TestKsiService)haService.ExtendingServices[0]).ExtendingServiceProtocol.RequestResult =
@@ -367,15 +379,14 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
             ((TestKsiService)haService.ExtendingServices[1]).ExtendingServiceProtocol.RequestResult = newService.ExtendingServiceProtocol.RequestResult;
 
             ExtenderConfigChangedEventArgs args = null;
-            ManualResetEvent waitHandle = new ManualResetEvent(false);
+            waitHandle = new ManualResetEvent(false);
 
             haService.ExtenderConfigChanged += delegate(object sender, ExtenderConfigChangedEventArgs e)
             {
                 args = e;
-                waitHandle.Set();
             };
 
-            ExtenderConfig resultConf = haService.GetExtenderConfig();
+            resultConf = haService.GetExtenderConfig();
 
             Assert.AreEqual(3, resultConf.MaxRequests, "Unexpected max requests value");
             Assert.AreEqual(1, resultConf.ParentsUris.Count, "Unexpected parent uri count");
@@ -386,7 +397,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
             waitHandle.WaitOne(1000);
 
             Assert.IsNotNull(args, "ExtenderConfigChangedEventArgs cannot be null.");
-            Assert.IsNotNull(args.ExtenderConfig, "ExtenderConfigChangedEventArgs.ExtenderConfig cannot be null.");
+            Assert.AreEqual(resultConf, args.ExtenderConfig, "Unexpected ExtenderConfigChangedEventArgs.ExtenderConfig.");
             Assert.IsNull(args.Exception, "ExtenderConfigChangedEventArgs.Exception cannot have value.");
             Assert.AreEqual(haService, args.KsiService, "Unexpected ExtenderConfigChangedEventArgs.KsiService");
         }

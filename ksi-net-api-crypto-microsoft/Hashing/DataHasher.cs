@@ -49,13 +49,7 @@ namespace Guardtime.KSI.Crypto.Microsoft.Hashing
             }
 
             _algorithm = algorithm;
-
             _hasher = GetHasher(algorithm);
-
-            if (_hasher == null)
-            {
-                throw new HashingException("Hash algorithm(" + algorithm.Name + ") is not supported.");
-            }
         }
 
         private static System.Security.Cryptography.HashAlgorithm GetHasher(HashAlgorithm algorithm)

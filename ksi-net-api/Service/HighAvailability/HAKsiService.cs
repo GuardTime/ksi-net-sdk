@@ -168,11 +168,7 @@ namespace Guardtime.KSI.Service.HighAvailability
         public SignRequestResponsePayload GetSignResponsePayload(IAsyncResult asyncResult)
         {
             HAAsyncResult ar = GetHAAsyncResult(asyncResult);
-            HASignRequestRunner requestRunner = ar.RequestRunner as HASignRequestRunner;
-            if (requestRunner == null)
-            {
-                throw new HAKsiServiceException("Invalid request runner: " + ar.RequestRunner.GetType() + "; Expected type: " + typeof(HASignRequestRunner));
-            }
+            HASignRequestRunner requestRunner = GetRequestRunner<HASignRequestRunner>(ar);
             return requestRunner.GetSignResponsePayload(ar);
         }
 
@@ -250,6 +246,7 @@ namespace Guardtime.KSI.Service.HighAvailability
                     if (_currentAggregatorConfigList.ContainsKey(ex.ThrownBySubService))
                     {
                         _currentAggregatorConfigList.Remove(ex.ThrownBySubService);
+                        RecalculateAggregatorConfig();
                     }
                 }
             }
@@ -383,6 +380,7 @@ namespace Guardtime.KSI.Service.HighAvailability
                     if (_currentExtenderConfigList.ContainsKey(ex.ThrownBySubService))
                     {
                         _currentExtenderConfigList.Remove(ex.ThrownBySubService);
+                        RecalculateExtenderConfig();
                     }
                 }
             }
@@ -509,13 +507,12 @@ namespace Guardtime.KSI.Service.HighAvailability
             {
                 try
                 {
-                    Logger.Debug("Sub-service AggregationConfig changed: " + e.AggregatorConfig + "; Sub-service: " + e.KsiService.AggregatorAddress);
-
                     if (e.AggregatorConfig == null)
                     {
                         throw new ArgumentNullException(nameof(e.AggregatorConfig));
                     }
 
+                    Logger.Debug("Sub-service AggregationConfig changed: " + e.AggregatorConfig + "; Sub-service: " + e.KsiService.AggregatorAddress);
                     _currentAggregatorConfigList[e.KsiService] = e.AggregatorConfig;
                     RecalculateAggregatorConfig();
                 }
@@ -566,15 +563,13 @@ namespace Guardtime.KSI.Service.HighAvailability
             {
                 try
                 {
-                    Logger.Debug("Sub-service ExtenderConfig changed: " + e.ExtenderConfig + "; Sub-service: " + e.KsiService.ExtenderAddress);
-
                     if (e.ExtenderConfig == null)
                     {
                         throw new ArgumentNullException(nameof(e.ExtenderConfig));
                     }
 
+                    Logger.Debug("Sub-service ExtenderConfig changed: " + e.ExtenderConfig + "; Sub-service: " + e.KsiService.ExtenderAddress);
                     _currentExtenderConfigList[e.KsiService] = e.ExtenderConfig;
-
                     RecalculateExtenderConfig();
                 }
                 catch (Exception ex)

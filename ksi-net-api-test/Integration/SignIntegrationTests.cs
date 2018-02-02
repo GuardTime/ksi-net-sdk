@@ -19,18 +19,23 @@
 
 using System;
 using System.IO;
+using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
+using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Service.Tcp;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
 using Guardtime.KSI.Test.Crypto;
+using Guardtime.KSI.Test.Properties;
+using Guardtime.KSI.Trust;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
@@ -42,6 +47,55 @@ namespace Guardtime.KSI.Test.Integration
         [Test, TestCaseSource(typeof(IntegrationTests), nameof(KsiList))]
         public void SignHashTest(Ksi ksi)
         {
+            VerificationResult verificationResult = SignHash(ksi);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode, "Signature should verify with key based policy");
+        }
+
+        [Test]
+        public void SignHashWithHttpTimeoutAndBufferSizeTest()
+        {
+            int requestTimeout = 9000;
+            int bufferSize = 1024;
+            HttpKsiServiceProtocol protocol = new HttpKsiServiceProtocol(
+                Settings.Default.HttpSigningServiceUrl,
+                null,
+                Settings.Default.HttpPublicationsFileUrl,
+                requestTimeout,
+                bufferSize);
+            Ksi ksi = new Ksi(new KsiService(
+                protocol,
+                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpSigningServiceHmacAlgorithm)),
+                null, null, protocol,
+                new PublicationsFileFactory(
+                    new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com")))));
+
+            VerificationResult verificationResult = SignHash(ksi);
+            Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode, "Signature should verify with key based policy");
+        }
+
+        [Test]
+        public void SignHashWithTcpTimeoutAndBufferSizeTest()
+        {
+            uint requestTimeout = 9000;
+            uint bufferSize = 1024;
+            TcpKsiSigningServiceProtocol protocol = new TcpKsiSigningServiceProtocol(
+                IPAddress.Parse(Settings.Default.TcpExtendingServiceIp),
+                Settings.Default.TcpSigningServicePort,
+                requestTimeout,
+                bufferSize);
+            HttpKsiServiceProtocol publicationsFileProtocol = new HttpKsiServiceProtocol(
+                null,
+                null,
+                Settings.Default.HttpPublicationsFileUrl);
+            Ksi ksi = new Ksi(new KsiService(
+                protocol,
+                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpSigningServiceHmacAlgorithm)),
+                null, null, publicationsFileProtocol,
+                new PublicationsFileFactory(
+                    new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com")))));
+
             VerificationResult verificationResult = SignHash(ksi);
             Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode, "Signature should verify with key based policy");
         }
@@ -548,8 +602,10 @@ namespace Guardtime.KSI.Test.Integration
         {
             KsiService service = GetTcpKsiService();
 
-            IAsyncResult ar1 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
-            IAsyncResult ar2 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("2f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
+            IAsyncResult ar1 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("1f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null,
+                null);
+            IAsyncResult ar2 = service.BeginSign(new DataHash(HashAlgorithm.Sha2256, Base16.Decode("2f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null,
+                null);
             service.EndSign(ar1);
 
             TcpKsiSigningServiceProtocol tcp = GetTcpProtocol(service);
@@ -560,6 +616,13 @@ namespace Guardtime.KSI.Test.Integration
             Assert.IsNull(GetSigningSocket(tcp), "Socket should be null");
 
             KsiServiceProtocolException ex = Assert.Throws<KsiServiceProtocolException>(delegate
+            {
+                tcp.Dispose();
+            });
+
+            Assert.That(ex.Message.StartsWith("TCP KSI service protocol is already disposed."), "Unexpected exception message: " + ex.Message);
+
+            ex = Assert.Throws<KsiServiceProtocolException>(delegate
             {
                 service.EndSign(ar2);
             });
