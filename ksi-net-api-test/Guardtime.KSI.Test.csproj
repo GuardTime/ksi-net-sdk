@@ -772,6 +772,9 @@
     <None Include="resources\signature\ksi-signature\ksi-signature-invalid-chain-index-mismatch.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="resources\signature\ksi-signature\ksi-signature-level-correction-5.ksi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="resources\signature\ksi-signature\sha1-as-aggregation-algo-2016-01.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
