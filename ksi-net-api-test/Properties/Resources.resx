@@ -702,4 +702,7 @@
   <data name="KsiSignature_Rfc3161Record_Sha1TstInfoAlgorithm_2017" xml:space="preserve">
     <value>resources/signature/rfc3161-record/rfc3161-sha1-in-tst-algo-2017.tlv</value>
   </data>
+  <data name="KsiSignature_Ok_LevelCorrection5" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-level-correction-5.ksi</value>
+  </data>
 </root>
