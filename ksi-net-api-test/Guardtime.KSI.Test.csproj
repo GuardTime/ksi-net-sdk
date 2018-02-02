@@ -227,7 +227,6 @@
     <Compile Include="Signature\Verification\Rule\AggregationHashChainShapeRuleTests.cs" />
     <Compile Include="TestSetup.cs" />
     <Compile Include="Signature\CalendarAuthenticationRecordTests.cs" />
-    <Compile Include="Signature\AggregationAuthenticationRecordTests.cs" />
     <Compile Include="Signature\KsiSignatureTests.cs" />
     <Compile Include="Signature\AggregationHashChainTests.cs" />
     <Compile Include="Signature\CalendarHashChainTests.cs" />

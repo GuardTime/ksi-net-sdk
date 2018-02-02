@@ -30,21 +30,21 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         public override VerificationRule Rule => new CalendarAuthenticationRecordExistenceRule();
 
         [Test]
-        public void TestRfc3161SignatureAggregationAuthenticationRecord()
+        public void TestRfc3161SignatureCalendarAuthenticationRecord()
         {
-            // Check legacy signature for aggregation authentication record existence
+            // Check legacy signature for calendar authentication record existence
             CreateSignatureAndVerify(Resources.KsiSignature_Legacy_Ok, VerificationResultCode.Ok);
         }
 
         [Test]
-        public void TestSignatureAggregationAuthenticationRecord()
+        public void TestSignatureCalendarAuthenticationRecord()
         {
-            // Check signature for aggregation authentication record existence
+            // Check signature for calendar authentication record existence
             CreateSignatureAndVerify(Resources.KsiSignature_Ok, VerificationResultCode.Ok);
         }
 
         [Test]
-        public void TestSignatureMissingAggregationAuthenticationRecord()
+        public void TestSignatureMissingCalendarAuthenticationRecord()
         {
             // Check signature without calendar authentication record
             CreateSignatureAndVerify(Resources.KsiSignature_Ok_AggregationHashChain_Only, VerificationResultCode.Na);

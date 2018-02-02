@@ -249,7 +249,6 @@
     <Compile Include="Service\KsiService.cs" />
     <Compile Include="Service\PduHeader.cs" />
     <Compile Include="Service\ServiceCredentials.cs" />
-    <Compile Include="Signature\AggregationAuthenticationRecord.cs" />
     <Compile Include="Signature\AggregationHashChain.cs" />
     <Compile Include="Signature\AggregationHashChainResult.cs" />
     <Compile Include="Signature\CalendarAuthenticationRecord.cs" />
