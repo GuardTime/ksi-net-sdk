@@ -77,7 +77,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
                     );
 
             IPublicationsFile publicationsFile = haService.GetPublicationsFile();
-            Assert.AreEqual(1484438400, publicationsFile.GetLatestPublication().PublicationData.PublicationTime, "Unexpected last publication time");
+            Assert.AreEqual(1515974400, publicationsFile.GetLatestPublication().PublicationData.PublicationTime, "Unexpected last publication time");
         }
 
         /// <summary>

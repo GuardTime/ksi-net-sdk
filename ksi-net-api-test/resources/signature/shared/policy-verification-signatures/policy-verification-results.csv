@@ -27,7 +27,6 @@ policy-verification-signature-calendar-input-hashes-do-not-match-PUB-03.ksig;use
 policy-verification-signature-publication-hashes-do-not-match-PUB-04.ksig;userPublication;PUB-04;Publication record hash and user provided publication hash mismatch;0;;;;;;AAAAAA-CZ4KSQ-AAO52M-BW7RKM-MVUEHH-BTXG3K-BDBKON-NIMLMH-KQ23BH-BB2VXU-GN555R-FZRU2K;true;;;
 policy-verification-signature-has-deprecated-algorithm-in-response-calendar-chain-GEN-02.ksig;publicationsFile;GEN-02;Verification inconclusive;0;;;;;;;true;resources/extension-response-with-deprecated-algorithm.tlv;resources/publications-file.bin;
 policy-verification-signature-suitable-publication-not-found-GEN-02.ksig;publicationsFile;GEN-02;Verification inconclusive;0;;;;;;;false;;resources/publications-file.bin;
-policy-verification-signature-suitable-publication-not-found-GEN-02.ksig;publicationsFile;GEN-02;Verification inconclusive;0;;;;;;;true;;resources/publications-file.bin;
 policy-verification-signature-rfc-signature.ksig;publicationsFile;GEN-02;Verification inconclusive;0;;;;;;;false;;;
 policy-verification-signature-other-core-signature.ksig;publicationsFile;PUB-01;Extender response calendar root hash mismatch;0;;;;;;;true;resources/extender-response-for-different-time.tlv;resources/publications-file.bin;
 policy-verification-signature-other-core-signature.ksig;publicationsFile;PUB-02;Extender response inconsistent;0;;;;;;;true;resources/extender-response-with-changed-times.tlv;resources/publications-file.bin;

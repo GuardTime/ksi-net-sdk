@@ -44,7 +44,7 @@ namespace Guardtime.KSI.Test.Service
             Ksi ksi = GetKsi();
 
             IPublicationsFile pubFile = ksi.GetPublicationsFile();
-            Assert.AreEqual(1484438400, pubFile.GetLatestPublication().PublicationData.PublicationTime, "Unexpected last publication time");
+            Assert.AreEqual(1515974400, pubFile.GetLatestPublication().PublicationData.PublicationTime, "Unexpected last publication time");
         }
 
         [Test]

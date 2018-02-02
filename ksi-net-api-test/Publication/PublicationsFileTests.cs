@@ -323,7 +323,7 @@ namespace Guardtime.KSI.Test.Publication
                         CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
                 PublicationRecordInPublicationFile publicationRecord = publicationsFile.GetLatestPublication();
 
-                Assert.AreEqual(1484438400, publicationRecord.PublicationData.PublicationTime, "Should be correct publication time for latest publication");
+                Assert.AreEqual(1515974400, publicationRecord.PublicationData.PublicationTime, "Should be correct publication time for latest publication");
             }
         }
 
