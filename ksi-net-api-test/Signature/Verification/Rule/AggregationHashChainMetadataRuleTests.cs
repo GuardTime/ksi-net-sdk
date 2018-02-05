@@ -144,6 +144,15 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         }
 
         /// <summary>
+        /// Test metadata without padding and with invalid hash algorithm id as first metadata content byte.
+        /// </summary>
+        [Test]
+        public void TestAggregationHashChainMetadataWithoutPaddingWithInvalidHashAlgorithmId()
+        {
+            CreateSignatureAndVerify(Resources.AggregationHashChainMetadataWithoutPaddingWithInvalidAlgorithm, VerificationResultCode.Ok);
+        }
+
+        /// <summary>
         /// Test metadata without padding: invalid first byte and length combination (possible to be interpreted as a valid imprint)
         /// </summary>
         [Test]

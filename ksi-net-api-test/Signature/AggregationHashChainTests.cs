@@ -41,25 +41,84 @@ namespace Guardtime.KSI.Test.Signature
         {
             AggregationHashChain aggregationHashChain = GetAggregationHashChainFromFile(Resources.AggregationHashChain_Ok);
             Assert.AreEqual(9, aggregationHashChain.Count, "Invalid amount of child TLV objects");
+            Assert.IsNotNull(aggregationHashChain.GetInputData(), "Unexpected input data.");
+        }
+
+        [Test]
+        public void TestCreateAggregationHashChainFromChildTags()
+        {
+            AggregationHashChain aggregationHashChain = new AggregationHashChain(false, false, GetAggregationHashChainFromFile(Resources.AggregationHashChain_Ok).ToArray());
+            Assert.AreEqual(9, aggregationHashChain.Count, "Invalid amount of child TLV objects");
         }
 
         [Test]
         public void TestCreateAggregationHashChainWithLinksOk()
         {
-            AggregationHashChain aggregationHashChain = GetAggregationHashChainFromFile(Resources.AggregationHashChain_Ok);
-
-            new AggregationHashChain(1, new ulong[] { 1 }, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE")),
-                1, aggregationHashChain.GetChainLinks().ToArray());
+            ReadOnlyCollection<AggregationHashChain.Link> links = GetAggregationHashChainFromFile(Resources.AggregationHashChain_Ok).GetChainLinks();
+            AggregationHashChain newAggregationHashChain = new AggregationHashChain(1, new ulong[] { 1 },
+                new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE")),
+                1, links.ToArray());
+            Assert.AreEqual(links.Count, newAggregationHashChain.GetChainLinks().Count, "Unexpected links count");
+            Assert.AreEqual(LinkDirection.Left, links[0].Direction, "Unexpected link direction");
+            Assert.AreEqual(new DataHash(Base16.Decode("01E8EE4A17C22DFA36839998F24DEC73E78DA7B0A92FF3530570AF98117F406DDF")), links[0].SiblingHash, "Unexpected sibling hash");
+            Assert.IsNull(links[0].Metadata, "Unexpected metadata");
         }
 
         [Test]
-        public void TestCreateAggregationHashChainInvalid()
+        public void TestCreateAggregationHashChainWithoutChainIndex()
+        {
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                new AggregationHashChain(1, null, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE")),
+                    1, new AggregationHashChain.Link[] { });
+            });
+
+            Assert.AreEqual("chainIndex", ex.ParamName);
+        }
+
+        [Test]
+        public void TestCreateAggregationHashChainWithChainLinksNull()
+        {
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                new AggregationHashChain(1, new ulong[] { 1 }, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE")),
+                    1, null);
+            });
+
+            Assert.AreEqual("chainLinks", ex.ParamName);
+        }
+
+        [Test]
+        public void TestCreateAggregationHashChainWithEmptyChainLinks()
         {
             Assert.That(delegate
             {
                 new AggregationHashChain(1, new ulong[] { 1 }, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE")),
                     1, new AggregationHashChain.Link[] { });
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Links are missing in aggregation hash chain"));
+        }
+
+        [Test]
+        public void TestGetOutputHashWithoutResult()
+        {
+            AggregationHashChain aggregationHashChain = GetAggregationHashChainFromFile(Resources.AggregationHashChain_Ok);
+
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                aggregationHashChain.GetOutputHash(null);
+            });
+
+            Assert.AreEqual("result", ex.ParamName);
+        }
+
+        [Test]
+        public void TestGetOutputHash()
+        {
+            AggregationHashChain aggregationHashChain = GetAggregationHashChainFromFile(Resources.AggregationHashChain_Ok);
+            AggregationHashChainResult result = new AggregationHashChainResult(1, aggregationHashChain.InputHash);
+            result = aggregationHashChain.GetOutputHash(result);
+            Assert.AreEqual(new DataHash(Base16.Decode("0116FF519501549E59F94952234BEAE90D1AB708901AF7B3F92B88B6A441969541")), result.Hash, "Unexpected output hash.");
+            Assert.AreEqual(29, result.Level, "Unexpected level.");
         }
 
         [Test]
@@ -125,10 +184,11 @@ namespace Guardtime.KSI.Test.Signature
         public void AggregationHashChainLinkSequenceNumberMissingTest()
         {
             AggregationHashChain.Link aggregationHashChain = new AggregationHashChain.Link(LinkDirection.Left, null,
-                new AggregationHashChain.Metadata("test client", "test machine id"));
+                new AggregationHashChain.Metadata("test client"));
 
             AggregationHashChain.Metadata metadata = aggregationHashChain.Metadata;
 
+            Assert.IsNull(metadata.MachineId, "Aggregation hash chain link machine id should match");
             Assert.IsNull(metadata.SequenceNumber, "Aggregation hash chain link metadata sequnece number should match");
             Assert.IsNull(metadata.RequestTime, "Aggregation hash chain link metadata request time should match");
         }

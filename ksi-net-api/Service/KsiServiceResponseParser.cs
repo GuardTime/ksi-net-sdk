@@ -169,7 +169,7 @@ namespace Guardtime.KSI.Service
                     if (_currentAggregatorConfig == null || !_currentAggregatorConfig.Equals(aggregatorConfig))
                     {
                         _currentAggregatorConfig = aggregatorConfig;
-                        AggregatorConfigChanged.BeginInvoke(this, new AggregatorConfigChangedEventArgs(_currentAggregatorConfig), EndAggregatorConfigChanged, null);
+                        AggregatorConfigChanged?.BeginInvoke(this, new AggregatorConfigChangedEventArgs(_currentAggregatorConfig), EndAggregatorConfigChanged, null);
                     }
                 }
             }
@@ -204,7 +204,7 @@ namespace Guardtime.KSI.Service
                     if (_currentExtenderConfig == null || !_currentExtenderConfig.Equals(extenderConfig))
                     {
                         _currentExtenderConfig = extenderConfig;
-                        ExtenderConfigChanged.BeginInvoke(this, new ExtenderConfigChangedEventArgs(_currentExtenderConfig), EndExtenderConfigChanged, null);
+                        ExtenderConfigChanged?.BeginInvoke(this, new ExtenderConfigChangedEventArgs(_currentExtenderConfig), EndExtenderConfigChanged, null);
                     }
                 }
             }
@@ -398,7 +398,7 @@ namespace Guardtime.KSI.Service
             if (errorPayload != null)
             {
                 // There should be only one payload if an error payload exists. If not then write log.
-                if (pdu.Payloads.Count > 1)
+                if (pdu.Payloads.Count > 0)
                 {
                     LogUnexpectedPayloads(pdu);
                 }
@@ -484,7 +484,7 @@ namespace Guardtime.KSI.Service
 
                 if (requestResponsePayload == null)
                 {
-                    throw new KsiServiceException("Cannot get request ID from payload. Payload type: " + payload.GetType());
+                    throw new KsiServiceException("Cannot get request ID from payload. Payload type: " + payload?.GetType());
                 }
 
                 if (requestResponsePayload.RequestId != requestId)
@@ -497,7 +497,7 @@ namespace Guardtime.KSI.Service
 
             if (responsePayload == null)
             {
-                throw new KsiServiceException("Cannot get status from payload. Payload type: " + payload.GetType());
+                throw new KsiServiceException("Cannot get status from payload. Payload type: " + payload?.GetType());
             }
 
             if (responsePayload.Status != 0)

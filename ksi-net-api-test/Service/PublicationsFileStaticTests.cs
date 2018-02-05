@@ -33,7 +33,7 @@ namespace Guardtime.KSI.Test.Service
     /// Publications file tests with static response
     /// </summary>
     [TestFixture]
-    public class PublicationsFileStaticTest : StaticServiceTestsBase
+    public class PublicationsFileStaticTests : StaticServiceTestsBase
     {
         /// <summary>
         /// Test signing and verifying
@@ -48,7 +48,20 @@ namespace Guardtime.KSI.Test.Service
         }
 
         [Test]
-        public void EndGetPublicationsFileArgumentNullTest()
+        public void BeginGetPublicationsFileWithoutPublicationsFileServiceProtocol()
+        {
+            KsiService service = new KsiService(null, null, null, null, null, null);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                service.BeginGetPublicationsFile(null, null);
+            });
+
+            Assert.That(ex.Message.StartsWith("Publications file service protocol is missing from service"), "Unexpected exception message: " + ex.Message);
+        }
+
+        [Test]
+        public void EndGetPublicationsFileWithAsyncResultNullTest()
         {
             KsiService service = GetKsiService();
 
@@ -60,7 +73,7 @@ namespace Guardtime.KSI.Test.Service
         }
 
         [Test]
-        public void EndGetPublicationsFileInvalidArgumentTest()
+        public void EndGetPublicationsFileInvalidAsyncResultTest()
         {
             KsiService service = GetKsiService();
 
@@ -70,6 +83,45 @@ namespace Guardtime.KSI.Test.Service
             });
 
             Assert.That(ex.Message.StartsWith("Invalid asyncResult type:"), "Unexpected exception message: " + ex.Message);
+        }
+
+        [Test]
+        public void EndGetPublicationsFileWithoutPublicationsFileServiceProtocol()
+        {
+            KsiService service = new KsiService(null, null, null, null, null, null);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                service.EndGetPublicationsFile(new TestAsyncResult());
+            });
+
+            Assert.That(ex.Message.StartsWith("Publications file service protocol is missing from service"), "Unexpected exception message: " + ex.Message);
+        }
+
+        [Test]
+        public void EndGetPublicationsFileWithoutPublicationsFileFactory()
+        {
+            KsiService service = new KsiService(null, null, null, null, new TestKsiServiceProtocol(), null);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                service.EndGetPublicationsFile(new TestAsyncResult());
+            });
+
+            Assert.That(ex.Message.StartsWith("Publications file factory is missing from service"), "Unexpected exception message: " + ex.Message);
+        }
+
+        [Test]
+        public void HttpKsiServiceProtocolEndGetPublicationsFileInvalidAsyncResultTest()
+        {
+            HttpKsiServiceProtocol protocol = new HttpKsiServiceProtocol(null, null, null);
+
+            KsiServiceProtocolException ex = Assert.Throws<KsiServiceProtocolException>(delegate
+            {
+                protocol.EndGetPublicationsFile(new TestAsyncResult());
+            });
+
+            Assert.That(ex.Message.StartsWith("Invalid IAsyncResult"), "Unexpected exception message: " + ex.Message);
         }
 
         private static Ksi GetKsi()

@@ -30,6 +30,46 @@ namespace Guardtime.KSI.Test.Service
     [TestFixture]
     public class AggregatorConfigRequestStaticTests : StaticServiceTestsBase
     {
+        [Test]
+        public void BeginGetAggregatorConfigWithoutSigningServiceProtocol()
+        {
+            KsiService service = new KsiService(null, null, null, null, null, null);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                service.BeginGetAggregatorConfig(null, null);
+            });
+
+            Assert.That(ex.Message.StartsWith("Signing service protocol is missing from service"), "Unexpected exception message: " + ex.Message);
+        }
+
+        [Test]
+        public void BeginGetAggregatorConfigWithoutSigningServiceCredentials()
+        {
+            TestKsiServiceProtocol protocol = new TestKsiServiceProtocol();
+            KsiService service = new KsiService(protocol, null, null, null, null, null);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                service.BeginGetAggregatorConfig(null, null);
+            });
+
+            Assert.That(ex.Message.StartsWith("Signing service credentials are missing."), "Unexpected exception message: " + ex.Message);
+        }
+
+        [Test]
+        public void EndGetAggregatorConfigWithoutSigningServiceProtocol()
+        {
+            KsiService service = new KsiService(null, null, null, null, null, null);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                service.EndGetAggregatorConfig(new TestAsyncResult());
+            });
+
+            Assert.That(ex.Message.StartsWith("Signing service protocol is missing from service"), "Unexpected exception message: " + ex.Message);
+        }
+
         /// <summary>
         /// Test aggregator configuration request
         /// </summary>

@@ -17,7 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Service.Tcp;
@@ -44,23 +43,18 @@ namespace Guardtime.KSI.Test.Service
 
             TcpResponseProcessor processor = new TcpResponseProcessor(asyncResultCollection);
 
-            CompositeTestTag pdu = new CompositeTestTag(Constants.AggregationResponsePdu.TagType, false, false,
+            byte[] data = new TlvTagBuilder(Constants.AggregationResponsePdu.TagType, false, false,
                 new ITlvTag[]
                 {
                     new CompositeTestTag(Constants.AggregationResponsePayload.TagType, true, false, new ITlvTag[] { new IntegerTag(0x1, true, false, 123), }),
-                });
+                }).BuildTag().Encode();
 
             Assert.IsFalse(asyncResult.IsCompleted, "Async result cannot be completed.");
 
-            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
-            {
-                writer.WriteTag(pdu);
-                byte[] data = ((MemoryStream)writer.BaseStream).ToArray();
-                processor.ProcessReceivedData(data, data.Length);
-                Assert.AreEqual(0, asyncResultCollection.Count(), "Invalid Async collection count.");
-                Assert.IsTrue(Util.IsArrayEqual(data, asyncResult.ResultStream.ToArray()), "Invalid async result stream content.");
-                Assert.IsTrue(asyncResult.IsCompleted, "Async result must be completed.");
-            }
+            processor.ProcessReceivedData(data, data.Length);
+            Assert.AreEqual(0, asyncResultCollection.Count(), "Invalid Async collection count.");
+            Assert.IsTrue(Util.IsArrayEqual(data, asyncResult.ResultStream.ToArray()), "Invalid async result stream content.");
+            Assert.IsTrue(asyncResult.IsCompleted, "Async result must be completed.");
         }
 
         /// <summary>
@@ -75,24 +69,19 @@ namespace Guardtime.KSI.Test.Service
 
             TcpResponseProcessor processor = new TcpResponseProcessor(asyncResultCollection);
 
-            CompositeTestTag pdu = new CompositeTestTag(Constants.ExtendResponsePdu.TagType, false, false,
+            byte[] data = new TlvTagBuilder(Constants.ExtendResponsePdu.TagType, false, false,
                 new ITlvTag[]
                 {
                     new CompositeTestTag(Constants.ExtendResponsePayload.TagType, true, false, new ITlvTag[] { new IntegerTag(0x1, true, false, 123), }),
-                });
+                }).BuildTag().Encode();
 
             Assert.IsFalse(asyncResult.IsCompleted, "Async result cannot be completed.");
 
-            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
-            {
-                writer.WriteTag(pdu);
-                byte[] data = ((MemoryStream)writer.BaseStream).ToArray();
-                processor.ProcessReceivedData(data, data.Length);
+            processor.ProcessReceivedData(data, data.Length);
 
-                Assert.AreEqual(0, asyncResultCollection.Count(), "Invalid Async collection count.");
-                Assert.IsTrue(Util.IsArrayEqual(data, asyncResult.ResultStream.ToArray()), "Invalid async result stream content.");
-                Assert.IsTrue(asyncResult.IsCompleted, "Async result must be completed.");
-            }
+            Assert.AreEqual(0, asyncResultCollection.Count(), "Invalid Async collection count.");
+            Assert.IsTrue(Util.IsArrayEqual(data, asyncResult.ResultStream.ToArray()), "Invalid async result stream content.");
+            Assert.IsTrue(asyncResult.IsCompleted, "Async result must be completed.");
         }
 
         /// <summary>
@@ -107,22 +96,17 @@ namespace Guardtime.KSI.Test.Service
 
             TcpResponseProcessor processor = new TcpResponseProcessor(asyncResultCollection);
 
-            CompositeTestTag pdu = new CompositeTestTag(Constants.AggregationResponsePdu.TagType, false, false,
+            byte[] data = new TlvTagBuilder(Constants.AggregationResponsePdu.TagType, false, false,
                 new ITlvTag[]
                 {
                     new CompositeTestTag(Constants.AggregatorConfigResponsePayload.TagType, true, false, new ITlvTag[] { }),
-                });
+                }).BuildTag().Encode();
 
-            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
-            {
-                writer.WriteTag(pdu);
-                byte[] data = ((MemoryStream)writer.BaseStream).ToArray();
-                processor.ProcessReceivedData(data, data.Length);
+            processor.ProcessReceivedData(data, data.Length);
 
-                Assert.AreEqual(0, asyncResultCollection.Count(), "Invalid Async collection count.");
-                Assert.IsTrue(Util.IsArrayEqual(data, asyncResult.ResultStream.ToArray()), "Invalid async result stream content.");
-                Assert.IsTrue(asyncResult.IsCompleted, "Async result must be completed.");
-            }
+            Assert.AreEqual(0, asyncResultCollection.Count(), "Invalid Async collection count.");
+            Assert.IsTrue(Util.IsArrayEqual(data, asyncResult.ResultStream.ToArray()), "Invalid async result stream content.");
+            Assert.IsTrue(asyncResult.IsCompleted, "Async result must be completed.");
         }
 
         /// <summary>
@@ -137,22 +121,17 @@ namespace Guardtime.KSI.Test.Service
 
             TcpResponseProcessor processor = new TcpResponseProcessor(asyncResultCollection);
 
-            CompositeTestTag pdu = new CompositeTestTag(Constants.ExtendResponsePdu.TagType, false, false,
+            byte[] data = new TlvTagBuilder(Constants.ExtendResponsePdu.TagType, false, false,
                 new ITlvTag[]
                 {
                     new CompositeTestTag(Constants.ExtenderConfigResponsePayload.TagType, true, false, new ITlvTag[] { }),
-                });
+                }).BuildTag().Encode();
 
-            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
-            {
-                writer.WriteTag(pdu);
-                byte[] data = ((MemoryStream)writer.BaseStream).ToArray();
-                processor.ProcessReceivedData(data, data.Length);
+            processor.ProcessReceivedData(data, data.Length);
 
-                Assert.AreEqual(0, asyncResultCollection.Count(), "Invalid Async collection count.");
-                Assert.IsTrue(Util.IsArrayEqual(data, asyncResult.ResultStream.ToArray()), "Invalid async result stream content.");
-                Assert.IsTrue(asyncResult.IsCompleted, "Async result must be completed.");
-            }
+            Assert.AreEqual(0, asyncResultCollection.Count(), "Invalid Async collection count.");
+            Assert.IsTrue(Util.IsArrayEqual(data, asyncResult.ResultStream.ToArray()), "Invalid async result stream content.");
+            Assert.IsTrue(asyncResult.IsCompleted, "Async result must be completed.");
         }
 
         /// <summary>
@@ -167,7 +146,7 @@ namespace Guardtime.KSI.Test.Service
 
             TcpResponseProcessor processor = new TcpResponseProcessor(asyncResultCollection);
 
-            CompositeTestTag pdu = new CompositeTestTag(Constants.AggregationResponsePdu.TagType, false, false,
+            byte[] data = new TlvTagBuilder(Constants.AggregationResponsePdu.TagType, false, false,
                 new ITlvTag[]
                 {
                     new CompositeTestTag(Constants.PduHeader.TagType, true, false,
@@ -182,19 +161,14 @@ namespace Guardtime.KSI.Test.Service
                     new ImprintTag(Constants.Pdu.MacTagType, true, false,
                         new DataHash(HashAlgorithm.Sha2256,
                             new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
-                });
+                }).BuildTag().Encode();
 
-            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
-            {
-                writer.WriteTag(pdu);
-                byte[] data = ((MemoryStream)writer.BaseStream).ToArray();
-                processor.ProcessReceivedData(data, data.Length);
-                Assert.IsTrue(Util.IsArrayEqual(data, asyncResult.ResultStream.ToArray()), "Invalid async result stream content.");
+            processor.ProcessReceivedData(data, data.Length);
+            Assert.IsTrue(Util.IsArrayEqual(data, asyncResult.ResultStream.ToArray()), "Invalid async result stream content.");
 
-                Assert.AreEqual(0, asyncResultCollection.Count(), "Invalid Async collection count.");
-                Assert.IsTrue(Util.IsArrayEqual(data, asyncResult.ResultStream.ToArray()), "Invalid async result stream content.");
-                Assert.IsTrue(asyncResult.IsCompleted, "Async result must be completed.");
-            }
+            Assert.AreEqual(0, asyncResultCollection.Count(), "Invalid Async collection count.");
+            Assert.IsTrue(Util.IsArrayEqual(data, asyncResult.ResultStream.ToArray()), "Invalid async result stream content.");
+            Assert.IsTrue(asyncResult.IsCompleted, "Async result must be completed.");
         }
 
         /// <summary>
@@ -204,9 +178,6 @@ namespace Guardtime.KSI.Test.Service
         public void TcpProcessorInvalidWithUnknownCriticalTlvTest()
         {
             TcpAsyncResultCollection asyncResultCollection = new TcpAsyncResultCollection();
-            TcpKsiServiceAsyncResult asyncResult = new TcpKsiServiceAsyncResult(KsiServiceRequestType.AggregatorConfig, null, 123, null, null);
-            asyncResultCollection.Add(123, asyncResult);
-
             TcpResponseProcessor processor = new TcpResponseProcessor(asyncResultCollection);
             byte[] data =
                 Base16.Decode(
@@ -220,9 +191,6 @@ namespace Guardtime.KSI.Test.Service
             });
 
             Assert.That(ex.Message.StartsWith("Unknown tag type (0x7)"), "Unexpected exception message: " + ex.Message);
-            Assert.AreEqual(1, asyncResultCollection.Count(), "Invalid Async collection count.");
-            Assert.AreEqual(0, asyncResult.ResultStream.Length, "Invalid async result stream content.");
-            Assert.IsFalse(asyncResult.IsCompleted, "Async result must not be completed.");
         }
 
         /// <summary>
@@ -232,30 +200,103 @@ namespace Guardtime.KSI.Test.Service
         public void TcpProcessorInvalidNoRequestIdTest()
         {
             TcpAsyncResultCollection asyncResultCollection = new TcpAsyncResultCollection();
+            TcpResponseProcessor processor = new TcpResponseProcessor(asyncResultCollection);
+
+            byte[] data = new TlvTagBuilder(Constants.AggregationResponsePdu.TagType, false, false,
+                new ITlvTag[]
+                {
+                    new CompositeTestTag(Constants.AggregationResponsePayload.TagType, true, false, new ITlvTag[] { }),
+                }).BuildTag().Encode();
+
+            KsiServiceProtocolException ex = Assert.Throws<KsiServiceProtocolException>(delegate
+            {
+                processor.ProcessReceivedData(data, data.Length);
+            });
+
+            Assert.That(ex.Message.StartsWith("Cannot find request id tag from aggregation response payload"), "Unexpected exception message: " + ex.Message);
+        }
+
+        /// <summary>
+        /// TCP response processor test with aggregation response payload without request Id.
+        /// </summary>
+        [Test]
+        public void TcpProcessorAggregationResponseInvalidNoRequestIdTest()
+        {
+            TcpAsyncResultCollection asyncResultCollection = new TcpAsyncResultCollection();
+            TcpResponseProcessor processor = new TcpResponseProcessor(asyncResultCollection);
+
+            byte[] data = new TlvTagBuilder(Constants.AggregationResponsePdu.TagType, false, false,
+                new ITlvTag[]
+                {
+                    new CompositeTestTag(Constants.AggregationResponsePayload.TagType, true, false, new ITlvTag[] { }),
+                }).BuildTag().Encode();
+
+            KsiServiceProtocolException ex = Assert.Throws<KsiServiceProtocolException>(delegate
+            {
+                processor.ProcessReceivedData(data, data.Length);
+            });
+
+            Assert.That(ex.Message.StartsWith("Cannot find request id tag from aggregation response payload"), "Unexpected exception message: " + ex.Message);
+        }
+
+        /// <summary>
+        /// TCP response processor test with extend response payload without request Id.
+        /// </summary>
+        [Test]
+        public void TcpProcessorExtendResponseInvalidNoRequestIdTest()
+        {
+            TcpAsyncResultCollection asyncResultCollection = new TcpAsyncResultCollection();
+            TcpResponseProcessor processor = new TcpResponseProcessor(asyncResultCollection);
+
+            byte[] data = new TlvTagBuilder(Constants.ExtendResponsePdu.TagType, false, false,
+                new ITlvTag[]
+                {
+                    new CompositeTestTag(Constants.ExtendResponsePayload.TagType, true, false, new ITlvTag[] { }),
+                }).BuildTag().Encode();
+
+            KsiServiceProtocolException ex = Assert.Throws<KsiServiceProtocolException>(delegate
+            {
+                processor.ProcessReceivedData(data, data.Length);
+            });
+
+            Assert.That(ex.Message.StartsWith("Cannot find request id tag from extender response payload"), "Unexpected exception message: " + ex.Message);
+        }
+
+        /// <summary>
+        /// TCP response processor test with PDU without a payload. Warning is logged: "Could not get payload from response PDU"
+        /// </summary>
+        [Test]
+        public void TcpProcessorInvalidNoPayloadTest()
+        {
+            TcpAsyncResultCollection asyncResultCollection = new TcpAsyncResultCollection();
             TcpKsiServiceAsyncResult asyncResult = new TcpKsiServiceAsyncResult(KsiServiceRequestType.AggregatorConfig, null, 123, null, null);
             asyncResultCollection.Add(123, asyncResult);
             TcpResponseProcessor processor = new TcpResponseProcessor(asyncResultCollection);
 
-            CompositeTestTag pdu = new CompositeTestTag(Constants.AggregationResponsePdu.TagType, false, false,
-                new ITlvTag[]
-                {
-                    new CompositeTestTag(Constants.AggregationResponsePayload.TagType, true, false, new ITlvTag[] { }),
-                });
+            byte[] data = new TlvTagBuilder(Constants.AggregationResponsePdu.TagType, false, false, new ITlvTag[] { }).BuildTag().Encode();
+            processor.ProcessReceivedData(data, data.Length);
 
-            using (TlvWriter writer = new TlvWriter(new MemoryStream()))
-            {
-                writer.WriteTag(pdu);
-                byte[] data = ((MemoryStream)writer.BaseStream).ToArray();
-                KsiServiceProtocolException ex = Assert.Throws<KsiServiceProtocolException>(delegate
-                {
-                    processor.ProcessReceivedData(data, data.Length);
-                });
-
-                Assert.That(ex.Message.StartsWith("Cannot find request id tag from aggregation response payload"), "Unexpected exception message: " + ex.Message);
-            }
             Assert.AreEqual(1, asyncResultCollection.Count(), "Invalid Async collection count.");
             Assert.AreEqual(0, asyncResult.ResultStream.Length, "Invalid async result stream content.");
             Assert.IsFalse(asyncResult.IsCompleted, "Async result must not be completed.");
+        }
+
+        /// <summary>
+        /// TCP response processor test with unknonw response PDU type.
+        /// </summary>
+        [Test]
+        public void TcpProcessorUnknowndResponsePduTypeTest()
+        {
+            TcpAsyncResultCollection asyncResultCollection = new TcpAsyncResultCollection();
+            TcpResponseProcessor processor = new TcpResponseProcessor(asyncResultCollection);
+
+            byte[] data = new StringTag(0, false, false, "asdf").Encode();
+            KsiServiceProtocolException ex = Assert.Throws<KsiServiceProtocolException>(delegate
+            {
+                processor.ProcessReceivedData(data, data.Length);
+            });
+
+            Assert.That(ex.Message.StartsWith("Unknown response PDU type"), "Unexpected exception message: " + ex.Message);
         }
     }
 }

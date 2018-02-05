@@ -30,6 +30,46 @@ namespace Guardtime.KSI.Test.Service
     [TestFixture]
     public class ExtenderConfigRequestStaticTests : StaticServiceTestsBase
     {
+        [Test]
+        public void BeginetExtenderConfigWithoutExtendingServiceProtocol()
+        {
+            KsiService service = new KsiService(null, null, null, null, null, null);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                service.BeginGetExtenderConfig(null, null);
+            });
+
+            Assert.That(ex.Message.StartsWith("Extending service protocol is missing from service"), "Unexpected exception message: " + ex.Message);
+        }
+
+        [Test]
+        public void BeginGetExtenderConfigWithoutExtendingServiceCredentials()
+        {
+            TestKsiServiceProtocol protocol = new TestKsiServiceProtocol();
+            KsiService service = new KsiService(null, null, protocol, null, null, null);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                service.BeginGetExtenderConfig(null, null);
+            });
+
+            Assert.That(ex.Message.StartsWith("Extending service credentials are missing."), "Unexpected exception message: " + ex.Message);
+        }
+
+        [Test]
+        public void EndGetExtenderConfigWithoutExtendingServiceProtocol()
+        {
+            KsiService service = new KsiService(null, null, null, null, null, null);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                service.EndGetExtenderConfig(new TestAsyncResult());
+            });
+
+            Assert.That(ex.Message.StartsWith("Extending service protocol is missing from service"), "Unexpected exception message: " + ex.Message);
+        }
+
         /// <summary>
         /// Test extender configuration request
         /// </summary>

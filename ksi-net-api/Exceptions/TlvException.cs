@@ -27,20 +27,14 @@ namespace Guardtime.KSI.Exceptions
     [Serializable]
     public class TlvException : KsiException
     {
-        /// <summary>
-        ///     Create new TlvException exception.
-        /// </summary>
-        /// <param name="message">exception message</param>
-        public TlvException(string message) : base(message)
-        {
-        }
+
 
         /// <summary>
         ///     Create new TlvException exception.
         /// </summary>
         /// <param name="message">exception message</param>
         /// <param name="innerException">inner exception</param>
-        public TlvException(string message, Exception innerException) : base(message, innerException)
+        public TlvException(string message, Exception innerException = null) : base(message, innerException)
         {
         }
     }

@@ -29,6 +29,17 @@ namespace Guardtime.KSI.Test.Trust
     public class RsaCryptoSignatureVerifierTests
     {
         [Test]
+        public void AlgorithmNullTest()
+        {
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                KsiProvider.CreateRsaCryptoSignatureVerifier(null);
+            });
+
+            Assert.That(ex.ParamName == "algorithm", "Unexpected exception message: " + ex.Message);
+        }
+
+        [Test]
         public void SignedBytesNullTest()
         {
             string encodedCert =

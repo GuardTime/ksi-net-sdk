@@ -94,5 +94,12 @@ namespace Guardtime.KSI.Service
 
             return true;
         }
+
+        /// <summary>Returns a string that represents the current object.</summary>
+        public override string ToString()
+        {
+            return string.Format("ExtenderConfig [{0},{1},{2},[{3}]]", MaxRequests?.ToString() ?? "null", CalendarFirstTime?.ToString() ?? "null",
+                CalendarLastTime?.ToString() ?? "null", GetParentUrisString());
+        }
     }
 }

@@ -76,7 +76,7 @@ namespace Guardtime.KSI.Service
 
             if (tagCounter[Constants.ExtenderConfigResponsePayload.MaxRequestsTagType] > 1)
             {
-                throw new TlvException("Only one max request tag is allowed in extender config response payload.");
+                throw new TlvException("Only one max requests tag is allowed in extender config response payload.");
             }
 
             if (tagCounter[Constants.ExtenderConfigResponsePayload.CalendarFirstTimeTagType] > 1)

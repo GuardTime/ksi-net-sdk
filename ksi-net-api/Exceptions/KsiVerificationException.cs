@@ -28,20 +28,14 @@ namespace Guardtime.KSI.Exceptions
     [Serializable]
     public class KsiVerificationException : KsiException
     {
-        /// <summary>
-        ///     Create new KSI verification exception with message.
-        /// </summary>
-        /// <param name="message">exception message</param>
-        public KsiVerificationException(string message) : base(message)
-        {
-        }
+
 
         /// <summary>
         ///     Create new KSI verification exception  with message and inner exception.
         /// </summary>
         /// <param name="message">exception message</param>
         /// <param name="innerException">inner exception</param>
-        public KsiVerificationException(string message, Exception innerException) : base(message, innerException)
+        public KsiVerificationException(string message, Exception innerException = null) : base(message, innerException)
         {
         }
 

@@ -38,18 +38,8 @@ namespace Guardtime.KSI.Exceptions
         /// </summary>
         /// <param name="thrownBySubService">Sub-service that threw the exception</param>
         /// <param name="message">Exception message</param>
-        public HAKsiSubServiceException(IKsiService thrownBySubService, string message) : base(message)
-        {
-            ThrownBySubService = thrownBySubService;
-        }
-
-        /// <summary>
-        ///     Create new HA KSI sub-service exception.
-        /// </summary>
-        /// <param name="thrownBySubService">Sub-service that threw the exception</param>
-        /// <param name="message">Exception message</param>
         /// <param name="innerExceptions">Inner exceptions</param>
-        public HAKsiSubServiceException(IKsiService thrownBySubService, string message, Exception innerExceptions) : base(message, innerExceptions)
+        public HAKsiSubServiceException(IKsiService thrownBySubService, string message, Exception innerExceptions = null) : base(message, innerExceptions)
         {
             ThrownBySubService = thrownBySubService;
         }

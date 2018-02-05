@@ -31,16 +31,8 @@ namespace Guardtime.KSI.Exceptions
         ///     Create new KSI exception
         /// </summary>
         /// <param name="message">Exception message</param>
-        public KsiException(string message) : base(message)
-        {
-        }
-
-        /// <summary>
-        ///     Create new KSI exception
-        /// </summary>
-        /// <param name="message">Exception message</param>
         /// <param name="innerException">Inner exception</param>
-        public KsiException(string message, Exception innerException) : base(message, innerException)
+        public KsiException(string message, Exception innerException = null) : base(message, innerException)
         {
         }
     }

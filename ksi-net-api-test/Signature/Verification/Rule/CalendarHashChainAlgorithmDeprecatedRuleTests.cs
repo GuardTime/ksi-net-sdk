@@ -30,6 +30,13 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         public override VerificationRule Rule => new CalendarHashChainAlgorithmDeprecatedRule();
 
         [Test]
+        public void TestSignatureMissingCalendarHashChain()
+        {
+            // Check signature without calendar chain
+            CreateSignatureAndVerify(Resources.KsiSignature_Ok_AggregationHashChain_Only, VerificationResultCode.Ok);
+        }
+
+        [Test]
         public void TestOkCalendarAlgorithms()
         {
             // Check with calendar hash chains that use hash algorithms without deprecated date

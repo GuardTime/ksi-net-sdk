@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Exceptions;
@@ -31,6 +32,54 @@ namespace Guardtime.KSI.Test.Trust
     [TestFixture]
     public class PkiTrustStoreProviderTests
     {
+        [Test]
+        public void PkiTrustStoreProviderCreateWithoutTrustStoreTest()
+        {
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(null, null);
+            });
+            Assert.AreEqual("trustStore", ex.ParamName);
+        }
+
+        [Test]
+        public void PkiTrustStoreProviderCreateWithoutCertificateRdnSelector()
+        {
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(CreateCertStore(Resources.PkiTrustProvider_IdenTrustCert), null);
+            });
+            Assert.AreEqual("certificateRdnSelector", ex.ParamName);
+        }
+
+        [Test]
+        public void PkiTrustStoreProviderVerifyWithoutSignedBytes()
+        {
+            PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(CreateCertStore(Resources.PkiTrustProvider_IdenTrustCert),
+                CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
+
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                trustStoreProvider.Verify(null, null);
+            });
+            Assert.AreEqual("signedBytes", ex.ParamName);
+        }
+
+        [Test]
+        public void PkiTrustStoreProviderVerifyWithoutSignatureBytes()
+        {
+            PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(CreateCertStore(Resources.PkiTrustProvider_IdenTrustCert),
+                CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
+
+            PublicationsFile publicationsFile = TestUtil.GetPublicationsFile(Resources.KsiPublicationsFile);
+
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                trustStoreProvider.Verify(publicationsFile.GetSignedBytes(), null);
+            });
+            Assert.AreEqual("signatureBytes", ex.ParamName);
+        }
+
         [Test]
         public void PkiTrustStoreProviderVerifyTest()
         {

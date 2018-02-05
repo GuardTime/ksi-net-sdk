@@ -28,19 +28,11 @@ namespace Guardtime.KSI.Exceptions
     public class PkiVerificationFailedCertNotValidException : PkiVerificationException
     {
         /// <summary>
-        ///     Create new PKI signature verification failed (certificat not valid at the given time) exception with message.
-        /// </summary>
-        /// <param name="message">exception message</param>
-        public PkiVerificationFailedCertNotValidException(string message) : base(message)
-        {
-        }
-
-        /// <summary>
         ///     Create new PKI signature verification failed (certificat not valid at the given time) exception with message and inner exception.
         /// </summary>
         /// <param name="message">exception message</param>
         /// <param name="innerException">inner exception</param>
-        public PkiVerificationFailedCertNotValidException(string message, Exception innerException) : base(message, innerException)
+        public PkiVerificationFailedCertNotValidException(string message, Exception innerException = null) : base(message, innerException)
         {
         }
     }

@@ -46,11 +46,8 @@ namespace Guardtime.KSI.Service
         /// <param name="loginId">login ID</param>
         /// <param name="loginKey">login key</param>
         /// <param name="macAlgorithm">MAC calculation algorithm of outgoing and incoming messages</param>
-        public ServiceCredentials(string loginId, string loginKey, HashAlgorithm macAlgorithm = null)
+        public ServiceCredentials(string loginId, string loginKey, HashAlgorithm macAlgorithm = null) : this(loginId, Util.EncodeNullTerminatedUtf8String(loginKey), macAlgorithm)
         {
-            LoginId = loginId;
-            LoginKey = Util.EncodeNullTerminatedUtf8String(loginKey);
-            MacAlgorithm = macAlgorithm;
         }
 
         /// <summary>

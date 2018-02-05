@@ -109,12 +109,12 @@ namespace Guardtime.KSI.Signature.Verification
         {
             if (KsiService == null)
             {
-                throw new KsiVerificationException("Invalid KSI service: null.");
+                throw new KsiVerificationException("Invalid KSI service in context: null.");
             }
 
             if (Signature == null)
             {
-                throw new KsiVerificationException("Invalid Signature: null.");
+                throw new KsiVerificationException("Invalid KSI signature in context: null.");
             }
 
             ulong cacheKey = publicationTime ?? 0;

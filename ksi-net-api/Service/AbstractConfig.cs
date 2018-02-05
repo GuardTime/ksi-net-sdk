@@ -95,5 +95,28 @@ namespace Guardtime.KSI.Service
 
             return true;
         }
+
+        /// <summary>
+        /// Get string that represents parent URIs
+        /// </summary>
+        /// <returns></returns>
+        protected string GetParentUrisString()
+        {
+            string parentUrisString = null;
+
+            if (ParentsUris != null)
+            {
+                foreach (string uri in ParentsUris)
+                {
+                    if (parentUrisString != null)
+                    {
+                        parentUrisString += ", ";
+                    }
+
+                    parentUrisString += "'" + uri + "'";
+                }
+            }
+            return parentUrisString;
+        }
     }
 }

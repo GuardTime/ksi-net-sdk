@@ -350,14 +350,26 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
             HAKsiService haService = GetHAService(
                 new List<PduPayload>()
                 {
-                    GetAggregatorConfigResponsePayload(1, 1, 100, 4, new List<string>() { "uri-1" })
+                    GetAggregatorConfigResponsePayload(2, 1, 100, 4, new List<string>() { "uri-1" })
                 },
                 new List<PduPayload>()
                 {
                     GetAggregatorConfigResponsePayload(1, 2, 100, 4, new List<string>() { "uri-2" })
                 });
 
-            haService.GetAggregatorConfig();
+            ManualResetEvent waitHandle = new ManualResetEvent(false);
+
+            haService.AggregatorConfigChanged += delegate
+            {
+            };
+
+            AggregatorConfig resultConf = haService.GetAggregatorConfig();
+            waitHandle.WaitOne(1000);
+
+            Assert.AreEqual(2, resultConf.MaxLevel, "Unexpected max level value");
+            Assert.AreEqual(100, resultConf.AggregationPeriod, "Unexpected aggregation period value");
+            Assert.AreEqual(4, resultConf.MaxRequests, "Unexpected max requests value");
+            Assert.AreEqual(1, resultConf.ParentsUris.Count, "Unexpected parent uri count");
 
             // change first service response so that request fails
             ((TestKsiService)haService.SigningServices[0]).SigningServiceProtocol.RequestResult =
@@ -373,15 +385,14 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
             ((TestKsiService)haService.SigningServices[1]).SigningServiceProtocol.RequestResult = newService.SigningServiceProtocol.RequestResult;
 
             AggregatorConfigChangedEventArgs args = null;
-            ManualResetEvent waitHandle = new ManualResetEvent(false);
+            waitHandle = new ManualResetEvent(false);
 
             haService.AggregatorConfigChanged += delegate(object sender, AggregatorConfigChangedEventArgs e)
             {
                 args = e;
-                waitHandle.Set();
             };
 
-            AggregatorConfig resultConf = haService.GetAggregatorConfig();
+            resultConf = haService.GetAggregatorConfig();
 
             Assert.AreEqual(2, resultConf.MaxLevel, "Unexpected max level value");
             Assert.AreEqual(3, resultConf.AggregationAlgorithm, "Unexpected algorithm value");
@@ -393,7 +404,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
             waitHandle.WaitOne(1000);
 
             Assert.IsNotNull(args, "AggregatorConfigChangedEventArgs cannot be null.");
-            Assert.IsNotNull(args.AggregatorConfig, "AggregatorConfigChangedEventArgs.AggregatorConfig cannot be null.");
+            Assert.AreEqual(resultConf, args.AggregatorConfig, "Unexpected AggregatorConfigChangedEventArgs.AggregatorConfig.");
             Assert.IsNull(args.Exception, "AggregatorConfigChangedEventArgs.Exception cannot have value.");
             Assert.AreEqual(haService, args.KsiService, "Unexpected AggregatorConfigChangedEventArgs.KsiService");
         }
@@ -582,7 +593,8 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
             }
         }
 
-        private static AggregatorConfigResponsePayload GetAggregatorConfigResponsePayload(ulong? maxLevel, ulong? aggregationAlgorithm, ulong? aggregationPeriod, ulong? maxRequests,
+        private static AggregatorConfigResponsePayload GetAggregatorConfigResponsePayload(ulong? maxLevel, ulong? aggregationAlgorithm, ulong? aggregationPeriod,
+                                                                                          ulong? maxRequests,
                                                                                           IList<string> parentsUris)
         {
             List<ITlvTag> tlvTags = new List<ITlvTag>();

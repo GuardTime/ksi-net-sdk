@@ -134,7 +134,13 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Integration\VerificationTests.cs" />
     <Compile Include="Integration\KsiVerificationTests.cs" />
+    <Compile Include="Publication\PublicationsFileFactoryTests.cs" />
+    <Compile Include="Service\AggregatorConfigResponsePayloadTests.cs" />
+    <Compile Include="Service\ExtenderConfigResponsePayloadTests.cs" />
+    <Compile Include="Service\TcpKsiServiceProtocolTests.cs" />
+    <Compile Include="Service\HttpKsiServiceProtocolTests.cs" />
     <Compile Include="Signature\Verification\Rule\RuleTestsBase.cs" />
     <Compile Include="Trust\RsaCryptoSignatureVerifierTests.cs" />
     <Compile Include="Trust\Pkcs7CryptoSignatureVerifierTests.cs" />
@@ -200,7 +206,7 @@
     <Compile Include="Service\AggregationPduTests.cs" />
     <Compile Include="Service\ExtendStaticTests.cs" />
     <Compile Include="Service\PduHeaderTests.cs" />
-    <Compile Include="Service\PublicationsFileStaticTest.cs" />
+    <Compile Include="Service\PublicationsFileStaticTests.cs" />
     <Compile Include="Service\AggregatorConfigRequestStaticTests.cs" />
     <Compile Include="Service\StaticServiceTestsBase.cs" />
     <Compile Include="Service\SigningStaticTests.cs" />
@@ -301,6 +307,9 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Include="resources\publication\publicationsfile\ksi-publications-2017-12.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\service\aggregation-response-pdu-invalid-mac.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\service\aggregation-response-pdu-signed-zero-bytes.tlv">
@@ -573,6 +582,9 @@
     <None Include="resources\signature\aggregation-hash-chain\MetadataPadding\TestAggregationHashChainMetadataWithoutPaddingFail.ksig">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="resources\signature\aggregation-hash-chain\MetadataPadding\TestAggregationHashChainMetadataWithoutPaddingWithInvalidAlgorithm.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="resources\signature\aggregation-hash-chain\MetadataPadding\TestAggregationHashChainMetadataWithPadding1.ksig">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -681,7 +693,7 @@
     <None Include="resources\signature\ksi-signature\ksi-signature-invalid-extra-tag.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-first-aggregation-chain-index-length.tlv">
+    <None Include="resources\signature\ksi-signature\ksi-signature-invalid-highest-aggregation-chain-index-length.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\ksi-signature\ksi-signature-invalid-hash-algorithm.tlv">

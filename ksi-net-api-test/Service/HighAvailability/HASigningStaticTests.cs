@@ -23,6 +23,7 @@ using System.IO;
 using System.Threading;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
+using Guardtime.KSI.Parser;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Service.HighAvailability;
 using Guardtime.KSI.Signature;
@@ -97,6 +98,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
                     },
                     null, null);
 
+            Assert.AreEqual("test.aggregator.address; test.aggregator.address; test.aggregator.address; ", haService.AggregatorAddress, "Unexpected aggregator address.");
             IKsiSignature signature = haService.Sign(new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
             Assert.IsNotNull(signature, "Signature cannot be null.");
         }
@@ -145,6 +147,29 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         }
 
         /// <summary>
+        /// Test with 4 sub-services. Max 3 is allowed.
+        /// </summary>
+        [Test]
+        public void HACreateServiceWith4SubServicesFailTest()
+        {
+            HAKsiServiceException ex = Assert.Throws<HAKsiServiceException>(delegate
+            {
+                IKsiService haService =
+                    new HAKsiService(
+                        new List<IKsiService>()
+                        {
+                            GetStaticKsiService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_RequestId_1584727637)), 1),
+                            GetStaticKsiService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_RequestId_1584727637)), 2),
+                            GetStaticKsiService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_RequestId_1584727637)), 1043101455),
+                            GetStaticKsiService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_RequestId_1584727637)), 1043101455)
+                        },
+                        null, null);
+            });
+
+            Assert.That(ex.Message.StartsWith("Cannot use more than 3 signing services"), "Unexpected exception message: " + ex.Message);
+        }
+
+        /// <summary>
         /// Test signing with all sub-requests failing.
         /// </summary>
         [Test]
@@ -166,6 +191,9 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
             });
 
             Assert.That(ex.Message.StartsWith("All sub-requests failed"), "Unexpected exception message: " + ex.Message);
+            Assert.AreEqual(3, ex.SubServiceExceptions.Count, "Unexpected sub-service exception count");
+            Assert.That(ex.SubServiceExceptions[0].Message.StartsWith("Using sub-service failed"),
+                "Unexpected sub-service exception message: " + ex.SubServiceExceptions[0].Message);
         }
 
         /// <summary>
@@ -191,6 +219,98 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
             });
 
             Assert.That(ex.Message.StartsWith("Invalid async result. Containing invalid request runner"), "Unexpected exception message: " + ex.Message);
+        }
+
+        /// <summary>
+        /// Test getting sign response payload with invalid async result.
+        /// </summary>
+        [Test]
+        public void HAGetSignResponsePayloadWithInvalidAsyncResultFailTest()
+        {
+            IKsiService haService =
+                new HAKsiService(
+                    null,
+                    new List<IKsiService>()
+                    {
+                        GetStaticKsiService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_RequestId_1043101455)), 1043101455)
+                    },
+                    null);
+
+            HAKsiServiceException ex = Assert.Throws<HAKsiServiceException>(delegate
+            {
+                IAsyncResult ar = haService.BeginExtend(1455494400, null, null);
+                // use extending async result
+                haService.GetSignResponsePayload(ar);
+            });
+
+            Assert.That(ex.Message.StartsWith("Invalid async result. Containing invalid request runner"), "Unexpected exception message: " + ex.Message);
+        }
+
+        /// <summary>
+        /// Test signing with async result null.
+        /// </summary>
+        [Test]
+        public void HASignWithAsyncResultNullFailTest()
+        {
+            IKsiService haService =
+                new HAKsiService(
+                    null,
+                    new List<IKsiService>()
+                    {
+                        GetStaticKsiService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_RequestId_1043101455)), 1043101455)
+                    },
+                    null);
+
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                haService.EndSign(null);
+            });
+
+            Assert.AreEqual("asyncResult", ex.ParamName, "Unexpected exception: " + ex.Message);
+        }
+
+        /// <summary>
+        /// Test signing with invalid type of async result.
+        /// </summary>
+        [Test]
+        public void HASignWithInvalidTypeAsyncResultFailTest()
+        {
+            IKsiService haService = new HAKsiService(null, null, null);
+
+            HAKsiServiceException ex = Assert.Throws<HAKsiServiceException>(delegate
+            {
+                IAsyncResult ar = GetStaticKsiService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_RequestId_1584727637)),
+                    1584727637).BeginSign(new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
+                haService.EndSign(ar);
+            });
+            Assert.That(ex.Message.StartsWith("Invalid asyncResult, could not cast to correct object"), "Unexpected exception message: " + ex.Message);
+        }
+
+        /// <summary>
+        /// Test signing with invalid TLV in result list.
+        /// </summary>
+        [Test]
+        public void HASignWithInvalidResultTlvFailTest()
+        {
+            IKsiService haService =
+                new HAKsiService(
+                    new List<IKsiService>()
+                    {
+                        GetStaticKsiService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregatorConfigResponsePdu)),
+                            1584727637)
+                    },
+                    null, null);
+
+            HAKsiServiceException ex = Assert.Throws<HAKsiServiceException>(delegate
+            {
+                HAAsyncResult asyncResult = (HAAsyncResult)haService.BeginSign(new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")),
+                    null, null);
+                // add invalid result
+                asyncResult.AddResultTlv(new IntegerTag(1, false, false, 1));
+                haService.EndSign(asyncResult);
+            });
+
+            Assert.That(ex.Message.StartsWith("Could not get request response of type " + typeof(KsiSignature)), "Unexpected exception message: " + ex.Message);
         }
     }
 }

@@ -61,6 +61,11 @@ namespace Guardtime.KSI.Signature
         /// <returns>KSI signature</returns>
         public IKsiSignature Create(byte[] bytes, DataHash hash = null)
         {
+            if (bytes == null)
+            {
+                throw new ArgumentNullException(nameof(bytes));
+            }
+
             using (Stream stream = new MemoryStream(bytes))
             {
                 return Create(stream, hash);
@@ -157,9 +162,14 @@ namespace Guardtime.KSI.Signature
         {
             List<ITlvTag> childTags = new List<ITlvTag>();
 
+            if (rfc3161Record != null)
+            {
+                childTags.Add(rfc3161Record);
+            }
+
             if (aggregationHashChains == null)
             {
-                throw new ArgumentException(nameof(aggregationHashChains));
+                throw new ArgumentNullException(nameof(aggregationHashChains));
             }
 
             foreach (AggregationHashChain childTag in aggregationHashChains)
@@ -180,11 +190,6 @@ namespace Guardtime.KSI.Signature
             if (calendarAuthenticationRecord != null)
             {
                 childTags.Add(calendarAuthenticationRecord);
-            }
-
-            if (rfc3161Record != null)
-            {
-                childTags.Add(rfc3161Record);
             }
 
             return CreateAndVerify(childTags.ToArray(), hash);
@@ -231,7 +236,11 @@ namespace Guardtime.KSI.Signature
             // Create list on new signature child tags.
             // Add new aggregation hash chain as the first element.
             // Add the chain that was initally the lowest (with corrected level correction) as second element
-            List<ITlvTag> childTags = new List<ITlvTag> { newAggregationHashChain, CreateAggregationHashChainWithLevelCorrection(lowestChain, levelCorrection - chainResult.Level) };
+            List<ITlvTag> childTags = new List<ITlvTag>
+            {
+                newAggregationHashChain,
+                CreateAggregationHashChainWithLevelCorrection(lowestChain, levelCorrection - chainResult.Level)
+            };
 
             foreach (ITlvTag tag in signature)
             {
@@ -275,33 +284,20 @@ namespace Guardtime.KSI.Signature
         private static KsiSignature CreateSignatureWithLevelCorrection(KsiSignature signature, uint addToFirstLinkLinkLevelCorrection)
         {
             ReadOnlyCollection<AggregationHashChain> aggregationHashChains = signature.GetAggregationHashChains();
-
-            if (aggregationHashChains.Count > 0)
-            {
-                TlvTagBuilder builder = new TlvTagBuilder(signature);
-                AggregationHashChain firstAggregationHashChain = aggregationHashChains[0];
-
-                ulong levelCorrection = firstAggregationHashChain.GetChainLinks()[0].LevelCorrection + addToFirstLinkLinkLevelCorrection;
-                builder.ReplaceChildTag(firstAggregationHashChain, CreateAggregationHashChainWithLevelCorrection(firstAggregationHashChain, levelCorrection));
-                return new KsiSignature(false, false, builder.GetChildTags());
-            }
-
-            return signature;
+            TlvTagBuilder builder = new TlvTagBuilder(signature);
+            AggregationHashChain firstAggregationHashChain = aggregationHashChains[0];
+            ulong levelCorrection = firstAggregationHashChain.GetChainLinks()[0].LevelCorrection + addToFirstLinkLinkLevelCorrection;
+            builder.ReplaceChildTag(firstAggregationHashChain, CreateAggregationHashChainWithLevelCorrection(firstAggregationHashChain, levelCorrection));
+            return new KsiSignature(false, false, builder.GetChildTags());
         }
 
         private static AggregationHashChain CreateAggregationHashChainWithLevelCorrection(AggregationHashChain aggregationHashChain, ulong levelCorrection)
         {
             ReadOnlyCollection<AggregationHashChain.Link> chainLinks = aggregationHashChain.GetChainLinks();
-
-            if (chainLinks.Count > 0)
-            {
-                TlvTagBuilder builder = new TlvTagBuilder(aggregationHashChain);
-                AggregationHashChain.Link firstLink = chainLinks[0];
-                builder.ReplaceChildTag(firstLink, CreateLinkWithLevelCorrection(firstLink, levelCorrection));
-                return new AggregationHashChain(builder.BuildTag());
-            }
-
-            return aggregationHashChain;
+            TlvTagBuilder builder = new TlvTagBuilder(aggregationHashChain);
+            AggregationHashChain.Link firstLink = chainLinks[0];
+            builder.ReplaceChildTag(firstLink, CreateLinkWithLevelCorrection(firstLink, levelCorrection));
+            return new AggregationHashChain(builder.BuildTag());
         }
 
         private static AggregationHashChain.Link CreateLinkWithLevelCorrection(AggregationHashChain.Link link, ulong levelCorrection)

@@ -60,7 +60,7 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
             // Check no publication found after current signature
             TestVerificationContext context = new TestVerificationContext()
             {
-                Signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_New),
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Ok),
                 PublicationsFile = new TestPublicationsFile(),
             };
 

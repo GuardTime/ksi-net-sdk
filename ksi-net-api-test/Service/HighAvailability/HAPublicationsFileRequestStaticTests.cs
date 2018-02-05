@@ -64,6 +64,32 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
         }
 
         /// <summary>
+        /// Test ending publications file request without publications file services.
+        /// </summary>
+        [Test]
+        public void HAEndPublicationsFileRequestWithoutServicesFailTest()
+        {
+            IKsiService haService =
+                new HAKsiService(
+                    new List<IKsiService>()
+                    {
+                        GetPublicationsFileService()
+                    },
+                    new List<IKsiService>()
+                    {
+                        GetPublicationsFileService()
+                    },
+                    null);
+
+            HAKsiServiceException ex = Assert.Throws<HAKsiServiceException>(delegate
+            {
+                haService.EndGetPublicationsFile(new TestAsyncResult());
+            });
+
+            Assert.That(ex.Message.StartsWith("Publications file service is missing"), "Unexpected exception message: " + ex.Message);
+        }
+
+        /// <summary>
         /// Test publications file request
         /// </summary>
         [Test]
@@ -74,7 +100,10 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
                     null,
                     null,
                     GetPublicationsFileService()
-                    );
+                );
+
+            Assert.AreEqual("test.publications.file.address", haService.PublicationsFileAddress,
+                "Unexpected publications file address.");
 
             IPublicationsFile publicationsFile = haService.GetPublicationsFile();
             Assert.AreEqual(1515974400, publicationsFile.GetLatestPublication().PublicationData.PublicationTime, "Unexpected last publication time");
@@ -91,7 +120,7 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
                     null,
                     null,
                     GetPublicationsFileService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_RequestId_1584727637)))
-                    );
+                );
 
             PublicationsFileException ex = Assert.Throws<PublicationsFileException>(delegate
             {
