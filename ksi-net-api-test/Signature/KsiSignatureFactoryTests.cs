@@ -248,9 +248,11 @@ namespace Guardtime.KSI.Test.Signature
                 new DataHash(Base16.Decode("04000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")),
                 new AggregationHashChain.Link[]
                 {
-                    new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.Metadata("test3"), 0),
-                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01979985EED807EC9E036D679D327B7BEFF0CA0D127524B0AD6EC37414EBE96258")), null, 1),
-                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("0500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")), null, 1)
+                    new AggregationHashChain.Link(LinkDirection.Left, new AggregationHashChain.Metadata("test3")),
+                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01979985EED807EC9E036D679D327B7BEFF0CA0D127524B0AD6EC37414EBE96258")), 1),
+                    new AggregationHashChain.Link(LinkDirection.Left,
+                        new DataHash(Base16.Decode(
+                            "0500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")), 1)
                 });
 
             CreateSignatureWithAggregationChainAndVerify(
@@ -258,9 +260,11 @@ namespace Guardtime.KSI.Test.Signature
                 new DataHash(Base16.Decode("020000000000000000000000000000000000000000")),
                 new AggregationHashChain.Link[]
                 {
-                    new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.Metadata("test2", "machine-id-1", 1, 1517236554764), 1),
+                    new AggregationHashChain.Link(LinkDirection.Left, "test2", "machine-id-1", 1, 1517236554764, 1),
                     new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("0178BAFB1F3AF73B661F9C7B4ADC30DE5A7B715184A4543B200694101C1A8C0E02"))),
-                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("0500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")), null, 1)
+                    new AggregationHashChain.Link(LinkDirection.Left,
+                        new DataHash(Base16.Decode(
+                            "0500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")), 1)
                 });
 
             CreateSignatureWithAggregationChainAndVerify(
@@ -268,7 +272,7 @@ namespace Guardtime.KSI.Test.Signature
                 new DataHash(Base16.Decode("0500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")),
                 new AggregationHashChain.Link[]
                 {
-                    new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("014024AA0B2367EBBC3E27B3C498B800C48AFD9A2623C1458A07D2D0ABA4387B3B")), null, 4)
+                    new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("014024AA0B2367EBBC3E27B3C498B800C48AFD9A2623C1458A07D2D0ABA4387B3B")), 4)
                 });
 
             CreateSignatureWithAggregationChainAndVerify(
@@ -276,7 +280,7 @@ namespace Guardtime.KSI.Test.Signature
                 new DataHash(Base16.Decode("0500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")),
                 new AggregationHashChain.Link[]
                 {
-                    new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("014024aa0b2367ebbc3e27b3c498b800c48afd9a2623c1458a07d2d0aba4387b3b")), null, 4)
+                    new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("014024aa0b2367ebbc3e27b3c498b800c48afd9a2623c1458a07d2d0aba4387b3b")), 4)
                 });
         }
 
@@ -293,8 +297,7 @@ namespace Guardtime.KSI.Test.Signature
                     new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2")),
                     new AggregationHashChain.Link[]
                     {
-                        new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("018D982C6911831201C5CF15E937514686A2169E2AD57BA36FD92CBEBD99A67E34")), null,
-                            1),
+                        new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("018D982C6911831201C5CF15E937514686A2169E2AD57BA36FD92CBEBD99A67E34")), 1),
                         new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("0114F9189A45A30D856029F9537FD20C9C7342B82A2D949072AB195D95D7B32ECB"))),
                         new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01D4F6E36871BA12449CA773F2A36F9C0112FC74EBE164C8278D213042C772E3AB"))),
                     });
@@ -312,8 +315,7 @@ namespace Guardtime.KSI.Test.Signature
                     new DataHash(Base16.Decode("019D982C6911831201C5CF15E937514686A2169E2AD57BA36FD92CBEBD99A67E32")),
                     new AggregationHashChain.Link[]
                     {
-                        new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01680192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F1")), null,
-                            2),
+                        new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01680192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F1")), 2),
                         new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("015950DCA0E23E65EF56D68AF94718951567EBC2EF1F54357732530FC25D925340"))),
                     });
             });
