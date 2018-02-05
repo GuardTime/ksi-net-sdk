@@ -359,18 +359,6 @@ namespace Guardtime.KSI
             public const uint MessageIdTagType = 0x3;
         }
 
-        public static class AggregationAuthenticationRecord
-        {
-            /// <summary>
-            ///     Aggregation authentication record tag type
-            /// </summary>
-            public const uint TagType = 0x804;
-
-            public const uint AggregationTimeTagType = 0x2;
-            public const uint ChainIndexTagType = 0x3;
-            public const uint InputHashTagType = 0x5;
-        }
-
         public static class AggregationHashChain
         {
             /// <summary>

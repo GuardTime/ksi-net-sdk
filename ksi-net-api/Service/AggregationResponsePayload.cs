@@ -50,7 +50,6 @@ namespace Guardtime.KSI.Service
                 case Constants.AggregationHashChain.TagType:
                 case Constants.CalendarHashChain.TagType:
                 case Constants.PublicationRecord.TagTypeInSignature:
-                case Constants.AggregationAuthenticationRecord.TagType:
                 case Constants.CalendarAuthenticationRecord.TagType:
                     return childTag;
                 default:

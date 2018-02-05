@@ -80,8 +80,6 @@ namespace Guardtime.KSI.Signature
                     return CalendarHashChain = childTag as CalendarHashChain ?? new CalendarHashChain(childTag);
                 case Constants.PublicationRecord.TagTypeInSignature:
                     return PublicationRecord = childTag as PublicationRecordInSignature ?? new PublicationRecordInSignature(childTag);
-                case Constants.AggregationAuthenticationRecord.TagType:
-                    return AggregationAuthenticationRecord = childTag as AggregationAuthenticationRecord ?? new AggregationAuthenticationRecord(childTag);
                 case Constants.CalendarAuthenticationRecord.TagType:
                     return CalendarAuthenticationRecord = childTag as CalendarAuthenticationRecord ?? new CalendarAuthenticationRecord(childTag);
                 case Constants.Rfc3161Record.TagType:
@@ -134,11 +132,6 @@ namespace Guardtime.KSI.Signature
         {
             _aggregationHashChains.Sort(new AggregationHashChain.ChainIndexOrdering());
         }
-
-        /// <summary>
-        ///     Get aggregation authentication record if it exists.
-        /// </summary>
-        public AggregationAuthenticationRecord AggregationAuthenticationRecord { get; private set; }
 
         /// <summary>
         ///     Get RFC 3161 record

@@ -100,23 +100,6 @@ namespace Guardtime.KSI.Test.Signature
                             new StringTag(Constants.PublicationRecord.PublicationRepositoryUriTagType, false, false, "Test publication repository uri 1"),
                             new StringTag(Constants.PublicationRecord.PublicationRepositoryUriTagType, false, false, "Test publication repository uri 2"),
                         }),
-                    TestUtil.GetCompositeTag<AggregationAuthenticationRecord>(Constants.AggregationAuthenticationRecord.TagType,
-                        new ITlvTag[]
-                        {
-                            new IntegerTag(Constants.AggregationAuthenticationRecord.AggregationTimeTagType, false, false, 1),
-                            new IntegerTag(Constants.AggregationAuthenticationRecord.ChainIndexTagType, false, false, 0),
-                            new ImprintTag(Constants.AggregationAuthenticationRecord.InputHashTagType, false, false,
-                                new DataHash(HashAlgorithm.Sha2256,
-                                    new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
-                            TestUtil.GetCompositeTag<SignatureData>(Constants.SignatureData.TagType,
-                                new ITlvTag[]
-                                {
-                                    new StringTag(Constants.SignatureData.SignatureTypeTagType, false, false, "Test SignatureType"),
-                                    new RawTag(Constants.SignatureData.SignatureValueTagType, false, false, new byte[] { 0x2 }),
-                                    new RawTag(Constants.SignatureData.CertificateIdTagType, false, false, new byte[] { 0x3 }),
-                                    new StringTag(Constants.SignatureData.CertificateRepositoryUriTagType, false, false, "Test CertificateRepositoryUri")
-                                })
-                        }),
                     TestUtil.GetCompositeTag<Rfc3161Record>(Constants.Rfc3161Record.TagType,
                         new ITlvTag[]
                         {
@@ -165,15 +148,6 @@ namespace Guardtime.KSI.Test.Signature
     TLV[0x9]:""Test publication reference 2""
     TLV[0xA]:""Test publication repository uri 1""
     TLV[0xA]:""Test publication repository uri 2""
-  TLV[0x804]:
-    TLV[0x2]:i1
-    TLV[0x3]:i0
-    TLV[0x5]:0x010102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F20
-    TLV[0xB]:
-      TLV[0x1]:""Test SignatureType""
-      TLV[0x2]:0x02
-      TLV[0x3]:0x03
-      TLV[0x4]:""Test CertificateRepositoryUri""
   TLV[0x806]:
     TLV[0x2]:i1
     TLV[0x3]:i1
@@ -237,23 +211,6 @@ namespace Guardtime.KSI.Test.Signature
                                 new DataHash(HashAlgorithm.Sha2256,
                                     new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })))
                         }),
-                    TestUtil.GetCompositeTag<AggregationAuthenticationRecord>(Constants.AggregationAuthenticationRecord.TagType,
-                        new ITlvTag[]
-                        {
-                            new IntegerTag(Constants.AggregationAuthenticationRecord.AggregationTimeTagType, false, false, 1),
-                            new IntegerTag(Constants.AggregationAuthenticationRecord.ChainIndexTagType, false, false, 0),
-                            new ImprintTag(Constants.AggregationAuthenticationRecord.InputHashTagType, false, false,
-                                new DataHash(HashAlgorithm.Sha2256,
-                                    new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
-                            TestUtil.GetCompositeTag<SignatureData>(Constants.SignatureData.TagType,
-                                new ITlvTag[]
-                                {
-                                    new StringTag(Constants.SignatureData.SignatureTypeTagType, false, false, "Test SignatureType"),
-                                    new RawTag(Constants.SignatureData.SignatureValueTagType, false, false, new byte[] { 0x2 }),
-                                    new RawTag(Constants.SignatureData.CertificateIdTagType, false, false, new byte[] { 0x3 }),
-                                    new StringTag(Constants.SignatureData.CertificateRepositoryUriTagType, false, false, "Test CertificateRepositoryUri")
-                                })
-                        }),
                     TestUtil.GetCompositeTag<CalendarAuthenticationRecord>(Constants.CalendarAuthenticationRecord.TagType,
                         new ITlvTag[]
                         {
@@ -314,15 +271,6 @@ namespace Guardtime.KSI.Test.Signature
     TLV[0x2]:i0
     TLV[0x5]:0x010102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F20
     TLV[0x7]:0x010102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F20
-  TLV[0x804]:
-    TLV[0x2]:i1
-    TLV[0x3]:i0
-    TLV[0x5]:0x010102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F20
-    TLV[0xB]:
-      TLV[0x1]:""Test SignatureType""
-      TLV[0x2]:0x02
-      TLV[0x3]:0x03
-      TLV[0x4]:""Test CertificateRepositoryUri""
   TLV[0x805]:
     TLV[0x10]:
       TLV[0x2]:i1
@@ -813,7 +761,10 @@ namespace Guardtime.KSI.Test.Signature
                                         new IntegerTag(Constants.PublicationData.PublicationTimeTagType, false, false, 1),
                                         new ImprintTag(Constants.PublicationData.PublicationHashTagType, false, false,
                                             new DataHash(HashAlgorithm.Sha2256,
-                                                new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
+                                                new byte[]
+                                                {
+                                                    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
+                                                })),
                                     }),
                                 TestUtil.GetCompositeTag<SignatureData>(Constants.SignatureData.TagType,
                                     new ITlvTag[]
@@ -833,7 +784,10 @@ namespace Guardtime.KSI.Test.Signature
                                         new IntegerTag(Constants.PublicationData.PublicationTimeTagType, false, false, 1),
                                         new ImprintTag(Constants.PublicationData.PublicationHashTagType, false, false,
                                             new DataHash(HashAlgorithm.Sha2256,
-                                                new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
+                                                new byte[]
+                                                {
+                                                    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
+                                                })),
                                     }),
                                 new StringTag(Constants.PublicationRecord.PublicationReferencesTagType, false, false, "Test publication reference 1"),
                                 new StringTag(Constants.PublicationRecord.PublicationReferencesTagType, false, false, "Test publication reference 2"),
@@ -1132,23 +1086,7 @@ namespace Guardtime.KSI.Test.Signature
                                     new DataHash(HashAlgorithm.Sha2256,
                                         new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })))
                             }),
-                        TestUtil.GetCompositeTag<AggregationAuthenticationRecord>(Constants.AggregationAuthenticationRecord.TagType,
-                            new ITlvTag[]
-                            {
-                                new IntegerTag(Constants.AggregationAuthenticationRecord.AggregationTimeTagType, false, false, 1),
-                                new IntegerTag(Constants.AggregationAuthenticationRecord.ChainIndexTagType, false, false, 0),
-                                new ImprintTag(Constants.AggregationAuthenticationRecord.InputHashTagType, false, false,
-                                    new DataHash(HashAlgorithm.Sha2256,
-                                        new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
-                                TestUtil.GetCompositeTag<SignatureData>(Constants.SignatureData.TagType,
-                                    new ITlvTag[]
-                                    {
-                                        new StringTag(Constants.SignatureData.SignatureTypeTagType, false, false, "Test SignatureType"),
-                                        new RawTag(Constants.SignatureData.SignatureValueTagType, false, false, new byte[] { 0x2 }),
-                                        new RawTag(Constants.SignatureData.CertificateIdTagType, false, false, new byte[] { 0x3 }),
-                                        new StringTag(Constants.SignatureData.CertificateRepositoryUriTagType, false, false, "Test CertificateRepositoryUri")
-                                    })
-                            }),
+
                         TestUtil.GetCompositeTag<CalendarAuthenticationRecord>(Constants.CalendarAuthenticationRecord.TagType,
                             new ITlvTag[]
                             {
@@ -1158,7 +1096,10 @@ namespace Guardtime.KSI.Test.Signature
                                         new IntegerTag(Constants.PublicationData.PublicationTimeTagType, false, false, 1),
                                         new ImprintTag(Constants.PublicationData.PublicationHashTagType, false, false,
                                             new DataHash(HashAlgorithm.Sha2256,
-                                                new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
+                                                new byte[]
+                                                {
+                                                    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
+                                                })),
                                     }),
                                 TestUtil.GetCompositeTag<SignatureData>(Constants.SignatureData.TagType,
                                     new ITlvTag[]
@@ -1178,7 +1119,10 @@ namespace Guardtime.KSI.Test.Signature
                                         new IntegerTag(Constants.PublicationData.PublicationTimeTagType, false, false, 1),
                                         new ImprintTag(Constants.PublicationData.PublicationHashTagType, false, false,
                                             new DataHash(HashAlgorithm.Sha2256,
-                                                new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
+                                                new byte[]
+                                                {
+                                                    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
+                                                })),
                                     }),
                                 new StringTag(Constants.PublicationRecord.PublicationReferencesTagType, false, false, "Test publication reference 1"),
                                 new StringTag(Constants.PublicationRecord.PublicationReferencesTagType, false, false, "Test publication reference 2"),
@@ -1255,23 +1199,6 @@ namespace Guardtime.KSI.Test.Signature
                             (ITlvTag)Activator.CreateInstance(calendarLinkType, new ImprintTag((uint)LinkDirection.Left, false, false,
                                 new DataHash(HashAlgorithm.Sha2256,
                                     new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })))
-                        }),
-                    TestUtil.GetCompositeTag<AggregationAuthenticationRecord>(Constants.AggregationAuthenticationRecord.TagType,
-                        new ITlvTag[]
-                        {
-                            new IntegerTag(Constants.AggregationAuthenticationRecord.AggregationTimeTagType, false, false, 1),
-                            new IntegerTag(Constants.AggregationAuthenticationRecord.ChainIndexTagType, false, false, 0),
-                            new ImprintTag(Constants.AggregationAuthenticationRecord.InputHashTagType, false, false,
-                                new DataHash(HashAlgorithm.Sha2256,
-                                    new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
-                            TestUtil.GetCompositeTag<SignatureData>(Constants.SignatureData.TagType,
-                                new ITlvTag[]
-                                {
-                                    new StringTag(Constants.SignatureData.SignatureTypeTagType, false, false, "Test SignatureType"),
-                                    new RawTag(Constants.SignatureData.SignatureValueTagType, false, false, new byte[] { 0x2 }),
-                                    new RawTag(Constants.SignatureData.CertificateIdTagType, false, false, new byte[] { 0x3 }),
-                                    new StringTag(Constants.SignatureData.CertificateRepositoryUriTagType, false, false, "Test CertificateRepositoryUri")
-                                })
                         }),
                     TestUtil.GetCompositeTag<CalendarAuthenticationRecord>(Constants.CalendarAuthenticationRecord.TagType,
                         new ITlvTag[]
@@ -1374,23 +1301,6 @@ namespace Guardtime.KSI.Test.Signature
                                 new DataHash(HashAlgorithm.Sha2256,
                                     new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })))
                         }),
-                    TestUtil.GetCompositeTag<AggregationAuthenticationRecord>(Constants.AggregationAuthenticationRecord.TagType,
-                        new ITlvTag[]
-                        {
-                            new IntegerTag(Constants.AggregationAuthenticationRecord.AggregationTimeTagType, false, false, 1),
-                            new IntegerTag(Constants.AggregationAuthenticationRecord.ChainIndexTagType, false, false, 0),
-                            new ImprintTag(Constants.AggregationAuthenticationRecord.InputHashTagType, false, false,
-                                new DataHash(HashAlgorithm.Sha2256,
-                                    new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
-                            TestUtil.GetCompositeTag<SignatureData>(Constants.SignatureData.TagType,
-                                new ITlvTag[]
-                                {
-                                    new StringTag(Constants.SignatureData.SignatureTypeTagType, false, false, "Test SignatureType"),
-                                    new RawTag(Constants.SignatureData.SignatureValueTagType, false, false, new byte[] { 0x2 }),
-                                    new RawTag(Constants.SignatureData.CertificateIdTagType, false, false, new byte[] { 0x3 }),
-                                    new StringTag(Constants.SignatureData.CertificateRepositoryUriTagType, false, false, "Test CertificateRepositoryUri")
-                                })
-                        }),
                     TestUtil.GetCompositeTag<PublicationRecordInSignature>(Constants.PublicationRecord.TagTypeInSignature,
                         new ITlvTag[]
                         {
@@ -1422,161 +1332,6 @@ namespace Guardtime.KSI.Test.Signature
                             new RawTag(Constants.Rfc3161Record.SignedAttributesSuffixTagType, false, false, new byte[] { 0x3 }),
                             new IntegerTag(Constants.Rfc3161Record.SignedAttributesAlgorithmTagType, false, false, 1),
                         })
-                });
-
-            Assert.DoesNotThrow(delegate
-            {
-                using (TlvWriter writer = new TlvWriter(new MemoryStream()))
-                {
-                    writer.WriteTag(tag);
-                    writer.BaseStream.Seek(0, SeekOrigin.Begin);
-                    IKsiSignature tag2 = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(writer.BaseStream);
-                    Assert.AreEqual(tag.ToString(), tag2.ToString(), "Signatures' strings should match.");
-                }
-            });
-        }
-
-        /// <summary>
-        /// Testing signature containing single aggrecation auth record
-        /// Expected result: success
-        /// </summary>
-        [Test]
-        public void SignatureContainingSingleAggregationAuthRecordTest()
-        {
-            Assembly assembly = typeof(AggregationHashChain).Assembly;
-            Type aggregationLinkType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Link");
-            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Metadata");
-
-            KsiSignature tag = TestUtil.GetCompositeTag<KsiSignature>(Constants.KsiSignature.TagType,
-                new ITlvTag[]
-                {
-                    TestUtil.GetCompositeTag<AggregationHashChain>(Constants.AggregationHashChain.TagType,
-                        new ITlvTag[]
-                        {
-                            new IntegerTag(Constants.AggregationHashChain.AggregationTimeTagType, false, false, 1),
-                            new IntegerTag(Constants.AggregationHashChain.ChainIndexTagType, false, false, 0),
-                            new RawTag(Constants.AggregationHashChain.InputDataTagType, false, false, new byte[] { 0x1 }),
-                            new ImprintTag(Constants.AggregationHashChain.InputHashTagType, false, false,
-                                new DataHash(HashAlgorithm.Sha2256,
-                                    new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
-                            new IntegerTag(Constants.AggregationHashChain.AggregationAlgorithmIdTagType, false, false, 1),
-                            TestUtil.GetCompositeTag(aggregationLinkType, (uint)LinkDirection.Left,
-                                new ITlvTag[]
-                                {
-                                    new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, 0),
-                                    TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.Metadata.TagType,
-                                        new ITlvTag[]
-                                        {
-                                            new StringTag(Constants.AggregationHashChain.Metadata.ClientIdTagType, false, false, "Test ClientId"),
-                                            new StringTag(Constants.AggregationHashChain.Metadata.MachineIdTagType, false, false, "Test Machine Id"),
-                                            new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
-                                            new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
-                                        })
-                                })
-                        }),
-                    TestUtil.GetCompositeTag<AggregationAuthenticationRecord>(Constants.AggregationAuthenticationRecord.TagType,
-                        new ITlvTag[]
-                        {
-                            new IntegerTag(Constants.AggregationAuthenticationRecord.AggregationTimeTagType, false, false, 1),
-                            new IntegerTag(Constants.AggregationAuthenticationRecord.ChainIndexTagType, false, false, 0),
-                            new ImprintTag(Constants.AggregationAuthenticationRecord.InputHashTagType, false, false,
-                                new DataHash(HashAlgorithm.Sha2256,
-                                    new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
-                            TestUtil.GetCompositeTag<SignatureData>(Constants.SignatureData.TagType,
-                                new ITlvTag[]
-                                {
-                                    new StringTag(Constants.SignatureData.SignatureTypeTagType, false, false, "Test SignatureType"),
-                                    new RawTag(Constants.SignatureData.SignatureValueTagType, false, false, new byte[] { 0x2 }),
-                                    new RawTag(Constants.SignatureData.CertificateIdTagType, false, false, new byte[] { 0x3 }),
-                                    new StringTag(Constants.SignatureData.CertificateRepositoryUriTagType, false, false, "Test CertificateRepositoryUri")
-                                })
-                        }),
-                });
-
-            Assert.DoesNotThrow(delegate
-            {
-                using (TlvWriter writer = new TlvWriter(new MemoryStream()))
-                {
-                    writer.WriteTag(tag);
-                    writer.BaseStream.Seek(0, SeekOrigin.Begin);
-                    IKsiSignature tag2 = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(writer.BaseStream);
-                    Assert.AreEqual(tag.ToString(), tag2.ToString(), "Signatures' strings should match.");
-                }
-            });
-        }
-
-        /// <summary>
-        /// Testing signature containing multiple aggrecation auth records
-        /// Expected result: success
-        /// </summary>
-        [Test]
-        public void SignatureContainingMultipleAggregationAuthRecordsTest()
-        {
-            Assembly assembly = typeof(AggregationHashChain).Assembly;
-            Type aggregationLinkType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Link");
-            Type metadataType = assembly.GetType("Guardtime.KSI.Signature.AggregationHashChain+Metadata");
-
-            KsiSignature tag = TestUtil.GetCompositeTag<KsiSignature>(Constants.KsiSignature.TagType,
-                new ITlvTag[]
-                {
-                    TestUtil.GetCompositeTag<AggregationHashChain>(Constants.AggregationHashChain.TagType,
-                        new ITlvTag[]
-                        {
-                            new IntegerTag(Constants.AggregationHashChain.AggregationTimeTagType, false, false, 1),
-                            new IntegerTag(Constants.AggregationHashChain.ChainIndexTagType, false, false, 0),
-                            new RawTag(Constants.AggregationHashChain.InputDataTagType, false, false, new byte[] { 0x1 }),
-                            new ImprintTag(Constants.AggregationHashChain.InputHashTagType, false, false,
-                                new DataHash(HashAlgorithm.Sha2256,
-                                    new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
-                            new IntegerTag(Constants.AggregationHashChain.AggregationAlgorithmIdTagType, false, false, 1),
-                            TestUtil.GetCompositeTag(aggregationLinkType, (uint)LinkDirection.Left,
-                                new ITlvTag[]
-                                {
-                                    new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, 0),
-                                    TestUtil.GetCompositeTag(metadataType, Constants.AggregationHashChain.Metadata.TagType,
-                                        new ITlvTag[]
-                                        {
-                                            new StringTag(Constants.AggregationHashChain.Metadata.ClientIdTagType, false, false, "Test ClientId"),
-                                            new StringTag(Constants.AggregationHashChain.Metadata.MachineIdTagType, false, false, "Test Machine Id"),
-                                            new IntegerTag(Constants.AggregationHashChain.Metadata.SequenceNumberTagType, false, false, 1),
-                                            new IntegerTag(Constants.AggregationHashChain.Metadata.RequestTimeTagType, false, false, 2)
-                                        })
-                                })
-                        }),
-                    TestUtil.GetCompositeTag<AggregationAuthenticationRecord>(Constants.AggregationAuthenticationRecord.TagType,
-                        new ITlvTag[]
-                        {
-                            new IntegerTag(Constants.AggregationAuthenticationRecord.AggregationTimeTagType, false, false, 1),
-                            new IntegerTag(Constants.AggregationAuthenticationRecord.ChainIndexTagType, false, false, 0),
-                            new ImprintTag(Constants.AggregationAuthenticationRecord.InputHashTagType, false, false,
-                                new DataHash(HashAlgorithm.Sha2256,
-                                    new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
-                            TestUtil.GetCompositeTag<SignatureData>(Constants.SignatureData.TagType,
-                                new ITlvTag[]
-                                {
-                                    new StringTag(Constants.SignatureData.SignatureTypeTagType, false, false, "Test SignatureType"),
-                                    new RawTag(Constants.SignatureData.SignatureValueTagType, false, false, new byte[] { 0x2 }),
-                                    new RawTag(Constants.SignatureData.CertificateIdTagType, false, false, new byte[] { 0x3 }),
-                                    new StringTag(Constants.SignatureData.CertificateRepositoryUriTagType, false, false, "Test CertificateRepositoryUri")
-                                })
-                        }),
-                    TestUtil.GetCompositeTag<AggregationAuthenticationRecord>(Constants.AggregationAuthenticationRecord.TagType,
-                        new ITlvTag[]
-                        {
-                            new IntegerTag(Constants.AggregationAuthenticationRecord.AggregationTimeTagType, false, false, 1),
-                            new IntegerTag(Constants.AggregationAuthenticationRecord.ChainIndexTagType, false, false, 0),
-                            new ImprintTag(Constants.AggregationAuthenticationRecord.InputHashTagType, false, false,
-                                new DataHash(HashAlgorithm.Sha2256,
-                                    new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
-                            TestUtil.GetCompositeTag<SignatureData>(Constants.SignatureData.TagType,
-                                new ITlvTag[]
-                                {
-                                    new StringTag(Constants.SignatureData.SignatureTypeTagType, false, false, "Test SignatureType"),
-                                    new RawTag(Constants.SignatureData.SignatureValueTagType, false, false, new byte[] { 0x2 }),
-                                    new RawTag(Constants.SignatureData.CertificateIdTagType, false, false, new byte[] { 0x3 }),
-                                    new StringTag(Constants.SignatureData.CertificateRepositoryUriTagType, false, false, "Test CertificateRepositoryUri")
-                                })
-                        }),
                 });
 
             Assert.DoesNotThrow(delegate
