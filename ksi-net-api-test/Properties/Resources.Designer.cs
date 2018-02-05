@@ -19,7 +19,7 @@ namespace Guardtime.KSI.Test.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -57,96 +57,6 @@ namespace Guardtime.KSI.Test.Properties {
             }
             set {
                 resourceCulture = value;
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/signature/aggregation-authentication-record/aggregation-authentication-record-invalid-extra-tag.tlv.
-        /// </summary>
-        internal static string AggregationAuthenticationRecord_Invalid_Extra_Tag {
-            get {
-                return ResourceManager.GetString("AggregationAuthenticationRecord_Invalid_Extra_Tag", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/signature/aggregation-authentication-record/aggregation-authentication-record-invalid-missing-aggregation-time.tlv.
-        /// </summary>
-        internal static string AggregationAuthenticationRecord_Invalid_Missing_Aggregation_Time {
-            get {
-                return ResourceManager.GetString("AggregationAuthenticationRecord_Invalid_Missing_Aggregation_Time", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/signature/aggregation-authentication-record/aggregation-authentication-record-invalid-missing-chain-index.tlv.
-        /// </summary>
-        internal static string AggregationAuthenticationRecord_Invalid_Missing_Chain_Index {
-            get {
-                return ResourceManager.GetString("AggregationAuthenticationRecord_Invalid_Missing_Chain_Index", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/signature/aggregation-authentication-record/aggregation-authentication-record-invalid-missing-input-hash.tlv.
-        /// </summary>
-        internal static string AggregationAuthenticationRecord_Invalid_Missing_Input_Hash {
-            get {
-                return ResourceManager.GetString("AggregationAuthenticationRecord_Invalid_Missing_Input_Hash", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/signature/aggregation-authentication-record/aggregation-authentication-record-invalid-missing-signature-data.tlv.
-        /// </summary>
-        internal static string AggregationAuthenticationRecord_Invalid_Missing_Signature_Data {
-            get {
-                return ResourceManager.GetString("AggregationAuthenticationRecord_Invalid_Missing_Signature_Data", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/signature/aggregation-authentication-record/aggregation-authentication-record-invalid-multiple-aggregation-time.tlv.
-        /// </summary>
-        internal static string AggregationAuthenticationRecord_Invalid_Multiple_Aggregation_Time {
-            get {
-                return ResourceManager.GetString("AggregationAuthenticationRecord_Invalid_Multiple_Aggregation_Time", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/signature/aggregation-authentication-record/aggregation-authentication-record-invalid-multiple-input-hash.tlv.
-        /// </summary>
-        internal static string AggregationAuthenticationRecord_Invalid_Multiple_Input_Hash {
-            get {
-                return ResourceManager.GetString("AggregationAuthenticationRecord_Invalid_Multiple_Input_Hash", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/signature/aggregation-authentication-record/aggregation-authentication-record-invalid-multiple-signature-data.tlv.
-        /// </summary>
-        internal static string AggregationAuthenticationRecord_Invalid_Multiple_Signature_Data {
-            get {
-                return ResourceManager.GetString("AggregationAuthenticationRecord_Invalid_Multiple_Signature_Data", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/signature/aggregation-authentication-record/aggregation-authentication-record-invalid-type.tlv.
-        /// </summary>
-        internal static string AggregationAuthenticationRecord_Invalid_Type {
-            get {
-                return ResourceManager.GetString("AggregationAuthenticationRecord_Invalid_Type", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to resources/signature/aggregation-authentication-record/aggregation-authentication-record-ok.tlv.
-        /// </summary>
-        internal static string AggregationAuthenticationRecord_Ok {
-            get {
-                return ResourceManager.GetString("AggregationAuthenticationRecord_Ok", resourceCulture);
             }
         }
         
@@ -1417,6 +1327,15 @@ namespace Guardtime.KSI.Test.Properties {
         internal static string KsiSignature_Ok_LevelCorrection3 {
             get {
                 return ResourceManager.GetString("KsiSignature_Ok_LevelCorrection3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resources/signature/ksi-signature/ksi-signature-level-correction-5.ksi.
+        /// </summary>
+        internal static string KsiSignature_Ok_LevelCorrection5 {
+            get {
+                return ResourceManager.GetString("KsiSignature_Ok_LevelCorrection5", resourceCulture);
             }
         }
         

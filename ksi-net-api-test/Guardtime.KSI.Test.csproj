@@ -233,7 +233,6 @@
     <Compile Include="Signature\Verification\Rule\AggregationHashChainShapeRuleTests.cs" />
     <Compile Include="TestSetup.cs" />
     <Compile Include="Signature\CalendarAuthenticationRecordTests.cs" />
-    <Compile Include="Signature\AggregationAuthenticationRecordTests.cs" />
     <Compile Include="Signature\KsiSignatureTests.cs" />
     <Compile Include="Signature\AggregationHashChainTests.cs" />
     <Compile Include="Signature\CalendarHashChainTests.cs" />
@@ -783,6 +782,9 @@
     </None>
     <None Include="resources\signature\ksi-signature\ksi-signature-invalid-chain-index-mismatch.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\ksi-signature\ksi-signature-level-correction-5.ksi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\ksi-signature\sha1-as-aggregation-algo-2016-01.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
