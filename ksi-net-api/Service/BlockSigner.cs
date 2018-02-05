@@ -260,19 +260,30 @@ namespace Guardtime.KSI.Service
 
                 if (node.IsLeftNode)
                 {
-                    links.Add(new AggregationHashChain.Link(
-                        LinkDirection.Left,
-                        node.Parent.Right.Hash,
-                        node.Parent.Right.Hash == null ? node.Parent.Right.Metadata.AggregationHashChainMetadata : null,
-                        levelCorrection));
+                    if (node.Parent.Right.Hash == null)
+                        links.Add(new AggregationHashChain.Link(
+                            LinkDirection.Left,
+                            node.Parent.Right.Metadata.AggregationHashChainMetadata,
+                            levelCorrection));
+                    else
+                        links.Add(new AggregationHashChain.Link(
+                            LinkDirection.Left,
+                            node.Parent.Right.Hash,
+                            levelCorrection));
                 }
                 else
                 {
-                    links.Add(new AggregationHashChain.Link(
-                        LinkDirection.Right,
-                        node.Parent.Left.Hash,
-                        node.Parent.Left.Hash == null ? node.Parent.Left.Metadata.AggregationHashChainMetadata : null,
-                        levelCorrection));
+                    if (node.Parent.Left.Hash == null)
+
+                        links.Add(new AggregationHashChain.Link(
+                            LinkDirection.Right,
+                            node.Parent.Left.Metadata.AggregationHashChainMetadata,
+                            levelCorrection));
+                    else
+                        links.Add(new AggregationHashChain.Link(
+                            LinkDirection.Right,
+                            node.Parent.Left.Hash,
+                            levelCorrection));
                 }
 
                 node = node.Parent;
