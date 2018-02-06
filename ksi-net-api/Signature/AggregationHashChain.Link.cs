@@ -44,7 +44,7 @@ namespace Guardtime.KSI.Signature
             private string _legacyIdString;
 
             /// <summary>
-            /// Create new aggregation hash chain link TLV element.
+            /// Create new aggregation hash chain link TLV element. Exactly one from sibling hash or metadata must be not null.
             /// </summary>
             /// <param name="direction">Direction</param>
             /// <param name="siblingHash">Sibling hash value</param>

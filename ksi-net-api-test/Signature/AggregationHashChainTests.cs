@@ -503,6 +503,48 @@ namespace Guardtime.KSI.Test.Signature
         }
 
         [Test]
+        public void TestLinksEqualWithMetadata()
+        {
+            Assert.AreEqual(new AggregationHashChain.Link(LinkDirection.Left, new AggregationHashChain.Metadata("test client", "test machine id")),
+            new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.Metadata("test client", "test machine id")));
+
+            Assert.AreEqual(new AggregationHashChain.Link(LinkDirection.Left, new AggregationHashChain.Metadata("test client", "test machine id")),
+            new AggregationHashChain.Link(LinkDirection.Left, "test client", "test machine id"));
+
+            Assert.AreEqual(new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.Metadata("test client", "test machine id")),
+            new AggregationHashChain.Link(LinkDirection.Left, "test client", "test machine id"));
+        }
+
+        [Test]
+        public void TestLinksEqualWithSiblingHash()
+        {
+            DataHash dataHash = new DataHash(Base16.Decode("0160D25FD6F2A962B41F20CFC2DD9CC62C9C802EADB08E8F15E60D0316E778ACDC"));
+            Assert.AreEqual(new AggregationHashChain.Link(LinkDirection.Left, dataHash),
+            new AggregationHashChain.Link(LinkDirection.Left, dataHash, null));
+        }
+
+        [Test]
+        public void TestLinksEqualWithMetadataAndLevel()
+        {
+            Assert.AreEqual(new AggregationHashChain.Link(LinkDirection.Left, new AggregationHashChain.Metadata("test client", "test machine id", 96, 74), 14),
+            new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.Metadata("test client", "test machine id", 96, 74), 14));
+
+            Assert.AreEqual(new AggregationHashChain.Link(LinkDirection.Left, new AggregationHashChain.Metadata("test client", "test machine id", 12, 45), 75),
+            new AggregationHashChain.Link(LinkDirection.Left, "test client", "test machine id", 12, 45, 75));
+
+            Assert.AreEqual(new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.Metadata("test client", "test machine id", 91, 72), 125),
+            new AggregationHashChain.Link(LinkDirection.Left, "test client", "test machine id", 91, 72, 125));
+        }
+
+        [Test]
+        public void TestLinksEqualWithSiblingHashAndLevel()
+        {
+            DataHash dataHash = new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE"));
+            Assert.AreEqual(new AggregationHashChain.Link(LinkDirection.Left, dataHash, 56),
+            new AggregationHashChain.Link(LinkDirection.Left, dataHash, null, 56));
+        }
+
+        [Test]
         public void ToStringTest()
         {
             Assembly assembly = typeof(AggregationHashChain).Assembly;
