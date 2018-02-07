@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
@@ -198,8 +199,11 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
             HAKsiServiceException ex = Assert.Throws<HAKsiServiceException>(delegate
             {
                 HAAsyncResult ar = (HAAsyncResult)haService.BeginExtend(1455494400, null, null);
+
                 // add invalid result
-                ar.AddResultTlv(new IntegerTag(1, false, false, 1));
+                FieldInfo memberInfo = typeof(HARequestRunner).GetField("_resultTlvs", BindingFlags.NonPublic | BindingFlags.Instance);
+                List<object> results = (List<object>)memberInfo.GetValue(ar.RequestRunner);
+                results.Add(new IntegerTag(1, false, false, 1));
                 haService.EndExtend(ar);
             });
 

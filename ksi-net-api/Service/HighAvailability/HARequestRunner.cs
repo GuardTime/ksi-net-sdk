@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using Guardtime.KSI.Exceptions;
 using NLog;
 
@@ -36,6 +37,10 @@ namespace Guardtime.KSI.Service.HighAvailability
         private readonly IList<IKsiService> _subServices;
         private readonly bool _returnAllResponses;
         private readonly RunSubServiceDelegate _runSubServiceDelegate;
+        private ManualResetEvent _endCallWaitHandle;
+        private ManualResetEvent _subServiceResultsWaitHandle;
+        private readonly object _resultTlvLock;
+        private readonly List<object> _resultTlvs;
 
         /// <summary>
         /// Create high availablity request runner instance.
@@ -47,7 +52,15 @@ namespace Guardtime.KSI.Service.HighAvailability
             _subServices = subServices;
             _returnAllResponses = returnAllResponses;
             _runSubServiceDelegate = RunSubService;
+            _resultTlvLock = new object();
+            _resultTlvs = new List<object>();
+            SubServiceErrors = new List<HAKsiSubServiceException>();
         }
+
+        /// <summary>
+        /// List of errors thrown by sub-services.
+        /// </summary>
+        public List<HAKsiSubServiceException> SubServiceErrors { get; }
 
         /// <summary>
         /// Begin HA request.
@@ -67,7 +80,8 @@ namespace Guardtime.KSI.Service.HighAvailability
 
             if (waitEndCall)
             {
-                haAsyncResult.InitEndCallWaitHandle();
+                _endCallWaitHandle = new ManualResetEvent(false);
+                _subServiceResultsWaitHandle = new ManualResetEvent(false);
             }
 
             for (int index = 0; index < _subServices.Count; index++)
@@ -100,8 +114,23 @@ namespace Guardtime.KSI.Service.HighAvailability
             {
                 IAsyncResult asyncResult = SubServiceBeginRequest(service);
                 asyncResult.AsyncWaitHandle.WaitOne();
-                haAsyncResult.EndCallWaitHandle?.WaitOne();
-                haAsyncResult.AddResultTlv(SubServiceEndRequest(service, asyncResult));
+
+                // if we need to wait request end call then mark HA async request completed.
+                if (_endCallWaitHandle != null)
+                {
+                    haAsyncResult.SetComplete();
+                }
+
+                // wait request end call.
+                _endCallWaitHandle?.WaitOne();
+                object subServiceEndRequest = SubServiceEndRequest(service, asyncResult);
+
+                lock (_resultTlvLock)
+                {
+                    _resultTlvs.Add(subServiceEndRequest);
+                }
+
+                _subServiceResultsWaitHandle?.Set();
 
                 if (haAsyncResult.IsCompleted)
                 {
@@ -116,7 +145,7 @@ namespace Guardtime.KSI.Service.HighAvailability
             }
             catch (Exception ex)
             {
-                HandleException(ex, service, haAsyncResult);
+                HandleException(ex, service);
             }
 
             CheckComplete(haAsyncResult);
@@ -142,7 +171,7 @@ namespace Guardtime.KSI.Service.HighAvailability
         /// <returns></returns>
         protected abstract object SubServiceEndRequest(IKsiService service, IAsyncResult asyncResult);
 
-        private void HandleException(Exception ex, IKsiService service, HAAsyncResult haAsyncResult)
+        private void HandleException(Exception ex, IKsiService service)
         {
             string message = "Using sub-service failed.";
 
@@ -157,7 +186,7 @@ namespace Guardtime.KSI.Service.HighAvailability
             }
 
             Logger.Warn(message, ex);
-            haAsyncResult.Errors.Add(new HAKsiSubServiceException(service, message, ex));
+            SubServiceErrors.Add(new HAKsiSubServiceException(service, message, ex));
         }
 
         /// <summary>
@@ -179,7 +208,10 @@ namespace Guardtime.KSI.Service.HighAvailability
                 haAsyncResult.AsyncWaitHandle.WaitOne();
             }
 
-            return haAsyncResult.GetResultTlvs();
+            lock (_resultTlvLock)
+            {
+                return _resultTlvs.ToArray();
+            }
         }
 
         /// <summary>
@@ -190,13 +222,14 @@ namespace Guardtime.KSI.Service.HighAvailability
         /// <returns></returns>
         protected T EndRequest<T>(HAAsyncResult haAsyncResult) where T : class
         {
-            haAsyncResult.EndCallWaitHandle?.Set();
+            _endCallWaitHandle?.Set();
+            _subServiceResultsWaitHandle?.WaitOne();
 
             object[] results = EndRequestMulti(haAsyncResult);
 
             if (results.Length == 0)
             {
-                throw new HAKsiServiceException("All sub-requests failed.", haAsyncResult.Errors);
+                throw new HAKsiServiceException("All sub-requests failed.", SubServiceErrors);
             }
 
             foreach (object obj in results)
@@ -222,20 +255,33 @@ namespace Guardtime.KSI.Service.HighAvailability
             return sb.ToString();
         }
 
+        private int ResultTlvCount
+        {
+            get
+            {
+                lock (_resultTlvLock)
+                {
+                    return _resultTlvs.Count;
+                }
+            }
+        }
+
         private void CheckComplete(HAAsyncResult haAsyncResult)
         {
             if (_returnAllResponses)
             {
-                if (haAsyncResult.ResultTlvCount + haAsyncResult.Errors.Count == _subServices.Count)
+                if (ResultTlvCount + SubServiceErrors.Count == _subServices.Count)
                 {
                     haAsyncResult.SetComplete();
+                    _subServiceResultsWaitHandle?.Set();
                 }
             }
             else
             {
-                if (haAsyncResult.Errors.Count >= _subServices.Count)
+                if (SubServiceErrors.Count >= _subServices.Count)
                 {
                     haAsyncResult.SetComplete();
+                    _subServiceResultsWaitHandle?.Set();
                 }
             }
         }

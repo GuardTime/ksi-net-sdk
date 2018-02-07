@@ -226,7 +226,7 @@ namespace Guardtime.KSI.Service.HighAvailability
                     _currentAggregatorConfig = null;
                 }
 
-                HAKsiServiceException ex = new HAKsiServiceException("Could not get aggregator configuration.", haAsyncResult.Errors);
+                HAKsiServiceException ex = new HAKsiServiceException("Could not get aggregator configuration.", runner.SubServiceErrors);
                 Logger.Warn(ex);
                 AggregatorConfigChangedEventArgs aggregatorConfigChangedEventArgs = new AggregatorConfigChangedEventArgs(ex, this);
                 AggregatorConfigChanged?.Invoke(this, aggregatorConfigChangedEventArgs);
@@ -234,7 +234,7 @@ namespace Guardtime.KSI.Service.HighAvailability
             }
 
             // if sub-service config request failed then remove corresponding config from cache
-            foreach (HAKsiSubServiceException ex in haAsyncResult.Errors)
+            foreach (HAKsiSubServiceException ex in runner.SubServiceErrors)
             {
                 if (ex.ThrownBySubService == null)
                 {
@@ -360,7 +360,7 @@ namespace Guardtime.KSI.Service.HighAvailability
                     _currentExtenderConfig = null;
                 }
 
-                HAKsiServiceException ex = new HAKsiServiceException("Could not get extender configuration.", haAsyncResult.Errors);
+                HAKsiServiceException ex = new HAKsiServiceException("Could not get extender configuration.", runner.SubServiceErrors);
                 Logger.Warn(ex);
                 ExtenderConfigChangedEventArgs extenderConfigChangedEventArgs = new ExtenderConfigChangedEventArgs(ex, this);
                 ExtenderConfigChanged?.Invoke(this, extenderConfigChangedEventArgs);
@@ -368,7 +368,7 @@ namespace Guardtime.KSI.Service.HighAvailability
             }
 
             // if sub-service config request failed then remove corresponding config from cache
-            foreach (HAKsiSubServiceException ex in haAsyncResult.Errors)
+            foreach (HAKsiSubServiceException ex in runner.SubServiceErrors)
             {
                 if (ex.ThrownBySubService == null)
                 {

@@ -19,8 +19,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
+using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Service.HighAvailability;
 using Guardtime.KSI.Signature;
@@ -144,6 +146,154 @@ namespace Guardtime.KSI.Test.Integration
             HAKsiService haService = new HAKsiService(SigningServices, ExtendingServices, PublicationsFileService);
             Assert.AreEqual(ExtendingServices, haService.ExtendingServices);
             Assert.AreEqual(SigningServices, haService.SigningServices);
+        }
+
+        [Test]
+        public void HAAsyncSignTest()
+        {
+            HAKsiService haService = new HAKsiService(SigningServices, ExtendingServices, PublicationsFileService);
+
+            DataHash dataHash = new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"));
+            ManualResetEvent waitHandle = new ManualResetEvent(false);
+            IKsiSignature signature = null;
+            object testObject = new object();
+            bool isAsyncStateCorrect = false;
+
+            haService.BeginSign(dataHash, delegate(IAsyncResult ar)
+            {
+                try
+                {
+                    isAsyncStateCorrect = ar.AsyncState == testObject;
+                    signature = haService.EndSign(ar);
+                }
+                finally
+                {
+                    waitHandle.Set();
+                }
+            }, testObject);
+
+            waitHandle.WaitOne(10000);
+
+            Assert.IsNotNull(signature, "Signature should not be null.");
+            Assert.AreEqual(true, isAsyncStateCorrect, "Unexpected async state.");
+        }
+
+        [Test]
+        public void HAAsyncGetAggregatorConfigTest()
+        {
+            HAKsiService haService = new HAKsiService(SigningServices, ExtendingServices, PublicationsFileService);
+
+            ManualResetEvent waitHandle = new ManualResetEvent(false);
+            AggregatorConfig config = null;
+            object testObject = new object();
+            bool isAsyncCorrect = false;
+
+            haService.BeginGetAggregatorConfig(delegate(IAsyncResult ar)
+            {
+                try
+                {
+                    isAsyncCorrect = ar.AsyncState == testObject;
+                    config = haService.EndGetAggregatorConfig(ar);
+                }
+                finally
+                {
+                    waitHandle.Set();
+                }
+            }, testObject);
+
+            waitHandle.WaitOne(10000);
+
+            Assert.IsNotNull(config, "Aggregator configuration should not be null.");
+            Assert.AreEqual(true, isAsyncCorrect, "Unexpected async state.");
+        }
+
+        [Test]
+        public void HAAsyncExtendTest()
+        {
+            HAKsiService haService = new HAKsiService(SigningServices, ExtendingServices, PublicationsFileService);
+
+            ManualResetEvent waitHandle = new ManualResetEvent(false);
+            CalendarHashChain cal = null;
+
+            object testObject = new object();
+            bool isAsyncCorrect = false;
+
+            haService.BeginExtend(1455400000, delegate(IAsyncResult ar)
+            {
+                try
+                {
+                    isAsyncCorrect = ar.AsyncState == testObject;
+                    cal = haService.EndExtend(ar);
+                }
+                finally
+                {
+                    waitHandle.Set();
+                }
+            }, testObject);
+
+            waitHandle.WaitOne(10000);
+
+            Assert.IsNotNull(cal, "Calendar hash chain should not be null.");
+            Assert.AreEqual(true, isAsyncCorrect, "Unexpected async state.");
+        }
+
+        [Test]
+        public void AsyncGetExtenderConfigTest()
+        {
+            HAKsiService haService = new HAKsiService(SigningServices, ExtendingServices, PublicationsFileService);
+
+            ManualResetEvent waitHandle = new ManualResetEvent(false);
+            ExtenderConfig config = null;
+            object testObject = new object();
+            bool isAsyncCorrect = false;
+
+            haService.BeginGetExtenderConfig(delegate(IAsyncResult ar)
+            {
+                try
+                {
+                    isAsyncCorrect = ar.AsyncState == testObject;
+                    config = haService.EndGetExtenderConfig(ar);
+                }
+                finally
+                {
+                    waitHandle.Set();
+                }
+            }, testObject);
+
+            waitHandle.WaitOne(10000);
+
+            Assert.IsNotNull(config, "Extender configuration should not be null.");
+            Assert.AreEqual(true, isAsyncCorrect, "Unexpected async state.");
+        }
+
+        [Test]
+        public void HttpAsyncGetPublicationsFileTest()
+        {
+            HAKsiService haService = new HAKsiService(SigningServices, ExtendingServices, PublicationsFileService);
+
+            ManualResetEvent waitHandle = new ManualResetEvent(false);
+            IPublicationsFile pubFile = null;
+
+            object testObject = new object();
+            bool isAsyncCorrect = false;
+
+            haService.BeginGetPublicationsFile(delegate(IAsyncResult ar)
+            {
+                try
+                {
+                    isAsyncCorrect = ar.AsyncState == testObject;
+                    pubFile = haService.EndGetPublicationsFile(ar);
+                }
+                finally
+                {
+                    waitHandle.Set();
+                }
+            }, testObject);
+
+            waitHandle.WaitOne(10000);
+
+            Assert.IsNotNull(pubFile, "Publications file should not be null.");
+            Assert.AreEqual(true, isAsyncCorrect, "Unexpected async state.");
         }
     }
 }
