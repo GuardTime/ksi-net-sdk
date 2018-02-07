@@ -30,7 +30,18 @@ namespace Guardtime.KSI.Test.Service
     public class ExtendResponsePduTests
     {
         [Test]
-        public void ToStringWithResponsePayloadTest()
+        public void ExtendResponsePduWithoutPayload()
+        {
+            TlvException ex = Assert.Throws<TlvException>(delegate
+            {
+                new ExtendResponsePdu(new TlvTagBuilder(Constants.ExtendResponsePdu.TagType, false, false, new ITlvTag[] { }).BuildTag());
+            });
+
+            Assert.That(ex.Message, Does.StartWith("Payloads are missing in PDU"));
+        }
+
+        [Test]
+        public void ExtendResponsePduToStringWithResponsePayloadTest()
         {
             ExtendResponsePdu tag = new ExtendResponsePdu(new TlvTagBuilder(Constants.ExtendResponsePdu.TagType, false, false,
                 new ITlvTag[]
@@ -71,7 +82,7 @@ namespace Guardtime.KSI.Test.Service
         }
 
         [Test]
-        public void ToStringWithResponseTest()
+        public void ExtendResponsePduToStringWithResponseTest()
         {
             ExtendResponsePdu tag = new ExtendResponsePdu(new TlvTagBuilder(Constants.ExtendResponsePdu.TagType, false, false,
                 new ITlvTag[]
@@ -114,7 +125,7 @@ namespace Guardtime.KSI.Test.Service
         }
 
         [Test]
-        public void ToStringWithErrorTest()
+        public void ExtendResponsePduToStringWithErrorTest()
         {
             ExtendResponsePdu tag = new ExtendResponsePdu(new TlvTagBuilder(Constants.ExtendResponsePdu.TagType, false, false,
                 new ITlvTag[]

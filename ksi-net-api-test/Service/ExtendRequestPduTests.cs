@@ -17,8 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
-using System.Reflection;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
@@ -32,7 +30,18 @@ namespace Guardtime.KSI.Test.Service
     public class ExtendRequestPduTests
     {
         [Test]
-        public void ToStringWithRequestPayloadTest()
+        public void ExtendRequestPduWithoutPayload()
+        {
+            TlvException ex = Assert.Throws<TlvException>(delegate
+            {
+                new ExtendRequestPdu(new TlvTagBuilder(Constants.ExtendRequestPdu.TagType, false, false, new ITlvTag[] { }).BuildTag());
+            });
+
+            Assert.That(ex.Message, Does.StartWith("Payloads are missing in PDU"));
+        }
+
+        [Test]
+        public void ExtendRequestPduToStringWithRequestPayloadTest()
         {
             ExtendRequestPdu tag = new ExtendRequestPdu(new TlvTagBuilder(Constants.ExtendRequestPdu.TagType, false, false,
                 new ITlvTag[]
@@ -61,7 +70,7 @@ namespace Guardtime.KSI.Test.Service
         }
 
         [Test]
-        public void ToStringWithResponseTest()
+        public void ExtendRequestPduToStringWithResponseTest()
         {
             ExtendResponsePdu tag = new ExtendResponsePdu(new TlvTagBuilder(Constants.ExtendResponsePdu.TagType, false, false,
                 new ITlvTag[]
@@ -104,7 +113,7 @@ namespace Guardtime.KSI.Test.Service
         }
 
         [Test]
-        public void ToStringWithErrorTest()
+        public void ExtendRequestPduToStringWithErrorTest()
         {
             ExtendResponsePdu tag = new ExtendResponsePdu(new TlvTagBuilder(Constants.ExtendResponsePdu.TagType, false, false,
                 new ITlvTag[]

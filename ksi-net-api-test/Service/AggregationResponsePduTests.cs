@@ -158,7 +158,7 @@ namespace Guardtime.KSI.Test.Service
         }
 
         [Test]
-        public void ToStringWithResponsePayloadTest()
+        public void AggregationResponsePduToStringWithResponsePayloadTest()
         {
             AggregationResponsePdu tag = new AggregationResponsePdu(new TlvTagBuilder(Constants.AggregationResponsePdu.TagType, false, false,
                 new ITlvTag[]
@@ -186,7 +186,7 @@ namespace Guardtime.KSI.Test.Service
         }
 
         [Test]
-        public void ToStringWithResponseTest()
+        public void AggregationResponsePduToStringWithResponseTest()
         {
             AggregationResponsePdu tag = new AggregationResponsePdu(new TlvTagBuilder(Constants.AggregationResponsePdu.TagType, false, false,
                 new ITlvTag[]
@@ -215,7 +215,7 @@ namespace Guardtime.KSI.Test.Service
         }
 
         [Test]
-        public void ToStringWithErrorTest()
+        public void AggregationResponsePduToStringWithErrorTest()
         {
             AggregationResponsePdu tag = new AggregationResponsePdu(new TlvTagBuilder(Constants.AggregationResponsePdu.TagType, false, false,
                 new ITlvTag[]
