@@ -26,35 +26,32 @@ using NUnit.Framework;
 namespace Guardtime.KSI.Test.Service
 {
     [TestFixture]
-    public class AggregationPduTests
+    public class AggregationResponsePduTests
     {
         [Test]
-        public void AggregationRequestPduWithoutPayload()
+        public void AggregationResponsePduWithoutPayload()
         {
             TlvException ex = Assert.Throws<TlvException>(delegate
             {
-                new AggregationRequestPdu(new TlvTagBuilder(Constants.AggregationRequestPdu.TagType, false, false, new ITlvTag[] { }).BuildTag());
+                new AggregationResponsePdu(new TlvTagBuilder(Constants.AggregationResponsePdu.TagType, false, false, new ITlvTag[] { }).BuildTag());
             });
 
             Assert.That(ex.Message, Does.StartWith("Payloads are missing in PDU"));
         }
 
         [Test]
-        public void AggregationRequestPduWithMultipleHeaders()
+        public void AggregationResponsePduWithMultipleHeaders()
         {
             TlvException ex = Assert.Throws<TlvException>(delegate
             {
-                new AggregationRequestPdu(new TlvTagBuilder(Constants.AggregationRequestPdu.TagType, false, false,
+                new AggregationResponsePdu(new TlvTagBuilder(Constants.AggregationResponsePdu.TagType, false, false,
                     new ITlvTag[]
                     {
-                        new AggregationRequestPayload(new TlvTagBuilder(Constants.AggregationRequestPayload.TagType, false, false,
+                        new AggregationResponsePayload(new TlvTagBuilder(Constants.AggregationResponsePayload.TagType, false, false,
                             new ITlvTag[]
                             {
                                 new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 1),
-                                new ImprintTag(Constants.AggregationRequestPayload.RequestHashTagType, false, false,
-                                    new DataHash(HashAlgorithm.Sha2256,
-                                        new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
-                                new IntegerTag(Constants.AggregationRequestPayload.RequestLevelTagType, false, false, 0),
+                                new IntegerTag(Constants.PduPayload.StatusTagType, false, false, 0),
                             }).BuildTag()),
                         new PduHeader(new TlvTagBuilder(Constants.PduHeader.TagType, false, false,
                             new ITlvTag[]
@@ -77,21 +74,18 @@ namespace Guardtime.KSI.Test.Service
         }
 
         [Test]
-        public void AggregationRequestPduWithHeaderNotFirst()
+        public void AggregationResponsePduWithHeaderNotFirst()
         {
             TlvException ex = Assert.Throws<TlvException>(delegate
             {
-                new AggregationRequestPdu(new TlvTagBuilder(Constants.AggregationRequestPdu.TagType, false, false,
+                new AggregationResponsePdu(new TlvTagBuilder(Constants.AggregationResponsePdu.TagType, false, false,
                     new ITlvTag[]
                     {
-                        new AggregationRequestPayload(new TlvTagBuilder(Constants.AggregationRequestPayload.TagType, false, false,
+                        new AggregationResponsePayload(new TlvTagBuilder(Constants.AggregationResponsePayload.TagType, false, false,
                             new ITlvTag[]
                             {
                                 new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 1),
-                                new ImprintTag(Constants.AggregationRequestPayload.RequestHashTagType, false, false,
-                                    new DataHash(HashAlgorithm.Sha2256,
-                                        new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
-                                new IntegerTag(Constants.AggregationRequestPayload.RequestLevelTagType, false, false, 0),
+                                new IntegerTag(Constants.PduPayload.StatusTagType, false, false, 0),
                             }).BuildTag()),
                         new PduHeader(new TlvTagBuilder(Constants.PduHeader.TagType, false, false,
                             new ITlvTag[]
@@ -107,11 +101,11 @@ namespace Guardtime.KSI.Test.Service
         }
 
         [Test]
-        public void AggregationRequestPduWithoutMac()
+        public void AggregationResponsePduWithoutMac()
         {
             TlvException ex = Assert.Throws<TlvException>(delegate
             {
-                new AggregationRequestPdu(new TlvTagBuilder(Constants.AggregationRequestPdu.TagType, false, false,
+                new AggregationResponsePdu(new TlvTagBuilder(Constants.AggregationResponsePdu.TagType, false, false,
                     new ITlvTag[]
                     {
                         new PduHeader(new TlvTagBuilder(Constants.PduHeader.TagType, false, false,
@@ -121,14 +115,11 @@ namespace Guardtime.KSI.Test.Service
                                 new IntegerTag(Constants.PduHeader.InstanceIdTagType, false, false, 1),
                                 new IntegerTag(Constants.PduHeader.MessageIdTagType, false, false, 2)
                             }).BuildTag()),
-                        new AggregationRequestPayload(new TlvTagBuilder(Constants.AggregationRequestPayload.TagType, false, false,
+                        new AggregationResponsePayload(new TlvTagBuilder(Constants.AggregationResponsePayload.TagType, false, false,
                             new ITlvTag[]
                             {
                                 new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 1),
-                                new ImprintTag(Constants.AggregationRequestPayload.RequestHashTagType, false, false,
-                                    new DataHash(HashAlgorithm.Sha2256,
-                                        new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
-                                new IntegerTag(Constants.AggregationRequestPayload.RequestLevelTagType, false, false, 0),
+                                new IntegerTag(Constants.PduPayload.StatusTagType, false, false, 0),
                             }).BuildTag()),
                     }).BuildTag());
             });
@@ -137,11 +128,11 @@ namespace Guardtime.KSI.Test.Service
         }
 
         [Test]
-        public void AggregationRequestPduWithMacNotLast()
+        public void AggregationResponsePduWithMacNotLast()
         {
             TlvException ex = Assert.Throws<TlvException>(delegate
             {
-                new AggregationRequestPdu(new TlvTagBuilder(Constants.AggregationRequestPdu.TagType, false, false,
+                new AggregationResponsePdu(new TlvTagBuilder(Constants.AggregationResponsePdu.TagType, false, false,
                     new ITlvTag[]
                     {
                         new PduHeader(new TlvTagBuilder(Constants.PduHeader.TagType, false, false,
@@ -154,14 +145,11 @@ namespace Guardtime.KSI.Test.Service
                         new ImprintTag(Constants.Pdu.MacTagType, false, false,
                             new DataHash(HashAlgorithm.Sha2256,
                                 new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
-                        new AggregationRequestPayload(new TlvTagBuilder(Constants.AggregationRequestPayload.TagType, false, false,
+                        new AggregationResponsePayload(new TlvTagBuilder(Constants.AggregationResponsePayload.TagType, false, false,
                             new ITlvTag[]
                             {
                                 new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 1),
-                                new ImprintTag(Constants.AggregationRequestPayload.RequestHashTagType, false, false,
-                                    new DataHash(HashAlgorithm.Sha2256,
-                                        new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
-                                new IntegerTag(Constants.AggregationRequestPayload.RequestLevelTagType, false, false, 0),
+                                new IntegerTag(Constants.PduPayload.StatusTagType, false, false, 0),
                             }).BuildTag()),
                     }).BuildTag());
             });
@@ -170,59 +158,27 @@ namespace Guardtime.KSI.Test.Service
         }
 
         [Test]
-        public void ToStringWithRequestPayloadTest()
+        public void AggregationResponsePduToStringWithResponsePayloadTest()
         {
-            AggregationRequestPdu tag = TestUtil.GetCompositeTag<AggregationRequestPdu>(Constants.AggregationRequestPdu.TagType,
+            AggregationResponsePdu tag = new AggregationResponsePdu(new TlvTagBuilder(Constants.AggregationResponsePdu.TagType, false, false,
                 new ITlvTag[]
                 {
-                    TestUtil.GetCompositeTag<PduHeader>(Constants.PduHeader.TagType,
+                    new PduHeader(new TlvTagBuilder(Constants.PduHeader.TagType, false, false,
                         new ITlvTag[]
                         {
                             new StringTag(Constants.PduHeader.LoginIdTagType, false, false, "Test Login Id"),
                             new IntegerTag(Constants.PduHeader.InstanceIdTagType, false, false, 1),
                             new IntegerTag(Constants.PduHeader.MessageIdTagType, false, false, 2)
-                        }),
-                    TestUtil.GetCompositeTag<AggregationRequestPayload>(Constants.AggregationRequestPayload.TagType, new ITlvTag[]
+                        }).BuildTag()),
+                    new AggregationResponsePayload(new TlvTagBuilder(Constants.AggregationResponsePayload.TagType, false, false, new ITlvTag[]
                     {
                         new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 1),
-                        new ImprintTag(Constants.AggregationRequestPayload.RequestHashTagType, false, false,
-                            new DataHash(HashAlgorithm.Sha2256,
-                                new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
-                        new IntegerTag(Constants.AggregationRequestPayload.RequestLevelTagType, false, false, 0),
-                    }),
+                        new IntegerTag(Constants.PduPayload.StatusTagType, false, false, 0),
+                    }).BuildTag()),
                     new ImprintTag(Constants.Pdu.MacTagType, false, false,
                         new DataHash(HashAlgorithm.Sha2256,
                             new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
-                });
-
-            AggregationRequestPdu tag2 = new AggregationRequestPdu(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
-
-            Assert.AreEqual(tag.ToString(), tag2.ToString());
-        }
-
-        [Test]
-        public void ToStringWithResponseTest()
-        {
-            AggregationResponsePdu tag = TestUtil.GetCompositeTag<AggregationResponsePdu>(Constants.AggregationResponsePdu.TagType,
-                new ITlvTag[]
-                {
-                    TestUtil.GetCompositeTag<PduHeader>(Constants.PduHeader.TagType,
-                        new ITlvTag[]
-                        {
-                            new StringTag(Constants.PduHeader.LoginIdTagType, false, false, "Test Login Id"),
-                            new IntegerTag(Constants.PduHeader.InstanceIdTagType, false, false, 1),
-                            new IntegerTag(Constants.PduHeader.MessageIdTagType, false, false, 2)
-                        }),
-                    TestUtil.GetCompositeTag<AggregationResponsePayload>(Constants.AggregationResponsePayload.TagType, new ITlvTag[]
-                    {
-                        new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 2),
-                        new IntegerTag(Constants.PduPayload.StatusTagType, false, false, 1),
-                        new StringTag(Constants.PduPayload.ErrorMessageTagType, false, false, "Test error message."),
-                    }),
-                    new ImprintTag(Constants.Pdu.MacTagType, false, false,
-                        new DataHash(HashAlgorithm.Sha2256,
-                            new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
-                });
+                }).BuildTag());
 
             AggregationResponsePdu tag2 = new AggregationResponsePdu(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 
@@ -230,17 +186,46 @@ namespace Guardtime.KSI.Test.Service
         }
 
         [Test]
-        public void ToStringWithErrorTest()
+        public void AggregationResponsePduToStringWithResponseTest()
         {
-            AggregationResponsePdu tag = TestUtil.GetCompositeTag<AggregationResponsePdu>(Constants.AggregationResponsePdu.TagType,
+            AggregationResponsePdu tag = new AggregationResponsePdu(new TlvTagBuilder(Constants.AggregationResponsePdu.TagType, false, false,
                 new ITlvTag[]
                 {
-                    TestUtil.GetCompositeTag<AggregationErrorPayload>(Constants.ErrorPayload.TagType, new ITlvTag[]
+                    new PduHeader(new TlvTagBuilder(Constants.PduHeader.TagType, false, false,
+                        new ITlvTag[]
+                        {
+                            new StringTag(Constants.PduHeader.LoginIdTagType, false, false, "Test Login Id"),
+                            new IntegerTag(Constants.PduHeader.InstanceIdTagType, false, false, 1),
+                            new IntegerTag(Constants.PduHeader.MessageIdTagType, false, false, 2)
+                        }).BuildTag()),
+                    new AggregationResponsePayload(new TlvTagBuilder(Constants.AggregationResponsePayload.TagType, false, false, new ITlvTag[]
+                    {
+                        new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 2),
+                        new IntegerTag(Constants.PduPayload.StatusTagType, false, false, 1),
+                        new StringTag(Constants.PduPayload.ErrorMessageTagType, false, false, "Test error message."),
+                    }).BuildTag()),
+                    new ImprintTag(Constants.Pdu.MacTagType, false, false,
+                        new DataHash(HashAlgorithm.Sha2256,
+                            new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
+                }).BuildTag());
+
+            AggregationResponsePdu tag2 = new AggregationResponsePdu(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
+
+            Assert.AreEqual(tag.ToString(), tag2.ToString());
+        }
+
+        [Test]
+        public void AggregationResponsePduToStringWithErrorTest()
+        {
+            AggregationResponsePdu tag = new AggregationResponsePdu(new TlvTagBuilder(Constants.AggregationResponsePdu.TagType, false, false,
+                new ITlvTag[]
+                {
+                    new AggregationErrorPayload(new TlvTagBuilder(Constants.ErrorPayload.TagType, false, false, new ITlvTag[]
                     {
                         new IntegerTag(Constants.PduPayload.StatusTagType, false, false, 1),
                         new StringTag(Constants.PduPayload.ErrorMessageTagType, false, false, "Test Error message")
-                    })
-                });
+                    }).BuildTag())
+                }).BuildTag());
 
             AggregationResponsePdu tag2 = new AggregationResponsePdu(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 
@@ -252,27 +237,27 @@ namespace Guardtime.KSI.Test.Service
         {
             Assert.That(delegate
                 {
-                    TestUtil.GetCompositeTag<AggregationResponsePdu>(Constants.AggregationResponsePdu.TagType,
+                    new AggregationResponsePdu(new TlvTagBuilder(Constants.AggregationResponsePdu.TagType, false, false,
                         new ITlvTag[]
                         {
-                            TestUtil.GetCompositeTag<AggregationResponsePayload>(Constants.AggregationResponsePayload.TagType, new ITlvTag[]
+                            new AggregationResponsePayload(new TlvTagBuilder(Constants.AggregationResponsePayload.TagType, false, false, new ITlvTag[]
                             {
                                 new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 2),
                                 new IntegerTag(Constants.PduPayload.StatusTagType, false, false, 1),
                                 new StringTag(Constants.PduPayload.ErrorMessageTagType, false, false, "Test error message."),
-                            }),
-                            TestUtil.GetCompositeTag<PduHeader>(Constants.PduHeader.TagType,
+                            }).BuildTag()),
+                            new PduHeader(new TlvTagBuilder(Constants.PduHeader.TagType, false, false,
                                 new ITlvTag[]
                                 {
                                     new StringTag(Constants.PduHeader.LoginIdTagType, false, false, "Test Login Id"),
                                     new IntegerTag(Constants.PduHeader.InstanceIdTagType, false, false, 1),
                                     new IntegerTag(Constants.PduHeader.MessageIdTagType, false, false, 2)
-                                }),
+                                }).BuildTag()),
                             new ImprintTag(Constants.Pdu.MacTagType, false, false,
                                 new DataHash(HashAlgorithm.Sha2256,
                                     new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
-                        });
-                }, Throws.Exception.InnerException.TypeOf<TlvException>().With.InnerException.Message.StartWith("Header must be the first element"),
+                        }).BuildTag());
+                }, Throws.Exception.TypeOf<TlvException>().With.Message.StartWith("Header must be the first element"),
                 "Creating AggregationPdu should fail when header is not the first element.");
         }
 
@@ -281,27 +266,27 @@ namespace Guardtime.KSI.Test.Service
         {
             Assert.That(delegate
                 {
-                    TestUtil.GetCompositeTag<AggregationResponsePdu>(Constants.AggregationResponsePdu.TagType,
+                    new AggregationResponsePdu(new TlvTagBuilder(Constants.AggregationResponsePdu.TagType, false, false,
                         new ITlvTag[]
                         {
-                            TestUtil.GetCompositeTag<PduHeader>(Constants.PduHeader.TagType,
+                            new PduHeader(new TlvTagBuilder(Constants.PduHeader.TagType, false, false,
                                 new ITlvTag[]
                                 {
                                     new StringTag(Constants.PduHeader.LoginIdTagType, false, false, "Test Login Id"),
                                     new IntegerTag(Constants.PduHeader.InstanceIdTagType, false, false, 1),
                                     new IntegerTag(Constants.PduHeader.MessageIdTagType, false, false, 2)
-                                }),
+                                }).BuildTag()),
                             new ImprintTag(Constants.Pdu.MacTagType, false, false,
                                 new DataHash(HashAlgorithm.Sha2256,
                                     new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
-                            TestUtil.GetCompositeTag<AggregationResponsePayload>(Constants.AggregationResponsePayload.TagType, new ITlvTag[]
+                            new AggregationResponsePayload(new TlvTagBuilder(Constants.AggregationResponsePayload.TagType, false, false, new ITlvTag[]
                             {
                                 new IntegerTag(Constants.PduPayload.RequestIdTagType, false, false, 2),
                                 new IntegerTag(Constants.PduPayload.StatusTagType, false, false, 1),
                                 new StringTag(Constants.PduPayload.ErrorMessageTagType, false, false, "Test error message."),
-                            }),
-                        });
-                }, Throws.Exception.InnerException.TypeOf<TlvException>().With.InnerException.Message.StartWith("MAC must be the last element"),
+                            }).BuildTag()),
+                        }).BuildTag());
+                }, Throws.Exception.TypeOf<TlvException>().With.Message.StartWith("MAC must be the last element"),
                 "Creating AggregationPdu should fail when mac is not the last element.");
         }
     }
