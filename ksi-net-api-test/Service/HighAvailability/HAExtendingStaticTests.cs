@@ -198,12 +198,16 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
             HAKsiServiceException ex = Assert.Throws<HAKsiServiceException>(delegate
             {
                 HAAsyncResult ar = (HAAsyncResult)haService.BeginExtend(1455494400, null, null);
+                //System.Threading.Thread.Sleep(1000);
                 // add invalid result
                 ar.AddResultTlv(new IntegerTag(1, false, false, 1));
                 haService.EndExtend(ar);
             });
 
-            Assert.That(ex.Message.StartsWith("Could not get request response of type " + typeof(CalendarHashChain)), "Unexpected exception message: " + ex.Message);
+            // Depending on in which order the parallel code is run there can be 2 different exception messages. 
+            // When you put a thread sleep before adding invalid result then "all sub-request failed" message is always thrown. Otherwise one of two is thrown.
+            Assert.That(ex.Message.StartsWith("All sub-requests failed") || ex.Message.StartsWith("Could not get request response of type " + typeof(CalendarHashChain)),
+                "Unexpected exception message: " + ex.Message);
         }
     }
 }

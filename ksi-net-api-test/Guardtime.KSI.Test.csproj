@@ -137,8 +137,10 @@
     <Compile Include="Integration\VerificationTests.cs" />
     <Compile Include="Integration\KsiVerificationTests.cs" />
     <Compile Include="Publication\PublicationsFileFactoryTests.cs" />
+    <Compile Include="Service\AggregationResponsePduTests.cs" />
     <Compile Include="Service\AggregatorConfigResponsePayloadTests.cs" />
     <Compile Include="Service\ExtenderConfigResponsePayloadTests.cs" />
+    <Compile Include="Service\ExtendResponsePduTests.cs" />
     <Compile Include="Service\TcpKsiServiceProtocolTests.cs" />
     <Compile Include="Service\HttpKsiServiceProtocolTests.cs" />
     <Compile Include="Signature\Verification\Rule\RuleTestsBase.cs" />
@@ -197,13 +199,13 @@
     <Compile Include="Service\TreeVisualizer.cs" />
     <Compile Include="Service\ExtendErrorPayloadTests.cs" />
     <Compile Include="Integration\BlockSignerTests.cs" />
-    <Compile Include="Service\ExtendPduTests.cs" />
+    <Compile Include="Service\ExtendRequestPduTests.cs" />
     <Compile Include="Service\ExtendRequestPayloadTests.cs" />
     <Compile Include="Service\ExtendResponsePayloadTests.cs" />
     <Compile Include="Service\AggregationResponsePayloadTests.cs" />
     <Compile Include="Service\AggregationErrorPayloadTests.cs" />
     <Compile Include="Service\AggregationRequestPayloadTests.cs" />
-    <Compile Include="Service\AggregationPduTests.cs" />
+    <Compile Include="Service\AggregationRequestPduTests.cs" />
     <Compile Include="Service\ExtendStaticTests.cs" />
     <Compile Include="Service\PduHeaderTests.cs" />
     <Compile Include="Service\PublicationsFileStaticTests.cs" />
