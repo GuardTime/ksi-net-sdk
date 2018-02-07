@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Guardtime.KSI.Exceptions;
@@ -43,14 +44,51 @@ namespace Guardtime.KSI.Signature
             private string _legacyIdString;
 
             /// <summary>
-            /// Create new aggregation hash chain link TLV element.
+            /// Create new aggregation hash chain link TLV element. Exactly one from sibling hash or metadata must be not null.
             /// </summary>
             /// <param name="direction">Direction</param>
             /// <param name="siblingHash">Sibling hash value</param>
             /// <param name="metadata">Metadata element</param>
             /// <param name="levelCorrection">Level correction</param>
-            public Link(LinkDirection direction, DataHash siblingHash, Metadata metadata = null, ulong levelCorrection = 0)
+            [Obsolete]
+            public Link(LinkDirection direction, DataHash siblingHash, Metadata metadata, ulong levelCorrection = 0)
                 : base((uint)direction, false, false, BuildChildTags(siblingHash, metadata, levelCorrection))
+            {
+            }
+
+            /// <summary>
+            /// Create new aggregation hash chain link TLV element with sibling hash.
+            /// </summary>
+            /// <param name="direction">Direction</param>
+            /// <param name="siblingHash">Sibling hash value</param>
+            /// <param name="levelCorrection">Level correction</param>
+            public Link(LinkDirection direction, DataHash siblingHash, ulong levelCorrection = 0)
+                : base((uint)direction, false, false, BuildChildTags(siblingHash, levelCorrection))
+            {
+            }
+
+            /// <summary>
+            /// Create new aggregation hash chain link TLV element with metadata.
+            /// </summary>
+            /// <param name="direction">Direction</param>
+            /// <param name="metadata">Metadata element</param>
+            /// <param name="levelCorrection">Level correction</param>
+            public Link(LinkDirection direction, Metadata metadata, ulong levelCorrection = 0)
+                : base((uint)direction, false, false, BuildChildTags(metadata, levelCorrection))
+            {
+            }
+
+            /// <summary>
+            /// Create new aggregation hash chain link TLV element with metadata.
+            /// </summary>
+            /// <param name="direction">Direction</param>
+            /// <param name="clientId">Client id of metadata element</param>
+            /// <param name="machineId">Machine id of metadata element</param>
+            /// <param name="sequenceNumber">Sequence number of metadata element</param>
+            /// <param name="requestTime">Request time of metadata element</param>
+            /// <param name="levelCorrection">Level correction</param>
+            public Link(LinkDirection direction, string clientId, string machineId = null, ulong? sequenceNumber = null, ulong? requestTime = null, ulong levelCorrection = 0)
+                : base((uint)direction, false, false, BuildChildTags(clientId, machineId, sequenceNumber, requestTime, levelCorrection))
             {
             }
 
@@ -143,6 +181,67 @@ namespace Guardtime.KSI.Signature
                 {
                     list.Add(metadata);
                 }
+
+                if (levelCorrection > 0)
+                {
+                    list.Add(new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, levelCorrection));
+                }
+
+                return list.ToArray();
+            }
+
+            /// <summary>
+            /// Create child TLV element list
+            /// </summary>
+            /// <param name="siblingHash">Sibling hash value</param>
+            /// <param name="levelCorrection">Level correction</param>
+            private static ITlvTag[] BuildChildTags(DataHash siblingHash, ulong levelCorrection)
+            {
+                if (siblingHash == null)
+                {
+                    throw new ArgumentNullException(nameof(siblingHash));
+                }
+
+                List<ITlvTag> list = new List<ITlvTag> { new ImprintTag(Constants.AggregationHashChain.Link.SiblingHashTagType, false, false, siblingHash) };
+
+                if (levelCorrection > 0)
+                {
+                    list.Add(new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, levelCorrection));
+                }
+
+                return list.ToArray();
+            }
+
+            /// <summary>
+            /// Create child TLV element list
+            /// </summary>
+            /// <param name="metadata">Metadata element</param>
+            /// <param name="levelCorrection">Level correction</param>
+            private static ITlvTag[] BuildChildTags(Metadata metadata, ulong levelCorrection)
+            {
+                if (metadata == null)
+                {
+                    throw new ArgumentNullException(nameof(metadata));
+                }
+
+                List<ITlvTag> list = new List<ITlvTag> { metadata };
+
+                if (levelCorrection > 0)
+                {
+                    list.Add(new IntegerTag(Constants.AggregationHashChain.Link.LevelCorrectionTagType, false, false, levelCorrection));
+                }
+
+                return list.ToArray();
+            }
+
+            private static ITlvTag[] BuildChildTags(string clientId, string machineId, ulong? sequenceNumber, ulong? requestTime, ulong levelCorrection)
+            {
+                if (clientId == null)
+                {
+                    throw new ArgumentNullException(nameof(clientId));
+                }
+
+                List<ITlvTag> list = new List<ITlvTag> { new Metadata(clientId, machineId, sequenceNumber, requestTime) };
 
                 if (levelCorrection > 0)
                 {
