@@ -557,6 +557,34 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
             Assert.AreEqual(0, changeCount, "Unexpected change count.");
         }
 
+        /// <summary>
+        /// Test HA get aggregator config request timeout.
+        /// </summary>
+        [Test]
+        public void HAGetAggregatorConfigTimeoutTest()
+        {
+            TestKsiServiceProtocol protocol = new TestKsiServiceProtocol
+            {
+                RequestResult = GetAggregatorConfigResponsePayload(1, 2, 100, 4, null).Encode(),
+                DelayMilliseconds = 3000
+            };
+
+            IKsiService haService =
+                new HAKsiService(
+                    new List<IKsiService>()
+                    {
+                        GetStaticKsiService(protocol),
+                    },
+                    null, null, 1000);
+
+            HAKsiServiceException ex = Assert.Throws<HAKsiServiceException>(delegate
+            {
+                haService.GetAggregatorConfig();
+            });
+
+            Assert.That(ex.Message.StartsWith("HA service request timed out"), "Unexpected exception message: " + ex.Message);
+        }
+
         private static HAKsiService GetHAService(params List<PduPayload>[] subServiceResults)
         {
             return new HAKsiService(subServiceResults.Select(payloads => GetService(payloads)).ToList(), null, null);

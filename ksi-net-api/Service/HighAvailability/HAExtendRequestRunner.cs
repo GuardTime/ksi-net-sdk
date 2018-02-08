@@ -37,7 +37,8 @@ namespace Guardtime.KSI.Service.HighAvailability
         /// <param name="subServices">List of sub-services</param>
         /// <param name="aggregationTime">aggregation time</param>
         /// <param name="publicationTime">publication time</param>
-        public HAExtendRequestRunner(IList<IKsiService> subServices, ulong aggregationTime, ulong? publicationTime = null) : base(subServices)
+        /// <param name="requestTimeout">request timeout in milliseconds</param>
+        public HAExtendRequestRunner(IList<IKsiService> subServices, ulong aggregationTime, ulong? publicationTime,  uint requestTimeout) : base(subServices, requestTimeout)
         {
             _aggregationTime = aggregationTime;
             _publicationTime = publicationTime;

@@ -35,6 +35,7 @@ namespace Guardtime.KSI.Service.HighAvailability
     public class HAKsiService : IKsiService
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly uint _requestTimeout = 20000;
         private readonly object _aggregatorConfigChangedLock = new object();
         private readonly object _extenderConfigChangedLock = new object();
         private readonly Dictionary<IKsiService, AggregatorConfig> _currentAggregatorConfigList = new Dictionary<IKsiService, AggregatorConfig>();
@@ -60,9 +61,11 @@ namespace Guardtime.KSI.Service.HighAvailability
         /// <param name="signingServices">List of signing services. Max 3 allowed.</param>
         /// <param name="extendingServices">List of extending services. Max 3 allowed.</param>
         /// <param name="publicationsFileService">Publications file service</param>
+        /// <param name="requestTimeout">request timeout in milliseconds</param>
         public HAKsiService(IList<IKsiService> signingServices,
                             IList<IKsiService> extendingServices,
-                            IKsiService publicationsFileService)
+                            IKsiService publicationsFileService,
+                            uint? requestTimeout = null)
         {
             if (signingServices != null)
             {
@@ -103,6 +106,11 @@ namespace Guardtime.KSI.Service.HighAvailability
             }
 
             PublicationsFileService = publicationsFileService;
+
+            if (requestTimeout.HasValue)
+            {
+                _requestTimeout = requestTimeout.Value;
+            }
         }
 
         /// <summary>
@@ -157,7 +165,7 @@ namespace Guardtime.KSI.Service.HighAvailability
         public IAsyncResult BeginSign(DataHash hash, uint level, AsyncCallback callback, object asyncState)
         {
             Logger.Debug("Begin HA sign (hash: {0}; level: {1})", hash, level);
-            return new HASignRequestRunner(SigningServices, hash, level).BeginRequest(callback, asyncState);
+            return new HASignRequestRunner(SigningServices, hash, level, _requestTimeout).BeginRequest(callback, asyncState);
         }
 
         /// <summary>
@@ -204,7 +212,7 @@ namespace Guardtime.KSI.Service.HighAvailability
         public IAsyncResult BeginGetAggregatorConfig(AsyncCallback callback, object asyncState)
         {
             Logger.Debug("Begin HA aggregator config request.");
-            return new HAAggregatorConfigRequestRunner(SigningServices).BeginRequest(callback, asyncState);
+            return new HAAggregatorConfigRequestRunner(SigningServices, _requestTimeout).BeginRequest(callback, asyncState);
         }
 
         /// <summary>
@@ -288,7 +296,7 @@ namespace Guardtime.KSI.Service.HighAvailability
         public IAsyncResult BeginExtend(ulong aggregationTime, AsyncCallback callback, object asyncState)
         {
             Logger.Debug("Begin HA extend (aggregation time: {0})", aggregationTime);
-            return new HAExtendRequestRunner(ExtendingServices, aggregationTime).BeginRequest(callback, asyncState);
+            return new HAExtendRequestRunner(ExtendingServices, aggregationTime, null, _requestTimeout).BeginRequest(callback, asyncState);
         }
 
         /// <summary>
@@ -303,7 +311,7 @@ namespace Guardtime.KSI.Service.HighAvailability
         public IAsyncResult BeginExtend(ulong aggregationTime, ulong publicationTime, AsyncCallback callback, object asyncState)
         {
             Logger.Debug("Begin HA extend (aggregation time: {0}; publication time: {1})", aggregationTime, publicationTime);
-            return new HAExtendRequestRunner(ExtendingServices, aggregationTime, publicationTime).BeginRequest(callback, asyncState);
+            return new HAExtendRequestRunner(ExtendingServices, aggregationTime, publicationTime, _requestTimeout).BeginRequest(callback, asyncState);
         }
 
         /// <summary>
@@ -338,7 +346,7 @@ namespace Guardtime.KSI.Service.HighAvailability
         public IAsyncResult BeginGetExtenderConfig(AsyncCallback callback, object asyncState)
         {
             Logger.Debug("Begin HA extender config request.");
-            return new HAExtenderConfigRequestRunner(ExtendingServices).BeginRequest(callback, asyncState);
+            return new HAExtenderConfigRequestRunner(ExtendingServices, _requestTimeout).BeginRequest(callback, asyncState);
         }
 
         /// <summary>

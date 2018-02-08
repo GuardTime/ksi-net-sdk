@@ -42,7 +42,8 @@ namespace Guardtime.KSI.Service.HighAvailability
         /// Create high availability aggregator configuration request runner instance.
         /// </summary>
         /// <param name="subServices">List of sub-services</param>
-        public HAAggregatorConfigRequestRunner(IList<IKsiService> subServices) : base(subServices, true)
+        /// <param name="requestTimeout">request timeout in milliseconds</param>
+        public HAAggregatorConfigRequestRunner(IList<IKsiService> subServices, uint requestTimeout) : base(subServices, requestTimeout, true)
         {
         }
 

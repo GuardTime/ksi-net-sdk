@@ -34,11 +34,12 @@ namespace Guardtime.KSI.Service.HighAvailability
         private delegate void RunSubServiceDelegate(HAAsyncResult haAsyncResult, int serviceIndex);
 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly int _requestTimeout;
         private readonly IList<IKsiService> _subServices;
         private readonly bool _returnAllResponses;
         private readonly RunSubServiceDelegate _runSubServiceDelegate;
         private ManualResetEvent _endCallWaitHandle;
-        private ManualResetEvent _subServiceResultsWaitHandle;
+        private ManualResetEvent _subServiceFirstResultsWaitHandle;
         private readonly object _resultTlvLock;
         private readonly List<object> _resultTlvs;
 
@@ -46,10 +47,12 @@ namespace Guardtime.KSI.Service.HighAvailability
         /// Create high availablity request runner instance.
         /// </summary>
         /// <param name="subServices">List of sub-services</param>
+        /// <param name="requestTimeout">request timeout in milliseconds</param>
         /// <param name="returnAllResponses">If true then all sub-service requests are returned as result. If false then the first sub-service response is returned as result.</param>
-        protected HARequestRunner(IList<IKsiService> subServices, bool returnAllResponses = false)
+        protected HARequestRunner(IList<IKsiService> subServices, uint requestTimeout, bool returnAllResponses = false)
         {
             _subServices = subServices;
+            _requestTimeout = (int)requestTimeout;
             _returnAllResponses = returnAllResponses;
             _runSubServiceDelegate = RunSubService;
             _resultTlvLock = new object();
@@ -81,7 +84,7 @@ namespace Guardtime.KSI.Service.HighAvailability
             if (waitEndCall)
             {
                 _endCallWaitHandle = new ManualResetEvent(false);
-                _subServiceResultsWaitHandle = new ManualResetEvent(false);
+                _subServiceFirstResultsWaitHandle = new ManualResetEvent(false);
             }
 
             for (int index = 0; index < _subServices.Count; index++)
@@ -113,7 +116,10 @@ namespace Guardtime.KSI.Service.HighAvailability
             try
             {
                 IAsyncResult asyncResult = SubServiceBeginRequest(service);
-                asyncResult.AsyncWaitHandle.WaitOne();
+                if (!asyncResult.AsyncWaitHandle.WaitOne(_requestTimeout))
+                {
+                    throw new HAKsiServiceException("Sub-service request timed out.");
+                }
 
                 // if we need to wait request end call then mark HA async request completed.
                 if (_endCallWaitHandle != null)
@@ -121,8 +127,15 @@ namespace Guardtime.KSI.Service.HighAvailability
                     haAsyncResult.SetComplete();
                 }
 
-                // wait request end call.
-                _endCallWaitHandle?.WaitOne();
+                if (_endCallWaitHandle != null)
+                {
+                    // wait request end call.
+                    if (!_endCallWaitHandle.WaitOne(_requestTimeout))
+                    {
+                        throw new HAKsiServiceException("Wait end call timed out.");
+                    }
+                }
+
                 object subServiceEndRequest = SubServiceEndRequest(service, asyncResult);
 
                 lock (_resultTlvLock)
@@ -130,7 +143,7 @@ namespace Guardtime.KSI.Service.HighAvailability
                     _resultTlvs.Add(subServiceEndRequest);
                 }
 
-                _subServiceResultsWaitHandle?.Set();
+                _subServiceFirstResultsWaitHandle?.Set();
 
                 if (haAsyncResult.IsCompleted)
                 {
@@ -205,7 +218,10 @@ namespace Guardtime.KSI.Service.HighAvailability
         {
             if (!haAsyncResult.IsCompleted)
             {
-                haAsyncResult.AsyncWaitHandle.WaitOne();
+                if (!haAsyncResult.AsyncWaitHandle.WaitOne(_requestTimeout))
+                {
+                    throw new HAKsiServiceException("HA service request timed out.");
+                }
             }
 
             lock (_resultTlvLock)
@@ -222,8 +238,16 @@ namespace Guardtime.KSI.Service.HighAvailability
         /// <returns></returns>
         protected T EndRequest<T>(HAAsyncResult haAsyncResult) where T : class
         {
-            _endCallWaitHandle?.Set();
-            _subServiceResultsWaitHandle?.WaitOne();
+            if (_subServiceFirstResultsWaitHandle != null)
+            {
+                // notify that end request is called
+                _endCallWaitHandle?.Set();
+                // wait for first successful sub-service result
+                if (!_subServiceFirstResultsWaitHandle.WaitOne(_requestTimeout))
+                {
+                    throw new HAKsiServiceException("HA service request timed out.");
+                }
+            }
 
             object[] results = EndRequestMulti(haAsyncResult);
 
@@ -273,7 +297,7 @@ namespace Guardtime.KSI.Service.HighAvailability
                 if (ResultTlvCount + SubServiceErrors.Count == _subServices.Count)
                 {
                     haAsyncResult.SetComplete();
-                    _subServiceResultsWaitHandle?.Set();
+                    _subServiceFirstResultsWaitHandle?.Set();
                 }
             }
             else
@@ -281,7 +305,7 @@ namespace Guardtime.KSI.Service.HighAvailability
                 if (SubServiceErrors.Count >= _subServices.Count)
                 {
                     haAsyncResult.SetComplete();
-                    _subServiceResultsWaitHandle?.Set();
+                    _subServiceFirstResultsWaitHandle?.Set();
                 }
             }
         }

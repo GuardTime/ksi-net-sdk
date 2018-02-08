@@ -39,7 +39,8 @@ namespace Guardtime.KSI.Service.HighAvailability
         /// <param name="subServices">List of sub-services</param>
         /// <param name="hash">data hash to be signed</param>
         /// <param name="level">the level value of the aggregation tree node</param>
-        public HASignRequestRunner(IList<IKsiService> subServices, DataHash hash, uint level) : base(subServices)
+        /// <param name="requestTimeout">request timeout in milliseconds</param>
+        public HASignRequestRunner(IList<IKsiService> subServices, DataHash hash, uint level, uint requestTimeout) : base(subServices, requestTimeout)
         {
             _hash = hash;
             _level = level;
