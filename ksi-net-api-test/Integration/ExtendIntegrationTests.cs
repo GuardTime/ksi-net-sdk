@@ -271,7 +271,7 @@ namespace Guardtime.KSI.Test.Integration
 
             Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " Waiting ...");
 
-            waitHandle.WaitOne();
+            waitHandle.WaitOne(20000);
 
             if (errorMessage != null)
             {
@@ -320,7 +320,7 @@ namespace Guardtime.KSI.Test.Integration
                 }
             }, testObject);
 
-            waitHandle.WaitOne();
+            waitHandle.WaitOne(10000);
 
             Assert.IsNotNull(cal, "Calendar hash chain should not be null.");
             Assert.AreEqual(true, isAsyncCorrect, "Unexpected async state.");
@@ -349,7 +349,7 @@ namespace Guardtime.KSI.Test.Integration
                 }
             }, null);
 
-            waitHandle.WaitOne();
+            waitHandle.WaitOne(10000);
 
             Assert.IsNull(cal, "Calendar hash chain should be null.");
             Assert.IsNotNull(ex, "Exception should not be null.");

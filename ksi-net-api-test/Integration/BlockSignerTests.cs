@@ -490,7 +490,7 @@ namespace Guardtime.KSI.Test.Integration
 
             Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " Waiting ...");
 
-            waitHandle.WaitOne();
+            waitHandle.WaitOne(20000);
 
             if (errorMessage != null)
             {

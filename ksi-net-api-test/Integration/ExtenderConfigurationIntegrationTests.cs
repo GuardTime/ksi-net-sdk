@@ -87,7 +87,7 @@ namespace Guardtime.KSI.Test.Integration
                 }
             }, testObject);
 
-            waitHandle.WaitOne();
+            waitHandle.WaitOne(10000);
 
             Assert.IsNotNull(config, "Extender configuration should not be null.");
             Assert.AreEqual(true, isAsyncCorrect, "Unexpected async state.");
