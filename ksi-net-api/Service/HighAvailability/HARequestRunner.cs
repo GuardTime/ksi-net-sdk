@@ -28,6 +28,7 @@ namespace Guardtime.KSI.Service.HighAvailability
 {
     /// <summary>
     /// Class that is resposible for running high availablity sub-service requests and giving a result based on the requests.
+    /// In case signing request we need to wait HA service end request call (EndSign or GetSignResponsePayload) before sub-services end request calls can be made.
     /// </summary>
     public abstract class HARequestRunner
     {
@@ -70,7 +71,7 @@ namespace Guardtime.KSI.Service.HighAvailability
         /// </summary>
         /// <param name="callback">callback when HA request is finished</param>
         /// <param name="asyncState">callback async state object</param>
-        /// <param name="waitEndCall">If true then HA end request call is waited before sub-service end request call is made.</param>
+        /// <param name="waitEndCall">If true then HA end request call (eg. EndSign) is waited before sub-service end request call can be made.</param>
         /// <returns></returns>
         public virtual HAAsyncResult BeginRequest(AsyncCallback callback, object asyncState, bool waitEndCall = false)
         {
@@ -121,15 +122,13 @@ namespace Guardtime.KSI.Service.HighAvailability
                     throw new HAKsiServiceException("Sub-service request timed out.");
                 }
 
-                // if we need to wait request end call then mark HA async request completed.
                 if (_endCallWaitHandle != null)
                 {
+                    // We need to wait HA service end call (eg. EndSign)
+                    // Mark HA async request as complete
                     haAsyncResult.SetComplete();
-                }
 
-                if (_endCallWaitHandle != null)
-                {
-                    // wait request end call.
+                    // Wait for HA service end call.
                     if (!_endCallWaitHandle.WaitOne(_requestTimeout))
                     {
                         throw new HAKsiServiceException("Wait end call timed out.");
