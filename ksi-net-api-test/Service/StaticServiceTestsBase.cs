@@ -49,11 +49,17 @@ namespace Guardtime.KSI.Test.Service
                                                          PduVersion pduVersion = PduVersion.v2,
                                                          HashAlgorithm signingMacAlgorithm = null, HashAlgorithm extendingMacAlgorithm = null)
         {
-            TestKsiServiceProtocol protocol = new TestKsiServiceProtocol
-            {
-                RequestResult = requestResult,
-            };
+            return GetStaticKsiService(new TestKsiServiceProtocol
+                {
+                    RequestResult = requestResult,
+                },
+                requestId, pduVersion, signingMacAlgorithm, extendingMacAlgorithm);
+        }
 
+        protected static IKsiService GetStaticKsiService(TestKsiServiceProtocol protocol, ulong requestId = 0,
+                                                         PduVersion pduVersion = PduVersion.v2,
+                                                         HashAlgorithm signingMacAlgorithm = null, HashAlgorithm extendingMacAlgorithm = null)
+        {
             return
                 new TestKsiService(
                     protocol,

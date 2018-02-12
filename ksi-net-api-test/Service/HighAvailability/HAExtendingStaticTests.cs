@@ -20,6 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
@@ -198,16 +199,67 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
             HAKsiServiceException ex = Assert.Throws<HAKsiServiceException>(delegate
             {
                 HAAsyncResult ar = (HAAsyncResult)haService.BeginExtend(1455494400, null, null);
-                //System.Threading.Thread.Sleep(1000);
+
                 // add invalid result
-                ar.AddResultTlv(new IntegerTag(1, false, false, 1));
+                FieldInfo memberInfo = typeof(HARequestRunner).GetField("_resultTlvs", BindingFlags.NonPublic | BindingFlags.Instance);
+                List<object> results = (List<object>)memberInfo.GetValue(ar.RequestRunner);
+                results.Add(new IntegerTag(1, false, false, 1));
                 haService.EndExtend(ar);
             });
 
-            // Depending on in which order the parallel code is run there can be 2 different exception messages. 
-            // When you put a thread sleep before adding invalid result then "all sub-request failed" message is always thrown. Otherwise one of two is thrown.
-            Assert.That(ex.Message.StartsWith("All sub-requests failed") || ex.Message.StartsWith("Could not get request response of type " + typeof(CalendarHashChain)),
-                "Unexpected exception message: " + ex.Message);
+            Assert.That(ex.Message.StartsWith("Could not get request response of type " + typeof(CalendarHashChain)), "Unexpected exception message: " + ex.Message);
+        }
+
+        /// <summary>
+        /// Test HA extending request timeout.
+        /// </summary>
+        [Test]
+        public void HAExtendTimeoutTest()
+        {
+            TestKsiServiceProtocol protocol = new TestKsiServiceProtocol
+            {
+                RequestResult = File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_RequestId_1043101455)),
+                DelayMilliseconds = 3000
+            };
+
+            IKsiService haService =
+                new HAKsiService(
+                    null, new List<IKsiService>()
+                    {
+                        GetStaticKsiService(protocol, 1043101455),
+                    },
+                    null, 1000);
+
+            HAKsiServiceException ex = Assert.Throws<HAKsiServiceException>(delegate
+            {
+                haService.Extend(123);
+            });
+
+            Assert.That(ex.Message.StartsWith("HA service request timed out"), "Unexpected exception message: " + ex.Message);
+        }
+
+        /// <summary>
+        /// Test HA extending request timeout. One sub-services delays, but the other is succeeds.
+        /// </summary>
+        [Test]
+        public void HAExtendWithOneSubServiceTimeoutTest()
+        {
+            TestKsiServiceProtocol protocol = new TestKsiServiceProtocol
+            {
+                RequestResult = File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_RequestId_1043101455)),
+                DelayMilliseconds = 3000
+            };
+
+            IKsiService haService =
+                new HAKsiService(
+                    null, new List<IKsiService>()
+                    {
+                        GetStaticKsiService(protocol, 1043101455),
+                        GetStaticKsiService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_RequestId_1043101455)), 1043101455),
+                    },
+                    null, 1000);
+
+            haService.Extend(123);
         }
     }
 }

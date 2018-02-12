@@ -20,7 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading;
+using System.Reflection;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
@@ -141,7 +141,6 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
                     null, null);
 
             IAsyncResult ar = haService.BeginSign(new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")), null, null);
-            Thread.Sleep(1000);
             SignRequestResponsePayload payload = haService.GetSignResponsePayload(ar);
             Assert.IsNotNull(payload, "Sign request response payload cannot be null.");
         }
@@ -305,12 +304,68 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
             {
                 HAAsyncResult asyncResult = (HAAsyncResult)haService.BeginSign(new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")),
                     null, null);
+
                 // add invalid result
-                asyncResult.AddResultTlv(new IntegerTag(1, false, false, 1));
+                FieldInfo memberInfo = typeof(HARequestRunner).GetField("_resultTlvs", BindingFlags.NonPublic | BindingFlags.Instance);
+                List<object> results = (List<object>)memberInfo.GetValue(asyncResult.RequestRunner);
+                results.Add(new IntegerTag(1, false, false, 1));
+
                 haService.EndSign(asyncResult);
             });
 
             Assert.That(ex.Message.StartsWith("Could not get request response of type " + typeof(KsiSignature)), "Unexpected exception message: " + ex.Message);
+        }
+
+        /// <summary>
+        /// Test HA sign request timeout.
+        /// </summary>
+        [Test]
+        public void HASignTimeoutTest()
+        {
+            TestKsiServiceProtocol protocol = new TestKsiServiceProtocol
+            {
+                RequestResult = File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_RequestId_1584727637)),
+                DelayMilliseconds = 3000
+            };
+
+            IKsiService haService =
+                new HAKsiService(
+                    new List<IKsiService>()
+                    {
+                        GetStaticKsiService(protocol, 1584727637),
+                    },
+                    null, null, 1000);
+
+            HAKsiServiceException ex = Assert.Throws<HAKsiServiceException>(delegate
+            {
+                haService.Sign(new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
+            });
+
+            Assert.That(ex.Message.StartsWith("HA service request timed out"), "Unexpected exception message: " + ex.Message);
+        }
+
+        /// <summary>
+        /// Test HA sign request timeout. One sub-services delays, but the other is succeeds.
+        /// </summary>
+        [Test]
+        public void HASignWithOneSubServiceTimeoutTest()
+        {
+            TestKsiServiceProtocol protocol = new TestKsiServiceProtocol
+            {
+                RequestResult = File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_RequestId_1584727637)),
+                DelayMilliseconds = 3000
+            };
+
+            IKsiService haService =
+                new HAKsiService(
+                    new List<IKsiService>()
+                    {
+                        GetStaticKsiService(protocol, 1584727637),
+                        GetStaticKsiService(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_RequestId_1584727637)), 1584727637)
+                    },
+                    null, null, 1000);
+
+            haService.Sign(new DataHash(Base16.Decode("019f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")));
         }
     }
 }

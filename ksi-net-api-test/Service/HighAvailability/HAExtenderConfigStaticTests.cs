@@ -545,6 +545,34 @@ namespace Guardtime.KSI.Test.Service.HighAvailability
             Assert.AreEqual(0, changeCount, "Unexpected change count.");
         }
 
+        /// <summary>
+        /// Test HA get extender config request timeout.
+        /// </summary>
+        [Test]
+        public void HAGetExtenderConfigTimeoutTest()
+        {
+            TestKsiServiceProtocol protocol = new TestKsiServiceProtocol
+            {
+                RequestResult = GetExtenderConfigResponsePayload(1, null, 123, 234).Encode(),
+                DelayMilliseconds = 3000
+            };
+
+            IKsiService haService =
+                new HAKsiService(
+                    null, new List<IKsiService>()
+                    {
+                        GetStaticKsiService(protocol),
+                    },
+                    null, 1000);
+
+            HAKsiServiceException ex = Assert.Throws<HAKsiServiceException>(delegate
+            {
+                haService.GetExtenderConfig();
+            });
+
+            Assert.That(ex.Message.StartsWith("HA service request timed out"), "Unexpected exception message: " + ex.Message);
+        }
+
         private static HAKsiService GetHAService(params List<PduPayload>[] subServiceResults)
         {
             return new HAKsiService(null, subServiceResults.Select(payloads => GetService(payloads)).ToList(), null);
