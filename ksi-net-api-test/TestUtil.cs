@@ -21,6 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
@@ -107,6 +108,20 @@ namespace Guardtime.KSI.Test
             {
                 return reader.ReadTag();
             }
+        }
+
+        public static X509Store CreateCertStore(params string[] certPaths)
+        {
+            X509Store store = new X509Store("test", StoreLocation.CurrentUser);
+            store.Open(OpenFlags.ReadWrite);
+            store.RemoveRange(store.Certificates);
+
+            foreach (string certPath in certPaths)
+            {
+                X509Certificate2 certificate = new X509Certificate2(Path.Combine(TestSetup.LocalPath, certPath));
+                store.Add(certificate);
+            }
+            return store;
         }
     }
 }

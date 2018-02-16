@@ -130,7 +130,8 @@ namespace Guardtime.KSI.Test.Integration
 
             if (!setUserPublication)
             {
-                publicationsFile = GetPublicationsFile(string.IsNullOrEmpty(testingRow.PublicationsFilePath) ? null : testDataDir + testingRow.PublicationsFilePath);
+                publicationsFile = GetPublicationsFile(string.IsNullOrEmpty(testingRow.PublicationsFilePath) ? null : testDataDir + testingRow.PublicationsFilePath,
+                    string.IsNullOrEmpty(testingRow.CertFilePath) ? null : testDataDir + testingRow.CertFilePath);
             }
 
             if (string.IsNullOrEmpty(testingRow.ResourceFile))
@@ -150,7 +151,7 @@ namespace Guardtime.KSI.Test.Integration
                             TestUtil.GetHashAlgorithm(Properties.Settings.Default.HttpSigningServiceHmacAlgorithm)),
                         protocol,
                         new ServiceCredentials(Properties.Settings.Default.HttpExtendingServiceUser, Properties.Settings.Default.HttpExtendingServicePass,
-                          TestUtil.GetHashAlgorithm(Properties.Settings.Default.HttpExtendingServiceHmacAlgorithm)),
+                            TestUtil.GetHashAlgorithm(Properties.Settings.Default.HttpExtendingServiceHmacAlgorithm)),
                         protocol,
                         new PublicationsFileFactory(
                             new PkiTrustStoreProvider(new X509Store(StoreName.Root),
@@ -220,15 +221,17 @@ namespace Guardtime.KSI.Test.Integration
 
         private static IPublicationsFile PubsFile => _pubsFile ?? (_pubsFile = IntegrationTests.GetHttpKsiService().GetPublicationsFile());
 
-        private static IPublicationsFile GetPublicationsFile(string path)
+        private static IPublicationsFile GetPublicationsFile(string path, string certPath)
         {
             if (string.IsNullOrEmpty(path))
             {
                 return PubsFile;
             }
 
+            X509Store certStore = string.IsNullOrEmpty(certPath) ? new X509Store(StoreName.Root) : TestUtil.CreateCertStore(certPath);
+
             PublicationsFileFactory factory = new PublicationsFileFactory(
-                new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com")));
+                new PkiTrustStoreProvider(certStore, CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com")));
 
             return factory.Create(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, path)));
         }
@@ -288,9 +291,8 @@ namespace Guardtime.KSI.Test.Integration
                 }
 
                 ResourceFile = args[12];
-
                 PublicationsFilePath = args[13];
-
+                CertFilePath = args[14];
                 TestIndex = index;
             }
 
@@ -309,6 +311,7 @@ namespace Guardtime.KSI.Test.Integration
             public bool IsExtendingAllowed { get; }
             public string ResourceFile { get; }
             public string PublicationsFilePath { get; }
+            public string CertFilePath { get; }
 
             public bool VerificationResultMatch(VerificationError verificationError)
             {
