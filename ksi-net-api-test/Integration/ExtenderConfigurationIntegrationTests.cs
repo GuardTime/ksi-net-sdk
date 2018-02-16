@@ -17,11 +17,11 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
+using System.Threading;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Service;
 using NUnit.Framework;
-using System;
-using System.Threading;
 
 namespace Guardtime.KSI.Test.Integration
 {
@@ -87,7 +87,7 @@ namespace Guardtime.KSI.Test.Integration
                 }
             }, testObject);
 
-            waitHandle.WaitOne(10000);
+            Assert.IsTrue(waitHandle.WaitOne(10000), "Wait handle timed out.");
 
             Assert.IsNotNull(config, "Extender configuration should not be null.");
             Assert.AreEqual(true, isAsyncCorrect, "Unexpected async state.");
@@ -114,7 +114,7 @@ namespace Guardtime.KSI.Test.Integration
             }
 
             service.GetExtenderConfig();
-            _waitHandle.WaitOne(10000);
+            Assert.IsTrue(_waitHandle.WaitOne(10000), "Wait handle timed out.");
             Assert.IsNotNull(_extenderConfig, "Could not get extender config using event handler.");
         }
 

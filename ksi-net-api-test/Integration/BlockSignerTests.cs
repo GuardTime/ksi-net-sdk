@@ -490,7 +490,7 @@ namespace Guardtime.KSI.Test.Integration
 
             Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " Waiting ...");
 
-            waitHandle.WaitOne(20000);
+            Assert.IsTrue(waitHandle.WaitOne(20000), "Wait handle timed out.");
 
             if (errorMessage != null)
             {

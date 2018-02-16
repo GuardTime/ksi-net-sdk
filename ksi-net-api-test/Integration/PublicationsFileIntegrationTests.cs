@@ -72,13 +72,17 @@ namespace Guardtime.KSI.Test.Integration
                     isAsyncCorrect = ar.AsyncState == testObject;
                     pubFile = service.EndGetPublicationsFile(ar);
                 }
+                catch (Exception ex)
+                {
+                    Assert.Fail("Unexpected exception: " + ex);
+                }
                 finally
                 {
                     waitHandle.Set();
                 }
             }, testObject);
 
-            waitHandle.WaitOne(10000);
+            Assert.IsTrue(waitHandle.WaitOne(10000), "Wait handle timed out.");
 
             Assert.IsNotNull(pubFile, "Publications file should not be null.");
             Assert.AreEqual(true, isAsyncCorrect, "Unexpected async state.");

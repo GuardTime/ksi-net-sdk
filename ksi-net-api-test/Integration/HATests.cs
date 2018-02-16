@@ -172,7 +172,7 @@ namespace Guardtime.KSI.Test.Integration
                 }
             }, testObject);
 
-            waitHandle.WaitOne(10000);
+            Assert.IsTrue(waitHandle.WaitOne(10000), "Wait handle timed out.");
 
             Assert.IsNotNull(signature, "Signature should not be null.");
             Assert.AreEqual(true, isAsyncStateCorrect, "Unexpected async state.");
@@ -201,7 +201,7 @@ namespace Guardtime.KSI.Test.Integration
                 }
             }, testObject);
 
-            waitHandle.WaitOne(10000);
+            Assert.IsTrue(waitHandle.WaitOne(10000), "Wait handle timed out.");
 
             Assert.IsNotNull(config, "Aggregator configuration should not be null.");
             Assert.AreEqual(true, isAsyncCorrect, "Unexpected async state.");
@@ -231,7 +231,7 @@ namespace Guardtime.KSI.Test.Integration
                 }
             }, testObject);
 
-            waitHandle.WaitOne(10000);
+            Assert.IsTrue(waitHandle.WaitOne(10000), "Wait handle timed out.");
 
             Assert.IsNotNull(cal, "Calendar hash chain should not be null.");
             Assert.AreEqual(true, isAsyncCorrect, "Unexpected async state.");
@@ -260,7 +260,7 @@ namespace Guardtime.KSI.Test.Integration
                 }
             }, testObject);
 
-            waitHandle.WaitOne(10000);
+            Assert.IsTrue(waitHandle.WaitOne(10000), "Wait handle timed out.");
 
             Assert.IsNotNull(config, "Extender configuration should not be null.");
             Assert.AreEqual(true, isAsyncCorrect, "Unexpected async state.");
@@ -290,7 +290,7 @@ namespace Guardtime.KSI.Test.Integration
                 }
             }, testObject);
 
-            waitHandle.WaitOne(10000);
+            Assert.IsTrue(waitHandle.WaitOne(10000), "Wait handle timed out.");
 
             Assert.IsNotNull(pubFile, "Publications file should not be null.");
             Assert.AreEqual(true, isAsyncCorrect, "Unexpected async state.");

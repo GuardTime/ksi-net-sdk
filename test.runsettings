@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+ <!-- Load the settings file here: Test > Test settings > Select test settings file -->
+  <NUnit>
+    <DefaultTimeout>60000</DefaultTimeout>
+  </NUnit>
+
+</RunSettings>
