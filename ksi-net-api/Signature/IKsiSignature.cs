@@ -66,13 +66,6 @@ namespace Guardtime.KSI.Signature
         /// Get the identity of the signature.
         /// </summary>
         /// <returns></returns>
-        [Obsolete("This property is obsolete. Use GetIdentity() method instead.", false)]
-        string Identity { get; }
-
-        /// <summary>
-        /// Get the identity of the signature.
-        /// </summary>
-        /// <returns></returns>
         IEnumerable<IIdentity> GetIdentity();
 
         /// <summary>

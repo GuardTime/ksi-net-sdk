@@ -36,7 +36,6 @@ namespace Guardtime.KSI.Signature
     {
         private readonly List<AggregationHashChain> _aggregationHashChains = new List<AggregationHashChain>();
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private string _identity;
         private DataHash _aggregationHashChainRootHash;
 
         /// <summary>
@@ -157,42 +156,6 @@ namespace Guardtime.KSI.Signature
         ///     Get publication record.
         /// </summary>
         public PublicationRecordInSignature PublicationRecord { get; private set; }
-
-        /// <summary>
-        /// Get the identity of the signature.
-        /// </summary>
-        /// <returns></returns>
-        [Obsolete("This property is obsolete. Use GetIdentity() method instead.", false)]
-        public string Identity
-        {
-            get
-            {
-                if (_identity != null)
-                {
-                    return _identity;
-                }
-
-                _identity = "";
-
-                foreach (IIdentity linkIdentity in GetIdentity())
-                {
-                    string id = linkIdentity.ClientId;
-                    if (id.Length <= 0)
-                    {
-                        continue;
-                    }
-
-                    if (_identity.Length > 0)
-                    {
-                        _identity += " :: ";
-                    }
-
-                    _identity += id;
-                }
-
-                return _identity;
-            }
-        }
 
         /// <summary>
         /// Get the identity of the signature.

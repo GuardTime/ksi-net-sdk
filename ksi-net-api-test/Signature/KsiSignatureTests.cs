@@ -18,6 +18,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Guardtime.KSI.Exceptions;
@@ -128,8 +129,8 @@ namespace Guardtime.KSI.Test.Signature
             IKsiSignature signature = GetKsiSignatureFromFile(Resources.KsiSignature_Ok);
             byte[] publicationDataBytes =
                 new PublicationData(1455494400, new DataHash(Base16.Decode("011878289E1A333DD85091D30F001B9F6F9ED4D428D57E049BD0EBD4DBC89BD210"))).Encode();
-            byte[] uriTagBytes =
-                new StringTag(Constants.PublicationRecord.PublicationRepositoryUriTagType, false, false, "Test uri (publication record in publications file)").Encode();
+            byte[] uriTagBytes = new StringTag(Constants.PublicationRecord.PublicationRepositoryUriTagType, false, false, "Test uri (publication record in publications file)")
+                .Encode();
             byte[] childBytes = new byte[publicationDataBytes.Length + uriTagBytes.Length];
             Array.Copy(publicationDataBytes, childBytes, publicationDataBytes.Length);
             Array.Copy(uriTagBytes, 0, childBytes, publicationDataBytes.Length, uriTagBytes.Length);
@@ -148,16 +149,16 @@ namespace Guardtime.KSI.Test.Signature
         public void TestKsiSignatureIdentity()
         {
             IKsiSignature signature = GetKsiSignatureFromFile(Resources.KsiSignature_Ok_With_Mixed_Aggregation_Chains);
-            Assert.AreEqual("GT :: testA :: taavi-test :: anon", signature.Identity,
-                "Invalid signature identity. Path: " + Resources.KsiSignature_Ok_With_Mixed_Aggregation_Chains);
-            Assert.AreEqual("GT :: testA :: taavi-test :: anon", signature.GetIdentity().Select(i => i.ClientId).Aggregate((current, next) => current + " :: " + next),
-                "Invalid signature identity returned by GetIdentity. Path: " + Resources.KsiSignature_Ok_With_Mixed_Aggregation_Chains);
-            IIdentity lastIdentity = signature.GetIdentity().Last();
-            Assert.AreEqual("anon", lastIdentity.ClientId, "Unexpected client id in in last identity element");
-            Assert.AreEqual("127.0.0.1", lastIdentity.MachineId, "Unexpected machine id in last identity element");
-            Assert.AreEqual(1426671056028078, lastIdentity.RequestTime, "Unexpected request time in last identity element");
-            Assert.AreEqual(0, lastIdentity.SequenceNumber, "Unexpected sequence number in last identity element");
-            Assert.AreEqual(IdentityType.Metadata, lastIdentity.IdentityType, "Unexpected identity type in last identity element");
+            IIdentity[] identity = signature.GetIdentity().ToArray();
+            Assert.AreEqual(4, identity.Length, "Unexpected identity count.");
+            Assert.AreEqual("GT", identity[0].ClientId, "Unexpected client id in 1st identity element");
+            Assert.AreEqual("testA", identity[1].ClientId, "Unexpected client id in 2nd last identity element");
+            Assert.AreEqual("taavi-test", identity[2].ClientId, "Unexpected client id in 3rd last identity element");
+            Assert.AreEqual("anon", identity[3].ClientId, "Unexpected client id in last identity element");
+            Assert.AreEqual("127.0.0.1", identity[3].MachineId, "Unexpected machine id last identity element");
+            Assert.AreEqual(1426671056028078, identity[3].RequestTime, "Unexpected request time in last identity element");
+            Assert.AreEqual(0, identity[3].SequenceNumber, "Unexpected sequence number in last identity element");
+            Assert.AreEqual(IdentityType.Metadata, identity[3].IdentityType, "Unexpected identity type in last identity element");
         }
 
         [Test]

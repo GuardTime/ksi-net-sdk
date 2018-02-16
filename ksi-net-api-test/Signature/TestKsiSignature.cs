@@ -123,8 +123,6 @@ namespace Guardtime.KSI.Test.Signature
             return EncodedBytes;
         }
 
-        public string Identity => "Test";
-
         public bool IsExtended => PublicationRecord != null;
 
         public IEnumerable<IIdentity> GetIdentity()
