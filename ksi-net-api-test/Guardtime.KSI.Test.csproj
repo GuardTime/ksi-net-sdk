@@ -761,6 +761,9 @@
     <None Include="resources\signature\ksi-signature\ksi-signature-ok-new.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="resources\signature\ksi-signature\ksi-signature-ok-only-aggregation-chains.tlv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="resources\signature\ksi-signature\ksi-signature-ok-with-publication-record.tlv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -1008,9 +1011,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\shared\internal-policy-signatures\aggregation-chain\invalid-signature-aggr-chain-right-link-sibling-hash-datahash-value-wrong.tlv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="resources\signature\shared\internal-policy-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-pub-hash-datahash-value-wrong - Copy.tlv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\shared\internal-policy-signatures\calendar-authentication-record\invalid-signature-cal-auth-rec-pub-hash-datahash-value-wrong.tlv">
@@ -1772,6 +1772,9 @@
     <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-has-deprecated-algorithm-in-calendar-chain-for-key-based-verification-GEN-02.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-has-deprecated-algorithm-in-calendar-chain-for-publications-file-policy-GEN-02.ksig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-has-deprecated-algorithm-in-calendar-chain-GEN-02.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -1826,6 +1829,12 @@
     <None Include="resources\signature\shared\policy-verification-signatures\policy-verification-signature-wrong-document-GEN-01.ksig">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="resources\signature\shared\policy-verification-signatures\resources\cert-file-for-deprecated-algorithm-in-calendar-chain.pem">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\policy-verification-signatures\resources\cert-for-publication-based-verification-gen2.pem">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="resources\signature\shared\policy-verification-signatures\resources\extender-response-for-CAL-03.tlv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -1837,6 +1846,12 @@
     </None>
     <None Include="resources\signature\shared\policy-verification-signatures\resources\extension-response-with-deprecated-algorithm.tlv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\policy-verification-signatures\resources\publications-file-for-deprecated-algorithm-in-calendar-chain.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\signature\shared\policy-verification-signatures\resources\publications-file-for-publication-based-verification-gen2.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\shared\policy-verification-signatures\resources\publications-file.bin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
