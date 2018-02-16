@@ -104,7 +104,20 @@ namespace Guardtime.KSI.Service
         /// <returns>
         /// A <see cref="T:System.Threading.WaitHandle"/> that is used to wait for an asynchronous operation to complete.
         /// </returns>
-        public WaitHandle AsyncWaitHandle => _waitHandle;
+        public WaitHandle AsyncWaitHandle
+        {
+            get
+            {
+                lock (_lock)
+                {
+                    if (_isDisposed)
+                    {
+                        throw new KsiServiceException("Cannot get AsyncWaitHandle property of a disposed object.");
+                    }
+                    return _waitHandle;
+                }
+            }
+        }
 
         /// <summary>
         /// Gets a value that indicates whether the asynchronous operation completed synchronously.
@@ -141,9 +154,12 @@ namespace Guardtime.KSI.Service
         /// </summary>
         public void Dispose()
         {
-            _isDisposed = true;
-            _waitHandle.Close();
-            ResultStream?.Dispose();
+            lock (_lock)
+            {
+                _isDisposed = true;
+                _waitHandle.Close();
+                ResultStream?.Dispose();
+            }
         }
 
         /// <summary>
@@ -153,16 +169,21 @@ namespace Guardtime.KSI.Service
         {
             lock (_lock)
             {
+                if (_isDisposed)
+                {
+                    return;
+                }
+
                 if (!_isCompleted)
                 {
                     _isCompleted = true;
                     _callback?.Invoke(this);
                 }
-            }
 
-            if (!_waitHandle.Set())
-            {
-                throw new KsiServiceProtocolException("WaitHandle completion failed");
+                if (!_waitHandle.Set())
+                {
+                    throw new KsiServiceProtocolException("WaitHandle completion failed");
+                }
             }
         }
     }

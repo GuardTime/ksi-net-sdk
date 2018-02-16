@@ -33,6 +33,7 @@ namespace Guardtime.KSI.Service.HighAvailability
 
         private readonly ManualResetEvent _waitHandle;
         private bool _isCompleted;
+        private bool _isDisposed;
 
         /// <summary>
         /// Create high availablity KSI service async result instance.
@@ -64,7 +65,20 @@ namespace Guardtime.KSI.Service.HighAvailability
         /// <summary>
         /// Gets a <see cref="T:System.Threading.WaitHandle"/> that is used to wait for an asynchronous operation to complete.
         /// </summary>
-        public WaitHandle AsyncWaitHandle => _waitHandle;
+        public WaitHandle AsyncWaitHandle
+        {
+            get
+            {
+                lock (_lock)
+                {
+                    if (_isDisposed)
+                    {
+                        throw new KsiServiceException("Cannot get AsyncWaitHandle property of a disposed object.");
+                    }
+                    return _waitHandle;
+                }
+            }
+        }
 
         /// <summary>
         /// Gets a value that indicates whether the asynchronous operation completed synchronously.
@@ -95,7 +109,11 @@ namespace Guardtime.KSI.Service.HighAvailability
         /// </summary>
         public void Dispose()
         {
-            _waitHandle.Close();
+            lock (_lock)
+            {
+                _isDisposed = true;
+                _waitHandle.Close();
+            }
         }
 
         /// <summary>
@@ -105,6 +123,10 @@ namespace Guardtime.KSI.Service.HighAvailability
         {
             lock (_lock)
             {
+                if (_isDisposed)
+                {
+                    return;
+                }
                 if (!_isCompleted)
                 {
                     _isCompleted = true;

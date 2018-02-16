@@ -24,15 +24,15 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Service.Tcp;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Policy;
-using NUnit.Framework;
-using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Test.Properties;
+using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Integration
 {
@@ -226,7 +226,7 @@ namespace Guardtime.KSI.Test.Integration
                 stream.CopyTo(ms);
             }
 
-            for (int i = 0; i < runCount; i ++)
+            for (int i = 0; i < runCount; i++)
             {
                 Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " Start " + i);
                 int k = i;
@@ -271,7 +271,7 @@ namespace Guardtime.KSI.Test.Integration
 
             Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " Waiting ...");
 
-            waitHandle.WaitOne(20000);
+            Assert.IsTrue(waitHandle.WaitOne(20000), "Wait handle timed out.");
 
             if (errorMessage != null)
             {
@@ -290,7 +290,7 @@ namespace Guardtime.KSI.Test.Integration
             {
                 service.Extend(1455494400);
             }
-                // if new aggregator then no exception
+            // if new aggregator then no exception
             catch (Exception ex)
             {
                 Assert.That(ex.Message.StartsWith("Received PDU v1 response to PDU v2 request. Configure the SDK to use PDU v1 format for the given Extender"),
@@ -314,13 +314,17 @@ namespace Guardtime.KSI.Test.Integration
                     isAsyncCorrect = ar.AsyncState == testObject;
                     cal = service.EndExtend(ar);
                 }
+                catch (Exception ex)
+                {
+                    Assert.Fail("Unexpected exception: " + ex);
+                }
                 finally
                 {
                     waitHandle.Set();
                 }
             }, testObject);
 
-            waitHandle.WaitOne(10000);
+            Assert.IsTrue(waitHandle.WaitOne(10000), "Wait handle timed out.");
 
             Assert.IsNotNull(cal, "Calendar hash chain should not be null.");
             Assert.AreEqual(true, isAsyncCorrect, "Unexpected async state.");
@@ -349,7 +353,7 @@ namespace Guardtime.KSI.Test.Integration
                 }
             }, null);
 
-            waitHandle.WaitOne(10000);
+            Assert.IsTrue(waitHandle.WaitOne(10000), "Wait handle timed out.");
 
             Assert.IsNull(cal, "Calendar hash chain should be null.");
             Assert.IsNotNull(ex, "Exception should not be null.");

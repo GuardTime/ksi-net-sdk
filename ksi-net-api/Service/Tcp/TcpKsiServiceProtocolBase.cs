@@ -34,7 +34,7 @@ namespace Guardtime.KSI.Service.Tcp
     public class TcpKsiServiceProtocolBase : IDisposable
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly uint _requestTimeOut = 10000;
+        private readonly int _requestTimeOut = 10000;
         private readonly uint _bufferSize = 8192;
         readonly byte[] _receivedDataBuffer;
         private readonly IPAddress _ipAddress;
@@ -42,8 +42,7 @@ namespace Guardtime.KSI.Service.Tcp
         private Socket _socket;
         private readonly object _syncObject = new object();
         private bool _isDisposed;
-        private ManualResetEvent _waitSocketConnectHandle;
-        private ManualResetEvent _waitHandle;
+        private readonly ManualResetEvent _waitSocketConnectHandle;
         private bool _isReceivingRetry;
         private readonly TcpResponseProcessor _responseProcessor;
         private readonly TcpAsyncResultCollection _asyncResults;
@@ -67,7 +66,7 @@ namespace Guardtime.KSI.Service.Tcp
 
             if (requestTimeout.HasValue)
             {
-                _requestTimeOut = requestTimeout.Value;
+                _requestTimeOut = (int)requestTimeout.Value;
             }
 
             if (bufferSize.HasValue)
@@ -83,6 +82,7 @@ namespace Guardtime.KSI.Service.Tcp
             _receivedDataBuffer = new byte[_bufferSize];
             _asyncResults = new TcpAsyncResultCollection();
             _responseProcessor = new TcpResponseProcessor(_asyncResults);
+            _waitSocketConnectHandle = new ManualResetEvent(false);
         }
 
         /// <summary>
@@ -95,10 +95,6 @@ namespace Guardtime.KSI.Service.Tcp
         /// </summary>
         public void Dispose()
         {
-            _waitHandle?.WaitOne();
-            // make new requests, retrying and error throwing to wait
-            _waitHandle = new ManualResetEvent(false);
-
             Logger.Debug("Disposing TCP KSI service protocol.");
 
             if (_isDisposed)
@@ -106,10 +102,12 @@ namespace Guardtime.KSI.Service.Tcp
                 throw new KsiServiceProtocolException("TCP KSI service protocol is already disposed.");
             }
 
-            _isDisposed = true;
-            CloseSocket();
-
-            _waitHandle.Set();
+            // Wait until making a new request, retrying or error throwing is in progress
+            lock (_syncObject)
+            {
+                _isDisposed = true;
+                CloseSocket();
+            }
         }
 
         /// <summary>
@@ -134,18 +132,28 @@ namespace Guardtime.KSI.Service.Tcp
             }
 
             TcpKsiServiceAsyncResult asyncResult = new TcpKsiServiceAsyncResult(requestType, data, requestId, callback, asyncState);
-            // wait until retrying, disposing or error throwing is in progress
-            _waitHandle?.WaitOne();
-            _asyncResults.Add(requestId, asyncResult);
+
+            Logger.Debug("Begin TCP request (request id: {0}).", asyncResult.RequestId);
+
+            // Wait until retrying, disposing or error throwing is in progress
+            lock (_syncObject)
+            {
+                _asyncResults.Add(requestId, asyncResult);
+            }
 
             if (_socket == null)
             {
                 CreateSocketAndConnect();
             }
 
-            BeginSend(asyncResult);
+            // Before starting sending request check that other request (possibly failed) haven't finished and disposed the async result.
+            if (!asyncResult.IsDisposed)
+            {
+                ThreadPool.RegisterWaitForSingleObject(asyncResult.AsyncWaitHandle, EndBeginRequestCallback, asyncResult, _requestTimeOut, true);
 
-            ThreadPool.RegisterWaitForSingleObject(asyncResult.AsyncWaitHandle, EndBeginRequestCallback, asyncResult, _requestTimeOut, true);
+                BeginSend(asyncResult);
+            }
+
             return asyncResult;
         }
 
@@ -177,7 +185,11 @@ namespace Guardtime.KSI.Service.Tcp
 
                 if (!asyncResult.IsCompleted)
                 {
-                    asyncResult.AsyncWaitHandle.WaitOne();
+                    if (!asyncResult.AsyncWaitHandle.WaitOne(_requestTimeOut))
+                    {
+                        Logger.Debug("Request timed out. Waiting asyncResult.AsyncWaitHandle in EndRequest timed out.");
+                        throw new KsiServiceProtocolException("Request timed out.");
+                    }
                 }
 
                 if (asyncResult.HasError)
@@ -186,7 +198,7 @@ namespace Guardtime.KSI.Service.Tcp
                     throw asyncResult.Error;
                 }
 
-                Logger.Debug("Service protocol returning {0} bytes (request id: {1}).", asyncResult.ResultStream.Length, asyncResult.RequestId);
+                Logger.Debug("TCP service protocol returning {0} bytes (request id: {1}).", asyncResult.ResultStream.Length, asyncResult.RequestId);
 
                 return asyncResult.ResultStream.ToArray();
             }
@@ -198,6 +210,11 @@ namespace Guardtime.KSI.Service.Tcp
 
         private void CloseSocket()
         {
+            if (!_waitSocketConnectHandle.Reset())
+            {
+                throw new KsiServiceProtocolException("_waitSocketConnectHandle reset failed.");
+            }
+
             if (_socket != null)
             {
                 Logger.Debug("Closing socket. Handle: " + _socket.Handle);
@@ -211,28 +228,14 @@ namespace Guardtime.KSI.Service.Tcp
                 _socket = null;
             }
 
-            if (_waitSocketConnectHandle != null)
-            {
-                _waitSocketConnectHandle.Set();
-                _waitSocketConnectHandle.Close();
-                _waitSocketConnectHandle = null;
-            }
-
             _responseProcessor?.Clear();
         }
 
         private void CreateSocketAndConnect()
         {
-            lock (_syncObject)
+            if (!_waitSocketConnectHandle.Reset())
             {
-                if (_waitSocketConnectHandle == null)
-                {
-                    _waitSocketConnectHandle = new ManualResetEvent(false);
-                }
-                else
-                {
-                    _waitSocketConnectHandle.WaitOne();
-                }
+                throw new KsiServiceProtocolException("_waitSocketConnectHandle reset failed.");
             }
 
             if (_socket == null)
@@ -252,12 +255,21 @@ namespace Guardtime.KSI.Service.Tcp
                 // Complete the connection.
                 _socket.EndConnect(ar);
                 Logger.Debug("Socket connected to {0}.", _socket.RemoteEndPoint.ToString());
-
+            }
+            catch (Exception e)
+            {
+                SetError(e, "Completing connection failed.");
+            }
+            finally
+            {
                 if (!_waitSocketConnectHandle.Set())
                 {
-                    throw new KsiServiceProtocolException("WaitSocketConnectHandle completion failed.");
+                    SetError(null, "Set WaitSocketConnectHandle failed.");
                 }
+            }
 
+            try
+            {
                 Logger.Debug("Starting receiving.");
                 _socket.BeginReceive(_receivedDataBuffer, 0, _receivedDataBuffer.Length, 0, ReceiveCallback, null);
             }
@@ -276,7 +288,12 @@ namespace Guardtime.KSI.Service.Tcp
 
             try
             {
-                _waitSocketConnectHandle.WaitOne();
+                if (!_waitSocketConnectHandle.WaitOne(_requestTimeOut))
+                {
+                    Logger.Debug("Request timed out. Waiting _waitSocketConnectHandle in BeginSend timed out.");
+                    throw new KsiServiceProtocolException("Request timed out.");
+                }
+
                 Logger.Debug("Starting sending (request id: {0}).", asyncResult.RequestId);
 
                 if (!asyncResult.IsCompleted)
@@ -322,7 +339,7 @@ namespace Guardtime.KSI.Service.Tcp
         {
             if (_isDisposed)
             {
-                Logger.Debug("Exiting receiving due to disposing TCP KSI service protocol.");
+                Logger.Debug("Exiting receiving due to disposing of TCP KSI service protocol.");
                 return;
             }
 
@@ -361,7 +378,7 @@ namespace Guardtime.KSI.Service.Tcp
             }
             catch (Exception ex)
             {
-                SetError(ex, "Processing received data failed. Result data: " + _responseProcessor.GetEncodedReceivedData());
+                SetError(ex, "Processing received data failed. " + Environment.NewLine + " Result data: " + _responseProcessor.GetEncodedReceivedData());
                 return;
             }
 
@@ -387,87 +404,110 @@ namespace Guardtime.KSI.Service.Tcp
 
         private void RetryUsingNewSocket()
         {
-            _waitHandle?.WaitOne();
-            // make new requests, error throwing and disposing to wait
-            _waitHandle = new ManualResetEvent(false);
-
-            try
+            // Wait until making a new request, disposing or error throwing is in progress
+            lock (_syncObject)
             {
-                CloseSocket();
-
-                if (_asyncResults.Count() == 0)
+                try
                 {
-                    Logger.Debug("No pending requests.");
-                }
-                else
-                {
-                    _isReceivingRetry = true;
-                    CreateSocketAndConnect();
+                    CloseSocket();
 
-                    Logger.Debug("Rerun all requests.");
-
-                    foreach (ulong key in _asyncResults.GetKeys())
+                    if (_asyncResults.Count() == 0)
                     {
-                        BeginSend(_asyncResults.GetValue(key));
+                        Logger.Debug("No pending requests.");
+                    }
+                    else
+                    {
+                        _isReceivingRetry = true;
+                        CreateSocketAndConnect();
+
+                        Logger.Debug("Rerun all requests.");
+
+                        foreach (ulong key in _asyncResults.GetKeys())
+                        {
+                            BeginSend(_asyncResults.GetValue(key));
+                        }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                SetError(ex, "Retrying with a new socket failed.");
-            }
-            finally
-            {
-                _waitHandle.Set();
+                catch (Exception ex)
+                {
+                    SetError(ex, "Retrying with a new socket failed.");
+                }
             }
         }
 
         private void EndBeginRequestCallback(object state, bool timedOut)
         {
-            TcpKsiServiceAsyncResult asyncResult = (TcpKsiServiceAsyncResult)state;
-            _asyncResults.Remove(asyncResult);
-
-            if (timedOut)
+            try
             {
-                asyncResult.Error = new KsiServiceProtocolException("Request timed out.");
-            }
+                TcpKsiServiceAsyncResult asyncResult = (TcpKsiServiceAsyncResult)state;
+                _asyncResults.Remove(asyncResult);
 
-            asyncResult.SetComplete();
+                if (timedOut)
+                {
+                    asyncResult.Error = new KsiServiceProtocolException("Request timed out.");
+                }
+
+                asyncResult.SetComplete();
+            }
+            catch (Exception ex)
+            {
+                Logger.Debug("EndBeginRequestCallback failed.", ex);
+                throw;
+            }
         }
 
         private void SetError(Exception e, string errorMessage)
         {
-            _waitHandle?.WaitOne();
-            // make new requests, disposing and retrying to wait
-            _waitHandle = new ManualResetEvent(false);
-
-            try
+            // Wait until making a new request, retrying or disposing is in progress
+            lock (_syncObject)
             {
-                Logger.Debug(errorMessage + " Closing socket due to error.");
-                CloseSocket();
-
-                // no specific asyncResult, notify all pending requests about the error
-                foreach (ulong key in _asyncResults.GetKeys())
+                try
                 {
-                    TcpKsiServiceAsyncResult asyncResult = _asyncResults.GetValue(key);
-                    asyncResult.Error = new KsiServiceProtocolException(errorMessage, e);
-                    asyncResult.SetComplete();
-                }
+                    Logger.Debug(errorMessage + Environment.NewLine + e + Environment.NewLine + "Closing socket due to error.");
+                    CloseSocket();
 
-                Logger.Debug("Clearing asyncResults.");
-                _asyncResults.Clear();
-            }
-            finally
-            {
-                _waitHandle.Set();
+                    // no specific asyncResult, notify all pending requests about the error
+                    foreach (ulong key in _asyncResults.GetKeys())
+                    {
+                        TcpKsiServiceAsyncResult asyncResult = _asyncResults.GetValue(key);
+                        // If an error already exists then do not overwrite.
+                        if (asyncResult.Error != null)
+                        {
+                            continue;
+                        }
+                        asyncResult.Error = new KsiServiceProtocolException(errorMessage, e);
+                        asyncResult.SetComplete();
+                    }
+
+                    Logger.Debug("Clearing asyncResults.");
+                    _asyncResults.Clear();
+                }
+                catch (Exception ex)
+                {
+                    Logger.Debug("SetError failed.", ex);
+                    throw;
+                }
             }
         }
 
         private void SetError(TcpKsiServiceAsyncResult asyncResult, Exception e, string errorMessage)
         {
-            asyncResult.Error = new KsiServiceProtocolException(errorMessage, e);
-            asyncResult.SetComplete();
-            _asyncResults.Remove(asyncResult);
+            try
+            {
+                // If an error already exists then do not overwrite.
+                if (asyncResult.Error != null)
+                {
+                    return;
+                }
+                asyncResult.Error = new KsiServiceProtocolException(errorMessage, e);
+                asyncResult.SetComplete();
+                _asyncResults.Remove(asyncResult);
+            }
+            catch (Exception ex)
+            {
+                Logger.Debug("SetError with asyncResult failed.", ex);
+                throw;
+            }
         }
     }
 }

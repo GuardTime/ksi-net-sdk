@@ -333,7 +333,7 @@ namespace Guardtime.KSI.Test.Integration
 
             Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff") + " Waiting ...");
 
-            waitHandle.WaitOne(20000);
+            Assert.IsTrue(waitHandle.WaitOne(20000), "Wait handle timed out.");
 
             if (errorMessage != null)
             {
@@ -412,13 +412,17 @@ namespace Guardtime.KSI.Test.Integration
                     isAsyncStateCorrect = ar.AsyncState == testObject;
                     signature = service.EndSign(ar);
                 }
+                catch (Exception ex)
+                {
+                    Assert.Fail("Unexpected exception: " + ex);
+                }
                 finally
                 {
                     waitHandle.Set();
                 }
             }, testObject);
 
-            waitHandle.WaitOne(10000);
+            Assert.IsTrue(waitHandle.WaitOne(10000), "Wait handle timed out.");
 
             Assert.IsNotNull(signature, "Signature should not be null.");
             Assert.AreEqual(true, isAsyncStateCorrect, "Unexpected async state.");
@@ -462,7 +466,7 @@ namespace Guardtime.KSI.Test.Integration
                 }
             }, null);
 
-            waitHandle.WaitOne(10000);
+            Assert.IsTrue(waitHandle.WaitOne(10000), "Wait handle timed out.");
 
             Assert.IsNull(signature, "Signature should be null.");
             Assert.IsNotNull(ex, "Exception should not be null.");

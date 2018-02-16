@@ -527,7 +527,7 @@ namespace Guardtime.KSI.Service
                 throw asyncResult.Error;
             }
 
-            Logger.Debug("Service protocol returning {0} bytes (request id: {1}).", asyncResult.ResultStream.Length, asyncResult.RequestId);
+            Logger.Debug("HTTP service protocol returning {0} bytes (request id: {1}).", asyncResult.ResultStream.Length, asyncResult.RequestId);
 
             return asyncResult.ResultStream.ToArray();
         }
