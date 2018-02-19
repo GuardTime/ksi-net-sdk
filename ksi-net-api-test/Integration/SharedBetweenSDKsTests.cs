@@ -228,10 +228,6 @@ namespace Guardtime.KSI.Test.Integration
                 return PubsFile;
             }
 
-            if (!string.IsNullOrEmpty(certPath))
-            {
-            }
-
             X509Store certStore = string.IsNullOrEmpty(certPath) ? new X509Store(StoreName.Root) : TestUtil.CreateCertStore(certPath);
 
             PublicationsFileFactory factory = new PublicationsFileFactory(
