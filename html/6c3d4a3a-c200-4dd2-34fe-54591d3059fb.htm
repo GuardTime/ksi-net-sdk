@@ -22,687 +22,137 @@
     <link rel="stylesheet" type="text/css" href="../styles/branding-Website.css" />
     <script type="text/javascript" src="../scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../scripts/branding-Website.js"></script>
+    <script type="text/javascript" src="../scripts/clipboard.min.js"></script>
   </head>
   <body onload="OnLoad('cs')">
     <input type="hidden" id="userDataCache" class="userDataStyle" />
     <div class="pageHeader" id="PageHeader">KSI .NET API<form id="SearchForm" method="get" action="#" onsubmit="javascript:TransferToSearchPage(); return false;"><input id="SearchTextBox" type="text" maxlength="200" /><button id="SearchButton" type="submit"></button></form></div>
     <div class="pageBody">
-      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="504f6905-a315-5d37-1522-273f3b568c3a.htm" title="Guardtime.KSI.Service Namespaces" tocid="504f6905-a315-5d37-1522-273f3b568c3a">Guardtime.KSI.Service Namespaces</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="6c3d4a3a-c200-4dd2-34fe-54591d3059fb.htm" title="Guardtime.KSI.Service" tocid="6c3d4a3a-c200-4dd2-34fe-54591d3059fb">Guardtime.KSI.Service</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="e29c4909-e8d0-2cf8-bc31-58636a5b1a6e.htm" title="AggregationErrorPayload Class" tocid="e29c4909-e8d0-2cf8-bc31-58636a5b1a6e">AggregationErrorPayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="6ab15b26-efb6-c1b6-e877-8130e44e4637.htm" title="AggregationRequestPayload Class" tocid="6ab15b26-efb6-c1b6-e877-8130e44e4637">AggregationRequestPayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="c1ec8259-a344-953e-5ae6-62f6d9e1a262.htm" title="AggregationRequestPdu Class" tocid="c1ec8259-a344-953e-5ae6-62f6d9e1a262">AggregationRequestPdu Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="d0b4ec7d-8abc-8e03-54ac-3edc14e2a08d.htm" title="AggregationResponsePayload Class" tocid="d0b4ec7d-8abc-8e03-54ac-3edc14e2a08d">AggregationResponsePayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="315af5e7-7690-c935-11c6-f93f8c16716b.htm" title="AggregationResponsePdu Class" tocid="315af5e7-7690-c935-11c6-f93f8c16716b">AggregationResponsePdu Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="c9ce8807-a052-d717-cf17-2cf52529a051.htm" title="AggregatorConfig Class" tocid="c9ce8807-a052-d717-cf17-2cf52529a051">AggregatorConfig Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="1f282b34-6b3f-d111-8002-70249ca43e2e.htm" title="AggregatorConfigRequestPayload Class" tocid="1f282b34-6b3f-d111-8002-70249ca43e2e">AggregatorConfigRequestPayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="4c977abf-cc6f-b472-6129-a82fdf925d8d.htm" title="AggregatorConfigResponsePayload Class" tocid="4c977abf-cc6f-b472-6129-a82fdf925d8d">AggregatorConfigResponsePayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="5bbc9c58-1beb-3f81-2fb2-bc27894f58be.htm" title="BlockSigner Class" tocid="5bbc9c58-1beb-3f81-2fb2-bc27894f58be">BlockSigner Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="65cc859c-561b-f242-a60a-b235f2691037.htm" title="ErrorPayload Class" tocid="65cc859c-561b-f242-a60a-b235f2691037">ErrorPayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="745e4dbe-5c58-9af7-e699-624ed6287b12.htm" title="ExtenderConfig Class" tocid="745e4dbe-5c58-9af7-e699-624ed6287b12">ExtenderConfig Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="5afde90a-2331-d17d-8531-921368dbea69.htm" title="ExtenderConfigRequestPayload Class" tocid="5afde90a-2331-d17d-8531-921368dbea69">ExtenderConfigRequestPayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="e83692db-9ff0-f07c-3e9a-f7223c69d363.htm" title="ExtenderConfigResponsePayload Class" tocid="e83692db-9ff0-f07c-3e9a-f7223c69d363">ExtenderConfigResponsePayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="4abd77bc-343c-a797-40e1-a9a25b2fd435.htm" title="ExtendErrorPayload Class" tocid="4abd77bc-343c-a797-40e1-a9a25b2fd435">ExtendErrorPayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="b3d0ca89-cff7-6bb4-61f2-1ffb2e4039e9.htm" title="ExtendRequestPayload Class" tocid="b3d0ca89-cff7-6bb4-61f2-1ffb2e4039e9">ExtendRequestPayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="405a9368-981b-2f75-eec5-30b4342b0206.htm" title="ExtendRequestPdu Class" tocid="405a9368-981b-2f75-eec5-30b4342b0206">ExtendRequestPdu Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="950e896a-7031-4977-fefe-c8df666de67e.htm" title="ExtendResponsePayload Class" tocid="950e896a-7031-4977-fefe-c8df666de67e">ExtendResponsePayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="ec04051b-f76c-41b7-c3ff-c48c39d0b4f1.htm" title="ExtendResponsePdu Class" tocid="ec04051b-f76c-41b7-c3ff-c48c39d0b4f1">ExtendResponsePdu Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="8fc5eae1-1449-3ab9-3677-8f213eb09c70.htm" title="HttpKsiServiceProtocol Class" tocid="8fc5eae1-1449-3ab9-3677-8f213eb09c70">HttpKsiServiceProtocol Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="49ff971d-51ed-5c52-800d-4affb9d07dc0.htm" title="IdentityMetadata Class" tocid="49ff971d-51ed-5c52-800d-4affb9d07dc0">IdentityMetadata Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="973dbbb4-2e75-f708-3aa9-29afb3d6908b.htm" title="IKsiExtendingServiceProtocol Interface" tocid="973dbbb4-2e75-f708-3aa9-29afb3d6908b">IKsiExtendingServiceProtocol Interface</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="20b0062e-6708-1600-0072-0685cb4bf723.htm" title="IKsiPublicationsFileServiceProtocol Interface" tocid="20b0062e-6708-1600-0072-0685cb4bf723">IKsiPublicationsFileServiceProtocol Interface</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="d33e394f-31b6-e477-a12b-d9c2c317251f.htm" title="IKsiService Interface" tocid="d33e394f-31b6-e477-a12b-d9c2c317251f">IKsiService Interface</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="fd26ebac-5415-1dc7-2718-ab6f2dd95406.htm" title="IKsiSigningServiceProtocol Interface" tocid="fd26ebac-5415-1dc7-2718-ab6f2dd95406">IKsiSigningServiceProtocol Interface</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="4a78658f-bab0-0824-f97a-7fd5a7c62b77.htm" title="IServiceCredentials Interface" tocid="4a78658f-bab0-0824-f97a-7fd5a7c62b77">IServiceCredentials Interface</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="ca2c884d-b796-629c-fc1a-b7fa95848182.htm" title="KsiService Class" tocid="ca2c884d-b796-629c-fc1a-b7fa95848182">KsiService Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="e47a1046-db2c-7df6-3888-bf30fbfafd53.htm" title="KsiServiceAsyncResult Class" tocid="e47a1046-db2c-7df6-3888-bf30fbfafd53">KsiServiceAsyncResult Class</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="1f191a55-e3b8-ac68-3af3-555e04e88ff6.htm" title="KsiServiceRequestType Enumeration" tocid="1f191a55-e3b8-ac68-3af3-555e04e88ff6">KsiServiceRequestType Enumeration</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="3f4771c5-0217-1e7b-88ac-b990cbd5dcb4.htm" title="KsiServiceResponseParser Class" tocid="3f4771c5-0217-1e7b-88ac-b990cbd5dcb4">KsiServiceResponseParser Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="f0263be5-70ff-5118-35bb-bb1ab8bdff33.htm" title="LegacyAggregationErrorPayload Class" tocid="f0263be5-70ff-5118-35bb-bb1ab8bdff33">LegacyAggregationErrorPayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="321010a4-673e-2eaa-ea08-ebe8b538551a.htm" title="LegacyAggregationPdu Class" tocid="321010a4-673e-2eaa-ea08-ebe8b538551a">LegacyAggregationPdu Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="08e8107d-b596-bb1b-0a26-9d740b76703e.htm" title="LegacyAggregationRequestPayload Class" tocid="08e8107d-b596-bb1b-0a26-9d740b76703e">LegacyAggregationRequestPayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="7c44c771-b101-c19b-8435-eef3c45af10a.htm" title="LegacyAggregationResponsePayload Class" tocid="7c44c771-b101-c19b-8435-eef3c45af10a">LegacyAggregationResponsePayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="2d3c1686-175b-f681-e2d8-64ed8d9b9642.htm" title="LegacyExtendErrorPayload Class" tocid="2d3c1686-175b-f681-e2d8-64ed8d9b9642">LegacyExtendErrorPayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="97a717ed-45c9-d664-507a-3c7f81efabc3.htm" title="LegacyExtendPdu Class" tocid="97a717ed-45c9-d664-507a-3c7f81efabc3">LegacyExtendPdu Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="4d06dc9d-5b64-4b4f-b577-d7b67757313b.htm" title="LegacyExtendRequestPayload Class" tocid="4d06dc9d-5b64-4b4f-b577-d7b67757313b">LegacyExtendRequestPayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="ca319427-1879-965d-8393-e40fd2d30b58.htm" title="LegacyExtendResponsePayload Class" tocid="ca319427-1879-965d-8393-e40fd2d30b58">LegacyExtendResponsePayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="4afee413-7f9c-0a23-ba42-0d14e1b6d1fa.htm" title="LegacyPdu Class" tocid="4afee413-7f9c-0a23-ba42-0d14e1b6d1fa">LegacyPdu Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="a8638e3d-1826-81ee-3536-9772dad78425.htm" title="Pdu Class" tocid="a8638e3d-1826-81ee-3536-9772dad78425">Pdu Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="c15897dd-6530-b1fe-b1d1-818c31edd54b.htm" title="PduHeader Class" tocid="c15897dd-6530-b1fe-b1d1-818c31edd54b">PduHeader Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="0d0ce02a-5ecb-6597-0d25-fa62bf5ff120.htm" title="PduPayload Class" tocid="0d0ce02a-5ecb-6597-0d25-fa62bf5ff120">PduPayload Class</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="6f2890e3-920a-078d-3693-8e2ee681bff1.htm" title="PduVersion Enumeration" tocid="6f2890e3-920a-078d-3693-8e2ee681bff1">PduVersion Enumeration</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="13bc119c-ded1-4550-ba3d-85eea6eb17b6.htm" title="RequestResponsePayload Class" tocid="13bc119c-ded1-4550-ba3d-85eea6eb17b6">RequestResponsePayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="dc44482f-b58a-3152-7033-43257e911916.htm" title="ResponsePayload Class" tocid="dc44482f-b58a-3152-7033-43257e911916">ResponsePayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="541356bd-3a18-c757-ae6d-d12b3b2f4ceb.htm" title="ServiceCredentials Class" tocid="541356bd-3a18-c757-ae6d-d12b3b2f4ceb">ServiceCredentials Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="6f051dd4-2d14-549c-7fa2-eb27fe3c3b29.htm" title="SignRequestResponsePayload Class" tocid="6f051dd4-2d14-549c-7fa2-eb27fe3c3b29">SignRequestResponsePayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="66b3c392-c3b4-b0eb-ed92-c8a4f28e90b0.htm" title="TcpKsiServiceProtocol Class" tocid="66b3c392-c3b4-b0eb-ed92-c8a4f28e90b0">TcpKsiServiceProtocol Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="c2bf788d-b844-60b5-2558-8e5e8b99671f.htm" title="TreeBuilder Class" tocid="c2bf788d-b844-60b5-2558-8e5e8b99671f">TreeBuilder Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="6570ed0e-f1c3-d6f4-0048-608c745eace0.htm" title="TreeNode Class" tocid="6570ed0e-f1c3-d6f4-0048-608c745eace0">TreeNode Class</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
+      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/504f6905-a315-5d37-1522-273f3b568c3a.htm" title="Guardtime.KSI.Service Namespaces" tocid="504f6905-a315-5d37-1522-273f3b568c3a">Guardtime.KSI.Service Namespaces</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="6c3d4a3a-c200-4dd2-34fe-54591d3059fb.htm" title="Guardtime.KSI.Service" tocid="6c3d4a3a-c200-4dd2-34fe-54591d3059fb">Guardtime.KSI.Service</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="acd6fdd1-6d5e-2ba3-bea1-7ebc91d7e4cc.htm" title="AbstractConfig Class" tocid="acd6fdd1-6d5e-2ba3-bea1-7ebc91d7e4cc">AbstractConfig Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="e29c4909-e8d0-2cf8-bc31-58636a5b1a6e.htm" title="AggregationErrorPayload Class" tocid="e29c4909-e8d0-2cf8-bc31-58636a5b1a6e">AggregationErrorPayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="6ab15b26-efb6-c1b6-e877-8130e44e4637.htm" title="AggregationRequestPayload Class" tocid="6ab15b26-efb6-c1b6-e877-8130e44e4637">AggregationRequestPayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="c1ec8259-a344-953e-5ae6-62f6d9e1a262.htm" title="AggregationRequestPdu Class" tocid="c1ec8259-a344-953e-5ae6-62f6d9e1a262">AggregationRequestPdu Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="d0b4ec7d-8abc-8e03-54ac-3edc14e2a08d.htm" title="AggregationResponsePayload Class" tocid="d0b4ec7d-8abc-8e03-54ac-3edc14e2a08d">AggregationResponsePayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="315af5e7-7690-c935-11c6-f93f8c16716b.htm" title="AggregationResponsePdu Class" tocid="315af5e7-7690-c935-11c6-f93f8c16716b">AggregationResponsePdu Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="c9ce8807-a052-d717-cf17-2cf52529a051.htm" title="AggregatorConfig Class" tocid="c9ce8807-a052-d717-cf17-2cf52529a051">AggregatorConfig Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="38803d94-1e72-96d3-1198-b6cf8a3e441e.htm" title="AggregatorConfigChangedEventArgs Class" tocid="38803d94-1e72-96d3-1198-b6cf8a3e441e">AggregatorConfigChangedEventArgs Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="1f282b34-6b3f-d111-8002-70249ca43e2e.htm" title="AggregatorConfigRequestPayload Class" tocid="1f282b34-6b3f-d111-8002-70249ca43e2e">AggregatorConfigRequestPayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="4c977abf-cc6f-b472-6129-a82fdf925d8d.htm" title="AggregatorConfigResponsePayload Class" tocid="4c977abf-cc6f-b472-6129-a82fdf925d8d">AggregatorConfigResponsePayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="5bbc9c58-1beb-3f81-2fb2-bc27894f58be.htm" title="BlockSigner Class" tocid="5bbc9c58-1beb-3f81-2fb2-bc27894f58be">BlockSigner Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="65cc859c-561b-f242-a60a-b235f2691037.htm" title="ErrorPayload Class" tocid="65cc859c-561b-f242-a60a-b235f2691037">ErrorPayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="745e4dbe-5c58-9af7-e699-624ed6287b12.htm" title="ExtenderConfig Class" tocid="745e4dbe-5c58-9af7-e699-624ed6287b12">ExtenderConfig Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="e65fd305-64de-e38c-1b15-7716e8e6f70b.htm" title="ExtenderConfigChangedEventArgs Class" tocid="e65fd305-64de-e38c-1b15-7716e8e6f70b">ExtenderConfigChangedEventArgs Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="5afde90a-2331-d17d-8531-921368dbea69.htm" title="ExtenderConfigRequestPayload Class" tocid="5afde90a-2331-d17d-8531-921368dbea69">ExtenderConfigRequestPayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="e83692db-9ff0-f07c-3e9a-f7223c69d363.htm" title="ExtenderConfigResponsePayload Class" tocid="e83692db-9ff0-f07c-3e9a-f7223c69d363">ExtenderConfigResponsePayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="4abd77bc-343c-a797-40e1-a9a25b2fd435.htm" title="ExtendErrorPayload Class" tocid="4abd77bc-343c-a797-40e1-a9a25b2fd435">ExtendErrorPayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="b3d0ca89-cff7-6bb4-61f2-1ffb2e4039e9.htm" title="ExtendRequestPayload Class" tocid="b3d0ca89-cff7-6bb4-61f2-1ffb2e4039e9">ExtendRequestPayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="405a9368-981b-2f75-eec5-30b4342b0206.htm" title="ExtendRequestPdu Class" tocid="405a9368-981b-2f75-eec5-30b4342b0206">ExtendRequestPdu Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="950e896a-7031-4977-fefe-c8df666de67e.htm" title="ExtendResponsePayload Class" tocid="950e896a-7031-4977-fefe-c8df666de67e">ExtendResponsePayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="ec04051b-f76c-41b7-c3ff-c48c39d0b4f1.htm" title="ExtendResponsePdu Class" tocid="ec04051b-f76c-41b7-c3ff-c48c39d0b4f1">ExtendResponsePdu Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="8fc5eae1-1449-3ab9-3677-8f213eb09c70.htm" title="HttpKsiServiceProtocol Class" tocid="8fc5eae1-1449-3ab9-3677-8f213eb09c70">HttpKsiServiceProtocol Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="49ff971d-51ed-5c52-800d-4affb9d07dc0.htm" title="IdentityMetadata Class" tocid="49ff971d-51ed-5c52-800d-4affb9d07dc0">IdentityMetadata Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="973dbbb4-2e75-f708-3aa9-29afb3d6908b.htm" title="IKsiExtendingServiceProtocol Interface" tocid="973dbbb4-2e75-f708-3aa9-29afb3d6908b">IKsiExtendingServiceProtocol Interface</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="20b0062e-6708-1600-0072-0685cb4bf723.htm" title="IKsiPublicationsFileServiceProtocol Interface" tocid="20b0062e-6708-1600-0072-0685cb4bf723">IKsiPublicationsFileServiceProtocol Interface</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="d33e394f-31b6-e477-a12b-d9c2c317251f.htm" title="IKsiService Interface" tocid="d33e394f-31b6-e477-a12b-d9c2c317251f">IKsiService Interface</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="fd26ebac-5415-1dc7-2718-ab6f2dd95406.htm" title="IKsiSigningServiceProtocol Interface" tocid="fd26ebac-5415-1dc7-2718-ab6f2dd95406">IKsiSigningServiceProtocol Interface</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="4a78658f-bab0-0824-f97a-7fd5a7c62b77.htm" title="IServiceCredentials Interface" tocid="4a78658f-bab0-0824-f97a-7fd5a7c62b77">IServiceCredentials Interface</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="ca2c884d-b796-629c-fc1a-b7fa95848182.htm" title="KsiService Class" tocid="ca2c884d-b796-629c-fc1a-b7fa95848182">KsiService Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="e47a1046-db2c-7df6-3888-bf30fbfafd53.htm" title="KsiServiceAsyncResult Class" tocid="e47a1046-db2c-7df6-3888-bf30fbfafd53">KsiServiceAsyncResult Class</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="1f191a55-e3b8-ac68-3af3-555e04e88ff6.htm" title="KsiServiceRequestType Enumeration" tocid="1f191a55-e3b8-ac68-3af3-555e04e88ff6">KsiServiceRequestType Enumeration</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="3f4771c5-0217-1e7b-88ac-b990cbd5dcb4.htm" title="KsiServiceResponseParser Class" tocid="3f4771c5-0217-1e7b-88ac-b990cbd5dcb4">KsiServiceResponseParser Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="f55c83ad-212a-3679-4cc9-9106ff9202d0.htm" title="KsiServiceResponsePayloadInfo Class" tocid="f55c83ad-212a-3679-4cc9-9106ff9202d0">KsiServiceResponsePayloadInfo Class</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="9173c5c4-b033-cb21-04c9-0467ee99cf19.htm" title="KsiServiceResponsePayloadType Enumeration" tocid="9173c5c4-b033-cb21-04c9-0467ee99cf19">KsiServiceResponsePayloadType Enumeration</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="f0263be5-70ff-5118-35bb-bb1ab8bdff33.htm" title="LegacyAggregationErrorPayload Class" tocid="f0263be5-70ff-5118-35bb-bb1ab8bdff33">LegacyAggregationErrorPayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="321010a4-673e-2eaa-ea08-ebe8b538551a.htm" title="LegacyAggregationPdu Class" tocid="321010a4-673e-2eaa-ea08-ebe8b538551a">LegacyAggregationPdu Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="08e8107d-b596-bb1b-0a26-9d740b76703e.htm" title="LegacyAggregationRequestPayload Class" tocid="08e8107d-b596-bb1b-0a26-9d740b76703e">LegacyAggregationRequestPayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="7c44c771-b101-c19b-8435-eef3c45af10a.htm" title="LegacyAggregationResponsePayload Class" tocid="7c44c771-b101-c19b-8435-eef3c45af10a">LegacyAggregationResponsePayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="2d3c1686-175b-f681-e2d8-64ed8d9b9642.htm" title="LegacyExtendErrorPayload Class" tocid="2d3c1686-175b-f681-e2d8-64ed8d9b9642">LegacyExtendErrorPayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="97a717ed-45c9-d664-507a-3c7f81efabc3.htm" title="LegacyExtendPdu Class" tocid="97a717ed-45c9-d664-507a-3c7f81efabc3">LegacyExtendPdu Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="4d06dc9d-5b64-4b4f-b577-d7b67757313b.htm" title="LegacyExtendRequestPayload Class" tocid="4d06dc9d-5b64-4b4f-b577-d7b67757313b">LegacyExtendRequestPayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="ca319427-1879-965d-8393-e40fd2d30b58.htm" title="LegacyExtendResponsePayload Class" tocid="ca319427-1879-965d-8393-e40fd2d30b58">LegacyExtendResponsePayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="4afee413-7f9c-0a23-ba42-0d14e1b6d1fa.htm" title="LegacyPdu Class" tocid="4afee413-7f9c-0a23-ba42-0d14e1b6d1fa">LegacyPdu Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="a8638e3d-1826-81ee-3536-9772dad78425.htm" title="Pdu Class" tocid="a8638e3d-1826-81ee-3536-9772dad78425">Pdu Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="c15897dd-6530-b1fe-b1d1-818c31edd54b.htm" title="PduHeader Class" tocid="c15897dd-6530-b1fe-b1d1-818c31edd54b">PduHeader Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="0d0ce02a-5ecb-6597-0d25-fa62bf5ff120.htm" title="PduPayload Class" tocid="0d0ce02a-5ecb-6597-0d25-fa62bf5ff120">PduPayload Class</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="6f2890e3-920a-078d-3693-8e2ee681bff1.htm" title="PduVersion Enumeration" tocid="6f2890e3-920a-078d-3693-8e2ee681bff1">PduVersion Enumeration</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="13bc119c-ded1-4550-ba3d-85eea6eb17b6.htm" title="RequestResponsePayload Class" tocid="13bc119c-ded1-4550-ba3d-85eea6eb17b6">RequestResponsePayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="dc44482f-b58a-3152-7033-43257e911916.htm" title="ResponsePayload Class" tocid="dc44482f-b58a-3152-7033-43257e911916">ResponsePayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="541356bd-3a18-c757-ae6d-d12b3b2f4ceb.htm" title="ServiceCredentials Class" tocid="541356bd-3a18-c757-ae6d-d12b3b2f4ceb">ServiceCredentials Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="6f051dd4-2d14-549c-7fa2-eb27fe3c3b29.htm" title="SignRequestResponsePayload Class" tocid="6f051dd4-2d14-549c-7fa2-eb27fe3c3b29">SignRequestResponsePayload Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="66b3c392-c3b4-b0eb-ed92-c8a4f28e90b0.htm" title="TcpKsiServiceProtocol Class" tocid="66b3c392-c3b4-b0eb-ed92-c8a4f28e90b0">TcpKsiServiceProtocol Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="c2bf788d-b844-60b5-2558-8e5e8b99671f.htm" title="TreeBuilder Class" tocid="c2bf788d-b844-60b5-2558-8e5e8b99671f">TreeBuilder Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="6570ed0e-f1c3-d6f4-0048-608c745eace0.htm" title="TreeNode Class" tocid="6570ed0e-f1c3-d6f4-0048-608c745eace0">TreeNode Class</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
         <table class="titleTable">
           <tr>
-            <td class="titleColumn">Guardtime.KSI.Service Namespace</td>
+            <td class="titleColumn">
+              <h1>Guardtime.KSI.Service Namespace</h1>
+            </td>
           </tr>
         </table>
-        <span class="introStyle"></span>
-        <div class="summary"> </div>
-        <div class="collapsibleAreaRegion">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0">
-            <img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Classes</span>
-        </div>
-        <div id="ID0RBSection" class="collapsibleSection">
-          <table id="typeList" class="members">
-            <tr>
-              <th class="iconColumn">
+        <span class="introStyle"></span> <div class="summary"> </div><div class="collapsibleAreaRegion"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0"><img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Classes</span></div><div id="ID0RBSection" class="collapsibleSection"><table class="members" id="classList"><tr><th class="iconColumn">
 					 
-				</th>
-              <th>Class</th>
-              <th>Description</th>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="e29c4909-e8d0-2cf8-bc31-58636a5b1a6e.htm">AggregationErrorPayload</a>
-              </td>
-              <td>
-                <div class="summary">
+				</th><th>Class</th><th>Description</th></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="acd6fdd1-6d5e-2ba3-bea1-7ebc91d7e4cc.htm">AbstractConfig</a></td><td><div class="summary">
+                Abstract configuration data.
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="e29c4909-e8d0-2cf8-bc31-58636a5b1a6e.htm">AggregationErrorPayload</a></td><td><div class="summary">
                 Aggregation Error payload TLV element.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="6ab15b26-efb6-c1b6-e877-8130e44e4637.htm">AggregationRequestPayload</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="6ab15b26-efb6-c1b6-e877-8130e44e4637.htm">AggregationRequestPayload</a></td><td><div class="summary">
                 Aggregation request payload.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="c1ec8259-a344-953e-5ae6-62f6d9e1a262.htm">AggregationRequestPdu</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="c1ec8259-a344-953e-5ae6-62f6d9e1a262.htm">AggregationRequestPdu</a></td><td><div class="summary">
                 Aggregation request message PDU.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="d0b4ec7d-8abc-8e03-54ac-3edc14e2a08d.htm">AggregationResponsePayload</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="d0b4ec7d-8abc-8e03-54ac-3edc14e2a08d.htm">AggregationResponsePayload</a></td><td><div class="summary">
                 Aggregation response payload.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="315af5e7-7690-c935-11c6-f93f8c16716b.htm">AggregationResponsePdu</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="315af5e7-7690-c935-11c6-f93f8c16716b.htm">AggregationResponsePdu</a></td><td><div class="summary">
                 Aggregation response message PDU.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="c9ce8807-a052-d717-cf17-2cf52529a051.htm">AggregatorConfig</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="c9ce8807-a052-d717-cf17-2cf52529a051.htm">AggregatorConfig</a></td><td><div class="summary">
                 Aggregator configuration data.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="1f282b34-6b3f-d111-8002-70249ca43e2e.htm">AggregatorConfigRequestPayload</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="38803d94-1e72-96d3-1198-b6cf8a3e441e.htm">AggregatorConfigChangedEventArgs</a></td><td><div class="summary">
+            Class holding aggregator configuration changed event information. 
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="1f282b34-6b3f-d111-8002-70249ca43e2e.htm">AggregatorConfigRequestPayload</a></td><td><div class="summary">
                 Aggregator configuration request payload.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="4c977abf-cc6f-b472-6129-a82fdf925d8d.htm">AggregatorConfigResponsePayload</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="4c977abf-cc6f-b472-6129-a82fdf925d8d.htm">AggregatorConfigResponsePayload</a></td><td><div class="summary">
                 Aggregator configuration response payload.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="5bbc9c58-1beb-3f81-2fb2-bc27894f58be.htm">BlockSigner</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="5bbc9c58-1beb-3f81-2fb2-bc27894f58be.htm">BlockSigner</a></td><td><div class="summary">
             Class to create multiple uni-signatures.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="65cc859c-561b-f242-a60a-b235f2691037.htm">ErrorPayload</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="65cc859c-561b-f242-a60a-b235f2691037.htm">ErrorPayload</a></td><td><div class="summary">
                 Aggregation Error payload TLV element.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="745e4dbe-5c58-9af7-e699-624ed6287b12.htm">ExtenderConfig</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="745e4dbe-5c58-9af7-e699-624ed6287b12.htm">ExtenderConfig</a></td><td><div class="summary">
                 Class containing extender configuration data.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="5afde90a-2331-d17d-8531-921368dbea69.htm">ExtenderConfigRequestPayload</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="e65fd305-64de-e38c-1b15-7716e8e6f70b.htm">ExtenderConfigChangedEventArgs</a></td><td><div class="summary">
+            Class holding extender configuration changed event information. 
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="5afde90a-2331-d17d-8531-921368dbea69.htm">ExtenderConfigRequestPayload</a></td><td><div class="summary">
                 Extender configuration request payload.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="e83692db-9ff0-f07c-3e9a-f7223c69d363.htm">ExtenderConfigResponsePayload</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="e83692db-9ff0-f07c-3e9a-f7223c69d363.htm">ExtenderConfigResponsePayload</a></td><td><div class="summary">
                 Extender configuration response payload.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="4abd77bc-343c-a797-40e1-a9a25b2fd435.htm">ExtendErrorPayload</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="4abd77bc-343c-a797-40e1-a9a25b2fd435.htm">ExtendErrorPayload</a></td><td><div class="summary">
                 Extend error payload.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="b3d0ca89-cff7-6bb4-61f2-1ffb2e4039e9.htm">ExtendRequestPayload</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="b3d0ca89-cff7-6bb4-61f2-1ffb2e4039e9.htm">ExtendRequestPayload</a></td><td><div class="summary">
                 Extend request payload.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="405a9368-981b-2f75-eec5-30b4342b0206.htm">ExtendRequestPdu</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="405a9368-981b-2f75-eec5-30b4342b0206.htm">ExtendRequestPdu</a></td><td><div class="summary">
                 Extend request PDU.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="950e896a-7031-4977-fefe-c8df666de67e.htm">ExtendResponsePayload</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="950e896a-7031-4977-fefe-c8df666de67e.htm">ExtendResponsePayload</a></td><td><div class="summary">
                 Extend response payload.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="ec04051b-f76c-41b7-c3ff-c48c39d0b4f1.htm">ExtendResponsePdu</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="ec04051b-f76c-41b7-c3ff-c48c39d0b4f1.htm">ExtendResponsePdu</a></td><td><div class="summary">
                 Extend response PDU.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="8fc5eae1-1449-3ab9-3677-8f213eb09c70.htm">HttpKsiServiceProtocol</a>
-              </td>
-              <td>
-                <div class="summary">
-                HTTP KSI service protocol.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="49ff971d-51ed-5c52-800d-4affb9d07dc0.htm">IdentityMetadata</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="8fc5eae1-1449-3ab9-3677-8f213eb09c70.htm">HttpKsiServiceProtocol</a></td><td><div class="summary">
+            HTTP KSI service protocol.
+            Responsible for making HTTP requests to aggregator and extender and requesting publications file.
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="49ff971d-51ed-5c52-800d-4affb9d07dc0.htm">IdentityMetadata</a></td><td><div class="summary">
             Metadata to be added to the signature.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="ca2c884d-b796-629c-fc1a-b7fa95848182.htm">KsiService</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="ca2c884d-b796-629c-fc1a-b7fa95848182.htm">KsiService</a></td><td><div class="summary">
                 KSI service.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="e47a1046-db2c-7df6-3888-bf30fbfafd53.htm">KsiServiceAsyncResult</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="e47a1046-db2c-7df6-3888-bf30fbfafd53.htm">KsiServiceAsyncResult</a></td><td><div class="summary">
                 KSI service async result.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="3f4771c5-0217-1e7b-88ac-b990cbd5dcb4.htm">KsiServiceResponseParser</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="3f4771c5-0217-1e7b-88ac-b990cbd5dcb4.htm">KsiServiceResponseParser</a></td><td><div class="summary">
             Class for parsing KSI service response.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="f0263be5-70ff-5118-35bb-bb1ab8bdff33.htm">LegacyAggregationErrorPayload</a>
-              </td>
-              <td> <strong>Obsolete. </strong><div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="f55c83ad-212a-3679-4cc9-9106ff9202d0.htm">KsiServiceResponsePayloadInfo</a></td><td><div class="summary">
+            Class containing KSI service response payload info (payload type and request ID)
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="f0263be5-70ff-5118-35bb-bb1ab8bdff33.htm">LegacyAggregationErrorPayload</a></td><td> <strong>Obsolete. </strong><div class="summary">
                 Aggregation Error payload TLV element.
-            </div></td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="321010a4-673e-2eaa-ea08-ebe8b538551a.htm">LegacyAggregationPdu</a>
-              </td>
-              <td> <strong>Obsolete. </strong><div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="321010a4-673e-2eaa-ea08-ebe8b538551a.htm">LegacyAggregationPdu</a></td><td> <strong>Obsolete. </strong><div class="summary">
                 Aggregation message PDU.
-            </div></td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="08e8107d-b596-bb1b-0a26-9d740b76703e.htm">LegacyAggregationRequestPayload</a>
-              </td>
-              <td> <strong>Obsolete. </strong><div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="08e8107d-b596-bb1b-0a26-9d740b76703e.htm">LegacyAggregationRequestPayload</a></td><td> <strong>Obsolete. </strong><div class="summary">
                 Aggregation request payload.
-            </div></td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="7c44c771-b101-c19b-8435-eef3c45af10a.htm">LegacyAggregationResponsePayload</a>
-              </td>
-              <td> <strong>Obsolete. </strong><div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="7c44c771-b101-c19b-8435-eef3c45af10a.htm">LegacyAggregationResponsePayload</a></td><td> <strong>Obsolete. </strong><div class="summary">
                 Aggregation response payload.
-            </div></td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="2d3c1686-175b-f681-e2d8-64ed8d9b9642.htm">LegacyExtendErrorPayload</a>
-              </td>
-              <td> <strong>Obsolete. </strong><div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="2d3c1686-175b-f681-e2d8-64ed8d9b9642.htm">LegacyExtendErrorPayload</a></td><td> <strong>Obsolete. </strong><div class="summary">
                 Extend error payload.
-            </div></td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="97a717ed-45c9-d664-507a-3c7f81efabc3.htm">LegacyExtendPdu</a>
-              </td>
-              <td> <strong>Obsolete. </strong><div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="97a717ed-45c9-d664-507a-3c7f81efabc3.htm">LegacyExtendPdu</a></td><td> <strong>Obsolete. </strong><div class="summary">
                 Extend PDU.
-            </div></td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="4d06dc9d-5b64-4b4f-b577-d7b67757313b.htm">LegacyExtendRequestPayload</a>
-              </td>
-              <td> <strong>Obsolete. </strong><div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="4d06dc9d-5b64-4b4f-b577-d7b67757313b.htm">LegacyExtendRequestPayload</a></td><td> <strong>Obsolete. </strong><div class="summary">
                 Extend request payload.
-            </div></td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="ca319427-1879-965d-8393-e40fd2d30b58.htm">LegacyExtendResponsePayload</a>
-              </td>
-              <td> <strong>Obsolete. </strong><div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="ca319427-1879-965d-8393-e40fd2d30b58.htm">LegacyExtendResponsePayload</a></td><td> <strong>Obsolete. </strong><div class="summary">
                 Extend response payload.
-            </div></td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="4afee413-7f9c-0a23-ba42-0d14e1b6d1fa.htm">LegacyPdu</a>
-              </td>
-              <td> <strong>Obsolete. </strong><div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="4afee413-7f9c-0a23-ba42-0d14e1b6d1fa.htm">LegacyPdu</a></td><td> <strong>Obsolete. </strong><div class="summary">
             Legacy Protocol Data Unit.
-            </div></td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="a8638e3d-1826-81ee-3536-9772dad78425.htm">Pdu</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="a8638e3d-1826-81ee-3536-9772dad78425.htm">Pdu</a></td><td><div class="summary">
             Protocol Data Unit
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="c15897dd-6530-b1fe-b1d1-818c31edd54b.htm">PduHeader</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="c15897dd-6530-b1fe-b1d1-818c31edd54b.htm">PduHeader</a></td><td><div class="summary">
             PDU header.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="0d0ce02a-5ecb-6597-0d25-fa62bf5ff120.htm">PduPayload</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="0d0ce02a-5ecb-6597-0d25-fa62bf5ff120.htm">PduPayload</a></td><td><div class="summary">
             PDU payload.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="13bc119c-ded1-4550-ba3d-85eea6eb17b6.htm">RequestResponsePayload</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="13bc119c-ded1-4550-ba3d-85eea6eb17b6.htm">RequestResponsePayload</a></td><td><div class="summary">
             KSI service request response payload. Contains request ID.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="dc44482f-b58a-3152-7033-43257e911916.htm">ResponsePayload</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="dc44482f-b58a-3152-7033-43257e911916.htm">ResponsePayload</a></td><td><div class="summary">
             KSI service response payload.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="541356bd-3a18-c757-ae6d-d12b3b2f4ceb.htm">ServiceCredentials</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="541356bd-3a18-c757-ae6d-d12b3b2f4ceb.htm">ServiceCredentials</a></td><td><div class="summary">
                 Service credentials.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="6f051dd4-2d14-549c-7fa2-eb27fe3c3b29.htm">SignRequestResponsePayload</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="6f051dd4-2d14-549c-7fa2-eb27fe3c3b29.htm">SignRequestResponsePayload</a></td><td><div class="summary">
             Sign request response payload.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="66b3c392-c3b4-b0eb-ed92-c8a4f28e90b0.htm">TcpKsiServiceProtocol</a>
-              </td>
-              <td>
-                <div class="summary">
-            TCP KSI service protocol.
-            All requests and responses go through one socket that is kept opened for future requests.
-            If a request fails (eg. socket is closed by server) it will be repeated once more with a new freshly connected socket.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="c2bf788d-b844-60b5-2558-8e5e8b99671f.htm">TreeBuilder</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="66b3c392-c3b4-b0eb-ed92-c8a4f28e90b0.htm">TcpKsiServiceProtocol</a></td><td> <strong>Obsolete. </strong><div class="summary">
+            TCP KSI service protocol for signing.
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="c2bf788d-b844-60b5-2558-8e5e8b99671f.htm">TreeBuilder</a></td><td><div class="summary">
             Class for building Merkle tree and receiving the tree root node.
             The order of added nodes will be persisted.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="6570ed0e-f1c3-d6f4-0048-608c745eace0.htm">TreeNode</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="6570ed0e-f1c3-d6f4-0048-608c745eace0.htm">TreeNode</a></td><td><div class="summary">
             Merkle tree node. Used to build Merkle tree during local aggregation.
-            </div>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <div class="collapsibleAreaRegion">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0">
-            <img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Interfaces</span>
-        </div>
-        <div id="ID1RBSection" class="collapsibleSection">
-          <table id="typeList" class="members">
-            <tr>
-              <th class="iconColumn">
+            </div></td></tr></table></div><div class="collapsibleAreaRegion"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0"><img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Interfaces</span></div><div id="ID1RBSection" class="collapsibleSection"><table class="members" id="interfaceList"><tr><th class="iconColumn">
 					 
-				</th>
-              <th>Interface</th>
-              <th>Description</th>
-            </tr>
-            <tr data="interface; public">
-              <td>
-                <img src="../icons/pubinterface.gif" alt="Public interface" title="Public interface" />
-              </td>
-              <td>
-                <a href="973dbbb4-2e75-f708-3aa9-29afb3d6908b.htm">IKsiExtendingServiceProtocol</a>
-              </td>
-              <td>
-                <div class="summary">
+				</th><th>Interface</th><th>Description</th></tr><tr data="interface; public"><td><img src="../icons/pubinterface.gif" alt="Public interface" title="Public interface" /></td><td><a href="973dbbb4-2e75-f708-3aa9-29afb3d6908b.htm">IKsiExtendingServiceProtocol</a></td><td><div class="summary">
                 Service protocol interface for making KSI signature extending request.
-            </div>
-              </td>
-            </tr>
-            <tr data="interface; public">
-              <td>
-                <img src="../icons/pubinterface.gif" alt="Public interface" title="Public interface" />
-              </td>
-              <td>
-                <a href="20b0062e-6708-1600-0072-0685cb4bf723.htm">IKsiPublicationsFileServiceProtocol</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="interface; public"><td><img src="../icons/pubinterface.gif" alt="Public interface" title="Public interface" /></td><td><a href="20b0062e-6708-1600-0072-0685cb4bf723.htm">IKsiPublicationsFileServiceProtocol</a></td><td><div class="summary">
                 Service protocol interface for making KSI publications file request.
-            </div>
-              </td>
-            </tr>
-            <tr data="interface; public">
-              <td>
-                <img src="../icons/pubinterface.gif" alt="Public interface" title="Public interface" />
-              </td>
-              <td>
-                <a href="d33e394f-31b6-e477-a12b-d9c2c317251f.htm">IKsiService</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="interface; public"><td><img src="../icons/pubinterface.gif" alt="Public interface" title="Public interface" /></td><td><a href="d33e394f-31b6-e477-a12b-d9c2c317251f.htm">IKsiService</a></td><td><div class="summary">
                 KSI service interface.
-            </div>
-              </td>
-            </tr>
-            <tr data="interface; public">
-              <td>
-                <img src="../icons/pubinterface.gif" alt="Public interface" title="Public interface" />
-              </td>
-              <td>
-                <a href="fd26ebac-5415-1dc7-2718-ab6f2dd95406.htm">IKsiSigningServiceProtocol</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="interface; public"><td><img src="../icons/pubinterface.gif" alt="Public interface" title="Public interface" /></td><td><a href="fd26ebac-5415-1dc7-2718-ab6f2dd95406.htm">IKsiSigningServiceProtocol</a></td><td><div class="summary">
                 Service protocol interface for making KSI signing request.
-            </div>
-              </td>
-            </tr>
-            <tr data="interface; public">
-              <td>
-                <img src="../icons/pubinterface.gif" alt="Public interface" title="Public interface" />
-              </td>
-              <td>
-                <a href="4a78658f-bab0-0824-f97a-7fd5a7c62b77.htm">IServiceCredentials</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="interface; public"><td><img src="../icons/pubinterface.gif" alt="Public interface" title="Public interface" /></td><td><a href="4a78658f-bab0-0824-f97a-7fd5a7c62b77.htm">IServiceCredentials</a></td><td><div class="summary">
                 KSI service settings interface.
-            </div>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <div class="collapsibleAreaRegion">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID2RB')" onkeypress="SectionExpandCollapse_CheckKey('ID2RB', event)" tabindex="0">
-            <img id="ID2RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Enumerations</span>
-        </div>
-        <div id="ID2RBSection" class="collapsibleSection">
-          <table id="typeList" class="members">
-            <tr>
-              <th class="iconColumn">
+            </div></td></tr></table></div><div class="collapsibleAreaRegion"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID2RB')" onkeypress="SectionExpandCollapse_CheckKey('ID2RB', event)" tabindex="0"><img id="ID2RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Enumerations</span></div><div id="ID2RBSection" class="collapsibleSection"><table class="members" id="enumerationList"><tr><th class="iconColumn">
 					 
-				</th>
-              <th>Enumeration</th>
-              <th>Description</th>
-            </tr>
-            <tr data="enumeration; public">
-              <td>
-                <img src="../icons/pubenumeration.gif" alt="Public enumeration" title="Public enumeration" />
-              </td>
-              <td>
-                <a href="1f191a55-e3b8-ac68-3af3-555e04e88ff6.htm">KsiServiceRequestType</a>
-              </td>
-              <td>
-                <div class="summary">
+				</th><th>Enumeration</th><th>Description</th></tr><tr data="enumeration; public"><td><img src="../icons/pubenumeration.gif" alt="Public enumeration" title="Public enumeration" /></td><td><a href="1f191a55-e3b8-ac68-3af3-555e04e88ff6.htm">KsiServiceRequestType</a></td><td><div class="summary">
             KSI service request type
-            </div>
-              </td>
-            </tr>
-            <tr data="enumeration; public">
-              <td>
-                <img src="../icons/pubenumeration.gif" alt="Public enumeration" title="Public enumeration" />
-              </td>
-              <td>
-                <a href="6f2890e3-920a-078d-3693-8e2ee681bff1.htm">PduVersion</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="enumeration; public"><td><img src="../icons/pubenumeration.gif" alt="Public enumeration" title="Public enumeration" /></td><td><a href="9173c5c4-b033-cb21-04c9-0467ee99cf19.htm">KsiServiceResponsePayloadType</a></td><td><div class="summary">
+            Paylaod types returned by KSI service.
+            </div></td></tr><tr data="enumeration; public"><td><img src="../icons/pubenumeration.gif" alt="Public enumeration" title="Public enumeration" /></td><td><a href="6f2890e3-920a-078d-3693-8e2ee681bff1.htm">PduVersion</a></td><td><div class="summary">
             PDU version
-            </div>
-              </td>
-            </tr>
-          </table>
-        </div>
-      </div>
+            </div></td></tr></table></div></div>
     </div>
     <div id="pageFooter" class="pageFooter"> </div>
   </body>

@@ -9,6 +9,7 @@
     <title>Namespaces</title>
     <meta name="Language" content="en-us" />
     <meta name="Microsoft.Help.Id" content="R:Project_ksi-net-api" />
+    <meta name="Description" content="KSI .NET SDK Guardtime Keyless Signature Infrastructure (KSI) is an industrial scale blockchain platform that cryptographically ensures data integrity and proves time of existence." />
     <meta name="Microsoft.Help.ContentType" content="Reference" />
     <meta name="BrandingAware" content="true" />
     
@@ -16,9 +17,12 @@
     <meta name="file" content="792326d8-f529-7e1f-c936-304562dc82b1" />
     <meta name="guid" content="792326d8-f529-7e1f-c936-304562dc82b1" />
     
+    <link type="text/css" rel="stylesheet" href="../styles/highlight.css" />
+    <script type="text/javascript" src="../scripts/highlight.js"> </script>
     <link rel="stylesheet" type="text/css" href="../styles/branding-Website.css" />
     <script type="text/javascript" src="../scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../scripts/branding-Website.js"></script>
+    <script type="text/javascript" src="../scripts/clipboard.min.js"></script>
   </head>
   <body onload="OnLoad('cs')">
     <input type="hidden" id="userDataCache" class="userDataStyle" />
@@ -27,103 +31,115 @@
       <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="7130fca7-18fc-e8df-f48e-4dd121779c36.htm" title="Guardtime.KSI" tocid="7130fca7-18fc-e8df-f48e-4dd121779c36">Guardtime.KSI</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="5f63717e-22be-a5d5-2aaa-edc3ca1ebbe3.htm" title="Guardtime.KSI.Crypto Namespaces" tocid="5f63717e-22be-a5d5-2aaa-edc3ca1ebbe3">Guardtime.KSI.Crypto Namespaces</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="3800d177-c5c3-002c-9b7a-ee6c28c882c5.htm" title="Guardtime.KSI.Exceptions" tocid="3800d177-c5c3-002c-9b7a-ee6c28c882c5">Guardtime.KSI.Exceptions</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="c9854ef0-7686-e200-09ac-f457d258f60d.htm" title="Guardtime.KSI.Hashing" tocid="c9854ef0-7686-e200-09ac-f457d258f60d">Guardtime.KSI.Hashing</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="6c05433b-be27-6856-1c54-f6524a4d30fd.htm" title="Guardtime.KSI.Parser" tocid="6c05433b-be27-6856-1c54-f6524a4d30fd">Guardtime.KSI.Parser</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="1ecd9b33-bad2-c818-c38b-4f80c4b26f9a.htm" title="Guardtime.KSI.Publication" tocid="1ecd9b33-bad2-c818-c38b-4f80c4b26f9a">Guardtime.KSI.Publication</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="504f6905-a315-5d37-1522-273f3b568c3a.htm" title="Guardtime.KSI.Service Namespaces" tocid="504f6905-a315-5d37-1522-273f3b568c3a">Guardtime.KSI.Service Namespaces</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="b47c2570-2d70-686e-e260-6ed09f9fcb94.htm" title="Guardtime.KSI.Signature Namespaces" tocid="b47c2570-2d70-686e-e260-6ed09f9fcb94">Guardtime.KSI.Signature Namespaces</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="ed54ab2b-34e9-c374-6343-f26365891ac7.htm" title="Guardtime.KSI.Trust" tocid="ed54ab2b-34e9-c374-6343-f26365891ac7">Guardtime.KSI.Trust</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="247abecf-0639-aa43-0fcf-bf4a1b556b97.htm" title="Guardtime.KSI.Utils" tocid="247abecf-0639-aa43-0fcf-bf4a1b556b97">Guardtime.KSI.Utils</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
         <table class="titleTable">
           <tr>
-            <td class="titleColumn">Namespaces</td>
+            <td class="titleColumn">
+              <h1>Namespaces</h1>
+            </td>
           </tr>
         </table>
-        <span class="introStyle"></span>
-        <div class="collapsibleAreaRegion">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0">
-            <img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Namespaces</span>
-        </div>
-        <div id="ID0RBSection" class="collapsibleSection">
-          <table id="memberList" class="members">
-            <tr>
-              <th>Namespace</th>
-              <th>Description</th>
-            </tr>
-            <tr>
-              <td>
-                <a href="7130fca7-18fc-e8df-f48e-4dd121779c36.htm">Guardtime.KSI</a>
-              </td>
-              <td>
-                <div class="summary"> </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a href="5f63717e-22be-a5d5-2aaa-edc3ca1ebbe3.htm">Guardtime.KSI.Crypto</a>
-              </td>
-              <td>
-                <div class="summary"> </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a href="3800d177-c5c3-002c-9b7a-ee6c28c882c5.htm">Guardtime.KSI.Exceptions</a>
-              </td>
-              <td>
-                <div class="summary"> </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a href="c9854ef0-7686-e200-09ac-f457d258f60d.htm">Guardtime.KSI.Hashing</a>
-              </td>
-              <td>
-                <div class="summary"> </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a href="6c05433b-be27-6856-1c54-f6524a4d30fd.htm">Guardtime.KSI.Parser</a>
-              </td>
-              <td>
-                <div class="summary"> </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a href="1ecd9b33-bad2-c818-c38b-4f80c4b26f9a.htm">Guardtime.KSI.Publication</a>
-              </td>
-              <td>
-                <div class="summary"> </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a href="504f6905-a315-5d37-1522-273f3b568c3a.htm">Guardtime.KSI.Service</a>
-              </td>
-              <td>
-                <div class="summary"> </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a href="b47c2570-2d70-686e-e260-6ed09f9fcb94.htm">Guardtime.KSI.Signature</a>
-              </td>
-              <td>
-                <div class="summary"> </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a href="ed54ab2b-34e9-c374-6343-f26365891ac7.htm">Guardtime.KSI.Trust</a>
-              </td>
-              <td>
-                <div class="summary"> </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <a href="247abecf-0639-aa43-0fcf-bf4a1b556b97.htm">Guardtime.KSI.Utils</a>
-              </td>
-              <td>
-                <div class="summary"> </div>
-              </td>
-            </tr>
-          </table>
-        </div>
-      </div>
+        <span class="introStyle"></span> <div class="summary"><div><h1>KSI .NET SDK</h1><p>
+        Guardtime Keyless Signature Infrastructure (KSI) is an industrial scale blockchain platform that cryptographically
+        ensures data integrity and proves time of existence. Its keyless signatures, based on hash chains, link data to global
+        calendar blockchain. The checkpoints of the blockchain, published in newspapers and electronic media, enable long term
+        integrity of any digital asset without the need to trust any system. There are many applications for KSI, a classical
+        example is signing of any type of logs - system logs, financial transactions, call records, etc. For more,
+        see <a href="https://guardtime.com/" rel="nofollow noreferrer noopener" target="_blank">https://guardtime.com</a>.
+    </p><p>
+        The KSI .NET SDK is a software development kit for developers who want to integrate KSI with their .NET based applications
+        and systems. It provides an API for all KSI functionality, including the core functions - signing of data, extending
+        and verifying the signatures.
+    </p><h2>Installation</h2><p>
+        In your .NET project add reference to KSI .NET SDK and crypto provider to be used (You can use microsoft or bouncycastle crypto provider).
+        Instead of adding references manually you can install packages "ksi-net-sdk" and "ksi-net-sdk-microsoft-crypto" using NuGet package manager.
+    </p><h2>Usage</h2><p>
+        In order to get trial access to the KSI platform, go to <a href="https://guardtime.com/blockchain-developers" rel="nofollow noreferrer noopener" target="_blank">https://guardtime.com/blockchain-developers</a>.
+    </p><p><strong>Creating ksiService</strong>:
+    </p><pre class="code highlight js-syntax-highlight csharp white" lang="csharp" v-pre="true"><div class="codeSnippetContainer"><div class="codeSnippetContainerCodeContainer"><div class="codeSnippetToolBar"><div class="codeSnippetToolBarText"><a id="ID0EAAVAABA_copyCode" href="#" class="copyCodeSnippet" onclick="javascript:CopyToClipboard('ID0EAAVAABA');return false;" title="Copy">Copy</a></div></div><div id="ID0EAAVAABA_code_Div1" class="codeSnippetContainerCode" style="display: block"><pre xml:space="preserve"><span class="highlight-comment">// Set crypto provider to bouncycastle or microsoft</span>
+KsiProvider.SetCryptoProvider(<span class="highlight-keyword">new</span> MicrosoftCryptoProvider());
+<span class="highlight-comment">//KsiProvider.SetCryptoProvider(new BouncyCastleCryptoProvider());</span>
+<span class="highlight-comment">// Create HTTP KSI service protocol</span>
+HttpKsiServiceProtocol httpKsiServiceProtocol = <span class="highlight-keyword">new</span> HttpKsiServiceProtocol(<span class="highlight-literal">"http://signingservice_url"</span>, <span class="highlight-literal">"http://extendingservice_url"</span>, <span class="highlight-literal">"http://publicationsfile_url"</span>);
+<span class="highlight-comment">// Create new KSI service</span>
+IKsiService ksiService = <span class="highlight-keyword">new</span> KsiService(
+    httpKsiServiceProtocol, <span class="highlight-keyword">new</span> ServiceCredentials(<span class="highlight-literal">"sign-user"</span>, <span class="highlight-literal">"sign-pass"</span>),
+    httpKsiServiceProtocol, <span class="highlight-keyword">new</span> ServiceCredentials(<span class="highlight-literal">"extend-user"</span>, <span class="highlight-literal">"extend-pass"</span>),
+    httpKsiServiceProtocol,
+    <span class="highlight-keyword">new</span> PublicationsFileFactory(
+        <span class="highlight-keyword">new</span> PkiTrustStoreProvider(
+            <span class="highlight-keyword">new</span> X509Store(StoreName.Root),
+            <span class="highlight-keyword">new</span> CertificateSubjectRdnSelector(<span class="highlight-literal">"E=publications@guardtime.com"</span>))));</pre></div></div></div><script type="text/javascript">AddLanguageTabSet("ID0EAAVAABA");</script></pre><p><strong>Creating ksiService and setting PDU version</strong>:
+    </p><pre class="code highlight js-syntax-highlight csharp white" lang="csharp" v-pre="true"><div class="codeSnippetContainer"><div class="codeSnippetContainerCodeContainer"><div class="codeSnippetToolBar"><div class="codeSnippetToolBarText"><a id="ID0EAATAABA_copyCode" href="#" class="copyCodeSnippet" onclick="javascript:CopyToClipboard('ID0EAATAABA');return false;" title="Copy">Copy</a></div></div><div id="ID0EAATAABA_code_Div1" class="codeSnippetContainerCode" style="display: block"><pre xml:space="preserve"><span class="highlight-comment">// Set crypto provider to bouncycastle or microsoft</span>
+KsiProvider.SetCryptoProvider(<span class="highlight-keyword">new</span> MicrosoftCryptoProvider());
+<span class="highlight-comment">//KsiProvider.SetCryptoProvider(new BouncyCastleCryptoProvider());</span>
+<span class="highlight-comment">// Create HTTP KSI service protocol</span>
+HttpKsiServiceProtocol httpKsiServiceProtocol = <span class="highlight-keyword">new</span> HttpKsiServiceProtocol(<span class="highlight-literal">"http://signingservice_url"</span>, <span class="highlight-literal">"http://extendingservice_url"</span>, <span class="highlight-literal">"http://publicationsfile_url"</span>);
+<span class="highlight-comment">// Create new KSI service</span>
+IKsiService ksiService = <span class="highlight-keyword">new</span> KsiService(
+    httpKsiServiceProtocol, <span class="highlight-keyword">new</span> ServiceCredentials(<span class="highlight-literal">"sign-user"</span>, <span class="highlight-literal">"sign-pass"</span>),
+    httpKsiServiceProtocol, <span class="highlight-keyword">new</span> ServiceCredentials(<span class="highlight-literal">"extend-user"</span>, <span class="highlight-literal">"extend-pass"</span>),
+    httpKsiServiceProtocol,
+    <span class="highlight-keyword">new</span> PublicationsFileFactory(
+        <span class="highlight-keyword">new</span> PkiTrustStoreProvider(
+            <span class="highlight-keyword">new</span> X509Store(StoreName.Root),
+            <span class="highlight-keyword">new</span> CertificateSubjectRdnSelector(<span class="highlight-literal">"E=publications@guardtime.com"</span>))),
+    PduVersion.v2);</pre></div></div></div><script type="text/javascript">AddLanguageTabSet("ID0EAATAABA");</script></pre><p>If PDU version is not given then version v2 is used by default.</p><p>If different PDU versions are needed for aggregating and extending then separate KsiServices should be used.</p><p><strong>Proxy Configuration</strong></p><p>
+        To use proxy, add the respective parameters to the HttpKsiServiceProtocol, e.g.
+    </p><pre><div class="codeSnippetContainer"><div class="codeSnippetContainerCodeContainer"><div class="codeSnippetToolBar"><div class="codeSnippetToolBarText"><a id="ID0EAAOAABA_copyCode" href="#" class="copyCodeSnippet" onclick="javascript:CopyToClipboard('ID0EAAOAABA');return false;" title="Copy">Copy</a></div></div><div id="ID0EAAOAABA_code_Div1" class="codeSnippetContainerCode" style="display: block"><pre xml:space="preserve">HttpKsiServiceProtocol httpKsiServiceProtocol =
+    <span class="highlight-keyword">new</span> HttpKsiServiceProtocol(<span class="highlight-literal">"http://signingservice_url"</span>,
+    <span class="highlight-literal">"http://extendingservice_url"</span>,
+    <span class="highlight-literal">"http://publicationsfile_url"</span>,
+    <span class="highlight-literal">"http://proxy-url"</span>,
+    <span class="highlight-keyword">new</span> NetworkCredential(<span class="highlight-literal">"proxy-user"</span>, <span class="highlight-literal">"proxy-pass"</span>));</pre></div></div></div><script type="text/javascript">AddLanguageTabSet("ID0EAAOAABA");</script></pre><p>There are 2 ways to use KSI service, with and without simple API wrapper.</p><p><strong>Example using simple wrapper</strong>:
+    </p><pre class="code highlight js-syntax-highlight csharp white" lang="csharp" v-pre="true"><div class="codeSnippetContainer"><div class="codeSnippetContainerCodeContainer"><div class="codeSnippetToolBar"><div class="codeSnippetToolBarText"><a id="ID0EAALAABA_copyCode" href="#" class="copyCodeSnippet" onclick="javascript:CopyToClipboard('ID0EAALAABA');return false;" title="Copy">Copy</a></div></div><div id="ID0EAALAABA_code_Div1" class="codeSnippetContainerCode" style="display: block"><pre xml:space="preserve"><span class="highlight-comment">// Create new simple wrapper</span>
+Ksi ksi = <span class="highlight-keyword">new</span> Ksi(ksiService);
+
+<span class="highlight-comment">// Create new signature by signing document hash</span>
+<span class="highlight-keyword">byte</span>[] documentBytes = <span class="highlight-keyword">new</span> <span class="highlight-keyword">byte</span>[] { <span class="highlight-number">1</span>, <span class="highlight-number">2</span>, <span class="highlight-number">3</span> };
+DataHash documentHash = KsiProvider.CreateDataHasher()
+                                   .AddData(documentBytes)
+                                   .GetHash();
+IKsiSignature signature = ksi.Sign(documentHash);
+
+<span class="highlight-comment">// Extend an older signature to the closest publication</span>
+IKsiSignature extendedSignature = ksi.Extend(signature);
+
+<span class="highlight-comment">// Verify signature</span>
+VerificationResult verificationResult = ksi.Verify(signature, documentHash);
+<span class="highlight-keyword">if</span> (verificationResult.ResultCode != VerificationResultCode.Ok)
+{
+    <span class="highlight-keyword">throw</span> <span class="highlight-keyword">new</span> Exception(<span class="highlight-literal">"Signature verification failed! Error: "</span> + verificationResult.VerificationError);
+}</pre></div></div></div><script type="text/javascript">AddLanguageTabSet("ID0EAALAABA");</script></pre><p><strong>Example without simple wrapper</strong>:
+    </p><pre class="code highlight js-syntax-highlight csharp white" lang="csharp" v-pre="true"><div class="codeSnippetContainer"><div class="codeSnippetContainerCodeContainer"><div class="codeSnippetToolBar"><div class="codeSnippetToolBarText"><a id="ID0EAAJAABA_copyCode" href="#" class="copyCodeSnippet" onclick="javascript:CopyToClipboard('ID0EAAJAABA');return false;" title="Copy">Copy</a></div></div><div id="ID0EAAJAABA_code_Div1" class="codeSnippetContainerCode" style="display: block"><pre xml:space="preserve"><span class="highlight-comment">// Create new signature by signing document hash</span>
+<span class="highlight-keyword">byte</span>[] documentBytes = <span class="highlight-keyword">new</span> <span class="highlight-keyword">byte</span>[] { <span class="highlight-number">1</span>, <span class="highlight-number">2</span>, <span class="highlight-number">3</span> };
+DataHash documentHash = KsiProvider.CreateDataHasher()
+                                   .AddData(documentBytes)
+                                   .GetHash();
+IKsiSignature signature = ksiService.Sign(documentHash);
+
+<span class="highlight-comment">// Getting publications file</span>
+IPublicationsFile publicationsFile = ksiService.GetPublicationsFile();
+
+<span class="highlight-comment">// Extend an older signature to the closest publication</span>
+PublicationRecordInPublicationFile publicationRecord = publicationsFile.GetNearestPublicationRecord(signature.AggregationTime);
+<span class="highlight-keyword">if</span> (publicationRecord == <span class="highlight-keyword">null</span>)
+{
+    <span class="highlight-keyword">throw</span> <span class="highlight-keyword">new</span> Exception(<span class="highlight-literal">"No suitable publication yet."</span>);
+}
+CalendarHashChain calendarHashChain = ksiService.Extend(signature.AggregationTime, publicationRecord.PublicationData.PublicationTime);
+IKsiSignature extendedSignature = signature.Extend(calendarHashChain, publicationRecord);
+
+<span class="highlight-comment">// Verify signature</span>
+VerificationResult verificationResult = <span class="highlight-keyword">new</span> DefaultVerificationPolicy().Verify(signature, documentHash, ksiService);
+<span class="highlight-keyword">if</span> (verificationResult.ResultCode != VerificationResultCode.Ok)
+{
+    <span class="highlight-keyword">throw</span> <span class="highlight-keyword">new</span> Exception(<span class="highlight-literal">"Signature verification failed! Error: "</span> + verificationResult.VerificationError);
+}</pre></div></div></div><script type="text/javascript">AddLanguageTabSet("ID0EAAJAABA");</script></pre><p>
+  More detailed tutorial is available here <a href="https://github.com/guardtime/ksi-net-sdk/blob/master/TUTORIAL.md">TUTORIAL.md</a>.
+ </p><h2>Dependencies</h2><table><tr><th><strong>Dependency</strong></th><th><strong>Version</strong></th><th><strong>License</strong></th><th><strong>Notes</strong></th></tr><tr><td>NLog</td><td>2.1</td><td><a href="https://raw.githubusercontent.com/NLog/NLog/master/LICENSE.txt" rel="nofollow noreferrer noopener" target="_blank">https://raw.githubusercontent.com/NLog/NLog/master/LICENSE.txt</a></td><td /></tr><tr><td>Bouncy Castle Crypto APIs for .Net</td><td>1.8</td><td>
+                MIT <a href="http://www.bouncycastle.org/csharp/licence.html" rel="nofollow noreferrer noopener" target="_blank">http://www.bouncycastle.org/csharp/licence.html</a></td><td>Not needed when KSI .NET SDK Microsoft cryptography provider is used</td></tr><tr><td>NUnit</td><td>3.0.1</td><td><a href="http://nunit.org/nuget/nunit3-license.txt" rel="nofollow noreferrer noopener" target="_blank">http://nunit.org/nuget/nunit3-license.txt</a></td><td>Required only for testing</td></tr></table><h2>Compatibility</h2><p>.NET 2.0 or newer</p><h2>Contributing</h2><p>
+        See <a href="https://github.com/guardtime/ksi-net-sdk/blob/master/CONTRIBUTING.md" rel="nofollow noreferrer noopener" target="_blank">CONTRIBUTING.md</a> file.
+    </p><h2>License</h2><p>
+        See <a href="https://github.com/guardtime/ksi-net-sdk/blob/master/LICENSE" rel="nofollow noreferrer noopener" target="_blank">LICENSE</a> file.
+    </p></div></div><div class="collapsibleAreaRegion"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0"><img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Namespaces</span></div><div id="ID1RBSection" class="collapsibleSection"><table id="namespaceList" class="members"><tr><th>Namespace</th><th>Description</th></tr><tr><td><a href="7130fca7-18fc-e8df-f48e-4dd121779c36.htm">Guardtime.KSI</a></td><td><div class="summary"> </div></td></tr><tr><td><a href="5f63717e-22be-a5d5-2aaa-edc3ca1ebbe3.htm">Guardtime.KSI.Crypto</a></td><td><div class="summary"> </div></td></tr><tr><td><a href="3800d177-c5c3-002c-9b7a-ee6c28c882c5.htm">Guardtime.KSI.Exceptions</a></td><td><div class="summary"> </div></td></tr><tr><td><a href="c9854ef0-7686-e200-09ac-f457d258f60d.htm">Guardtime.KSI.Hashing</a></td><td><div class="summary"> </div></td></tr><tr><td><a href="6c05433b-be27-6856-1c54-f6524a4d30fd.htm">Guardtime.KSI.Parser</a></td><td><div class="summary"> </div></td></tr><tr><td><a href="1ecd9b33-bad2-c818-c38b-4f80c4b26f9a.htm">Guardtime.KSI.Publication</a></td><td><div class="summary"> </div></td></tr><tr><td><a href="504f6905-a315-5d37-1522-273f3b568c3a.htm">Guardtime.KSI.Service</a></td><td><div class="summary"> </div></td></tr><tr><td><a href="b47c2570-2d70-686e-e260-6ed09f9fcb94.htm">Guardtime.KSI.Signature</a></td><td><div class="summary"> </div></td></tr><tr><td><a href="ed54ab2b-34e9-c374-6343-f26365891ac7.htm">Guardtime.KSI.Trust</a></td><td><div class="summary"> </div></td></tr><tr><td><a href="247abecf-0639-aa43-0fcf-bf4a1b556b97.htm">Guardtime.KSI.Utils</a></td><td><div class="summary"> </div></td></tr></table></div></div>
     </div>
     <div id="pageFooter" class="pageFooter"> </div>
   </body>

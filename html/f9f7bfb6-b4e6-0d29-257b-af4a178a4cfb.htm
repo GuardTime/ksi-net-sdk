@@ -22,74 +22,29 @@
     <link rel="stylesheet" type="text/css" href="../styles/branding-Website.css" />
     <script type="text/javascript" src="../scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../scripts/branding-Website.js"></script>
+    <script type="text/javascript" src="../scripts/clipboard.min.js"></script>
   </head>
   <body onload="OnLoad('cs')">
     <input type="hidden" id="userDataCache" class="userDataStyle" />
     <div class="pageHeader" id="PageHeader">KSI .NET API<form id="SearchForm" method="get" action="#" onsubmit="javascript:TransferToSearchPage(); return false;"><input id="SearchTextBox" type="text" maxlength="200" /><button id="SearchButton" type="submit"></button></form></div>
     <div class="pageBody">
-      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="5f63717e-22be-a5d5-2aaa-edc3ca1ebbe3.htm" title="Guardtime.KSI.Crypto Namespaces" tocid="5f63717e-22be-a5d5-2aaa-edc3ca1ebbe3">Guardtime.KSI.Crypto Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="1ff7bf7e-32cf-462d-ff9a-8eb2b2b97420.htm" title="Guardtime.KSI.Crypto.BouncyCastle Namespaces" tocid="1ff7bf7e-32cf-462d-ff9a-8eb2b2b97420">Guardtime.KSI.Crypto.BouncyCastle Namespaces</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="f9f7bfb6-b4e6-0d29-257b-af4a178a4cfb.htm" title="Guardtime.KSI.Crypto.BouncyCastle.Hashing" tocid="f9f7bfb6-b4e6-0d29-257b-af4a178a4cfb">Guardtime.KSI.Crypto.BouncyCastle.Hashing</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="058b7fc4-04ce-fdbd-f8a9-f3b8347eb266.htm" title="DataHasher Class" tocid="058b7fc4-04ce-fdbd-f8a9-f3b8347eb266">DataHasher Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="e4424a1f-b1f5-7b69-494a-80370e35333c.htm" title="DigestProvider Class" tocid="e4424a1f-b1f5-7b69-494a-80370e35333c">DigestProvider Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="e5608714-bc00-7575-11f1-1af04a98de2f.htm" title="HmacHasher Class" tocid="e5608714-bc00-7575-11f1-1af04a98de2f">HmacHasher Class</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
+      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/5f63717e-22be-a5d5-2aaa-edc3ca1ebbe3.htm" title="Guardtime.KSI.Crypto Namespaces" tocid="5f63717e-22be-a5d5-2aaa-edc3ca1ebbe3">Guardtime.KSI.Crypto Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/1ff7bf7e-32cf-462d-ff9a-8eb2b2b97420.htm" title="Guardtime.KSI.Crypto.BouncyCastle Namespaces" tocid="1ff7bf7e-32cf-462d-ff9a-8eb2b2b97420">Guardtime.KSI.Crypto.BouncyCastle Namespaces</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="f9f7bfb6-b4e6-0d29-257b-af4a178a4cfb.htm" title="Guardtime.KSI.Crypto.BouncyCastle.Hashing" tocid="f9f7bfb6-b4e6-0d29-257b-af4a178a4cfb">Guardtime.KSI.Crypto.BouncyCastle.Hashing</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="058b7fc4-04ce-fdbd-f8a9-f3b8347eb266.htm" title="DataHasher Class" tocid="058b7fc4-04ce-fdbd-f8a9-f3b8347eb266">DataHasher Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="e4424a1f-b1f5-7b69-494a-80370e35333c.htm" title="DigestProvider Class" tocid="e4424a1f-b1f5-7b69-494a-80370e35333c">DigestProvider Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="e5608714-bc00-7575-11f1-1af04a98de2f.htm" title="HmacHasher Class" tocid="e5608714-bc00-7575-11f1-1af04a98de2f">HmacHasher Class</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
         <table class="titleTable">
           <tr>
-            <td class="titleColumn">Guardtime.KSI.Crypto.BouncyCastle.Hashing Namespace</td>
+            <td class="titleColumn">
+              <h1>Guardtime.KSI.Crypto.BouncyCastle.Hashing Namespace</h1>
+            </td>
           </tr>
         </table>
-        <span class="introStyle"></span>
-        <div class="summary"> </div>
-        <div class="collapsibleAreaRegion">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0">
-            <img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Classes</span>
-        </div>
-        <div id="ID0RBSection" class="collapsibleSection">
-          <table id="typeList" class="members">
-            <tr>
-              <th class="iconColumn">
+        <span class="introStyle"></span> <div class="summary"> </div><div class="collapsibleAreaRegion"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0"><img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Classes</span></div><div id="ID0RBSection" class="collapsibleSection"><table class="members" id="classList"><tr><th class="iconColumn">
 					 
-				</th>
-              <th>Class</th>
-              <th>Description</th>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="058b7fc4-04ce-fdbd-f8a9-f3b8347eb266.htm">DataHasher</a>
-              </td>
-              <td>
-                <div class="summary">
+				</th><th>Class</th><th>Description</th></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="058b7fc4-04ce-fdbd-f8a9-f3b8347eb266.htm">DataHasher</a></td><td><div class="summary">
                 This class provides functionality for hashing data.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="e4424a1f-b1f5-7b69-494a-80370e35333c.htm">DigestProvider</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="e4424a1f-b1f5-7b69-494a-80370e35333c.htm">DigestProvider</a></td><td><div class="summary">
             Digest provider
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="e5608714-bc00-7575-11f1-1af04a98de2f.htm">HmacHasher</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="e5608714-bc00-7575-11f1-1af04a98de2f.htm">HmacHasher</a></td><td><div class="summary">
             HMAC hasher
-            </div>
-              </td>
-            </tr>
-          </table>
-        </div>
-      </div>
+            </div></td></tr></table></div></div>
     </div>
     <div id="pageFooter" class="pageFooter"> </div>
   </body>

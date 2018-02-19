@@ -22,100 +22,38 @@
     <link rel="stylesheet" type="text/css" href="../styles/branding-Website.css" />
     <script type="text/javascript" src="../scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../scripts/branding-Website.js"></script>
+    <script type="text/javascript" src="../scripts/clipboard.min.js"></script>
   </head>
   <body onload="OnLoad('cs')">
     <input type="hidden" id="userDataCache" class="userDataStyle" />
     <div class="pageHeader" id="PageHeader">KSI .NET API<form id="SearchForm" method="get" action="#" onsubmit="javascript:TransferToSearchPage(); return false;"><input id="SearchTextBox" type="text" maxlength="200" /><button id="SearchButton" type="submit"></button></form></div>
     <div class="pageBody">
-      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="b47c2570-2d70-686e-e260-6ed09f9fcb94.htm" title="Guardtime.KSI.Signature Namespaces" tocid="b47c2570-2d70-686e-e260-6ed09f9fcb94">Guardtime.KSI.Signature Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="749d2ab0-3fa1-40bc-6d0e-d0e404d2e39e.htm" title="Guardtime.KSI.Signature.Verification Namespaces" tocid="749d2ab0-3fa1-40bc-6d0e-d0e404d2e39e">Guardtime.KSI.Signature.Verification Namespaces</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="56fe67ee-54e6-7f69-63c8-ad52a3a990ba.htm" title="Guardtime.KSI.Signature.Verification.Policy" tocid="56fe67ee-54e6-7f69-63c8-ad52a3a990ba">Guardtime.KSI.Signature.Verification.Policy</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="26f92bb2-c28f-a5ab-95ca-1b026b00c437.htm" title="CalendarBasedVerificationPolicy Class" tocid="26f92bb2-c28f-a5ab-95ca-1b026b00c437">CalendarBasedVerificationPolicy Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="d1db5d42-fda6-fdca-4143-1b078c4aef47.htm" title="InternalVerificationPolicy Class" tocid="d1db5d42-fda6-fdca-4143-1b078c4aef47">InternalVerificationPolicy Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="c9a419e1-b6bc-f4d3-de32-a795c4175ba2.htm" title="KeyBasedVerificationPolicy Class" tocid="c9a419e1-b6bc-f4d3-de32-a795c4175ba2">KeyBasedVerificationPolicy Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="80868392-7213-2f12-54b0-4d66de9aec0f.htm" title="PublicationBasedVerificationPolicy Class" tocid="80868392-7213-2f12-54b0-4d66de9aec0f">PublicationBasedVerificationPolicy Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="48b11e82-e608-b68b-3776-a8cb48d5e36a.htm" title="VerificationPolicy Class" tocid="48b11e82-e608-b68b-3776-a8cb48d5e36a">VerificationPolicy Class</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
+      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/b47c2570-2d70-686e-e260-6ed09f9fcb94.htm" title="Guardtime.KSI.Signature Namespaces" tocid="b47c2570-2d70-686e-e260-6ed09f9fcb94">Guardtime.KSI.Signature Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/749d2ab0-3fa1-40bc-6d0e-d0e404d2e39e.htm" title="Guardtime.KSI.Signature.Verification Namespaces" tocid="749d2ab0-3fa1-40bc-6d0e-d0e404d2e39e">Guardtime.KSI.Signature.Verification Namespaces</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="56fe67ee-54e6-7f69-63c8-ad52a3a990ba.htm" title="Guardtime.KSI.Signature.Verification.Policy" tocid="56fe67ee-54e6-7f69-63c8-ad52a3a990ba">Guardtime.KSI.Signature.Verification.Policy</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="26f92bb2-c28f-a5ab-95ca-1b026b00c437.htm" title="CalendarBasedVerificationPolicy Class" tocid="26f92bb2-c28f-a5ab-95ca-1b026b00c437">CalendarBasedVerificationPolicy Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="e152dc2a-fb78-0e4f-7e77-64d96da0e038.htm" title="DefaultVerificationPolicy Class" tocid="e152dc2a-fb78-0e4f-7e77-64d96da0e038">DefaultVerificationPolicy Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="d1db5d42-fda6-fdca-4143-1b078c4aef47.htm" title="InternalVerificationPolicy Class" tocid="d1db5d42-fda6-fdca-4143-1b078c4aef47">InternalVerificationPolicy Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="c9a419e1-b6bc-f4d3-de32-a795c4175ba2.htm" title="KeyBasedVerificationPolicy Class" tocid="c9a419e1-b6bc-f4d3-de32-a795c4175ba2">KeyBasedVerificationPolicy Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="80868392-7213-2f12-54b0-4d66de9aec0f.htm" title="PublicationBasedVerificationPolicy Class" tocid="80868392-7213-2f12-54b0-4d66de9aec0f">PublicationBasedVerificationPolicy Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="48b11e82-e608-b68b-3776-a8cb48d5e36a.htm" title="VerificationPolicy Class" tocid="48b11e82-e608-b68b-3776-a8cb48d5e36a">VerificationPolicy Class</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
         <table class="titleTable">
           <tr>
-            <td class="titleColumn">Guardtime.KSI.Signature.Verification.Policy Namespace</td>
+            <td class="titleColumn">
+              <h1>Guardtime.KSI.Signature.Verification.Policy Namespace</h1>
+            </td>
           </tr>
         </table>
-        <span class="introStyle"></span>
-        <div class="summary"> </div>
-        <div class="collapsibleAreaRegion">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0">
-            <img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Classes</span>
-        </div>
-        <div id="ID0RBSection" class="collapsibleSection">
-          <table id="typeList" class="members">
-            <tr>
-              <th class="iconColumn">
+        <span class="introStyle"></span> <div class="summary"> </div><div class="collapsibleAreaRegion"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0"><img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Classes</span></div><div id="ID0RBSection" class="collapsibleSection"><table class="members" id="classList"><tr><th class="iconColumn">
 					 
-				</th>
-              <th>Class</th>
-              <th>Description</th>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="26f92bb2-c28f-a5ab-95ca-1b026b00c437.htm">CalendarBasedVerificationPolicy</a>
-              </td>
-              <td>
-                <div class="summary">
+				</th><th>Class</th><th>Description</th></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="26f92bb2-c28f-a5ab-95ca-1b026b00c437.htm">CalendarBasedVerificationPolicy</a></td><td><div class="summary">
                 Policy for verifying KSI signature with calendar.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="d1db5d42-fda6-fdca-4143-1b078c4aef47.htm">InternalVerificationPolicy</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="e152dc2a-fb78-0e4f-7e77-64d96da0e038.htm">DefaultVerificationPolicy</a></td><td><div class="summary">
+            Recommended default policy for verifying KSI signatures.
+            When verifying a signature at first it is verified against given document hash and publications file. 
+            If suitable publication is not found in publications file then the KSI signature is extended (if extending is allowed).
+            If extending is not allowed or not yet possible then key based verification is done.
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="d1db5d42-fda6-fdca-4143-1b078c4aef47.htm">InternalVerificationPolicy</a></td><td><div class="summary">
                 Policy for verifying KSI signature internal consistency.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="c9a419e1-b6bc-f4d3-de32-a795c4175ba2.htm">KeyBasedVerificationPolicy</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="c9a419e1-b6bc-f4d3-de32-a795c4175ba2.htm">KeyBasedVerificationPolicy</a></td><td><div class="summary">
                 Policy for verifying KSI signature with PKI.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="80868392-7213-2f12-54b0-4d66de9aec0f.htm">PublicationBasedVerificationPolicy</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="80868392-7213-2f12-54b0-4d66de9aec0f.htm">PublicationBasedVerificationPolicy</a></td><td><div class="summary">
                 Policy for verifying KSI signature with publication.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="48b11e82-e608-b68b-3776-a8cb48d5e36a.htm">VerificationPolicy</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="48b11e82-e608-b68b-3776-a8cb48d5e36a.htm">VerificationPolicy</a></td><td><div class="summary">
                 Verification policy to verify set of verification rules.
-            </div>
-              </td>
-            </tr>
-          </table>
-        </div>
-      </div>
+            </div></td></tr></table></div></div>
     </div>
     <div id="pageFooter" class="pageFooter"> </div>
   </body>

@@ -20,129 +20,23 @@
     <link rel="stylesheet" type="text/css" href="../styles/branding-Website.css" />
     <script type="text/javascript" src="../scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../scripts/branding-Website.js"></script>
+    <script type="text/javascript" src="../scripts/clipboard.min.js"></script>
   </head>
   <body onload="OnLoad('cs')">
     <input type="hidden" id="userDataCache" class="userDataStyle" />
     <div class="pageHeader" id="PageHeader">KSI .NET API<form id="SearchForm" method="get" action="#" onsubmit="javascript:TransferToSearchPage(); return false;"><input id="SearchTextBox" type="text" maxlength="200" /><button id="SearchButton" type="submit"></button></form></div>
     <div class="pageBody">
-      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="3800d177-c5c3-002c-9b7a-ee6c28c882c5.htm" title="Guardtime.KSI.Exceptions" tocid="3800d177-c5c3-002c-9b7a-ee6c28c882c5">Guardtime.KSI.Exceptions</a></div><div class="toclevel1" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="9e4367d2-7ace-6678-88ed-966558bbfd7f.htm" title="KsiServiceUnexpectedResponseFormatException Class" tocid="9e4367d2-7ace-6678-88ed-966558bbfd7f">KsiServiceUnexpectedResponseFormatException Class</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="ce3a84f5-0320-ceab-b023-657344a537f2.htm" title="KsiServiceUnexpectedResponseFormatException Constructor " tocid="ce3a84f5-0320-ceab-b023-657344a537f2">KsiServiceUnexpectedResponseFormatException Constructor </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="adfae361-609d-6dc9-7b75-8807163df905.htm" title="KsiServiceUnexpectedResponseFormatException Properties" tocid="adfae361-609d-6dc9-7b75-8807163df905">KsiServiceUnexpectedResponseFormatException Properties</a></div><div class="toclevel2 current" data-toclevel="2"><a data-tochassubtree="false" href="40f14e72-4406-eed0-4a49-1dfdc8515b53.htm" title="KsiServiceUnexpectedResponseFormatException Methods" tocid="40f14e72-4406-eed0-4a49-1dfdc8515b53">KsiServiceUnexpectedResponseFormatException Methods</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="df368934-4450-d070-d244-0a2228f56ddb.htm" title="KsiServiceUnexpectedResponseFormatException Events" tocid="df368934-4450-d070-d244-0a2228f56ddb">KsiServiceUnexpectedResponseFormatException Events</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
+      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/3800d177-c5c3-002c-9b7a-ee6c28c882c5.htm" title="Guardtime.KSI.Exceptions" tocid="3800d177-c5c3-002c-9b7a-ee6c28c882c5">Guardtime.KSI.Exceptions</a></div><div class="toclevel1" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/9e4367d2-7ace-6678-88ed-966558bbfd7f.htm" title="KsiServiceUnexpectedResponseFormatException Class" tocid="9e4367d2-7ace-6678-88ed-966558bbfd7f">KsiServiceUnexpectedResponseFormatException Class</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="ce3a84f5-0320-ceab-b023-657344a537f2.htm" title="KsiServiceUnexpectedResponseFormatException Constructor " tocid="ce3a84f5-0320-ceab-b023-657344a537f2">KsiServiceUnexpectedResponseFormatException Constructor </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="adfae361-609d-6dc9-7b75-8807163df905.htm" title="KsiServiceUnexpectedResponseFormatException Properties" tocid="adfae361-609d-6dc9-7b75-8807163df905">KsiServiceUnexpectedResponseFormatException Properties</a></div><div class="toclevel2 current" data-toclevel="2"><a data-tochassubtree="false" href="40f14e72-4406-eed0-4a49-1dfdc8515b53.htm" title="KsiServiceUnexpectedResponseFormatException Methods" tocid="40f14e72-4406-eed0-4a49-1dfdc8515b53">KsiServiceUnexpectedResponseFormatException Methods</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
         <table class="titleTable">
           <tr>
-            <td class="titleColumn">KsiServiceUnexpectedResponseFormatException Methods</td>
+            <td class="titleColumn">
+              <h1>KsiServiceUnexpectedResponseFormatException Methods</h1>
+            </td>
           </tr>
         </table>
-        <span class="introStyle"></span>
-        <p>The <a href="9e4367d2-7ace-6678-88ed-966558bbfd7f.htm">KsiServiceUnexpectedResponseFormatException</a> type exposes the following members.</p>
-        <div class="collapsibleAreaRegion">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0">
-            <img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Methods</span>
-        </div>
-        <div id="ID0RBSection" class="collapsibleSection">
-          <table id="memberList" class="members">
-            <tr>
-              <th class="iconColumn">
+        <span class="introStyle"></span> <p>The <a href="9e4367d2-7ace-6678-88ed-966558bbfd7f.htm">KsiServiceUnexpectedResponseFormatException</a> type exposes the following members.</p><div class="collapsibleAreaRegion"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0"><img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Methods</span></div><div id="ID0RBSection" class="collapsibleSection"><table class="members" id="methodList"><tr><th class="iconColumn">
 								 
-							</th>
-              <th>Name</th>
-              <th>Description</th>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="http://msdn2.microsoft.com/en-us/library/bsc2ak47" target="_blank">Equals</a>
-              </td>
-              <td>
-                <div class="summary">Determines whether the specified object is equal to the current object.</div> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b" target="_blank">Object</a>.)</td>
-            </tr>
-            <tr data="protected;inherited;notNetfw;">
-              <td>
-                <img src="../icons/protmethod.gif" alt="Protected method" title="Protected method" />
-              </td>
-              <td>
-                <a href="http://msdn2.microsoft.com/en-us/library/4k87zsw7" target="_blank">Finalize</a>
-              </td>
-              <td>
-                <div class="summary">Allows an object to try to free resources and perform other cleanup operations before it is reclaimed by garbage collection.</div> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b" target="_blank">Object</a>.)</td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="http://msdn2.microsoft.com/en-us/library/49kcee3b" target="_blank">GetBaseException</a>
-              </td>
-              <td>
-                <div class="summary">When overridden in a derived class, returns the <a href="http://msdn2.microsoft.com/en-us/library/c18k6c59" target="_blank">Exception</a> that is the root cause of one or more subsequent exceptions.</div> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/c18k6c59" target="_blank">Exception</a>.)</td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="http://msdn2.microsoft.com/en-us/library/zdee4b3y" target="_blank">GetHashCode</a>
-              </td>
-              <td>
-                <div class="summary">Serves as a hash function for a particular type. </div> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b" target="_blank">Object</a>.)</td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="http://msdn2.microsoft.com/en-us/library/fwb1489e" target="_blank">GetObjectData</a>
-              </td>
-              <td>
-                <div class="summary">When overridden in a derived class, sets the <a href="http://msdn2.microsoft.com/en-us/library/a9b6042e" target="_blank">SerializationInfo</a> with information about the exception.</div> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/c18k6c59" target="_blank">Exception</a>.)</td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="http://msdn2.microsoft.com/en-us/library/44zb316t" target="_blank">GetType</a>
-              </td>
-              <td>
-                <div class="summary">Gets the runtime type of the current instance.</div> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/c18k6c59" target="_blank">Exception</a>.)</td>
-            </tr>
-            <tr data="protected;inherited;notNetfw;">
-              <td>
-                <img src="../icons/protmethod.gif" alt="Protected method" title="Protected method" />
-              </td>
-              <td>
-                <a href="http://msdn2.microsoft.com/en-us/library/57ctke0a" target="_blank">MemberwiseClone</a>
-              </td>
-              <td>
-                <div class="summary">Creates a shallow copy of the current <a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b" target="_blank">Object</a>.</div> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b" target="_blank">Object</a>.)</td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="http://msdn2.microsoft.com/en-us/library/es4y6f7e" target="_blank">ToString</a>
-              </td>
-              <td>
-                <div class="summary">Creates and returns a string representation of the current exception.</div> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/c18k6c59" target="_blank">Exception</a>.)</td>
-            </tr>
-          </table>
-          <a href="#PageHeader">Top</a>
-        </div>
-        <div class="collapsibleAreaRegion" id="seeAlsoSection">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0">
-            <img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span>
-        </div>
-        <div id="ID1RBSection" class="collapsibleSection">
-          <h4 class="subHeading">Reference</h4>
-          <div class="seeAlsoStyle">
-            <a href="9e4367d2-7ace-6678-88ed-966558bbfd7f.htm">KsiServiceUnexpectedResponseFormatException Class</a>
-          </div>
-          <div class="seeAlsoStyle">
-            <a href="3800d177-c5c3-002c-9b7a-ee6c28c882c5.htm">Guardtime.KSI.Exceptions Namespace</a>
-          </div>
-        </div>
-      </div>
+							</th><th>Name</th><th>Description</th></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="http://msdn2.microsoft.com/en-us/library/bsc2ak47" target="_blank">Equals</a></td><td> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b" target="_blank">Object</a>.)</td></tr><tr data="protected;inherited;notNetfw;"><td><img src="../icons/protmethod.gif" alt="Protected method" title="Protected method" /></td><td><a href="http://msdn2.microsoft.com/en-us/library/4k87zsw7" target="_blank">Finalize</a></td><td> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b" target="_blank">Object</a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="http://msdn2.microsoft.com/en-us/library/49kcee3b" target="_blank">GetBaseException</a></td><td> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/c18k6c59" target="_blank">Exception</a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="http://msdn2.microsoft.com/en-us/library/zdee4b3y" target="_blank">GetHashCode</a></td><td> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b" target="_blank">Object</a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="http://msdn2.microsoft.com/en-us/library/fwb1489e" target="_blank">GetObjectData</a></td><td> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/c18k6c59" target="_blank">Exception</a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="http://msdn2.microsoft.com/en-us/library/44zb316t" target="_blank">GetType</a></td><td> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/c18k6c59" target="_blank">Exception</a>.)</td></tr><tr data="protected;inherited;notNetfw;"><td><img src="../icons/protmethod.gif" alt="Protected method" title="Protected method" /></td><td><a href="http://msdn2.microsoft.com/en-us/library/57ctke0a" target="_blank">MemberwiseClone</a></td><td> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b" target="_blank">Object</a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="http://msdn2.microsoft.com/en-us/library/es4y6f7e" target="_blank">ToString</a></td><td> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/c18k6c59" target="_blank">Exception</a>.)</td></tr></table><a href="#PageHeader">Top</a></div><div class="collapsibleAreaRegion" id="seeAlsoSection"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0"><img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span></div><div id="ID1RBSection" class="collapsibleSection"><h4 class="subHeading">Reference</h4><div class="seeAlsoStyle"><a href="9e4367d2-7ace-6678-88ed-966558bbfd7f.htm">KsiServiceUnexpectedResponseFormatException Class</a></div><div class="seeAlsoStyle"><a href="3800d177-c5c3-002c-9b7a-ee6c28c882c5.htm">Guardtime.KSI.Exceptions Namespace</a></div></div></div>
     </div>
     <div id="pageFooter" class="pageFooter"> </div>
   </body>

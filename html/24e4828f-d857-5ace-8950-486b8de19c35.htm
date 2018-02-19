@@ -22,87 +22,31 @@
     <link rel="stylesheet" type="text/css" href="../styles/branding-Website.css" />
     <script type="text/javascript" src="../scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../scripts/branding-Website.js"></script>
+    <script type="text/javascript" src="../scripts/clipboard.min.js"></script>
   </head>
   <body onload="OnLoad('cs')">
     <input type="hidden" id="userDataCache" class="userDataStyle" />
     <div class="pageHeader" id="PageHeader">KSI .NET API<form id="SearchForm" method="get" action="#" onsubmit="javascript:TransferToSearchPage(); return false;"><input id="SearchTextBox" type="text" maxlength="200" /><button id="SearchButton" type="submit"></button></form></div>
     <div class="pageBody">
-      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="5f63717e-22be-a5d5-2aaa-edc3ca1ebbe3.htm" title="Guardtime.KSI.Crypto Namespaces" tocid="5f63717e-22be-a5d5-2aaa-edc3ca1ebbe3">Guardtime.KSI.Crypto Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="8e188afc-e93d-d09c-1895-ac39bd68974d.htm" title="Guardtime.KSI.Crypto.Microsoft Namespaces" tocid="8e188afc-e93d-d09c-1895-ac39bd68974d">Guardtime.KSI.Crypto.Microsoft Namespaces</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="24e4828f-d857-5ace-8950-486b8de19c35.htm" title="Guardtime.KSI.Crypto.Microsoft.Crypto" tocid="24e4828f-d857-5ace-8950-486b8de19c35">Guardtime.KSI.Crypto.Microsoft.Crypto</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="07a58e22-7ac5-c1b6-4f7f-a252c03d1da9.htm" title="CertificateSubjectRdnSelector Class" tocid="07a58e22-7ac5-c1b6-4f7f-a252c03d1da9">CertificateSubjectRdnSelector Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="5cc307f5-046c-c664-0086-73de1eeec99a.htm" title="CertificateTimeVerifier Class" tocid="5cc307f5-046c-c664-0086-73de1eeec99a">CertificateTimeVerifier Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="52eab78f-8755-218f-6257-a30ec8f5d884.htm" title="Pkcs7CryptoSignatureVerifier Class" tocid="52eab78f-8755-218f-6257-a30ec8f5d884">Pkcs7CryptoSignatureVerifier Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="9d53c71e-0a4c-45ae-02d5-51681f19eaf3.htm" title="RsaCryptoSignatureVerifier Class" tocid="9d53c71e-0a4c-45ae-02d5-51681f19eaf3">RsaCryptoSignatureVerifier Class</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
+      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/5f63717e-22be-a5d5-2aaa-edc3ca1ebbe3.htm" title="Guardtime.KSI.Crypto Namespaces" tocid="5f63717e-22be-a5d5-2aaa-edc3ca1ebbe3">Guardtime.KSI.Crypto Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/8e188afc-e93d-d09c-1895-ac39bd68974d.htm" title="Guardtime.KSI.Crypto.Microsoft Namespaces" tocid="8e188afc-e93d-d09c-1895-ac39bd68974d">Guardtime.KSI.Crypto.Microsoft Namespaces</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="24e4828f-d857-5ace-8950-486b8de19c35.htm" title="Guardtime.KSI.Crypto.Microsoft.Crypto" tocid="24e4828f-d857-5ace-8950-486b8de19c35">Guardtime.KSI.Crypto.Microsoft.Crypto</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="07a58e22-7ac5-c1b6-4f7f-a252c03d1da9.htm" title="CertificateSubjectRdnSelector Class" tocid="07a58e22-7ac5-c1b6-4f7f-a252c03d1da9">CertificateSubjectRdnSelector Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="5cc307f5-046c-c664-0086-73de1eeec99a.htm" title="CertificateTimeVerifier Class" tocid="5cc307f5-046c-c664-0086-73de1eeec99a">CertificateTimeVerifier Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="52eab78f-8755-218f-6257-a30ec8f5d884.htm" title="Pkcs7CryptoSignatureVerifier Class" tocid="52eab78f-8755-218f-6257-a30ec8f5d884">Pkcs7CryptoSignatureVerifier Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="9d53c71e-0a4c-45ae-02d5-51681f19eaf3.htm" title="RsaCryptoSignatureVerifier Class" tocid="9d53c71e-0a4c-45ae-02d5-51681f19eaf3">RsaCryptoSignatureVerifier Class</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
         <table class="titleTable">
           <tr>
-            <td class="titleColumn">Guardtime.KSI.Crypto.Microsoft.Crypto Namespace</td>
+            <td class="titleColumn">
+              <h1>Guardtime.KSI.Crypto.Microsoft.Crypto Namespace</h1>
+            </td>
           </tr>
         </table>
-        <span class="introStyle"></span>
-        <div class="summary"> </div>
-        <div class="collapsibleAreaRegion">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0">
-            <img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Classes</span>
-        </div>
-        <div id="ID0RBSection" class="collapsibleSection">
-          <table id="typeList" class="members">
-            <tr>
-              <th class="iconColumn">
+        <span class="introStyle"></span> <div class="summary"> </div><div class="collapsibleAreaRegion"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0"><img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Classes</span></div><div id="ID0RBSection" class="collapsibleSection"><table class="members" id="classList"><tr><th class="iconColumn">
 					 
-				</th>
-              <th>Class</th>
-              <th>Description</th>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="07a58e22-7ac5-c1b6-4f7f-a252c03d1da9.htm">CertificateSubjectRdnSelector</a>
-              </td>
-              <td>
-                <div class="summary">
-            Certificate subject rdn selector.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="5cc307f5-046c-c664-0086-73de1eeec99a.htm">CertificateTimeVerifier</a>
-              </td>
-              <td>
-                <div class="summary">
+				</th><th>Class</th><th>Description</th></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="07a58e22-7ac5-c1b6-4f7f-a252c03d1da9.htm">CertificateSubjectRdnSelector</a></td><td><div class="summary">
+            Certificate subject RDN selector. Used for verifying that certificate subject contains specific RDN.
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="5cc307f5-046c-c664-0086-73de1eeec99a.htm">CertificateTimeVerifier</a></td><td><div class="summary">
             Class for verifying that a certificate was valid on given time
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="52eab78f-8755-218f-6257-a30ec8f5d884.htm">Pkcs7CryptoSignatureVerifier</a>
-              </td>
-              <td>
-                <div class="summary">
-                PKCS#7 signature verifier.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="9d53c71e-0a4c-45ae-02d5-51681f19eaf3.htm">RsaCryptoSignatureVerifier</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="52eab78f-8755-218f-6257-a30ec8f5d884.htm">Pkcs7CryptoSignatureVerifier</a></td><td><div class="summary">
+                PKCS#7 signature verifier. Used to verify certificate against trust anchors and verify that certificate subject contains specified RDN.
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="9d53c71e-0a4c-45ae-02d5-51681f19eaf3.htm">RsaCryptoSignatureVerifier</a></td><td><div class="summary">
                 RSA signature verifier.
-            </div>
-              </td>
-            </tr>
-          </table>
-        </div>
-      </div>
+            </div></td></tr></table></div></div>
     </div>
     <div id="pageFooter" class="pageFooter"> </div>
   </body>

@@ -23,76 +23,27 @@
     <link rel="stylesheet" type="text/css" href="../styles/branding-Website.css" />
     <script type="text/javascript" src="../scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../scripts/branding-Website.js"></script>
+    <script type="text/javascript" src="../scripts/clipboard.min.js"></script>
   </head>
   <body onload="OnLoad('cs')">
     <input type="hidden" id="userDataCache" class="userDataStyle" />
     <div class="pageHeader" id="PageHeader">KSI .NET API<form id="SearchForm" method="get" action="#" onsubmit="javascript:TransferToSearchPage(); return false;"><input id="SearchTextBox" type="text" maxlength="200" /><button id="SearchButton" type="submit"></button></form></div>
     <div class="pageBody">
-      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="247abecf-0639-aa43-0fcf-bf4a1b556b97.htm" title="Guardtime.KSI.Utils" tocid="247abecf-0639-aa43-0fcf-bf4a1b556b97">Guardtime.KSI.Utils</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="e51e6090-d057-6195-f249-175202a3b58f.htm" title="Util Class" tocid="e51e6090-d057-6195-f249-175202a3b58f">Util Class</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="0bedb54a-f657-c1b9-fb0e-4d7a48d1e3c9.htm" title="Util Methods" tocid="0bedb54a-f657-c1b9-fb0e-4d7a48d1e3c9">Util Methods</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="c45fda42-2675-06b0-87bb-1733a86e801d.htm" title="IsArrayEqual Method " tocid="c45fda42-2675-06b0-87bb-1733a86e801d">IsArrayEqual Method </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="9be1dc09-0dd5-0830-e102-1b274728530a.htm" title="IsArrayEqual(T) Method (T[], T[])" tocid="9be1dc09-0dd5-0830-e102-1b274728530a">IsArrayEqual(T) Method (T[], T[])</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="50200ec1-033b-2eb0-cef7-01a91f81bb4a.htm" title="IsArrayEqual(T) Method (T[], T[], Int32, Int32)" tocid="50200ec1-033b-2eb0-cef7-01a91f81bb4a">IsArrayEqual(T) Method (T[], T[], Int32, Int32)</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
+      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/247abecf-0639-aa43-0fcf-bf4a1b556b97.htm" title="Guardtime.KSI.Utils" tocid="247abecf-0639-aa43-0fcf-bf4a1b556b97">Guardtime.KSI.Utils</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/e51e6090-d057-6195-f249-175202a3b58f.htm" title="Util Class" tocid="e51e6090-d057-6195-f249-175202a3b58f">Util Class</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/0bedb54a-f657-c1b9-fb0e-4d7a48d1e3c9.htm" title="Util Methods" tocid="0bedb54a-f657-c1b9-fb0e-4d7a48d1e3c9">Util Methods</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="c45fda42-2675-06b0-87bb-1733a86e801d.htm" title="IsArrayEqual Method " tocid="c45fda42-2675-06b0-87bb-1733a86e801d">IsArrayEqual Method </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="9be1dc09-0dd5-0830-e102-1b274728530a.htm" title="IsArrayEqual(T) Method (T[], T[])" tocid="9be1dc09-0dd5-0830-e102-1b274728530a">IsArrayEqual(T) Method (T[], T[])</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="50200ec1-033b-2eb0-cef7-01a91f81bb4a.htm" title="IsArrayEqual(T) Method (T[], T[], Int32, Int32)" tocid="50200ec1-033b-2eb0-cef7-01a91f81bb4a">IsArrayEqual(T) Method (T[], T[], Int32, Int32)</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
         <table class="titleTable">
           <tr>
-            <td class="titleColumn">Util<span id="LST9D70840B_0"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST9D70840B_0?cpp=::|nu=.");</script>IsArrayEqual Method </td>
+            <td class="titleColumn">
+              <h1>Util<span id="LST9D70840B_0"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST9D70840B_0?cpp=::|nu=.");</script>IsArrayEqual Method </h1>
+            </td>
           </tr>
         </table>
-        <span class="introStyle"></span>
-        <div class="collapsibleAreaRegion">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0">
-            <img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Overload List</span>
-        </div>
-        <div id="ID0RBSection" class="collapsibleSection">
-          <table id="memberList" class="members">
-            <tr>
-              <th class="iconColumn">
+        <span class="introStyle"></span> <div class="collapsibleAreaRegion"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0"><img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Overload List</span></div><div id="ID0RBSection" class="collapsibleSection"><table class="members" id="overloadMembersList"><tr><th class="iconColumn">
 								 
-							</th>
-              <th>Name</th>
-              <th>Description</th>
-            </tr>
-            <tr data="public;static;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-                <img src="../icons/static.gif" alt="Static member" title="Static member" />
-              </td>
-              <td>
-                <a href="9be1dc09-0dd5-0830-e102-1b274728530a.htm">IsArrayEqual<span id="LST9D70840B_1"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST9D70840B_1?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>T<span id="LST9D70840B_2"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST9D70840B_2?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>(<span id="LST9D70840B_3"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST9D70840B_3?cpp=array&lt;");</script>T<span id="LST9D70840B_4"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST9D70840B_4?cpp=&gt;|cs=[]|vb=()|nu=[]|fs=[]");</script>, <span id="LST9D70840B_5"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST9D70840B_5?cpp=array&lt;");</script>T<span id="LST9D70840B_6"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST9D70840B_6?cpp=&gt;|cs=[]|vb=()|nu=[]|fs=[]");</script>)</a>
-              </td>
-              <td>
-                <div class="summary">
+							</th><th>Name</th><th>Description</th></tr><tr data="public;static;declared;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /><img src="../icons/static.gif" alt="Static member" title="Static member" /></td><td><a href="9be1dc09-0dd5-0830-e102-1b274728530a.htm">IsArrayEqual<span id="LST9D70840B_1"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST9D70840B_1?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>T<span id="LST9D70840B_2"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST9D70840B_2?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>(<span id="LST9D70840B_3"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST9D70840B_3?cpp=array&lt;");</script>T<span id="LST9D70840B_4"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST9D70840B_4?cpp=&gt;|cs=[]|vb=()|nu=[]|fs=[]");</script>, <span id="LST9D70840B_5"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST9D70840B_5?cpp=array&lt;");</script>T<span id="LST9D70840B_6"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST9D70840B_6?cpp=&gt;|cs=[]|vb=()|nu=[]|fs=[]");</script>)</a></td><td><div class="summary">
                 Are given arrays equal with same data ordering.
-            </div>
-              </td>
-            </tr>
-            <tr data="public;static;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-                <img src="../icons/static.gif" alt="Static member" title="Static member" />
-              </td>
-              <td>
-                <a href="50200ec1-033b-2eb0-cef7-01a91f81bb4a.htm">IsArrayEqual<span id="LST9D70840B_7"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST9D70840B_7?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>T<span id="LST9D70840B_8"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST9D70840B_8?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>(<span id="LST9D70840B_9"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST9D70840B_9?cpp=array&lt;");</script>T<span id="LST9D70840B_10"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST9D70840B_10?cpp=&gt;|cs=[]|vb=()|nu=[]|fs=[]");</script>, <span id="LST9D70840B_11"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST9D70840B_11?cpp=array&lt;");</script>T<span id="LST9D70840B_12"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST9D70840B_12?cpp=&gt;|cs=[]|vb=()|nu=[]|fs=[]");</script>, Int32, Int32)</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="public;static;declared;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /><img src="../icons/static.gif" alt="Static member" title="Static member" /></td><td><a href="50200ec1-033b-2eb0-cef7-01a91f81bb4a.htm">IsArrayEqual<span id="LST9D70840B_7"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST9D70840B_7?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>T<span id="LST9D70840B_8"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST9D70840B_8?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>(<span id="LST9D70840B_9"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST9D70840B_9?cpp=array&lt;");</script>T<span id="LST9D70840B_10"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST9D70840B_10?cpp=&gt;|cs=[]|vb=()|nu=[]|fs=[]");</script>, <span id="LST9D70840B_11"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST9D70840B_11?cpp=array&lt;");</script>T<span id="LST9D70840B_12"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST9D70840B_12?cpp=&gt;|cs=[]|vb=()|nu=[]|fs=[]");</script>, Int32, Int32)</a></td><td><div class="summary">
             Are parts of given arrays equal
-            </div>
-              </td>
-            </tr>
-          </table>
-          <a href="#PageHeader">Top</a>
-        </div>
-        <div class="collapsibleAreaRegion" id="seeAlsoSection">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0">
-            <img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span>
-        </div>
-        <div id="ID1RBSection" class="collapsibleSection">
-          <h4 class="subHeading">Reference</h4>
-          <div class="seeAlsoStyle">
-            <a href="e51e6090-d057-6195-f249-175202a3b58f.htm">Util Class</a>
-          </div>
-          <div class="seeAlsoStyle">
-            <a href="247abecf-0639-aa43-0fcf-bf4a1b556b97.htm">Guardtime.KSI.Utils Namespace</a>
-          </div>
-        </div>
-      </div>
+            </div></td></tr></table><a href="#PageHeader">Top</a></div><div class="collapsibleAreaRegion" id="seeAlsoSection"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0"><img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span></div><div id="ID1RBSection" class="collapsibleSection"><h4 class="subHeading">Reference</h4><div class="seeAlsoStyle"><a href="e51e6090-d057-6195-f249-175202a3b58f.htm">Util Class</a></div><div class="seeAlsoStyle"><a href="247abecf-0639-aa43-0fcf-bf4a1b556b97.htm">Guardtime.KSI.Utils Namespace</a></div></div></div>
     </div>
     <div id="pageFooter" class="pageFooter"> </div>
   </body>

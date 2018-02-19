@@ -20,62 +20,31 @@
     <link rel="stylesheet" type="text/css" href="../styles/branding-Website.css" />
     <script type="text/javascript" src="../scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../scripts/branding-Website.js"></script>
+    <script type="text/javascript" src="../scripts/clipboard.min.js"></script>
   </head>
   <body onload="OnLoad('cs')">
     <input type="hidden" id="userDataCache" class="userDataStyle" />
     <div class="pageHeader" id="PageHeader">KSI .NET API<form id="SearchForm" method="get" action="#" onsubmit="javascript:TransferToSearchPage(); return false;"><input id="SearchTextBox" type="text" maxlength="200" /><button id="SearchButton" type="submit"></button></form></div>
     <div class="pageBody">
-      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="504f6905-a315-5d37-1522-273f3b568c3a.htm" title="Guardtime.KSI.Service Namespaces" tocid="504f6905-a315-5d37-1522-273f3b568c3a">Guardtime.KSI.Service Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="6c3d4a3a-c200-4dd2-34fe-54591d3059fb.htm" title="Guardtime.KSI.Service" tocid="6c3d4a3a-c200-4dd2-34fe-54591d3059fb">Guardtime.KSI.Service</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="ca2c884d-b796-629c-fc1a-b7fa95848182.htm" title="KsiService Class" tocid="ca2c884d-b796-629c-fc1a-b7fa95848182">KsiService Class</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="ee72632c-6dd4-f083-d3ca-52b009eac85e.htm" title="KsiService Properties" tocid="ee72632c-6dd4-f083-d3ca-52b009eac85e">KsiService Properties</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="4a9e71b8-7b7f-e6ad-1a2f-13e9f89950a4.htm" title="PduVersion Property " tocid="4a9e71b8-7b7f-e6ad-1a2f-13e9f89950a4">PduVersion Property </a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
+      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/504f6905-a315-5d37-1522-273f3b568c3a.htm" title="Guardtime.KSI.Service Namespaces" tocid="504f6905-a315-5d37-1522-273f3b568c3a">Guardtime.KSI.Service Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/6c3d4a3a-c200-4dd2-34fe-54591d3059fb.htm" title="Guardtime.KSI.Service" tocid="6c3d4a3a-c200-4dd2-34fe-54591d3059fb">Guardtime.KSI.Service</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/ca2c884d-b796-629c-fc1a-b7fa95848182.htm" title="KsiService Class" tocid="ca2c884d-b796-629c-fc1a-b7fa95848182">KsiService Class</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="ee72632c-6dd4-f083-d3ca-52b009eac85e.htm" title="KsiService Properties" tocid="ee72632c-6dd4-f083-d3ca-52b009eac85e">KsiService Properties</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="c57f34ed-b267-94d8-ff03-8aeaf4cc72b9.htm" title="AggregatorAddress Property " tocid="c57f34ed-b267-94d8-ff03-8aeaf4cc72b9">AggregatorAddress Property </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="08efd320-23d0-2e0d-c0d7-b70853e7933d.htm" title="ExtenderAddress Property " tocid="08efd320-23d0-2e0d-c0d7-b70853e7933d">ExtenderAddress Property </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="4a9e71b8-7b7f-e6ad-1a2f-13e9f89950a4.htm" title="PduVersion Property " tocid="4a9e71b8-7b7f-e6ad-1a2f-13e9f89950a4">PduVersion Property </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="b4a3140d-1b2b-2b63-78b4-2159037e7f70.htm" title="PublicationsFileAddress Property " tocid="b4a3140d-1b2b-2b63-78b4-2159037e7f70">PublicationsFileAddress Property </a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
         <table class="titleTable">
           <tr>
-            <td class="titleColumn">KsiService Properties</td>
+            <td class="titleColumn">
+              <h1>KsiService Properties</h1>
+            </td>
           </tr>
         </table>
-        <span class="introStyle"></span>
-        <p>The <a href="ca2c884d-b796-629c-fc1a-b7fa95848182.htm">KsiService</a> type exposes the following members.</p>
-        <div class="collapsibleAreaRegion">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0">
-            <img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Properties</span>
-        </div>
-        <div id="ID0RBSection" class="collapsibleSection">
-          <table id="memberList" class="members">
-            <tr>
-              <th class="iconColumn">
+        <span class="introStyle"></span> <p>The <a href="ca2c884d-b796-629c-fc1a-b7fa95848182.htm">KsiService</a> type exposes the following members.</p><div class="collapsibleAreaRegion"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0"><img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Properties</span></div><div id="ID0RBSection" class="collapsibleSection"><table class="members" id="propertyList"><tr><th class="iconColumn">
 								 
-							</th>
-              <th>Name</th>
-              <th>Description</th>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="4a9e71b8-7b7f-e6ad-1a2f-13e9f89950a4.htm">PduVersion</a>
-              </td>
-              <td>
-                <div class="summary">
+							</th><th>Name</th><th>Description</th></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="c57f34ed-b267-94d8-ff03-8aeaf4cc72b9.htm">AggregatorAddress</a></td><td><div class="summary">
+            Aggregator address (url or ip)
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="08efd320-23d0-2e0d-c0d7-b70853e7933d.htm">ExtenderAddress</a></td><td><div class="summary">
+            Extender address (url or ip)
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="4a9e71b8-7b7f-e6ad-1a2f-13e9f89950a4.htm">PduVersion</a></td><td><div class="summary">
             PDU format version
-            </div>
-              </td>
-            </tr>
-          </table>
-          <a href="#PageHeader">Top</a>
-        </div>
-        <div class="collapsibleAreaRegion" id="seeAlsoSection">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0">
-            <img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span>
-        </div>
-        <div id="ID1RBSection" class="collapsibleSection">
-          <h4 class="subHeading">Reference</h4>
-          <div class="seeAlsoStyle">
-            <a href="ca2c884d-b796-629c-fc1a-b7fa95848182.htm">KsiService Class</a>
-          </div>
-          <div class="seeAlsoStyle">
-            <a href="6c3d4a3a-c200-4dd2-34fe-54591d3059fb.htm">Guardtime.KSI.Service Namespace</a>
-          </div>
-        </div>
-      </div>
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="b4a3140d-1b2b-2b63-78b4-2159037e7f70.htm">PublicationsFileAddress</a></td><td><div class="summary">
+            Publications file url
+            </div></td></tr></table><a href="#PageHeader">Top</a></div><div class="collapsibleAreaRegion" id="seeAlsoSection"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0"><img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span></div><div id="ID1RBSection" class="collapsibleSection"><h4 class="subHeading">Reference</h4><div class="seeAlsoStyle"><a href="ca2c884d-b796-629c-fc1a-b7fa95848182.htm">KsiService Class</a></div><div class="seeAlsoStyle"><a href="6c3d4a3a-c200-4dd2-34fe-54591d3059fb.htm">Guardtime.KSI.Service Namespace</a></div></div></div>
     </div>
     <div id="pageFooter" class="pageFooter"> </div>
   </body>

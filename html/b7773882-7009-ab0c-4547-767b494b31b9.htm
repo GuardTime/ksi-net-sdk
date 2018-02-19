@@ -23,74 +23,27 @@
     <link rel="stylesheet" type="text/css" href="../styles/branding-Website.css" />
     <script type="text/javascript" src="../scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../scripts/branding-Website.js"></script>
+    <script type="text/javascript" src="../scripts/clipboard.min.js"></script>
   </head>
   <body onload="OnLoad('cs')">
     <input type="hidden" id="userDataCache" class="userDataStyle" />
     <div class="pageHeader" id="PageHeader">KSI .NET API<form id="SearchForm" method="get" action="#" onsubmit="javascript:TransferToSearchPage(); return false;"><input id="SearchTextBox" type="text" maxlength="200" /><button id="SearchButton" type="submit"></button></form></div>
     <div class="pageBody">
-      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="504f6905-a315-5d37-1522-273f3b568c3a.htm" title="Guardtime.KSI.Service Namespaces" tocid="504f6905-a315-5d37-1522-273f3b568c3a">Guardtime.KSI.Service Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="6c3d4a3a-c200-4dd2-34fe-54591d3059fb.htm" title="Guardtime.KSI.Service" tocid="6c3d4a3a-c200-4dd2-34fe-54591d3059fb">Guardtime.KSI.Service</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="541356bd-3a18-c757-ae6d-d12b3b2f4ceb.htm" title="ServiceCredentials Class" tocid="541356bd-3a18-c757-ae6d-d12b3b2f4ceb">ServiceCredentials Class</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="b7773882-7009-ab0c-4547-767b494b31b9.htm" title="ServiceCredentials Constructor " tocid="b7773882-7009-ab0c-4547-767b494b31b9">ServiceCredentials Constructor </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="c856df16-d8aa-936c-0279-872a9c26de8d.htm" title="ServiceCredentials Constructor (String, Byte[], HashAlgorithm)" tocid="c856df16-d8aa-936c-0279-872a9c26de8d">ServiceCredentials Constructor (String, Byte[], HashAlgorithm)</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="621f2adf-a965-cf87-5951-fd097cc581a4.htm" title="ServiceCredentials Constructor (String, String, HashAlgorithm)" tocid="621f2adf-a965-cf87-5951-fd097cc581a4">ServiceCredentials Constructor (String, String, HashAlgorithm)</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
+      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/504f6905-a315-5d37-1522-273f3b568c3a.htm" title="Guardtime.KSI.Service Namespaces" tocid="504f6905-a315-5d37-1522-273f3b568c3a">Guardtime.KSI.Service Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/6c3d4a3a-c200-4dd2-34fe-54591d3059fb.htm" title="Guardtime.KSI.Service" tocid="6c3d4a3a-c200-4dd2-34fe-54591d3059fb">Guardtime.KSI.Service</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/541356bd-3a18-c757-ae6d-d12b3b2f4ceb.htm" title="ServiceCredentials Class" tocid="541356bd-3a18-c757-ae6d-d12b3b2f4ceb">ServiceCredentials Class</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="b7773882-7009-ab0c-4547-767b494b31b9.htm" title="ServiceCredentials Constructor " tocid="b7773882-7009-ab0c-4547-767b494b31b9">ServiceCredentials Constructor </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="c856df16-d8aa-936c-0279-872a9c26de8d.htm" title="ServiceCredentials Constructor (String, Byte[], HashAlgorithm)" tocid="c856df16-d8aa-936c-0279-872a9c26de8d">ServiceCredentials Constructor (String, Byte[], HashAlgorithm)</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="621f2adf-a965-cf87-5951-fd097cc581a4.htm" title="ServiceCredentials Constructor (String, String, HashAlgorithm)" tocid="621f2adf-a965-cf87-5951-fd097cc581a4">ServiceCredentials Constructor (String, String, HashAlgorithm)</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
         <table class="titleTable">
           <tr>
-            <td class="titleColumn">ServiceCredentials Constructor </td>
+            <td class="titleColumn">
+              <h1>ServiceCredentials Constructor </h1>
+            </td>
           </tr>
         </table>
-        <span class="introStyle"></span>
-        <div class="collapsibleAreaRegion">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0">
-            <img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Overload List</span>
-        </div>
-        <div id="ID0RBSection" class="collapsibleSection">
-          <table id="memberList" class="members">
-            <tr>
-              <th class="iconColumn">
+        <span class="introStyle"></span> <div class="collapsibleAreaRegion"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0"><img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Overload List</span></div><div id="ID0RBSection" class="collapsibleSection"><table class="members" id="overloadMembersList"><tr><th class="iconColumn">
 								 
-							</th>
-              <th>Name</th>
-              <th>Description</th>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="c856df16-d8aa-936c-0279-872a9c26de8d.htm">ServiceCredentials(String, <span id="LST9576EF18_0"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST9576EF18_0?cpp=array&lt;");</script>Byte<span id="LST9576EF18_1"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST9576EF18_1?cpp=&gt;|cs=[]|vb=()|nu=[]|fs=[]");</script>, HashAlgorithm)</a>
-              </td>
-              <td>
-                <div class="summary">
+							</th><th>Name</th><th>Description</th></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="c856df16-d8aa-936c-0279-872a9c26de8d.htm">ServiceCredentials(String, <span id="LST9576EF18_0"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST9576EF18_0?cpp=array&lt;");</script>Byte<span id="LST9576EF18_1"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST9576EF18_1?cpp=&gt;|cs=[]|vb=()|nu=[]|fs=[]");</script>, HashAlgorithm)</a></td><td><div class="summary">
                 Create service credentials object from login ID and login key as bytes.
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="621f2adf-a965-cf87-5951-fd097cc581a4.htm">ServiceCredentials(String, String, HashAlgorithm)</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="621f2adf-a965-cf87-5951-fd097cc581a4.htm">ServiceCredentials(String, String, HashAlgorithm)</a></td><td><div class="summary">
                 Create servoce credentials object from login ID and login key as string.
-            </div>
-              </td>
-            </tr>
-          </table>
-          <a href="#PageHeader">Top</a>
-        </div>
-        <div class="collapsibleAreaRegion" id="seeAlsoSection">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0">
-            <img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span>
-        </div>
-        <div id="ID1RBSection" class="collapsibleSection">
-          <h4 class="subHeading">Reference</h4>
-          <div class="seeAlsoStyle">
-            <a href="541356bd-3a18-c757-ae6d-d12b3b2f4ceb.htm">ServiceCredentials Class</a>
-          </div>
-          <div class="seeAlsoStyle">
-            <a href="6c3d4a3a-c200-4dd2-34fe-54591d3059fb.htm">Guardtime.KSI.Service Namespace</a>
-          </div>
-        </div>
-      </div>
+            </div></td></tr></table><a href="#PageHeader">Top</a></div><div class="collapsibleAreaRegion" id="seeAlsoSection"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0"><img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span></div><div id="ID1RBSection" class="collapsibleSection"><h4 class="subHeading">Reference</h4><div class="seeAlsoStyle"><a href="541356bd-3a18-c757-ae6d-d12b3b2f4ceb.htm">ServiceCredentials Class</a></div><div class="seeAlsoStyle"><a href="6c3d4a3a-c200-4dd2-34fe-54591d3059fb.htm">Guardtime.KSI.Service Namespace</a></div></div></div>
     </div>
     <div id="pageFooter" class="pageFooter"> </div>
   </body>

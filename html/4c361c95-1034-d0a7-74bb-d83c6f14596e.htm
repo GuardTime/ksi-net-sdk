@@ -22,113 +22,33 @@
     <link rel="stylesheet" type="text/css" href="../styles/branding-Website.css" />
     <script type="text/javascript" src="../scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../scripts/branding-Website.js"></script>
+    <script type="text/javascript" src="../scripts/clipboard.min.js"></script>
   </head>
   <body onload="OnLoad('cs')">
     <input type="hidden" id="userDataCache" class="userDataStyle" />
     <div class="pageHeader" id="PageHeader">KSI .NET API<form id="SearchForm" method="get" action="#" onsubmit="javascript:TransferToSearchPage(); return false;"><input id="SearchTextBox" type="text" maxlength="200" /><button id="SearchButton" type="submit"></button></form></div>
     <div class="pageBody">
-      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="b47c2570-2d70-686e-e260-6ed09f9fcb94.htm" title="Guardtime.KSI.Signature Namespaces" tocid="b47c2570-2d70-686e-e260-6ed09f9fcb94">Guardtime.KSI.Signature Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="9ea69061-5f2d-b102-3720-0587e5478ff9.htm" title="Guardtime.KSI.Signature" tocid="9ea69061-5f2d-b102-3720-0587e5478ff9">Guardtime.KSI.Signature</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="355751a8-676c-0591-40da-8b0da92f7ca0.htm" title="KsiSignatureFactory Class" tocid="355751a8-676c-0591-40da-8b0da92f7ca0">KsiSignatureFactory Class</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="fe59f33d-50c3-1ac6-12c7-43365474d07f.htm" title="KsiSignatureFactory Methods" tocid="fe59f33d-50c3-1ac6-12c7-43365474d07f">KsiSignatureFactory Methods</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="4c361c95-1034-d0a7-74bb-d83c6f14596e.htm" title="Create Method " tocid="4c361c95-1034-d0a7-74bb-d83c6f14596e">Create Method </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="07da4043-b732-fb30-e61f-0e1d13558c80.htm" title="Create Method (Byte[], DataHash)" tocid="07da4043-b732-fb30-e61f-0e1d13558c80">Create Method (Byte[], DataHash)</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="d42a54d3-b63f-c4e5-bb07-55f865c5e90e.htm" title="Create Method (Stream, DataHash)" tocid="d42a54d3-b63f-c4e5-bb07-55f865c5e90e">Create Method (Stream, DataHash)</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="69fe8e75-65af-6985-1060-7416324e8a98.htm" title="Create Method (AggregationResponsePayload, DataHash, Nullable(UInt32))" tocid="69fe8e75-65af-6985-1060-7416324e8a98">Create Method (AggregationResponsePayload, DataHash, Nullable(UInt32))</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="d04aed9e-777c-8abd-31c0-54e868d619e0.htm" title="Create Method (LegacyAggregationResponsePayload, DataHash, Nullable(UInt32))" tocid="d04aed9e-777c-8abd-31c0-54e868d619e0">Create Method (LegacyAggregationResponsePayload, DataHash, Nullable(UInt32))</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="ef95dc49-5dc0-fcc1-fa72-7e06b56ac268.htm" title="Create Method (ICollection(AggregationHashChain), CalendarHashChain, CalendarAuthenticationRecord, PublicationRecordInSignature, Rfc3161Record, DataHash)" tocid="ef95dc49-5dc0-fcc1-fa72-7e06b56ac268">Create Method (ICollection(AggregationHashChain), CalendarHashChain, CalendarAuthenticationRecord, PublicationRecordInSignature, Rfc3161Record, DataHash)</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
+      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/b47c2570-2d70-686e-e260-6ed09f9fcb94.htm" title="Guardtime.KSI.Signature Namespaces" tocid="b47c2570-2d70-686e-e260-6ed09f9fcb94">Guardtime.KSI.Signature Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/9ea69061-5f2d-b102-3720-0587e5478ff9.htm" title="Guardtime.KSI.Signature" tocid="9ea69061-5f2d-b102-3720-0587e5478ff9">Guardtime.KSI.Signature</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/355751a8-676c-0591-40da-8b0da92f7ca0.htm" title="KsiSignatureFactory Class" tocid="355751a8-676c-0591-40da-8b0da92f7ca0">KsiSignatureFactory Class</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/fe59f33d-50c3-1ac6-12c7-43365474d07f.htm" title="KsiSignatureFactory Methods" tocid="fe59f33d-50c3-1ac6-12c7-43365474d07f">KsiSignatureFactory Methods</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="4c361c95-1034-d0a7-74bb-d83c6f14596e.htm" title="Create Method " tocid="4c361c95-1034-d0a7-74bb-d83c6f14596e">Create Method </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="07da4043-b732-fb30-e61f-0e1d13558c80.htm" title="Create Method (Byte[], DataHash)" tocid="07da4043-b732-fb30-e61f-0e1d13558c80">Create Method (Byte[], DataHash)</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="d42a54d3-b63f-c4e5-bb07-55f865c5e90e.htm" title="Create Method (Stream, DataHash)" tocid="d42a54d3-b63f-c4e5-bb07-55f865c5e90e">Create Method (Stream, DataHash)</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="69fe8e75-65af-6985-1060-7416324e8a98.htm" title="Create Method (AggregationResponsePayload, DataHash, Nullable(UInt32))" tocid="69fe8e75-65af-6985-1060-7416324e8a98">Create Method (AggregationResponsePayload, DataHash, Nullable(UInt32))</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="d04aed9e-777c-8abd-31c0-54e868d619e0.htm" title="Create Method (LegacyAggregationResponsePayload, DataHash, Nullable(UInt32))" tocid="d04aed9e-777c-8abd-31c0-54e868d619e0">Create Method (LegacyAggregationResponsePayload, DataHash, Nullable(UInt32))</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="ef95dc49-5dc0-fcc1-fa72-7e06b56ac268.htm" title="Create Method (ICollection(AggregationHashChain), CalendarHashChain, CalendarAuthenticationRecord, PublicationRecordInSignature, Rfc3161Record, DataHash)" tocid="ef95dc49-5dc0-fcc1-fa72-7e06b56ac268">Create Method (ICollection(AggregationHashChain), CalendarHashChain, CalendarAuthenticationRecord, PublicationRecordInSignature, Rfc3161Record, DataHash)</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
         <table class="titleTable">
           <tr>
-            <td class="titleColumn">KsiSignatureFactory<span id="LST3EAE3C38_0"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST3EAE3C38_0?cpp=::|nu=.");</script>Create Method </td>
+            <td class="titleColumn">
+              <h1>KsiSignatureFactory<span id="LST3EAE3C38_0"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST3EAE3C38_0?cpp=::|nu=.");</script>Create Method </h1>
+            </td>
           </tr>
         </table>
-        <span class="introStyle"></span>
-        <div class="collapsibleAreaRegion">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0">
-            <img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Overload List</span>
-        </div>
-        <div id="ID0RBSection" class="collapsibleSection">
-          <table id="memberList" class="members">
-            <tr>
-              <th class="iconColumn">
+        <span class="introStyle"></span> <div class="collapsibleAreaRegion"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0"><img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Overload List</span></div><div id="ID0RBSection" class="collapsibleSection"><table class="members" id="overloadMembersList"><tr><th class="iconColumn">
 								 
-							</th>
-              <th>Name</th>
-              <th>Description</th>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="07da4043-b732-fb30-e61f-0e1d13558c80.htm">Create(<span id="LST3EAE3C38_1"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST3EAE3C38_1?cpp=array&lt;");</script>Byte<span id="LST3EAE3C38_2"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST3EAE3C38_2?cpp=&gt;|cs=[]|vb=()|nu=[]|fs=[]");</script>, DataHash)</a>
-              </td>
-              <td>
-                <div class="summary">
-                Get KSI signature instance from byte array.
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="d42a54d3-b63f-c4e5-bb07-55f865c5e90e.htm">Create(Stream, DataHash)</a>
-              </td>
-              <td>
-                <div class="summary">
-                Get KSI signature instance from stream.
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="69fe8e75-65af-6985-1060-7416324e8a98.htm">Create(AggregationResponsePayload, DataHash, Nullable<span id="LST3EAE3C38_3"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST3EAE3C38_3?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>UInt32<span id="LST3EAE3C38_4"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST3EAE3C38_4?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>)</a>
-              </td>
-              <td>
-                <div class="summary">
-                Get KSI signature instance from aggregation response payload.
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="d04aed9e-777c-8abd-31c0-54e868d619e0.htm">Create(LegacyAggregationResponsePayload, DataHash, Nullable<span id="LST3EAE3C38_5"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST3EAE3C38_5?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>UInt32<span id="LST3EAE3C38_6"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST3EAE3C38_6?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>)</a>
-              </td>
-              <td>
-                <div class="summary">
-                Get KSI signature instance from legacy aggregation response payload.
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="ef95dc49-5dc0-fcc1-fa72-7e06b56ac268.htm">Create(ICollection<span id="LST3EAE3C38_7"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST3EAE3C38_7?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>AggregationHashChain<span id="LST3EAE3C38_8"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST3EAE3C38_8?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>, CalendarHashChain, CalendarAuthenticationRecord, PublicationRecordInSignature, Rfc3161Record, DataHash)</a>
-              </td>
-              <td>
-                <div class="summary">
-            Get KSI signature instance from tlv tags
-            </div>
-              </td>
-            </tr>
-          </table>
-          <a href="#PageHeader">Top</a>
-        </div>
-        <div class="collapsibleAreaRegion" id="seeAlsoSection">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0">
-            <img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span>
-        </div>
-        <div id="ID1RBSection" class="collapsibleSection">
-          <h4 class="subHeading">Reference</h4>
-          <div class="seeAlsoStyle">
-            <a href="355751a8-676c-0591-40da-8b0da92f7ca0.htm">KsiSignatureFactory Class</a>
-          </div>
-          <div class="seeAlsoStyle">
-            <a href="9ea69061-5f2d-b102-3720-0587e5478ff9.htm">Guardtime.KSI.Signature Namespace</a>
-          </div>
-        </div>
-      </div>
+							</th><th>Name</th><th>Description</th></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="07da4043-b732-fb30-e61f-0e1d13558c80.htm">Create(<span id="LST3EAE3C38_1"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST3EAE3C38_1?cpp=array&lt;");</script>Byte<span id="LST3EAE3C38_2"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST3EAE3C38_2?cpp=&gt;|cs=[]|vb=()|nu=[]|fs=[]");</script>, DataHash)</a></td><td><div class="summary">
+                Create KSI signature instance from byte array.
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="d42a54d3-b63f-c4e5-bb07-55f865c5e90e.htm">Create(Stream, DataHash)</a></td><td><div class="summary">
+                Create KSI signature instance from stream.
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="69fe8e75-65af-6985-1060-7416324e8a98.htm">Create(AggregationResponsePayload, DataHash, Nullable<span id="LST3EAE3C38_3"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST3EAE3C38_3?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>UInt32<span id="LST3EAE3C38_4"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST3EAE3C38_4?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>)</a></td><td><div class="summary">
+                Create KSI signature instance from aggregation response payload.
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="d04aed9e-777c-8abd-31c0-54e868d619e0.htm">Create(LegacyAggregationResponsePayload, DataHash, Nullable<span id="LST3EAE3C38_5"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST3EAE3C38_5?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>UInt32<span id="LST3EAE3C38_6"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST3EAE3C38_6?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>)</a></td><td><div class="summary">
+                Create KSI signature instance from legacy aggregation response payload.
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="ef95dc49-5dc0-fcc1-fa72-7e06b56ac268.htm">Create(ICollection<span id="LST3EAE3C38_7"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST3EAE3C38_7?cs=&lt;|vb=(Of |cpp=&lt;|fs=&lt;'|nu=(");</script>AggregationHashChain<span id="LST3EAE3C38_8"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST3EAE3C38_8?cs=&gt;|vb=)|cpp=&gt;|fs=&gt;|nu=)");</script>, CalendarHashChain, CalendarAuthenticationRecord, PublicationRecordInSignature, Rfc3161Record, DataHash)</a></td><td><div class="summary">
+            Create KSI signature instance from tlv tags
+            </div></td></tr></table><a href="#PageHeader">Top</a></div><div class="collapsibleAreaRegion" id="seeAlsoSection"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0"><img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span></div><div id="ID1RBSection" class="collapsibleSection"><h4 class="subHeading">Reference</h4><div class="seeAlsoStyle"><a href="355751a8-676c-0591-40da-8b0da92f7ca0.htm">KsiSignatureFactory Class</a></div><div class="seeAlsoStyle"><a href="9ea69061-5f2d-b102-3720-0587e5478ff9.htm">Guardtime.KSI.Signature Namespace</a></div></div></div>
     </div>
     <div id="pageFooter" class="pageFooter"> </div>
   </body>

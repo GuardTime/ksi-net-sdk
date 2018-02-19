@@ -20,63 +20,25 @@
     <link rel="stylesheet" type="text/css" href="../styles/branding-Website.css" />
     <script type="text/javascript" src="../scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../scripts/branding-Website.js"></script>
+    <script type="text/javascript" src="../scripts/clipboard.min.js"></script>
   </head>
   <body onload="OnLoad('cs')">
     <input type="hidden" id="userDataCache" class="userDataStyle" />
     <div class="pageHeader" id="PageHeader">KSI .NET API<form id="SearchForm" method="get" action="#" onsubmit="javascript:TransferToSearchPage(); return false;"><input id="SearchTextBox" type="text" maxlength="200" /><button id="SearchButton" type="submit"></button></form></div>
     <div class="pageBody">
-      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="7130fca7-18fc-e8df-f48e-4dd121779c36.htm" title="Guardtime.KSI" tocid="7130fca7-18fc-e8df-f48e-4dd121779c36">Guardtime.KSI</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="b8d712f8-7298-037e-b2ef-c3afb7751536.htm" title="Constants.AggregationRequestPdu Class" tocid="b8d712f8-7298-037e-b2ef-c3afb7751536">Constants.AggregationRequestPdu Class</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="f44c65fb-a952-01eb-3c90-86800f13cbf7.htm" title="AggregationRequestPdu Fields" tocid="f44c65fb-a952-01eb-3c90-86800f13cbf7">AggregationRequestPdu Fields</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="c46a56dc-b64f-5d7f-4f38-0408d9365274.htm" title="TagType Field" tocid="c46a56dc-b64f-5d7f-4f38-0408d9365274">TagType Field</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
+      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/7130fca7-18fc-e8df-f48e-4dd121779c36.htm" title="Guardtime.KSI" tocid="7130fca7-18fc-e8df-f48e-4dd121779c36">Guardtime.KSI</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/b8d712f8-7298-037e-b2ef-c3afb7751536.htm" title="Constants.AggregationRequestPdu Class" tocid="b8d712f8-7298-037e-b2ef-c3afb7751536">Constants.AggregationRequestPdu Class</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="f44c65fb-a952-01eb-3c90-86800f13cbf7.htm" title="AggregationRequestPdu Fields" tocid="f44c65fb-a952-01eb-3c90-86800f13cbf7">AggregationRequestPdu Fields</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="c46a56dc-b64f-5d7f-4f38-0408d9365274.htm" title="TagType Field" tocid="c46a56dc-b64f-5d7f-4f38-0408d9365274">TagType Field</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
         <table class="titleTable">
           <tr>
-            <td class="titleColumn">AggregationRequestPdu Fields</td>
+            <td class="titleColumn">
+              <h1>AggregationRequestPdu Fields</h1>
+            </td>
           </tr>
         </table>
-        <span class="introStyle"></span>
-        <p>The <a href="b8d712f8-7298-037e-b2ef-c3afb7751536.htm">Constants<span id="LST18D80FDF_0"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST18D80FDF_0?cs=.|vb=.|cpp=::|nu=.|fs=.");</script>AggregationRequestPdu</a> type exposes the following members.</p>
-        <div class="collapsibleAreaRegion">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0">
-            <img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Fields</span>
-        </div>
-        <div id="ID0RBSection" class="collapsibleSection">
-          <table id="memberList" class="members">
-            <tr>
-              <th class="iconColumn">
+        <span class="introStyle"></span> <p>The <a href="b8d712f8-7298-037e-b2ef-c3afb7751536.htm">Constants<span id="LST18D80FDF_0"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST18D80FDF_0?cs=.|vb=.|cpp=::|nu=.|fs=.");</script>AggregationRequestPdu</a> type exposes the following members.</p><div class="collapsibleAreaRegion"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0"><img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Fields</span></div><div id="ID0RBSection" class="collapsibleSection"><table class="members" id="fieldList"><tr><th class="iconColumn">
 								 
-							</th>
-              <th>Name</th>
-              <th>Description</th>
-            </tr>
-            <tr data="public;static;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubfield.gif" alt="Public field" title="Public field" />
-                <img src="../icons/static.gif" alt="Static member" title="Static member" />
-              </td>
-              <td>
-                <a href="c46a56dc-b64f-5d7f-4f38-0408d9365274.htm">TagType</a>
-              </td>
-              <td>
-                <div class="summary">
+							</th><th>Name</th><th>Description</th></tr><tr data="public;static;declared;notNetfw;"><td><img src="../icons/pubfield.gif" alt="Public field" title="Public field" /><img src="../icons/static.gif" alt="Static member" title="Static member" /></td><td><a href="c46a56dc-b64f-5d7f-4f38-0408d9365274.htm">TagType</a></td><td><div class="summary">
                 Aggregation request PDU TLV type.
-            </div>
-              </td>
-            </tr>
-          </table>
-          <a href="#PageHeader">Top</a>
-        </div>
-        <div class="collapsibleAreaRegion" id="seeAlsoSection">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0">
-            <img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span>
-        </div>
-        <div id="ID1RBSection" class="collapsibleSection">
-          <h4 class="subHeading">Reference</h4>
-          <div class="seeAlsoStyle">
-            <a href="b8d712f8-7298-037e-b2ef-c3afb7751536.htm">Constants<span id="LST18D80FDF_1"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST18D80FDF_1?cs=.|vb=.|cpp=::|nu=.|fs=.");</script>AggregationRequestPdu Class</a>
-          </div>
-          <div class="seeAlsoStyle">
-            <a href="7130fca7-18fc-e8df-f48e-4dd121779c36.htm">Guardtime.KSI Namespace</a>
-          </div>
-        </div>
-      </div>
+            </div></td></tr></table><a href="#PageHeader">Top</a></div><div class="collapsibleAreaRegion" id="seeAlsoSection"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0"><img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span></div><div id="ID1RBSection" class="collapsibleSection"><h4 class="subHeading">Reference</h4><div class="seeAlsoStyle"><a href="b8d712f8-7298-037e-b2ef-c3afb7751536.htm">Constants<span id="LST18D80FDF_1"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST18D80FDF_1?cs=.|vb=.|cpp=::|nu=.|fs=.");</script>AggregationRequestPdu Class</a></div><div class="seeAlsoStyle"><a href="7130fca7-18fc-e8df-f48e-4dd121779c36.htm">Guardtime.KSI Namespace</a></div></div></div>
     </div>
     <div id="pageFooter" class="pageFooter"> </div>
   </body>

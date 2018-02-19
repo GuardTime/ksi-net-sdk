@@ -20,62 +20,25 @@
     <link rel="stylesheet" type="text/css" href="../styles/branding-Website.css" />
     <script type="text/javascript" src="../scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../scripts/branding-Website.js"></script>
+    <script type="text/javascript" src="../scripts/clipboard.min.js"></script>
   </head>
   <body onload="OnLoad('cs')">
     <input type="hidden" id="userDataCache" class="userDataStyle" />
     <div class="pageHeader" id="PageHeader">KSI .NET API<form id="SearchForm" method="get" action="#" onsubmit="javascript:TransferToSearchPage(); return false;"><input id="SearchTextBox" type="text" maxlength="200" /><button id="SearchButton" type="submit"></button></form></div>
     <div class="pageBody">
-      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="5f63717e-22be-a5d5-2aaa-edc3ca1ebbe3.htm" title="Guardtime.KSI.Crypto Namespaces" tocid="5f63717e-22be-a5d5-2aaa-edc3ca1ebbe3">Guardtime.KSI.Crypto Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="182104c0-dd33-5017-413a-2bc097d3f1c8.htm" title="Guardtime.KSI.Crypto" tocid="182104c0-dd33-5017-413a-2bc097d3f1c8">Guardtime.KSI.Crypto</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="b76d2d15-3cb1-4ed7-c5a8-3a96341db7aa.htm" title="ICryptoSignatureVerifier Interface" tocid="b76d2d15-3cb1-4ed7-c5a8-3a96341db7aa">ICryptoSignatureVerifier Interface</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="819031f5-8e66-08b5-7d17-e6c19f6846df.htm" title="ICryptoSignatureVerifier Methods" tocid="819031f5-8e66-08b5-7d17-e6c19f6846df">ICryptoSignatureVerifier Methods</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="990ad2d2-4090-e3fe-b62c-b23374e0be5c.htm" title="Verify Method " tocid="990ad2d2-4090-e3fe-b62c-b23374e0be5c">Verify Method </a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
+      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/5f63717e-22be-a5d5-2aaa-edc3ca1ebbe3.htm" title="Guardtime.KSI.Crypto Namespaces" tocid="5f63717e-22be-a5d5-2aaa-edc3ca1ebbe3">Guardtime.KSI.Crypto Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/182104c0-dd33-5017-413a-2bc097d3f1c8.htm" title="Guardtime.KSI.Crypto" tocid="182104c0-dd33-5017-413a-2bc097d3f1c8">Guardtime.KSI.Crypto</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/b76d2d15-3cb1-4ed7-c5a8-3a96341db7aa.htm" title="ICryptoSignatureVerifier Interface" tocid="b76d2d15-3cb1-4ed7-c5a8-3a96341db7aa">ICryptoSignatureVerifier Interface</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="819031f5-8e66-08b5-7d17-e6c19f6846df.htm" title="ICryptoSignatureVerifier Methods" tocid="819031f5-8e66-08b5-7d17-e6c19f6846df">ICryptoSignatureVerifier Methods</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="990ad2d2-4090-e3fe-b62c-b23374e0be5c.htm" title="Verify Method " tocid="990ad2d2-4090-e3fe-b62c-b23374e0be5c">Verify Method </a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
         <table class="titleTable">
           <tr>
-            <td class="titleColumn">ICryptoSignatureVerifier Methods</td>
+            <td class="titleColumn">
+              <h1>ICryptoSignatureVerifier Methods</h1>
+            </td>
           </tr>
         </table>
-        <span class="introStyle"></span>
-        <p>The <a href="b76d2d15-3cb1-4ed7-c5a8-3a96341db7aa.htm">ICryptoSignatureVerifier</a> type exposes the following members.</p>
-        <div class="collapsibleAreaRegion">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0">
-            <img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Methods</span>
-        </div>
-        <div id="ID0RBSection" class="collapsibleSection">
-          <table id="memberList" class="members">
-            <tr>
-              <th class="iconColumn">
+        <span class="introStyle"></span> <p>The <a href="b76d2d15-3cb1-4ed7-c5a8-3a96341db7aa.htm">ICryptoSignatureVerifier</a> type exposes the following members.</p><div class="collapsibleAreaRegion"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0"><img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Methods</span></div><div id="ID0RBSection" class="collapsibleSection"><table class="members" id="methodList"><tr><th class="iconColumn">
 								 
-							</th>
-              <th>Name</th>
-              <th>Description</th>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="990ad2d2-4090-e3fe-b62c-b23374e0be5c.htm">Verify</a>
-              </td>
-              <td>
-                <div class="summary">
+							</th><th>Name</th><th>Description</th></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="990ad2d2-4090-e3fe-b62c-b23374e0be5c.htm">Verify</a></td><td><div class="summary">
                 Verify signed bytes and signature.
-            </div>
-              </td>
-            </tr>
-          </table>
-          <a href="#PageHeader">Top</a>
-        </div>
-        <div class="collapsibleAreaRegion" id="seeAlsoSection">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0">
-            <img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span>
-        </div>
-        <div id="ID1RBSection" class="collapsibleSection">
-          <h4 class="subHeading">Reference</h4>
-          <div class="seeAlsoStyle">
-            <a href="b76d2d15-3cb1-4ed7-c5a8-3a96341db7aa.htm">ICryptoSignatureVerifier Interface</a>
-          </div>
-          <div class="seeAlsoStyle">
-            <a href="182104c0-dd33-5017-413a-2bc097d3f1c8.htm">Guardtime.KSI.Crypto Namespace</a>
-          </div>
-        </div>
-      </div>
+            </div></td></tr></table><a href="#PageHeader">Top</a></div><div class="collapsibleAreaRegion" id="seeAlsoSection"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0"><img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span></div><div id="ID1RBSection" class="collapsibleSection"><h4 class="subHeading">Reference</h4><div class="seeAlsoStyle"><a href="b76d2d15-3cb1-4ed7-c5a8-3a96341db7aa.htm">ICryptoSignatureVerifier Interface</a></div><div class="seeAlsoStyle"><a href="182104c0-dd33-5017-413a-2bc097d3f1c8.htm">Guardtime.KSI.Crypto Namespace</a></div></div></div>
     </div>
     <div id="pageFooter" class="pageFooter"> </div>
   </body>

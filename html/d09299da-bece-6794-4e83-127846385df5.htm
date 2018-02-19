@@ -20,169 +20,43 @@
     <link rel="stylesheet" type="text/css" href="../styles/branding-Website.css" />
     <script type="text/javascript" src="../scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../scripts/branding-Website.js"></script>
+    <script type="text/javascript" src="../scripts/clipboard.min.js"></script>
   </head>
   <body onload="OnLoad('cs')">
     <input type="hidden" id="userDataCache" class="userDataStyle" />
     <div class="pageHeader" id="PageHeader">KSI .NET API<form id="SearchForm" method="get" action="#" onsubmit="javascript:TransferToSearchPage(); return false;"><input id="SearchTextBox" type="text" maxlength="200" /><button id="SearchButton" type="submit"></button></form></div>
     <div class="pageBody">
-      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="504f6905-a315-5d37-1522-273f3b568c3a.htm" title="Guardtime.KSI.Service Namespaces" tocid="504f6905-a315-5d37-1522-273f3b568c3a">Guardtime.KSI.Service Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="6c3d4a3a-c200-4dd2-34fe-54591d3059fb.htm" title="Guardtime.KSI.Service" tocid="6c3d4a3a-c200-4dd2-34fe-54591d3059fb">Guardtime.KSI.Service</a></div><div class="toclevel1" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="c1ec8259-a344-953e-5ae6-62f6d9e1a262.htm" title="AggregationRequestPdu Class" tocid="c1ec8259-a344-953e-5ae6-62f6d9e1a262">AggregationRequestPdu Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="941bb56e-a186-9a63-1383-01a1931f6ab0.htm" title="AggregationRequestPdu Constructor " tocid="941bb56e-a186-9a63-1383-01a1931f6ab0">AggregationRequestPdu Constructor </a></div><div class="toclevel2 current" data-toclevel="2"><a data-tochassubtree="false" href="d09299da-bece-6794-4e83-127846385df5.htm" title="AggregationRequestPdu Properties" tocid="d09299da-bece-6794-4e83-127846385df5">AggregationRequestPdu Properties</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="ab0dfb3b-c617-e557-83bf-c1e144333430.htm" title="AggregationRequestPdu Methods" tocid="ab0dfb3b-c617-e557-83bf-c1e144333430">AggregationRequestPdu Methods</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
+      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/504f6905-a315-5d37-1522-273f3b568c3a.htm" title="Guardtime.KSI.Service Namespaces" tocid="504f6905-a315-5d37-1522-273f3b568c3a">Guardtime.KSI.Service Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/6c3d4a3a-c200-4dd2-34fe-54591d3059fb.htm" title="Guardtime.KSI.Service" tocid="6c3d4a3a-c200-4dd2-34fe-54591d3059fb">Guardtime.KSI.Service</a></div><div class="toclevel1" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/c1ec8259-a344-953e-5ae6-62f6d9e1a262.htm" title="AggregationRequestPdu Class" tocid="c1ec8259-a344-953e-5ae6-62f6d9e1a262">AggregationRequestPdu Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="941bb56e-a186-9a63-1383-01a1931f6ab0.htm" title="AggregationRequestPdu Constructor " tocid="941bb56e-a186-9a63-1383-01a1931f6ab0">AggregationRequestPdu Constructor </a></div><div class="toclevel2 current" data-toclevel="2"><a data-tochassubtree="false" href="d09299da-bece-6794-4e83-127846385df5.htm" title="AggregationRequestPdu Properties" tocid="d09299da-bece-6794-4e83-127846385df5">AggregationRequestPdu Properties</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="ab0dfb3b-c617-e557-83bf-c1e144333430.htm" title="AggregationRequestPdu Methods" tocid="ab0dfb3b-c617-e557-83bf-c1e144333430">AggregationRequestPdu Methods</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
         <table class="titleTable">
           <tr>
-            <td class="titleColumn">AggregationRequestPdu Properties</td>
+            <td class="titleColumn">
+              <h1>AggregationRequestPdu Properties</h1>
+            </td>
           </tr>
         </table>
-        <span class="introStyle"></span>
-        <p>The <a href="c1ec8259-a344-953e-5ae6-62f6d9e1a262.htm">AggregationRequestPdu</a> type exposes the following members.</p>
-        <div class="collapsibleAreaRegion">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0">
-            <img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Properties</span>
-        </div>
-        <div id="ID0RBSection" class="collapsibleSection">
-          <table id="memberList" class="members">
-            <tr>
-              <th class="iconColumn">
+        <span class="introStyle"></span> <p>The <a href="c1ec8259-a344-953e-5ae6-62f6d9e1a262.htm">AggregationRequestPdu</a> type exposes the following members.</p><div class="collapsibleAreaRegion"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0"><img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Properties</span></div><div id="ID0RBSection" class="collapsibleSection"><table class="members" id="propertyList"><tr><th class="iconColumn">
 								 
-							</th>
-              <th>Name</th>
-              <th>Description</th>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="ebba2d33-0d61-49b6-9261-5d07c60ae1bf.htm">Count</a>
-              </td>
-              <td>
-                <div class="summary">
+							</th><th>Name</th><th>Description</th></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="ebba2d33-0d61-49b6-9261-5d07c60ae1bf.htm">Count</a></td><td><div class="summary">
                 Get TLV element list size
-            </div> (Inherited from <a href="df7fe40c-3194-9664-6e96-b6771ad206f2.htm">CompositeTag</a>.)</td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="3cd8b652-be1c-e8f0-6391-4c9661bd69b5.htm">ErrorPayload</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div> (Inherited from <a href="df7fe40c-3194-9664-6e96-b6771ad206f2.htm">CompositeTag</a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="3cd8b652-be1c-e8f0-6391-4c9661bd69b5.htm">ErrorPayload</a></td><td><div class="summary">
             Error payload
-            </div> (Inherited from <a href="a8638e3d-1826-81ee-3536-9772dad78425.htm">Pdu</a>.)</td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="297d83a6-e100-8edb-e235-4e0598f72fe9.htm">ForceTlv16Encoding</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div> (Inherited from <a href="a8638e3d-1826-81ee-3536-9772dad78425.htm">Pdu</a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="297d83a6-e100-8edb-e235-4e0598f72fe9.htm">ForceTlv16Encoding</a></td><td><div class="summary">
             Is TLV16 encoding forced when writing the TLV object
-            </div> (Inherited from <a href="a3d4048b-ff6f-4d08-d3d4-56e55a11f699.htm">TlvTag</a>.)</td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="dba7a5c2-ba42-29ad-f7ba-8cf25ac24e3f.htm">Forward</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div> (Inherited from <a href="a3d4048b-ff6f-4d08-d3d4-56e55a11f699.htm">TlvTag</a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="dba7a5c2-ba42-29ad-f7ba-8cf25ac24e3f.htm">Forward</a></td><td><div class="summary">
                 Is tlv forwarded.
-            </div> (Inherited from <a href="a3d4048b-ff6f-4d08-d3d4-56e55a11f699.htm">TlvTag</a>.)</td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="4f486607-13e9-dac7-a174-068880fbb3b6.htm">Header</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div> (Inherited from <a href="a3d4048b-ff6f-4d08-d3d4-56e55a11f699.htm">TlvTag</a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="4f486607-13e9-dac7-a174-068880fbb3b6.htm">Header</a></td><td><div class="summary">
                 Get and set PDU header
-            </div> (Inherited from <a href="a8638e3d-1826-81ee-3536-9772dad78425.htm">Pdu</a>.)</td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="bf563c32-1198-40c8-af2a-f348528c9098.htm">Item</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div> (Inherited from <a href="a8638e3d-1826-81ee-3536-9772dad78425.htm">Pdu</a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="bf563c32-1198-40c8-af2a-f348528c9098.htm">Item</a></td><td><div class="summary">
                 Get or set TLV child object
-            </div> (Inherited from <a href="df7fe40c-3194-9664-6e96-b6771ad206f2.htm">CompositeTag</a>.)</td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="17a17aef-43f7-18e4-21d0-e827971d982e.htm">Mac</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div> (Inherited from <a href="df7fe40c-3194-9664-6e96-b6771ad206f2.htm">CompositeTag</a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="17a17aef-43f7-18e4-21d0-e827971d982e.htm">Mac</a></td><td><div class="summary">
             MAC
-            </div> (Inherited from <a href="a8638e3d-1826-81ee-3536-9772dad78425.htm">Pdu</a>.)</td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="8b449bc0-820a-50fe-48f1-b55bfdb4e86a.htm">NonCritical</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div> (Inherited from <a href="a8638e3d-1826-81ee-3536-9772dad78425.htm">Pdu</a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="8b449bc0-820a-50fe-48f1-b55bfdb4e86a.htm">NonCritical</a></td><td><div class="summary">
                 Is tlv tag non critical.
-            </div> (Inherited from <a href="a3d4048b-ff6f-4d08-d3d4-56e55a11f699.htm">TlvTag</a>.)</td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="70fd76f0-273f-d6e5-f122-f8b136445b03.htm">Payloads</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div> (Inherited from <a href="a3d4048b-ff6f-4d08-d3d4-56e55a11f699.htm">TlvTag</a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="70fd76f0-273f-d6e5-f122-f8b136445b03.htm">Payloads</a></td><td><div class="summary">
             List on payloads
-            </div> (Inherited from <a href="a8638e3d-1826-81ee-3536-9772dad78425.htm">Pdu</a>.)</td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="9a72d18c-06de-49c7-5118-36c54419e481.htm">Type</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div> (Inherited from <a href="a8638e3d-1826-81ee-3536-9772dad78425.htm">Pdu</a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="9a72d18c-06de-49c7-5118-36c54419e481.htm">Type</a></td><td><div class="summary">
                 Tlv tag type.
-            </div> (Inherited from <a href="a3d4048b-ff6f-4d08-d3d4-56e55a11f699.htm">TlvTag</a>.)</td>
-            </tr>
-          </table>
-          <a href="#PageHeader">Top</a>
-        </div>
-        <div class="collapsibleAreaRegion" id="seeAlsoSection">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0">
-            <img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span>
-        </div>
-        <div id="ID1RBSection" class="collapsibleSection">
-          <h4 class="subHeading">Reference</h4>
-          <div class="seeAlsoStyle">
-            <a href="c1ec8259-a344-953e-5ae6-62f6d9e1a262.htm">AggregationRequestPdu Class</a>
-          </div>
-          <div class="seeAlsoStyle">
-            <a href="6c3d4a3a-c200-4dd2-34fe-54591d3059fb.htm">Guardtime.KSI.Service Namespace</a>
-          </div>
-        </div>
-      </div>
+            </div> (Inherited from <a href="a3d4048b-ff6f-4d08-d3d4-56e55a11f699.htm">TlvTag</a>.)</td></tr></table><a href="#PageHeader">Top</a></div><div class="collapsibleAreaRegion" id="seeAlsoSection"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0"><img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span></div><div id="ID1RBSection" class="collapsibleSection"><h4 class="subHeading">Reference</h4><div class="seeAlsoStyle"><a href="c1ec8259-a344-953e-5ae6-62f6d9e1a262.htm">AggregationRequestPdu Class</a></div><div class="seeAlsoStyle"><a href="6c3d4a3a-c200-4dd2-34fe-54591d3059fb.htm">Guardtime.KSI.Service Namespace</a></div></div></div>
     </div>
     <div id="pageFooter" class="pageFooter"> </div>
   </body>

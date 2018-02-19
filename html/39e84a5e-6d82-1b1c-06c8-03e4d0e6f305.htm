@@ -20,61 +20,25 @@
     <link rel="stylesheet" type="text/css" href="../styles/branding-Website.css" />
     <script type="text/javascript" src="../scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../scripts/branding-Website.js"></script>
+    <script type="text/javascript" src="../scripts/clipboard.min.js"></script>
   </head>
   <body onload="OnLoad('cs')">
     <input type="hidden" id="userDataCache" class="userDataStyle" />
     <div class="pageHeader" id="PageHeader">KSI .NET API<form id="SearchForm" method="get" action="#" onsubmit="javascript:TransferToSearchPage(); return false;"><input id="SearchTextBox" type="text" maxlength="200" /><button id="SearchButton" type="submit"></button></form></div>
     <div class="pageBody">
-      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="b47c2570-2d70-686e-e260-6ed09f9fcb94.htm" title="Guardtime.KSI.Signature Namespaces" tocid="b47c2570-2d70-686e-e260-6ed09f9fcb94">Guardtime.KSI.Signature Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="749d2ab0-3fa1-40bc-6d0e-d0e404d2e39e.htm" title="Guardtime.KSI.Signature.Verification Namespaces" tocid="749d2ab0-3fa1-40bc-6d0e-d0e404d2e39e">Guardtime.KSI.Signature.Verification Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="56fe67ee-54e6-7f69-63c8-ad52a3a990ba.htm" title="Guardtime.KSI.Signature.Verification.Policy" tocid="56fe67ee-54e6-7f69-63c8-ad52a3a990ba">Guardtime.KSI.Signature.Verification.Policy</a></div><div class="toclevel1" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="d1db5d42-fda6-fdca-4143-1b078c4aef47.htm" title="InternalVerificationPolicy Class" tocid="d1db5d42-fda6-fdca-4143-1b078c4aef47">InternalVerificationPolicy Class</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="36afd2d5-ba06-1260-f5c4-a3c759a62338.htm" title="InternalVerificationPolicy Constructor " tocid="36afd2d5-ba06-1260-f5c4-a3c759a62338">InternalVerificationPolicy Constructor </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="536121c8-2b2a-b4b8-315b-0a8a2f742bc8.htm" title="InternalVerificationPolicy Methods" tocid="536121c8-2b2a-b4b8-315b-0a8a2f742bc8">InternalVerificationPolicy Methods</a></div><div class="toclevel2 current" data-toclevel="2"><a data-tochassubtree="false" href="39e84a5e-6d82-1b1c-06c8-03e4d0e6f305.htm" title="InternalVerificationPolicy Fields" tocid="39e84a5e-6d82-1b1c-06c8-03e4d0e6f305">InternalVerificationPolicy Fields</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
+      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/b47c2570-2d70-686e-e260-6ed09f9fcb94.htm" title="Guardtime.KSI.Signature Namespaces" tocid="b47c2570-2d70-686e-e260-6ed09f9fcb94">Guardtime.KSI.Signature Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/749d2ab0-3fa1-40bc-6d0e-d0e404d2e39e.htm" title="Guardtime.KSI.Signature.Verification Namespaces" tocid="749d2ab0-3fa1-40bc-6d0e-d0e404d2e39e">Guardtime.KSI.Signature.Verification Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/56fe67ee-54e6-7f69-63c8-ad52a3a990ba.htm" title="Guardtime.KSI.Signature.Verification.Policy" tocid="56fe67ee-54e6-7f69-63c8-ad52a3a990ba">Guardtime.KSI.Signature.Verification.Policy</a></div><div class="toclevel1" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/d1db5d42-fda6-fdca-4143-1b078c4aef47.htm" title="InternalVerificationPolicy Class" tocid="d1db5d42-fda6-fdca-4143-1b078c4aef47">InternalVerificationPolicy Class</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="36afd2d5-ba06-1260-f5c4-a3c759a62338.htm" title="InternalVerificationPolicy Constructor " tocid="36afd2d5-ba06-1260-f5c4-a3c759a62338">InternalVerificationPolicy Constructor </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="536121c8-2b2a-b4b8-315b-0a8a2f742bc8.htm" title="InternalVerificationPolicy Methods" tocid="536121c8-2b2a-b4b8-315b-0a8a2f742bc8">InternalVerificationPolicy Methods</a></div><div class="toclevel2 current" data-toclevel="2"><a data-tochassubtree="false" href="39e84a5e-6d82-1b1c-06c8-03e4d0e6f305.htm" title="InternalVerificationPolicy Fields" tocid="39e84a5e-6d82-1b1c-06c8-03e4d0e6f305">InternalVerificationPolicy Fields</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
         <table class="titleTable">
           <tr>
-            <td class="titleColumn">InternalVerificationPolicy Fields</td>
+            <td class="titleColumn">
+              <h1>InternalVerificationPolicy Fields</h1>
+            </td>
           </tr>
         </table>
-        <span class="introStyle"></span>
-        <p>The <a href="d1db5d42-fda6-fdca-4143-1b078c4aef47.htm">InternalVerificationPolicy</a> type exposes the following members.</p>
-        <div class="collapsibleAreaRegion">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0">
-            <img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Fields</span>
-        </div>
-        <div id="ID0RBSection" class="collapsibleSection">
-          <table id="memberList" class="members">
-            <tr>
-              <th class="iconColumn">
+        <span class="introStyle"></span> <p>The <a href="d1db5d42-fda6-fdca-4143-1b078c4aef47.htm">InternalVerificationPolicy</a> type exposes the following members.</p><div class="collapsibleAreaRegion"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0"><img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Fields</span></div><div id="ID0RBSection" class="collapsibleSection"><table class="members" id="fieldList"><tr><th class="iconColumn">
 								 
-							</th>
-              <th>Name</th>
-              <th>Description</th>
-            </tr>
-            <tr data="protected;inherited;notNetfw;">
-              <td>
-                <img src="../icons/protfield.gif" alt="Protected field" title="Protected field" />
-              </td>
-              <td>
-                <a href="c69cd076-6d88-5a87-3f3f-82900290b62b.htm">FirstRule</a>
-              </td>
-              <td>
-                <div class="summary">
+							</th><th>Name</th><th>Description</th></tr><tr data="protected;inherited;notNetfw;"><td><img src="../icons/protfield.gif" alt="Protected field" title="Protected field" /></td><td><a href="c69cd076-6d88-5a87-3f3f-82900290b62b.htm">FirstRule</a></td><td><div class="summary">
                 First rule to verify.
-            </div> (Inherited from <a href="48b11e82-e608-b68b-3776-a8cb48d5e36a.htm">VerificationPolicy</a>.)</td>
-            </tr>
-          </table>
-          <a href="#PageHeader">Top</a>
-        </div>
-        <div class="collapsibleAreaRegion" id="seeAlsoSection">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0">
-            <img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span>
-        </div>
-        <div id="ID1RBSection" class="collapsibleSection">
-          <h4 class="subHeading">Reference</h4>
-          <div class="seeAlsoStyle">
-            <a href="d1db5d42-fda6-fdca-4143-1b078c4aef47.htm">InternalVerificationPolicy Class</a>
-          </div>
-          <div class="seeAlsoStyle">
-            <a href="56fe67ee-54e6-7f69-63c8-ad52a3a990ba.htm">Guardtime.KSI.Signature.Verification.Policy Namespace</a>
-          </div>
-        </div>
-      </div>
+            </div> (Inherited from <a href="48b11e82-e608-b68b-3776-a8cb48d5e36a.htm">VerificationPolicy</a>.)</td></tr></table><a href="#PageHeader">Top</a></div><div class="collapsibleAreaRegion" id="seeAlsoSection"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0"><img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span></div><div id="ID1RBSection" class="collapsibleSection"><h4 class="subHeading">Reference</h4><div class="seeAlsoStyle"><a href="d1db5d42-fda6-fdca-4143-1b078c4aef47.htm">InternalVerificationPolicy Class</a></div><div class="seeAlsoStyle"><a href="56fe67ee-54e6-7f69-63c8-ad52a3a990ba.htm">Guardtime.KSI.Signature.Verification.Policy Namespace</a></div></div></div>
     </div>
     <div id="pageFooter" class="pageFooter"> </div>
   </body>

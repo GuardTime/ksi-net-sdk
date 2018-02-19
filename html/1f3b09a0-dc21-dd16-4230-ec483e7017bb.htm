@@ -20,174 +20,37 @@
     <link rel="stylesheet" type="text/css" href="../styles/branding-Website.css" />
     <script type="text/javascript" src="../scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../scripts/branding-Website.js"></script>
+    <script type="text/javascript" src="../scripts/clipboard.min.js"></script>
   </head>
   <body onload="OnLoad('cs')">
     <input type="hidden" id="userDataCache" class="userDataStyle" />
     <div class="pageHeader" id="PageHeader">KSI .NET API<form id="SearchForm" method="get" action="#" onsubmit="javascript:TransferToSearchPage(); return false;"><input id="SearchTextBox" type="text" maxlength="200" /><button id="SearchButton" type="submit"></button></form></div>
     <div class="pageBody">
-      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="504f6905-a315-5d37-1522-273f3b568c3a.htm" title="Guardtime.KSI.Service Namespaces" tocid="504f6905-a315-5d37-1522-273f3b568c3a">Guardtime.KSI.Service Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="6c3d4a3a-c200-4dd2-34fe-54591d3059fb.htm" title="Guardtime.KSI.Service" tocid="6c3d4a3a-c200-4dd2-34fe-54591d3059fb">Guardtime.KSI.Service</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="66b3c392-c3b4-b0eb-ed92-c8a4f28e90b0.htm" title="TcpKsiServiceProtocol Class" tocid="66b3c392-c3b4-b0eb-ed92-c8a4f28e90b0">TcpKsiServiceProtocol Class</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="1f3b09a0-dc21-dd16-4230-ec483e7017bb.htm" title="TcpKsiServiceProtocol Methods" tocid="1f3b09a0-dc21-dd16-4230-ec483e7017bb">TcpKsiServiceProtocol Methods</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="26aec6a3-b24a-fb1e-1912-2fddbc977024.htm" title="BeginGetAggregatorConfig Method " tocid="26aec6a3-b24a-fb1e-1912-2fddbc977024">BeginGetAggregatorConfig Method </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="a85848d7-ee2f-e9d6-e7e6-cbbf82d1b955.htm" title="BeginSign Method " tocid="a85848d7-ee2f-e9d6-e7e6-cbbf82d1b955">BeginSign Method </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="38056137-f49d-3a98-d18e-5624e811b55e.htm" title="Dispose Method " tocid="38056137-f49d-3a98-d18e-5624e811b55e">Dispose Method </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="8898f59c-a61f-1ad2-b816-c4193b7815b7.htm" title="EndGetAggregatorConfig Method " tocid="8898f59c-a61f-1ad2-b816-c4193b7815b7">EndGetAggregatorConfig Method </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="b333f97f-d9d7-8e1d-33ac-95d73ebbb192.htm" title="EndSign Method " tocid="b333f97f-d9d7-8e1d-33ac-95d73ebbb192">EndSign Method </a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
+      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/504f6905-a315-5d37-1522-273f3b568c3a.htm" title="Guardtime.KSI.Service Namespaces" tocid="504f6905-a315-5d37-1522-273f3b568c3a">Guardtime.KSI.Service Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/6c3d4a3a-c200-4dd2-34fe-54591d3059fb.htm" title="Guardtime.KSI.Service" tocid="6c3d4a3a-c200-4dd2-34fe-54591d3059fb">Guardtime.KSI.Service</a></div><div class="toclevel1" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/66b3c392-c3b4-b0eb-ed92-c8a4f28e90b0.htm" title="TcpKsiServiceProtocol Class" tocid="66b3c392-c3b4-b0eb-ed92-c8a4f28e90b0">TcpKsiServiceProtocol Class</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="b7e4ea87-fd40-db71-a3bc-ee7ba5fc1222.htm" title="TcpKsiServiceProtocol Constructor " tocid="b7e4ea87-fd40-db71-a3bc-ee7ba5fc1222">TcpKsiServiceProtocol Constructor </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="55a555af-d20c-4e56-b992-c6b6cd121046.htm" title="TcpKsiServiceProtocol Properties" tocid="55a555af-d20c-4e56-b992-c6b6cd121046">TcpKsiServiceProtocol Properties</a></div><div class="toclevel2 current" data-toclevel="2"><a data-tochassubtree="false" href="1f3b09a0-dc21-dd16-4230-ec483e7017bb.htm" title="TcpKsiServiceProtocol Methods" tocid="1f3b09a0-dc21-dd16-4230-ec483e7017bb">TcpKsiServiceProtocol Methods</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
         <table class="titleTable">
           <tr>
-            <td class="titleColumn">TcpKsiServiceProtocol Methods</td>
+            <td class="titleColumn">
+              <h1>TcpKsiServiceProtocol Methods</h1>
+            </td>
           </tr>
         </table>
-        <span class="introStyle"></span>
-        <p>The <a href="66b3c392-c3b4-b0eb-ed92-c8a4f28e90b0.htm">TcpKsiServiceProtocol</a> type exposes the following members.</p>
-        <div class="collapsibleAreaRegion">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0">
-            <img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Methods</span>
-        </div>
-        <div id="ID0RBSection" class="collapsibleSection">
-          <table id="memberList" class="members">
-            <tr>
-              <th class="iconColumn">
+        <span class="introStyle"></span> <p>The <a href="66b3c392-c3b4-b0eb-ed92-c8a4f28e90b0.htm">TcpKsiServiceProtocol</a> type exposes the following members.</p><div class="collapsibleAreaRegion"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0"><img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Methods</span></div><div id="ID0RBSection" class="collapsibleSection"><table class="members" id="methodList"><tr><th class="iconColumn">
 								 
-							</th>
-              <th>Name</th>
-              <th>Description</th>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="26aec6a3-b24a-fb1e-1912-2fddbc977024.htm">BeginGetAggregatorConfig</a>
-              </td>
-              <td>
-                <div class="summary">
+							</th><th>Name</th><th>Description</th></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="721432f6-e4ea-7cda-d4d4-7fa5c710ed29.htm">BeginGetAggregatorConfig</a></td><td><div class="summary">
                   Begin aggregator configuration request.
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="a85848d7-ee2f-e9d6-e7e6-cbbf82d1b955.htm">BeginSign</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div> (Inherited from <a href="196e8fe1-1854-f41d-9e88-a882fdceedb8.htm">TcpKsiSigningServiceProtocol</a>.)</td></tr><tr data="protected;inherited;notNetfw;"><td><img src="../icons/protmethod.gif" alt="Protected method" title="Protected method" /></td><td><a href="c72da0e3-0989-979b-a1cb-d5c0fea23d56.htm">BeginRequest</a></td><td><div class="summary">
+            Begin TCP request
+            </div> (Inherited from <a href="5d5dd861-2b60-8004-f890-88ae590bfd03.htm">TcpKsiServiceProtocolBase</a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="1b7a9458-3b87-9025-a70a-98dc2b1be459.htm">BeginSign</a></td><td><div class="summary">
                Begin signing request.
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="38056137-f49d-3a98-d18e-5624e811b55e.htm">Dispose</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div> (Inherited from <a href="196e8fe1-1854-f41d-9e88-a882fdceedb8.htm">TcpKsiSigningServiceProtocol</a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="46c9497d-8e84-9f35-6250-66d37542afa7.htm">Dispose</a></td><td><div class="summary">
             Dispose TCP KSI service protocol. Close opened connection.
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="8898f59c-a61f-1ad2-b816-c4193b7815b7.htm">EndGetAggregatorConfig</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div> (Inherited from <a href="5d5dd861-2b60-8004-f890-88ae590bfd03.htm">TcpKsiServiceProtocolBase</a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="fdedd308-f4bd-0eaa-3d7f-e945bbb68738.htm">EndGetAggregatorConfig</a></td><td><div class="summary">
                 End aggregator configuration request.
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="b333f97f-d9d7-8e1d-33ac-95d73ebbb192.htm">EndSign</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div> (Inherited from <a href="196e8fe1-1854-f41d-9e88-a882fdceedb8.htm">TcpKsiSigningServiceProtocol</a>.)</td></tr><tr data="protected;inherited;notNetfw;"><td><img src="../icons/protmethod.gif" alt="Protected method" title="Protected method" /></td><td><a href="e3308568-9105-ab33-ccf3-889d41113291.htm">EndRequest</a></td><td><div class="summary">
+            End TCP request
+            </div> (Inherited from <a href="5d5dd861-2b60-8004-f890-88ae590bfd03.htm">TcpKsiServiceProtocolBase</a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="6b23702a-ff92-408c-0fa7-8c0e186c7125.htm">EndSign</a></td><td><div class="summary">
                 End signing request.
-            </div>
-              </td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="http://msdn2.microsoft.com/en-us/library/bsc2ak47" target="_blank">Equals</a>
-              </td>
-              <td>
-                <div class="summary">Determines whether the specified object is equal to the current object.</div> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b" target="_blank">Object</a>.)</td>
-            </tr>
-            <tr data="protected;inherited;notNetfw;">
-              <td>
-                <img src="../icons/protmethod.gif" alt="Protected method" title="Protected method" />
-              </td>
-              <td>
-                <a href="http://msdn2.microsoft.com/en-us/library/4k87zsw7" target="_blank">Finalize</a>
-              </td>
-              <td>
-                <div class="summary">Allows an object to try to free resources and perform other cleanup operations before it is reclaimed by garbage collection.</div> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b" target="_blank">Object</a>.)</td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="http://msdn2.microsoft.com/en-us/library/zdee4b3y" target="_blank">GetHashCode</a>
-              </td>
-              <td>
-                <div class="summary">Serves as a hash function for a particular type. </div> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b" target="_blank">Object</a>.)</td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="http://msdn2.microsoft.com/en-us/library/dfwy45w9" target="_blank">GetType</a>
-              </td>
-              <td>
-                <div class="summary">Gets the <a href="http://msdn2.microsoft.com/en-us/library/42892f65" target="_blank">Type</a> of the current instance.</div> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b" target="_blank">Object</a>.)</td>
-            </tr>
-            <tr data="protected;inherited;notNetfw;">
-              <td>
-                <img src="../icons/protmethod.gif" alt="Protected method" title="Protected method" />
-              </td>
-              <td>
-                <a href="http://msdn2.microsoft.com/en-us/library/57ctke0a" target="_blank">MemberwiseClone</a>
-              </td>
-              <td>
-                <div class="summary">Creates a shallow copy of the current <a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b" target="_blank">Object</a>.</div> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b" target="_blank">Object</a>.)</td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="http://msdn2.microsoft.com/en-us/library/7bxwbwt2" target="_blank">ToString</a>
-              </td>
-              <td>
-                <div class="summary">Returns a string that represents the current object.</div> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b" target="_blank">Object</a>.)</td>
-            </tr>
-          </table>
-          <a href="#PageHeader">Top</a>
-        </div>
-        <div class="collapsibleAreaRegion" id="seeAlsoSection">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0">
-            <img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span>
-        </div>
-        <div id="ID1RBSection" class="collapsibleSection">
-          <h4 class="subHeading">Reference</h4>
-          <div class="seeAlsoStyle">
-            <a href="66b3c392-c3b4-b0eb-ed92-c8a4f28e90b0.htm">TcpKsiServiceProtocol Class</a>
-          </div>
-          <div class="seeAlsoStyle">
-            <a href="6c3d4a3a-c200-4dd2-34fe-54591d3059fb.htm">Guardtime.KSI.Service Namespace</a>
-          </div>
-        </div>
-      </div>
+            </div> (Inherited from <a href="196e8fe1-1854-f41d-9e88-a882fdceedb8.htm">TcpKsiSigningServiceProtocol</a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="http://msdn2.microsoft.com/en-us/library/bsc2ak47" target="_blank">Equals</a></td><td> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b" target="_blank">Object</a>.)</td></tr><tr data="protected;inherited;notNetfw;"><td><img src="../icons/protmethod.gif" alt="Protected method" title="Protected method" /></td><td><a href="http://msdn2.microsoft.com/en-us/library/4k87zsw7" target="_blank">Finalize</a></td><td> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b" target="_blank">Object</a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="http://msdn2.microsoft.com/en-us/library/zdee4b3y" target="_blank">GetHashCode</a></td><td> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b" target="_blank">Object</a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="http://msdn2.microsoft.com/en-us/library/dfwy45w9" target="_blank">GetType</a></td><td> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b" target="_blank">Object</a>.)</td></tr><tr data="protected;inherited;notNetfw;"><td><img src="../icons/protmethod.gif" alt="Protected method" title="Protected method" /></td><td><a href="http://msdn2.microsoft.com/en-us/library/57ctke0a" target="_blank">MemberwiseClone</a></td><td> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b" target="_blank">Object</a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="http://msdn2.microsoft.com/en-us/library/7bxwbwt2" target="_blank">ToString</a></td><td> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b" target="_blank">Object</a>.)</td></tr></table><a href="#PageHeader">Top</a></div><div class="collapsibleAreaRegion" id="seeAlsoSection"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0"><img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span></div><div id="ID1RBSection" class="collapsibleSection"><h4 class="subHeading">Reference</h4><div class="seeAlsoStyle"><a href="66b3c392-c3b4-b0eb-ed92-c8a4f28e90b0.htm">TcpKsiServiceProtocol Class</a></div><div class="seeAlsoStyle"><a href="6c3d4a3a-c200-4dd2-34fe-54591d3059fb.htm">Guardtime.KSI.Service Namespace</a></div></div></div>
     </div>
     <div id="pageFooter" class="pageFooter"> </div>
   </body>

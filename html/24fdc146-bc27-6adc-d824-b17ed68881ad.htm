@@ -19,99 +19,32 @@
     <meta name="file" content="24fdc146-bc27-6adc-d824-b17ed68881ad" />
     <meta name="guid" content="24fdc146-bc27-6adc-d824-b17ed68881ad" />
     
-    <link type="text/css" rel="stylesheet" href="../styles/highlight.css" />
-    <script type="text/javascript" src="../scripts/highlight.js"> </script>
     <link rel="stylesheet" type="text/css" href="../styles/branding-Website.css" />
     <script type="text/javascript" src="../scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../scripts/branding-Website.js"></script>
+    <script type="text/javascript" src="../scripts/clipboard.min.js"></script>
   </head>
   <body onload="OnLoad('cs')">
     <input type="hidden" id="userDataCache" class="userDataStyle" />
     <div class="pageHeader" id="PageHeader">KSI .NET API<form id="SearchForm" method="get" action="#" onsubmit="javascript:TransferToSearchPage(); return false;"><input id="SearchTextBox" type="text" maxlength="200" /><button id="SearchButton" type="submit"></button></form></div>
     <div class="pageBody">
-      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="7130fca7-18fc-e8df-f48e-4dd121779c36.htm" title="Guardtime.KSI" tocid="7130fca7-18fc-e8df-f48e-4dd121779c36">Guardtime.KSI</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="00805511-d1eb-ab5e-5474-8f235d1dbc2b.htm" title="Ksi Class" tocid="00805511-d1eb-ab5e-5474-8f235d1dbc2b">Ksi Class</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="68b95448-536f-f593-7fa4-4d41bd050091.htm" title="Ksi Methods" tocid="68b95448-536f-f593-7fa4-4d41bd050091">Ksi Methods</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="24fdc146-bc27-6adc-d824-b17ed68881ad.htm" title="Sign Method " tocid="24fdc146-bc27-6adc-d824-b17ed68881ad">Sign Method </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="08569054-1811-5fc3-7193-e7ebe3ca71ad.htm" title="Sign Method (Byte[])" tocid="08569054-1811-5fc3-7193-e7ebe3ca71ad">Sign Method (Byte[])</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="5cc48c72-5ec5-01e2-00ca-51a3b503f5e9.htm" title="Sign Method (Stream)" tocid="5cc48c72-5ec5-01e2-00ca-51a3b503f5e9">Sign Method (Stream)</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="826753b3-87d1-4cc3-33ed-7f9cf2e224ee.htm" title="Sign Method (DataHash, UInt32)" tocid="826753b3-87d1-4cc3-33ed-7f9cf2e224ee">Sign Method (DataHash, UInt32)</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
+      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/7130fca7-18fc-e8df-f48e-4dd121779c36.htm" title="Guardtime.KSI" tocid="7130fca7-18fc-e8df-f48e-4dd121779c36">Guardtime.KSI</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/00805511-d1eb-ab5e-5474-8f235d1dbc2b.htm" title="Ksi Class" tocid="00805511-d1eb-ab5e-5474-8f235d1dbc2b">Ksi Class</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/68b95448-536f-f593-7fa4-4d41bd050091.htm" title="Ksi Methods" tocid="68b95448-536f-f593-7fa4-4d41bd050091">Ksi Methods</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="24fdc146-bc27-6adc-d824-b17ed68881ad.htm" title="Sign Method " tocid="24fdc146-bc27-6adc-d824-b17ed68881ad">Sign Method </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="cb86bab1-5961-1584-8038-e1c13b6dd31e.htm" title="Sign Method (Byte[], UInt32)" tocid="cb86bab1-5961-1584-8038-e1c13b6dd31e">Sign Method (Byte[], UInt32)</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="707c5b8d-492e-ecc3-030b-6f9ddffbad43.htm" title="Sign Method (Stream, UInt32)" tocid="707c5b8d-492e-ecc3-030b-6f9ddffbad43">Sign Method (Stream, UInt32)</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="826753b3-87d1-4cc3-33ed-7f9cf2e224ee.htm" title="Sign Method (DataHash, UInt32)" tocid="826753b3-87d1-4cc3-33ed-7f9cf2e224ee">Sign Method (DataHash, UInt32)</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
         <table class="titleTable">
           <tr>
-            <td class="titleColumn">Ksi<span id="LSTD6A9947F_0"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTD6A9947F_0?cpp=::|nu=.");</script>Sign Method </td>
+            <td class="titleColumn">
+              <h1>Ksi<span id="LSTD6A9947F_0"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTD6A9947F_0?cpp=::|nu=.");</script>Sign Method </h1>
+            </td>
           </tr>
         </table>
-        <span class="introStyle"></span>
-        <div class="collapsibleAreaRegion">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID2RB')" onkeypress="SectionExpandCollapse_CheckKey('ID2RB', event)" tabindex="0">
-            <img id="ID2RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Overload List</span>
-        </div>
-        <div id="ID2RBSection" class="collapsibleSection">
-          <table id="memberList" class="members">
-            <tr>
-              <th class="iconColumn">
+        <span class="introStyle"></span> <div class="collapsibleAreaRegion"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0"><img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Overload List</span></div><div id="ID0RBSection" class="collapsibleSection"><table class="members" id="overloadMembersList"><tr><th class="iconColumn">
 								 
-							</th>
-              <th>Name</th>
-              <th>Description</th>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="08569054-1811-5fc3-7193-e7ebe3ca71ad.htm">Sign(<span id="LSTD6A9947F_1"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTD6A9947F_1?cpp=array&lt;");</script>Byte<span id="LSTD6A9947F_2"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTD6A9947F_2?cpp=&gt;|cs=[]|vb=()|nu=[]|fs=[]");</script>)</a>
-              </td>
-              <td>
-                <div class="summary">
-            Sign document
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="5cc48c72-5ec5-01e2-00ca-51a3b503f5e9.htm">Sign(Stream)</a>
-              </td>
-              <td>
-                <div class="summary">
-            Sign document
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-                <img src="../icons/CodeExample.png" alt="Code example" title="Code example" />
-              </td>
-              <td>
-                <a href="826753b3-87d1-4cc3-33ed-7f9cf2e224ee.htm">Sign(DataHash, UInt32)</a>
-              </td>
-              <td>
-                <div class="summary">
-                Sign document hash.
-                <div class="collapsibleAreaRegion"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0"><img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Examples</span></div><div id="ID1RBSection" class="collapsibleSection">
-                    Equals to following code
-                    <div class="codeSnippetContainer"><div class="codeSnippetContainerCodeContainer"><div class="codeSnippetToolBar"><div class="codeSnippetToolBarText"><a id="ID0EAAAAACDA_copyCode" href="#" onclick="javascript:CopyToClipboard('ID0EAAAAACDA');return false;" title="Copy">Copy</a></div></div><div id="ID0EAAAAACDA_code_Div1" class="codeSnippetContainerCode" style="display: block"><pre xml:space="preserve">KsiProvider.SetCryptoProvider(<span class="highlight-keyword">new</span> MicrosoftCryptoProvider()); 
-DataHash hash;
-KsiService ksiService;
-
-IKsiSignature signature = ksiService.Sign(hash);</pre></div></div></div><script type="text/javascript">AddLanguageTabSet("ID0EAAAAACDA");</script></div></div>
-              </td>
-            </tr>
-          </table>
-          <a href="#PageHeader">Top</a>
-        </div>
-        <div class="collapsibleAreaRegion" id="seeAlsoSection">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID3RB')" onkeypress="SectionExpandCollapse_CheckKey('ID3RB', event)" tabindex="0">
-            <img id="ID3RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span>
-        </div>
-        <div id="ID3RBSection" class="collapsibleSection">
-          <h4 class="subHeading">Reference</h4>
-          <div class="seeAlsoStyle">
-            <a href="00805511-d1eb-ab5e-5474-8f235d1dbc2b.htm">Ksi Class</a>
-          </div>
-          <div class="seeAlsoStyle">
-            <a href="7130fca7-18fc-e8df-f48e-4dd121779c36.htm">Guardtime.KSI Namespace</a>
-          </div>
-        </div>
-      </div>
+							</th><th>Name</th><th>Description</th></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="cb86bab1-5961-1584-8038-e1c13b6dd31e.htm">Sign(<span id="LSTD6A9947F_1"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTD6A9947F_1?cpp=array&lt;");</script>Byte<span id="LSTD6A9947F_2"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTD6A9947F_2?cpp=&gt;|cs=[]|vb=()|nu=[]|fs=[]");</script>, UInt32)</a></td><td><div class="summary">
+            Sign document hash.
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="707c5b8d-492e-ecc3-030b-6f9ddffbad43.htm">Sign(Stream, UInt32)</a></td><td><div class="summary">
+            Sign document hash.
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="826753b3-87d1-4cc3-33ed-7f9cf2e224ee.htm">Sign(DataHash, UInt32)</a></td><td><div class="summary">
+            Sign document hash.
+            </div></td></tr></table><a href="#PageHeader">Top</a></div><div class="collapsibleAreaRegion" id="seeAlsoSection"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0"><img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span></div><div id="ID1RBSection" class="collapsibleSection"><h4 class="subHeading">Reference</h4><div class="seeAlsoStyle"><a href="00805511-d1eb-ab5e-5474-8f235d1dbc2b.htm">Ksi Class</a></div><div class="seeAlsoStyle"><a href="7130fca7-18fc-e8df-f48e-4dd121779c36.htm">Guardtime.KSI Namespace</a></div></div></div>
     </div>
     <div id="pageFooter" class="pageFooter"> </div>
   </body>

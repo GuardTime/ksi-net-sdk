@@ -23,70 +23,27 @@
     <link rel="stylesheet" type="text/css" href="../styles/branding-Website.css" />
     <script type="text/javascript" src="../scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../scripts/branding-Website.js"></script>
+    <script type="text/javascript" src="../scripts/clipboard.min.js"></script>
   </head>
   <body onload="OnLoad('cs')">
     <input type="hidden" id="userDataCache" class="userDataStyle" />
     <div class="pageHeader" id="PageHeader">KSI .NET API<form id="SearchForm" method="get" action="#" onsubmit="javascript:TransferToSearchPage(); return false;"><input id="SearchTextBox" type="text" maxlength="200" /><button id="SearchButton" type="submit"></button></form></div>
     <div class="pageBody">
-      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="504f6905-a315-5d37-1522-273f3b568c3a.htm" title="Guardtime.KSI.Service Namespaces" tocid="504f6905-a315-5d37-1522-273f3b568c3a">Guardtime.KSI.Service Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="6c3d4a3a-c200-4dd2-34fe-54591d3059fb.htm" title="Guardtime.KSI.Service" tocid="6c3d4a3a-c200-4dd2-34fe-54591d3059fb">Guardtime.KSI.Service</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="4afee413-7f9c-0a23-ba42-0d14e1b6d1fa.htm" title="LegacyPdu Class" tocid="4afee413-7f9c-0a23-ba42-0d14e1b6d1fa">LegacyPdu Class</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="2509560a-8bd8-4523-d7d3-10616d9f19db.htm" title="LegacyPdu Constructor " tocid="2509560a-8bd8-4523-d7d3-10616d9f19db">LegacyPdu Constructor </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="370c2119-c26c-aae4-b8d3-989ba61ccdb2.htm" title="LegacyPdu Constructor (ITlvTag)" tocid="370c2119-c26c-aae4-b8d3-989ba61ccdb2">LegacyPdu Constructor (ITlvTag)</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="aa067cf8-1e23-d126-68df-aff42b127c56.htm" title="LegacyPdu Constructor (UInt32, Boolean, Boolean, ITlvTag[])" tocid="aa067cf8-1e23-d126-68df-aff42b127c56">LegacyPdu Constructor (UInt32, Boolean, Boolean, ITlvTag[])</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
+      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/504f6905-a315-5d37-1522-273f3b568c3a.htm" title="Guardtime.KSI.Service Namespaces" tocid="504f6905-a315-5d37-1522-273f3b568c3a">Guardtime.KSI.Service Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/6c3d4a3a-c200-4dd2-34fe-54591d3059fb.htm" title="Guardtime.KSI.Service" tocid="6c3d4a3a-c200-4dd2-34fe-54591d3059fb">Guardtime.KSI.Service</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/4afee413-7f9c-0a23-ba42-0d14e1b6d1fa.htm" title="LegacyPdu Class" tocid="4afee413-7f9c-0a23-ba42-0d14e1b6d1fa">LegacyPdu Class</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="2509560a-8bd8-4523-d7d3-10616d9f19db.htm" title="LegacyPdu Constructor " tocid="2509560a-8bd8-4523-d7d3-10616d9f19db">LegacyPdu Constructor </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="370c2119-c26c-aae4-b8d3-989ba61ccdb2.htm" title="LegacyPdu Constructor (ITlvTag)" tocid="370c2119-c26c-aae4-b8d3-989ba61ccdb2">LegacyPdu Constructor (ITlvTag)</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="aa067cf8-1e23-d126-68df-aff42b127c56.htm" title="LegacyPdu Constructor (UInt32, Boolean, Boolean, ITlvTag[])" tocid="aa067cf8-1e23-d126-68df-aff42b127c56">LegacyPdu Constructor (UInt32, Boolean, Boolean, ITlvTag[])</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
         <table class="titleTable">
           <tr>
-            <td class="titleColumn">LegacyPdu Constructor </td>
+            <td class="titleColumn">
+              <h1>LegacyPdu Constructor </h1>
+            </td>
           </tr>
         </table>
-        <span class="introStyle"></span>
-        <div class="collapsibleAreaRegion">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0">
-            <img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Overload List</span>
-        </div>
-        <div id="ID0RBSection" class="collapsibleSection">
-          <table id="memberList" class="members">
-            <tr>
-              <th class="iconColumn">
+        <span class="introStyle"></span> <div class="collapsibleAreaRegion"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0"><img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Overload List</span></div><div id="ID0RBSection" class="collapsibleSection"><table class="members" id="overloadMembersList"><tr><th class="iconColumn">
 								 
-							</th>
-              <th>Name</th>
-              <th>Description</th>
-            </tr>
-            <tr data="protected;declared;notNetfw;">
-              <td>
-                <img src="../icons/protmethod.gif" alt="Protected method" title="Protected method" />
-              </td>
-              <td>
-                <a href="370c2119-c26c-aae4-b8d3-989ba61ccdb2.htm">LegacyPdu(ITlvTag)</a>
-              </td>
-              <td> <strong>Obsolete. </strong><div class="summary">
+							</th><th>Name</th><th>Description</th></tr><tr data="protected;declared;notNetfw;"><td><img src="../icons/protmethod.gif" alt="Protected method" title="Protected method" /></td><td><a href="370c2119-c26c-aae4-b8d3-989ba61ccdb2.htm">LegacyPdu(ITlvTag)</a></td><td> <strong>Obsolete. </strong><div class="summary">
                 Create PDU from TLV element.
-            </div></td>
-            </tr>
-            <tr data="protected;declared;notNetfw;">
-              <td>
-                <img src="../icons/protmethod.gif" alt="Protected method" title="Protected method" />
-              </td>
-              <td>
-                <a href="aa067cf8-1e23-d126-68df-aff42b127c56.htm">LegacyPdu(UInt32, Boolean, Boolean, <span id="LST342C52BF_0"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST342C52BF_0?cpp=array&lt;");</script>ITlvTag<span id="LST342C52BF_1"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST342C52BF_1?cpp=&gt;|cs=[]|vb=()|nu=[]|fs=[]");</script>)</a>
-              </td>
-              <td> <strong>Obsolete. </strong><div class="summary">
+            </div></td></tr><tr data="protected;declared;notNetfw;"><td><img src="../icons/protmethod.gif" alt="Protected method" title="Protected method" /></td><td><a href="aa067cf8-1e23-d126-68df-aff42b127c56.htm">LegacyPdu(UInt32, Boolean, Boolean, <span id="LST342C52BF_0"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST342C52BF_0?cpp=array&lt;");</script>ITlvTag<span id="LST342C52BF_1"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST342C52BF_1?cpp=&gt;|cs=[]|vb=()|nu=[]|fs=[]");</script>)</a></td><td> <strong>Obsolete. </strong><div class="summary">
                 Create PDU from PDU header and data.
-            </div></td>
-            </tr>
-          </table>
-          <a href="#PageHeader">Top</a>
-        </div>
-        <div class="collapsibleAreaRegion" id="seeAlsoSection">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0">
-            <img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span>
-        </div>
-        <div id="ID1RBSection" class="collapsibleSection">
-          <h4 class="subHeading">Reference</h4>
-          <div class="seeAlsoStyle">
-            <a href="4afee413-7f9c-0a23-ba42-0d14e1b6d1fa.htm">LegacyPdu Class</a>
-          </div>
-          <div class="seeAlsoStyle">
-            <a href="6c3d4a3a-c200-4dd2-34fe-54591d3059fb.htm">Guardtime.KSI.Service Namespace</a>
-          </div>
-        </div>
-      </div>
+            </div></td></tr></table><a href="#PageHeader">Top</a></div><div class="collapsibleAreaRegion" id="seeAlsoSection"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0"><img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span></div><div id="ID1RBSection" class="collapsibleSection"><h4 class="subHeading">Reference</h4><div class="seeAlsoStyle"><a href="4afee413-7f9c-0a23-ba42-0d14e1b6d1fa.htm">LegacyPdu Class</a></div><div class="seeAlsoStyle"><a href="6c3d4a3a-c200-4dd2-34fe-54591d3059fb.htm">Guardtime.KSI.Service Namespace</a></div></div></div>
     </div>
     <div id="pageFooter" class="pageFooter"> </div>
   </body>

@@ -20,101 +20,31 @@
     <link rel="stylesheet" type="text/css" href="../styles/branding-Website.css" />
     <script type="text/javascript" src="../scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../scripts/branding-Website.js"></script>
+    <script type="text/javascript" src="../scripts/clipboard.min.js"></script>
   </head>
   <body onload="OnLoad('cs')">
     <input type="hidden" id="userDataCache" class="userDataStyle" />
     <div class="pageHeader" id="PageHeader">KSI .NET API<form id="SearchForm" method="get" action="#" onsubmit="javascript:TransferToSearchPage(); return false;"><input id="SearchTextBox" type="text" maxlength="200" /><button id="SearchButton" type="submit"></button></form></div>
     <div class="pageBody">
-      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="504f6905-a315-5d37-1522-273f3b568c3a.htm" title="Guardtime.KSI.Service Namespaces" tocid="504f6905-a315-5d37-1522-273f3b568c3a">Guardtime.KSI.Service Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="6c3d4a3a-c200-4dd2-34fe-54591d3059fb.htm" title="Guardtime.KSI.Service" tocid="6c3d4a3a-c200-4dd2-34fe-54591d3059fb">Guardtime.KSI.Service</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="fd26ebac-5415-1dc7-2718-ab6f2dd95406.htm" title="IKsiSigningServiceProtocol Interface" tocid="fd26ebac-5415-1dc7-2718-ab6f2dd95406">IKsiSigningServiceProtocol Interface</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="6b429567-502c-7015-c3d4-596abc6e191a.htm" title="IKsiSigningServiceProtocol Methods" tocid="6b429567-502c-7015-c3d4-596abc6e191a">IKsiSigningServiceProtocol Methods</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="6f3c2ae4-5f8d-ca20-a671-7303c2ee1c87.htm" title="BeginGetAggregatorConfig Method " tocid="6f3c2ae4-5f8d-ca20-a671-7303c2ee1c87">BeginGetAggregatorConfig Method </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="76a4edcc-9d52-f176-69ef-e3f3d9bfb7c4.htm" title="BeginSign Method " tocid="76a4edcc-9d52-f176-69ef-e3f3d9bfb7c4">BeginSign Method </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="b9e9e841-3b45-2c54-4a6e-f1a5ce63e49e.htm" title="EndGetAggregatorConfig Method " tocid="b9e9e841-3b45-2c54-4a6e-f1a5ce63e49e">EndGetAggregatorConfig Method </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="23187445-e67c-6111-80f5-4e715fa84f11.htm" title="EndSign Method " tocid="23187445-e67c-6111-80f5-4e715fa84f11">EndSign Method </a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
+      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/504f6905-a315-5d37-1522-273f3b568c3a.htm" title="Guardtime.KSI.Service Namespaces" tocid="504f6905-a315-5d37-1522-273f3b568c3a">Guardtime.KSI.Service Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/6c3d4a3a-c200-4dd2-34fe-54591d3059fb.htm" title="Guardtime.KSI.Service" tocid="6c3d4a3a-c200-4dd2-34fe-54591d3059fb">Guardtime.KSI.Service</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/fd26ebac-5415-1dc7-2718-ab6f2dd95406.htm" title="IKsiSigningServiceProtocol Interface" tocid="fd26ebac-5415-1dc7-2718-ab6f2dd95406">IKsiSigningServiceProtocol Interface</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="6b429567-502c-7015-c3d4-596abc6e191a.htm" title="IKsiSigningServiceProtocol Methods" tocid="6b429567-502c-7015-c3d4-596abc6e191a">IKsiSigningServiceProtocol Methods</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="6f3c2ae4-5f8d-ca20-a671-7303c2ee1c87.htm" title="BeginGetAggregatorConfig Method " tocid="6f3c2ae4-5f8d-ca20-a671-7303c2ee1c87">BeginGetAggregatorConfig Method </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="76a4edcc-9d52-f176-69ef-e3f3d9bfb7c4.htm" title="BeginSign Method " tocid="76a4edcc-9d52-f176-69ef-e3f3d9bfb7c4">BeginSign Method </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="b9e9e841-3b45-2c54-4a6e-f1a5ce63e49e.htm" title="EndGetAggregatorConfig Method " tocid="b9e9e841-3b45-2c54-4a6e-f1a5ce63e49e">EndGetAggregatorConfig Method </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="23187445-e67c-6111-80f5-4e715fa84f11.htm" title="EndSign Method " tocid="23187445-e67c-6111-80f5-4e715fa84f11">EndSign Method </a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
         <table class="titleTable">
           <tr>
-            <td class="titleColumn">IKsiSigningServiceProtocol Methods</td>
+            <td class="titleColumn">
+              <h1>IKsiSigningServiceProtocol Methods</h1>
+            </td>
           </tr>
         </table>
-        <span class="introStyle"></span>
-        <p>The <a href="fd26ebac-5415-1dc7-2718-ab6f2dd95406.htm">IKsiSigningServiceProtocol</a> type exposes the following members.</p>
-        <div class="collapsibleAreaRegion">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0">
-            <img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Methods</span>
-        </div>
-        <div id="ID0RBSection" class="collapsibleSection">
-          <table id="memberList" class="members">
-            <tr>
-              <th class="iconColumn">
+        <span class="introStyle"></span> <p>The <a href="fd26ebac-5415-1dc7-2718-ab6f2dd95406.htm">IKsiSigningServiceProtocol</a> type exposes the following members.</p><div class="collapsibleAreaRegion"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0"><img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Methods</span></div><div id="ID0RBSection" class="collapsibleSection"><table class="members" id="methodList"><tr><th class="iconColumn">
 								 
-							</th>
-              <th>Name</th>
-              <th>Description</th>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="6f3c2ae4-5f8d-ca20-a671-7303c2ee1c87.htm">BeginGetAggregatorConfig</a>
-              </td>
-              <td>
-                <div class="summary">
+							</th><th>Name</th><th>Description</th></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="6f3c2ae4-5f8d-ca20-a671-7303c2ee1c87.htm">BeginGetAggregatorConfig</a></td><td><div class="summary">
                 Begin aggregator configuration request.
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="76a4edcc-9d52-f176-69ef-e3f3d9bfb7c4.htm">BeginSign</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="76a4edcc-9d52-f176-69ef-e3f3d9bfb7c4.htm">BeginSign</a></td><td><div class="summary">
                 Begin signing request.
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="b9e9e841-3b45-2c54-4a6e-f1a5ce63e49e.htm">EndGetAggregatorConfig</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="b9e9e841-3b45-2c54-4a6e-f1a5ce63e49e.htm">EndGetAggregatorConfig</a></td><td><div class="summary">
                 End aggregator configuration request.
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="23187445-e67c-6111-80f5-4e715fa84f11.htm">EndSign</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="23187445-e67c-6111-80f5-4e715fa84f11.htm">EndSign</a></td><td><div class="summary">
                 End signing request.
-            </div>
-              </td>
-            </tr>
-          </table>
-          <a href="#PageHeader">Top</a>
-        </div>
-        <div class="collapsibleAreaRegion" id="seeAlsoSection">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0">
-            <img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span>
-        </div>
-        <div id="ID1RBSection" class="collapsibleSection">
-          <h4 class="subHeading">Reference</h4>
-          <div class="seeAlsoStyle">
-            <a href="fd26ebac-5415-1dc7-2718-ab6f2dd95406.htm">IKsiSigningServiceProtocol Interface</a>
-          </div>
-          <div class="seeAlsoStyle">
-            <a href="6c3d4a3a-c200-4dd2-34fe-54591d3059fb.htm">Guardtime.KSI.Service Namespace</a>
-          </div>
-        </div>
-      </div>
+            </div></td></tr></table><a href="#PageHeader">Top</a></div><div class="collapsibleAreaRegion" id="seeAlsoSection"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0"><img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span></div><div id="ID1RBSection" class="collapsibleSection"><h4 class="subHeading">Reference</h4><div class="seeAlsoStyle"><a href="fd26ebac-5415-1dc7-2718-ab6f2dd95406.htm">IKsiSigningServiceProtocol Interface</a></div><div class="seeAlsoStyle"><a href="6c3d4a3a-c200-4dd2-34fe-54591d3059fb.htm">Guardtime.KSI.Service Namespace</a></div></div></div>
     </div>
     <div id="pageFooter" class="pageFooter"> </div>
   </body>

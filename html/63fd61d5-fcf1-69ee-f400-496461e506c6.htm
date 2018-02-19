@@ -20,175 +20,39 @@
     <link rel="stylesheet" type="text/css" href="../styles/branding-Website.css" />
     <script type="text/javascript" src="../scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../scripts/branding-Website.js"></script>
+    <script type="text/javascript" src="../scripts/clipboard.min.js"></script>
   </head>
   <body onload="OnLoad('cs')">
     <input type="hidden" id="userDataCache" class="userDataStyle" />
     <div class="pageHeader" id="PageHeader">KSI .NET API<form id="SearchForm" method="get" action="#" onsubmit="javascript:TransferToSearchPage(); return false;"><input id="SearchTextBox" type="text" maxlength="200" /><button id="SearchButton" type="submit"></button></form></div>
     <div class="pageBody">
-      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="6c05433b-be27-6856-1c54-f6524a4d30fd.htm" title="Guardtime.KSI.Parser" tocid="6c05433b-be27-6856-1c54-f6524a4d30fd">Guardtime.KSI.Parser</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="4e5ca8e5-cf86-fb42-6fa2-fffb3ef747ad.htm" title="StringTag Class" tocid="4e5ca8e5-cf86-fb42-6fa2-fffb3ef747ad">StringTag Class</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="63fd61d5-fcf1-69ee-f400-496461e506c6.htm" title="StringTag Methods" tocid="63fd61d5-fcf1-69ee-f400-496461e506c6">StringTag Methods</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="5c4abd1c-8d00-6452-b38e-eee5473c4d5a.htm" title="EncodeValue Method " tocid="5c4abd1c-8d00-6452-b38e-eee5473c4d5a">EncodeValue Method </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="5bff1948-5e11-44f2-01ab-3784771200a3.htm" title="GetHashCode Method " tocid="5bff1948-5e11-44f2-01ab-3784771200a3">GetHashCode Method </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="da5d6b86-8c5d-afc6-029f-9372f72514c9.htm" title="ToString Method " tocid="da5d6b86-8c5d-afc6-029f-9372f72514c9">ToString Method </a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
+      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/6c05433b-be27-6856-1c54-f6524a4d30fd.htm" title="Guardtime.KSI.Parser" tocid="6c05433b-be27-6856-1c54-f6524a4d30fd">Guardtime.KSI.Parser</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/4e5ca8e5-cf86-fb42-6fa2-fffb3ef747ad.htm" title="StringTag Class" tocid="4e5ca8e5-cf86-fb42-6fa2-fffb3ef747ad">StringTag Class</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="63fd61d5-fcf1-69ee-f400-496461e506c6.htm" title="StringTag Methods" tocid="63fd61d5-fcf1-69ee-f400-496461e506c6">StringTag Methods</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="5c4abd1c-8d00-6452-b38e-eee5473c4d5a.htm" title="EncodeValue Method " tocid="5c4abd1c-8d00-6452-b38e-eee5473c4d5a">EncodeValue Method </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="5bff1948-5e11-44f2-01ab-3784771200a3.htm" title="GetHashCode Method " tocid="5bff1948-5e11-44f2-01ab-3784771200a3">GetHashCode Method </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="da5d6b86-8c5d-afc6-029f-9372f72514c9.htm" title="ToString Method " tocid="da5d6b86-8c5d-afc6-029f-9372f72514c9">ToString Method </a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
         <table class="titleTable">
           <tr>
-            <td class="titleColumn">StringTag Methods</td>
+            <td class="titleColumn">
+              <h1>StringTag Methods</h1>
+            </td>
           </tr>
         </table>
-        <span class="introStyle"></span>
-        <p>The <a href="4e5ca8e5-cf86-fb42-6fa2-fffb3ef747ad.htm">StringTag</a> type exposes the following members.</p>
-        <div class="collapsibleAreaRegion">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0">
-            <img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Methods</span>
-        </div>
-        <div id="ID0RBSection" class="collapsibleSection">
-          <table id="memberList" class="members">
-            <tr>
-              <th class="iconColumn">
+        <span class="introStyle"></span> <p>The <a href="4e5ca8e5-cf86-fb42-6fa2-fffb3ef747ad.htm">StringTag</a> type exposes the following members.</p><div class="collapsibleAreaRegion"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0"><img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Methods</span></div><div id="ID0RBSection" class="collapsibleSection"><table class="members" id="methodList"><tr><th class="iconColumn">
 								 
-							</th>
-              <th>Name</th>
-              <th>Description</th>
-            </tr>
-            <tr data="protected;inherited;notNetfw;">
-              <td>
-                <img src="../icons/protmethod.gif" alt="Protected method" title="Protected method" />
-              </td>
-              <td>
-                <a href="3c0bb7a3-84bb-10bb-bd06-9a222e28ed9b.htm">CheckTagType</a>
-              </td>
-              <td>
-                <div class="summary">
+							</th><th>Name</th><th>Description</th></tr><tr data="protected;inherited;notNetfw;"><td><img src="../icons/protmethod.gif" alt="Protected method" title="Protected method" /></td><td><a href="3c0bb7a3-84bb-10bb-bd06-9a222e28ed9b.htm">CheckTagType</a></td><td><div class="summary">
             Checks if TLV tag type is valid and throws a TLV exception if the type is invalid.
-            </div> (Inherited from <a href="a3d4048b-ff6f-4d08-d3d4-56e55a11f699.htm">TlvTag</a>.)</td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="a98a5771-c269-0655-681a-d88f731ddd65.htm">Encode</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div> (Inherited from <a href="a3d4048b-ff6f-4d08-d3d4-56e55a11f699.htm">TlvTag</a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="a98a5771-c269-0655-681a-d88f731ddd65.htm">Encode</a></td><td><div class="summary">
                 Encode TLV object.
-            </div> (Inherited from <a href="a3d4048b-ff6f-4d08-d3d4-56e55a11f699.htm">TlvTag</a>.)</td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="5c4abd1c-8d00-6452-b38e-eee5473c4d5a.htm">EncodeValue</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div> (Inherited from <a href="a3d4048b-ff6f-4d08-d3d4-56e55a11f699.htm">TlvTag</a>.)</td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="5c4abd1c-8d00-6452-b38e-eee5473c4d5a.htm">EncodeValue</a></td><td><div class="summary">
                 Encode element value string to byte array.
-            </div> (Overrides <a href="25837bc1-9ad9-04a6-cc0b-7ab81400c335.htm">TlvTag<span id="LSTB298317_0"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB298317_0?cs=.|vb=.|cpp=::|nu=.|fs=.");</script>EncodeValue<span id="LSTB298317_1"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB298317_1?cs=()|vb=|cpp=()|nu=()|fs=()");</script></a>.)</td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="eddd2ef8-4f89-d0c9-9140-1d075a38b6dd.htm">Equals(Object)</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div> (Overrides <a href="25837bc1-9ad9-04a6-cc0b-7ab81400c335.htm">TlvTag<span id="LSTB298317_0"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB298317_0?cs=.|vb=.|cpp=::|nu=.|fs=.");</script>EncodeValue<span id="LSTB298317_1"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB298317_1?cs=()|vb=|cpp=()|nu=()|fs=()");</script></a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="eddd2ef8-4f89-d0c9-9140-1d075a38b6dd.htm">Equals(Object)</a></td><td><div class="summary">
                 Compare TLV element to object.
-            </div> (Inherited from <a href="a3d4048b-ff6f-4d08-d3d4-56e55a11f699.htm">TlvTag</a>.)</td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="2f03f6c2-c5ef-0b34-91c9-43c28b416fd6.htm">Equals(TlvTag)</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div> (Inherited from <a href="a3d4048b-ff6f-4d08-d3d4-56e55a11f699.htm">TlvTag</a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="2f03f6c2-c5ef-0b34-91c9-43c28b416fd6.htm">Equals(TlvTag)</a></td><td><div class="summary">
                 Compare tlv element to tlv element
-            </div> (Inherited from <a href="a3d4048b-ff6f-4d08-d3d4-56e55a11f699.htm">TlvTag</a>.)</td>
-            </tr>
-            <tr data="protected;inherited;notNetfw;">
-              <td>
-                <img src="../icons/protmethod.gif" alt="Protected method" title="Protected method" />
-              </td>
-              <td>
-                <a href="http://msdn2.microsoft.com/en-us/library/4k87zsw7" target="_blank">Finalize</a>
-              </td>
-              <td>
-                <div class="summary">Allows an object to try to free resources and perform other cleanup operations before it is reclaimed by garbage collection.</div> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b" target="_blank">Object</a>.)</td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="5bff1948-5e11-44f2-01ab-3784771200a3.htm">GetHashCode</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div> (Inherited from <a href="a3d4048b-ff6f-4d08-d3d4-56e55a11f699.htm">TlvTag</a>.)</td></tr><tr data="protected;inherited;notNetfw;"><td><img src="../icons/protmethod.gif" alt="Protected method" title="Protected method" /></td><td><a href="http://msdn2.microsoft.com/en-us/library/4k87zsw7" target="_blank">Finalize</a></td><td> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b" target="_blank">Object</a>.)</td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="5bff1948-5e11-44f2-01ab-3784771200a3.htm">GetHashCode</a></td><td><div class="summary">
                 Get TLV element hash code.
-            </div> (Overrides <a href="5600ec5e-676d-7a0d-a89b-a58e65e5ffa3.htm">TlvTag<span id="LSTB298317_2"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB298317_2?cs=.|vb=.|cpp=::|nu=.|fs=.");</script>GetHashCode<span id="LSTB298317_3"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB298317_3?cs=()|vb=|cpp=()|nu=()|fs=()");</script></a>.)</td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="http://msdn2.microsoft.com/en-us/library/dfwy45w9" target="_blank">GetType</a>
-              </td>
-              <td>
-                <div class="summary">Gets the <a href="http://msdn2.microsoft.com/en-us/library/42892f65" target="_blank">Type</a> of the current instance.</div> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b" target="_blank">Object</a>.)</td>
-            </tr>
-            <tr data="protected;inherited;notNetfw;">
-              <td>
-                <img src="../icons/protmethod.gif" alt="Protected method" title="Protected method" />
-              </td>
-              <td>
-                <a href="http://msdn2.microsoft.com/en-us/library/57ctke0a" target="_blank">MemberwiseClone</a>
-              </td>
-              <td>
-                <div class="summary">Creates a shallow copy of the current <a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b" target="_blank">Object</a>.</div> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b" target="_blank">Object</a>.)</td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="da5d6b86-8c5d-afc6-029f-9372f72514c9.htm">ToString</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div> (Overrides <a href="5600ec5e-676d-7a0d-a89b-a58e65e5ffa3.htm">TlvTag<span id="LSTB298317_2"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB298317_2?cs=.|vb=.|cpp=::|nu=.|fs=.");</script>GetHashCode<span id="LSTB298317_3"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB298317_3?cs=()|vb=|cpp=()|nu=()|fs=()");</script></a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="http://msdn2.microsoft.com/en-us/library/dfwy45w9" target="_blank">GetType</a></td><td> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b" target="_blank">Object</a>.)</td></tr><tr data="protected;inherited;notNetfw;"><td><img src="../icons/protmethod.gif" alt="Protected method" title="Protected method" /></td><td><a href="http://msdn2.microsoft.com/en-us/library/57ctke0a" target="_blank">MemberwiseClone</a></td><td> (Inherited from <a href="http://msdn2.microsoft.com/en-us/library/e5kfa45b" target="_blank">Object</a>.)</td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="da5d6b86-8c5d-afc6-029f-9372f72514c9.htm">ToString</a></td><td><div class="summary">
                 Convert TLV element to string.
-            </div> (Overrides <a href="33756f80-6823-95d7-c754-44f6c93caba1.htm">TlvTag<span id="LSTB298317_4"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB298317_4?cs=.|vb=.|cpp=::|nu=.|fs=.");</script>ToString<span id="LSTB298317_5"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB298317_5?cs=()|vb=|cpp=()|nu=()|fs=()");</script></a>.)</td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubmethod.gif" alt="Public method" title="Public method" />
-              </td>
-              <td>
-                <a href="4cb696bf-bb81-d1ff-c91d-44892570a56f.htm">WriteTo</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div> (Overrides <a href="33756f80-6823-95d7-c754-44f6c93caba1.htm">TlvTag<span id="LSTB298317_4"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB298317_4?cs=.|vb=.|cpp=::|nu=.|fs=.");</script>ToString<span id="LSTB298317_5"></span><script type="text/javascript">AddLanguageSpecificTextSet("LSTB298317_5?cs=()|vb=|cpp=()|nu=()|fs=()");</script></a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubmethod.gif" alt="Public method" title="Public method" /></td><td><a href="4cb696bf-bb81-d1ff-c91d-44892570a56f.htm">WriteTo</a></td><td><div class="summary">
                 Write TlvTag to stream.
-            </div> (Inherited from <a href="a3d4048b-ff6f-4d08-d3d4-56e55a11f699.htm">TlvTag</a>.)</td>
-            </tr>
-          </table>
-          <a href="#PageHeader">Top</a>
-        </div>
-        <div class="collapsibleAreaRegion" id="seeAlsoSection">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0">
-            <img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span>
-        </div>
-        <div id="ID1RBSection" class="collapsibleSection">
-          <h4 class="subHeading">Reference</h4>
-          <div class="seeAlsoStyle">
-            <a href="4e5ca8e5-cf86-fb42-6fa2-fffb3ef747ad.htm">StringTag Class</a>
-          </div>
-          <div class="seeAlsoStyle">
-            <a href="6c05433b-be27-6856-1c54-f6524a4d30fd.htm">Guardtime.KSI.Parser Namespace</a>
-          </div>
-        </div>
-      </div>
+            </div> (Inherited from <a href="a3d4048b-ff6f-4d08-d3d4-56e55a11f699.htm">TlvTag</a>.)</td></tr></table><a href="#PageHeader">Top</a></div><div class="collapsibleAreaRegion" id="seeAlsoSection"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0"><img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span></div><div id="ID1RBSection" class="collapsibleSection"><h4 class="subHeading">Reference</h4><div class="seeAlsoStyle"><a href="4e5ca8e5-cf86-fb42-6fa2-fffb3ef747ad.htm">StringTag Class</a></div><div class="seeAlsoStyle"><a href="6c05433b-be27-6856-1c54-f6524a4d30fd.htm">Guardtime.KSI.Parser Namespace</a></div></div></div>
     </div>
     <div id="pageFooter" class="pageFooter"> </div>
   </body>

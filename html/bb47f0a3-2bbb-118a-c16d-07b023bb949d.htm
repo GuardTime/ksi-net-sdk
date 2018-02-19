@@ -22,579 +22,151 @@
     <link rel="stylesheet" type="text/css" href="../styles/branding-Website.css" />
     <script type="text/javascript" src="../scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../scripts/branding-Website.js"></script>
+    <script type="text/javascript" src="../scripts/clipboard.min.js"></script>
   </head>
   <body onload="OnLoad('cs')">
     <input type="hidden" id="userDataCache" class="userDataStyle" />
     <div class="pageHeader" id="PageHeader">KSI .NET API<form id="SearchForm" method="get" action="#" onsubmit="javascript:TransferToSearchPage(); return false;"><input id="SearchTextBox" type="text" maxlength="200" /><button id="SearchButton" type="submit"></button></form></div>
     <div class="pageBody">
-      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="b47c2570-2d70-686e-e260-6ed09f9fcb94.htm" title="Guardtime.KSI.Signature Namespaces" tocid="b47c2570-2d70-686e-e260-6ed09f9fcb94">Guardtime.KSI.Signature Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="749d2ab0-3fa1-40bc-6d0e-d0e404d2e39e.htm" title="Guardtime.KSI.Signature.Verification Namespaces" tocid="749d2ab0-3fa1-40bc-6d0e-d0e404d2e39e">Guardtime.KSI.Signature.Verification Namespaces</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="bb47f0a3-2bbb-118a-c16d-07b023bb949d.htm" title="Guardtime.KSI.Signature.Verification.Rule" tocid="bb47f0a3-2bbb-118a-c16d-07b023bb949d">Guardtime.KSI.Signature.Verification.Rule</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="5498c7a2-5423-88fc-9af9-89a9faa683d0.htm" title="AggregationChainInputHashVerificationRule Class" tocid="5498c7a2-5423-88fc-9af9-89a9faa683d0">AggregationChainInputHashVerificationRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="14781c0e-83ab-7d89-4043-284d6e9b8a8a.htm" title="AggregationHashChainConsistencyRule Class" tocid="14781c0e-83ab-7d89-4043-284d6e9b8a8a">AggregationHashChainConsistencyRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="2b263736-7cae-d93d-0506-0ae38d8b6de4.htm" title="AggregationHashChainIndexRule Class" tocid="2b263736-7cae-d93d-0506-0ae38d8b6de4">AggregationHashChainIndexRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="207bb5eb-b21f-f5c5-f350-56f074dd538d.htm" title="AggregationHashChainIndexSuccessorRule Class" tocid="207bb5eb-b21f-f5c5-f350-56f074dd538d">AggregationHashChainIndexSuccessorRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="27c04def-af15-c83f-94d6-d380a8b5c2ca.htm" title="AggregationHashChainMetadataRule Class" tocid="27c04def-af15-c83f-94d6-d380a8b5c2ca">AggregationHashChainMetadataRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="525556a6-f3bb-f6dd-497e-ea873200f2db.htm" title="AggregationHashChainTimeConsistencyRule Class" tocid="525556a6-f3bb-f6dd-497e-ea873200f2db">AggregationHashChainTimeConsistencyRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="8539babc-d3ff-83d7-34e4-27bd21344c16.htm" title="CalendarAuthenticationRecordAggregationHashRule Class" tocid="8539babc-d3ff-83d7-34e4-27bd21344c16">CalendarAuthenticationRecordAggregationHashRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="ce4d0dcc-fde0-8ce2-1a14-1a70cfcc23d8.htm" title="CalendarAuthenticationRecordAggregationTimeRule Class" tocid="ce4d0dcc-fde0-8ce2-1a14-1a70cfcc23d8">CalendarAuthenticationRecordAggregationTimeRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="ae268b82-45b4-4de2-847a-b3c1e046265c.htm" title="CalendarAuthenticationRecordExistenceRule Class" tocid="ae268b82-45b4-4de2-847a-b3c1e046265c">CalendarAuthenticationRecordExistenceRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="562d9c99-7b19-e1ef-7120-3179bea973a7.htm" title="CalendarAuthenticationRecordSignatureVerificationRule Class" tocid="562d9c99-7b19-e1ef-7120-3179bea973a7">CalendarAuthenticationRecordSignatureVerificationRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="42229f1a-e2ca-9d7a-8184-ebfaeb78638c.htm" title="CalendarHashChainAggregationTimeRule Class" tocid="42229f1a-e2ca-9d7a-8184-ebfaeb78638c">CalendarHashChainAggregationTimeRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="88128c09-583b-d0f9-87a9-d26be82d5083.htm" title="CalendarHashChainExistenceRule Class" tocid="88128c09-583b-d0f9-87a9-d26be82d5083">CalendarHashChainExistenceRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="1d668ca8-f555-8a71-301d-d8cc46b6a7da.htm" title="CalendarHashChainInputHashVerificationRule Class" tocid="1d668ca8-f555-8a71-301d-d8cc46b6a7da">CalendarHashChainInputHashVerificationRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="b07d6a13-238f-89f7-95db-de196bbd4849.htm" title="CalendarHashChainRegistrationTimeRule Class" tocid="b07d6a13-238f-89f7-95db-de196bbd4849">CalendarHashChainRegistrationTimeRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="88f5ec84-8c4a-da18-719b-b5c63d2b0381.htm" title="CertificateExistenceRule Class" tocid="88f5ec84-8c4a-da18-719b-b5c63d2b0381">CertificateExistenceRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="bba99141-a4d7-49a4-1ab1-ce978361a5a7.htm" title="DocumentHashLevelVerificationRule Class" tocid="bba99141-a4d7-49a4-1ab1-ce978361a5a7">DocumentHashLevelVerificationRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="4af80a3e-3929-d1cb-4bab-250fc3762306.htm" title="DocumentHashVerificationRule Class" tocid="4af80a3e-3929-d1cb-4bab-250fc3762306">DocumentHashVerificationRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="87e8e296-5de9-f163-f8ec-0e17c5ba78bd.htm" title="ExtendedSignatureAggregationChainRightLinksMatchesRule Class" tocid="87e8e296-5de9-f163-f8ec-0e17c5ba78bd">ExtendedSignatureAggregationChainRightLinksMatchesRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="290869ae-aacd-9082-ae95-a6ad089417ea.htm" title="ExtendedSignatureCalendarChainAggregationTimeRule Class" tocid="290869ae-aacd-9082-ae95-a6ad089417ea">ExtendedSignatureCalendarChainAggregationTimeRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="40466011-29ed-6e6a-6b14-31de81584837.htm" title="ExtendedSignatureCalendarChainInputHashRule Class" tocid="40466011-29ed-6e6a-6b14-31de81584837">ExtendedSignatureCalendarChainInputHashRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="969300c3-a540-783b-39d3-a059cd3eae2f.htm" title="ExtendedSignatureCalendarChainRootHashRule Class" tocid="969300c3-a540-783b-39d3-a059cd3eae2f">ExtendedSignatureCalendarChainRootHashRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="02964543-7ba8-53a5-e630-a5a341b8267c.htm" title="ExtendingPermittedVerificationRule Class" tocid="02964543-7ba8-53a5-e630-a5a341b8267c">ExtendingPermittedVerificationRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="16319f7a-f96d-7d38-2a0e-7834aabb42d3.htm" title="InputHashAlgorithmVerificationRule Class" tocid="16319f7a-f96d-7d38-2a0e-7834aabb42d3">InputHashAlgorithmVerificationRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="d3de13a1-dfaa-cf7a-9df3-b5f0a876b85b.htm" title="OkResultRule Class" tocid="d3de13a1-dfaa-cf7a-9df3-b5f0a876b85b">OkResultRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="fcae3295-15aa-8352-38ce-9c226f9e1f86.htm" title="PublicationsFileExtendedSignatureInputHashRule Class" tocid="fcae3295-15aa-8352-38ce-9c226f9e1f86">PublicationsFileExtendedSignatureInputHashRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="f90d41f5-ca86-9611-cb77-a93d6bf934b0.htm" title="PublicationsFilePublicationHashMatchesExtenderResponseRule Class" tocid="f90d41f5-ca86-9611-cb77-a93d6bf934b0">PublicationsFilePublicationHashMatchesExtenderResponseRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="a90c04df-23ad-099d-c398-fa4847064a82.htm" title="PublicationsFilePublicationTimeMatchesExtenderResponseRule Class" tocid="a90c04df-23ad-099d-c398-fa4847064a82">PublicationsFilePublicationTimeMatchesExtenderResponseRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="be24f70b-bcd2-8e46-9403-605b28b1ba78.htm" title="PublicationsFileSignaturePublicationMatchRule Class" tocid="be24f70b-bcd2-8e46-9403-605b28b1ba78">PublicationsFileSignaturePublicationMatchRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="e28add20-1bed-7928-3fde-8522a9fe6be9.htm" title="Rfc3161RecordAggregationTimeRule Class" tocid="e28add20-1bed-7928-3fde-8522a9fe6be9">Rfc3161RecordAggregationTimeRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="727b98ea-7d3a-af27-bf2d-adef88709e24.htm" title="Rfc3161RecordChainIndexRule Class" tocid="727b98ea-7d3a-af27-bf2d-adef88709e24">Rfc3161RecordChainIndexRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="8c4dc68a-6311-06d5-28c7-8828238b56b3.htm" title="SignaturePublicationRecordExistenceRule Class" tocid="8c4dc68a-6311-06d5-28c7-8828238b56b3">SignaturePublicationRecordExistenceRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="1566074f-f928-0041-e6ec-c1e927906fc8.htm" title="SignaturePublicationRecordPublicationHashRule Class" tocid="1566074f-f928-0041-e6ec-c1e927906fc8">SignaturePublicationRecordPublicationHashRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="4e2ecc48-b9a5-b70b-12be-abddd0d0814f.htm" title="SignaturePublicationRecordPublicationTimeRule Class" tocid="4e2ecc48-b9a5-b70b-12be-abddd0d0814f">SignaturePublicationRecordPublicationTimeRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="09639fa6-8c4f-9b0b-0ca1-c30ab302e611.htm" title="UserProvidedPublicationCreationTimeVerificationRule Class" tocid="09639fa6-8c4f-9b0b-0ca1-c30ab302e611">UserProvidedPublicationCreationTimeVerificationRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="c97b295d-ec3b-d5c5-2538-dec89b4aca89.htm" title="UserProvidedPublicationExistenceRule Class" tocid="c97b295d-ec3b-d5c5-2538-dec89b4aca89">UserProvidedPublicationExistenceRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="39f039a4-c05b-34a2-a004-8e88b4920ae5.htm" title="UserProvidedPublicationExtendedSignatureInputHashRule Class" tocid="39f039a4-c05b-34a2-a004-8e88b4920ae5">UserProvidedPublicationExtendedSignatureInputHashRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="311bef11-28df-40ac-266b-aa195798f0a1.htm" title="UserProvidedPublicationHashMatchesExtendedResponseRule Class" tocid="311bef11-28df-40ac-266b-aa195798f0a1">UserProvidedPublicationHashMatchesExtendedResponseRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="88ca44d7-207b-47ff-d1e1-51107662eb46.htm" title="UserProvidedPublicationTimeMatchesExtendedResponseRule Class" tocid="88ca44d7-207b-47ff-d1e1-51107662eb46">UserProvidedPublicationTimeMatchesExtendedResponseRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="77c7dd12-0d29-2096-0ae3-324c5576e2f7.htm" title="UserProvidedPublicationVerificationRule Class" tocid="77c7dd12-0d29-2096-0ae3-324c5576e2f7">UserProvidedPublicationVerificationRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="b57e80e5-caab-90a4-6bf6-e9854f70bfb5.htm" title="VerificationRule Class" tocid="b57e80e5-caab-90a4-6bf6-e9854f70bfb5">VerificationRule Class</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
+      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/b47c2570-2d70-686e-e260-6ed09f9fcb94.htm" title="Guardtime.KSI.Signature Namespaces" tocid="b47c2570-2d70-686e-e260-6ed09f9fcb94">Guardtime.KSI.Signature Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/749d2ab0-3fa1-40bc-6d0e-d0e404d2e39e.htm" title="Guardtime.KSI.Signature.Verification Namespaces" tocid="749d2ab0-3fa1-40bc-6d0e-d0e404d2e39e">Guardtime.KSI.Signature.Verification Namespaces</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="bb47f0a3-2bbb-118a-c16d-07b023bb949d.htm" title="Guardtime.KSI.Signature.Verification.Rule" tocid="bb47f0a3-2bbb-118a-c16d-07b023bb949d">Guardtime.KSI.Signature.Verification.Rule</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="5498c7a2-5423-88fc-9af9-89a9faa683d0.htm" title="AggregationChainInputHashVerificationRule Class" tocid="5498c7a2-5423-88fc-9af9-89a9faa683d0">AggregationChainInputHashVerificationRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="b73df07f-bfd0-5b2d-2e0a-a0e77b016d43.htm" title="AggregationHashChainAlgorithmDeprecatedRule Class" tocid="b73df07f-bfd0-5b2d-2e0a-a0e77b016d43">AggregationHashChainAlgorithmDeprecatedRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="14781c0e-83ab-7d89-4043-284d6e9b8a8a.htm" title="AggregationHashChainConsistencyRule Class" tocid="14781c0e-83ab-7d89-4043-284d6e9b8a8a">AggregationHashChainConsistencyRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="2b263736-7cae-d93d-0506-0ae38d8b6de4.htm" title="AggregationHashChainIndexRule Class" tocid="2b263736-7cae-d93d-0506-0ae38d8b6de4">AggregationHashChainIndexRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="207bb5eb-b21f-f5c5-f350-56f074dd538d.htm" title="AggregationHashChainIndexSuccessorRule Class" tocid="207bb5eb-b21f-f5c5-f350-56f074dd538d">AggregationHashChainIndexSuccessorRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="27c04def-af15-c83f-94d6-d380a8b5c2ca.htm" title="AggregationHashChainMetadataRule Class" tocid="27c04def-af15-c83f-94d6-d380a8b5c2ca">AggregationHashChainMetadataRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="a0e05849-4364-ccf7-4196-5bfd5a9dd048.htm" title="AggregationHashChainShapeRule Class" tocid="a0e05849-4364-ccf7-4196-5bfd5a9dd048">AggregationHashChainShapeRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="525556a6-f3bb-f6dd-497e-ea873200f2db.htm" title="AggregationHashChainTimeConsistencyRule Class" tocid="525556a6-f3bb-f6dd-497e-ea873200f2db">AggregationHashChainTimeConsistencyRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="8539babc-d3ff-83d7-34e4-27bd21344c16.htm" title="CalendarAuthenticationRecordAggregationHashRule Class" tocid="8539babc-d3ff-83d7-34e4-27bd21344c16">CalendarAuthenticationRecordAggregationHashRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="ce4d0dcc-fde0-8ce2-1a14-1a70cfcc23d8.htm" title="CalendarAuthenticationRecordAggregationTimeRule Class" tocid="ce4d0dcc-fde0-8ce2-1a14-1a70cfcc23d8">CalendarAuthenticationRecordAggregationTimeRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="ae268b82-45b4-4de2-847a-b3c1e046265c.htm" title="CalendarAuthenticationRecordExistenceRule Class" tocid="ae268b82-45b4-4de2-847a-b3c1e046265c">CalendarAuthenticationRecordExistenceRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="ce0c4d09-c27b-6e70-30d6-82bcbf0453f7.htm" title="CalendarAuthenticationRecordPublicationTimeRule Class" tocid="ce0c4d09-c27b-6e70-30d6-82bcbf0453f7">CalendarAuthenticationRecordPublicationTimeRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="562d9c99-7b19-e1ef-7120-3179bea973a7.htm" title="CalendarAuthenticationRecordSignatureVerificationRule Class" tocid="562d9c99-7b19-e1ef-7120-3179bea973a7">CalendarAuthenticationRecordSignatureVerificationRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="42229f1a-e2ca-9d7a-8184-ebfaeb78638c.htm" title="CalendarHashChainAggregationTimeRule Class" tocid="42229f1a-e2ca-9d7a-8184-ebfaeb78638c">CalendarHashChainAggregationTimeRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="6601f446-5de3-f31e-9bb4-3e314dfbe796.htm" title="CalendarHashChainAlgorithmDeprecatedRule Class" tocid="6601f446-5de3-f31e-9bb4-3e314dfbe796">CalendarHashChainAlgorithmDeprecatedRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="985a0f92-6209-bacd-7bce-1d3ab86580c5.htm" title="CalendarHashChainAlgorithmObsoleteRule Class" tocid="985a0f92-6209-bacd-7bce-1d3ab86580c5">CalendarHashChainAlgorithmObsoleteRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="88128c09-583b-d0f9-87a9-d26be82d5083.htm" title="CalendarHashChainExistenceRule Class" tocid="88128c09-583b-d0f9-87a9-d26be82d5083">CalendarHashChainExistenceRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="1d668ca8-f555-8a71-301d-d8cc46b6a7da.htm" title="CalendarHashChainInputHashVerificationRule Class" tocid="1d668ca8-f555-8a71-301d-d8cc46b6a7da">CalendarHashChainInputHashVerificationRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="b07d6a13-238f-89f7-95db-de196bbd4849.htm" title="CalendarHashChainRegistrationTimeRule Class" tocid="b07d6a13-238f-89f7-95db-de196bbd4849">CalendarHashChainRegistrationTimeRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="88f5ec84-8c4a-da18-719b-b5c63d2b0381.htm" title="CertificateExistenceRule Class" tocid="88f5ec84-8c4a-da18-719b-b5c63d2b0381">CertificateExistenceRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="bba99141-a4d7-49a4-1ab1-ce978361a5a7.htm" title="DocumentHashLevelVerificationRule Class" tocid="bba99141-a4d7-49a4-1ab1-ce978361a5a7">DocumentHashLevelVerificationRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="4af80a3e-3929-d1cb-4bab-250fc3762306.htm" title="DocumentHashVerificationRule Class" tocid="4af80a3e-3929-d1cb-4bab-250fc3762306">DocumentHashVerificationRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="87e8e296-5de9-f163-f8ec-0e17c5ba78bd.htm" title="ExtendedSignatureAggregationChainRightLinksMatchesRule Class" tocid="87e8e296-5de9-f163-f8ec-0e17c5ba78bd">ExtendedSignatureAggregationChainRightLinksMatchesRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="290869ae-aacd-9082-ae95-a6ad089417ea.htm" title="ExtendedSignatureCalendarChainAggregationTimeRule Class" tocid="290869ae-aacd-9082-ae95-a6ad089417ea">ExtendedSignatureCalendarChainAggregationTimeRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="40466011-29ed-6e6a-6b14-31de81584837.htm" title="ExtendedSignatureCalendarChainInputHashRule Class" tocid="40466011-29ed-6e6a-6b14-31de81584837">ExtendedSignatureCalendarChainInputHashRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="969300c3-a540-783b-39d3-a059cd3eae2f.htm" title="ExtendedSignatureCalendarChainRootHashRule Class" tocid="969300c3-a540-783b-39d3-a059cd3eae2f">ExtendedSignatureCalendarChainRootHashRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="acac080a-1339-06f4-bd09-2084694822ea.htm" title="ExtendedSignatureCalendarHashChainRightLinksMatchRule Class" tocid="acac080a-1339-06f4-bd09-2084694822ea">ExtendedSignatureCalendarHashChainRightLinksMatchRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="5b03625c-1a47-1b2b-0f70-e7d4df4f3400.htm" title="ExtenderResponseCalendarHashChainAlgorithmDeprecatedRule Class" tocid="5b03625c-1a47-1b2b-0f70-e7d4df4f3400">ExtenderResponseCalendarHashChainAlgorithmDeprecatedRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="02964543-7ba8-53a5-e630-a5a341b8267c.htm" title="ExtendingPermittedVerificationRule Class" tocid="02964543-7ba8-53a5-e630-a5a341b8267c">ExtendingPermittedVerificationRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="a0a07a3f-6ab5-1283-c5d3-403dcad2016e.htm" title="InputHashAlgorithmDeprecatedRule Class" tocid="a0a07a3f-6ab5-1283-c5d3-403dcad2016e">InputHashAlgorithmDeprecatedRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="16319f7a-f96d-7d38-2a0e-7834aabb42d3.htm" title="InputHashAlgorithmVerificationRule Class" tocid="16319f7a-f96d-7d38-2a0e-7834aabb42d3">InputHashAlgorithmVerificationRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="d3de13a1-dfaa-cf7a-9df3-b5f0a876b85b.htm" title="OkResultRule Class" tocid="d3de13a1-dfaa-cf7a-9df3-b5f0a876b85b">OkResultRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="fcae3295-15aa-8352-38ce-9c226f9e1f86.htm" title="PublicationsFileExtendedSignatureInputHashRule Class" tocid="fcae3295-15aa-8352-38ce-9c226f9e1f86">PublicationsFileExtendedSignatureInputHashRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="f90d41f5-ca86-9611-cb77-a93d6bf934b0.htm" title="PublicationsFilePublicationHashMatchesExtenderResponseRule Class" tocid="f90d41f5-ca86-9611-cb77-a93d6bf934b0">PublicationsFilePublicationHashMatchesExtenderResponseRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="a90c04df-23ad-099d-c398-fa4847064a82.htm" title="PublicationsFilePublicationTimeMatchesExtenderResponseRule Class" tocid="a90c04df-23ad-099d-c398-fa4847064a82">PublicationsFilePublicationTimeMatchesExtenderResponseRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="be24f70b-bcd2-8e46-9403-605b28b1ba78.htm" title="PublicationsFileSignaturePublicationMatchRule Class" tocid="be24f70b-bcd2-8e46-9403-605b28b1ba78">PublicationsFileSignaturePublicationMatchRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="e28add20-1bed-7928-3fde-8522a9fe6be9.htm" title="Rfc3161RecordAggregationTimeRule Class" tocid="e28add20-1bed-7928-3fde-8522a9fe6be9">Rfc3161RecordAggregationTimeRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="727b98ea-7d3a-af27-bf2d-adef88709e24.htm" title="Rfc3161RecordChainIndexRule Class" tocid="727b98ea-7d3a-af27-bf2d-adef88709e24">Rfc3161RecordChainIndexRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="994e31a8-b707-d2a2-18f9-d8d5ef0a5a6f.htm" title="Rfc3161RecordHashAlgorithmDeprecatedRule Class" tocid="994e31a8-b707-d2a2-18f9-d8d5ef0a5a6f">Rfc3161RecordHashAlgorithmDeprecatedRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="bbc5990e-112c-2bd4-4a11-a3c6b13f1f75.htm" title="Rfc3161RecordOutputHashAlgorithmDeprecatedRule Class" tocid="bbc5990e-112c-2bd4-4a11-a3c6b13f1f75">Rfc3161RecordOutputHashAlgorithmDeprecatedRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="867335f9-24ee-0042-02cc-cbc9b62cbd2b.htm" title="Rfc3161RecordOutputHashVerificationRule Class" tocid="867335f9-24ee-0042-02cc-cbc9b62cbd2b">Rfc3161RecordOutputHashVerificationRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="8c4dc68a-6311-06d5-28c7-8828238b56b3.htm" title="SignaturePublicationRecordExistenceRule Class" tocid="8c4dc68a-6311-06d5-28c7-8828238b56b3">SignaturePublicationRecordExistenceRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="1566074f-f928-0041-e6ec-c1e927906fc8.htm" title="SignaturePublicationRecordPublicationHashRule Class" tocid="1566074f-f928-0041-e6ec-c1e927906fc8">SignaturePublicationRecordPublicationHashRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="4e2ecc48-b9a5-b70b-12be-abddd0d0814f.htm" title="SignaturePublicationRecordPublicationTimeRule Class" tocid="4e2ecc48-b9a5-b70b-12be-abddd0d0814f">SignaturePublicationRecordPublicationTimeRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="09639fa6-8c4f-9b0b-0ca1-c30ab302e611.htm" title="UserProvidedPublicationCreationTimeVerificationRule Class" tocid="09639fa6-8c4f-9b0b-0ca1-c30ab302e611">UserProvidedPublicationCreationTimeVerificationRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="c97b295d-ec3b-d5c5-2538-dec89b4aca89.htm" title="UserProvidedPublicationExistenceRule Class" tocid="c97b295d-ec3b-d5c5-2538-dec89b4aca89">UserProvidedPublicationExistenceRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="39f039a4-c05b-34a2-a004-8e88b4920ae5.htm" title="UserProvidedPublicationExtendedSignatureInputHashRule Class" tocid="39f039a4-c05b-34a2-a004-8e88b4920ae5">UserProvidedPublicationExtendedSignatureInputHashRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="311bef11-28df-40ac-266b-aa195798f0a1.htm" title="UserProvidedPublicationHashMatchesExtendedResponseRule Class" tocid="311bef11-28df-40ac-266b-aa195798f0a1">UserProvidedPublicationHashMatchesExtendedResponseRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="88ca44d7-207b-47ff-d1e1-51107662eb46.htm" title="UserProvidedPublicationTimeMatchesExtendedResponseRule Class" tocid="88ca44d7-207b-47ff-d1e1-51107662eb46">UserProvidedPublicationTimeMatchesExtendedResponseRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="77c7dd12-0d29-2096-0ae3-324c5576e2f7.htm" title="UserProvidedPublicationVerificationRule Class" tocid="77c7dd12-0d29-2096-0ae3-324c5576e2f7">UserProvidedPublicationVerificationRule Class</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="b57e80e5-caab-90a4-6bf6-e9854f70bfb5.htm" title="VerificationRule Class" tocid="b57e80e5-caab-90a4-6bf6-e9854f70bfb5">VerificationRule Class</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
         <table class="titleTable">
           <tr>
-            <td class="titleColumn">Guardtime.KSI.Signature.Verification.Rule Namespace</td>
+            <td class="titleColumn">
+              <h1>Guardtime.KSI.Signature.Verification.Rule Namespace</h1>
+            </td>
           </tr>
         </table>
-        <span class="introStyle"></span>
-        <div class="summary"> </div>
-        <div class="collapsibleAreaRegion">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0">
-            <img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Classes</span>
-        </div>
-        <div id="ID0RBSection" class="collapsibleSection">
-          <table id="typeList" class="members">
-            <tr>
-              <th class="iconColumn">
+        <span class="introStyle"></span> <div class="summary"> </div><div class="collapsibleAreaRegion"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0"><img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Classes</span></div><div id="ID0RBSection" class="collapsibleSection"><table class="members" id="classList"><tr><th class="iconColumn">
 					 
-				</th>
-              <th>Class</th>
-              <th>Description</th>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="5498c7a2-5423-88fc-9af9-89a9faa683d0.htm">AggregationChainInputHashVerificationRule</a>
-              </td>
-              <td>
-                <div class="summary">
+				</th><th>Class</th><th>Description</th></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="5498c7a2-5423-88fc-9af9-89a9faa683d0.htm">AggregationChainInputHashVerificationRule</a></td><td> <strong>Obsolete. </strong><div class="summary">
                 This rule verifies RFC3161 output hash equals to aggregation chain input hash. 
                 If RFC3161 record is not present then <a href="2a77bc15-ba6d-bdc4-52d5-741af5a5ee15.htm">Ok</a> is returned.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="14781c0e-83ab-7d89-4043-284d6e9b8a8a.htm">AggregationHashChainConsistencyRule</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="b73df07f-bfd0-5b2d-2e0a-a0e77b016d43.htm">AggregationHashChainAlgorithmDeprecatedRule</a></td><td><div class="summary">
+            Verifies that aggregation hash chains use hash algorithms that were not deprecated at the aggregation time.
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="14781c0e-83ab-7d89-4043-284d6e9b8a8a.htm">AggregationHashChainConsistencyRule</a></td><td><div class="summary">
                 Rule verifies if all aggregation hash chains are consistent. e.g. previous aggregation hash chain output hash
                 equals to current aggregation hash chain input hash.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="2b263736-7cae-d93d-0506-0ae38d8b6de4.htm">AggregationHashChainIndexRule</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="2b263736-7cae-d93d-0506-0ae38d8b6de4.htm">AggregationHashChainIndexRule</a></td><td> <strong>Obsolete. </strong><div class="summary">
                 Rule checks that shape of the aggregation hash chain matches with chain index.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="207bb5eb-b21f-f5c5-f350-56f074dd538d.htm">AggregationHashChainIndexSuccessorRule</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="207bb5eb-b21f-f5c5-f350-56f074dd538d.htm">AggregationHashChainIndexSuccessorRule</a></td><td><div class="summary">
             This rule checks that chain index of a aggregation hash chain is successor to it's parent aggregation hash chain index.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="27c04def-af15-c83f-94d6-d380a8b5c2ca.htm">AggregationHashChainMetadataRule</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="27c04def-af15-c83f-94d6-d380a8b5c2ca.htm">AggregationHashChainMetadataRule</a></td><td><div class="summary">
                 Rule verifies if all metadata tags in aggregation hash chains are valid.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="525556a6-f3bb-f6dd-497e-ea873200f2db.htm">AggregationHashChainTimeConsistencyRule</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="a0e05849-4364-ccf7-4196-5bfd5a9dd048.htm">AggregationHashChainShapeRule</a></td><td><div class="summary">
+                Rule checks that shape of the aggregation hash chain matches with chain index.
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="525556a6-f3bb-f6dd-497e-ea873200f2db.htm">AggregationHashChainTimeConsistencyRule</a></td><td><div class="summary">
                 Rule checks that aggregation hash chain times are consistent. It means that previous aggregation hash chain
                 aggregation time equals to current one.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="8539babc-d3ff-83d7-34e4-27bd21344c16.htm">CalendarAuthenticationRecordAggregationHashRule</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="8539babc-d3ff-83d7-34e4-27bd21344c16.htm">CalendarAuthenticationRecordAggregationHashRule</a></td><td><div class="summary">
                 Rule verifies that calendar authentication record publication hash equals to calendar hash chain output hash.
                 Without calendar authentication record <a href="2a77bc15-ba6d-bdc4-52d5-741af5a5ee15.htm">Ok</a> is returned.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="ce4d0dcc-fde0-8ce2-1a14-1a70cfcc23d8.htm">CalendarAuthenticationRecordAggregationTimeRule</a>
-              </td>
-              <td>
-                <div class="summary">
-                Rule verifies that calendar authentication record aggregation time equals to calendar hash chain aggregation time.
-                Without calendar authentication record <a href="2a77bc15-ba6d-bdc4-52d5-741af5a5ee15.htm">Ok</a> is returned.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="ae268b82-45b4-4de2-847a-b3c1e046265c.htm">CalendarAuthenticationRecordExistenceRule</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="ce4d0dcc-fde0-8ce2-1a14-1a70cfcc23d8.htm">CalendarAuthenticationRecordAggregationTimeRule</a></td><td> <strong>Obsolete. </strong></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="ae268b82-45b4-4de2-847a-b3c1e046265c.htm">CalendarAuthenticationRecordExistenceRule</a></td><td><div class="summary">
                 Rule verifies that KSI signature contains calendar authentication record.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="562d9c99-7b19-e1ef-7120-3179bea973a7.htm">CalendarAuthenticationRecordSignatureVerificationRule</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="ce0c4d09-c27b-6e70-30d6-82bcbf0453f7.htm">CalendarAuthenticationRecordPublicationTimeRule</a></td><td><div class="summary">
+                Rule verifies that calendar authentication record publication time equals to calendar hash chain publication time.
+                Without calendar authentication record <a href="2a77bc15-ba6d-bdc4-52d5-741af5a5ee15.htm">Ok</a> is returned.
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="562d9c99-7b19-e1ef-7120-3179bea973a7.htm">CalendarAuthenticationRecordSignatureVerificationRule</a></td><td><div class="summary">
                 Rule validates calendar authentication record signature. Signature is made from calendar authentication record
                 publication data. X.509 certificate is searched from publications file and when found, it is used to validate PKI
                 signature in calendar authentication record.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="42229f1a-e2ca-9d7a-8184-ebfaeb78638c.htm">CalendarHashChainAggregationTimeRule</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="42229f1a-e2ca-9d7a-8184-ebfaeb78638c.htm">CalendarHashChainAggregationTimeRule</a></td><td><div class="summary">
                 Rule verifies calendar hash chain aggregation time equality to last aggregation hash chain aggregation time.
                 Without calendar authentication record <a href="2a77bc15-ba6d-bdc4-52d5-741af5a5ee15.htm">Ok</a> is returned.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="88128c09-583b-d0f9-87a9-d26be82d5083.htm">CalendarHashChainExistenceRule</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="6601f446-5de3-f31e-9bb4-3e314dfbe796.htm">CalendarHashChainAlgorithmDeprecatedRule</a></td><td><div class="summary">
+                Verifies that calendar hash chain right link hash algorithms were not deprecated at the publication time.
+                If calendar hash chain is missing then status <a href="2a77bc15-ba6d-bdc4-52d5-741af5a5ee15.htm">Ok</a> is returned.
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="985a0f92-6209-bacd-7bce-1d3ab86580c5.htm">CalendarHashChainAlgorithmObsoleteRule</a></td><td><div class="summary">
+                Verifies that calendar hash chain right link hash algorithms were not obsolete at the publication time.
+                If calendar hash chain is missing then status <a href="2a77bc15-ba6d-bdc4-52d5-741af5a5ee15.htm">Ok</a> is returned.
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="88128c09-583b-d0f9-87a9-d26be82d5083.htm">CalendarHashChainExistenceRule</a></td><td><div class="summary">
                 Rule for checking if KSI signature contains calendar hash chain.
                 Used for key-based and publication-based verification policies.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="1d668ca8-f555-8a71-301d-d8cc46b6a7da.htm">CalendarHashChainInputHashVerificationRule</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="1d668ca8-f555-8a71-301d-d8cc46b6a7da.htm">CalendarHashChainInputHashVerificationRule</a></td><td><div class="summary">
                 Rule verifies that last aggregation hash chain output hash is equal to calendar hash chain input hash. If calendar
                 hash chain is missing, status <a href="2a77bc15-ba6d-bdc4-52d5-741af5a5ee15.htm">Ok</a> is returned.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="b07d6a13-238f-89f7-95db-de196bbd4849.htm">CalendarHashChainRegistrationTimeRule</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="b07d6a13-238f-89f7-95db-de196bbd4849.htm">CalendarHashChainRegistrationTimeRule</a></td><td><div class="summary">
                 Rule is used to verify calendar hash chain registration time (calculated from calendar hash chain shape) equality
                 to calendar hash chain aggregation time. If calendar hash chain is missing then status
                 <a href="2a77bc15-ba6d-bdc4-52d5-741af5a5ee15.htm">Ok</a> is returned.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="88f5ec84-8c4a-da18-719b-b5c63d2b0381.htm">CertificateExistenceRule</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="88f5ec84-8c4a-da18-719b-b5c63d2b0381.htm">CertificateExistenceRule</a></td><td><div class="summary">
                 Rule checks if publications file contains certificate with certificate id contained in calendar authentication
                 record.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="bba99141-a4d7-49a4-1ab1-ce978361a5a7.htm">DocumentHashLevelVerificationRule</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="bba99141-a4d7-49a4-1ab1-ce978361a5a7.htm">DocumentHashLevelVerificationRule</a></td><td><div class="summary">
                 This rule verifies that given document hash level is not greater than the first link level correction of the first aggregation hash chain. 
                 In case RFC3161 signature the given document hash level must be 0.
                 If the level is equal to or less than expected then <a href="2a77bc15-ba6d-bdc4-52d5-741af5a5ee15.htm">Ok</a> is returned.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="4af80a3e-3929-d1cb-4bab-250fc3762306.htm">DocumentHashVerificationRule</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="4af80a3e-3929-d1cb-4bab-250fc3762306.htm">DocumentHashVerificationRule</a></td><td><div class="summary">
                 This rule verifies document hash. If RFC3161 record is present then document hash must equal to RFC3161 record input hash. 
                 Otherwise document hash is compared to aggregation hash chain input hash.
                 If document hash is not provided then <a href="2a77bc15-ba6d-bdc4-52d5-741af5a5ee15.htm">Ok</a> is returned.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="87e8e296-5de9-f163-f8ec-0e17c5ba78bd.htm">ExtendedSignatureAggregationChainRightLinksMatchesRule</a>
-              </td>
-              <td>
-                <div class="summary">
-                Rule checks if extended signature aggregation hash chain links are with same structure and right links are equal to
-                not extended signature right links.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="290869ae-aacd-9082-ae95-a6ad089417ea.htm">ExtendedSignatureCalendarChainAggregationTimeRule</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="87e8e296-5de9-f163-f8ec-0e17c5ba78bd.htm">ExtendedSignatureAggregationChainRightLinksMatchesRule</a></td><td> <strong>Obsolete. </strong></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="290869ae-aacd-9082-ae95-a6ad089417ea.htm">ExtendedSignatureCalendarChainAggregationTimeRule</a></td><td><div class="summary">
                 Rule checks that extended signature contains correct aggregation time.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="40466011-29ed-6e6a-6b14-31de81584837.htm">ExtendedSignatureCalendarChainInputHashRule</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="40466011-29ed-6e6a-6b14-31de81584837.htm">ExtendedSignatureCalendarChainInputHashRule</a></td><td><div class="summary">
                 Rule checks that extended signature contains correct calendar hash chain input hash. It means that input hash
                 equals to aggregation hash chain root hash.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="969300c3-a540-783b-39d3-a059cd3eae2f.htm">ExtendedSignatureCalendarChainRootHashRule</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="969300c3-a540-783b-39d3-a059cd3eae2f.htm">ExtendedSignatureCalendarChainRootHashRule</a></td><td><div class="summary">
                 Rule checks that extender response calendar hash chain (extension request with current calendar hash chain
                 aggregation and publication time is used) matches with current calendar hash chain root hash. If current signature
                 does not contain calendar hash chain, <a href="2a77bc15-ba6d-bdc4-52d5-741af5a5ee15.htm">Ok</a> is returned.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="02964543-7ba8-53a5-e630-a5a341b8267c.htm">ExtendingPermittedVerificationRule</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="acac080a-1339-06f4-bd09-2084694822ea.htm">ExtendedSignatureCalendarHashChainRightLinksMatchRule</a></td><td><div class="summary">
+            Checks if extended signature calendar hash chain right links are equal to not extended signature right links.
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="5b03625c-1a47-1b2b-0f70-e7d4df4f3400.htm">ExtenderResponseCalendarHashChainAlgorithmDeprecatedRule</a></td><td><div class="summary">
+                Verifies that extender response calendar hash chain right link hash algorithms are not deprecated.
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="02964543-7ba8-53a5-e630-a5a341b8267c.htm">ExtendingPermittedVerificationRule</a></td><td><div class="summary">
                 Rule checks that extending is permitted by user.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="16319f7a-f96d-7d38-2a0e-7834aabb42d3.htm">InputHashAlgorithmVerificationRule</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="a0a07a3f-6ab5-1283-c5d3-403dcad2016e.htm">InputHashAlgorithmDeprecatedRule</a></td><td><div class="summary">
+                This rule verifies that input hash algorithm is not deprecated at aggregation time. If RFC3161 record is present then RFC3161 record input hash algorithm deprecation is checked.
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="16319f7a-f96d-7d38-2a0e-7834aabb42d3.htm">InputHashAlgorithmVerificationRule</a></td><td><div class="summary">
                 This rule verifies input hash algorithm. If RFC3161 record is present then intput hash algorithm must equal to RFC3161 record input hash algorithm. 
                 Otherwise input hash algorithm is compared to aggregation hash chain input hash algorithm.
                 If input hash is not provided then <a href="2a77bc15-ba6d-bdc4-52d5-741af5a5ee15.htm">Ok</a> is returned.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="d3de13a1-dfaa-cf7a-9df3-b5f0a876b85b.htm">OkResultRule</a>
-              </td>
-              <td>
-                <div class="summary">
-                Rule that always returns <a href="2a77bc15-ba6d-bdc4-52d5-741af5a5ee15.htm">Ok</a></div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="fcae3295-15aa-8352-38ce-9c226f9e1f86.htm">PublicationsFileExtendedSignatureInputHashRule</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="d3de13a1-dfaa-cf7a-9df3-b5f0a876b85b.htm">OkResultRule</a></td><td><div class="summary">
+                Rule that always returns <a href="2a77bc15-ba6d-bdc4-52d5-741af5a5ee15.htm">Ok</a></div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="fcae3295-15aa-8352-38ce-9c226f9e1f86.htm">PublicationsFileExtendedSignatureInputHashRule</a></td><td><div class="summary">
                 Rule checks that extender response calendar hash chain input hash matches with signature aggregation root hash.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="f90d41f5-ca86-9611-cb77-a93d6bf934b0.htm">PublicationsFilePublicationHashMatchesExtenderResponseRule</a>
-              </td>
-              <td>
-                <div class="summary">
-                Rule checks that publications file publication hash matches with extender reponse calendar hash chain root hash.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="a90c04df-23ad-099d-c398-fa4847064a82.htm">PublicationsFilePublicationTimeMatchesExtenderResponseRule</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="f90d41f5-ca86-9611-cb77-a93d6bf934b0.htm">PublicationsFilePublicationHashMatchesExtenderResponseRule</a></td><td><div class="summary">
+                Rule checks that publications file publication hash matches with extender response calendar hash chain root hash.
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="a90c04df-23ad-099d-c398-fa4847064a82.htm">PublicationsFilePublicationTimeMatchesExtenderResponseRule</a></td><td><div class="summary">
                 Rule checks that publications file publication time matches with extender response calendar hash chain shape.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="be24f70b-bcd2-8e46-9403-605b28b1ba78.htm">PublicationsFileSignaturePublicationMatchRule</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="be24f70b-bcd2-8e46-9403-605b28b1ba78.htm">PublicationsFileSignaturePublicationMatchRule</a></td><td><div class="summary">
                 Rule checks if publications file and signature publication record match.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="e28add20-1bed-7928-3fde-8522a9fe6be9.htm">Rfc3161RecordAggregationTimeRule</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="e28add20-1bed-7928-3fde-8522a9fe6be9.htm">Rfc3161RecordAggregationTimeRule</a></td><td><div class="summary">
                 This rule verifies that aggregation hash chain aggregation time and RFC3161 record aggregation time match.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="727b98ea-7d3a-af27-bf2d-adef88709e24.htm">Rfc3161RecordChainIndexRule</a>
-              </td>
-              <td>
-                <div class="summary">
+                If RFC3161 record is not present then <a href="2a77bc15-ba6d-bdc4-52d5-741af5a5ee15.htm">Ok</a> is returned.
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="727b98ea-7d3a-af27-bf2d-adef88709e24.htm">Rfc3161RecordChainIndexRule</a></td><td><div class="summary">
                 This rule verifies that aggregation hash chain index and RFC3161 record chain index match.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="8c4dc68a-6311-06d5-28c7-8828238b56b3.htm">SignaturePublicationRecordExistenceRule</a>
-              </td>
-              <td>
-                <div class="summary">
+                If RFC3161 record is not present then <a href="2a77bc15-ba6d-bdc4-52d5-741af5a5ee15.htm">Ok</a> is returned.
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="994e31a8-b707-d2a2-18f9-d8d5ef0a5a6f.htm">Rfc3161RecordHashAlgorithmDeprecatedRule</a></td><td><div class="summary">
+                Verifies that all hash algorithms used internally in RFC3161 record were not deprecated at the aggregation time.
+                If RFC3161 record is not present then <a href="2a77bc15-ba6d-bdc4-52d5-741af5a5ee15.htm">Ok</a> is returned.
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="bbc5990e-112c-2bd4-4a11-a3c6b13f1f75.htm">Rfc3161RecordOutputHashAlgorithmDeprecatedRule</a></td><td><div class="summary">
+                Verifies that RFC3161 record output hash algorithm was not deprecated at the aggregation time. 
+                If RFC3161 record is not present then <a href="2a77bc15-ba6d-bdc4-52d5-741af5a5ee15.htm">Ok</a> is returned.
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="867335f9-24ee-0042-02cc-cbc9b62cbd2b.htm">Rfc3161RecordOutputHashVerificationRule</a></td><td><div class="summary">
+                This rule verifies RFC3161 output hash equals to aggregation chain input hash. 
+                If RFC3161 record is not present then <a href="2a77bc15-ba6d-bdc4-52d5-741af5a5ee15.htm">Ok</a> is returned.
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="8c4dc68a-6311-06d5-28c7-8828238b56b3.htm">SignaturePublicationRecordExistenceRule</a></td><td><div class="summary">
                 Rule checks if KSI signature contains publication record.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="1566074f-f928-0041-e6ec-c1e927906fc8.htm">SignaturePublicationRecordPublicationHashRule</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="1566074f-f928-0041-e6ec-c1e927906fc8.htm">SignaturePublicationRecordPublicationHashRule</a></td><td><div class="summary">
                 Rule checks if KSI signature calendar hash chain publication hash matches signature publication record publication hash. 
                 If publication record is missing, <a href="2a77bc15-ba6d-bdc4-52d5-741af5a5ee15.htm">Ok</a> is returned.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="4e2ecc48-b9a5-b70b-12be-abddd0d0814f.htm">SignaturePublicationRecordPublicationTimeRule</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="4e2ecc48-b9a5-b70b-12be-abddd0d0814f.htm">SignaturePublicationRecordPublicationTimeRule</a></td><td><div class="summary">
                 Rule checks if KSI signature calendar hash chain publication time matches signature publication record publication time. 
                 If publication record is missing, <a href="2a77bc15-ba6d-bdc4-52d5-741af5a5ee15.htm">Ok</a> is returned.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="09639fa6-8c4f-9b0b-0ca1-c30ab302e611.htm">UserProvidedPublicationCreationTimeVerificationRule</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="09639fa6-8c4f-9b0b-0ca1-c30ab302e611.htm">UserProvidedPublicationCreationTimeVerificationRule</a></td><td><div class="summary">
                 Rule checks that signature is created before user provided publication.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="c97b295d-ec3b-d5c5-2538-dec89b4aca89.htm">UserProvidedPublicationExistenceRule</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="c97b295d-ec3b-d5c5-2538-dec89b4aca89.htm">UserProvidedPublicationExistenceRule</a></td><td><div class="summary">
                 Rule checks that user has provided a publication.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="39f039a4-c05b-34a2-a004-8e88b4920ae5.htm">UserProvidedPublicationExtendedSignatureInputHashRule</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="39f039a4-c05b-34a2-a004-8e88b4920ae5.htm">UserProvidedPublicationExtendedSignatureInputHashRule</a></td><td><div class="summary">
                 Rule checks that extender response input hash equals to signature aggregation root hash.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="311bef11-28df-40ac-266b-aa195798f0a1.htm">UserProvidedPublicationHashMatchesExtendedResponseRule</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="311bef11-28df-40ac-266b-aa195798f0a1.htm">UserProvidedPublicationHashMatchesExtendedResponseRule</a></td><td><div class="summary">
                 Rule checks that user provided publication hash matches extender response calendar hash chain root hash.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="88ca44d7-207b-47ff-d1e1-51107662eb46.htm">UserProvidedPublicationTimeMatchesExtendedResponseRule</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="88ca44d7-207b-47ff-d1e1-51107662eb46.htm">UserProvidedPublicationTimeMatchesExtendedResponseRule</a></td><td><div class="summary">
                 Rule checks that user provided publication time matches extender response calendar hash chain shape.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="77c7dd12-0d29-2096-0ae3-324c5576e2f7.htm">UserProvidedPublicationVerificationRule</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="77c7dd12-0d29-2096-0ae3-324c5576e2f7.htm">UserProvidedPublicationVerificationRule</a></td><td><div class="summary">
                 Rule checks that user provided publication equals to publication in KSI signature.
-            </div>
-              </td>
-            </tr>
-            <tr data="class; public">
-              <td>
-                <img src="../icons/pubclass.gif" alt="Public class" title="Public class" />
-              </td>
-              <td>
-                <a href="b57e80e5-caab-90a4-6bf6-e9854f70bfb5.htm">VerificationRule</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="class; public"><td><img src="../icons/pubclass.gif" alt="Public class" title="Public class" /></td><td><a href="b57e80e5-caab-90a4-6bf6-e9854f70bfb5.htm">VerificationRule</a></td><td><div class="summary">
                 Verification rule.
-            </div>
-              </td>
-            </tr>
-          </table>
-        </div>
-      </div>
+            </div></td></tr></table></div></div>
     </div>
     <div id="pageFooter" class="pageFooter"> </div>
   </body>

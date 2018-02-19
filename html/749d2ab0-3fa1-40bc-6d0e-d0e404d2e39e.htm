@@ -20,58 +20,21 @@
     <link rel="stylesheet" type="text/css" href="../styles/branding-Website.css" />
     <script type="text/javascript" src="../scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../scripts/branding-Website.js"></script>
+    <script type="text/javascript" src="../scripts/clipboard.min.js"></script>
   </head>
   <body onload="OnLoad('cs')">
     <input type="hidden" id="userDataCache" class="userDataStyle" />
     <div class="pageHeader" id="PageHeader">KSI .NET API<form id="SearchForm" method="get" action="#" onsubmit="javascript:TransferToSearchPage(); return false;"><input id="SearchTextBox" type="text" maxlength="200" /><button id="SearchButton" type="submit"></button></form></div>
     <div class="pageBody">
-      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="b47c2570-2d70-686e-e260-6ed09f9fcb94.htm" title="Guardtime.KSI.Signature Namespaces" tocid="b47c2570-2d70-686e-e260-6ed09f9fcb94">Guardtime.KSI.Signature Namespaces</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="749d2ab0-3fa1-40bc-6d0e-d0e404d2e39e.htm" title="Guardtime.KSI.Signature.Verification Namespaces" tocid="749d2ab0-3fa1-40bc-6d0e-d0e404d2e39e">Guardtime.KSI.Signature.Verification Namespaces</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="751269f9-2229-d258-b9dc-dfc5542968fb.htm" title="Guardtime.KSI.Signature.Verification" tocid="751269f9-2229-d258-b9dc-dfc5542968fb">Guardtime.KSI.Signature.Verification</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="56fe67ee-54e6-7f69-63c8-ad52a3a990ba.htm" title="Guardtime.KSI.Signature.Verification.Policy" tocid="56fe67ee-54e6-7f69-63c8-ad52a3a990ba">Guardtime.KSI.Signature.Verification.Policy</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="bb47f0a3-2bbb-118a-c16d-07b023bb949d.htm" title="Guardtime.KSI.Signature.Verification.Rule" tocid="bb47f0a3-2bbb-118a-c16d-07b023bb949d">Guardtime.KSI.Signature.Verification.Rule</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
+      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/b47c2570-2d70-686e-e260-6ed09f9fcb94.htm" title="Guardtime.KSI.Signature Namespaces" tocid="b47c2570-2d70-686e-e260-6ed09f9fcb94">Guardtime.KSI.Signature Namespaces</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="749d2ab0-3fa1-40bc-6d0e-d0e404d2e39e.htm" title="Guardtime.KSI.Signature.Verification Namespaces" tocid="749d2ab0-3fa1-40bc-6d0e-d0e404d2e39e">Guardtime.KSI.Signature.Verification Namespaces</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="751269f9-2229-d258-b9dc-dfc5542968fb.htm" title="Guardtime.KSI.Signature.Verification" tocid="751269f9-2229-d258-b9dc-dfc5542968fb">Guardtime.KSI.Signature.Verification</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="56fe67ee-54e6-7f69-63c8-ad52a3a990ba.htm" title="Guardtime.KSI.Signature.Verification.Policy" tocid="56fe67ee-54e6-7f69-63c8-ad52a3a990ba">Guardtime.KSI.Signature.Verification.Policy</a></div><div class="toclevel2" data-toclevel="2"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="bb47f0a3-2bbb-118a-c16d-07b023bb949d.htm" title="Guardtime.KSI.Signature.Verification.Rule" tocid="bb47f0a3-2bbb-118a-c16d-07b023bb949d">Guardtime.KSI.Signature.Verification.Rule</a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
         <table class="titleTable">
           <tr>
-            <td class="titleColumn">Guardtime.KSI.Signature.Verification Namespaces</td>
+            <td class="titleColumn">
+              <h1>Guardtime.KSI.Signature.Verification Namespaces</h1>
+            </td>
           </tr>
         </table>
-        <span class="introStyle"></span>
-        <div class="summary"> </div>
-        <div id="namespacesSection">
-          <div class="collapsibleAreaRegion">
-            <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0">
-              <img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Namespaces</span>
-          </div>
-          <div id="ID0RBSection" class="collapsibleSection">
-            <table id="typeList" class="members">
-              <tr>
-                <th>Namespace</th>
-                <th>Description</th>
-              </tr>
-              <tr>
-                <td>
-                  <a href="751269f9-2229-d258-b9dc-dfc5542968fb.htm">Guardtime.KSI.Signature.Verification</a>
-                </td>
-                <td>
-                  <div class="summary"> </div>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="56fe67ee-54e6-7f69-63c8-ad52a3a990ba.htm">Guardtime.KSI.Signature.Verification.Policy</a>
-                </td>
-                <td>
-                  <div class="summary"> </div>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="bb47f0a3-2bbb-118a-c16d-07b023bb949d.htm">Guardtime.KSI.Signature.Verification.Rule</a>
-                </td>
-                <td>
-                  <div class="summary"> </div>
-                </td>
-              </tr>
-            </table>
-          </div>
-        </div>
-      </div>
+        <span class="introStyle"></span> <div class="summary"> </div><div id="namespacesSection"><div class="collapsibleAreaRegion"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0"><img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Namespaces</span></div><div id="ID0RBSection" class="collapsibleSection"><table id="namespaceList" class="members"><tr><th>Namespace</th><th>Description</th></tr><tr><td><a href="751269f9-2229-d258-b9dc-dfc5542968fb.htm">Guardtime.KSI.Signature.Verification</a></td><td><div class="summary"> </div></td></tr><tr><td><a href="56fe67ee-54e6-7f69-63c8-ad52a3a990ba.htm">Guardtime.KSI.Signature.Verification.Policy</a></td><td><div class="summary"> </div></td></tr><tr><td><a href="bb47f0a3-2bbb-118a-c16d-07b023bb949d.htm">Guardtime.KSI.Signature.Verification.Rule</a></td><td><div class="summary"> </div></td></tr></table></div></div></div>
     </div>
     <div id="pageFooter" class="pageFooter"> </div>
   </body>

@@ -20,134 +20,37 @@
     <link rel="stylesheet" type="text/css" href="../styles/branding-Website.css" />
     <script type="text/javascript" src="../scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../scripts/branding-Website.js"></script>
+    <script type="text/javascript" src="../scripts/clipboard.min.js"></script>
   </head>
   <body onload="OnLoad('cs')">
     <input type="hidden" id="userDataCache" class="userDataStyle" />
     <div class="pageHeader" id="PageHeader">KSI .NET API<form id="SearchForm" method="get" action="#" onsubmit="javascript:TransferToSearchPage(); return false;"><input id="SearchTextBox" type="text" maxlength="200" /><button id="SearchButton" type="submit"></button></form></div>
     <div class="pageBody">
-      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="b47c2570-2d70-686e-e260-6ed09f9fcb94.htm" title="Guardtime.KSI.Signature Namespaces" tocid="b47c2570-2d70-686e-e260-6ed09f9fcb94">Guardtime.KSI.Signature Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="9ea69061-5f2d-b102-3720-0587e5478ff9.htm" title="Guardtime.KSI.Signature" tocid="9ea69061-5f2d-b102-3720-0587e5478ff9">Guardtime.KSI.Signature</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="f636907f-1ac0-e8d5-acf9-30f7bd8e87d3.htm" title="AggregationHashChain.Metadata.PaddingTag Class" tocid="f636907f-1ac0-e8d5-acf9-30f7bd8e87d3">AggregationHashChain.Metadata.PaddingTag Class</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="5b553d9a-3b0d-c992-fea8-fbead20bf464.htm" title="PaddingTag Properties" tocid="5b553d9a-3b0d-c992-fea8-fbead20bf464">PaddingTag Properties</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="0e06e4d0-4f94-bc28-8bb6-6ef6b09a416f.htm" title="ForceTlv16Encoding Property " tocid="0e06e4d0-4f94-bc28-8bb6-6ef6b09a416f">ForceTlv16Encoding Property </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="5e4e35b6-53bd-25dd-f8b3-25438fb1b9ca.htm" title="Index Property " tocid="5e4e35b6-53bd-25dd-f8b3-25438fb1b9ca">Index Property </a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
+      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/b47c2570-2d70-686e-e260-6ed09f9fcb94.htm" title="Guardtime.KSI.Signature Namespaces" tocid="b47c2570-2d70-686e-e260-6ed09f9fcb94">Guardtime.KSI.Signature Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/9ea69061-5f2d-b102-3720-0587e5478ff9.htm" title="Guardtime.KSI.Signature" tocid="9ea69061-5f2d-b102-3720-0587e5478ff9">Guardtime.KSI.Signature</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/f636907f-1ac0-e8d5-acf9-30f7bd8e87d3.htm" title="AggregationHashChain.Metadata.PaddingTag Class" tocid="f636907f-1ac0-e8d5-acf9-30f7bd8e87d3">AggregationHashChain.Metadata.PaddingTag Class</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="5b553d9a-3b0d-c992-fea8-fbead20bf464.htm" title="PaddingTag Properties" tocid="5b553d9a-3b0d-c992-fea8-fbead20bf464">PaddingTag Properties</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="0e06e4d0-4f94-bc28-8bb6-6ef6b09a416f.htm" title="ForceTlv16Encoding Property " tocid="0e06e4d0-4f94-bc28-8bb6-6ef6b09a416f">ForceTlv16Encoding Property </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="5e4e35b6-53bd-25dd-f8b3-25438fb1b9ca.htm" title="Index Property " tocid="5e4e35b6-53bd-25dd-f8b3-25438fb1b9ca">Index Property </a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
         <table class="titleTable">
           <tr>
-            <td class="titleColumn">PaddingTag Properties</td>
+            <td class="titleColumn">
+              <h1>PaddingTag Properties</h1>
+            </td>
           </tr>
         </table>
-        <span class="introStyle"></span>
-        <p>The <a href="f636907f-1ac0-e8d5-acf9-30f7bd8e87d3.htm">AggregationHashChain<span id="LST1461FEDF_0"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST1461FEDF_0?cs=.|vb=.|cpp=::|nu=.|fs=.");</script>Metadata<span id="LST1461FEDF_1"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST1461FEDF_1?cs=.|vb=.|cpp=::|nu=.|fs=.");</script>PaddingTag</a> type exposes the following members.</p>
-        <div class="collapsibleAreaRegion">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0">
-            <img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Properties</span>
-        </div>
-        <div id="ID0RBSection" class="collapsibleSection">
-          <table id="memberList" class="members">
-            <tr>
-              <th class="iconColumn">
+        <span class="introStyle"></span> <p>The <a href="f636907f-1ac0-e8d5-acf9-30f7bd8e87d3.htm">AggregationHashChain<span id="LST1461FEDF_0"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST1461FEDF_0?cs=.|vb=.|cpp=::|nu=.|fs=.");</script>Metadata<span id="LST1461FEDF_1"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST1461FEDF_1?cs=.|vb=.|cpp=::|nu=.|fs=.");</script>PaddingTag</a> type exposes the following members.</p><div class="collapsibleAreaRegion"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0"><img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Properties</span></div><div id="ID0RBSection" class="collapsibleSection"><table class="members" id="propertyList"><tr><th class="iconColumn">
 								 
-							</th>
-              <th>Name</th>
-              <th>Description</th>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="0e06e4d0-4f94-bc28-8bb6-6ef6b09a416f.htm">ForceTlv16Encoding</a>
-              </td>
-              <td>
-                <div class="summary">
+							</th><th>Name</th><th>Description</th></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="0e06e4d0-4f94-bc28-8bb6-6ef6b09a416f.htm">ForceTlv16Encoding</a></td><td><div class="summary">
             Is TLV16 encoding forced when writing the TLV object
-            </div> (Overrides <a href="297d83a6-e100-8edb-e235-4e0598f72fe9.htm">TlvTag<span id="LST1461FEDF_2"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST1461FEDF_2?cs=.|vb=.|cpp=::|nu=.|fs=.");</script>ForceTlv16Encoding</a>.)</td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="dba7a5c2-ba42-29ad-f7ba-8cf25ac24e3f.htm">Forward</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div> (Overrides <a href="297d83a6-e100-8edb-e235-4e0598f72fe9.htm">TlvTag<span id="LST1461FEDF_2"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST1461FEDF_2?cs=.|vb=.|cpp=::|nu=.|fs=.");</script>ForceTlv16Encoding</a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="dba7a5c2-ba42-29ad-f7ba-8cf25ac24e3f.htm">Forward</a></td><td><div class="summary">
                 Is tlv forwarded.
-            </div> (Inherited from <a href="a3d4048b-ff6f-4d08-d3d4-56e55a11f699.htm">TlvTag</a>.)</td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="5e4e35b6-53bd-25dd-f8b3-25438fb1b9ca.htm">Index</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div> (Inherited from <a href="a3d4048b-ff6f-4d08-d3d4-56e55a11f699.htm">TlvTag</a>.)</td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="5e4e35b6-53bd-25dd-f8b3-25438fb1b9ca.htm">Index</a></td><td><div class="summary">
             Padding element index inside the metadata element
-            </div>
-              </td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="9a617fc5-9643-fccb-fd28-1f49b6463798.htm">IsReadAsTlv16</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="9a617fc5-9643-fccb-fd28-1f49b6463798.htm">IsReadAsTlv16</a></td><td><div class="summary">
             Indicates that TLV element was created using tlv16 encoding
-            </div> (Inherited from <a href="5ee0f61b-fb81-90c3-0e3d-78918ac39146.htm">RawTag</a>.)</td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="8b449bc0-820a-50fe-48f1-b55bfdb4e86a.htm">NonCritical</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div> (Inherited from <a href="5ee0f61b-fb81-90c3-0e3d-78918ac39146.htm">RawTag</a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="8b449bc0-820a-50fe-48f1-b55bfdb4e86a.htm">NonCritical</a></td><td><div class="summary">
                 Is tlv tag non critical.
-            </div> (Inherited from <a href="a3d4048b-ff6f-4d08-d3d4-56e55a11f699.htm">TlvTag</a>.)</td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="9a72d18c-06de-49c7-5118-36c54419e481.htm">Type</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div> (Inherited from <a href="a3d4048b-ff6f-4d08-d3d4-56e55a11f699.htm">TlvTag</a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="9a72d18c-06de-49c7-5118-36c54419e481.htm">Type</a></td><td><div class="summary">
                 Tlv tag type.
-            </div> (Inherited from <a href="a3d4048b-ff6f-4d08-d3d4-56e55a11f699.htm">TlvTag</a>.)</td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="344cc106-a869-58ab-02c3-ee2ae6dac4bb.htm">Value</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div> (Inherited from <a href="a3d4048b-ff6f-4d08-d3d4-56e55a11f699.htm">TlvTag</a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="344cc106-a869-58ab-02c3-ee2ae6dac4bb.htm">Value</a></td><td><div class="summary">
                 Get TLV element byte array value.
-            </div> (Inherited from <a href="5ee0f61b-fb81-90c3-0e3d-78918ac39146.htm">RawTag</a>.)</td>
-            </tr>
-          </table>
-          <a href="#PageHeader">Top</a>
-        </div>
-        <div class="collapsibleAreaRegion" id="seeAlsoSection">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0">
-            <img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span>
-        </div>
-        <div id="ID1RBSection" class="collapsibleSection">
-          <h4 class="subHeading">Reference</h4>
-          <div class="seeAlsoStyle">
-            <a href="f636907f-1ac0-e8d5-acf9-30f7bd8e87d3.htm">AggregationHashChain<span id="LST1461FEDF_3"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST1461FEDF_3?cs=.|vb=.|cpp=::|nu=.|fs=.");</script>Metadata<span id="LST1461FEDF_4"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST1461FEDF_4?cs=.|vb=.|cpp=::|nu=.|fs=.");</script>PaddingTag Class</a>
-          </div>
-          <div class="seeAlsoStyle">
-            <a href="9ea69061-5f2d-b102-3720-0587e5478ff9.htm">Guardtime.KSI.Signature Namespace</a>
-          </div>
-        </div>
-      </div>
+            </div> (Inherited from <a href="5ee0f61b-fb81-90c3-0e3d-78918ac39146.htm">RawTag</a>.)</td></tr></table><a href="#PageHeader">Top</a></div><div class="collapsibleAreaRegion" id="seeAlsoSection"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0"><img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span></div><div id="ID1RBSection" class="collapsibleSection"><h4 class="subHeading">Reference</h4><div class="seeAlsoStyle"><a href="f636907f-1ac0-e8d5-acf9-30f7bd8e87d3.htm">AggregationHashChain<span id="LST1461FEDF_3"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST1461FEDF_3?cs=.|vb=.|cpp=::|nu=.|fs=.");</script>Metadata<span id="LST1461FEDF_4"></span><script type="text/javascript">AddLanguageSpecificTextSet("LST1461FEDF_4?cs=.|vb=.|cpp=::|nu=.|fs=.");</script>PaddingTag Class</a></div><div class="seeAlsoStyle"><a href="9ea69061-5f2d-b102-3720-0587e5478ff9.htm">Guardtime.KSI.Signature Namespace</a></div></div></div>
     </div>
     <div id="pageFooter" class="pageFooter"> </div>
   </body>

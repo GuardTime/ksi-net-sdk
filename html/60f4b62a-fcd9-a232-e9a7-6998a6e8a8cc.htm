@@ -20,249 +20,51 @@
     <link rel="stylesheet" type="text/css" href="../styles/branding-Website.css" />
     <script type="text/javascript" src="../scripts/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../scripts/branding-Website.js"></script>
+    <script type="text/javascript" src="../scripts/clipboard.min.js"></script>
   </head>
   <body onload="OnLoad('cs')">
     <input type="hidden" id="userDataCache" class="userDataStyle" />
     <div class="pageHeader" id="PageHeader">KSI .NET API<form id="SearchForm" method="get" action="#" onsubmit="javascript:TransferToSearchPage(); return false;"><input id="SearchTextBox" type="text" maxlength="200" /><button id="SearchButton" type="submit"></button></form></div>
     <div class="pageBody">
-      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="b47c2570-2d70-686e-e260-6ed09f9fcb94.htm" title="Guardtime.KSI.Signature Namespaces" tocid="b47c2570-2d70-686e-e260-6ed09f9fcb94">Guardtime.KSI.Signature Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="9ea69061-5f2d-b102-3720-0587e5478ff9.htm" title="Guardtime.KSI.Signature" tocid="9ea69061-5f2d-b102-3720-0587e5478ff9">Guardtime.KSI.Signature</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="6f9d446d-6925-c983-72d9-cea931301132.htm" title="KsiSignature Class" tocid="6f9d446d-6925-c983-72d9-cea931301132">KsiSignature Class</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="60f4b62a-fcd9-a232-e9a7-6998a6e8a8cc.htm" title="KsiSignature Properties" tocid="60f4b62a-fcd9-a232-e9a7-6998a6e8a8cc">KsiSignature Properties</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="1d8ac57d-99df-b541-81d2-36f055c93180.htm" title="AggregationAuthenticationRecord Property " tocid="1d8ac57d-99df-b541-81d2-36f055c93180">AggregationAuthenticationRecord Property </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="60de1295-f631-1489-f215-2f034eeeae7e.htm" title="AggregationTime Property " tocid="60de1295-f631-1489-f215-2f034eeeae7e">AggregationTime Property </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="5b1caa27-3aa0-4790-4166-a268e9fb75a7.htm" title="CalendarAuthenticationRecord Property " tocid="5b1caa27-3aa0-4790-4166-a268e9fb75a7">CalendarAuthenticationRecord Property </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="69100169-03c3-0399-b649-0a4683dc4845.htm" title="CalendarHashChain Property " tocid="69100169-03c3-0399-b649-0a4683dc4845">CalendarHashChain Property </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="dbb2a920-509d-2b57-402e-f74bf7ef0736.htm" title="Identity Property " tocid="dbb2a920-509d-2b57-402e-f74bf7ef0736">Identity Property </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="90fb33a2-1d7f-aeb0-1d6c-32ce4429c2a9.htm" title="InputHash Property " tocid="90fb33a2-1d7f-aeb0-1d6c-32ce4429c2a9">InputHash Property </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="be8e09db-2db2-999f-a0fa-d1a40c7c213d.htm" title="IsExtended Property " tocid="be8e09db-2db2-999f-a0fa-d1a40c7c213d">IsExtended Property </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="a5e3a604-4348-8bc0-b57e-f80c4c1eddfa.htm" title="IsRfc3161Signature Property " tocid="a5e3a604-4348-8bc0-b57e-f80c4c1eddfa">IsRfc3161Signature Property </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="df21ef4c-effd-ca53-854d-dcdf4cf8b9fb.htm" title="PublicationRecord Property " tocid="df21ef4c-effd-ca53-854d-dcdf4cf8b9fb">PublicationRecord Property </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="5ad44826-21be-f958-2225-d9753a16a120.htm" title="Rfc3161Record Property " tocid="5ad44826-21be-f958-2225-d9753a16a120">Rfc3161Record Property </a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
+      <div class="leftNav" id="leftNav"><div id="tocNav"><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="792326d8-f529-7e1f-c936-304562dc82b1.htm" title="KSI .NET API" tocid="roottoc">KSI .NET API</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/792326d8-f529-7e1f-c936-304562dc82b1.htm" title="Namespaces" tocid="792326d8-f529-7e1f-c936-304562dc82b1">Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/b47c2570-2d70-686e-e260-6ed09f9fcb94.htm" title="Guardtime.KSI.Signature Namespaces" tocid="b47c2570-2d70-686e-e260-6ed09f9fcb94">Guardtime.KSI.Signature Namespaces</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/9ea69061-5f2d-b102-3720-0587e5478ff9.htm" title="Guardtime.KSI.Signature" tocid="9ea69061-5f2d-b102-3720-0587e5478ff9">Guardtime.KSI.Signature</a></div><div class="toclevel0" data-toclevel="0"><a class="tocCollapsed" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="../html/6f9d446d-6925-c983-72d9-cea931301132.htm" title="KsiSignature Class" tocid="6f9d446d-6925-c983-72d9-cea931301132">KsiSignature Class</a></div><div class="toclevel1 current" data-toclevel="1" data-childrenloaded="true"><a class="tocExpanded" onclick="javascript: Toggle(this);" href="#!" /><a data-tochassubtree="true" href="60f4b62a-fcd9-a232-e9a7-6998a6e8a8cc.htm" title="KsiSignature Properties" tocid="60f4b62a-fcd9-a232-e9a7-6998a6e8a8cc">KsiSignature Properties</a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="60de1295-f631-1489-f215-2f034eeeae7e.htm" title="AggregationTime Property " tocid="60de1295-f631-1489-f215-2f034eeeae7e">AggregationTime Property </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="5b1caa27-3aa0-4790-4166-a268e9fb75a7.htm" title="CalendarAuthenticationRecord Property " tocid="5b1caa27-3aa0-4790-4166-a268e9fb75a7">CalendarAuthenticationRecord Property </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="69100169-03c3-0399-b649-0a4683dc4845.htm" title="CalendarHashChain Property " tocid="69100169-03c3-0399-b649-0a4683dc4845">CalendarHashChain Property </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="90fb33a2-1d7f-aeb0-1d6c-32ce4429c2a9.htm" title="InputHash Property " tocid="90fb33a2-1d7f-aeb0-1d6c-32ce4429c2a9">InputHash Property </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="be8e09db-2db2-999f-a0fa-d1a40c7c213d.htm" title="IsExtended Property " tocid="be8e09db-2db2-999f-a0fa-d1a40c7c213d">IsExtended Property </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="a5e3a604-4348-8bc0-b57e-f80c4c1eddfa.htm" title="IsRfc3161Signature Property " tocid="a5e3a604-4348-8bc0-b57e-f80c4c1eddfa">IsRfc3161Signature Property </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="df21ef4c-effd-ca53-854d-dcdf4cf8b9fb.htm" title="PublicationRecord Property " tocid="df21ef4c-effd-ca53-854d-dcdf4cf8b9fb">PublicationRecord Property </a></div><div class="toclevel2" data-toclevel="2"><a data-tochassubtree="false" href="5ad44826-21be-f958-2225-d9753a16a120.htm" title="Rfc3161Record Property " tocid="5ad44826-21be-f958-2225-d9753a16a120">Rfc3161Record Property </a></div></div><div id="tocResizableEW" onmousedown="OnMouseDown(event);"></div><div id="TocResize" class="tocResize"><img id="ResizeImageIncrease" src="../icons/TocOpen.gif" onclick="OnIncreaseToc()" alt="Click or drag to resize" title="Click or drag to resize" /><img id="ResizeImageReset" src="../icons/TocClose.gif" style="display:none" onclick="OnResetToc()" alt="Click or drag to resize" title="Click or drag to resize" /></div></div><div class="topicContent" id="TopicContent">
         <table class="titleTable">
           <tr>
-            <td class="titleColumn">KsiSignature Properties</td>
+            <td class="titleColumn">
+              <h1>KsiSignature Properties</h1>
+            </td>
           </tr>
         </table>
-        <span class="introStyle"></span>
-        <p>The <a href="6f9d446d-6925-c983-72d9-cea931301132.htm">KsiSignature</a> type exposes the following members.</p>
-        <div class="collapsibleAreaRegion">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0">
-            <img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Properties</span>
-        </div>
-        <div id="ID0RBSection" class="collapsibleSection">
-          <table id="memberList" class="members">
-            <tr>
-              <th class="iconColumn">
+        <span class="introStyle"></span> <p>The <a href="6f9d446d-6925-c983-72d9-cea931301132.htm">KsiSignature</a> type exposes the following members.</p><div class="collapsibleAreaRegion"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID0RB')" onkeypress="SectionExpandCollapse_CheckKey('ID0RB', event)" tabindex="0"><img id="ID0RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />Properties</span></div><div id="ID0RBSection" class="collapsibleSection"><table class="members" id="propertyList"><tr><th class="iconColumn">
 								 
-							</th>
-              <th>Name</th>
-              <th>Description</th>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="1d8ac57d-99df-b541-81d2-36f055c93180.htm">AggregationAuthenticationRecord</a>
-              </td>
-              <td>
-                <div class="summary">
-                Get aggregation authentication record if it exists.
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="60de1295-f631-1489-f215-2f034eeeae7e.htm">AggregationTime</a>
-              </td>
-              <td>
-                <div class="summary">
+							</th><th>Name</th><th>Description</th></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="60de1295-f631-1489-f215-2f034eeeae7e.htm">AggregationTime</a></td><td><div class="summary">
                 Get aggregation time.
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="5b1caa27-3aa0-4790-4166-a268e9fb75a7.htm">CalendarAuthenticationRecord</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="5b1caa27-3aa0-4790-4166-a268e9fb75a7.htm">CalendarAuthenticationRecord</a></td><td><div class="summary">
                 Get calendar authentication record.
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="69100169-03c3-0399-b649-0a4683dc4845.htm">CalendarHashChain</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="69100169-03c3-0399-b649-0a4683dc4845.htm">CalendarHashChain</a></td><td><div class="summary">
                 Get calendar hash chain.
-            </div>
-              </td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="ebba2d33-0d61-49b6-9261-5d07c60ae1bf.htm">Count</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="ebba2d33-0d61-49b6-9261-5d07c60ae1bf.htm">Count</a></td><td><div class="summary">
                 Get TLV element list size
-            </div> (Inherited from <a href="df7fe40c-3194-9664-6e96-b6771ad206f2.htm">CompositeTag</a>.)</td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="297d83a6-e100-8edb-e235-4e0598f72fe9.htm">ForceTlv16Encoding</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div> (Inherited from <a href="df7fe40c-3194-9664-6e96-b6771ad206f2.htm">CompositeTag</a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="297d83a6-e100-8edb-e235-4e0598f72fe9.htm">ForceTlv16Encoding</a></td><td><div class="summary">
             Is TLV16 encoding forced when writing the TLV object
-            </div> (Inherited from <a href="a3d4048b-ff6f-4d08-d3d4-56e55a11f699.htm">TlvTag</a>.)</td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="dba7a5c2-ba42-29ad-f7ba-8cf25ac24e3f.htm">Forward</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div> (Inherited from <a href="a3d4048b-ff6f-4d08-d3d4-56e55a11f699.htm">TlvTag</a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="dba7a5c2-ba42-29ad-f7ba-8cf25ac24e3f.htm">Forward</a></td><td><div class="summary">
                 Is tlv forwarded.
-            </div> (Inherited from <a href="a3d4048b-ff6f-4d08-d3d4-56e55a11f699.htm">TlvTag</a>.)</td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="dbb2a920-509d-2b57-402e-f74bf7ef0736.htm">Identity</a>
-              </td>
-              <td> <strong>Obsolete. </strong><div class="summary">
-            Get the identity of the signature.
-            </div></td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="90fb33a2-1d7f-aeb0-1d6c-32ce4429c2a9.htm">InputHash</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div> (Inherited from <a href="a3d4048b-ff6f-4d08-d3d4-56e55a11f699.htm">TlvTag</a>.)</td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="90fb33a2-1d7f-aeb0-1d6c-32ce4429c2a9.htm">InputHash</a></td><td><div class="summary">
                 If RFC 3161 record exists then RFC3161 input hash will be returned. Otherwise first aggregation chain input hash will be returned.
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="be8e09db-2db2-999f-a0fa-d1a40c7c213d.htm">IsExtended</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="be8e09db-2db2-999f-a0fa-d1a40c7c213d.htm">IsExtended</a></td><td><div class="summary">
             Returns true if signature contains signature publication record element.
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="a5e3a604-4348-8bc0-b57e-f80c4c1eddfa.htm">IsRfc3161Signature</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="a5e3a604-4348-8bc0-b57e-f80c4c1eddfa.htm">IsRfc3161Signature</a></td><td><div class="summary">
                 Returns true if RFC 3161 record exists.
-            </div>
-              </td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="bf563c32-1198-40c8-af2a-f348528c9098.htm">Item</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="bf563c32-1198-40c8-af2a-f348528c9098.htm">Item</a></td><td><div class="summary">
                 Get or set TLV child object
-            </div> (Inherited from <a href="df7fe40c-3194-9664-6e96-b6771ad206f2.htm">CompositeTag</a>.)</td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="8b449bc0-820a-50fe-48f1-b55bfdb4e86a.htm">NonCritical</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div> (Inherited from <a href="df7fe40c-3194-9664-6e96-b6771ad206f2.htm">CompositeTag</a>.)</td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="8b449bc0-820a-50fe-48f1-b55bfdb4e86a.htm">NonCritical</a></td><td><div class="summary">
                 Is tlv tag non critical.
-            </div> (Inherited from <a href="a3d4048b-ff6f-4d08-d3d4-56e55a11f699.htm">TlvTag</a>.)</td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="df21ef4c-effd-ca53-854d-dcdf4cf8b9fb.htm">PublicationRecord</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div> (Inherited from <a href="a3d4048b-ff6f-4d08-d3d4-56e55a11f699.htm">TlvTag</a>.)</td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="df21ef4c-effd-ca53-854d-dcdf4cf8b9fb.htm">PublicationRecord</a></td><td><div class="summary">
                 Get publication record.
-            </div>
-              </td>
-            </tr>
-            <tr data="public;declared;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="5ad44826-21be-f958-2225-d9753a16a120.htm">Rfc3161Record</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="public;declared;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="5ad44826-21be-f958-2225-d9753a16a120.htm">Rfc3161Record</a></td><td><div class="summary">
                 Get RFC 3161 record
-            </div>
-              </td>
-            </tr>
-            <tr data="public;inherited;notNetfw;">
-              <td>
-                <img src="../icons/pubproperty.gif" alt="Public property" title="Public property" />
-              </td>
-              <td>
-                <a href="9a72d18c-06de-49c7-5118-36c54419e481.htm">Type</a>
-              </td>
-              <td>
-                <div class="summary">
+            </div></td></tr><tr data="public;inherited;notNetfw;"><td><img src="../icons/pubproperty.gif" alt="Public property" title="Public property" /></td><td><a href="9a72d18c-06de-49c7-5118-36c54419e481.htm">Type</a></td><td><div class="summary">
                 Tlv tag type.
-            </div> (Inherited from <a href="a3d4048b-ff6f-4d08-d3d4-56e55a11f699.htm">TlvTag</a>.)</td>
-            </tr>
-          </table>
-          <a href="#PageHeader">Top</a>
-        </div>
-        <div class="collapsibleAreaRegion" id="seeAlsoSection">
-          <span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0">
-            <img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span>
-        </div>
-        <div id="ID1RBSection" class="collapsibleSection">
-          <h4 class="subHeading">Reference</h4>
-          <div class="seeAlsoStyle">
-            <a href="6f9d446d-6925-c983-72d9-cea931301132.htm">KsiSignature Class</a>
-          </div>
-          <div class="seeAlsoStyle">
-            <a href="9ea69061-5f2d-b102-3720-0587e5478ff9.htm">Guardtime.KSI.Signature Namespace</a>
-          </div>
-        </div>
-      </div>
+            </div> (Inherited from <a href="a3d4048b-ff6f-4d08-d3d4-56e55a11f699.htm">TlvTag</a>.)</td></tr></table><a href="#PageHeader">Top</a></div><div class="collapsibleAreaRegion" id="seeAlsoSection"><span class="collapsibleRegionTitle" onclick="SectionExpandCollapse('ID1RB')" onkeypress="SectionExpandCollapse_CheckKey('ID1RB', event)" tabindex="0"><img id="ID1RBToggle" class="collapseToggle" src="../icons/SectionExpanded.png" />See Also</span></div><div id="ID1RBSection" class="collapsibleSection"><h4 class="subHeading">Reference</h4><div class="seeAlsoStyle"><a href="6f9d446d-6925-c983-72d9-cea931301132.htm">KsiSignature Class</a></div><div class="seeAlsoStyle"><a href="9ea69061-5f2d-b102-3720-0587e5478ff9.htm">Guardtime.KSI.Signature Namespace</a></div></div></div>
     </div>
     <div id="pageFooter" class="pageFooter"> </div>
   </body>
