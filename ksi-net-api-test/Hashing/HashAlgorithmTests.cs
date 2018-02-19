@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -55,12 +55,12 @@ namespace Guardtime.KSI.Test.Hashing
         {
             Assert.That(delegate
             {
-                HashAlgorithm algorithm = HashAlgorithm.GetById(3);
+                HashAlgorithm.GetById(3);
             }, Throws.TypeOf<HashingException>().With.Message.StartWith("Invalid hash algorithm"), "Id 3 should be invalid");
 
             Assert.That(delegate
             {
-                HashAlgorithm algorithm = HashAlgorithm.GetById(0x7E);
+                HashAlgorithm.GetById(0x7E);
             }, Throws.TypeOf<HashingException>().With.Message.StartWith("Invalid hash algorithm"), "Id 7E should be invalid");
         }
 

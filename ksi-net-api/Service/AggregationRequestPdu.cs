@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -45,10 +45,10 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="header">PDU header</param>
         /// <param name="payload">aggregation payload</param>
-        /// <param name="macAlgorithm">MAC algorithm</param>
+        /// <param name="hmacAlgorithm">HMAC algorithm</param>
         /// <param name="key">hmac key</param>
-        public AggregationRequestPdu(PduHeader header, PduPayload payload, HashAlgorithm macAlgorithm, byte[] key)
-            : base(Constants.AggregationRequestPdu.TagType, header, payload, macAlgorithm, key)
+        public AggregationRequestPdu(PduHeader header, PduPayload payload, HashAlgorithm hmacAlgorithm, byte[] key)
+            : base(Constants.AggregationRequestPdu.TagType, header, payload, hmacAlgorithm, key)
         {
         }
 

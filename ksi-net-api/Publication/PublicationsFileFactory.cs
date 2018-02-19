@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -106,11 +106,6 @@ namespace Guardtime.KSI.Publication
         /// <returns>publications file</returns>
         public IPublicationsFile Create(Stream stream)
         {
-            if (stream == null)
-            {
-                throw new ArgumentNullException(nameof(stream));
-            }
-
             return Create(stream, DefaultBufferSize);
         }
 

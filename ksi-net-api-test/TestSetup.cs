@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -18,8 +18,10 @@
  */
 
 using System;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Test.Crypto;
 using NUnit.Framework;
@@ -71,6 +73,7 @@ namespace Guardtime.KSI.Test
         [OneTimeSetUp]
         public void RunBeforeAnyTests()
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("et-EE");
             KsiProvider.SetCryptoProvider(CryptoTestFactory.CreateProvider());
         }
     }

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -75,12 +75,20 @@ namespace Guardtime.KSI.Crypto.Microsoft.Crypto
                 throw new PkiVerificationErrorException("Certificate in data parameter cannot be null.");
             }
 
+            X509Certificate2 certificate;
             try
             {
-                X509Certificate2 certificate = new X509Certificate2(certificateBytes);
+                certificate = new X509Certificate2(certificateBytes);
+            }
+            catch (Exception e)
+            {
+                throw new PkiVerificationErrorException("Could not create certificate from given bytes.", e);
+            }
 
-                CertificateTimeVerifier.Verify(certificate, data.SignTime);
+            CertificateTimeVerifier.Verify(certificate, data.SignTime);
 
+            try
+            {
                 using (RSACryptoServiceProvider serviceProvider = (RSACryptoServiceProvider)certificate.PublicKey.Key)
                 {
                     if (!serviceProvider.VerifyData(signedBytes, _algorithm, signatureBytes))
@@ -88,10 +96,6 @@ namespace Guardtime.KSI.Crypto.Microsoft.Crypto
                         throw new PkiVerificationFailedException("Failed to verify RSA signature.");
                     }
                 }
-            }
-            catch (PkiVerificationFailedCertNotValidException)
-            {
-                throw;
             }
             catch (PkiVerificationFailedException)
             {

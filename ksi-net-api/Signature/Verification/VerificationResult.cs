@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -18,6 +18,7 @@
  */
 
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Utils;
@@ -88,6 +89,11 @@ namespace Guardtime.KSI.Signature.Verification
         public VerificationError VerificationError { get; }
 
         /// <summary>
+        /// Returns collection of child results.
+        /// </summary>
+        public ReadOnlyCollection<VerificationResult> ChildResults => new ReadOnlyCollection<VerificationResult>(_childResults);
+
+        /// <summary>
         ///     Returns a string that represents the current object.
         /// </summary>
         /// <returns>
@@ -96,18 +102,26 @@ namespace Guardtime.KSI.Signature.Verification
         public override string ToString()
         {
             StringBuilder builder = new StringBuilder();
-            builder.Append(RuleName).Append(": ");
-            builder.Append(ResultCode);
+            builder.Append(RuleName).Append(": ").Append(ResultCode);
 
             if (_childResults.Count > 0)
             {
                 builder.AppendLine();
             }
 
-            foreach (VerificationResult childResult in _childResults)
+            for (int index = 0; index < _childResults.Count; index++)
             {
-                builder.AppendLine(Util.TabPrefixString(childResult.ToString()));
+                string line = Util.TabPrefixString(_childResults[index].ToString());
+                if (index == _childResults.Count - 1)
+                {
+                    builder.Append(line);
+                }
+                else
+                {
+                    builder.AppendLine(line);
+                }
             }
+
             return builder.ToString();
         }
     }

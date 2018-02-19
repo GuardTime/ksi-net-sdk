@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Signature.Verification.Rule;
@@ -29,16 +30,34 @@ namespace Guardtime.KSI.Signature.Verification.Policy
     public class KeyBasedVerificationPolicy : VerificationPolicy
     {
         /// <summary>
-        ///     Create key based verification policy and add rules to it.
+        ///     Create key based verification policy.
         /// </summary>
-        public KeyBasedVerificationPolicy(X509Store trustStore, ICertificateSubjectRdnSelector certificateRdnSelector)
+        [Obsolete("Use KeyBasedVerificationPolicy() instead.")]
+        public KeyBasedVerificationPolicy(X509Store trustStore, ICertificateSubjectRdnSelector certificateRdnSelector) : this()
         {
-            // Check for internal verification
+        }
+
+        internal KeyBasedVerificationPolicy(bool excludeInternalPolicy)
+        {
+            FirstRule = excludeInternalPolicy ? GetRules() : new InternalVerificationPolicy().OnSuccess(GetRules());
+        }
+
+        /// <summary>
+        ///     Create key based verification policy.
+        /// </summary>
+        public KeyBasedVerificationPolicy()
+        {
             FirstRule = new InternalVerificationPolicy()
-                .OnSuccess(new CalendarHashChainExistenceRule()
-                    .OnSuccess(new CalendarAuthenticationRecordExistenceRule()
-                        .OnSuccess(new CertificateExistenceRule()
-                            .OnSuccess(new CalendarAuthenticationRecordSignatureVerificationRule(trustStore, certificateRdnSelector)))));
+                .OnSuccess(GetRules());
+        }
+
+        private static VerificationRule GetRules()
+        {
+            return new CalendarHashChainExistenceRule() // Gen-02
+                .OnSuccess(new CalendarHashChainAlgorithmDeprecatedRule() // Gen-02
+                    .OnSuccess(new CalendarAuthenticationRecordExistenceRule() // Gen-02
+                        .OnSuccess(new CertificateExistenceRule() // Key-01
+                            .OnSuccess(new CalendarAuthenticationRecordSignatureVerificationRule())))); // Key-02, Key-03
         }
     }
 }

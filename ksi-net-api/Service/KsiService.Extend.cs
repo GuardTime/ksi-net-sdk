@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -56,8 +56,8 @@ namespace Guardtime.KSI.Service
         ///     Begin extend to latest publication (async).
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
-        /// <param name="callback">callback when extending signature is finished</param>
-        /// <param name="asyncState">async state object</param>
+        /// <param name="callback">callback when extending request is finished</param>
+        /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         public IAsyncResult BeginExtend(ulong aggregationTime, AsyncCallback callback, object asyncState)
         {
@@ -74,8 +74,8 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="aggregationTime">aggregation time</param>
         /// <param name="publicationTime">publication time</param>
-        /// <param name="callback">callback when extending signature is finished</param>
-        /// <param name="asyncState">async state object</param>
+        /// <param name="callback">callback when extending request is finished</param>
+        /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         public IAsyncResult BeginExtend(ulong aggregationTime, ulong publicationTime, AsyncCallback callback,
                                         object asyncState)
@@ -92,8 +92,8 @@ namespace Guardtime.KSI.Service
         ///     Begin extend.
         /// </summary>
         /// <param name="payload">extend request payload</param>
-        /// <param name="callback">callback when extending signature is finished</param>
-        /// <param name="asyncState">async state object</param>
+        /// <param name="callback">callback when extending request is finished</param>
+        /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         private IAsyncResult BeginExtend(ExtendRequestPayload payload, AsyncCallback callback, object asyncState)
         {
@@ -204,10 +204,16 @@ namespace Guardtime.KSI.Service
                 {
                     _extendRequestResponseParser = new KsiServiceResponseParser(PduVersion, KsiServiceRequestType.Extend, _extendingMacAlgorithm,
                         _extendingServiceCredentials.LoginKey);
+                    _extendRequestResponseParser.ExtenderConfigChanged += RequestResponseParser_ExtenderConfigChanged;
                 }
 
                 return _extendRequestResponseParser;
             }
+        }
+
+        private void RequestResponseParser_ExtenderConfigChanged(object sender, ExtenderConfigChangedEventArgs e)
+        {
+            ExtenderConfigChanged?.Invoke(this, new ExtenderConfigChangedEventArgs(e.ExtenderConfig, this));
         }
 
         /// <summary>
@@ -222,8 +228,8 @@ namespace Guardtime.KSI.Service
         /// <summary>
         /// Begin get additional extender configuration data (async)
         /// </summary>
-        /// <param name="callback"></param>
-        /// <param name="asyncState"></param>
+        /// <param name="callback">callback when extender configuration request is finished</param>
+        /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         public IAsyncResult BeginGetExtenderConfig(AsyncCallback callback, object asyncState)
         {
@@ -290,6 +296,7 @@ namespace Guardtime.KSI.Service
                 {
                     _extenderConfigRequestResponseParser = new KsiServiceResponseParser(PduVersion, KsiServiceRequestType.ExtenderConfig,
                         _extendingMacAlgorithm, _extendingServiceCredentials.LoginKey);
+                    _extenderConfigRequestResponseParser.ExtenderConfigChanged += RequestResponseParser_ExtenderConfigChanged;
                 }
 
                 return _extenderConfigRequestResponseParser;

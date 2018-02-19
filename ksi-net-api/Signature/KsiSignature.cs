@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -36,7 +36,6 @@ namespace Guardtime.KSI.Signature
     {
         private readonly List<AggregationHashChain> _aggregationHashChains = new List<AggregationHashChain>();
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private string _identity;
         private DataHash _aggregationHashChainRootHash;
 
         /// <summary>
@@ -80,8 +79,6 @@ namespace Guardtime.KSI.Signature
                     return CalendarHashChain = childTag as CalendarHashChain ?? new CalendarHashChain(childTag);
                 case Constants.PublicationRecord.TagTypeInSignature:
                     return PublicationRecord = childTag as PublicationRecordInSignature ?? new PublicationRecordInSignature(childTag);
-                case Constants.AggregationAuthenticationRecord.TagType:
-                    return AggregationAuthenticationRecord = childTag as AggregationAuthenticationRecord ?? new AggregationAuthenticationRecord(childTag);
                 case Constants.CalendarAuthenticationRecord.TagType:
                     return CalendarAuthenticationRecord = childTag as CalendarAuthenticationRecord ?? new CalendarAuthenticationRecord(childTag);
                 case Constants.Rfc3161Record.TagType:
@@ -136,11 +133,6 @@ namespace Guardtime.KSI.Signature
         }
 
         /// <summary>
-        ///     Get aggregation authentication record if it exists.
-        /// </summary>
-        public AggregationAuthenticationRecord AggregationAuthenticationRecord { get; private set; }
-
-        /// <summary>
         ///     Get RFC 3161 record
         /// </summary>
         public Rfc3161Record Rfc3161Record { get; private set; }
@@ -164,42 +156,6 @@ namespace Guardtime.KSI.Signature
         ///     Get publication record.
         /// </summary>
         public PublicationRecordInSignature PublicationRecord { get; private set; }
-
-        /// <summary>
-        /// Get the identity of the signature.
-        /// </summary>
-        /// <returns></returns>
-        [Obsolete("This property is obsolete. Use GetIdentity() method instead.", false)]
-        public string Identity
-        {
-            get
-            {
-                if (_identity != null)
-                {
-                    return _identity;
-                }
-
-                _identity = "";
-
-                foreach (IIdentity linkIdentity in GetIdentity())
-                {
-                    string id = linkIdentity.ClientId;
-                    if (id.Length <= 0)
-                    {
-                        continue;
-                    }
-
-                    if (_identity.Length > 0)
-                    {
-                        _identity += " :: ";
-                    }
-
-                    _identity += id;
-                }
-
-                return _identity;
-            }
-        }
 
         /// <summary>
         /// Get the identity of the signature.
@@ -304,6 +260,11 @@ namespace Guardtime.KSI.Signature
                 throw new ArgumentNullException(nameof(calendarHashChain));
             }
 
+            if (publicationRecord == null)
+            {
+                publicationRecord = new PublicationRecordInSignature(false, false, calendarHashChain.PublicationData);
+            }
+
             if (signatureFactory == null)
             {
                 signatureFactory = new KsiSignatureFactory();
@@ -316,8 +277,6 @@ namespace Guardtime.KSI.Signature
                     switch (childTag.Type)
                     {
                         case Constants.CalendarHashChain.TagType:
-                            writer.WriteTag(calendarHashChain);
-                            break;
                         case Constants.CalendarAuthenticationRecord.TagType:
                         case Constants.PublicationRecord.TagTypeInSignature:
                             break;
@@ -327,10 +286,8 @@ namespace Guardtime.KSI.Signature
                     }
                 }
 
-                if (publicationRecord != null)
-                {
-                    writer.WriteTag(publicationRecord);
-                }
+                writer.WriteTag(calendarHashChain);
+                writer.WriteTag(publicationRecord);
 
                 try
                 {

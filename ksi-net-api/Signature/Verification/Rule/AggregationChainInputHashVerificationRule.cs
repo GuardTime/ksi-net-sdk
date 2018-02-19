@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -17,7 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
-using Guardtime.KSI.Hashing;
+using System;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
@@ -25,27 +25,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     ///     This rule verifies RFC3161 output hash equals to aggregation chain input hash. 
     ///     If RFC3161 record is not present then <see cref="VerificationResultCode.Ok" /> is returned.
     /// </summary>
-    public sealed class AggregationChainInputHashVerificationRule : VerificationRule
+    [Obsolete("Use Rfc3161RecordOutputHashVerificationRule  instead.", false)]
+    public sealed class AggregationChainInputHashVerificationRule : Rfc3161RecordOutputHashVerificationRule
     {
-        /// <see cref="VerificationRule.Verify" />
-        public override VerificationResult Verify(IVerificationContext context)
-        {
-            IKsiSignature signature = GetSignature(context);
-
-            if (!signature.IsRfc3161Signature)
-            {
-                return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
-            }
-
-            DataHash aggregationHashChainInputHash = GetAggregationHashChains(signature, false)[0].InputHash;
-
-            DataHash inputHash = KsiProvider.CreateDataHasher(aggregationHashChainInputHash.Algorithm)
-                                            .AddData(signature.Rfc3161Record.GetOutputHash().Imprint)
-                                            .GetHash();
-
-            return inputHash != aggregationHashChainInputHash
-                ? new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int01)
-                : new VerificationResult(GetRuleName(), VerificationResultCode.Ok);
-        }
     }
 }

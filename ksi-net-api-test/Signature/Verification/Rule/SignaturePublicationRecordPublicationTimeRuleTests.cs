@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -17,141 +17,53 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
-using System.IO;
-using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
+using Guardtime.KSI.Test.Properties;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
-    public class SignaturePublicationRecordPublicationTimeRuleTests
+    public class SignaturePublicationRecordPublicationTimeRuleTests : RuleTestsBase
     {
-        [Test]
-        public void TestMissingContext()
-        {
-            SignaturePublicationRecordPublicationTimeRule rule = new SignaturePublicationRecordPublicationTimeRule();
+        public override VerificationRule Rule => new SignaturePublicationRecordPublicationTimeRule();
 
-            // Argument null exception when no context
-            Assert.Throws<ArgumentNullException>(delegate
+        [Test]
+        public void TestSignatureMissingCalendarHashChain()
+        {
+            TestSignatureMissingCalendarHashChain(new TestKsiSignature()
             {
-                rule.Verify(null);
+                PublicationRecord = TestUtil.GetSignature(Resources.KsiSignature_Ok_With_Publication_Record).PublicationRecord
             });
-        }
-
-        [Test]
-        public void TestContextMissingSignature()
-        {
-            SignaturePublicationRecordPublicationTimeRule rule = new SignaturePublicationRecordPublicationTimeRule();
-
-            // Verification exception on missing KSI signature 
-            Assert.Throws<KsiVerificationException>(delegate
-            {
-                TestVerificationContext context = new TestVerificationContext();
-
-                rule.Verify(context);
-            });
-        }
-
-        [Test]
-        public void TestSignaturePublicationRecordAndMissingCalendarHashChain()
-        {
-            SignaturePublicationRecordPublicationTimeRule rule = new SignaturePublicationRecordPublicationTimeRule();
-
-            // Check signature with publication record and calendar hash chain is missing
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_With_Publication_Record), FileMode.Open))
-            {
-                Assert.Throws<KsiVerificationException>(delegate
-                {
-                    IKsiSignature signature = new KsiSignatureFactory().Create(stream);
-                    TestVerificationContext context = new TestVerificationContext()
-                    {
-                        Signature = new TestKsiSignature()
-                        {
-                            PublicationRecord = signature.PublicationRecord
-                        }
-                    };
-
-                    rule.Verify(context);
-                });
-            }
         }
 
         [Test]
         public void TestSignatureMissingPublicationRecord()
         {
-            SignaturePublicationRecordPublicationTimeRule rule = new SignaturePublicationRecordPublicationTimeRule();
-
             // Check signature without publication record
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream)
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            CreateSignatureAndVerify(Resources.KsiSignature_Ok, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestRfc3161SignaturePublicationRecordTime()
         {
-            SignaturePublicationRecordPublicationTimeRule rule = new SignaturePublicationRecordPublicationTimeRule();
-
             // Check legacy signature with publication record
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok_With_Publication_Record), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream)
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            CreateSignatureAndVerify(Resources.KsiSignature_Legacy_Ok_With_Publication_Record, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestSignaturePublicationRecordTime()
         {
-            SignaturePublicationRecordPublicationTimeRule rule = new SignaturePublicationRecordPublicationTimeRule();
-
             // Check signature with publication record
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_With_Publication_Record), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream)
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            CreateSignatureAndVerify(Resources.KsiSignature_Ok_With_Publication_Record, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestSignatureInvalidPublicationRecordTime()
         {
-            SignaturePublicationRecordPublicationTimeRule rule = new SignaturePublicationRecordPublicationTimeRule();
-
-            // Check invalid signature with invalid publications record
-            using (FileStream stream =
-                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Invalid_With_Invalid_Publication_Record_Time), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream)
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-                Assert.AreEqual(VerificationError.Int07, verificationResult.VerificationError);
-            }
+            // Check invalid signature with invalid publication record
+            CreateSignatureAndVerify(Resources.KsiSignature_Invalid_With_Invalid_Publication_Record_Time, VerificationResultCode.Fail, VerificationError.Int07);
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -63,7 +63,7 @@ namespace Guardtime.KSI.Service
 
             if (tagCounter[Constants.PduPayload.StatusTagType] != 1)
             {
-                throw new TlvException("Exactly one status code must exist in reponse payload.");
+                throw new TlvException("Exactly one status code must exist in response payload.");
             }
 
             if (tagCounter[Constants.PduPayload.ErrorMessageTagType] > 1)

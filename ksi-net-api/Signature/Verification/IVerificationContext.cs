@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -36,7 +36,7 @@ namespace Guardtime.KSI.Signature.Verification
         /// <summary>
         ///     Get document hash node level value in the aggregation tree
         /// </summary>
-        uint DocumentHashLevel { get; }
+        uint DocumentHashLevel { get; set; }
 
         /// <summary>
         ///     Get or set signature.
@@ -46,22 +46,22 @@ namespace Guardtime.KSI.Signature.Verification
         /// <summary>
         ///     Get user publication.
         /// </summary>
-        PublicationData UserPublication { get; }
+        PublicationData UserPublication { get; set; }
 
         /// <summary>
         ///     Get KSI service.
         /// </summary>
-        IKsiService KsiService { get; }
+        IKsiService KsiService { get; set; }
 
         /// <summary>
         ///     Is extending allowed.
         /// </summary>
-        bool IsExtendingAllowed { get; }
+        bool IsExtendingAllowed { get; set; }
 
         /// <summary>
         ///     Get publications file.
         /// </summary>
-        IPublicationsFile PublicationsFile { get; }
+        IPublicationsFile PublicationsFile { get; set; }
 
         /// <summary>
         ///     Get extended latest calendar hash chain.

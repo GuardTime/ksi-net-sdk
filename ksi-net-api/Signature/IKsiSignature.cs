@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -61,13 +61,6 @@ namespace Guardtime.KSI.Signature
         ///     Get aggregation time.
         /// </summary>
         ulong AggregationTime { get; }
-
-        /// <summary>
-        /// Get the identity of the signature.
-        /// </summary>
-        /// <returns></returns>
-        [Obsolete("This property is obsolete. Use GetIdentity() method instead.", false)]
-        string Identity { get; }
 
         /// <summary>
         /// Get the identity of the signature.

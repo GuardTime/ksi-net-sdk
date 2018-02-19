@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -21,7 +21,6 @@ using System;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Test.Crypto;
 using Guardtime.KSI.Test.Properties;
@@ -34,12 +33,60 @@ namespace Guardtime.KSI.Test.Trust
     public class PkiTrustStoreProviderTests
     {
         [Test]
-        public void PkiTrustStoreProviderVerifyTest()
+        public void PkiTrustStoreProviderCreateWithoutTrustStoreTest()
         {
-            PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(CreateCertStore(Resources.PkiTrustProvider_IdenTrustCert),
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(null, null);
+            });
+            Assert.AreEqual("trustStore", ex.ParamName);
+        }
+
+        [Test]
+        public void PkiTrustStoreProviderCreateWithoutCertificateRdnSelector()
+        {
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(TestUtil.CreateCertStore(Resources.PkiTrustProvider_IdenTrustCert), null);
+            });
+            Assert.AreEqual("certificateRdnSelector", ex.ParamName);
+        }
+
+        [Test]
+        public void PkiTrustStoreProviderVerifyWithoutSignedBytes()
+        {
+            PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(TestUtil.CreateCertStore(Resources.PkiTrustProvider_IdenTrustCert),
                 CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
-            PublicationsFile publicationsFile = GetPublicationsFile(Resources.KsiPublicationsFile);
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                trustStoreProvider.Verify(null, null);
+            });
+            Assert.AreEqual("signedBytes", ex.ParamName);
+        }
+
+        [Test]
+        public void PkiTrustStoreProviderVerifyWithoutSignatureBytes()
+        {
+            PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(TestUtil.CreateCertStore(Resources.PkiTrustProvider_IdenTrustCert),
+                CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
+
+            PublicationsFile publicationsFile = TestUtil.GetPublicationsFile(Resources.KsiPublicationsFile);
+
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                trustStoreProvider.Verify(publicationsFile.GetSignedBytes(), null);
+            });
+            Assert.AreEqual("signatureBytes", ex.ParamName);
+        }
+
+        [Test]
+        public void PkiTrustStoreProviderVerifyTest()
+        {
+            PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(TestUtil.CreateCertStore(Resources.PkiTrustProvider_IdenTrustCert),
+                CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
+
+            PublicationsFile publicationsFile = TestUtil.GetPublicationsFile(Resources.KsiPublicationsFile);
 
             trustStoreProvider.Verify(publicationsFile.GetSignedBytes(), publicationsFile.GetSignatureValue());
         }
@@ -50,7 +97,7 @@ namespace Guardtime.KSI.Test.Trust
             PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                 CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
-            PublicationsFile publicationsFile = GetPublicationsFile(Resources.KsiPublicationsFile);
+            PublicationsFile publicationsFile = TestUtil.GetPublicationsFile(Resources.KsiPublicationsFile);
 
             trustStoreProvider.Verify(publicationsFile.GetSignedBytes(), publicationsFile.GetSignatureValue());
         }
@@ -58,10 +105,10 @@ namespace Guardtime.KSI.Test.Trust
         [Test]
         public void PkiTrustStoreProviderVerifyInvalidTest()
         {
-            PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(CreateCertStore(Resources.PkiTrustProvider_CustomCertInvalid),
+            PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(TestUtil.CreateCertStore(Resources.PkiTrustProvider_CustomCertInvalid),
                 CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
-            PublicationsFile publicationsFile = GetPublicationsFile(Resources.KsiPublicationsFile);
+            PublicationsFile publicationsFile = TestUtil.GetPublicationsFile(Resources.KsiPublicationsFile);
 
             PkiVerificationFailedException ex = Assert.Throws<PkiVerificationFailedException>(delegate
             {
@@ -80,10 +127,10 @@ namespace Guardtime.KSI.Test.Trust
         {
             // test verify with custom cert
 
-            PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(CreateCertStore(Resources.PkiTrustProvider_CustomCert),
+            PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(TestUtil.CreateCertStore(Resources.PkiTrustProvider_CustomCert),
                 CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
-            PublicationsFile publicationsFile = GetPublicationsFile(Resources.PkiTrustProvider_PubsFileCustomCert);
+            PublicationsFile publicationsFile = TestUtil.GetPublicationsFile(Resources.PkiTrustProvider_PubsFileCustomCert);
 
             trustStoreProvider.Verify(publicationsFile.GetSignedBytes(), publicationsFile.GetSignatureValue());
         }
@@ -94,7 +141,7 @@ namespace Guardtime.KSI.Test.Trust
             PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                 CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
-            PublicationsFile publicationsFile = GetPublicationsFile(Resources.PkiTrustProvider_PubsFileCustomCert);
+            PublicationsFile publicationsFile = TestUtil.GetPublicationsFile(Resources.PkiTrustProvider_PubsFileCustomCert);
 
             PkiVerificationFailedException ex = Assert.Throws<PkiVerificationFailedException>(delegate
             {
@@ -114,10 +161,10 @@ namespace Guardtime.KSI.Test.Trust
             // test verify with custom cert
 
             PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(
-                CreateCertStore(Resources.PkiTrustProvider_CustomCert, Resources.PkiTrustProvider_CustomCertInvalid),
+                TestUtil.CreateCertStore(Resources.PkiTrustProvider_CustomCert, Resources.PkiTrustProvider_CustomCertInvalid),
                 CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
-            PublicationsFile publicationsFile = GetPublicationsFile(Resources.PkiTrustProvider_PubsFileCustomCert);
+            PublicationsFile publicationsFile = TestUtil.GetPublicationsFile(Resources.PkiTrustProvider_PubsFileCustomCert);
 
             trustStoreProvider.Verify(publicationsFile.GetSignedBytes(), publicationsFile.GetSignatureValue());
         }
@@ -125,10 +172,10 @@ namespace Guardtime.KSI.Test.Trust
         [Test]
         public void PkiTrustStoreProviderVerifyCustomCertInvalidTest()
         {
-            PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(CreateCertStore(Resources.PkiTrustProvider_IdenTrustCert),
+            PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(TestUtil.CreateCertStore(Resources.PkiTrustProvider_IdenTrustCert),
                 CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
-            PublicationsFile publicationsFile = GetPublicationsFile(Resources.PkiTrustProvider_PubsFileCustomCert);
+            PublicationsFile publicationsFile = TestUtil.GetPublicationsFile(Resources.PkiTrustProvider_PubsFileCustomCert);
 
             PkiVerificationFailedException ex = Assert.Throws<PkiVerificationFailedException>(delegate
             {
@@ -146,12 +193,12 @@ namespace Guardtime.KSI.Test.Trust
         public void PkiTrustStoreProviderVerifyCustomCertMultiInvalidTest()
         {
             PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(
-                CreateCertStore(
+                TestUtil.CreateCertStore(
                     Resources.PkiTrustProvider_CustomCertInvalid,
                     Resources.PkiTrustProvider_IdenTrustCert),
                 CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
-            PublicationsFile publicationsFile = GetPublicationsFile(Resources.PkiTrustProvider_PubsFileCustomCert);
+            PublicationsFile publicationsFile = TestUtil.GetPublicationsFile(Resources.PkiTrustProvider_PubsFileCustomCert);
 
             PkiVerificationFailedException ex = Assert.Throws<PkiVerificationFailedException>(delegate
             {
@@ -168,10 +215,10 @@ namespace Guardtime.KSI.Test.Trust
         [Test]
         public void PkiTrustStoreProviderVerifyCustomCertExpiredInvalidTest()
         {
-            PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(CreateCertStore(Resources.PkiTrustProvider_CustomCertExpired),
+            PkiTrustStoreProvider trustStoreProvider = new PkiTrustStoreProvider(TestUtil.CreateCertStore(Resources.PkiTrustProvider_CustomCertExpired),
                 CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"));
 
-            PublicationsFile publicationsFile = GetPublicationsFile(Resources.PkiTrustProvider_PubsFileCustomCertExpired);
+            PublicationsFile publicationsFile = TestUtil.GetPublicationsFile(Resources.PkiTrustProvider_PubsFileCustomCertExpired);
 
             PkiVerificationFailedException ex = Assert.Throws<PkiVerificationFailedException>(delegate
             {
@@ -189,31 +236,6 @@ namespace Guardtime.KSI.Test.Trust
                 "Unexpected exception message: " + ex.Message);
         }
 
-        private static PublicationsFile GetPublicationsFile(string path)
-        {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, path), FileMode.Open, FileAccess.Read))
-            {
-                BinaryReader binaryReader = new BinaryReader(stream);
-                byte[] pubsFileBytes = binaryReader.ReadBytes((int)stream.Length);
-                byte[] data = new byte[pubsFileBytes.Length - PublicationsFile.FileBeginningMagicBytes.Length];
-                Array.Copy(pubsFileBytes, PublicationsFile.FileBeginningMagicBytes.Length, data, 0, data.Length);
 
-                return new PublicationsFile(new RawTag(0x0, false, false, data));
-            }
-        }
-
-        public X509Store CreateCertStore(params string[] certPaths)
-        {
-            X509Store store = new X509Store("test", StoreLocation.CurrentUser);
-            store.Open(OpenFlags.ReadWrite);
-            store.RemoveRange(store.Certificates);
-
-            foreach (string certPath in certPaths)
-            {
-                X509Certificate2 certificate = new X509Certificate2(Path.Combine(TestSetup.LocalPath, certPath));
-                store.Add(certificate);
-            }
-            return store;
-        }
     }
 }

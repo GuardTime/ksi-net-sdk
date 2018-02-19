@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -32,7 +32,7 @@ namespace Guardtime.KSI.Signature
     /// </summary>
     public sealed partial class AggregationHashChain : CompositeTag
     {
-        private IntegerTag _aggrAlgorithmId;
+        private HashAlgorithm _aggrAlgorithm;
         private IntegerTag _aggregationTime;
         private readonly List<Link> _links = new List<Link>();
         private readonly List<IntegerTag> _chainIndex = new List<IntegerTag>();
@@ -96,7 +96,9 @@ namespace Guardtime.KSI.Signature
                 case Constants.AggregationHashChain.InputHashTagType:
                     return _inputHash = GetImprintTag(childTag);
                 case Constants.AggregationHashChain.AggregationAlgorithmIdTagType:
-                    return _aggrAlgorithmId = GetIntegerTag(childTag);
+                    IntegerTag aggrAlgorithmTag = GetIntegerTag(childTag);
+                    _aggrAlgorithm = HashAlgorithm.GetById((byte)aggrAlgorithmTag.Value);
+                    return aggrAlgorithmTag;
                 case (uint)LinkDirection.Left:
                 case (uint)LinkDirection.Right:
                     Link linkTag = childTag as Link ?? new Link(childTag);
@@ -199,6 +201,11 @@ namespace Guardtime.KSI.Signature
         public ulong AggregationTime => _aggregationTime.Value;
 
         /// <summary>
+        /// Get Aggregation algorithm
+        /// </summary>
+        public HashAlgorithm AggregationAlgorithm => _aggrAlgorithm;
+
+        /// <summary>
         /// Get chain index values
         /// </summary>
         /// <returns></returns>
@@ -259,34 +266,6 @@ namespace Guardtime.KSI.Signature
             result |= 1UL << links.Length;
 
             return result;
-        }
-
-        /// <summary>
-        /// Get the (partial) signer identity from the current hash chain.
-        /// </summary>
-        /// <returns></returns>
-        [Obsolete("This method is obsolete. Use GetIdentity() method instead.", false)]
-        public string GetChainIdentity()
-        {
-            string identity = "";
-
-            foreach (IIdentity linkIdentity in GetIdentity())
-            {
-                string id = linkIdentity.ClientId;
-                if (id.Length <= 0)
-                {
-                    continue;
-                }
-
-                if (identity.Length > 0)
-                {
-                    identity += " :: ";
-                }
-
-                identity += id;
-            }
-
-            return identity;
         }
 
         /// <summary>
@@ -366,7 +345,7 @@ namespace Guardtime.KSI.Signature
         /// <returns>resulting hash</returns>
         private DataHash GetStepHash(byte[] hashA, byte[] hashB, ulong level)
         {
-            IDataHasher hasher = KsiProvider.CreateDataHasher(HashAlgorithm.GetById((byte)_aggrAlgorithmId.Value));
+            IDataHasher hasher = KsiProvider.CreateDataHasher(_aggrAlgorithm);
             hasher.AddData(hashA);
             hasher.AddData(hashB);
             hasher.AddData(Util.EncodeUnsignedLong(level));

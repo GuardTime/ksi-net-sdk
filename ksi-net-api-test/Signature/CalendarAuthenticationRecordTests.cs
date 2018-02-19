@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -17,12 +17,12 @@
  * reserves and retains all trademark rights.
  */
 
-using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Signature;
+using Guardtime.KSI.Test.Properties;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
@@ -34,7 +34,7 @@ namespace Guardtime.KSI.Test.Signature
         [Test]
         public void TestCalendarAuthenticationRecordOk()
         {
-            CalendarAuthenticationRecord calendarAuthenticationRecord = GetCalendarAuthenticationRecordFromFile(Properties.Resources.CalendarAuthenticationRecord_Ok);
+            CalendarAuthenticationRecord calendarAuthenticationRecord = GetCalendarAuthenticationRecordFromFile(Resources.CalendarAuthenticationRecord_Ok);
             Assert.AreEqual(2, calendarAuthenticationRecord.Count, "Invalid amount of child TLV objects");
 
             PublicationData publicationData = new PublicationData(1398902400,
@@ -52,7 +52,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetCalendarAuthenticationRecordFromFile(Properties.Resources.CalendarAuthenticationRecord_Invalid_Extra_Tag);
+                GetCalendarAuthenticationRecordFromFile(Resources.CalendarAuthenticationRecord_Invalid_Extra_Tag);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Unknown tag"));
         }
 
@@ -61,7 +61,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetCalendarAuthenticationRecordFromFile(Properties.Resources.CalendarAuthenticationRecord_Invalid_Missing_Publication_Data);
+                GetCalendarAuthenticationRecordFromFile(Resources.CalendarAuthenticationRecord_Invalid_Missing_Publication_Data);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one publication data must exist in calendar authentication record"));
         }
 
@@ -70,7 +70,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetCalendarAuthenticationRecordFromFile(Properties.Resources.CalendarAuthenticationRecord_Invalid_Missing_Signature_Data);
+                GetCalendarAuthenticationRecordFromFile(Resources.CalendarAuthenticationRecord_Invalid_Missing_Signature_Data);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one signature data must exist in calendar authentication record"));
         }
 
@@ -79,7 +79,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetCalendarAuthenticationRecordFromFile(Properties.Resources.CalendarAuthenticationRecord_Invalid_Multiple_Publication_Data);
+                GetCalendarAuthenticationRecordFromFile(Resources.CalendarAuthenticationRecord_Invalid_Multiple_Publication_Data);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one publication data must exist in calendar authentication record"));
         }
 
@@ -88,7 +88,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetCalendarAuthenticationRecordFromFile(Properties.Resources.CalendarAuthenticationRecord_Invalid_Multiple_Signature_Data);
+                GetCalendarAuthenticationRecordFromFile(Resources.CalendarAuthenticationRecord_Invalid_Multiple_Signature_Data);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one signature data must exist in calendar authentication record"));
         }
 
@@ -97,7 +97,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetCalendarAuthenticationRecordFromFile(Properties.Resources.CalendarAuthenticationRecord_Invalid_Type);
+                GetCalendarAuthenticationRecordFromFile(Resources.CalendarAuthenticationRecord_Invalid_Type);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Invalid tag type! Class: CalendarAuthenticationRecord; Type: 0x806;"));
         }
 
@@ -132,12 +132,7 @@ namespace Guardtime.KSI.Test.Signature
 
         private static CalendarAuthenticationRecord GetCalendarAuthenticationRecordFromFile(string file)
         {
-            using (TlvReader reader = new TlvReader(new FileStream(Path.Combine(TestSetup.LocalPath, file), FileMode.Open)))
-            {
-                CalendarAuthenticationRecord calendarAuthenticationRecord = new CalendarAuthenticationRecord(reader.ReadTag());
-
-                return calendarAuthenticationRecord;
-            }
+            return new CalendarAuthenticationRecord(TestUtil.GetRawTag(file));
         }
     }
 }

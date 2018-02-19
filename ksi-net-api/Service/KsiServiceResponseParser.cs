@@ -37,9 +37,21 @@ namespace Guardtime.KSI.Service
         private readonly KsiServiceRequestType _requestType;
         private readonly HashAlgorithm _macAlgorithm;
         private readonly byte[] _macKey;
+        private AggregatorConfig _currentAggregatorConfig;
+        private ExtenderConfig _currentExtenderConfig;
 
         /// <summary>
-        /// Create new KSI service reponse parser. 
+        /// Aggregator configuration changed event
+        /// </summary>
+        public event EventHandler<AggregatorConfigChangedEventArgs> AggregatorConfigChanged;
+
+        /// <summary>
+        /// Extender configuration changed event
+        /// </summary>
+        public event EventHandler<ExtenderConfigChangedEventArgs> ExtenderConfigChanged;
+
+        /// <summary>
+        /// Create new KSI service response parser. 
         /// </summary>
         /// <param name="pduVersion">PDU version</param>
         /// <param name="requestType">Request type of the response to be parsed</param>
@@ -111,6 +123,9 @@ namespace Guardtime.KSI.Service
                 }
                 else
                 {
+                    CheckAggregatorConfigChange(pdu);
+                    CheckExtenderConfigChange(pdu);
+
                     return GetResponsePayload(data, pdu, requestId);
                 }
             }
@@ -139,6 +154,76 @@ namespace Guardtime.KSI.Service
                 }
 
                 throw;
+            }
+        }
+
+        private void CheckAggregatorConfigChange(Pdu pdu)
+        {
+            if (AggregatorConfigChanged != null)
+            {
+                AggregatorConfigResponsePayload configPayload = GetPayload(pdu, Constants.AggregatorConfigResponsePayload.TagType, null) as AggregatorConfigResponsePayload;
+                if (configPayload != null)
+                {
+                    AggregatorConfig aggregatorConfig = new AggregatorConfig(configPayload);
+
+                    if (_currentAggregatorConfig == null || !_currentAggregatorConfig.Equals(aggregatorConfig))
+                    {
+                        _currentAggregatorConfig = aggregatorConfig;
+                        AggregatorConfigChanged?.BeginInvoke(this, new AggregatorConfigChangedEventArgs(_currentAggregatorConfig), EndAggregatorConfigChanged, null);
+                    }
+                }
+            }
+        }
+
+        private void EndAggregatorConfigChanged(IAsyncResult asyncResult)
+        {
+            if (AggregatorConfigChanged == null)
+            {
+                return;
+            }
+
+            try
+            {
+                AggregatorConfigChanged.EndInvoke(asyncResult);
+            }
+            catch (Exception ex)
+            {
+                Logger.Warn("Ending aggregator configuration changed call failed.", ex);
+            }
+        }
+
+        private void CheckExtenderConfigChange(Pdu pdu)
+        {
+            if (ExtenderConfigChanged != null)
+            {
+                ExtenderConfigResponsePayload configPayload = GetPayload(pdu, Constants.ExtenderConfigResponsePayload.TagType, null) as ExtenderConfigResponsePayload;
+                if (configPayload != null)
+                {
+                    ExtenderConfig extenderConfig = new ExtenderConfig(configPayload);
+
+                    if (_currentExtenderConfig == null || !_currentExtenderConfig.Equals(extenderConfig))
+                    {
+                        _currentExtenderConfig = extenderConfig;
+                        ExtenderConfigChanged?.BeginInvoke(this, new ExtenderConfigChangedEventArgs(_currentExtenderConfig), EndExtenderConfigChanged, null);
+                    }
+                }
+            }
+        }
+
+        private void EndExtenderConfigChanged(IAsyncResult asyncResult)
+        {
+            if (ExtenderConfigChanged == null)
+            {
+                return;
+            }
+
+            try
+            {
+                ExtenderConfigChanged.EndInvoke(asyncResult);
+            }
+            catch (Exception ex)
+            {
+                Logger.Warn("Ending extender configuration changed call failed.", ex);
             }
         }
 
@@ -313,7 +398,7 @@ namespace Guardtime.KSI.Service
             if (errorPayload != null)
             {
                 // There should be only one payload if an error payload exists. If not then write log.
-                if (pdu.Payloads.Count > 1)
+                if (pdu.Payloads.Count > 0)
                 {
                     LogUnexpectedPayloads(pdu);
                 }
@@ -399,7 +484,7 @@ namespace Guardtime.KSI.Service
 
                 if (requestResponsePayload == null)
                 {
-                    throw new KsiServiceException("Cannot get request ID from payload. Payload type: " + payload.GetType());
+                    throw new KsiServiceException("Cannot get request ID from payload. Payload type: " + payload?.GetType());
                 }
 
                 if (requestResponsePayload.RequestId != requestId)
@@ -412,7 +497,7 @@ namespace Guardtime.KSI.Service
 
             if (responsePayload == null)
             {
-                throw new KsiServiceException("Cannot get status from payload. Payload type: " + payload.GetType());
+                throw new KsiServiceException("Cannot get status from payload. Payload type: " + payload?.GetType());
             }
 
             if (responsePayload.Status != 0)

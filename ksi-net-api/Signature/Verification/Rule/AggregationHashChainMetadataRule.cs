@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -20,7 +20,6 @@
 using System.Collections.ObjectModel;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Utils;
-using NLog;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
@@ -29,8 +28,6 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class AggregationHashChainMetadataRule : VerificationRule
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
         /// <see cref="VerificationRule.Verify" />
         public override VerificationResult Verify(IVerificationContext context)
         {
@@ -84,7 +81,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
                         if (!isValid)
                         {
-                            Logger.Warn("Metadata with padding may not be trusted. " + message + " Metadata: " + link.Metadata);
+                            Logger.Debug("Metadata with padding may not be trusted. " + message + " Metadata: " + link.Metadata);
                             return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int11);
                         }
                     }
@@ -108,7 +105,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
                         if (hashAlgorithm != null && hashAlgorithm.Length == metadata.Length - 1)
                         {
-                            Logger.Warn("Metadata without padding may not be trusted. Metadata: " + link.Metadata);
+                            Logger.Debug("Metadata without padding may not be trusted. Metadata: " + link.Metadata);
                             return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int11);
                         }
                     }

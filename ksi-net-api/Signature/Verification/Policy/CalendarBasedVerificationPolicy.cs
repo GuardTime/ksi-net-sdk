@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -31,15 +31,15 @@ namespace Guardtime.KSI.Signature.Verification.Policy
         /// </summary>
         public CalendarBasedVerificationPolicy()
         {
-            VerificationRule verificationRule = new ExtendedSignatureCalendarChainInputHashRule()
-                .OnSuccess(new ExtendedSignatureCalendarChainAggregationTimeRule());
+            VerificationRule verificationRule = new ExtendedSignatureCalendarChainInputHashRule() // Cal-02
+                .OnSuccess(new ExtendedSignatureCalendarChainAggregationTimeRule()); // Cal-03
 
             FirstRule = new InternalVerificationPolicy()
-                .OnSuccess(new CalendarHashChainExistenceRule()
-                    .OnSuccess(new SignaturePublicationRecordExistenceRule()
-                        .OnSuccess(new ExtendedSignatureCalendarChainRootHashRule()
+                .OnSuccess(new CalendarHashChainExistenceRule() // // Gen-02
+                    .OnSuccess(new SignaturePublicationRecordExistenceRule() // Gen-02
+                        .OnSuccess(new ExtendedSignatureCalendarChainRootHashRule() // Cal-01
                             .OnSuccess(verificationRule))
-                        .OnNa(new ExtendedSignatureAggregationChainRightLinksMatchesRule()
+                        .OnNa(new ExtendedSignatureCalendarHashChainRightLinksMatchRule() // Cal-4
                             .OnSuccess(verificationRule)))
                     .OnNa(verificationRule));
         }

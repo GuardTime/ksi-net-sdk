@@ -1,3 +1,24 @@
+Version 3.10
+2018-02-19 3.10.X
+
+* FEATURE: Added High availability services (KSINETAPI-122)
+* FEATURE: Handle pushed configuration updates from Aggregator and Extender (KSINETAPI-128)
+* FEATURE: Create new signature from existing root signature and aggregation hash chain elements (KSINETAPI-132)
+* IMPROVEMENT: Added ability to make KSI extension requests over TCP/IP (KSINETAPI-129)
+* IMPROVEMENT: Handling of deprecated and obsolete hash functions, SHA1-s is no longer trusted (KSINETAPI-127)
+* IMPROVEMENT: KSI service now provides verification functionality (KSINETAPI-126)
+* IMPROVEMENT: Added default verification policy (KSINETAPI-125)
+* IMPROVEMENT: Added new verification error code INT-17 (KSINETAPI-134)
+* IMPROVEMENT: Added HMAC algorithm setting to app.config (KSINETAPI-131)
+* IMPROVEMENT: Split HTTP and TCP configurations.
+* IMPROVEMENT: Improved verification rule names (KSINETAPI-139)
+* IMPROVEMENT: Refactored and improved unit tests (KSINETAPI-138)
+* BUGFIX: Fixed extending of a signature without calendar hash chain (KSINETAPI-137)
+* IMPROVEMENT: Fixed CalendarAuthenticationRecordSignatureVerificationRule constructor not to take any parameters (KSINETAPI-135)
+* IMPROVEMENT: Removed AggregationAuthenticationRecord (KSINETAPI-140)
+* BUGFIX: Fixed TCP service protocol deadlock (KSINETAPI-143)
+
+
 Version 3.9
 2017-09-12 3.9.369
 

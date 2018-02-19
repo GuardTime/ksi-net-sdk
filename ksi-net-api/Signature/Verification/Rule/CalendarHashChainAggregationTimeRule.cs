@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -33,7 +33,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             IKsiSignature signature = GetSignature(context);
             CalendarHashChain calendarHashChain = GetCalendarHashChain(signature, true);
 
-            // If calendar hash chain is missing, verification successful
+            // If calendar hash chain is missing, verification is successful
             if (calendarHashChain == null)
             {
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Ok);

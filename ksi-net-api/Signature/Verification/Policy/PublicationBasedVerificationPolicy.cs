@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -27,11 +27,10 @@ namespace Guardtime.KSI.Signature.Verification.Policy
     public partial class PublicationBasedVerificationPolicy : VerificationPolicy
     {
         /// <summary>
-        ///     Create publication based verification policy and add rules to it.
+        ///     Create publication based verification policy.
         /// </summary>
         public PublicationBasedVerificationPolicy()
         {
-            // Check for internal verification
             FirstRule = new InternalVerificationPolicy()
                 .OnSuccess(new UserProvidedPublicationExistenceRule()
                     .OnSuccess(new UserProvidedPublicationBasedVerificationPolicy())

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -112,8 +112,6 @@ namespace Guardtime.KSI.Service
                 throw new TlvException("Only one publication time is allowed in extend request payload.");
             }
         }
-
-
 
         /// <summary>
         ///     Get request ID.

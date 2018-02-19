@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -18,7 +18,6 @@
  */
 
 using System;
-using System.IO;
 using System.Reflection;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
@@ -26,6 +25,7 @@ using Guardtime.KSI.Parser;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
+using Guardtime.KSI.Test.Properties;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Signature
@@ -36,14 +36,14 @@ namespace Guardtime.KSI.Test.Signature
         [Test]
         public void TestCalendarHashChainOk()
         {
-            CalendarHashChain calendarHashChain = GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Ok);
+            CalendarHashChain calendarHashChain = GetCalendarHashChainFromFile(Resources.CalendarHashChain_Ok);
             Assert.AreEqual(26, calendarHashChain.Count, "Invalid amount of child TLV objects");
         }
 
         [Test]
         public void TestCalendarHashChainOkMissingOptionals()
         {
-            CalendarHashChain calendarHashChain = GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Ok_Missing_Optionals);
+            CalendarHashChain calendarHashChain = GetCalendarHashChainFromFile(Resources.CalendarHashChain_Ok_Missing_Optionals);
             Assert.AreEqual(25, calendarHashChain.Count, "Invalid amount of child TLV objects");
         }
 
@@ -52,7 +52,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Type);
+                GetCalendarHashChainFromFile(Resources.CalendarHashChain_Invalid_Type);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Invalid tag type! Class: CalendarHashChain; Type: 0x803;"));
         }
 
@@ -61,7 +61,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Extra_Tag);
+                GetCalendarHashChainFromFile(Resources.CalendarHashChain_Invalid_Extra_Tag);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Unknown tag"));
         }
 
@@ -70,7 +70,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Missing_Input_Hash);
+                GetCalendarHashChainFromFile(Resources.CalendarHashChain_Invalid_Missing_Input_Hash);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one input hash must exist in calendar hash chain"));
         }
 
@@ -79,7 +79,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Missing_Links);
+                GetCalendarHashChainFromFile(Resources.CalendarHashChain_Invalid_Missing_Links);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Links are missing in calendar hash chain"));
         }
 
@@ -88,7 +88,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Missing_Publication_Time);
+                GetCalendarHashChainFromFile(Resources.CalendarHashChain_Invalid_Missing_Publication_Time);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one publication time must exist in calendar hash chain"));
         }
 
@@ -97,7 +97,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Multiple_Aggregation_Time);
+                GetCalendarHashChainFromFile(Resources.CalendarHashChain_Invalid_Multiple_Aggregation_Time);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Only one aggregation time is allowed in calendar hash chain"));
         }
 
@@ -106,7 +106,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Multiple_Input_Hash);
+                GetCalendarHashChainFromFile(Resources.CalendarHashChain_Invalid_Multiple_Input_Hash);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one input hash must exist in calendar hash chain"));
         }
 
@@ -115,7 +115,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetCalendarHashChainFromFile(Properties.Resources.CalendarHashChain_Invalid_Multiple_Publication_Time);
+                GetCalendarHashChainFromFile(Resources.CalendarHashChain_Invalid_Multiple_Publication_Time);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one publication time must exist in calendar hash chain"));
         }
 
@@ -126,15 +126,11 @@ namespace Guardtime.KSI.Test.Signature
         public void TestCalendarHashChainOkChangedAlgorithm()
         {
             SignaturePublicationRecordPublicationHashRule rule = new SignaturePublicationRecordPublicationHashRule();
+            IKsiSignature signature = TestUtil.GetSignature(Resources.CalendarHashChain_Ok_Changed_Algorithm);
+            VerificationContext context = new VerificationContext(signature);
+            VerificationResult result = rule.Verify(context);
 
-            using (Stream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.CalendarHashChain_Ok_Changed_Algorithm), FileMode.Open))
-            {
-                IKsiSignature signature = new KsiSignatureFactory().Create(stream);
-                VerificationContext context = new VerificationContext(signature);
-                VerificationResult result = rule.Verify(context);
-
-                Assert.AreEqual(VerificationResultCode.Ok, result.ResultCode);
-            }
+            Assert.AreEqual(VerificationResultCode.Ok, result.ResultCode);
         }
 
         [Test]
@@ -164,12 +160,7 @@ namespace Guardtime.KSI.Test.Signature
 
         private static CalendarHashChain GetCalendarHashChainFromFile(string file)
         {
-            using (TlvReader reader = new TlvReader(new FileStream(Path.Combine(TestSetup.LocalPath, file), FileMode.Open)))
-            {
-                CalendarHashChain calendarHashChain = new CalendarHashChain(reader.ReadTag());
-
-                return calendarHashChain;
-            }
+            return new CalendarHashChain(TestUtil.GetRawTag(file));
         }
     }
 }

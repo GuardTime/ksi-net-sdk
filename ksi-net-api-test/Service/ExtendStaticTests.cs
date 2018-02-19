@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -17,14 +17,19 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
+using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
+using Guardtime.KSI.Signature.Verification.Policy;
 using Guardtime.KSI.Test.Properties;
+using Guardtime.KSI.Test.Signature;
 using Guardtime.KSI.Test.Signature.Verification;
+using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Service
@@ -41,12 +46,106 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void ExtendStaticTest()
         {
-            IKsiSignature signature = new KsiSignatureFactory().Create(
-                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
+            IKsiSignature signature = new KsiSignatureFactory().Create(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
+            Ksi ksi = GetStaticKsi(Resources.KsiService_ExtendResponsePdu_RequestId_1043101455, 1043101455);
+            Verify(ksi.Extend(signature));
+        }
 
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu)), 1043101455);
+        /// <summary>
+        /// Test exteding with signature null
+        /// </summary>
+        [Test]
+        public void ExtendStaticWithoutSignatureTest()
+        {
+            Ksi ksi = GetStaticKsi(Resources.KsiService_ExtendResponsePdu_RequestId_1043101455, 1043101455);
 
-            ksi.Extend(signature);
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                ksi.Extend(null);
+            });
+
+            Assert.AreEqual("signature", ex.ParamName);
+        }
+
+        /// <summary>
+        /// Test exteding with signature null and publication data not null
+        /// </summary>
+        [Test]
+        public void ExtendStaticWithoutSignatureWithPublicationDataTest()
+        {
+            Ksi ksi = GetStaticKsi(Resources.KsiService_ExtendResponsePdu_RequestId_1043101455, 1043101455);
+
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                ksi.Extend(null, new PublicationData(123456789, new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D"))));
+            });
+
+            Assert.AreEqual("signature", ex.ParamName);
+        }
+
+        /// <summary>
+        /// Test exteding with publication data null
+        /// </summary>
+        [Test]
+        public void ExtendStaticWithPublicationDataNullTest()
+        {
+            Ksi ksi = GetStaticKsi(Resources.KsiService_ExtendResponsePdu_RequestId_1043101455, 1043101455);
+
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                ksi.Extend(new TestKsiSignature(), (PublicationData)null);
+            });
+
+            Assert.AreEqual("publicationData", ex.ParamName);
+        }
+
+        /// <summary>
+        /// Test exteding with publication record null
+        /// </summary>
+        [Test]
+        public void ExtendStaticWithPublicationRecordInPublicationsFileNullTest()
+        {
+            Ksi ksi = GetStaticKsi(Resources.KsiService_ExtendResponsePdu_RequestId_1043101455, 1043101455);
+
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                ksi.Extend(new TestKsiSignature(), (PublicationRecordInPublicationFile)null);
+            });
+
+            Assert.AreEqual("publicationRecord", ex.ParamName);
+        }
+
+        /// <summary>
+        /// Test exteding with publication record null
+        /// </summary>
+        [Test]
+        public void ExtendStaticWithPublicationRecordInSignatureNullTest()
+        {
+            Ksi ksi = GetStaticKsi(Resources.KsiService_ExtendResponsePdu_RequestId_1043101455, 1043101455);
+
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                ksi.Extend(new TestKsiSignature(), (PublicationRecordInSignature)null);
+            });
+
+            Assert.AreEqual("publicationRecord", ex.ParamName);
+        }
+
+        /// <summary>
+        /// Test exteding with no suitable publication yet in publications file.
+        /// </summary>
+        [Test]
+        public void ExtendStaticNoSuitablePublicationYetTest()
+        {
+            IKsiSignature signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_New);
+            Ksi ksi = GetStaticKsi(Resources.KsiService_ExtendResponsePdu_RequestId_1043101455, 1043101455);
+
+            KsiException ex = Assert.Throws<KsiException>(delegate
+            {
+                ksi.Extend(signature);
+            });
+
+            Assert.That(ex.Message.StartsWith("No suitable publication yet"), "Unexpected exception message: " + ex.Message);
         }
 
         /// <summary>
@@ -55,10 +154,8 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void ExtendStaticInvalidWithNonZeroPayloadStatusTest()
         {
-            IKsiSignature signature = new KsiSignatureFactory().Create(
-                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
-
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_NonZeroPayloadStatus)), 0x748559A670A87D7D);
+            IKsiSignature signature = new KsiSignatureFactory().Create(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
+            Ksi ksi = GetStaticKsi(Resources.KsiService_ExtendResponsePdu_NonZeroPayloadStatus, 0x748559A670A87D7D);
 
             KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
             {
@@ -74,10 +171,8 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void ExtendStaticInvalidPduResponseVersionTest()
         {
-            IKsiSignature signature = new KsiSignatureFactory().Create(
-                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
-
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu)), 1043101455, null, PduVersion.v1);
+            IKsiSignature signature = new KsiSignatureFactory().Create(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
+            Ksi ksi = GetStaticKsi(Resources.KsiService_ExtendResponsePdu_RequestId_1043101455, 1043101455, null, PduVersion.v1);
 
             KsiServiceUnexpectedResponseFormatException ex = Assert.Throws<KsiServiceUnexpectedResponseFormatException>(delegate
             {
@@ -93,14 +188,10 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void ExtendStaticWithMultiPayloadsResponseTest()
         {
-            IKsiSignature signature = new KsiSignatureFactory().Create(
-                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
-
+            IKsiSignature signature = new KsiSignatureFactory().Create(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
             // Response has multiple payloads (2 extending payloads and a configuration payload)
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_Multi_Payloads)), 8396215651691691389,
-                new KsiSignatureFactory(new EmptyVerificationPolicy()));
-
-            ksi.Extend(signature);
+            Ksi ksi = GetStaticKsi(Resources.KsiService_ExtendResponsePdu_Multi_Payloads, 1043101455, new KsiSignatureFactory(new EmptyVerificationPolicy()));
+            Verify(ksi.Extend(signature));
         }
 
         /// <summary>
@@ -109,10 +200,8 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void ExtendStaticResponseWithWrongRequestIdTest()
         {
-            IKsiSignature signature = new KsiSignatureFactory().Create(
-                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
-
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu)), 1234567890);
+            IKsiSignature signature = new KsiSignatureFactory().Create(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
+            Ksi ksi = GetStaticKsi(Resources.KsiService_ExtendResponsePdu_RequestId_1043101455, 1234567890);
 
             KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
             {
@@ -128,10 +217,8 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void ExtendStaticInvalidCalendarHashChainTest()
         {
-            IKsiSignature signature = new KsiSignatureFactory().Create(
-                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
-
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_Invalid_Signature)), 1207047688);
+            IKsiSignature signature = new KsiSignatureFactory().Create(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
+            Ksi ksi = GetStaticKsi(Resources.KsiService_ExtendResponsePdu_Invalid_Signature, 1207047688);
 
             KsiSignatureInvalidContentException ex = Assert.Throws<KsiSignatureInvalidContentException>(delegate
             {
@@ -149,12 +236,9 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void LegacyExtendStaticTest()
         {
-            IKsiSignature signature = new KsiSignatureFactory().Create(
-                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
-
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_LegacyExtendResponsePdu)), 3491956840, null, PduVersion.v1);
-
-            ksi.Extend(signature);
+            IKsiSignature signature = new KsiSignatureFactory().Create(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
+            Ksi ksi = GetStaticKsi(Resources.KsiService_LegacyExtendResponsePdu, 3491956840, null, PduVersion.v1);
+            Verify(ksi.Extend(signature));
         }
 
         /// <summary>
@@ -163,12 +247,9 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void ExtendStaticWithNonCriticalPayloadTest()
         {
-            IKsiSignature signature = new KsiSignatureFactory().Create(
-                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
-
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSerice_ExtendResponseNonCriticalPayload)), 1043101455);
-
-            ksi.Extend(signature);
+            IKsiSignature signature = new KsiSignatureFactory().Create(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
+            Ksi ksi = GetStaticKsi(Resources.KsiService_ExtendResponseNonCriticalPayload, 1043101455);
+            Verify(ksi.Extend(signature));
         }
 
         /// <summary>
@@ -177,12 +258,9 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void ExtendStaticWithConfTest()
         {
-            IKsiSignature signature = new KsiSignatureFactory().Create(
-                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
-
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSerice_ExtendResponseWithConf)), 1043101455);
-
-            ksi.Extend(signature);
+            IKsiSignature signature = new KsiSignatureFactory().Create(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
+            Ksi ksi = GetStaticKsi(Resources.KsiService_ExtendResponseWithConf, 1043101455);
+            Verify(ksi.Extend(signature));
         }
 
         /// <summary>
@@ -191,10 +269,8 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void ExtendStaticResponseHasOnlyUnknownNonCriticalPayloadTest()
         {
-            IKsiSignature signature = new KsiSignatureFactory().Create(
-                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
-
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSerice_ExtenderResponseUnkownNonCriticalPayload)), 1234567890);
+            IKsiSignature signature = new KsiSignatureFactory().Create(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
+            Ksi ksi = GetStaticKsi(Resources.KsiService_ExtenderResponseUnkownNonCriticalPayload, 1234567890);
 
             KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
             {
@@ -212,8 +288,7 @@ namespace Guardtime.KSI.Test.Service
         {
             IKsiSignature signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(
                 File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Invalid_Calendar_Chain_Input_Hash)));
-
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_LegacyExtendResponsePdu)), 3491956840, null, PduVersion.v1);
+            Ksi ksi = GetStaticKsi(Resources.KsiService_LegacyExtendResponsePdu, 3491956840, null, PduVersion.v1);
 
             KsiSignatureInvalidContentException ex = Assert.Throws<KsiSignatureInvalidContentException>(delegate
             {
@@ -231,11 +306,8 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void LegacyExtendStaticWithNonZeroPayloadStatusTest()
         {
-            IKsiSignature signature = new KsiSignatureFactory().Create(
-                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
-
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_LegacyExtendResponsePdu_NonZeroPayloadStatus)), 768278381, null,
-                PduVersion.v1);
+            IKsiSignature signature = new KsiSignatureFactory().Create(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
+            Ksi ksi = GetStaticKsi(Resources.KsiService_LegacyExtendResponsePdu_NonZeroPayloadStatus, 768278381, null, PduVersion.v1);
 
             KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
             {
@@ -251,10 +323,8 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void ExtendStaticMultiPayloadsResponseIncludingErrorPayloadTest()
         {
-            IKsiSignature signature = new KsiSignatureFactory().Create(
-                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
-
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_Multi_Payloads_Including_ErrorPayload)));
+            IKsiSignature signature = new KsiSignatureFactory().Create(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
+            Ksi ksi = GetStaticKsi(Resources.KsiService_ExtendResponsePdu_Multi_Payloads_Including_ErrorPayload);
 
             KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
             {
@@ -270,10 +340,8 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void ExtendStaticErrorPayloadTest()
         {
-            IKsiSignature signature = new KsiSignatureFactory().Create(
-                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
-
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtenderResponsePdu_ErrorPayload)));
+            IKsiSignature signature = new KsiSignatureFactory().Create(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
+            Ksi ksi = GetStaticKsi(Resources.KsiService_ExtenderResponsePdu_ErrorPayload);
 
             KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
             {
@@ -290,11 +358,8 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void LegacyExtendStaticInvalidRequestIdTest()
         {
-            IKsiSignature signature = new KsiSignatureFactory().Create(
-                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
-
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_LegacyExtendResponsePdu)), 0, null,
-                PduVersion.v1);
+            IKsiSignature signature = new KsiSignatureFactory().Create(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
+            Ksi ksi = GetStaticKsi(Resources.KsiService_LegacyExtendResponsePdu, 0, null, PduVersion.v1);
 
             KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
             {
@@ -310,11 +375,8 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void ExtendStaticInvalidMacAlgorithmTest()
         {
-            IKsiSignature signature = new KsiSignatureFactory().Create(
-                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
-
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu)), 1043101455, null,
-                PduVersion.v2, null, HashAlgorithm.Sha2512);
+            IKsiSignature signature = new KsiSignatureFactory().Create(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
+            Ksi ksi = GetStaticKsi(Resources.KsiService_ExtendResponsePdu_RequestId_1043101455, 1043101455, null, PduVersion.v2, null, HashAlgorithm.Sha2512);
 
             KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
             {
@@ -330,11 +392,8 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void LegacyExtendStaticInvalidMacAlgorithmTest()
         {
-            IKsiSignature signature = new KsiSignatureFactory().Create(
-                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
-
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_LegacyExtendResponsePdu)), 3491956840, null,
-                PduVersion.v1, null, HashAlgorithm.Sha2512);
+            IKsiSignature signature = new KsiSignatureFactory().Create(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
+            Ksi ksi = GetStaticKsi(Resources.KsiService_LegacyExtendResponsePdu, 3491956840, null, PduVersion.v1, null, HashAlgorithm.Sha2512);
 
             KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
             {
@@ -342,6 +401,83 @@ namespace Guardtime.KSI.Test.Service
             });
 
             Assert.That(ex.Message.StartsWith("HMAC algorithm mismatch."), "Unexpected exception message: " + ex.Message);
+        }
+
+        [Test]
+        public void BeginExtendWithoutExtendingServiceProtocol()
+        {
+            KsiService service = new KsiService(null, null, null, null, null, null);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                service.BeginExtend(1, null, null);
+            });
+
+            Assert.That(ex.Message.StartsWith("Extending service protocol is missing from service"), "Unexpected exception message: " + ex.Message);
+        }
+
+        [Test]
+        public void BeginExtendWithoutExtendingServiceCredentials()
+        {
+            TestKsiServiceProtocol protocol = new TestKsiServiceProtocol();
+            KsiService service = new KsiService(null, null, protocol, null, null, null);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                service.BeginExtend(1, null, null);
+            });
+
+            Assert.That(ex.Message.StartsWith("Extending service credentials are missing."), "Unexpected exception message: " + ex.Message);
+        }
+
+        [Test]
+        public void EndExtendArgumentNullTest()
+        {
+            IKsiService service = GetStaticKsiService(new byte[] { 0 });
+
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                service.EndExtend(null);
+            });
+            Assert.AreEqual("asyncResult", ex.ParamName);
+        }
+
+        [Test]
+        public void EndExtendInvalidAsyncResultTest()
+        {
+            IKsiService service = GetStaticKsiService(new byte[] { 0 });
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                service.EndExtend(new TestAsyncResult());
+            });
+
+            Assert.That(ex.Message.StartsWith("Invalid asyncResult type:"), "Unexpected exception message: " + ex.Message);
+        }
+
+        [Test]
+        public void EndExtendWithoutExtendingServiceProtocol()
+        {
+            KsiService service = new KsiService(null, null, null, null, null, null);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                service.EndExtend(new TestAsyncResult());
+            });
+
+            Assert.That(ex.Message.StartsWith("Extending service protocol is missing from service"), "Unexpected exception message: " + ex.Message);
+        }
+
+        private static void Verify(IKsiSignature signature)
+        {
+            Assert.IsTrue(signature.IsExtended, "");
+
+            IVerificationContext context = new VerificationContext()
+            {
+                Signature = signature,
+            };
+            VerificationResult result = new InternalVerificationPolicy().Verify(context);
+            Assert.AreEqual(VerificationResultCode.Ok, result.ResultCode, "Unexpected verification result");
         }
     }
 }

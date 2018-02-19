@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -22,7 +22,7 @@ using Guardtime.KSI.Publication;
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
     /// <summary>
-    ///     Rule checks that publications file publication hash matches with extender reponse calendar hash chain root hash.
+    ///     Rule checks that publications file publication hash matches with extender response calendar hash chain root hash.
     /// </summary>
     public sealed class PublicationsFilePublicationHashMatchesExtenderResponseRule : VerificationRule
     {
@@ -37,7 +37,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             if (publicationRecord == null)
             {
                 // if suitable publication record does not exist in publications file then return NA
-                return new VerificationResult(GetRuleName(), VerificationResultCode.Na);
+                return new VerificationResult(GetRuleName(), VerificationResultCode.Na, VerificationError.Gen02);
             }
 
             CalendarHashChain extendedCalendarHashChain = GetExtendedCalendarHashChain(context, publicationRecord.PublicationData.PublicationTime);

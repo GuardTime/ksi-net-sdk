@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -18,17 +18,15 @@
  */
 
 using System.Collections.ObjectModel;
-using NLog;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
     /// <summary>
     ///     This rule verifies that aggregation hash chain index and RFC3161 record chain index match.
+    ///     If RFC3161 record is not present then <see cref="VerificationResultCode.Ok" /> is returned.
     /// </summary>
     public sealed class Rfc3161RecordChainIndexRule : VerificationRule
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
         /// <see cref="VerificationRule.Verify" />
         public override VerificationResult Verify(IVerificationContext context)
         {
@@ -43,7 +41,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
                 if (rfc3161ChainIndex.Length != aggregationChainIndex.Length)
                 {
-                    Logger.Warn(
+                    Logger.Debug(
                         string.Format("Aggregation hash chain index and RFC3161 chain index mismatch. Aggregation chain index length is {0} and RFC3161 chain index length is {1}",
                             aggregationChainIndex.Length, rfc3161ChainIndex.Length));
 
@@ -57,10 +55,9 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
                     if (!rfc3161Index.Equals(aggregationIndex))
                     {
-                        Logger.Warn(
-                            string.Format(
-                                "Aggregation hash chain index and RFC3161 chain index mismatch. At position {0} aggregation chain index value is {1} and RFC3161 chain index value is {2}",
-                                i, aggregationIndex, rfc3161Index));
+                        Logger.Debug(string.Format(
+                            "Aggregation hash chain index and RFC3161 chain index mismatch. At position {0} aggregation chain index value is {1} and RFC3161 chain index value is {2}",
+                            i, aggregationIndex, rfc3161Index));
                         return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int12);
                     }
                 }

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -33,13 +33,15 @@ namespace Guardtime.KSI.Signature.Verification.Policy
             /// </summary>
             public PublicationsFileVerificationPolicy()
             {
-                VerificationRule verificationRule = new ExtendingPermittedVerificationRule()
-                    .OnSuccess(new PublicationsFilePublicationHashMatchesExtenderResponseRule()
-                        .OnSuccess(new PublicationsFilePublicationTimeMatchesExtenderResponseRule()
-                            .OnSuccess(new PublicationsFileExtendedSignatureInputHashRule())));
+                VerificationRule verificationRule = new ExtendingPermittedVerificationRule() // Gen-02
+                    .OnSuccess(new ExtenderResponseCalendarHashChainAlgorithmDeprecatedRule() // Gen-02
+                        .OnSuccess(new PublicationsFilePublicationHashMatchesExtenderResponseRule() // Pub-01,  Gen-02
+                            .OnSuccess(new PublicationsFilePublicationTimeMatchesExtenderResponseRule() // Pub-02
+                                .OnSuccess(new PublicationsFileExtendedSignatureInputHashRule())))); // Pub-03
 
-                FirstRule = new SignaturePublicationRecordExistenceRule()
-                    .OnSuccess(new PublicationsFileSignaturePublicationMatchRule()
+                FirstRule = new SignaturePublicationRecordExistenceRule() // Gen-02
+                    .OnSuccess(new PublicationsFileSignaturePublicationMatchRule() // Pub-05, Gen-02
+                        .OnSuccess(new CalendarHashChainAlgorithmDeprecatedRule()) // Gen-02
                         .OnNa(verificationRule))
                     .OnNa(verificationRule);
             }

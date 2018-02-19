@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -31,6 +31,7 @@ namespace Guardtime.KSI.Test.Publication
         public bool Forward => false;
 
         public byte[] EncodeValueBytes;
+        public byte[] EncodedBytes;
 
         public List<PublicationRecordInPublicationFile> PublicationRecords = new List<PublicationRecordInPublicationFile>();
 
@@ -42,6 +43,11 @@ namespace Guardtime.KSI.Test.Publication
         public byte[] EncodeValue()
         {
             return EncodeValueBytes;
+        }
+
+        public byte[] Encode()
+        {
+            return EncodedBytes;
         }
 
         public byte[] FindCertificateById(byte[] certificateId)

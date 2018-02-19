@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -21,7 +21,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
+using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
+using Guardtime.KSI.Publication;
+using Guardtime.KSI.Signature;
+using Guardtime.KSI.Test.Properties;
+using Guardtime.KSI.Test.Signature.Verification;
+using Guardtime.KSI.Test.Trust;
 
 namespace Guardtime.KSI.Test
 {
@@ -60,6 +67,61 @@ namespace Guardtime.KSI.Test
             field.SetValue(value, new List<ITlvTag>(childTags));
 
             return value;
+        }
+
+        public static HashAlgorithm GetHashAlgorithm(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                return HashAlgorithm.Default;
+            }
+
+            HashAlgorithm algorithm = HashAlgorithm.GetByName(name);
+
+            if (algorithm == null)
+            {
+                throw new Exception("Invalid hmac algorithm name value in config. Name: " + name);
+            }
+
+            return algorithm;
+        }
+
+        public static KsiSignature GetSignature(string path = null)
+        {
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, path ?? Resources.KsiSignature_Ok), FileMode.Open))
+            {
+                return (KsiSignature)new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream);
+            }
+        }
+
+        public static PublicationsFile GetPublicationsFile(string path = null)
+        {
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, path ?? Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
+            {
+                return (PublicationsFile)new PublicationsFileFactory(new TestPkiTrustProvider()).Create(stream);
+            }
+        }
+
+        public static RawTag GetRawTag(string file)
+        {
+            using (TlvReader reader = new TlvReader(new FileStream(Path.Combine(TestSetup.LocalPath, file), FileMode.Open)))
+            {
+                return reader.ReadTag();
+            }
+        }
+
+        public static X509Store CreateCertStore(params string[] certPaths)
+        {
+            X509Store store = new X509Store("test", StoreLocation.CurrentUser);
+            store.Open(OpenFlags.ReadWrite);
+            store.RemoveRange(store.Certificates);
+
+            foreach (string certPath in certPaths)
+            {
+                X509Certificate2 certificate = new X509Certificate2(Path.Combine(TestSetup.LocalPath, certPath));
+                store.Add(certificate);
+            }
+            return store;
         }
     }
 }

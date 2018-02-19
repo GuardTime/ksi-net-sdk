@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -17,8 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
-using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
@@ -27,41 +25,32 @@ using NUnit.Framework;
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
-    public class UserProvidedPublicationExistenceRuleTests
+    public class UserProvidedPublicationExistenceRuleTests : RuleTestsBase
     {
-        [Test]
-        public void TestMissingContext()
-        {
-            UserProvidedPublicationExistenceRule rule = new UserProvidedPublicationExistenceRule();
+        public override VerificationRule Rule => new UserProvidedPublicationExistenceRule();
 
-            // Argument null exception when no context
-            Assert.Throws<ArgumentNullException>(delegate
-            {
-                rule.Verify(null);
-            });
+        [Test]
+        public override void TestContextMissingSignature()
+        {
+            // signature is not needed
         }
 
         [Test]
         public void TestMissingContextUserPublication()
         {
-            UserProvidedPublicationExistenceRule rule = new UserProvidedPublicationExistenceRule();
-
             TestVerificationContext context = new TestVerificationContext();
-            Assert.AreEqual(VerificationResultCode.Na, rule.Verify(context).ResultCode);
+            Verify(context, VerificationResultCode.Na);
         }
 
         [Test]
         public void TestContextUserPublicationIsSet()
         {
-            UserProvidedPublicationExistenceRule rule = new UserProvidedPublicationExistenceRule();
-
             TestVerificationContext context = new TestVerificationContext()
             {
-                UserPublication = new PublicationData(
-                    "AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K")
+                UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K")
             };
 
-            Assert.AreEqual(VerificationResultCode.Ok, rule.Verify(context).ResultCode);
+            Verify(context, VerificationResultCode.Ok);
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Service;
 using NUnit.Framework;
@@ -27,21 +28,82 @@ namespace Guardtime.KSI.Test.Service
     public class PduHeaderTests
     {
         [Test]
+        public void PduHeaderTest()
+        {
+            PduHeader tag = new PduHeader(new TlvTagBuilder(Constants.PduHeader.TagType, false, false, new ITlvTag[]
+            {
+                new StringTag(Constants.PduHeader.LoginIdTagType, false, false, "TestLoginId"),
+                new IntegerTag(Constants.PduHeader.InstanceIdTagType, false, false, 1),
+                new IntegerTag(Constants.PduHeader.MessageIdTagType, false, false, 2)
+            }).BuildTag());
+
+            Assert.AreEqual("TestLoginId", tag.LoginId, "Unexpected login id");
+            Assert.AreEqual(1, tag.InstanceId, "Unexpected instance id");
+            Assert.AreEqual(2, tag.MessageId, "Unexpected publication time");
+        }
+
+        [Test]
+        public void PduHeaderWithoutRequestId()
+        {
+            TlvException ex = Assert.Throws<TlvException>(delegate
+            {
+                new PduHeader(new TlvTagBuilder(Constants.PduHeader.TagType, false, false, new ITlvTag[]
+                {
+                    new IntegerTag(Constants.PduHeader.InstanceIdTagType, false, false, 2),
+                }).BuildTag());
+            });
+
+            Assert.That(ex.Message, Does.StartWith("Exactly one login id must exist in PDU header"));
+        }
+
+        [Test]
+        public void PduHeaderWithMultipleInstanceIds()
+        {
+            TlvException ex = Assert.Throws<TlvException>(delegate
+            {
+                new PduHeader(new TlvTagBuilder(Constants.PduHeader.TagType, false, false, new ITlvTag[]
+                {
+                    new StringTag(Constants.PduHeader.LoginIdTagType, false, false, "TestLoginId"),
+                    new IntegerTag(Constants.PduHeader.InstanceIdTagType, false, false, 2),
+                    new IntegerTag(Constants.PduHeader.InstanceIdTagType, false, false, 2),
+                }).BuildTag());
+            });
+
+            Assert.That(ex.Message, Does.StartWith("Only one instance id is allowed in PDU header"));
+        }
+
+        [Test]
+        public void PduHeaderWithoutMultipleMessageIds()
+        {
+            TlvException ex = Assert.Throws<TlvException>(delegate
+            {
+                new PduHeader(new TlvTagBuilder(Constants.PduHeader.TagType, false, false, new ITlvTag[]
+                {
+                    new StringTag(Constants.PduHeader.LoginIdTagType, false, false, "TestLoginId"),
+                    new IntegerTag(Constants.PduHeader.MessageIdTagType, false, false, 2),
+                    new IntegerTag(Constants.PduHeader.MessageIdTagType, false, false, 2)
+                }).BuildTag());
+            });
+
+            Assert.That(ex.Message, Does.StartWith("Only one message id is allowed in PDU header"));
+        }
+
+        [Test]
         public void ToStringTest()
         {
-            PduHeader tag = TestUtil.GetCompositeTag<PduHeader>(Constants.PduHeader.TagType,
+            PduHeader tag = new PduHeader(new TlvTagBuilder(Constants.PduHeader.TagType, false, false,
                 new ITlvTag[]
                 {
-                    new StringTag(Constants.PduHeader.LoginIdTagType, false, false, "Test Login Id"),
+                    new StringTag(Constants.PduHeader.LoginIdTagType, false, false, "TestLoginId"),
                     new IntegerTag(Constants.PduHeader.InstanceIdTagType, false, false, 1),
                     new IntegerTag(Constants.PduHeader.MessageIdTagType, false, false, 2)
-                });
+                }).BuildTag());
 
             PduHeader tag2 = new PduHeader(new RawTag(tag.Type, tag.NonCritical, tag.Forward, tag.EncodeValue()));
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
 
-            tag = new PduHeader("Test Login Id", 1, 2);
+            tag = new PduHeader("TestLoginId", 1, 2);
 
             Assert.AreEqual(tag.ToString(), tag2.ToString());
         }

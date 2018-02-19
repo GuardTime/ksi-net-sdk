@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -162,28 +162,31 @@ namespace Guardtime.KSI.Test.Parser
         [Test]
         public void TestTlvTagCreateFromInvalidEncodeTlvTag()
         {
-            Assert.Throws<TlvException>(delegate
+            TlvException ex = Assert.Throws<TlvException>(delegate
             {
                 new ImprintTag(new InvalidEncodeTlvTag(0x0, false, false));
             });
+            Assert.That(ex.Message, Does.StartWith("Invalid TLV element encoded value: null"));
         }
 
         [Test]
         public void TestImprintTagCreateFromNullTag()
         {
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 new ImprintTag(null);
             });
+            Assert.AreEqual("tag", ex.ParamName);
         }
 
         [Test]
         public void TestImprintTagCreateWithNullValue()
         {
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 new ImprintTag(0x1, true, true, null);
             });
+            Assert.AreEqual("value", ex.ParamName);
         }
 
         private class ChildImprintTag : ImprintTag

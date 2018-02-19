@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -17,180 +17,160 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
-using System.Threading;
 using Guardtime.KSI.Publication;
 using Guardtime.KSI.Service;
+using Guardtime.KSI.Service.Tcp;
 using Guardtime.KSI.Signature;
 using Guardtime.KSI.Test.Crypto;
 using Guardtime.KSI.Test.Properties;
 using Guardtime.KSI.Trust;
+using Guardtime.KSI.Hashing;
 
 namespace Guardtime.KSI.Test.Integration
 {
     public class IntegrationTests
     {
-        private static readonly HttpKsiServiceProtocol HttpKsiServiceProtocol =
-            new HttpKsiServiceProtocol(Settings.Default.HttpSigningServiceUrl, Settings.Default.HttpExtendingServiceUrl, Settings.Default.HttpPublicationsFileUrl, 10000);
-
-        private static readonly HttpKsiServiceProtocol HttpKsiServiceProtocolInvalidUrls =
-            new HttpKsiServiceProtocol("http://invalid.signing.service.url", "http://invalid.extending.service.url",
-                "http://invalid.publications.file.url", 10000);
-
-        private static readonly TcpKsiServiceProtocol TcpKsiServiceProtocol = new TcpKsiServiceProtocol(IPAddress.Parse(Settings.Default.TcpSigningServiceUrl),
-            Settings.Default.TcpSigningServicePort, 10000);
-
-        private static readonly TcpKsiServiceProtocol TcpKsiServiceProtocolInvalidPort = new TcpKsiServiceProtocol(IPAddress.Parse(Settings.Default.TcpSigningServiceUrl), 2847,
-            10000);
-
-        public static KsiService HttpKsiService = GetHttpKsiService();
-
-        public static object[] KsiServiceTestCases =
+        public static KsiService[] HttpKsiService = new KsiService[]
         {
-            new object[]
-            {
-                HttpKsiService
-            }
+            GetHttpKsiService()
         };
 
-        public static object[] HttpTestCases =
+        public static KsiService[] KsiServices = GetKsiServices();
+
+        public static KsiService[] GetKsiServices()
         {
-            new object[]
+            return new KsiService[]
             {
-                new Ksi(HttpKsiService)
-            }
+                GetHttpKsiService(),
+                GetTcpKsiService()
+            };
+        }
+
+        protected static object[] KsiServicesWithInvalidExtendingPass = new object[]
+        {
+            GetHttpKsiServiceWithInvalidExtendingPass(),
+            GetTcpKsiServiceWithInvalidExtendingPass()
         };
 
-        protected static object[] HttpTestCasesInvalidSigningPass =
+        protected static object[] KsiServicesWithInvalidSigningPass = new object[]
         {
-            new object[]
-            {
-                new Ksi(
-                    GetHttpKsiServiceWithInvalidSigningPass())
-            }
+            GetHttpKsiServiceWithInvalidSigningPass(),
+            GetTcpKsiServiceWithInvalidSigningPass()
         };
 
-        protected static object[] HttpTestCasesInvalidExtendingPass =
+        public static Ksi[] KsiList = new Ksi[]
         {
-            new object[]
-            {
-                new Ksi(
-                    GetHttpKsiServiceWithInvalidExtendingPass())
-            }
+            new Ksi(GetHttpKsiService()),
+            new Ksi(GetTcpKsiService())
         };
 
-        protected static object[] HttpTestCasesInvalidSigningUrl =
+        public static Ksi[] HttpKsi = new Ksi[]
         {
-            new object[]
-            {
-                new Ksi(
-                    new KsiService(
-                        HttpKsiServiceProtocolInvalidUrls,
-                        new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
-                        HttpKsiServiceProtocol,
-                        new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
-                        HttpKsiServiceProtocol,
-                        new PublicationsFileFactory(
-                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
-                        TestSetup.PduVersion))
-            }
+            new Ksi(GetHttpKsiService())
         };
 
-        protected static object[] HttpTestCasesInvalidExtendingUrl =
-        {
+        protected static object[] KsiListWithInvalidSigningPass =
             new object[]
             {
-                new Ksi(
-                    new KsiService(
-                        HttpKsiServiceProtocol,
-                        new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
-                        HttpKsiServiceProtocolInvalidUrls,
-                        new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
-                        HttpKsiServiceProtocol,
-                        new PublicationsFileFactory(
-                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
-                        TestSetup.PduVersion))
-            }
-        };
+                new Ksi(GetHttpKsiServiceWithInvalidSigningPass()),
+                new Ksi(GetTcpKsiServiceWithInvalidSigningPass()),
+            };
 
-        protected static object[] HttpTestCasesInvalidPublicationsFilegUrl =
-        {
+        protected static object[] KsiListWithInvalidExtendingPass =
             new object[]
             {
-                new Ksi(
-                    new KsiService(
-                        HttpKsiServiceProtocol,
-                        new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
-                        HttpKsiServiceProtocol,
-                        new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
-                        HttpKsiServiceProtocolInvalidUrls,
-                        new PublicationsFileFactory(
-                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
-                        TestSetup.PduVersion))
-            }
-        };
+                new Ksi(GetHttpKsiServiceWithInvalidExtendingPass()),
+                new Ksi(GetTcpKsiServiceWithInvalidExtendingPass())
+            };
 
-        protected static object[] TcpTestCases =
+        protected static Ksi[] HttpKsiWithInvalidSigningUrl = new Ksi[]
         {
-            new object[]
-            {
-                new Ksi(
-                    new KsiService(
-                        TcpKsiServiceProtocol,
-                        new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
-                        HttpKsiServiceProtocol,
-                        new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
-                        HttpKsiServiceProtocol,
-                        new PublicationsFileFactory(
-                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
-                        TestSetup.PduVersion))
-            }
+            new Ksi(new KsiService(
+                GetHttpKsiServiceProtocolInvalidUrls(),
+                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpSigningServiceHmacAlgorithm)),
+                GetHttpKsiServiceProtocol(),
+                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpExtendingServiceHmacAlgorithm)),
+                GetHttpKsiServiceProtocol(),
+                new PublicationsFileFactory(
+                    new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
+                TestSetup.PduVersion))
         };
 
-        protected static object[] TcpTestCasesInvalidPass =
+        protected static Ksi[] HttpKsiWithInvalidExtendingUrl = new Ksi[]
         {
-            new object[]
-            {
-                new Ksi(
-                    new KsiService(
-                        TcpKsiServiceProtocol,
-                        new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass + "x"),
-                        HttpKsiServiceProtocol,
-                        new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass + "x"),
-                        HttpKsiServiceProtocol,
-                        new PublicationsFileFactory(
-                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
-                        TestSetup.PduVersion))
-            }
+            new Ksi(new KsiService(
+                GetHttpKsiServiceProtocol(),
+                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpSigningServiceHmacAlgorithm)),
+                GetHttpKsiServiceProtocolInvalidUrls(),
+                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpExtendingServiceHmacAlgorithm)),
+                GetHttpKsiServiceProtocol(),
+                new PublicationsFileFactory(
+                    new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
+                TestSetup.PduVersion))
         };
 
-        protected static object[] TcpTestCasesInvalidPort =
+        protected static Ksi[] HttpKsiWithInvalidPublicationsFileUrl = new Ksi[]
         {
-            new object[]
-            {
-                new Ksi(
-                    new KsiService(
-                        TcpKsiServiceProtocolInvalidPort,
-                        new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
-                        HttpKsiServiceProtocolInvalidUrls,
-                        new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
-                        HttpKsiServiceProtocolInvalidUrls,
-                        new PublicationsFileFactory(
-                            new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
-                        TestSetup.PduVersion))
-            }
+            new Ksi(
+                new KsiService(
+                    GetHttpKsiServiceProtocol(),
+                    new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass,
+                        TestUtil.GetHashAlgorithm(Settings.Default.HttpSigningServiceHmacAlgorithm)),
+                    GetHttpKsiServiceProtocol(),
+                    new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass,
+                        TestUtil.GetHashAlgorithm(Settings.Default.HttpExtendingServiceHmacAlgorithm)),
+                    GetHttpKsiServiceProtocolInvalidUrls(),
+                    new PublicationsFileFactory(
+                        new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
+                    TestSetup.PduVersion))
         };
 
-        protected static KsiService GetHttpKsiService(PduVersion? pduVersion = null)
+        protected static Ksi[] TcpKsiWithInvalidSigningPort = new Ksi[]
+        {
+            new Ksi(new KsiService(
+                GetTcpKsiSigningServiceProtocolInvalidPort(),
+                new ServiceCredentials(Settings.Default.TcpSigningServiceUser, Settings.Default.TcpSigningServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.TcpSigningServiceHmacAlgorithm)),
+                GetTcpKsiExtendingServiceProtocol(),
+                new ServiceCredentials(Settings.Default.TcpExtendingServiceUser, Settings.Default.TcpExtendingServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.TcpExtendingServiceHmacAlgorithm)),
+                GetHttpKsiServiceProtocol(),
+                new PublicationsFileFactory(
+                    new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
+                TestSetup.PduVersion))
+        };
+
+        protected static Ksi[] TcpKsiWithInvalidExtendingPort = new Ksi[]
+        {
+            new Ksi(new KsiService(
+                GetTcpKsiSigningServiceProtocol(),
+                new ServiceCredentials(Settings.Default.TcpSigningServiceUser, Settings.Default.TcpSigningServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.TcpSigningServiceHmacAlgorithm)),
+                GetTcpKsiExtendingServiceProtocolInvalidPort(),
+                new ServiceCredentials(Settings.Default.TcpExtendingServiceUser, Settings.Default.TcpExtendingServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.TcpExtendingServiceHmacAlgorithm)),
+                GetHttpKsiServiceProtocol(),
+                new PublicationsFileFactory(
+                    new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
+                TestSetup.PduVersion))
+        };
+
+        public static KsiService GetHttpKsiService(PduVersion? pduVersion = null)
         {
             return new KsiService(
-                HttpKsiServiceProtocol,
-                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
-                HttpKsiServiceProtocol,
-                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
-                HttpKsiServiceProtocol,
+                GetHttpKsiServiceProtocol(),
+                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpSigningServiceHmacAlgorithm)),
+                GetHttpKsiServiceProtocol(),
+                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpExtendingServiceHmacAlgorithm)),
+                GetHttpKsiServiceProtocol(),
                 new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                     CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))), pduVersion ?? TestSetup.PduVersion);
         }
@@ -198,11 +178,13 @@ namespace Guardtime.KSI.Test.Integration
         protected static KsiService GetTcpKsiService(PduVersion? pduVersion = null)
         {
             return new KsiService(
-                TcpKsiServiceProtocol,
-                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
-                HttpKsiServiceProtocol,
-                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
-                HttpKsiServiceProtocol,
+                GetTcpKsiSigningServiceProtocol(),
+                new ServiceCredentials(Settings.Default.TcpSigningServiceUser, Settings.Default.TcpSigningServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.TcpSigningServiceHmacAlgorithm)),
+                GetTcpKsiExtendingServiceProtocol(),
+                new ServiceCredentials(Settings.Default.TcpExtendingServiceUser, Settings.Default.TcpExtendingServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.TcpExtendingServiceHmacAlgorithm)),
+                GetHttpKsiServiceProtocol(),
                 new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                     CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))), pduVersion ?? TestSetup.PduVersion);
         }
@@ -210,11 +192,29 @@ namespace Guardtime.KSI.Test.Integration
         protected static KsiService GetHttpKsiServiceWithInvalidSigningPass()
         {
             return new KsiService(
-                HttpKsiServiceProtocol,
-                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass + "x"),
-                HttpKsiServiceProtocol,
-                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
-                HttpKsiServiceProtocol,
+                GetHttpKsiServiceProtocol(),
+                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass + "x",
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpSigningServiceHmacAlgorithm)),
+                GetHttpKsiServiceProtocol(),
+                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpExtendingServiceHmacAlgorithm)),
+                GetHttpKsiServiceProtocol(),
+                new PublicationsFileFactory(
+                    new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
+                new KsiSignatureFactory(),
+                TestSetup.PduVersion);
+        }
+
+        private static KsiService GetTcpKsiServiceWithInvalidSigningPass()
+        {
+            return new KsiService(
+                GetTcpKsiSigningServiceProtocol(),
+                new ServiceCredentials(Settings.Default.TcpSigningServiceUser, Settings.Default.TcpSigningServicePass + "x",
+                    TestUtil.GetHashAlgorithm(Settings.Default.TcpSigningServiceHmacAlgorithm)),
+                GetTcpKsiExtendingServiceProtocol(),
+                new ServiceCredentials(Settings.Default.TcpExtendingServiceUser, Settings.Default.TcpExtendingServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.TcpExtendingServiceHmacAlgorithm)),
+                GetHttpKsiServiceProtocol(),
                 new PublicationsFileFactory(
                     new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
                 new KsiSignatureFactory(),
@@ -224,11 +224,61 @@ namespace Guardtime.KSI.Test.Integration
         protected static KsiService GetHttpKsiServiceWithInvalidExtendingPass()
         {
             return new KsiService(
-                HttpKsiServiceProtocol,
-                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
-                HttpKsiServiceProtocol,
-                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass + "x"),
-                HttpKsiServiceProtocol,
+                GetHttpKsiServiceProtocol(),
+                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpSigningServiceHmacAlgorithm)),
+                GetHttpKsiServiceProtocol(),
+                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass + "x",
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpExtendingServiceHmacAlgorithm)),
+                GetHttpKsiServiceProtocol(),
+                new PublicationsFileFactory(
+                    new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
+                new KsiSignatureFactory(),
+                TestSetup.PduVersion);
+        }
+
+        private static KsiService GetTcpKsiServiceWithInvalidExtendingPass()
+        {
+            return new KsiService(
+                GetTcpKsiSigningServiceProtocol(),
+                new ServiceCredentials(Settings.Default.TcpSigningServiceUser, Settings.Default.TcpSigningServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.TcpSigningServiceHmacAlgorithm)),
+                GetTcpKsiExtendingServiceProtocol(),
+                new ServiceCredentials(Settings.Default.TcpExtendingServiceUser, Settings.Default.TcpExtendingServicePass + "x",
+                    TestUtil.GetHashAlgorithm(Settings.Default.TcpExtendingServiceHmacAlgorithm)),
+                GetHttpKsiServiceProtocol(),
+                new PublicationsFileFactory(
+                    new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
+                new KsiSignatureFactory(),
+                TestSetup.PduVersion);
+        }
+
+        protected static KsiService GetHttpKsiServiceWithoutSigningUrl()
+        {
+            return new KsiService(
+                new HttpKsiServiceProtocol(null, Settings.Default.HttpExtendingServiceUrl, Settings.Default.HttpPublicationsFileUrl, 10000),
+                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpSigningServiceHmacAlgorithm)),
+                GetHttpKsiServiceProtocol(),
+                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpExtendingServiceHmacAlgorithm)),
+                GetHttpKsiServiceProtocol(),
+                new PublicationsFileFactory(
+                    new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
+                new KsiSignatureFactory(),
+                TestSetup.PduVersion);
+        }
+
+        protected static KsiService GetHttpKsiServiceWithoutExtendingUrl()
+        {
+            return new KsiService(
+                GetHttpKsiServiceProtocol(),
+                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpSigningServiceHmacAlgorithm)),
+                new HttpKsiServiceProtocol(Settings.Default.HttpSigningServiceUrl, null, Settings.Default.HttpPublicationsFileUrl, 10000),
+                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpExtendingServiceHmacAlgorithm)),
+                GetHttpKsiServiceProtocol(),
                 new PublicationsFileFactory(
                     new PkiTrustStoreProvider(new X509Store(StoreName.Root), CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))),
                 new KsiSignatureFactory(),
@@ -238,24 +288,59 @@ namespace Guardtime.KSI.Test.Integration
         protected static KsiService GetHttpKsiServiceWithDefaultPduVersion()
         {
             return new KsiService(
-                HttpKsiServiceProtocol,
-                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass),
-                HttpKsiServiceProtocol,
-                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass),
-                HttpKsiServiceProtocol,
+                GetHttpKsiServiceProtocol(),
+                new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpSigningServiceHmacAlgorithm)),
+                GetHttpKsiServiceProtocol(),
+                new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass,
+                    TestUtil.GetHashAlgorithm(Settings.Default.HttpExtendingServiceHmacAlgorithm)),
+                GetHttpKsiServiceProtocol(),
                 new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
                     CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))));
         }
-
-        protected class TestAsyncResult : IAsyncResult
+        
+        protected static KsiService GetService(PduVersion version, HashAlgorithm aggregatorHmacAlgo, HashAlgorithm extenderHmacAlgo)
         {
-            public object AsyncState => null;
+            return new KsiService(
+                    new HttpKsiServiceProtocol(Settings.Default.HttpSigningServiceUrl, Settings.Default.HttpExtendingServiceUrl, Settings.Default.HttpPublicationsFileUrl, 10000),
+                        new ServiceCredentials(Settings.Default.HttpSigningServiceUser, Settings.Default.HttpSigningServicePass, aggregatorHmacAlgo),
+                    new HttpKsiServiceProtocol(Settings.Default.HttpSigningServiceUrl, Settings.Default.HttpExtendingServiceUrl, Settings.Default.HttpPublicationsFileUrl, 10000),
+                        new ServiceCredentials(Settings.Default.HttpExtendingServiceUser, Settings.Default.HttpExtendingServicePass, extenderHmacAlgo),
+                    new HttpKsiServiceProtocol(Settings.Default.HttpSigningServiceUrl, Settings.Default.HttpExtendingServiceUrl, Settings.Default.HttpPublicationsFileUrl, 10000),
+                        new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
+                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))), version);
+        }
+        
+        private static HttpKsiServiceProtocol GetHttpKsiServiceProtocol()
+        {
+            return new HttpKsiServiceProtocol(Settings.Default.HttpSigningServiceUrl, Settings.Default.HttpExtendingServiceUrl, Settings.Default.HttpPublicationsFileUrl, 10000);
+        }
 
-            public WaitHandle AsyncWaitHandle => new ManualResetEvent(false);
+        private static HttpKsiServiceProtocol GetHttpKsiServiceProtocolInvalidUrls()
+        {
+            return
+                new HttpKsiServiceProtocol("http://invalid.signing.service.url", "http://invalid.extending.service.url",
+                    "http://invalid.publications.file.url", 10000);
+        }
 
-            public bool CompletedSynchronously => false;
+        private static TcpKsiSigningServiceProtocol GetTcpKsiSigningServiceProtocol()
+        {
+            return new TcpKsiSigningServiceProtocol(IPAddress.Parse(Settings.Default.TcpSigningServiceIp), Settings.Default.TcpSigningServicePort, 10000);
+        }
 
-            public bool IsCompleted => false;
+        private static TcpKsiExtendingServiceProtocol GetTcpKsiExtendingServiceProtocol()
+        {
+            return new TcpKsiExtendingServiceProtocol(IPAddress.Parse(Settings.Default.TcpExtendingServiceIp), Settings.Default.TcpExtendingServicePort, 10000);
+        }
+
+        private static TcpKsiSigningServiceProtocol GetTcpKsiSigningServiceProtocolInvalidPort()
+        {
+            return new TcpKsiSigningServiceProtocol(IPAddress.Parse(Settings.Default.TcpSigningServiceIp), 2847, 10000);
+        }
+
+        private static TcpKsiExtendingServiceProtocol GetTcpKsiExtendingServiceProtocolInvalidPort()
+        {
+            return new TcpKsiExtendingServiceProtocol(IPAddress.Parse(Settings.Default.TcpExtendingServiceIp), 2847, 10000);
         }
     }
 }

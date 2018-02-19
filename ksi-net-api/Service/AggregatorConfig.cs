@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.Collections.Generic;
 
 namespace Guardtime.KSI.Service
@@ -24,19 +25,38 @@ namespace Guardtime.KSI.Service
     /// <summary>
     ///     Aggregator configuration data.
     /// </summary>
-    public sealed class AggregatorConfig
+    public sealed class AggregatorConfig : AbstractConfig
     {
         /// <summary>
         /// Create new aggregator configuration data instance
         /// </summary>
         /// <param name="payload">Aggregator config response payload</param>
-        public AggregatorConfig(AggregatorConfigResponsePayload payload)
+        public AggregatorConfig(AggregatorConfigResponsePayload payload) : base(payload.ParentsUris)
         {
+            if (payload == null)
+            {
+                throw new ArgumentNullException(nameof(payload));
+            }
             MaxLevel = payload.MaxLevel;
             AggregationAlgorithm = payload.AggregationAlgorithm;
             AggregationPeriod = payload.AggregationPeriod;
             MaxRequests = payload.MaxRequests;
-            ParentsUris = payload.ParentsUris;
+        }
+
+        /// <summary>
+        /// Create new aggregator configuration data instance
+        /// </summary>
+        /// <param name="maxLevel">Maximum level value that the nodes in the client's aggregation tree are allowed to have</param>
+        /// <param name="aggregationAlgorithm">Identifier of the hash function that the aggregator is using for aggregation tree computation</param>
+        /// <param name="aggregationPeriod">Aggregation periond in milliseconds</param>
+        /// <param name="maxRequests">Maximum number of requests the client is allowed to send within one parent server's aggregation round</param>
+        /// <param name="parentsUris">Parent server URI (may be several parent servers)</param>
+        public AggregatorConfig(ulong? maxLevel, ulong? aggregationAlgorithm, ulong? aggregationPeriod, ulong? maxRequests, IList<string> parentsUris) : base(parentsUris)
+        {
+            MaxLevel = maxLevel;
+            AggregationAlgorithm = aggregationAlgorithm;
+            AggregationPeriod = aggregationPeriod;
+            MaxRequests = maxRequests;
         }
 
         /// <summary>
@@ -45,12 +65,12 @@ namespace Guardtime.KSI.Service
         public ulong? MaxLevel { get; }
 
         /// <summary>
-        /// Identifier of the hash function that the client is recommended to use in its aggregation trees
+        /// Identifier of the hash function that the aggregator is using for aggregation tree computation
         /// </summary>
         public ulong? AggregationAlgorithm { get; }
 
         /// <summary>
-        /// Recommended duration of client's aggregation round, in milliseconds
+        /// Aggregation periond in milliseconds
         /// </summary>
         public ulong? AggregationPeriod { get; }
 
@@ -60,8 +80,50 @@ namespace Guardtime.KSI.Service
         public ulong? MaxRequests { get; }
 
         /// <summary>
-        /// Parent server URI (may be several parent servers)
+        /// Returns a string that represents the current object.
         /// </summary>
-        public IList<string> ParentsUris { get; }
+        public override string ToString()
+        {
+
+            return string.Format("AggregatorConfig [{0},{1},{2},{3},[{4}]]", MaxLevel?.ToString() ?? "null", AggregationAlgorithm?.ToString() ?? "null",
+                AggregationPeriod?.ToString() ?? "null", MaxRequests?.ToString() ?? "null", GetParentUrisString());
+        }
+
+
+
+        /// <summary>
+        ///     Compare current aggregator config against another config.
+        /// </summary>
+        /// <param name="config">aggregator config</param>
+        /// <returns>true if objects are equal</returns>
+        public bool Equals(AggregatorConfig config)
+        {
+            if (!base.Equals(config))
+            {
+                return false;
+            }
+
+            if (MaxLevel != config.MaxLevel)
+            {
+                return false;
+            }
+
+            if (AggregationAlgorithm != config.AggregationAlgorithm)
+            {
+                return false;
+            }
+
+            if (AggregationPeriod != config.AggregationPeriod)
+            {
+                return false;
+            }
+
+            if (MaxRequests != config.MaxRequests)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

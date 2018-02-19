@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -23,30 +23,44 @@ using System.Security.Cryptography.Pkcs;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Guardtime.KSI.Exceptions;
-using NLog;
 
 namespace Guardtime.KSI.Crypto.Microsoft.Crypto
 {
     /// <summary>
-    ///     PKCS#7 signature verifier.
+    ///     PKCS#7 signature verifier. Used to verify certificate against trust anchors and verify that certificate subject contains specified RDN.
     /// </summary>
     public class Pkcs7CryptoSignatureVerifier : ICryptoSignatureVerifier
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
         private readonly X509Certificate2Collection _trustAnchors;
         private readonly ICertificateSubjectRdnSelector _certificateRdnSelector;
 
         /// <summary>
         /// Create PKCS#7 signature verifier instance.
         /// </summary>
-        /// <param name="trustAnchors">Trust anchors</param>
-        /// <param name="certificateRdnSelector">Certificate subject rdn selector</param>
+        public Pkcs7CryptoSignatureVerifier()
+        {
+        }
+
+        /// <summary>
+        /// Create PKCS#7 signature verifier instance.
+        /// </summary>
+        /// <param name="trustAnchors">Trust anchors to verify against</param>
+        /// <param name="certificateRdnSelector">Certificate subject RDN selector. Used to verify that certificate subject contains specified RDN</param>
         public Pkcs7CryptoSignatureVerifier(X509Certificate2Collection trustAnchors, ICertificateSubjectRdnSelector certificateRdnSelector)
         {
+            if (trustAnchors == null)
+            {
+                throw new ArgumentNullException(nameof(trustAnchors));
+            }
+
             if (certificateRdnSelector == null)
             {
                 throw new ArgumentNullException(nameof(certificateRdnSelector));
+            }
+
+            if (trustAnchors.Count == 0)
+            {
+                throw new ArgumentException("Non empty collection is expected.", nameof(trustAnchors));
             }
 
             _trustAnchors = trustAnchors;
@@ -71,11 +85,17 @@ namespace Guardtime.KSI.Crypto.Microsoft.Crypto
                 throw new ArgumentNullException(nameof(signatureBytes));
             }
 
+            if (_trustAnchors == null && data?.CertificateBytes == null)
+            {
+                throw new ArgumentException("No trust anchors given.");
+            }
+
             SignedCms signedCms;
 
             try
             {
                 signedCms = new SignedCms(new ContentInfo(signedBytes), true);
+                //    signedCms = new SignedCms();
                 signedCms.Decode(signatureBytes);
             }
             catch (Exception e)
@@ -85,58 +105,86 @@ namespace Guardtime.KSI.Crypto.Microsoft.Crypto
 
             if (signedCms.SignerInfos.Count == 0)
             {
-                throw new PkiVerificationErrorException("Signature does not contain any SignerInformation element.");
+                throw new PkiVerificationFailedException("Signature does not contain any SignerInformation element.");
             }
 
-            if (signedCms.SignerInfos.Count > 1)
+            foreach (SignerInfo signerInfo in signedCms.SignerInfos)
             {
-                throw new PkiVerificationErrorException("Signature contains more than one SignerInformation element.");
-            }
+                X509Certificate2 certificate = signerInfo.Certificate;
 
-            SignerInfo signerInfo = signedCms.SignerInfos[0];
-            X509Certificate2 certificate = signerInfo.Certificate;
-
-            if (data != null)
-            {
-                CertificateTimeVerifier.Verify(certificate, data.SignTime);
-            }
-
-            try
-            {
-                // Verify certificate with rdn selector
-                if (!_certificateRdnSelector.IsMatch(certificate))
+                if (data != null)
                 {
-                    throw new PkiVerificationFailedException("Certificate did not match with certificate subject rdn selector.");
+                    try
+                    {
+                        CertificateTimeVerifier.Verify(certificate, data.SignTime);
+                    }
+                    catch (PkiVerificationFailedCertNotValidException ex)
+                    {
+                        throw new PkiVerificationFailedCertNotValidException("PKCS#7 signature certificate is not valid.", ex);
+                    }
                 }
-            }
-            catch (PkiVerificationFailedException)
-            {
-                throw;
-            }
-            catch (Exception e)
-            {
-                throw new PkiVerificationErrorException("Error when verifying PKCS#7 signature.", e);
-            }
 
-            try
-            {
-                signedCms.CheckSignature(_trustAnchors, true);
-            }
-            catch (Exception e)
-            {
-                Logger.Warn("Failed to verify PKCS#7 signature. " + e + GetCertInfoString());
+                if (_certificateRdnSelector != null)
+                {
+                    try
+                    {
+                        if (!_certificateRdnSelector.IsMatch(certificate))
+                        {
+                            throw new PkiVerificationFailedException("Certificate did not match with certificate subject RDN selector.");
+                        }
+                    }
+                    catch (PkiVerificationFailedException)
+                    {
+                        throw;
+                    }
+                    catch (Exception e)
+                    {
+                        throw new PkiVerificationErrorException("Error when verifying PKCS#7 signature.", e);
+                    }
+                }
 
-                throw new PkiVerificationFailedException("Failed to verify PKCS#7 signature.", e);
-            }
+                X509Certificate2Collection trustAnchors;
 
-            ValidateCertPath(certificate);
+                if (data?.CertificateBytes != null)
+                {
+                    try
+                    {
+                        trustAnchors = new X509Certificate2Collection(new X509Certificate2(data.CertificateBytes));
+                    }
+                    catch (Exception e)
+                    {
+                        throw new PkiVerificationErrorException("Cannot create trust anchor certificate from " + nameof(data.CertificateBytes), e);
+                    }
+                }
+                else
+                {
+                    trustAnchors = _trustAnchors;
+                }
+
+                try
+                {
+                    signedCms.CheckSignature(trustAnchors, true);
+                }
+                catch (Exception e)
+                {
+                    throw new PkiVerificationFailedException("Failed to verify PKCS#7 signature.", e, GetCertInfoString(trustAnchors));
+                }
+
+                ValidateCertPath(trustAnchors, certificate, data?.SignTime == null);
+            }
         }
 
-        private void ValidateCertPath(X509Certificate2 certificate)
+        private static void ValidateCertPath(X509Certificate2Collection trustAnchors, X509Certificate2 certificate, bool verifyCertTimesAgainstSystemTime)
         {
-            X509Chain chain = new X509Chain { ChainPolicy = { VerificationFlags = X509VerificationFlags.AllowUnknownCertificateAuthority } };
+            X509VerificationFlags flags = X509VerificationFlags.AllowUnknownCertificateAuthority;
 
-            //chain.ChainPolicy.ExtraStore.AddRange(_trustAnchors);
+            if (!verifyCertTimesAgainstSystemTime)
+            {
+                // do not verify certificates against local system time.
+                flags |= X509VerificationFlags.IgnoreNotTimeValid;
+            }
+
+            X509Chain chain = new X509Chain { ChainPolicy = { VerificationFlags = flags } };
 
             bool isChainValid = chain.Build(certificate);
 
@@ -149,19 +197,13 @@ namespace Guardtime.KSI.Crypto.Microsoft.Crypto
                     errors.Add(string.Format("{0} ({1})", status.StatusInformation, status.Status));
                 }
 
-                string certificateErrorsString = "Unknown errors.";
-
-                if (errors.Count > 0)
-                {
-                    certificateErrorsString = string.Join(", ", errors.ToArray());
-                }
-
+                string certificateErrorsString = errors.Count == 0 ? "Unknown errors." : string.Join(", ", errors.ToArray());
                 throw new PkiVerificationFailedException("Trust chain did not complete to the known authority anchor. Errors: " + certificateErrorsString);
             }
 
             foreach (X509ChainElement chainElement in chain.ChainElements)
             {
-                foreach (X509Certificate2 cert in _trustAnchors)
+                foreach (X509Certificate2 cert in trustAnchors)
                 {
                     if (chainElement.Certificate.Thumbprint == cert.Thumbprint)
                     {
@@ -170,20 +212,18 @@ namespace Guardtime.KSI.Crypto.Microsoft.Crypto
                 }
             }
 
-            Logger.Warn("Failed to verify PKCS#7 signature. Trust chain did not complete to the known authority anchor. Thumbprints did not match." +
-                        GetCertInfoString(chain.ChainElements));
-
-            throw new PkiVerificationFailedException("Trust chain did not complete to the known authority anchor. Thumbprints did not match.");
+            throw new PkiVerificationFailedException("Trust chain did not complete to the known authority anchor. Thumbprints did not match.", null,
+                GetCertInfoString(trustAnchors, chain.ChainElements));
         }
 
-        private string GetCertInfoString(X509ChainElementCollection chainElements = null)
+        private static string GetCertInfoString(X509Certificate2Collection trustAnchors, X509ChainElementCollection chainElements = null)
         {
             StringBuilder sb = new StringBuilder();
 
             if (chainElements != null)
             {
                 sb.AppendLine();
-                sb.AppendLine("Chain elements: ");
+                sb.AppendLine("X509 chain elements: ");
 
                 foreach (X509ChainElement chainElement in chainElements)
                 {
@@ -195,7 +235,7 @@ namespace Guardtime.KSI.Crypto.Microsoft.Crypto
             sb.AppendLine();
             sb.AppendLine("Trust anchors: ");
 
-            foreach (X509Certificate2 cert in _trustAnchors)
+            foreach (X509Certificate2 cert in trustAnchors)
             {
                 sb.AppendLine("------------------ Trust anchor --------------------");
                 sb.AppendLine(cert.ToString());

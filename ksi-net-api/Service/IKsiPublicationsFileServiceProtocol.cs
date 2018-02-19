@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -30,7 +30,7 @@ namespace Guardtime.KSI.Service
         ///     Async begin get publications file.
         /// </summary>
         /// <param name="callback">callback when publications file is finished downloading</param>
-        /// <param name="asyncState">async state object</param>
+        /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         IAsyncResult BeginGetPublicationsFile(AsyncCallback callback, object asyncState);
 
@@ -40,5 +40,10 @@ namespace Guardtime.KSI.Service
         /// <param name="asyncResult">async result</param>
         /// <returns>publications file bytes</returns>
         byte[] EndGetPublicationsFile(IAsyncResult asyncResult);
+
+        /// <summary>
+        /// Publications file url
+        /// </summary>
+        string PublicationsFileAddress { get; }
     }
 }

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -22,26 +22,25 @@ using System;
 namespace Guardtime.KSI.Exceptions
 {
     /// <summary>
-    ///     PKI signature verification failed exception.
+    ///     Exception thrown when PKI signature verification fails.
     /// </summary>
     [Serializable]
     public class PkiVerificationFailedException : PkiVerificationException
     {
         /// <summary>
-        ///     Create new PKI signature verification failed exception with message.
-        /// </summary>
-        /// <param name="message">exception message</param>
-        public PkiVerificationFailedException(string message) : base(message)
-        {
-        }
-
-        /// <summary>
         ///     Create new PKI signature verification failed exception with message and inner exception.
         /// </summary>
         /// <param name="message">exception message</param>
         /// <param name="innerException">inner exception</param>
-        public PkiVerificationFailedException(string message, Exception innerException) : base(message, innerException)
+        /// <param name="additionalInfo">Additional information</param>
+        public PkiVerificationFailedException(string message, Exception innerException = null, string additionalInfo = null) : base(message, innerException)
         {
+            AdditionalInfo = additionalInfo;
         }
+
+        /// <summary>
+        /// Additional information.
+        /// </summary>
+        public string AdditionalInfo { get; }
     }
 }

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -17,116 +17,43 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
-using System.IO;
-using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
+using Guardtime.KSI.Test.Properties;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
-    public class AggregationHashChainTimeConsistencyRuleTests
+    public class AggregationHashChainTimeConsistencyRuleTests : RuleTestsBase
     {
-        [Test]
-        public void TestMissingContext()
-        {
-            AggregationHashChainTimeConsistencyRule rule = new AggregationHashChainTimeConsistencyRule();
-
-            // Argument null exception when no context
-            Assert.Throws<ArgumentNullException>(delegate
-            {
-                rule.Verify(null);
-            });
-        }
+        public override VerificationRule Rule => new AggregationHashChainTimeConsistencyRule();
 
         [Test]
-        public void TestContextMissingSignature()
+        public void TestSignatureMissingAggregationHashChain()
         {
-            AggregationHashChainTimeConsistencyRule rule = new AggregationHashChainTimeConsistencyRule();
-
-            // Verification exception on missing KSI signature 
-            Assert.Throws<KsiVerificationException>(delegate
-            {
-                TestVerificationContext context = new TestVerificationContext();
-
-                rule.Verify(context);
-            });
-        }
-
-        [Test]
-        public void TestSignatureWithoutAggregationHashChain()
-        {
-            AggregationHashChainTimeConsistencyRule rule = new AggregationHashChainTimeConsistencyRule();
-
-            // Verification exception on missing KSI signature aggregation hash chain 
-            Assert.Throws<KsiVerificationException>(delegate
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new TestKsiSignature()
-                };
-
-                rule.Verify(context);
-            });
+            TestSignatureMissingAggregationHashChain(null, true);
         }
 
         [Test]
         public void TestRfc3161SignatureAggregationHashChainTimeConsistency()
         {
-            AggregationHashChainTimeConsistencyRule rule = new AggregationHashChainTimeConsistencyRule();
-
             // Check legacy signature for aggregation hash chain time consistency
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream)
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            CreateSignatureAndVerify(Resources.KsiSignature_Legacy_Ok, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestSignatureAggregationHashChainTimeConsistency()
         {
-            AggregationHashChainTimeConsistencyRule rule = new AggregationHashChainTimeConsistencyRule();
-
             // Check signature for aggregation hash chain time consistency
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream)
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            CreateSignatureAndVerify(Resources.KsiSignature_Ok, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestInvalidSignatureAggregationHashChainTimeConsistency()
         {
-            AggregationHashChainTimeConsistencyRule rule = new AggregationHashChainTimeConsistencyRule();
-
             // Check invalid signature for aggregation hash chain incosistency in time
-            using (FileStream stream =
-                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Invalid_Aggregation_Chain_Aggregation_Time_Mismatch), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream)
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-                Assert.AreEqual(VerificationError.Int02, verificationResult.VerificationError);
-            }
+            CreateSignatureAndVerify(Resources.KsiSignature_Invalid_Aggregation_Chain_Aggregation_Time_Mismatch, VerificationResultCode.Fail, VerificationError.Int02);
         }
     }
 }

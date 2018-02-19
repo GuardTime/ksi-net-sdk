@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -21,7 +21,6 @@ using System;
 using System.Collections.Generic;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Signature.Verification.Rule;
-using NLog;
 
 namespace Guardtime.KSI.Signature.Verification.Policy
 {
@@ -30,15 +29,13 @@ namespace Guardtime.KSI.Signature.Verification.Policy
     /// </summary>
     public abstract class VerificationPolicy : VerificationRule
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
         /// <summary>
         ///     First rule to verify.
         /// </summary>
         protected VerificationRule FirstRule;
 
         /// <summary>
-        ///     Verify given context with verification policy.
+        /// Verify KSI signature with given context and policy.
         /// </summary>
         /// <param name="context">verification context</param>
         /// <returns>verification result</returns>
@@ -51,33 +48,59 @@ namespace Guardtime.KSI.Signature.Verification.Policy
 
             if (context.Signature == null)
             {
-                throw new KsiException("Invalid signature in context: null.");
+                throw new KsiVerificationException("Invalid KSI signature in context: null.");
             }
 
+            return DoVerification(context);
+        }
+
+        private VerificationResult DoVerification(IVerificationContext context, bool writeLog = true)
+        {
             VerificationRule verificationRule = FirstRule;
             List<VerificationResult> verificationResults = new List<VerificationResult>();
-
-            VerificationResult verificationResult;
 
             try
             {
                 while (verificationRule != null)
                 {
-                    VerificationResult result = verificationRule.Verify(context);
+                    VerificationPolicy policy = verificationRule as VerificationPolicy;
+                    VerificationResult result = policy != null ? policy.DoVerification(context, false) : verificationRule.Verify(context);
                     verificationResults.Add(result);
                     verificationRule = verificationRule.NextRule(result.ResultCode);
                 }
             }
             catch (Exception e)
             {
-                Logger.Warn("Error occured on rule {0}: {1}", verificationRule?.GetRuleName(), e);
-                verificationResults.Add(new VerificationResult(verificationRule?.GetRuleName(), VerificationResultCode.Na));
-                throw;
+                KsiVerificationException ksiVerificationException = e as KsiVerificationException;
+                VerificationResult resultFromException = ksiVerificationException?.VerificationResult;
+
+                // if inner policy has thrown an exception and verification result is set within the exception then add this result to result list. 
+                // otherwise add a new result.
+                verificationResults.Add(resultFromException ?? new VerificationResult(verificationRule?.GetRuleName(), VerificationResultCode.Na));
+                VerificationResult result = new VerificationResult(GetRuleName(), verificationResults);
+
+                // write log only when topmost policy
+                if (writeLog)
+                {
+                    Logger.Warn("Error occured on rule {0}: {1}{2}{3}", verificationRule?.GetRuleName(), e, Environment.NewLine, result);
+                    throw;
+                }
+
+                if (resultFromException != null)
+                {
+                    ksiVerificationException.VerificationResult = result;
+                    throw ksiVerificationException;
+                }
+
+                throw new KsiVerificationException(e.Message, e) { VerificationResult = result };
             }
-            finally
+
+            VerificationResult verificationResult = new VerificationResult(GetRuleName(), verificationResults);
+
+            // write log only when topmost policy
+            if (writeLog)
             {
-                verificationResult = new VerificationResult(GetRuleName(), verificationResults);
-                Logger.Debug("{0}{1}{2}", GetRuleName(), Environment.NewLine, verificationResult);
+                Logger.Debug(Environment.NewLine + verificationResult);
             }
 
             return verificationResult;

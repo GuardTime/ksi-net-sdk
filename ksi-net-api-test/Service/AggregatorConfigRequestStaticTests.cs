@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -17,7 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Test.Properties;
@@ -31,13 +30,53 @@ namespace Guardtime.KSI.Test.Service
     [TestFixture]
     public class AggregatorConfigRequestStaticTests : StaticServiceTestsBase
     {
+        [Test]
+        public void BeginGetAggregatorConfigWithoutSigningServiceProtocol()
+        {
+            KsiService service = new KsiService(null, null, null, null, null, null);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                service.BeginGetAggregatorConfig(null, null);
+            });
+
+            Assert.That(ex.Message.StartsWith("Signing service protocol is missing from service"), "Unexpected exception message: " + ex.Message);
+        }
+
+        [Test]
+        public void BeginGetAggregatorConfigWithoutSigningServiceCredentials()
+        {
+            TestKsiServiceProtocol protocol = new TestKsiServiceProtocol();
+            KsiService service = new KsiService(protocol, null, null, null, null, null);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                service.BeginGetAggregatorConfig(null, null);
+            });
+
+            Assert.That(ex.Message.StartsWith("Signing service credentials are missing."), "Unexpected exception message: " + ex.Message);
+        }
+
+        [Test]
+        public void EndGetAggregatorConfigWithoutSigningServiceProtocol()
+        {
+            KsiService service = new KsiService(null, null, null, null, null, null);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                service.EndGetAggregatorConfig(new TestAsyncResult());
+            });
+
+            Assert.That(ex.Message.StartsWith("Signing service protocol is missing from service"), "Unexpected exception message: " + ex.Message);
+        }
+
         /// <summary>
         /// Test aggregator configuration request
         /// </summary>
         [Test]
         public void AggregatorConfigRequestStaticTest()
         {
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregatorConfigResponsePdu)));
+            Ksi ksi = GetStaticKsi(Resources.KsiService_AggregatorConfigResponsePdu);
 
             AggregatorConfig config = ksi.GetAggregatorConfig();
 
@@ -54,7 +93,7 @@ namespace Guardtime.KSI.Test.Service
         public void AggregatorConfigRequestWithMultiPayloadsResponseStaticTest()
         {
             // Response has multiple payloads (2 signature payloads and a configuration payload)
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu_Multi_Payloads)));
+            Ksi ksi = GetStaticKsi(Resources.KsiService_AggregationResponsePdu_Multi_Payloads);
 
             AggregatorConfig config = ksi.GetAggregatorConfig();
 
@@ -71,7 +110,7 @@ namespace Guardtime.KSI.Test.Service
         public void AggregatorConfigRequestWithAcknowledgmentStaticTest()
         {
             // Response has multiple payloads (a configuration payload and an acknowledgment payload)
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregatorConfigResponsePdu_With_Acknowledgment)));
+            Ksi ksi = GetStaticKsi(Resources.KsiService_AggregatorConfigResponsePdu_With_Acknowledgment);
 
             AggregatorConfig config = ksi.GetAggregatorConfig();
 
@@ -88,7 +127,7 @@ namespace Guardtime.KSI.Test.Service
         public void AggregatorConfigRequestInvalidStaticTest()
         {
             // pdu does not contain aggregator config payload
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_AggregationResponsePdu)));
+            Ksi ksi = GetStaticKsi(Resources.KsiService_AggregationResponsePdu_RequestId_1584727637);
 
             KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
             {

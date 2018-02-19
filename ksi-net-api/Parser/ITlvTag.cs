@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -38,6 +38,12 @@ namespace Guardtime.KSI.Parser
         ///     Is tlv forwarded.
         /// </summary>
         bool Forward { get; }
+
+        /// <summary>
+        ///     Encode TLV object.
+        /// </summary>
+        /// <returns>TLV object as bytes</returns>
+        byte[] Encode();
 
         /// <summary>
         ///     Encode TLV object value.

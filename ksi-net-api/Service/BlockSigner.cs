@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -60,6 +60,13 @@ namespace Guardtime.KSI.Service
             }
 
             _hashAlgorithm = hashAlgorithm ?? HashAlgorithm.Default;
+
+            if (_hashAlgorithm.HasDeprecatedSinceDate)
+            {
+                throw new HashingException(string.Format("Hash algorithm {0} is deprecated since {1} and can not be used.", _hashAlgorithm.Name,
+                    _hashAlgorithm.DeprecatedSinceDate?.ToString(Constants.DateFormat)));
+            }
+
             _ksiService = ksiService;
             _signatureFactory = signatureFactory ?? new KsiSignatureFactory();
             _treeBuilder = new TreeBuilder(_hashAlgorithm, maxTreeHeight);
@@ -253,19 +260,30 @@ namespace Guardtime.KSI.Service
 
                 if (node.IsLeftNode)
                 {
-                    links.Add(new AggregationHashChain.Link(
-                        LinkDirection.Left,
-                        node.Parent.Right.Hash,
-                        node.Parent.Right.Hash == null ? node.Parent.Right.Metadata.AggregationHashChainMetadata : null,
-                        levelCorrection));
+                    if (node.Parent.Right.Hash == null)
+                        links.Add(new AggregationHashChain.Link(
+                            LinkDirection.Left,
+                            node.Parent.Right.Metadata.AggregationHashChainMetadata,
+                            levelCorrection));
+                    else
+                        links.Add(new AggregationHashChain.Link(
+                            LinkDirection.Left,
+                            node.Parent.Right.Hash,
+                            levelCorrection));
                 }
                 else
                 {
-                    links.Add(new AggregationHashChain.Link(
-                        LinkDirection.Right,
-                        node.Parent.Left.Hash,
-                        node.Parent.Left.Hash == null ? node.Parent.Left.Metadata.AggregationHashChainMetadata : null,
-                        levelCorrection));
+                    if (node.Parent.Left.Hash == null)
+
+                        links.Add(new AggregationHashChain.Link(
+                            LinkDirection.Right,
+                            node.Parent.Left.Metadata.AggregationHashChainMetadata,
+                            levelCorrection));
+                    else
+                        links.Add(new AggregationHashChain.Link(
+                            LinkDirection.Right,
+                            node.Parent.Left.Hash,
+                            levelCorrection));
                 }
 
                 node = node.Parent;

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -17,18 +17,12 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Security.Cryptography.X509Certificates;
-using Guardtime.KSI.Crypto;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
-using Guardtime.KSI.Test.Crypto;
-using Guardtime.KSI.Test.Properties;
-using Guardtime.KSI.Trust;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Publication
@@ -37,196 +31,148 @@ namespace Guardtime.KSI.Test.Publication
     public class PublicationsFileTests
     {
         [Test]
-        public void TestCreatePublicationsFileFromFileEmail()
+        public void InvalidHeaderIndexTest()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
+            PublicationsFile publicationsFile = TestUtil.GetPublicationsFile();
+
+            TlvTagBuilder builder = new TlvTagBuilder(publicationsFile.Type, publicationsFile.NonCritical, publicationsFile.Forward);
+
+            builder.AddChildTag(publicationsFile[1]);
+            builder.AddChildTag(publicationsFile[0]);
+
+            PublicationsFileException ex = Assert.Throws<PublicationsFileException>(delegate
             {
-                new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                    CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
-            }
+                PublicationsFile newPublicationsFile = new PublicationsFile(builder.BuildTag());
+            });
+
+            Assert.That(ex.Message.StartsWith("Publications file header should be the first element in publications file"), "Unexpected exception message: " + ex.Message);
         }
 
         [Test]
-        public void TestCreatePublicationsFileFromFileOu()
+        public void CertRecordAfterPubRecordsTest()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
+            PublicationsFile publicationsFile = TestUtil.GetPublicationsFile();
+
+            TlvTagBuilder builder = new TlvTagBuilder(publicationsFile.Type, publicationsFile.NonCritical, publicationsFile.Forward);
+
+            builder.AddChildTag(publicationsFile[0]);
+            builder.AddChildTag(publicationsFile[30]);
+            builder.AddChildTag(publicationsFile[1]);
+
+            PublicationsFileException ex = Assert.Throws<PublicationsFileException>(delegate
             {
-                new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                    CryptoTestFactory.CreateCertificateSubjectRdnSelector("OU=Verified Email: publications@guardtime.com"))).Create(stream);
-            }
+                PublicationsFile newPublicationsFile = new PublicationsFile(builder.BuildTag());
+            });
+
+            Assert.That(ex.Message.StartsWith("Certificate records should be before publication records"), "Unexpected exception message: " + ex.Message);
         }
 
         [Test]
-        public void TestCreatePublicationsFileFromFileLongEmailName()
+        public void CmsSignatureNotLastTestTest()
         {
-            if (CryptoTestFactory.ProviderType == CryptoProviderType.BouncyCastle)
+            PublicationsFile publicationsFile = TestUtil.GetPublicationsFile();
+
+            TlvTagBuilder builder = new TlvTagBuilder(publicationsFile.Type, publicationsFile.NonCritical, publicationsFile.Forward);
+
+            builder.AddChildTag(publicationsFile[0]);
+            builder.AddChildTag(publicationsFile[1]);
+            builder.AddChildTag(publicationsFile[46]);
+            builder.AddChildTag(publicationsFile[30]);
+
+            PublicationsFileException ex = Assert.Throws<PublicationsFileException>(delegate
             {
-                using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
-                {
-                    new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("EmailAddress=publications@guardtime.com"))).Create(stream);
-                }
-            }
-            else if (CryptoTestFactory.ProviderType == CryptoProviderType.Microsoft)
-            {
-                using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
-                {
-                    new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("EMail=publications@guardtime.com"))).Create(stream);
-                }
-            }
+                PublicationsFile newPublicationsFile = new PublicationsFile(builder.BuildTag());
+            });
+
+            Assert.That(ex.Message.StartsWith("Cms signature should be last element in publications file"), "Unexpected exception message: " + ex.Message);
         }
 
         [Test]
-        public void TestCreatePublicationsFileFromFileWithOid()
+        public void HeaderMissingTest()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
+            PublicationsFile publicationsFile = TestUtil.GetPublicationsFile();
+
+            TlvTagBuilder builder = new TlvTagBuilder(publicationsFile.Type, publicationsFile.NonCritical, publicationsFile.Forward);
+
+            builder.AddChildTag(publicationsFile[1]);
+
+            PublicationsFileException ex = Assert.Throws<PublicationsFileException>(delegate
             {
-                new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                    CryptoTestFactory.CreateCertificateSubjectRdnSelector("1.2.840.113549.1.9.1=publications@guardtime.com"))).Create(stream);
-            }
+                PublicationsFile newPublicationsFile = new PublicationsFile(builder.BuildTag());
+            });
+
+            Assert.That(ex.Message.StartsWith("Exactly one publications file header must exist in publications file"), "Unexpected exception message: " + ex.Message);
         }
 
         [Test]
-        public void TestCreatePublicationsFileFromFileInvalidName()
+        public void SignatureRecordMissingTest()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
-            {
-                ArgumentException ex = Assert.Throws<ArgumentException>(delegate
-                {
-                    new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("EEE=publications@guardtime.com"))).Create(stream);
-                });
+            PublicationsFile publicationsFile = TestUtil.GetPublicationsFile();
 
-                Assert.That(ex.Message, Does.Contain("is invalid.") | Does.Contain("Unknown object id"));
-            }
+            TlvTagBuilder builder = new TlvTagBuilder(publicationsFile.Type, publicationsFile.NonCritical, publicationsFile.Forward);
+
+            builder.AddChildTag(publicationsFile[0]);
+
+            PublicationsFileException ex = Assert.Throws<PublicationsFileException>(delegate
+            {
+                PublicationsFile newPublicationsFile = new PublicationsFile(builder.BuildTag());
+            });
+
+            Assert.That(ex.Message.StartsWith("Exactly one signature must exist in publications file"), "Unexpected exception message: " + ex.Message);
         }
 
         [Test]
-        public void TestCreatePublicationsFileFromFileInvalidEmail()
+        public void GetNearestPublicationRecordTest()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
-            {
-                PublicationsFileException ex = Assert.Throws<PublicationsFileException>(delegate
-                {
-                    new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=Xpublications@guardtime.com"))).Create(stream);
-                });
+            PublicationsFile publicationsFile = TestUtil.GetPublicationsFile();
+            PublicationRecordInPublicationFile latest = publicationsFile.GetLatestPublication();
+            PublicationRecordInPublicationFile prev = publicationsFile.GetNearestPublicationRecord(latest.PublicationData.PublicationTime - 35 * 24 * 3600);
 
-                Assert.That(ex.Message, Does.StartWith("Publications file verification failed."));
+            TlvTagBuilder builder = new TlvTagBuilder(publicationsFile.Type, publicationsFile.NonCritical, publicationsFile.Forward);
+            List<ITlvTag> pubRecordList = new List<ITlvTag>();
+
+            foreach (ITlvTag tag in publicationsFile)
+            {
+                if (tag.Type < Constants.PublicationRecord.TagTypeInPublicationsFile)
+                    builder.AddChildTag(tag);
+
+                if (tag.Type == Constants.PublicationRecord.TagTypeInPublicationsFile)
+                    pubRecordList.Add(tag);
             }
+
+            // add publication records in reverse order
+            for (int index = pubRecordList.Count - 1; index >= 0; index--)
+            {
+                ITlvTag tag = pubRecordList[index];
+                builder.AddChildTag(tag);
+            }
+
+            foreach (ITlvTag tag in publicationsFile)
+            {
+                if (tag.Type > Constants.PublicationRecord.TagTypeInPublicationsFile)
+                    builder.AddChildTag(tag);
+            }
+
+            PublicationsFile newPublicationsFile = new PublicationsFile(builder.BuildTag());
+
+            PublicationRecordInPublicationFile newPrev = newPublicationsFile.GetNearestPublicationRecord(latest.PublicationData.PublicationTime - 35 * 24 * 3600);
+            Assert.AreEqual(prev.PublicationData, newPrev.PublicationData, "Unexpected nearest publicatoin record.");
         }
 
         [Test]
-        public void TestCreatePublicationsFileFromFileInvalidOu()
+        public void FindCertificateById()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
-            {
-                PublicationsFileException ex = Assert.Throws<PublicationsFileException>(delegate
-                {
-                    new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("OU=something"))).Create(stream);
-                });
-
-                Assert.That(ex.Message, Does.StartWith("Publications file verification failed."));
-            }
+            PublicationsFile publicationsFile = TestUtil.GetPublicationsFile();
+            Assert.AreEqual("O=Guardtime, CN=H5", new X509Certificate2(publicationsFile.FindCertificateById(new byte[] { 0x9a, 0x65, 0x82, 0x94 })).Subject,
+                "Certificate should be correct");
         }
 
         [Test]
-        public void TestCreatePublicationsFileFromFileInvalidEmailWithOid()
+        public void GetLatestPublication()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
-            {
-                PublicationsFileException ex = Assert.Throws<PublicationsFileException>(delegate
-                {
-                    new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("1.2.840.113549.1.9.1=Xpublications@guardtime.com"))).Create(stream);
-                });
-
-                Assert.That(ex.Message, Does.StartWith("Publications file verification failed."));
-            }
-        }
-
-        [Test]
-        public void TestCreatePublicationsFileFromFileInvalidOid()
-        {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
-            {
-                ArgumentException ex = Assert.Throws<ArgumentException>(delegate
-                {
-                    new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                        CryptoTestFactory.CreateCertificateSubjectRdnSelector(new List<CertificateSubjectRdn>
-                        {
-                            new CertificateSubjectRdn("1.2.840.113549.1.9.1X", "publications@guardtime.com")
-                        })))
-                        .Create(stream);
-                });
-
-                Assert.That(ex.Message, Does.StartWith("Rdn contains invalid Oid or Value."));
-            }
-        }
-
-        [Test]
-        public void TestCreatePublicationsFileFromFileMultipleRdns()
-        {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
-            {
-                new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                    CryptoTestFactory.CreateCertificateSubjectRdnSelector(new List<CertificateSubjectRdn>
-                    {
-                        new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com"),
-                        new CertificateSubjectRdn("OU", "Verified Email: publications@guardtime.com")
-                    })))
-                    .Create(stream);
-            }
-        }
-
-        [Test]
-        public void TestCreatePublicationsFileFromFileMultipleRdnsInvalidOu()
-        {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
-            {
-                PublicationsFileException ex = Assert.Throws<PublicationsFileException>(delegate
-                {
-                    new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                        CryptoTestFactory.CreateCertificateSubjectRdnSelector(new List<CertificateSubjectRdn>
-                        {
-                            new CertificateSubjectRdn("1.2.840.113549.1.9.1", "publications@guardtime.com"),
-                            new CertificateSubjectRdn("OU", "something")
-                        })))
-                        .Create(stream);
-                });
-
-                Assert.That(ex.Message, Does.StartWith("Publications file verification failed"));
-            }
-        }
-
-        [Test]
-        public void TestFindCertificateById()
-        {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
-            {
-                IPublicationsFile publicationsFile =
-                    new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
-
-                Assert.AreEqual("O=Guardtime, CN=H5", new X509Certificate2(publicationsFile.FindCertificateById(new byte[] { 0x9a, 0x65, 0x82, 0x94 })).Subject,
-                    "Certificate should be correct");
-            }
-        }
-
-        [Test]
-        public void TestGetLatestPublication()
-        {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiPublicationsFile), FileMode.Open, FileAccess.Read))
-            {
-                IPublicationsFile publicationsFile =
-                    new PublicationsFileFactory(new PkiTrustStoreProvider(new X509Store(StoreName.Root),
-                        CryptoTestFactory.CreateCertificateSubjectRdnSelector("E=publications@guardtime.com"))).Create(stream);
-                PublicationRecordInPublicationFile publicationRecord = publicationsFile.GetLatestPublication();
-
-                Assert.AreEqual(1484438400, publicationRecord.PublicationData.PublicationTime, "Should be correct publication time for latest publication");
-            }
+            PublicationsFile publicationsFile = TestUtil.GetPublicationsFile();
+            PublicationRecordInPublicationFile publicationRecord = publicationsFile.GetLatestPublication();
+            Assert.AreEqual(1515974400, publicationRecord.PublicationData.PublicationTime, "Should be correct publication time for latest publication");
         }
 
         [Test]
@@ -264,7 +210,10 @@ namespace Guardtime.KSI.Test.Publication
                                         new IntegerTag(Constants.PublicationData.PublicationTimeTagType, false, false, 1),
                                         new ImprintTag(Constants.PublicationData.PublicationHashTagType, false, false,
                                             new DataHash(HashAlgorithm.Sha2256,
-                                                new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
+                                                new byte[]
+                                                {
+                                                    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
+                                                })),
                                     }),
                                 new StringTag(Constants.PublicationRecord.PublicationReferencesTagType, false, false, "Test publication reference 1"),
                                 new StringTag(Constants.PublicationRecord.PublicationReferencesTagType, false, false, "Test publication reference 2"),
@@ -280,7 +229,10 @@ namespace Guardtime.KSI.Test.Publication
                                         new IntegerTag(Constants.PublicationData.PublicationTimeTagType, false, false, 1),
                                         new ImprintTag(Constants.PublicationData.PublicationHashTagType, false, false,
                                             new DataHash(HashAlgorithm.Sha2256,
-                                                new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 })),
+                                                new byte[]
+                                                {
+                                                    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32
+                                                })),
                                     }),
                                 new StringTag(Constants.PublicationRecord.PublicationReferencesTagType, false, false, "Test publication reference 3"),
                                 new StringTag(Constants.PublicationRecord.PublicationReferencesTagType, false, false, "Test publication reference 4"),

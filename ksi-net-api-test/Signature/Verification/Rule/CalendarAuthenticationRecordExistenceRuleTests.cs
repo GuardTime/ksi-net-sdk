@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -17,100 +17,37 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
-using System.IO;
-using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
+using Guardtime.KSI.Test.Properties;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
-    public class CalendarAuthenticationRecordExistenceRuleTests
+    public class CalendarAuthenticationRecordExistenceRuleTests : RuleTestsBase
     {
-        [Test]
-        public void TestMissingContext()
-        {
-            CalendarAuthenticationRecordExistenceRule rule = new CalendarAuthenticationRecordExistenceRule();
+        public override VerificationRule Rule => new CalendarAuthenticationRecordExistenceRule();
 
-            // Argument null exception when no context
-            Assert.Throws<ArgumentNullException>(delegate
-            {
-                rule.Verify(null);
-            });
+        [Test]
+        public void TestRfc3161SignatureCalendarAuthenticationRecord()
+        {
+            // Check legacy signature for calendar authentication record existence
+            CreateSignatureAndVerify(Resources.KsiSignature_Legacy_Ok, VerificationResultCode.Ok);
         }
 
         [Test]
-        public void TestContextMissingSignature()
+        public void TestSignatureCalendarAuthenticationRecord()
         {
-            CalendarAuthenticationRecordExistenceRule rule = new CalendarAuthenticationRecordExistenceRule();
-
-            // Verification exception on missing KSI signature 
-            Assert.Throws<KsiVerificationException>(delegate
-            {
-                TestVerificationContext context = new TestVerificationContext();
-
-                rule.Verify(context);
-            });
+            // Check signature for calendar authentication record existence
+            CreateSignatureAndVerify(Resources.KsiSignature_Ok, VerificationResultCode.Ok);
         }
 
         [Test]
-        public void TestRfc3161SignatureAggregationAuthenticationRecord()
+        public void TestSignatureMissingCalendarAuthenticationRecord()
         {
-            CalendarAuthenticationRecordExistenceRule rule = new CalendarAuthenticationRecordExistenceRule();
-
-            // Check legacy signature for aggregation authentication record existence
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream)
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
-        }
-
-        [Test]
-        public void TestSignatureAggregationAuthenticationRecord()
-        {
-            CalendarAuthenticationRecordExistenceRule rule = new CalendarAuthenticationRecordExistenceRule();
-
-            // Check signature for aggregation authentication record existence
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream)
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
-        }
-
-        [Test]
-        public void TestSignatureMissingAggregationAuthenticationRecord()
-        {
-            CalendarAuthenticationRecordExistenceRule rule = new CalendarAuthenticationRecordExistenceRule();
-
             // Check signature without calendar authentication record
-            using (
-                FileStream stream =
-                    new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record),
-                        FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream)
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
-            }
+            CreateSignatureAndVerify(Resources.KsiSignature_Ok_AggregationHashChain_Only, VerificationResultCode.Na);
         }
     }
 }

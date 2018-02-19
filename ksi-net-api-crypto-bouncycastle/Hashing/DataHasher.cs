@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -22,7 +22,6 @@ using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.Security;
 
 namespace Guardtime.KSI.Crypto.BouncyCastle.Hashing
 {
@@ -49,15 +48,7 @@ namespace Guardtime.KSI.Crypto.BouncyCastle.Hashing
             }
 
             _algorithm = algorithm;
-
-            try
-            {
-                _digester = DigestProvider.GetDigest(algorithm);
-            }
-            catch (SecurityUtilityException e)
-            {
-                throw new HashingException("Hash algorithm(" + algorithm.Name + ") is not supported.", e);
-            }
+            _digester = DigestProvider.GetDigest(algorithm);
         }
 
         /// <summary>

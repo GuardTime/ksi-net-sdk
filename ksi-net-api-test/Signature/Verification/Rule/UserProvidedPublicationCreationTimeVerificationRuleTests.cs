@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -17,141 +17,82 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
-using System.IO;
-using Guardtime.KSI.Exceptions;
+using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Publication;
-using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
+using Guardtime.KSI.Test.Properties;
+using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
-    public class UserProvidedPublicationCreationTimeVerificationRuleTests
+    public class UserProvidedPublicationCreationTimeVerificationRuleTests : RuleTestsBase
     {
-        [Test]
-        public void TestMissingContext()
-        {
-            UserProvidedPublicationCreationTimeVerificationRule rule = new UserProvidedPublicationCreationTimeVerificationRule();
+        public override VerificationRule Rule => new UserProvidedPublicationCreationTimeVerificationRule();
 
-            // Argument null exception when no context
-            Assert.Throws<ArgumentNullException>(delegate
-            {
-                rule.Verify(null);
-            });
+        [Test]
+        public void TestContextMissingUserPublication()
+        {
+            base.TestContextMissingUserPublication();
         }
 
         [Test]
-        public void TestContextMissingSignature()
+        public void TestSignatureWithAggregationChainOnly()
         {
-            UserProvidedPublicationCreationTimeVerificationRule rule = new UserProvidedPublicationCreationTimeVerificationRule();
-
-            // Verification exception on missing KSI signature
-            Assert.Throws<KsiVerificationException>(delegate
+            // Check signature with aggregation chain only.
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext();
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_AggregationHashChain_Only),
+                UserPublication = GetUserPublication(1439596800)
+            };
 
-                rule.Verify(context);
-            });
-        }
-
-        [Test]
-        public void TestSignatureMissingCalendarHashChain()
-        {
-            UserProvidedPublicationCreationTimeVerificationRule rule = new UserProvidedPublicationCreationTimeVerificationRule();
-
-            // Check signature without calendar hash chain
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream)
-                };
-
-                Assert.Throws<KsiVerificationException>(delegate
-                {
-                    rule.Verify(context);
-                });
-            }
-        }
-
-        [Test]
-        public void TestSignatureWithoutContextUserPublication()
-        {
-            UserProvidedPublicationCreationTimeVerificationRule rule = new UserProvidedPublicationCreationTimeVerificationRule();
-
-            // Check signature without user publication
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream)
-                };
-
-                Assert.Throws<KsiVerificationException>(delegate
-                {
-                    rule.Verify(context);
-                });
-            }
+            Verify(context, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestRfc3161SignatureWithUserPublicationTime()
         {
-            UserProvidedPublicationCreationTimeVerificationRule rule = new UserProvidedPublicationCreationTimeVerificationRule();
-
             // Check extended legacy signature
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok_With_Publication_Record), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream),
-                    UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K")
-                };
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Legacy_Ok),
+                UserPublication = GetUserPublication(1439596800)
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            Verify(context, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestSignatureWithUserPublicationTime()
         {
-            UserProvidedPublicationCreationTimeVerificationRule rule = new UserProvidedPublicationCreationTimeVerificationRule();
-
             // Check extended signature
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_With_Publication_Record), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream),
-                    UserPublication = new PublicationData("AAAAAA-CVZ2AQ-AAIVXJ-PLJDAG-JMMYUC-OTP2GA-ELBIDQ-OKDY3C-C3VEH2-AR35I2-OJUACP-GOGD6K")
-                };
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Ok),
+                UserPublication = GetUserPublication(1455478442)
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            Verify(context, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestSignatureWithInvalidUserPublicationTime()
         {
-            UserProvidedPublicationCreationTimeVerificationRule rule = new UserProvidedPublicationCreationTimeVerificationRule();
-
             // Check invalid signature
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_New), FileMode.Open))
+            TestVerificationContext context = new TestVerificationContext()
             {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream),
-                    UserPublication = new PublicationData("AAAAAA-CVUWRI-AANGVK-SV7GJL-36LN65-AVJYZR-6XRZSL-HIMRH3-6GU7WR-YNRY7C-X2XEC3-YOVLRM")
-                };
+                Signature = TestUtil.GetSignature(Resources.KsiSignature_Ok),
+                UserPublication = GetUserPublication(1455478441)
+            };
 
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
-            }
+            Verify(context, VerificationResultCode.Na);
+        }
+
+        private static PublicationData GetUserPublication(ulong publicationTime)
+        {
+            return new PublicationData(publicationTime, new DataHash(Base16.Decode("0115BA5EB48C064B198A09D37E8C022C281C1CA1E36216EA43E811DF51A7268013")));
         }
     }
 }

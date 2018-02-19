@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -17,156 +17,57 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
-using System.IO;
-using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
+using Guardtime.KSI.Test.Properties;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
-    public class AggregationHashChainIndexSuccessorRuleTests
+    public class AggregationHashChainIndexSuccessorRuleTests : RuleTestsBase
     {
-        [Test]
-        public void TestMissingContext()
-        {
-            AggregationHashChainIndexSuccessorRule rule = new AggregationHashChainIndexSuccessorRule();
-
-            // Argument null exception when no context
-            Assert.Throws<ArgumentNullException>(delegate
-            {
-                rule.Verify(null);
-            });
-        }
+        public override VerificationRule Rule => new AggregationHashChainIndexSuccessorRule();
 
         [Test]
-        public void TestContextMissingSignature()
+        public void TestSignatureMissingAggregationHashChain()
         {
-            AggregationHashChainIndexSuccessorRule rule = new AggregationHashChainIndexSuccessorRule();
-
-            // Verification exception on missing KSI signature 
-            Assert.Throws<KsiVerificationException>(delegate
-            {
-                TestVerificationContext context = new TestVerificationContext();
-
-                rule.Verify(context);
-            });
-        }
-
-        [Test]
-        public void TestSignatureWithoutAggregationHashChain()
-        {
-            AggregationHashChainIndexSuccessorRule rule = new AggregationHashChainIndexSuccessorRule();
-
-            // Verification exception on missing KSI signature aggregation hash chain 
-            Assert.Throws<KsiVerificationException>(delegate
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new TestKsiSignature()
-                };
-
-                rule.Verify(context);
-            });
+            TestSignatureMissingAggregationHashChain(null, true);
         }
 
         [Test]
         public void TestRfc3161SignatureAggregationHashChainIndexSuccessor()
         {
-            AggregationHashChainIndexSuccessorRule rule = new AggregationHashChainIndexSuccessorRule();
-
             // Check legacy signature for aggregation hash chain index match against previous chain index
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Legacy_Ok), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream)
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            CreateSignatureAndVerify(Resources.KsiSignature_Legacy_Ok, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestSignatureAggregationHashChainIndexSuccessor()
         {
-            AggregationHashChainIndexSuccessorRule rule = new AggregationHashChainIndexSuccessorRule();
-
             // Check signature for aggregation hash chain index match against previous chain index
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory().Create(stream)
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            CreateSignatureAndVerify(Resources.KsiSignature_Ok, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestInvalidSignatureAggregationHashChainIndexSuccessor()
         {
-            AggregationHashChainIndexSuccessorRule rule = new AggregationHashChainIndexSuccessorRule();
-
             // Check invalid signature for aggregation hash chain index mismatch against previous chain index (Chain index: 11, 879, 475, 3951, 3; Parent chain index: 11, 879, 475, 255)
-            using (FileStream stream =
-                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Invalid_Aggregation_Chain_Index_Mismatch_Prev), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream)
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-                Assert.AreEqual(VerificationError.Int12, verificationResult.VerificationError);
-            }
+            CreateSignatureAndVerify(Resources.KsiSignature_Invalid_Aggregation_Chain_Index_Mismatch_Prev, VerificationResultCode.Fail, VerificationError.Int12);
         }
 
         [Test]
         public void TestInvalidSignatureAggregationHashChainIndexSuccessor2()
         {
-            AggregationHashChainIndexSuccessorRule rule = new AggregationHashChainIndexSuccessorRule();
-
-            // Check invalid signature for aggregation hash chain index mismatch against previous chain index (chain index equals parent chain index. Chain index: 11, 879, 475, 3951; Parent chain index: 11, 879, 475, 3951)
-            using (FileStream stream =
-                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Invalid_Aggregation_Chain_Index_Mismatch_Prev2), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream)
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-                Assert.AreEqual(VerificationError.Int12, verificationResult.VerificationError);
-            }
+            // Check invalid signature for aggregation hash chain index mismatch against previous chain index (Length mismatch. Chain index: 11, 879, 475, 3951; Parent chain index: 11, 879, 475, 3951)
+            CreateSignatureAndVerify(Resources.KsiSignature_Invalid_Aggregation_Chain_Index_Mismatch_Prev2, VerificationResultCode.Fail, VerificationError.Int12);
         }
 
         [Test]
-        public void TestInvalidSignatureFirstAggregationHashChainIndexLength()
+        public void TestInvalidSignatureHighestAggregationHashChainIndexLength()
         {
-            AggregationHashChainIndexSuccessorRule rule = new AggregationHashChainIndexSuccessorRule();
-
-            // First aggregation hash chain index length is not 1
-            using (FileStream stream =
-                new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Invalid_First_Aggregation_Chain_Index_Length), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext()
-                {
-                    Signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream)
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Fail, verificationResult.ResultCode);
-                Assert.AreEqual(VerificationError.Int12, verificationResult.VerificationError);
-            }
+            // The highest aggregation hash chain index length is not 1
+            CreateSignatureAndVerify(Resources.KsiSignature_Invalid_Highest_Aggregation_Chain_Index_Length, VerificationResultCode.Fail, VerificationError.Int12);
         }
     }
 }

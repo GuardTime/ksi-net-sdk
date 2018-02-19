@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -142,43 +142,47 @@ namespace Guardtime.KSI.Test.Parser
         [Test]
         public void TestCompositeTagAddNullValueToSpecificPosition()
         {
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 new CompositeTestTag(0x1, false, false, new ITlvTag[] { null });
             });
+            Assert.AreEqual("childTags", ex.ParamName);
         }
 
         [Test]
         public void TestCompositeTagCreateFromDataNullValue()
         {
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 new CompositeTestTag(0x1, false, false, null);
             });
+            Assert.AreEqual("childTags", ex.ParamName);
         }
 
         [Test]
         public void TestIsInvalidStructure()
         {
-            Assert.Throws<TlvException>(delegate
+            TlvException ex = Assert.Throws<TlvException>(delegate
             {
                 new CompositeTestTag(0x1, false, false,
                     new ITlvTag[]
                     {
-                        new RawTag(0x1, false, false, new byte[] { 0x1, 0x2 }),
-                        new RawTag(0x3, false, false, new byte[] { 0x3, 0x4 })
+                        new RawTag(0x2, false, false, new byte[] { 0x4, 0x5 }),
+                        new RawTag(0x3, false, false, new byte[] { 0x6, 0x7 })
                     });
             });
+            Assert.That(ex.Message, Does.StartWith("Unknown tag type (0x2)"));
         }
 
         [Test]
         public void TestVerifyCriticalFlag()
         {
             CompositeTestTag tag = new CompositeTestTag(0x1, false, false, new ITlvTag[] { });
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 tag.VerifyCriticalFlagWithoutTag();
             });
+            Assert.AreEqual("tag", ex.ParamName);
         }
 
         private class ChildCompositeTestTag : CompositeTestTag

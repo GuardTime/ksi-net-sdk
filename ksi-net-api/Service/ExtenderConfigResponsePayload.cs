@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -76,7 +76,7 @@ namespace Guardtime.KSI.Service
 
             if (tagCounter[Constants.ExtenderConfigResponsePayload.MaxRequestsTagType] > 1)
             {
-                throw new TlvException("Only one max request tag is allowed in extender config response payload.");
+                throw new TlvException("Only one max requests tag is allowed in extender config response payload.");
             }
 
             if (tagCounter[Constants.ExtenderConfigResponsePayload.CalendarFirstTimeTagType] > 1)

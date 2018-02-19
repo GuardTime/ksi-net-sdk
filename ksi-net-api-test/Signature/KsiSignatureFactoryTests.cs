@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -39,12 +39,63 @@ namespace Guardtime.KSI.Test.Signature
     public class KsiSignatureFactoryTests
     {
         [Test]
-        public void CreateFromStreamFromNullInvalidTest()
+        public void CreateFromByteArrayWithNullInvalidTest()
         {
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                new KsiSignatureFactory().Create((byte[])null);
+            });
+            Assert.AreEqual("bytes", ex.ParamName);
+        }
+
+        [Test]
+        public void CreateFromStreamWithNullInvalidTest()
+        {
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 new KsiSignatureFactory().Create((Stream)null);
             });
+            Assert.AreEqual("stream", ex.ParamName);
+        }
+
+        [Test]
+        public void CreateFromPayloadWithNullInvalidTest()
+        {
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                new KsiSignatureFactory().Create((AggregationResponsePayload)null, null);
+            });
+            Assert.AreEqual("payload", ex.ParamName);
+        }
+
+        [Test]
+        public void CreateFromLegacyPayloadWithNullInvalidTest()
+        {
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                new KsiSignatureFactory().Create((LegacyAggregationResponsePayload)null, null);
+            });
+            Assert.AreEqual("payload", ex.ParamName);
+        }
+
+        [Test]
+        public void CreateFromPartsWithNullInvalidTest()
+        {
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                new KsiSignatureFactory().Create(null, null, null, null, null, null);
+            });
+            Assert.AreEqual("aggregationHashChains", ex.ParamName);
+        }
+
+        [Test]
+        public void CreateByContentWithNullInvalidTest()
+        {
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                new KsiSignatureFactory().CreateByContent(null);
+            });
+            Assert.AreEqual("value", ex.ParamName);
         }
 
         [Test]
@@ -74,13 +125,6 @@ namespace Guardtime.KSI.Test.Signature
         [Test]
         public void CreateFromStreamAndVerifyWithPolicyInvalidTest()
         {
-            IKsiSignature signature;
-
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok_With_Publication_Record), FileMode.Open))
-            {
-                signature = new KsiSignatureFactory().Create(stream);
-            }
-
             KsiSignatureFactory signatureFactory = new KsiSignatureFactory(new PublicationBasedVerificationPolicy(),
                 new TestVerificationContext()
                 {
@@ -92,7 +136,7 @@ namespace Guardtime.KSI.Test.Signature
                 // Check invalid signature
                 using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok_With_Publication_Record), FileMode.Open))
                 {
-                    signature = signatureFactory.Create(stream);
+                    signatureFactory.Create(stream);
                 }
             });
 
@@ -102,12 +146,10 @@ namespace Guardtime.KSI.Test.Signature
         [Test]
         public void CreateFromStreamAndDoNotVerifyInvalidSignatureTest()
         {
-            IKsiSignature signature;
-
-            // Check invalid signature
+            // Do not verify invalid signature
             using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Invalid_Aggregation_Chain_Index_Mismatch), FileMode.Open))
             {
-                signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream);
+                new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(stream);
             }
         }
 
@@ -116,12 +158,16 @@ namespace Guardtime.KSI.Test.Signature
         {
             KsiSignatureFactory signatureFactory = new KsiSignatureFactory();
 
-            // corrseponding hash: "01D439459856BEF5ED25772646F73A70A841FC078D3CBBC24AB7F47C464683768D"
             AggregationResponsePayload aggregationResponsePayload =
                 new AggregationResponsePayload(new RawTag(0x2, false, false,
                     Base16.Decode(
-                        "01048BEAA4F5040005094E6F206572726F720088010067020457EBC32A03010B030206FD030203EF030103030103052101D439459856BEF5ED25772646F73A70A841FC078D3CBBC24AB7F47C464683768D060104072804267E0101610A616E6F6E206874747000620A616E6F6E3A687474700063006407053D913449EE6788010074020457EBC32A03010B030206FD030203EF0301030531046DF9DD7721D40C66006D89EAC90E25B97C4FD9B4B08D29E583110CD257A68C80F46FECE13F3C27C5F5591184CEEBEA3A060101072804267E0101610974616176695F616C00620B746573743A74616176690063006407053D91344F716688010186020457EBC32A03010B030206FD030203EF0521012D9B46B0D304DE23054347ED9851614BF14C868DB0870BECB9BE584A506309D0060101072201011B031D03000A73746167696E6720415300000000000000000000000000000000072601010702210100000000000000000000000000000000000000000000000000000000000000000723022101000000000000000000000000000000000000000000000000000000000000000007230221010000000000000000000000000000000000000000000000000000000000000000082302210126B310372170090DEB38DCE88367B8064A7D88C265EF6AAADE765EDF2D576D4A0723022101000000000000000000000000000000000000000000000000000000000000000007230221015C71338639B0B208B40475C7FF7C9F21F1FD3E758B345DB730A2537D8C9758FE07230221015F5F44AE22506BCCEBCDCFA4AE93689FE80BC571DAD43ADBC172404C146E30D007230221010000000000000000000000000000000000000000000000000000000000000000880101A7020457EBC32A03010B030206FD05210136B0066278D7C3D2FDEC4F7F517F4B16E66CA055AAC499DD1D9A7FD21605C8250601010722010105031D0300024754000000000000000000000000000000000000000000000000082601010702210182FF351DE0856A77845D580306AA1BBC500EF8223B61C03D8F8F275B7AA261E107230221010CBD37B5B45378082EB14D097CC9C403CCB89A1D9728FF9FC5496439206ABBAE0723022101000000000000000000000000000000000000000000000000000000000000000007230221018AF735B2A92BA3CC25269A35EA456C911F2DBF6C2B8DE730342E784318EF1362072302210138FFF691B2797C32F4ABC598F6EAE177FDD7778E14196EEDDEEF0C67F3D48E1C07230221010000000000000000000000000000000000000000000000000000000000000000072302210100000000000000000000000000000000000000000000000000000000000000000823022101000000000000000000000000000000000000000000000000000000000000000007230221013E7844503DD1B7976867CB40A55E3164AFF3042A872ACE06122134F927FDAE2A880100A4020457EBC32A03010B0521010B391E1BA3936CAD575F41B2CC025C4759BE011529B21680CA00A237FE38CC7B060101072601010F022101FBD0152F46E4C3ABDECAE417E92CE92DA99DC6FB636DBA23F0E56B1FD7B27E32072601012C02210137C1DEF4BD109E8F72FF4861ECFA134CC37B72623D4AD7F05F4025941EA07CF4082302210165A50BF7000E4F21108351A98C0C56D7C3213CDC4C5B345B1805C691988B2244880202A5010457EBC32A020457EBC32A0521019A96779C533C41659D5E9E783263A7633DEEC1404259B7A24EFC949E8B278B1A082101B889794E8768629FB66A22DEB05BEA7B37BF0ACB79A453462CE35E93BEC5FC8E0821011EB614D293CE2CF75161057FCF97AE1F37217150C6A90F68BB0161EC096BD2FE082101109323AFF6789E0ADE4F702AA08B671A52BE6044F4D1993E601D5328B7323CCD082101583CA8A1582CE31621C353FBC8BFCFAA09B7497474BCCD3AEBB1925FBF3DFB94082101518696A269EAB9FF1A32708F08AED4C9F3132F031F2DB7DEF9784A61E405E6FE08210192FEA847A3CD0E379A1CFB644082A55DD3702AA9A0671D373793C3163798DD920821011134FA5E508AA43C41BC5A99FA7D72880FF3E42BAB859727ED3C8ECA888F742B08210188B4845368AC24366CB24CF9BD1B14466AA4E196D39F17D63EA1B22203F51F060821019B81E3AECABEBC50A6B4DD597E5C1B56EEF1CE272E0C8F261ED14C0E9D709872082101293EF4708AEAE8D8CF6D384F1F07CD27D327F4AA2DDD530DD086E992A033C84F082101F0367ECE12995DF333C6CE54CD72B1644E6F24FAB6195EA990A2D1E6B015CF56082101D3CB30C04CEBF26EF00FA468F69443A29F5B238369CFB8280DA3394FA385C7EF0821014C23C4855510FAE15EFEBE246A01260D96C470DEBB50C63F88B2508FD6DC343708210129CB7DB7FE0C51D0F1E8B9663413AED76D7D89AC832F0D21981AE6687138CB21082101A0698E6B45EDEEAF9037E49F668114617CA60124F0FC416D017D06D78CA4295A082101A6F082B82280F3A6AFB14C8E39B7F57860B857B70CA57AFD35F40395EEB32458082101496FC0120D854E7534B992AB32EC3045B20D4BEE1BFBE4564FD092CEAFA08B72082101BB44FD36A5F3CDEE7B5C6DF3A6098A09E353335B6029F1477502588A7E37BE00880501513029020457EBC32A042101CD4BCCC347C0B07C0BAE7C9143D96B4F312E312ABB96225E89E939313863F0D4800B01220116312E322E3834302E3131333534392E312E312E31310080020100926FE3A4D7A4A2FFFF72D7A6BDE7872B4309DBCBD13CA35A3511FFF19DFC655005F55701BE52A15AEC7BEC629C5E7BA88AAFA7EAFED5D86869C2C21277DB9E65067E798378275795F5008CED21E1E527A1FC50DD90B2E03566A2E15745D406643FF6A33FCE4380CB27BA336125CF84BEE4C95D5A079266D2916DBED9AF38A4868B1E5C2E37C0355D50F3CEA37FC56CC4CB42E0709D0046C87F2D9936CB31F9D924647F4D184F64922664EC8D04096CE1AAD997DE98102B6499F31240A76081C6D7EA14819F1594502F3B4326D657C90969AC16A2EF722455E656C3EC6C0BF81EE7CB4EDF017F9585ECCF3046D72CEF855E2AF068BC92D2C96E73D9B73E21DB1C0304644C740D")));
-            signatureFactory.Create(aggregationResponsePayload, new DataHash(Base16.Decode("01D439459856BEF5ED25772646F73A70A841FC078D3CBBC24AB7F47C464683768D")));
+                        "0108AFE5A27DEF7743A1040005094E6F206572726F72008801006702045A6EF58C03010B03012503010D03010B03010305210196BFBF3488DC0485775A5A2B0F9870100009630F4783AAAC73C0D72E2C3343B4060101072A04287E01016105616E6F6E0062116B736967772D74657374757365723A3100630064070563E79A43A003880100AB02045A6EF58C03010B03012503010D03010B0521013C7A08C4C6F62C5E42FEA933EC5B7EB59FA522A1664BA4560E8DAF0FBD1A810E060101072404227E0201016103475400620B414C65322D312D323A360063010A64070563E79A44C9A0072601010102210155ECF6F1FDD26FE579D3D81A6ADF93987C6DFA02D3504F313B81DD2FB95F51C40823022101C3D0F6018F79DCA5D2FEC42EF89ECC805FD288BFDD56AEDDDBE0AFB77A488D6F880100A302045A6EF58C03010B03012503010D0521011B30143F49B30B251614B2BDB98C4606E6B92F17BD967B27C2F75161C54FE100060101072204207E02010161034754006209415365322D303A310063010164070563E79A4AC5400823022101FC9E9054C97CBCE13F65CB0B733A2A227B5CE5D23C0980C3B284B27BE5ABE63407230221010F87C8F8E53E3DA5840B545AC90219617A4FEAB9F76E7DFF336D7A14814F4C70880100E802045A6EF58C03010B0301250521016F946BC6CA37CBAB00A5DE378FD7C191ADC257C7E2E67EA2F933555F9C15292E0601010720041E7E02010161034754006207414E65323A300063011364070563E79A4AFAE508230221014C7D57F20776DC3CE07742B66B6527E5286D7CA9B03762C71DC935BB6888D62D0723022101E69A7B97BF8DA43685BA8AE8375BE287FDDB548F0F6820C26B35669365C2B4C608230221019F16DB50A02F8D92AA4599841F6316707B1A662A39518A489588504B554D1B7608230221010E288C96225D2179DEF90F28BE4FE62BF2C3AD28EFB8A8F600DCCF8F6A9676F7880100A402045A6EF58C03010B0521017F0D9AE236EBE7B56FEACA0B6AC53033A6993E437E495F6CE50DA46C1096E4E10601010726010144022101D474205F20C49D3BA8D144293E6D4FD2087260D25539328035E97BF792E8F6BD072601012C0221016D6210425AAB8257DE2F6E2FDC36DBDB9E7E7C976906579EAE68C8F440C891540823022101488F69C2C30F862FDCBC1BE79BB87C81D1E47BA621BE9B88076E1AA8D2D734BB880202A501045A6EF58C02045A6EF58C0521017657A2D6FD236E05B6FB45F189B5845FED615138D3782E5D4D1DA375D66E200708210142B20235775AAEF836F21B5A12D16535A401076FC0DD40DB1C5D6C62F3349B24082101B11A0A6D1B5415EE802A8C1F0E8ADC413D52283EBD91F801F1D16DAD3AE2642D082101ADEE14D2FA3F684727AE6802CD421C76BC965AEBFA2E2010691853E968643211082101E4C451E413358603EFE08066EEDA908FB6ECB609CE0DAE3A3F835B894AA3371F082101BEE31E35A4C47ED8A44BC46DEBAD7A14A259B8CA515E80A7493FB57AD862808F0821017724A0A2A8EB1F36C89F53C4BA5884AAFD10A8DD68673E6BCFF8C7A6B969D461082101D9D4620A29065A193015C1E15A15F392E133F0A2FA19464F3C06F1E8E320D074082101582522AEB80C092A3019ADA6B1AE0ED63D0BFB46CBFC75BB5ABC9E6E17F93F6308210141C699CC60229704B2B748ADCCBCD6760483607D3CEC93F3D84FA1E5B9ED3F600821018E886DD92F0A028B9680F971E189E47C474808B5CA020B8237ADCAF84A107335082101ED4F4C983F9425003ED5F3139ACECFA58BBC3356E6ED42D0EF32EFBBB0BBE27E082101468742111669F6E9C3FF6D6EF588D4CA2E83CB019BF8294058D18D6803386FF808210146DD0425199FC10F742F8FF8FC1A6EA2F9607AEC95EF0C9345EBB619E9EA634E082101CEC119E2F9EEDA49B7CABA0BD16F39FC68B9763260C4EAFBBFCE8757A8C129C108210148DEA5B1AFDBDA4B016A138B7F52F763E6826FCB935CEA9D8B8FF1AAA6B5A53B082101EBC3AB1D86641581130AC3C7077B71B67BBA4C915530E9FE49B98769FC8DCAEB082101496FC0120D854E7534B992AB32EC3045B20D4BEE1BFBE4564FD092CEAFA08B72082101BB44FD36A5F3CDEE7B5C6DF3A6098A09E353335B6029F1477502588A7E37BE0088050151302902045A6EF58C0421012EEE26A5F6FF57C8F24A0CF0546C107E6285FA0FE5962B0691EC5FDF5AF15D0C800B01220116312E322E3834302E3131333534392E312E312E3131008002010034BA0861EC8545A9ADC70F08FA82D8D16D678554320025EC2255C92996D6F19FF41F3F1FFC0D5B14152A6AD6EED9C017E460E9A9E97CE73BAB5B43672388DDDEDE524A134DB9A54770373993F706ECBBFBF249CEFB16A37F7593D4B54B4ECD84499F23D81CA6D8BF21E414F96EB7FE8CFD7863506937266EF8948E5B823E63F2025F0CFBA62D6144E37C756B23BF5DE5559BA0F358EC5E311232CC02E5D73832AEB7BBFFCE41390B4FA051051DFFB5F96710D348A97138ED97A5ACFD23CF78ED560EC509880B57CEA57580824BF849B163665C958DEB8FD3F715A7346BC89FDE9F250F67D107654945D42E62EFF452793ACFC4DC8AF9F77BC8C3A31968570B4E03048DEA135F")));
+            IKsiSignature signature = signatureFactory.Create(aggregationResponsePayload,
+                new DataHash(Base16.Decode("0196BFBF3488DC0485775A5A2B0F9870100009630F4783AAAC73C0D72E2C3343B4")), 1);
+            Assert.AreEqual(5, signature.GetAggregationHashChains().Count, "Unexpected aggregation hash chain count.");
+            Assert.AreEqual(1, signature.GetAggregationHashChains()[0].GetChainLinks()[0].LevelCorrection, "Unexpected first aggregation hash chain first link level correction.");
+            Assert.IsNotNull(signature.CalendarHashChain, "Unexpected calendar hash chain: null");
+            Assert.IsNotNull(signature.CalendarAuthenticationRecord, "Unexpected calendar auth record: null");
         }
 
         [Test]
@@ -140,6 +186,181 @@ namespace Guardtime.KSI.Test.Signature
                 signature.Rfc3161Record, signature.InputHash);
 
             Assert.AreEqual(signature.EncodeValue(), newSignature.EncodeValue(), "Signatures should be equal.");
+        }
+
+        [Test]
+        public void CreateRfc3161SignatureFromPartsTest()
+        {
+            KsiSignatureFactory signatureFactory = new KsiSignatureFactory();
+            IKsiSignature signature;
+
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Legacy_Ok_With_Publication_Record), FileMode.Open))
+            {
+                signature = new KsiSignatureFactory().Create(stream);
+            }
+
+            // create RFC3161 signature with publication record.
+            IKsiSignature newSignature = signatureFactory.Create(signature.GetAggregationHashChains(), signature.CalendarHashChain, signature.CalendarAuthenticationRecord,
+                signature.PublicationRecord,
+                signature.Rfc3161Record, signature.InputHash);
+
+            Assert.AreEqual(signature.EncodeValue(), newSignature.EncodeValue(), "Signatures should be equal.");
+        }
+
+        [Test]
+        public void CreateFromPartsWithoutCalendarHashChainFailTest()
+        {
+            KsiSignatureFactory signatureFactory = new KsiSignatureFactory();
+            IKsiSignature signature;
+
+            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok), FileMode.Open))
+            {
+                signature = new KsiSignatureFactory().Create(stream);
+            }
+
+            // create signature without calendar hash chain but with calendar auth record.
+            TlvException ex = Assert.Throws<TlvException>(delegate
+            {
+                signatureFactory.Create(signature.GetAggregationHashChains(), null, signature.CalendarAuthenticationRecord, signature.PublicationRecord,
+                    signature.Rfc3161Record, signature.InputHash);
+            });
+
+            Assert.That(ex.Message, Does.StartWith("No publication record or calendar authentication record is allowed in KSI signature if there is no calendar hash chain"));
+        }
+
+        [Test]
+        public void CreateSignatureWithAggregationChainUsingMetadataAndLevelsTest()
+        {
+            // Base signature input hash: {SHA-256:[017238818675AC5DD8879E292BF8C6A11AF5B5F68EF61661580288E50EEA40F2C8]} with level of 5
+
+            /*                                5A848EE
+                                    /‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\
+                                 014024AA 1                     \
+                          /‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\              \
+                       0178BAFB 1              01979985           \
+                     /‾‾‾‾‾‾‾‾‾‾\           /‾‾‾‾‾‾‾‾‾‾‾‾\         \
+                04000000       test3   02000000 1       test2    05000000 4
+            */
+            IKsiSignature signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_LevelCorrection5);
+
+            CreateSignatureWithAggregationChainAndVerify(
+                signature,
+                new DataHash(Base16.Decode("04000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")),
+                new AggregationHashChain.Link[]
+                {
+                    new AggregationHashChain.Link(LinkDirection.Left, new AggregationHashChain.Metadata("test3")),
+                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01979985EED807EC9E036D679D327B7BEFF0CA0D127524B0AD6EC37414EBE96258")), 1),
+                    new AggregationHashChain.Link(LinkDirection.Left,
+                        new DataHash(Base16.Decode(
+                            "0500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")), 1)
+                });
+
+            CreateSignatureWithAggregationChainAndVerify(
+                signature,
+                new DataHash(Base16.Decode("020000000000000000000000000000000000000000")),
+                new AggregationHashChain.Link[]
+                {
+                    new AggregationHashChain.Link(LinkDirection.Left, "test2", "machine-id-1", 1, 1517236554764, 1),
+                    new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("0178BAFB1F3AF73B661F9C7B4ADC30DE5A7B715184A4543B200694101C1A8C0E02"))),
+                    new AggregationHashChain.Link(LinkDirection.Left,
+                        new DataHash(Base16.Decode(
+                            "0500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")), 1)
+                });
+
+            CreateSignatureWithAggregationChainAndVerify(
+                signature,
+                new DataHash(Base16.Decode("0500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")),
+                new AggregationHashChain.Link[]
+                {
+                    new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("014024AA0B2367EBBC3E27B3C498B800C48AFD9A2623C1458A07D2D0ABA4387B3B")), 4)
+                });
+
+            CreateSignatureWithAggregationChainAndVerify(
+                signature,
+                new DataHash(Base16.Decode("0500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")),
+                new AggregationHashChain.Link[]
+                {
+                    new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("014024aa0b2367ebbc3e27b3c498b800c48afd9a2623c1458a07d2d0aba4387b3b")), 4)
+                });
+        }
+
+        [Test]
+        public void CreateSignatureWithAggregationChainFailWrongLevelCorrectionTest()
+        {
+            IKsiSignature signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_LevelCorrection3);
+
+            // new chain does not fit, base signature first level correction is not big enough
+            KsiException ex1 = Assert.Throws<KsiException>(delegate
+            {
+                CreateSignatureWithAggregationChainAndVerify(
+                    signature,
+                    new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2")),
+                    new AggregationHashChain.Link[]
+                    {
+                        new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("018D982C6911831201C5CF15E937514686A2169E2AD57BA36FD92CBEBD99A67E34")), 1),
+                        new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("0114F9189A45A30D856029F9537FD20C9C7342B82A2D949072AB195D95D7B32ECB"))),
+                        new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01D4F6E36871BA12449CA773F2A36F9C0112FC74EBE164C8278D213042C772E3AB"))),
+                    });
+            });
+
+            Assert.That(ex1.Message.StartsWith(
+                    "The aggregation hash chain cannot be added as lowest level chain. It's output level (4) is bigger than level correction of the first link of the first aggregation hash chain of the base signature (3)"),
+                "Unexpected exception message: " + ex1.Message);
+
+            // new chain does not fit, base signature first level correction is not big enough
+            KsiException ex2 = Assert.Throws<KsiException>(delegate
+            {
+                CreateSignatureWithAggregationChainAndVerify(
+                    signature,
+                    new DataHash(Base16.Decode("019D982C6911831201C5CF15E937514686A2169E2AD57BA36FD92CBEBD99A67E32")),
+                    new AggregationHashChain.Link[]
+                    {
+                        new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01680192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F1")), 2),
+                        new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("015950DCA0E23E65EF56D68AF94718951567EBC2EF1F54357732530FC25D925340"))),
+                    });
+            });
+
+            Assert.That(ex2.Message.StartsWith(
+                    "The aggregation hash chain cannot be added as lowest level chain. It's output level (4) is bigger than level correction of the first link of the first aggregation hash chain of the base signature (3)"),
+                "Unexpected exception message: " + ex1.Message);
+        }
+
+        [Test]
+        public void CreateSignatureWithAggregationChainFailHashMismatchTest()
+        {
+            // cannot add new aggregation hash chain, it's output hash and base signature input hash mismatch
+            KsiException ex = Assert.Throws<KsiException>(delegate
+            {
+                CreateSignatureWithAggregationChainAndVerify(
+                    TestUtil.GetSignature(Resources.KsiSignature_Ok_LevelCorrection3),
+                    new DataHash(Base16.Decode("01580192B0D06E48884432DFFC26A67C6C685BEAF0252B9DD2A0B4B05D1724C5F2")),
+                    new AggregationHashChain.Link[]
+                    {
+                        new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("0114F9189A45A30D856029F9537FD20C9C7342B82A2D949072AB195D95D7B32ECB"))),
+                        new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01D4F6E36871BA12449CA773F2A36F9C0112FC74EBE164C8278D213042C772E3AB"))),
+                    });
+            });
+
+            Assert.That(ex.Message.StartsWith("The aggregation hash chain cannot be added as lowest level chain. It's output hash does not match base signature input hash"),
+                "Unexpected exception message: " + ex.Message);
+        }
+
+        private static void CreateSignatureWithAggregationChainAndVerify(IKsiSignature signature, DataHash inputHash, AggregationHashChain.Link[] links,
+                                                                         string expectedVerificationErrorCode = null)
+        {
+            IKsiSignature newSignature = new KsiSignatureFactory(
+                new EmptyVerificationPolicy()).CreateSignatureWithAggregationChain(signature, inputHash, HashAlgorithm.Sha2256, links);
+            VerificationResult result = new InternalVerificationPolicy().Verify(new VerificationContext(newSignature) { DocumentHash = inputHash });
+
+            if (string.IsNullOrEmpty(expectedVerificationErrorCode))
+            {
+                Assert.AreEqual(VerificationResultCode.Ok, result.ResultCode, "Unexpected verification result");
+            }
+            else
+            {
+                Assert.AreEqual(VerificationResultCode.Fail, result.ResultCode, "Unexpected verification result");
+                Assert.AreEqual(expectedVerificationErrorCode, result.VerificationError.Code, "Unexpected verification error code");
+            }
         }
     }
 }

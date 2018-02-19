@@ -117,36 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AggregationAuthenticationRecord_Ok" xml:space="preserve">
-    <value>resources/signature/aggregation-authentication-record/aggregation-authentication-record-ok.tlv</value>
-  </data>
-  <data name="AggregationAuthenticationRecord_Invalid_Type" xml:space="preserve">
-    <value>resources/signature/aggregation-authentication-record/aggregation-authentication-record-invalid-type.tlv</value>
-  </data>
-  <data name="AggregationAuthenticationRecord_Invalid_Extra_Tag" xml:space="preserve">
-    <value>resources/signature/aggregation-authentication-record/aggregation-authentication-record-invalid-extra-tag.tlv</value>
-  </data>
-  <data name="AggregationAuthenticationRecord_Invalid_Missing_Aggregation_Time" xml:space="preserve">
-    <value>resources/signature/aggregation-authentication-record/aggregation-authentication-record-invalid-missing-aggregation-time.tlv</value>
-  </data>
-  <data name="AggregationAuthenticationRecord_Invalid_Missing_Chain_Index" xml:space="preserve">
-    <value>resources/signature/aggregation-authentication-record/aggregation-authentication-record-invalid-missing-chain-index.tlv</value>
-  </data>
-  <data name="AggregationAuthenticationRecord_Invalid_Missing_Input_Hash" xml:space="preserve">
-    <value>resources/signature/aggregation-authentication-record/aggregation-authentication-record-invalid-missing-input-hash.tlv</value>
-  </data>
-  <data name="AggregationAuthenticationRecord_Invalid_Missing_Signature_Data" xml:space="preserve">
-    <value>resources/signature/aggregation-authentication-record/aggregation-authentication-record-invalid-missing-signature-data.tlv</value>
-  </data>
-  <data name="AggregationAuthenticationRecord_Invalid_Multiple_Aggregation_Time" xml:space="preserve">
-    <value>resources/signature/aggregation-authentication-record/aggregation-authentication-record-invalid-multiple-aggregation-time.tlv</value>
-  </data>
-  <data name="AggregationAuthenticationRecord_Invalid_Multiple_Input_Hash" xml:space="preserve">
-    <value>resources/signature/aggregation-authentication-record/aggregation-authentication-record-invalid-multiple-input-hash.tlv</value>
-  </data>
-  <data name="AggregationAuthenticationRecord_Invalid_Multiple_Signature_Data" xml:space="preserve">
-    <value>resources/signature/aggregation-authentication-record/aggregation-authentication-record-invalid-multiple-signature-data.tlv</value>
-  </data>
   <data name="AggregationHashChain_Ok" xml:space="preserve">
     <value>resources/signature/aggregation-hash-chain/aggregation-hash-chain-ok.tlv</value>
   </data>
@@ -303,6 +273,9 @@
   <data name="KsiSignature_Ok" xml:space="preserve">
     <value>resources/signature/ksi-signature/ksi-signature-ok.tlv</value>
   </data>
+  <data name="KsiSignature_Ok_20171219" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-ok-2017-12-19.tlv</value>
+  </data>
   <data name="KsiSignature_Ok_New" xml:space="preserve">
     <value>resources/signature/ksi-signature/ksi-signature-ok-new.tlv</value>
   </data>
@@ -333,7 +306,7 @@
   <data name="KsiSignature_Invalid_Missing_Aggregation_Hash_Chain" xml:space="preserve">
     <value>resources/signature/ksi-signature/ksi-signature-invalid-missing-aggregation-hash-chains.tlv</value>
   </data>
-  <data name="KsiSignature_Ok_Missing_Publication_Record_And_Calendar_Authentication_Record" xml:space="preserve">
+  <data name="KsiSignature_Ok_AggregationHashChain_Only" xml:space="preserve">
     <value>resources/signature/ksi-signature/ksi-signature-ok-Missing-publication-record-and-calendar-authentication-record.tlv</value>
   </data>
   <data name="KsiSignature_Invalid_Multiple_Calendar_Authentication_Records" xml:space="preserve">
@@ -369,8 +342,8 @@
   <data name="KsiSignature_Invalid_Calendar_Chain_Input_Hash" xml:space="preserve">
     <value>resources/signature/ksi-signature/ksi-signature-invalid-calendar-hash-chain-input-hash.tlv</value>
   </data>
-  <data name="KsiSignature_Invalid_Calendar_Chain_Publication_Time" xml:space="preserve">
-    <value>resources/signature/ksi-signature/ksi-signature-invalid-calendar-hash-chain-publication-time.tlv</value>
+  <data name="KsiSignature_Invalid_Calendar_Chain_Aggregation_Time" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-calendar-hash-chain-aggregation-time.tlv</value>
   </data>
   <data name="KsiSignature_Invalid_Calendar_Chain_Registration_Time" xml:space="preserve">
     <value>resources/signature/ksi-signature/ksi-signature-invalid-calendar-hash-chain-registration-time.tlv</value>
@@ -380,9 +353,6 @@
   </data>
   <data name="KsiSignature_Invalid_With_Invalid_Publication_Record_Time" xml:space="preserve">
     <value>resources/signature/ksi-signature/ksi-signature-invalid-with-invalid-publication-record-time.tlv</value>
-  </data>
-  <data name="KsiSignature_Invalid_With_Invalid_Aggregation_Root_Hash" xml:space="preserve">
-    <value>resources/signature/ksi-signature/ksi-signature-invalid-aggregation-root-hash.tlv</value>
   </data>
   <data name="Rfc3161Record_Ok" xml:space="preserve">
     <value>resources/signature/rfc3161-record/rfc3161-record-ok.tlv</value>
@@ -531,6 +501,9 @@
   <data name="AggregationHashChainMetadataWithoutPadding" xml:space="preserve">
     <value>resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataWithoutPadding.ksig</value>
   </data>
+  <data name="AggregationHashChainMetadataWithoutPaddingWithInvalidAlgorithm" xml:space="preserve">
+    <value>resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataWithoutPaddingWithInvalidAlgorithm.ksig</value>
+  </data>
   <data name="AggregationHashChainMetadataWithoutPaddingFail" xml:space="preserve">
     <value>resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataWithoutPaddingFail.ksig</value>
   </data>
@@ -540,14 +513,17 @@
   <data name="AggregationHashChainMetadataWithPadding2" xml:space="preserve">
     <value>resources/signature/aggregation-hash-chain/MetadataPadding/TestAggregationHashChainMetadataWithPadding2.ksig</value>
   </data>
-  <data name="All_Wrong_Chains_Invalid_Signature" xml:space="preserve">
-    <value>resources/signature/integration-test-signatures/all-wrong-hash-chains-in-signature.ksig</value>
+  <data name="KsiSignature_Ok_Only_Aggregtion_Chains" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-ok-only-aggregation-chains.tlv</value>
   </data>
-  <data name="Signature_Wrong_Cert_ID" xml:space="preserve">
-    <value>resources/signature/integration-test-signatures/NewSignature-CalAuth-WrongCertID.ksig</value>
-  </data>
-  <data name="KsiService_AggregationResponsePdu" xml:space="preserve">
+  <data name="KsiService_AggregationResponsePdu_RequestId_1584727637" xml:space="preserve">
     <value>resources/service/aggregation-response-pdu.tlv</value>
+  </data>
+  <data name="KsiService_AggregationResponsePdu_RequestId_1584727638" xml:space="preserve">
+    <value>resources/service/aggregation-response-pdu-2.tlv</value>
+  </data>
+  <data name="KsiService_AggregationResponsePdu_Invalid_Mac" xml:space="preserve">
+    <value>resources/service/aggregation-response-pdu-invalid-mac.tlv</value>
   </data>
   <data name="KsiService_AggregationResponsePdu_Invalid_Signature" xml:space="preserve">
     <value>resources/service/aggregation-response-pdu-invalid-signature.tlv</value>
@@ -564,8 +540,11 @@
   <data name="KsiService_AggregatorConfigResponsePdu_With_Acknowledgment" xml:space="preserve">
     <value>resources/service/aggregator-config-response-pdu-with-acknowledgment.tlv</value>
   </data>
-  <data name="KsiService_ExtendResponsePdu" xml:space="preserve">
+  <data name="KsiService_ExtendResponsePdu_RequestId_1043101455" xml:space="preserve">
     <value>resources/service/extend-response-pdu.tlv</value>
+  </data>
+  <data name="KsiService_ExtendResponsePdu_RequestId_1043101454" xml:space="preserve">
+    <value>resources/service/extend-response-pdu-2.tlv</value>
   </data>
   <data name="KsiService_ExtendResponsePdu_Invalid_Signature" xml:space="preserve">
     <value>resources/service/extend-response-pdu-invalid-signature.tlv</value>
@@ -609,6 +588,9 @@
   <data name="KsiService_AggregationResponsePdu_SignedLevel2_LevelCorrection1" xml:space="preserve">
     <value>resources/service/aggregation-response-pdu-with-level-correction-1.tlv</value>
   </data>
+  <data name="KsiService_AggregationResponsePdu_SignedZeroBytes" xml:space="preserve">
+    <value>resources/service/aggregation-response-pdu-signed-zero-bytes.tlv</value>
+  </data>
   <data name="PkiTrustProvider_CustomCertInvalid" xml:space="preserve">
     <value>resources/trust/pkitrustprovider/custom-cert-invalid.pem</value>
   </data>
@@ -627,6 +609,9 @@
   <data name="PkiTrustProvider_IdenTrustCert" xml:space="preserve">
     <value>resources/trust/pkitrustprovider/identrust.pem</value>
   </data>
+  <data name="KsiPublicationsFile_201712" xml:space="preserve">
+    <value>resources/publication/publicationsfile/ksi-publications-2017-12.bin</value>
+  </data>
   <data name="KsiPublicationsFile" xml:space="preserve">
     <value>resources/publication/publicationsfile/ksi-publications.bin</value>
   </data>
@@ -636,31 +621,94 @@
   <data name="KsiSignature_Invalid_Aggregation_Chain_Index_Mismatch_Prev2" xml:space="preserve">
     <value>resources/signature/ksi-signature/ksi-signature-invalid-aggregation-chain-index-mismatch-prev-2.tlv</value>
   </data>
-  <data name="KsiSignature_Invalid_First_Aggregation_Chain_Index_Length" xml:space="preserve">
-    <value>resources/signature/ksi-signature/ksi-signature-invalid-first-aggregation-chain-index-length.tlv</value>
+  <data name="KsiSignature_Invalid_Highest_Aggregation_Chain_Index_Length" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-highest-aggregation-chain-index-length.tlv</value>
   </data>
   <data name="KsiSignature_Invalid_Not_Valid_Cert" xml:space="preserve">
     <value>resources/signature/ksi-signature/ksi-signature-invalid-not-valid-cert.tlv</value>
   </data>
+  <data name="KsiSignature_Ok_Calendar_Auth_Record_Pkcs7_Signature" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-ok-calendar-auth-record-pkcs7-signature.tlv</value>
+  </data>
+  <data name="KsiSignature_Invalid_Calendar_Auth_Record_Pkcs7_Signature" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-calendar-auth-record-pkcs7-signature.tlv</value>
+  </data>
+  <data name="KsiSignature_Invalid_Calendar_Auth_Record_Pkcs7_Signature_Modified_Bytes" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-calendar-auth-record-pkcs7-signature-modified-bytes.tlv</value>
+  </data>
+  <data name="KsiSignature_Invalid_Calendar_Auth_Record_Pkcs7_Signature_Not_Valid_Cert" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-invalid-calendar-auth-record-pkcs7-signature-cert-not-valid.tlv</value>
+  </data>
   <data name="SignatureData_Invalid_Leading_Zero" xml:space="preserve">
     <value>resources/signature/signaturedata/signature-data-invalid-leading-zero.tlv</value>
   </data>
-  <data name="KsiSerice_AggregationResponseUnknownNonCriticalPayload" xml:space="preserve">
+  <data name="KsiService_AggregationResponseUnknownNonCriticalPayload" xml:space="preserve">
     <value>resources/service/aggregation-response-pdu-with-only-unknown-non-critical-payload.tlv</value>
   </data>
-  <data name="KsiSerice_AggregationResponseWithConf" xml:space="preserve">
+  <data name="KsiService_AggregationResponseWithConf" xml:space="preserve">
     <value>resources/service/aggregation-response-pdu-with-conf.tlv</value>
   </data>
-  <data name="KsiSerice_AggregationResponseWithUnknownNonCriticalPayload" xml:space="preserve">
+  <data name="KsiService_AggregationResponseWithUnknownNonCriticalPayload" xml:space="preserve">
     <value>resources/service/aggregation-response-pdu-with-unknown-non-critical-payload.tlv</value>
   </data>
-  <data name="KsiSerice_ExtenderResponseUnkownNonCriticalPayload" xml:space="preserve">
+  <data name="KsiService_ExtenderResponseUnkownNonCriticalPayload" xml:space="preserve">
     <value>resources/service/extender-response-with-only-unknown-non-critical-payload.tlv</value>
   </data>
-  <data name="KsiSerice_ExtendResponseNonCriticalPayload" xml:space="preserve">
+  <data name="KsiService_ExtendResponseNonCriticalPayload" xml:space="preserve">
     <value>resources/service/extend-response-pdu-unknown-non-critical-payload.tlv</value>
   </data>
-  <data name="KsiSerice_ExtendResponseWithConf" xml:space="preserve">
+  <data name="KsiService_ExtendResponseWithConf" xml:space="preserve">
     <value>resources/service/extend-response-with-conf.tlv</value>
+  </data>
+  <data name="KsiSignature_Obsolete_Calendar_Chain_Algorithm_2016" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-siganture-obsolete-calendar-algo-2016-01.tlv</value>
+  </data>
+  <data name="KsiSignature_Obsolete_Calendar_Chain_Algorithm_2017" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-siganture-obsolete-calendar-algo-2017.tlv</value>
+  </data>
+  <data name="KsiSignature_Sha1AggregationChainAlgorithm_2016" xml:space="preserve">
+    <value>resources/signature/ksi-signature/sha1-as-aggregation-algo-2016-01.tlv</value>
+  </data>
+  <data name="KsiSignature_Sha1AggregationChainAlgorithm_2017" xml:space="preserve">
+    <value>resources/signature/ksi-signature/sha1-as-aggregation-algo-2017.tlv</value>
+  </data>
+  <data name="KsiSignature_Sha1InputAlgorithm_2016" xml:space="preserve">
+    <value>resources/signature/ksi-signature/sha1-as-input-algo-2016-01.tlv</value>
+  </data>
+  <data name="KsiSignature_Sha1InputAlgorithm_2017" xml:space="preserve">
+    <value>resources/signature/ksi-signature/sha1-as-input-algo-2017.tlv</value>
+  </data>
+  <data name="KsiSignature_Sha1CalendarLeftLinkAlgorithm_2016" xml:space="preserve">
+    <value>resources/signature/ksi-signature/sha1-as-calendar-algo-2016-01.tlv</value>
+  </data>
+  <data name="KsiSignature_Sha1CalendarLeftLinkAlgorithm_2017" xml:space="preserve">
+    <value>resources/signature/ksi-signature/sha1-as-calendar-algo-2017.tlv</value>
+  </data>
+  <data name="KsiSignature_Rfc3161Record_Sha1InputHashAlgorithm_2016" xml:space="preserve">
+    <value>resources/signature/rfc3161-record/rfc3161-sha1-as-input-hash-2016-01.tlv</value>
+  </data>
+  <data name="KsiSignature_Rfc3161Record_Sha1InputHashAlgorithm_2017" xml:space="preserve">
+    <value>resources/signature/rfc3161-record/rfc3161-sha1-as-input-hash-2017.tlv</value>
+  </data>
+  <data name="KsiSignature_Rfc3161Record_Sha1OutputHashAlgorithm_2016" xml:space="preserve">
+    <value>resources/signature/rfc3161-record/rfc3161-sha1-as-output-hash-2016-01.tlv</value>
+  </data>
+  <data name="KsiSignature_Rfc3161Record_Sha1OutputHashAlgorithm_2017" xml:space="preserve">
+    <value>resources/signature/rfc3161-record/rfc3161-sha1-as-output-hash-2017.tlv</value>
+  </data>
+  <data name="KsiSignature_Rfc3161Record_Sha1SignedAttrAlgorithm_2016" xml:space="preserve">
+    <value>resources/signature/rfc3161-record/rfc3161-sha1-in-sig-atr-2016-01.tlv</value>
+  </data>
+  <data name="KsiSignature_Rfc3161Record_Sha1SignedAttrAlgorithm_2017" xml:space="preserve">
+    <value>resources/signature/rfc3161-record/rfc3161-sha1-in-sig-atr-2017.tlv</value>
+  </data>
+  <data name="KsiSignature_Rfc3161Record_Sha1TstInfoAlgorithm_2016" xml:space="preserve">
+    <value>resources/signature/rfc3161-record/rfc3161-sha1-in-tst-algo-2016-01.tlv</value>
+  </data>
+  <data name="KsiSignature_Rfc3161Record_Sha1TstInfoAlgorithm_2017" xml:space="preserve">
+    <value>resources/signature/rfc3161-record/rfc3161-sha1-in-tst-algo-2017.tlv</value>
+  </data>
+  <data name="KsiSignature_Ok_LevelCorrection5" xml:space="preserve">
+    <value>resources/signature/ksi-signature/ksi-signature-level-correction-5.ksi</value>
   </data>
 </root>

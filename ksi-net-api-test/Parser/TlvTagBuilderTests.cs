@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -29,10 +29,11 @@ namespace Guardtime.KSI.Test.Parser
         [Test]
         public void TlvTagBuilderCreateNullTest()
         {
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 TlvTagBuilder builder = new TlvTagBuilder(null);
             });
+            Assert.AreEqual("tag", ex.ParamName);
         }
 
         [Test]
@@ -48,10 +49,11 @@ namespace Guardtime.KSI.Test.Parser
 
             TlvTagBuilder builder = new TlvTagBuilder(tag);
 
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 builder.AddChildTag(null);
             });
+            Assert.AreEqual("childTag", ex.ParamName);
         }
 
         [Test]
@@ -88,10 +90,11 @@ namespace Guardtime.KSI.Test.Parser
 
             TlvTagBuilder builder = new TlvTagBuilder(tag);
 
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 builder.RemoveChildTag(null);
             });
+            Assert.AreEqual("childTag", ex.ParamName);
         }
 
         [Test]
@@ -130,10 +133,11 @@ namespace Guardtime.KSI.Test.Parser
 
             TlvTagBuilder builder = new TlvTagBuilder(tag);
 
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 builder.ReplaceChildTag(null, child1);
             });
+            Assert.AreEqual("oldTag", ex.ParamName);
         }
 
         [Test]
@@ -149,10 +153,11 @@ namespace Guardtime.KSI.Test.Parser
 
             TlvTagBuilder builder = new TlvTagBuilder(tag);
 
-            Assert.Throws<ArgumentNullException>(delegate
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
             {
                 builder.ReplaceChildTag(child1, null);
             });
+            Assert.AreEqual("newTag", ex.ParamName);
         }
 
         [Test]

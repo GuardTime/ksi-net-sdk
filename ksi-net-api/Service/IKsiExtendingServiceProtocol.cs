@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -31,8 +31,8 @@ namespace Guardtime.KSI.Service
         /// </summary>
         /// <param name="data">extend request bytes</param>
         /// <param name="requestId">request id</param>
-        /// <param name="callback">callback when response is ready</param>
-        /// <param name="asyncState">async state object</param>
+        /// <param name="callback">callback when extending request is finished</param>
+        /// <param name="asyncState">callback async state object</param>
         /// <returns>async result</returns>
         IAsyncResult BeginExtend(byte[] data, ulong requestId, AsyncCallback callback, object asyncState);
 
@@ -46,9 +46,9 @@ namespace Guardtime.KSI.Service
         /// <summary>
         ///     Begin extender configuration request.
         /// </summary>
-        /// <param name="data">extend request bytes</param>
+        /// <param name="data">extender configuration request bytes</param>
         /// <param name="requestId">request id</param>
-        /// <param name="callback">callback when response is ready</param>
+        /// <param name="callback">callback when extender configuration request is finished</param>
         /// <param name="asyncState">async state object</param>
         /// <returns>async result</returns>
         IAsyncResult BeginGetExtenderConfig(byte[] data, ulong requestId, AsyncCallback callback, object asyncState);
@@ -59,5 +59,10 @@ namespace Guardtime.KSI.Service
         /// <param name="asyncResult">async result</param>
         /// <returns>response bytes</returns>
         byte[] EndGetExtenderConfig(IAsyncResult asyncResult);
+
+        /// <summary>
+        /// Extender address (url or ip)
+        /// </summary>
+        string ExtenderAddress { get; }
     }
 }

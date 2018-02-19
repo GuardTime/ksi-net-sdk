@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -109,12 +109,12 @@ namespace Guardtime.KSI.Signature.Verification
         {
             if (KsiService == null)
             {
-                throw new KsiException("Invalid KSI service: null.");
+                throw new KsiVerificationException("Invalid KSI service in context: null.");
             }
 
             if (Signature == null)
             {
-                throw new KsiException("Invalid Signature: null.");
+                throw new KsiVerificationException("Invalid KSI signature in context: null.");
             }
 
             ulong cacheKey = publicationTime ?? 0;
@@ -133,6 +133,8 @@ namespace Guardtime.KSI.Signature.Verification
                     {
                         return _calendarHashChainCache[cacheKey];
                     }
+
+                    _calendarHashChainCache.Remove(cacheKey);
                 }
             }
 

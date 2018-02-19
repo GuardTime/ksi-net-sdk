@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -31,13 +31,34 @@ namespace Guardtime.KSI.Test.Service
         /// </summary>
         public byte[] RequestResult { get; set; }
 
+        /// <summary>
+        /// Return publications file bytes.
+        /// </summary>
+        public byte[] PublicationsFileBytes { get; set; }
+
+        /// <summary>
+        /// If set then Sleep(DelayMilliseconds) is called before 
+        /// </summary>
+        public uint DelayMilliseconds { get; set; }
+
         public IAsyncResult BeginSign(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
-            return new AsyncResult(requestId);
+            AsyncResult ar = new AsyncResult(requestId, asyncState);
+            callback?.Invoke(ar);
+            return ar;
         }
 
         public byte[] EndSign(IAsyncResult asyncResult)
         {
+            return GetResult();
+        }
+
+        private byte[] GetResult()
+        {
+            if (DelayMilliseconds > 0)
+            {
+                System.Threading.Thread.Sleep((int)DelayMilliseconds);
+            }
             return RequestResult;
         }
 
@@ -48,17 +69,19 @@ namespace Guardtime.KSI.Test.Service
 
         public byte[] EndGetAggregatorConfig(IAsyncResult asyncResult)
         {
-            return RequestResult;
+            return GetResult();
         }
+
+        public string AggregatorAddress => "test.aggregator.address";
 
         public IAsyncResult BeginExtend(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
         {
-            return new AsyncResult(requestId);
+            return new AsyncResult(requestId, asyncState);
         }
 
         public byte[] EndExtend(IAsyncResult asyncResult)
         {
-            return RequestResult;
+            return GetResult();
         }
 
         public IAsyncResult BeginGetExtenderConfig(byte[] data, ulong requestId, AsyncCallback callback, object asyncState)
@@ -68,18 +91,22 @@ namespace Guardtime.KSI.Test.Service
 
         public byte[] EndGetExtenderConfig(IAsyncResult asyncResult)
         {
-            return RequestResult;
+            return GetResult();
         }
+
+        public string ExtenderAddress => "test.extender.address";
 
         public IAsyncResult BeginGetPublicationsFile(AsyncCallback callback, object asyncState)
         {
-            return new AsyncResult(0);
+            return new AsyncResult(0, asyncState);
         }
 
         public byte[] EndGetPublicationsFile(IAsyncResult asyncResult)
         {
-            return ReadFile(Resources.KsiPublicationsFile);
+            return PublicationsFileBytes ?? ReadFile(Resources.KsiPublicationsFile);
         }
+
+        public string PublicationsFileAddress => "test.publications.file.address";
 
         private static byte[] ReadFile(string file)
         {
@@ -93,7 +120,7 @@ namespace Guardtime.KSI.Test.Service
 
         private class AsyncResult : KsiServiceAsyncResult
         {
-            public AsyncResult(ulong requestId) : base(null, requestId, null, null)
+            public AsyncResult(ulong requestId, object asyncState = null) : base(null, requestId, null, asyncState)
             {
                 SetComplete();
             }

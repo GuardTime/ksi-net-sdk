@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -19,7 +19,6 @@
 
 using System.Collections.ObjectModel;
 using Guardtime.KSI.Utils;
-using NLog;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
@@ -28,8 +27,7 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public class AggregationHashChainIndexSuccessorRule : VerificationRule
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
+      
         /// <see cref="VerificationRule.Verify" />
         public override VerificationResult Verify(IVerificationContext context)
         {
@@ -65,14 +63,14 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
             if (!isValid)
             {
-                Logger.Warn("Chain index is not the successor to the parent aggregation hash chain index. Chain index: {0}; Parent chain index: {1}",
+                Logger.Debug("Chain index is not the successor to the parent aggregation hash chain index. Chain index: {0}; Parent chain index: {1}",
                     Util.ArrayToString(childChainIndex), Util.ArrayToString(currentIndex));
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int12);
             }
 
             if (currentIndex != null && currentIndex.Length != 1)
             {
-                Logger.Warn("Highest aggregation hash chain index length is not 1. Chain index: {0};", Util.ArrayToString(currentIndex));
+                Logger.Debug("Highest aggregation hash chain index length is not 1. Chain index: {0};", Util.ArrayToString(currentIndex));
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int12);
             }
 

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -17,11 +17,11 @@
  * reserves and retains all trademark rights.
  */
 
-using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Signature;
+using Guardtime.KSI.Test.Properties;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
@@ -33,7 +33,7 @@ namespace Guardtime.KSI.Test.Signature
         [Test]
         public void TestRfc3161RecordOk()
         {
-            Rfc3161Record rfc3161Record = GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Ok);
+            Rfc3161Record rfc3161Record = GetRfc3161RecordFromFile(Resources.Rfc3161Record_Ok);
             Assert.AreEqual(10, rfc3161Record.Count, "Invalid amount of child TLV objects");
 
             Assert.AreEqual(rfc3161Record.GetOutputHash(),
@@ -45,7 +45,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Type);
+                GetRfc3161RecordFromFile(Resources.Rfc3161Record_Invalid_Type);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Invalid tag type! Class: Rfc3161Record; Type: 0x807;"));
         }
 
@@ -54,7 +54,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Extra_Tag);
+                GetRfc3161RecordFromFile(Resources.Rfc3161Record_Invalid_Extra_Tag);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Unknown tag"));
         }
 
@@ -63,7 +63,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Missing_Aggregation_Time);
+                GetRfc3161RecordFromFile(Resources.Rfc3161Record_Invalid_Missing_Aggregation_Time);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one aggregation time must exist in RFC#3161 record"));
         }
 
@@ -72,7 +72,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Missing_Chain_Index);
+                GetRfc3161RecordFromFile(Resources.Rfc3161Record_Invalid_Missing_Chain_Index);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Chain indexes must exist in RFC#3161 record"));
         }
 
@@ -81,7 +81,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Missing_Input_Hash);
+                GetRfc3161RecordFromFile(Resources.Rfc3161Record_Invalid_Missing_Input_Hash);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one input hash must exist in RFC#3161 record"));
         }
 
@@ -90,7 +90,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Missing_Signed_Attributes_Algorithm);
+                GetRfc3161RecordFromFile(Resources.Rfc3161Record_Invalid_Missing_Signed_Attributes_Algorithm);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one signed attributes algorithm must exist in RFC#3161 record"));
         }
 
@@ -99,7 +99,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Missing_Signed_Attributes_Prefix);
+                GetRfc3161RecordFromFile(Resources.Rfc3161Record_Invalid_Missing_Signed_Attributes_Prefix);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one signed attributes prefix must exist in RFC#3161 record"));
         }
 
@@ -108,7 +108,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Missing_Signed_Attributes_Suffix);
+                GetRfc3161RecordFromFile(Resources.Rfc3161Record_Invalid_Missing_Signed_Attributes_Suffix);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one signed attributes suffix must exist in RFC#3161 record"));
         }
 
@@ -117,7 +117,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Missing_TstInfo_Algorithm);
+                GetRfc3161RecordFromFile(Resources.Rfc3161Record_Invalid_Missing_TstInfo_Algorithm);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one tstInfo algorithm must exist in RFC#3161 record"));
         }
 
@@ -126,7 +126,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Missing_TstInfo_Prefix);
+                GetRfc3161RecordFromFile(Resources.Rfc3161Record_Invalid_Missing_TstInfo_Prefix);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one tstInfo prefix must exist in RFC#3161 record"));
         }
 
@@ -135,7 +135,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Missing_TstInfo_Suffix);
+                GetRfc3161RecordFromFile(Resources.Rfc3161Record_Invalid_Missing_TstInfo_Suffix);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one tstInfo suffix must exist in RFC#3161 record"));
         }
 
@@ -144,7 +144,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Multiple_Aggregation_Time);
+                GetRfc3161RecordFromFile(Resources.Rfc3161Record_Invalid_Multiple_Aggregation_Time);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one aggregation time must exist in RFC#3161 record"));
         }
 
@@ -153,7 +153,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Multiple_Input_Hash);
+                GetRfc3161RecordFromFile(Resources.Rfc3161Record_Invalid_Multiple_Input_Hash);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one input hash must exist in RFC#3161 record"));
         }
 
@@ -162,7 +162,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Multiple_Signed_Attributes_Algorithm);
+                GetRfc3161RecordFromFile(Resources.Rfc3161Record_Invalid_Multiple_Signed_Attributes_Algorithm);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one signed attributes algorithm must exist in RFC#3161 record"));
         }
 
@@ -171,7 +171,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Multiple_Signed_Attributes_Prefix);
+                GetRfc3161RecordFromFile(Resources.Rfc3161Record_Invalid_Multiple_Signed_Attributes_Prefix);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one signed attributes prefix must exist in RFC#3161 record"));
         }
 
@@ -180,7 +180,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Multiple_Signed_Attributes_Suffix);
+                GetRfc3161RecordFromFile(Resources.Rfc3161Record_Invalid_Multiple_Signed_Attributes_Suffix);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one signed attributes suffix must exist in RFC#3161 record"));
         }
 
@@ -189,7 +189,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Multiple_TstInfo_Algorithm);
+                GetRfc3161RecordFromFile(Resources.Rfc3161Record_Invalid_Multiple_TstInfo_Algorithm);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one tstInfo algorithm must exist in RFC#3161 record"));
         }
 
@@ -198,7 +198,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Multiple_TstInfo_Prefix);
+                GetRfc3161RecordFromFile(Resources.Rfc3161Record_Invalid_Multiple_TstInfo_Prefix);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one tstInfo prefix must exist in RFC#3161 record"));
         }
 
@@ -207,7 +207,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetRfc3161RecordFromFile(Properties.Resources.Rfc3161Record_Invalid_Multiple_TstInfo_Suffix);
+                GetRfc3161RecordFromFile(Resources.Rfc3161Record_Invalid_Multiple_TstInfo_Suffix);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one tstInfo suffix must exist in RFC#3161 record"));
         }
 
@@ -237,12 +237,7 @@ namespace Guardtime.KSI.Test.Signature
 
         private static Rfc3161Record GetRfc3161RecordFromFile(string file)
         {
-            using (TlvReader reader = new TlvReader(new FileStream(Path.Combine(TestSetup.LocalPath, file), FileMode.Open)))
-            {
-                Rfc3161Record rfc3161Record = new Rfc3161Record(reader.ReadTag());
-
-                return rfc3161Record;
-            }
+            return new Rfc3161Record(TestUtil.GetRawTag(file));
         }
     }
 }

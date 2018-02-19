@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -17,6 +17,7 @@
  * reserves and retains all trademark rights.
  */
 
+using System;
 using System.Security.Cryptography.X509Certificates;
 using Guardtime.KSI.Exceptions;
 
@@ -32,17 +33,27 @@ namespace Guardtime.KSI.Crypto
         /// </summary>
         /// <param name="oid">signature oid</param>
         /// <param name="trustStore">trust store</param>
-        /// <param name="certificateRdnSelector">sertificate subject rdn selector</param>
+        /// <param name="certificateRdnSelector">certificate subject RDN selector</param>
         /// <returns>signature verifier</returns>
-        public static ICryptoSignatureVerifier GetCryptoSignatureVerifierByOid(string oid, X509Store trustStore,
-                                                                               ICertificateSubjectRdnSelector certificateRdnSelector)
+        [Obsolete("Use GetCryptoSignatureVerifierByOid(string oid) instead.")]
+        public static ICryptoSignatureVerifier GetCryptoSignatureVerifierByOid(string oid, X509Store trustStore, ICertificateSubjectRdnSelector certificateRdnSelector)
+        {
+            return GetCryptoSignatureVerifierByOid(oid);
+        }
+
+        /// <summary>
+        ///     Get crypto signature verifier by oid.
+        /// </summary>
+        /// <param name="oid">signature oid</param>
+        /// <returns>signature verifier</returns>
+        public static ICryptoSignatureVerifier GetCryptoSignatureVerifierByOid(string oid)
         {
             switch (oid)
             {
                 case "1.2.840.113549.1.1.11":
                     return KsiProvider.CreateRsaCryptoSignatureVerifier("SHA256");
                 case "1.2.840.113549.1.7.2":
-                    return KsiProvider.CreatePkcs7CryptoSignatureVerifier(trustStore, certificateRdnSelector);
+                    return KsiProvider.CreatePkcs7CryptoSignatureVerifier();
                 default:
                     throw new PkiVerificationErrorException("Cryptographic signature not supported. Oid: " + oid);
             }

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -115,14 +115,14 @@ namespace Guardtime.KSI.Test.Crypto
             }
         }
 
-        public static ICertificateSubjectRdnSelector CreateCertificateSubjectRdnSelector(string subjectDn)
+        public static ICertificateSubjectRdnSelector CreateCertificateSubjectRdnSelector(params string[] rdn)
         {
             switch (ProviderType)
             {
                 case CryptoProviderType.BouncyCastle:
-                    return new KSI.Crypto.BouncyCastle.Crypto.CertificateSubjectRdnSelector(subjectDn);
+                    return new KSI.Crypto.BouncyCastle.Crypto.CertificateSubjectRdnSelector(rdn);
                 case CryptoProviderType.Microsoft:
-                    return new KSI.Crypto.Microsoft.Crypto.CertificateSubjectRdnSelector(subjectDn);
+                    return new KSI.Crypto.Microsoft.Crypto.CertificateSubjectRdnSelector(rdn);
                 default:
                     return null;
             }

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -17,7 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using System.IO;
 using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Service;
 using Guardtime.KSI.Test.Properties;
@@ -31,13 +30,53 @@ namespace Guardtime.KSI.Test.Service
     [TestFixture]
     public class ExtenderConfigRequestStaticTests : StaticServiceTestsBase
     {
+        [Test]
+        public void BeginetExtenderConfigWithoutExtendingServiceProtocol()
+        {
+            KsiService service = new KsiService(null, null, null, null, null, null);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                service.BeginGetExtenderConfig(null, null);
+            });
+
+            Assert.That(ex.Message.StartsWith("Extending service protocol is missing from service"), "Unexpected exception message: " + ex.Message);
+        }
+
+        [Test]
+        public void BeginGetExtenderConfigWithoutExtendingServiceCredentials()
+        {
+            TestKsiServiceProtocol protocol = new TestKsiServiceProtocol();
+            KsiService service = new KsiService(null, null, protocol, null, null, null);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                service.BeginGetExtenderConfig(null, null);
+            });
+
+            Assert.That(ex.Message.StartsWith("Extending service credentials are missing."), "Unexpected exception message: " + ex.Message);
+        }
+
+        [Test]
+        public void EndGetExtenderConfigWithoutExtendingServiceProtocol()
+        {
+            KsiService service = new KsiService(null, null, null, null, null, null);
+
+            KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
+            {
+                service.EndGetExtenderConfig(new TestAsyncResult());
+            });
+
+            Assert.That(ex.Message.StartsWith("Extending service protocol is missing from service"), "Unexpected exception message: " + ex.Message);
+        }
+
         /// <summary>
         /// Test extender configuration request
         /// </summary>
         [Test]
         public void ExtenderConfigRequestStaticTest()
         {
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtenderConfigResponsePdu)));
+            Ksi ksi = GetStaticKsi(Resources.KsiService_ExtenderConfigResponsePdu);
 
             ExtenderConfig config = ksi.GetExtenderConfig();
 
@@ -53,7 +92,7 @@ namespace Guardtime.KSI.Test.Service
         public void ExtenderConfigRequestWithMultiPayloadsResponseStaticTest()
         {
             // Response has multiple payloads (2 extending payloads and a configuration payload)
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu_Multi_Payloads)));
+            Ksi ksi = GetStaticKsi(Resources.KsiService_ExtendResponsePdu_Multi_Payloads);
 
             ExtenderConfig config = ksi.GetExtenderConfig();
 
@@ -69,7 +108,7 @@ namespace Guardtime.KSI.Test.Service
         public void ExtenderConfigRequestInvalidStaticTest()
         {
             // pdu does not contain extender config payload
-            Ksi ksi = GetStaticKsi(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiService_ExtendResponsePdu)));
+            Ksi ksi = GetStaticKsi(Resources.KsiService_ExtendResponsePdu_RequestId_1043101455);
 
             KsiServiceException ex = Assert.Throws<KsiServiceException>(delegate
             {

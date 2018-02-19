@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -24,7 +24,7 @@ using System.Security.Cryptography.X509Certificates;
 namespace Guardtime.KSI.Crypto.Microsoft.Crypto
 {
     /// <summary>
-    /// Certificate subject rdn selector.
+    /// Certificate subject RDN selector. Used for verifying that certificate subject contains specific RDN.
     /// </summary>
     public class CertificateSubjectRdnSelector : ICertificateSubjectRdnSelector
     {
@@ -48,12 +48,12 @@ namespace Guardtime.KSI.Crypto.Microsoft.Crypto
         //    { "1.2.840.113549.1.9.2", new string[] { "UnstructuredName" } }
         //};
 
-        readonly List<string> _rdnList;
+        readonly List<string> _rdnList = new List<string>();
 
         /// <summary>
-        /// Create certificate subject rdn selector instance.
+        /// Create certificate subject RDN selector instance.
         /// </summary>
-        /// <param name="rdnList">Certificate subject rdn list. Special chars must be escaped in rdn value.</param>
+        /// <param name="rdnList">List of expected RDNs. Special chars must be escaped in RDN value.</param>
         public CertificateSubjectRdnSelector(IList<CertificateSubjectRdn> rdnList)
         {
             if (rdnList == null)
@@ -63,10 +63,9 @@ namespace Guardtime.KSI.Crypto.Microsoft.Crypto
 
             if (rdnList.Count == 0)
             {
-                throw new ArgumentException("List cannot be empty.", nameof(rdnList));
+                throw new ArgumentException("RDN list cannot be empty.", nameof(rdnList));
             }
 
-            _rdnList = new List<string>();
             foreach (CertificateSubjectRdn rdn in rdnList)
             {
                 try
@@ -82,28 +81,42 @@ namespace Guardtime.KSI.Crypto.Microsoft.Crypto
         }
 
         /// <summary>
-        /// Create certificate subject rdn selector instance.
+        /// Create certificate subject RDN selector instance.
         /// </summary>
-        /// <param name="subjectDn">Certificate subject DN.</param>
-        public CertificateSubjectRdnSelector(string subjectDn)
+        /// <param name="rdn">Expected RDN. Special chars must be escaped in RDN value.</param>
+        public CertificateSubjectRdnSelector(params string[] rdn)
         {
-            if (string.IsNullOrEmpty(subjectDn))
+            if (rdn.Length == 0)
             {
-                throw new ArgumentException("Value cannot be empty", nameof(subjectDn));
+                throw new ArgumentException("At least one RDN must be given.");
             }
-            try
+
+            foreach (string d in rdn)
             {
-                X500DistinguishedName dname = new X500DistinguishedName(subjectDn);
-                _rdnList = GetRdnList(dname);
-            }
-            catch (Exception ex)
-            {
-                throw new ArgumentException(nameof(subjectDn) + " is invalid.", ex);
+                if (string.IsNullOrEmpty(d))
+                {
+                    throw new ArgumentException("RDN cannot be empty.");
+                }
+                try
+                {
+                    X500DistinguishedName dname = new X500DistinguishedName(d);
+                    foreach (string s in GetRdnList(dname))
+                    {
+                        if (!_rdnList.Contains(s))
+                        {
+                            _rdnList.Add(s);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new ArgumentException("Invalid RDN: " + d, ex);
+                }
             }
         }
 
         /// <summary>
-        /// Checks if certificate contains rdn selectors
+        /// Checks if certificate subject contains specified RDNs.
         /// </summary>
         /// <param name="certificate">certificate to check</param>
         /// <returns></returns>
@@ -113,7 +126,7 @@ namespace Guardtime.KSI.Crypto.Microsoft.Crypto
         }
 
         /// <summary>
-        /// Checks if certificate contains rdn selectors
+        /// Checks if certificate subject contains specified RDNs.
         /// </summary>
         /// <param name="certificate">certificate to check</param>
         /// <returns></returns>

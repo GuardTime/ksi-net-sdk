@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -20,7 +20,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -28,6 +27,7 @@ using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Hashing;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Signature;
+using Guardtime.KSI.Test.Properties;
 using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
@@ -39,21 +39,57 @@ namespace Guardtime.KSI.Test.Signature
         [Test]
         public void TestCreateAggregationHashChainOk()
         {
-            AggregationHashChain aggregationHashChain = GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Ok);
+            AggregationHashChain aggregationHashChain = GetAggregationHashChainFromFile(Resources.AggregationHashChain_Ok);
+            Assert.AreEqual(9, aggregationHashChain.Count, "Invalid amount of child TLV objects");
+            Assert.IsNotNull(aggregationHashChain.GetInputData(), "Unexpected input data.");
+        }
+
+        [Test]
+        public void TestCreateAggregationHashChainFromChildTags()
+        {
+            AggregationHashChain aggregationHashChain = new AggregationHashChain(false, false, GetAggregationHashChainFromFile(Resources.AggregationHashChain_Ok).ToArray());
             Assert.AreEqual(9, aggregationHashChain.Count, "Invalid amount of child TLV objects");
         }
 
         [Test]
         public void TestCreateAggregationHashChainWithLinksOk()
         {
-            AggregationHashChain aggregationHashChain = GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Ok);
-
-            new AggregationHashChain(1, new ulong[] { 1 }, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE")),
-                1, aggregationHashChain.GetChainLinks().ToArray());
+            ReadOnlyCollection<AggregationHashChain.Link> links = GetAggregationHashChainFromFile(Resources.AggregationHashChain_Ok).GetChainLinks();
+            AggregationHashChain newAggregationHashChain = new AggregationHashChain(1, new ulong[] { 1 },
+                new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE")),
+                1, links.ToArray());
+            Assert.AreEqual(links.Count, newAggregationHashChain.GetChainLinks().Count, "Unexpected links count");
+            Assert.AreEqual(LinkDirection.Left, links[0].Direction, "Unexpected link direction");
+            Assert.AreEqual(new DataHash(Base16.Decode("01E8EE4A17C22DFA36839998F24DEC73E78DA7B0A92FF3530570AF98117F406DDF")), links[0].SiblingHash, "Unexpected sibling hash");
+            Assert.IsNull(links[0].Metadata, "Unexpected metadata");
         }
 
         [Test]
-        public void TestCreateAggregationHashChainInvalid()
+        public void TestCreateAggregationHashChainWithoutChainIndex()
+        {
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                new AggregationHashChain(1, null, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE")),
+                    1, new AggregationHashChain.Link[] { });
+            });
+
+            Assert.AreEqual("chainIndex", ex.ParamName);
+        }
+
+        [Test]
+        public void TestCreateAggregationHashChainWithChainLinksNull()
+        {
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                new AggregationHashChain(1, new ulong[] { 1 }, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE")),
+                    1, null);
+            });
+
+            Assert.AreEqual("chainLinks", ex.ParamName);
+        }
+
+        [Test]
+        public void TestCreateAggregationHashChainWithEmptyChainLinks()
         {
             Assert.That(delegate
             {
@@ -63,57 +99,80 @@ namespace Guardtime.KSI.Test.Signature
         }
 
         [Test]
+        public void TestGetOutputHashWithoutResult()
+        {
+            AggregationHashChain aggregationHashChain = GetAggregationHashChainFromFile(Resources.AggregationHashChain_Ok);
+
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                aggregationHashChain.GetOutputHash(null);
+            });
+
+            Assert.AreEqual("result", ex.ParamName);
+        }
+
+        [Test]
+        public void TestGetOutputHash()
+        {
+            AggregationHashChain aggregationHashChain = GetAggregationHashChainFromFile(Resources.AggregationHashChain_Ok);
+            AggregationHashChainResult result = new AggregationHashChainResult(1, aggregationHashChain.InputHash);
+            result = aggregationHashChain.GetOutputHash(result);
+            Assert.AreEqual(new DataHash(Base16.Decode("0116FF519501549E59F94952234BEAE90D1AB708901AF7B3F92B88B6A441969541")), result.Hash, "Unexpected output hash.");
+            Assert.AreEqual(29, result.Level, "Unexpected level.");
+        }
+
+        [Test]
         public void TestGetLocationPointer()
         {
             Assert.AreEqual(63,
                 AggregationHashChain.CalcLocationPointer(new List<AggregationHashChain.Link>
                 {
-                    new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.Metadata("test client", "test machine id"), 0),
-                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE")), null, 0),
-                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("0160D25FD6F2A962B41F20CFC2DD9CC62C9C802EADB08E8F15E60D0316E778ACDC")), null, 0),
-                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01F2960B44B6846AE20FD4169D599D9F1C405A6CB1CBAA5B3179A06B3D1DB92166")), null, 0),
-                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01F2960B44B6846AE20FD4169D599D9F1C405A6CB1CBAA5B3179A06B3D1DB92166")), null, 0),
+                    new AggregationHashChain.Link(LinkDirection.Left, new AggregationHashChain.Metadata("test client", "test machine id")),
+                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE"))),
+                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("0160D25FD6F2A962B41F20CFC2DD9CC62C9C802EADB08E8F15E60D0316E778ACDC"))),
+                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01F2960B44B6846AE20FD4169D599D9F1C405A6CB1CBAA5B3179A06B3D1DB92166"))),
+                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01F2960B44B6846AE20FD4169D599D9F1C405A6CB1CBAA5B3179A06B3D1DB92166"))),
                 }.ToArray()), "Invalid location pointer.");
 
             Assert.AreEqual(51,
                 AggregationHashChain.CalcLocationPointer(new List<AggregationHashChain.Link>
                 {
-                    new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.Metadata("test client", "test machine id"), 0),
-                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE")), null, 0),
-                    new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("0160D25FD6F2A962B41F20CFC2DD9CC62C9C802EADB08E8F15E60D0316E778ACDC")), null, 0),
-                    new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01F2960B44B6846AE20FD4169D599D9F1C405A6CB1CBAA5B3179A06B3D1DB92166")), null, 0),
-                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01F2960B44B6846AE20FD4169D599D9F1C405A6CB1CBAA5B3179A06B3D1DB92166")), null, 0),
+                    new AggregationHashChain.Link(LinkDirection.Left, "test client", "test machine id"),
+                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE"))),
+                    new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("0160D25FD6F2A962B41F20CFC2DD9CC62C9C802EADB08E8F15E60D0316E778ACDC"))),
+                    new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01F2960B44B6846AE20FD4169D599D9F1C405A6CB1CBAA5B3179A06B3D1DB92166"))),
+                    new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01F2960B44B6846AE20FD4169D599D9F1C405A6CB1CBAA5B3179A06B3D1DB92166"))),
                 }.ToArray()), "Invalid location pointer.");
 
             Assert.AreEqual(23, AggregationHashChain.CalcLocationPointer(new List<AggregationHashChain.Link>
             {
-                new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.Metadata("test client", "test machine id"), 0),
-                new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE")), null, 0),
-                new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("0160D25FD6F2A962B41F20CFC2DD9CC62C9C802EADB08E8F15E60D0316E778ACDC")), null, 0),
-                new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01F2960B44B6846AE20FD4169D599D9F1C405A6CB1CBAA5B3179A06B3D1DB92166")), null, 0),
+                new AggregationHashChain.Link(LinkDirection.Left, new AggregationHashChain.Metadata("test client", "test machine id")),
+                new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE"))),
+                new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("0160D25FD6F2A962B41F20CFC2DD9CC62C9C802EADB08E8F15E60D0316E778ACDC"))),
+                new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01F2960B44B6846AE20FD4169D599D9F1C405A6CB1CBAA5B3179A06B3D1DB92166"))),
             }.ToArray()), "Invalid location pointer.");
 
             Assert.AreEqual(21, AggregationHashChain.CalcLocationPointer(new List<AggregationHashChain.Link>
             {
-                new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.Metadata("test client", "test machine id"), 0),
-                new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE")), null, 0),
-                new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("0160D25FD6F2A962B41F20CFC2DD9CC62C9C802EADB08E8F15E60D0316E778ACDC")), null, 0),
-                new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01F2960B44B6846AE20FD4169D599D9F1C405A6CB1CBAA5B3179A06B3D1DB92166")), null, 0),
+                new AggregationHashChain.Link(LinkDirection.Left, new AggregationHashChain.Metadata("test client", "test machine id")),
+                new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE"))),
+                new AggregationHashChain.Link(LinkDirection.Left, new DataHash(Base16.Decode("0160D25FD6F2A962B41F20CFC2DD9CC62C9C802EADB08E8F15E60D0316E778ACDC"))),
+                new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01F2960B44B6846AE20FD4169D599D9F1C405A6CB1CBAA5B3179A06B3D1DB92166"))),
             }.ToArray()), "Invalid location pointer.");
 
             Assert.AreEqual(9, AggregationHashChain.CalcLocationPointer(new List<AggregationHashChain.Link>
             {
-                new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.Metadata("test client", "test machine id"), 0),
-                new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE")), null, 0),
-                new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("0160D25FD6F2A962B41F20CFC2DD9CC62C9C802EADB08E8F15E60D0316E778ACDC")), null, 0),
+                new AggregationHashChain.Link(LinkDirection.Left, new AggregationHashChain.Metadata("test client", "test machine id")),
+                new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE"))),
+                new AggregationHashChain.Link(LinkDirection.Right, new DataHash(Base16.Decode("0160D25FD6F2A962B41F20CFC2DD9CC62C9C802EADB08E8F15E60D0316E778ACDC"))),
             }.ToArray()), "Invalid location pointer.");
         }
 
         [Test]
         public void AggregationHashChainLinkSequenceNumberTest()
         {
-            AggregationHashChain.Link aggregationHashChain = new AggregationHashChain.Link(LinkDirection.Left, null,
-                new AggregationHashChain.Metadata("test client", "test machine id", 1, 2), 0);
+            AggregationHashChain.Link aggregationHashChain =
+                new AggregationHashChain.Link(LinkDirection.Left, "test client", "test machine id", 1, 2);
 
             AggregationHashChain.Metadata metadata = aggregationHashChain.Metadata;
 
@@ -124,37 +183,67 @@ namespace Guardtime.KSI.Test.Signature
         [Test]
         public void AggregationHashChainLinkSequenceNumberMissingTest()
         {
-            AggregationHashChain.Link aggregationHashChain = new AggregationHashChain.Link(LinkDirection.Left, null,
-                new AggregationHashChain.Metadata("test client", "test machine id"), 0);
+            AggregationHashChain.Link aggregationHashChain = new AggregationHashChain.Link(LinkDirection.Left, new AggregationHashChain.Metadata("test client"));
 
             AggregationHashChain.Metadata metadata = aggregationHashChain.Metadata;
 
+            Assert.IsNull(metadata.MachineId, "Aggregation hash chain link machine id should match");
             Assert.IsNull(metadata.SequenceNumber, "Aggregation hash chain link metadata sequnece number should match");
             Assert.IsNull(metadata.RequestTime, "Aggregation hash chain link metadata request time should match");
         }
 
         [Test]
+        public void AggregationHashChainLinkMissingSiblingHashTest()
+        {
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                new AggregationHashChain.Link(LinkDirection.Left, (DataHash)null);
+            });
+
+            Assert.AreEqual("siblingHash", ex.ParamName);
+        }
+
+        [Test]
+        public void AggregationHashChainLinkMissingMetadataTest()
+        {
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                new AggregationHashChain.Link(LinkDirection.Left, (AggregationHashChain.Metadata)null);
+            });
+
+            Assert.AreEqual("metadata", ex.ParamName);
+        }
+
+        [Test]
+        public void AggregationHashChainLinkMissingClientIdTest()
+        {
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(delegate
+            {
+                new AggregationHashChain.Link(LinkDirection.Left, (string)null);
+            });
+
+            Assert.AreEqual("clientId", ex.ParamName);
+        }
+
+        [Test]
         public void TestGetLocationPointerWithMixedAggregationChains()
         {
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Properties.Resources.KsiSignature_Ok_With_Mixed_Aggregation_Chains), FileMode.Open))
-            {
-                IKsiSignature signature = new KsiSignatureFactory().Create(stream);
-                ReadOnlyCollection<AggregationHashChain> hashChains = signature.GetAggregationHashChains();
-                ulong[] index = hashChains[0].GetChainIndex();
-                int i = index.Length - 1;
+            IKsiSignature signature = TestUtil.GetSignature(Resources.KsiSignature_Ok_With_Mixed_Aggregation_Chains);
+            ReadOnlyCollection<AggregationHashChain> hashChains = signature.GetAggregationHashChains();
+            ulong[] index = hashChains[0].GetChainIndex();
+            int i = index.Length - 1;
 
-                foreach (AggregationHashChain chain in hashChains)
-                {
-                    ReadOnlyCollection<AggregationHashChain.Link> links = chain.GetChainLinks();
-                    Assert.AreEqual(index[i--], AggregationHashChain.CalcLocationPointer(links.ToArray()), "Location pointers do not match.");
-                }
+            foreach (AggregationHashChain chain in hashChains)
+            {
+                ReadOnlyCollection<AggregationHashChain.Link> links = chain.GetChainLinks();
+                Assert.AreEqual(index[i--], AggregationHashChain.CalcLocationPointer(links.ToArray()), "Location pointers do not match.");
             }
         }
 
         [Test]
         public void TestAggregationHashChainOkMissingOptionals()
         {
-            AggregationHashChain aggregationHashChain = GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Ok_Missing_Optionals);
+            AggregationHashChain aggregationHashChain = GetAggregationHashChainFromFile(Resources.AggregationHashChain_Ok_Missing_Optionals);
             Assert.AreEqual(8, aggregationHashChain.Count, "Invalid amount of child TLV objects");
         }
 
@@ -163,7 +252,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Extra_Tag);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Invalid_Extra_Tag);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Unknown tag"));
         }
 
@@ -172,7 +261,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Missing_Aggregation_Algorithm);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Invalid_Missing_Aggregation_Algorithm);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one algorithm must exist in aggregation hash chain"));
         }
 
@@ -181,7 +270,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Missing_Aggregation_Time);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Invalid_Missing_Aggregation_Time);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one aggregation time must exist in aggregation hash chain"));
         }
 
@@ -190,7 +279,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Missing_Chain_Index);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Invalid_Missing_Chain_Index);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Chain index is missing in aggregation hash chain"));
         }
 
@@ -199,7 +288,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Missing_Input_Hash);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Invalid_Missing_Input_Hash);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one input hash must exist in aggregation hash chain"));
         }
 
@@ -208,7 +297,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Missing_Links);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Invalid_Missing_Links);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Links are missing in aggregation hash chain"));
         }
 
@@ -217,7 +306,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Multiple_Aggregation_Algorithm);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Invalid_Multiple_Aggregation_Algorithm);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one algorithm must exist in aggregation hash chain"));
         }
 
@@ -226,7 +315,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Multiple_Aggregation_Time);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Invalid_Multiple_Aggregation_Time);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one aggregation time must exist in aggregation hash chain"));
         }
 
@@ -235,7 +324,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Multiple_Input_Data);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Invalid_Multiple_Input_Data);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Only one input data value is allowed in aggregation hash chain"));
         }
 
@@ -244,7 +333,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Multiple_Input_Hash);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Invalid_Multiple_Input_Hash);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one input hash must exist in aggregation hash chain"));
         }
 
@@ -253,14 +342,14 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Invalid_Type);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Invalid_Type);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Invalid tag type! Class: AggregationHashChain; Type: 0x802;"));
         }
 
         [Test]
         public void TestAggregationHashChainLinkOkMissingOptionals()
         {
-            GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Ok_Missing_Optionals);
+            GetAggregationHashChainFromFile(Resources.AggregationHashChain_Link_Ok_Missing_Optionals);
         }
 
         [Test]
@@ -268,7 +357,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_All_Tags_Defined);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Link_Invalid_All_Tags_Defined);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one of three from sibling hash, legacy id or metadata must exist in aggregation hash chain link"));
         }
 
@@ -277,7 +366,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_Empty);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Link_Invalid_Empty);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one of three from sibling hash, legacy id or metadata must exist in aggregation hash chain link"));
         }
 
@@ -286,7 +375,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_Extra_Tag);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Link_Invalid_Extra_Tag);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Unknown tag"));
         }
 
@@ -295,7 +384,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_Metadata_Metahash_No_SiblingHash);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Link_Invalid_Metadata_Metahash_No_SiblingHash);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one of three from sibling hash, legacy id or metadata must exist in aggregation hash chain link"));
         }
 
@@ -304,7 +393,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_Multiple_LevelCorrection);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Link_Invalid_Multiple_LevelCorrection);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Only one levelcorrection value is allowed in aggregation hash chain link"));
         }
 
@@ -313,7 +402,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_Multiple_Metadata);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Link_Invalid_Multiple_Metadata);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one of three from sibling hash, legacy id or metadata must exist in aggregation hash chain link"));
         }
 
@@ -322,7 +411,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_Multiple_Metahash);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Link_Invalid_Multiple_Metahash);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one of three from sibling hash, legacy id or metadata must exist in aggregation hash chain link"));
         }
 
@@ -331,7 +420,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_Multiple_Siblinghash);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Link_Invalid_Multiple_Siblinghash);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one of three from sibling hash, legacy id or metadata must exist in aggregation hash chain link"));
         }
 
@@ -340,7 +429,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_SiblingHash_Metadata_No_MetaHash);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Link_Invalid_SiblingHash_Metadata_No_MetaHash);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one of three from sibling hash, legacy id or metadata must exist in aggregation hash chain link"));
         }
 
@@ -349,14 +438,14 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Link_Invalid_SiblingHash_MetaHash_No_Metadata);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Link_Invalid_SiblingHash_MetaHash_No_Metadata);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one of three from sibling hash, legacy id or metadata must exist in aggregation hash chain link"));
         }
 
         [Test]
         public void TestAggregationHashChainMetadataOkMissingOptionals()
         {
-            GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Metadata_Ok_Missing_Optionals);
+            GetAggregationHashChainFromFile(Resources.AggregationHashChain_Metadata_Ok_Missing_Optionals);
         }
 
         [Test]
@@ -364,7 +453,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Metadata_Invalid_Extra_Tag);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Metadata_Invalid_Extra_Tag);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Unknown tag"));
         }
 
@@ -373,7 +462,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Metadata_Invalid_Missing_Client_id);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Metadata_Invalid_Missing_Client_id);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one client id must exist in aggregation hash chain link metadata"));
         }
 
@@ -382,7 +471,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Metadata_Invalid_Multiple_Client_Id);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Metadata_Invalid_Multiple_Client_Id);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Exactly one client id must exist in aggregation hash chain link metadata"));
         }
 
@@ -391,7 +480,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Metadata_Invalid_Multiple_Machine_Id);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Metadata_Invalid_Multiple_Machine_Id);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Only one machine id is allowed in aggregation hash chain link metadata"));
         }
 
@@ -400,7 +489,7 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Metadata_Invalid_Multiple_Request_Time);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Metadata_Invalid_Multiple_Request_Time);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Only one request time is allowed in aggregation hash chain link metadata"));
         }
 
@@ -409,8 +498,50 @@ namespace Guardtime.KSI.Test.Signature
         {
             Assert.That(delegate
             {
-                GetAggregationHashChainFromFile(Properties.Resources.AggregationHashChain_Metadata_Invalid_Multiple_Sequence_Number);
+                GetAggregationHashChainFromFile(Resources.AggregationHashChain_Metadata_Invalid_Multiple_Sequence_Number);
             }, Throws.TypeOf<TlvException>().With.Message.StartWith("Only one sequence number is allowed in aggregation hash chain link metadata"));
+        }
+
+        [Test]
+        public void TestLinksEqualWithMetadata()
+        {
+            Assert.AreEqual(new AggregationHashChain.Link(LinkDirection.Left, new AggregationHashChain.Metadata("test client", "test machine id")),
+            new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.Metadata("test client", "test machine id")));
+
+            Assert.AreEqual(new AggregationHashChain.Link(LinkDirection.Left, new AggregationHashChain.Metadata("test client", "test machine id")),
+            new AggregationHashChain.Link(LinkDirection.Left, "test client", "test machine id"));
+
+            Assert.AreEqual(new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.Metadata("test client", "test machine id")),
+            new AggregationHashChain.Link(LinkDirection.Left, "test client", "test machine id"));
+        }
+
+        [Test]
+        public void TestLinksEqualWithSiblingHash()
+        {
+            DataHash dataHash = new DataHash(Base16.Decode("0160D25FD6F2A962B41F20CFC2DD9CC62C9C802EADB08E8F15E60D0316E778ACDC"));
+            Assert.AreEqual(new AggregationHashChain.Link(LinkDirection.Left, dataHash),
+            new AggregationHashChain.Link(LinkDirection.Left, dataHash, null));
+        }
+
+        [Test]
+        public void TestLinksEqualWithMetadataAndLevel()
+        {
+            Assert.AreEqual(new AggregationHashChain.Link(LinkDirection.Left, new AggregationHashChain.Metadata("test client", "test machine id", 96, 74), 14),
+            new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.Metadata("test client", "test machine id", 96, 74), 14));
+
+            Assert.AreEqual(new AggregationHashChain.Link(LinkDirection.Left, new AggregationHashChain.Metadata("test client", "test machine id", 12, 45), 75),
+            new AggregationHashChain.Link(LinkDirection.Left, "test client", "test machine id", 12, 45, 75));
+
+            Assert.AreEqual(new AggregationHashChain.Link(LinkDirection.Left, null, new AggregationHashChain.Metadata("test client", "test machine id", 91, 72), 125),
+            new AggregationHashChain.Link(LinkDirection.Left, "test client", "test machine id", 91, 72, 125));
+        }
+
+        [Test]
+        public void TestLinksEqualWithSiblingHashAndLevel()
+        {
+            DataHash dataHash = new DataHash(Base16.Decode("01404572B3A03FCBB57D265903A153B24237F277723D1B24A199F9F009A4EB23BE"));
+            Assert.AreEqual(new AggregationHashChain.Link(LinkDirection.Left, dataHash, 56),
+            new AggregationHashChain.Link(LinkDirection.Left, dataHash, null, 56));
         }
 
         [Test]
@@ -546,12 +677,7 @@ namespace Guardtime.KSI.Test.Signature
 
         private static AggregationHashChain GetAggregationHashChainFromFile(string file)
         {
-            using (TlvReader reader = new TlvReader(new FileStream(Path.Combine(TestSetup.LocalPath, file), FileMode.Open)))
-            {
-                AggregationHashChain aggregationHashChain = new AggregationHashChain(reader.ReadTag());
-
-                return aggregationHashChain;
-            }
+            return new AggregationHashChain(TestUtil.GetRawTag(file));
         }
     }
 }

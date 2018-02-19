@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -29,7 +29,7 @@ namespace Guardtime.KSI.Hashing
         /// <summary>
         ///     SHA1 Hash Algorithm
         /// </summary>
-        public static readonly HashAlgorithm Sha1 = new HashAlgorithm("SHA1", 0x0, 20, AlgorithmStatus.NotTrusted);
+        public static readonly HashAlgorithm Sha1 = new HashAlgorithm("SHA1", 0x0, 20, AlgorithmStatus.NotTrusted, null, 1467331200); // 1467331200 = 2016-07-01
 
         /// <summary>
         ///     SHA2-256 Hash Algorithm

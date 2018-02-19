@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -18,7 +18,6 @@
  */
 
 using System.Collections.ObjectModel;
-using NLog;
 
 namespace Guardtime.KSI.Signature.Verification.Rule
 {
@@ -28,8 +27,6 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class AggregationHashChainConsistencyRule : VerificationRule
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
         /// <see cref="VerificationRule.Verify" />
         public override VerificationResult Verify(IVerificationContext context)
         {
@@ -45,7 +42,8 @@ namespace Guardtime.KSI.Signature.Verification.Rule
 
                 if (aggregationHashChain.InputHash != chainResult.Hash)
                 {
-                    Logger.Warn("Previous aggregation hash chain output hash {0} does not match current input hash {1}.", chainResult.Hash, aggregationHashChain.InputHash);
+                    Logger.Debug("Aggregation hash chains not consistent. Aggregation hash chain input hash {0} does not match previous aggregation hash chain output hash {1}.",
+                        aggregationHashChain.InputHash, chainResult.Hash);
                     return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Int01);
                 }
 

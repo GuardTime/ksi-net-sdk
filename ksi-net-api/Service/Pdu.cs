@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -128,12 +128,12 @@ namespace Guardtime.KSI.Service
         /// <param name="tagType">PDU TLV tag type</param>
         /// <param name="header">PDU header</param>
         /// <param name="payload">aggregation payload</param>
-        /// <param name="macAlgorithm">MAC algorithm</param>
+        /// <param name="hmacAlgorithm">MAC algorithm</param>
         /// <param name="key">hmac key</param>
-        protected Pdu(uint tagType, PduHeader header, PduPayload payload, HashAlgorithm macAlgorithm, byte[] key)
-            : base(tagType, false, false, new ITlvTag[] { header, payload, GetEmptyMacTag(macAlgorithm) })
+        protected Pdu(uint tagType, PduHeader header, PduPayload payload, HashAlgorithm hmacAlgorithm, byte[] key)
+            : base(tagType, false, false, new ITlvTag[] { header, payload, GetEmptyMacTag(hmacAlgorithm) })
         {
-            SetMacValue(macAlgorithm, key);
+            SetMacValue(hmacAlgorithm, key);
         }
 
         /// <summary>

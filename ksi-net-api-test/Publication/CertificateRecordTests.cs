@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -17,8 +17,10 @@
  * reserves and retains all trademark rights.
  */
 
+using Guardtime.KSI.Exceptions;
 using Guardtime.KSI.Parser;
 using Guardtime.KSI.Publication;
+using Guardtime.KSI.Utils;
 using NUnit.Framework;
 
 namespace Guardtime.KSI.Test.Publication
@@ -26,6 +28,56 @@ namespace Guardtime.KSI.Test.Publication
     [TestFixture]
     public class CertificateRecordTests
     {
+        [Test]
+        public void CertificationRecordOkTest()
+        {
+            TlvTagBuilder builder = new TlvTagBuilder(Constants.CertificateRecord.TagType, false, false,
+                new ITlvTag[]
+                {
+                    new RawTag(Constants.CertificateRecord.CertificateIdTagType, false, false, new byte[] { 0x2 }),
+                    new RawTag(Constants.CertificateRecord.X509CertificateTagType, false, false, new byte[] { 0x3 }),
+                });
+
+            CertificateRecord tag = new CertificateRecord(builder.BuildTag());
+
+            Assert.That(Util.IsArrayEqual(new byte[] { 0x2 }, tag.CertificateId.Value), "Unexpected certificate id");
+            Assert.That(Util.IsArrayEqual(new byte[] { 0x3 }, tag.X509Certificate.Value), "Unexpected X509 certificate.");
+        }
+
+        [Test]
+        public void CertificationRecordWithoutCertIdTest()
+        {
+            TlvException ex = Assert.Throws<TlvException>(delegate
+            {
+                TlvTagBuilder builder = new TlvTagBuilder(Constants.CertificateRecord.TagType, false, false,
+                    new ITlvTag[]
+                    {
+                        new RawTag(Constants.CertificateRecord.X509CertificateTagType, false, false, new byte[] { 0x3 }),
+                    });
+
+                CertificateRecord tag = new CertificateRecord(builder.BuildTag());
+            });
+
+            Assert.That(ex.Message.StartsWith("Exactly one certificate id must exist in certificate record"), "Unexpected exception message: " + ex.Message);
+        }
+
+        [Test]
+        public void CertificationRecordWithoutCertTest()
+        {
+            TlvException ex = Assert.Throws<TlvException>(delegate
+            {
+                TlvTagBuilder builder = new TlvTagBuilder(Constants.CertificateRecord.TagType, false, false,
+                    new ITlvTag[]
+                    {
+                        new RawTag(Constants.CertificateRecord.CertificateIdTagType, false, false, new byte[] { 0x2 }),
+                    });
+
+                CertificateRecord tag = new CertificateRecord(builder.BuildTag());
+            });
+
+            Assert.That(ex.Message.StartsWith("Exactly one certificate must exist in certificate record"), "Unexpected exception message: " + ex.Message);
+        }
+
         [Test]
         public void ToStringTest()
         {

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -32,23 +32,19 @@ namespace Guardtime.KSI.Signature.Verification.Rule
     /// </summary>
     public sealed class CalendarAuthenticationRecordSignatureVerificationRule : VerificationRule
     {
-        private readonly X509Store _trustStore;
-        private readonly ICertificateSubjectRdnSelector _certificateRdnSelector;
+        /// <summary>
+        /// Create calendar authentication record signature verification rule.
+        /// </summary>
+        public CalendarAuthenticationRecordSignatureVerificationRule()
+        {
+        }
 
         /// <summary>
         /// Create calendar authentication record signature verification rule.
         /// </summary>
-        /// <param name="trustStore">trust store</param>
-        /// <param name="certificateRdnSelector">certificate rdn selector</param>
+        [Obsolete("Use CalendarAuthenticationRecordSignatureVerificationRule() instead.")]
         public CalendarAuthenticationRecordSignatureVerificationRule(X509Store trustStore, ICertificateSubjectRdnSelector certificateRdnSelector)
         {
-            if (certificateRdnSelector == null)
-            {
-                throw new ArgumentNullException(nameof(certificateRdnSelector));
-            }
-
-            _trustStore = trustStore;
-            _certificateRdnSelector = certificateRdnSelector;
         }
 
         /// <see cref="VerificationRule.Verify" />
@@ -65,20 +61,33 @@ namespace Guardtime.KSI.Signature.Verification.Rule
             }
 
             byte[] signedBytes = calendarAuthenticationRecord.PublicationData.Encode();
-            ICryptoSignatureVerifier cryptoSignatureVerifier = CryptoSignatureVerifierFactory.GetCryptoSignatureVerifierByOid(signatureData.SignatureType, _trustStore,
-                _certificateRdnSelector);
-            CryptoSignatureVerificationData data = new CryptoSignatureVerificationData(certificateBytes, signature.AggregationTime);
 
             try
             {
+                ICryptoSignatureVerifier cryptoSignatureVerifier = CryptoSignatureVerifierFactory.GetCryptoSignatureVerifierByOid(signatureData.SignatureType);
+                CryptoSignatureVerificationData data = new CryptoSignatureVerificationData(certificateBytes, signature.AggregationTime);
                 cryptoSignatureVerifier.Verify(signedBytes, signatureData.GetSignatureValue(), data);
             }
-            catch (PkiVerificationFailedCertNotValidException)
+            catch (PkiVerificationFailedCertNotValidException ex)
             {
+                Logger.Debug(ex);
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Key03);
             }
-            catch (PkiVerificationFailedException)
+            catch (PkiVerificationFailedException ex)
             {
+                Logger.Debug("Could not verify signature.{0}Signature type: {1}{0}{2}{0}{3}",
+                    Environment.NewLine,
+                    signatureData.SignatureType,
+                    ex,
+                    ex.AdditionalInfo);
+                return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Key02);
+            }
+            catch (PkiVerificationErrorException ex)
+            {
+                Logger.Debug("Signature verification error.{0}Signature type: {1}{0}{2}",
+                    Environment.NewLine,
+                    signatureData.SignatureType,
+                    ex);
                 return new VerificationResult(GetRuleName(), VerificationResultCode.Fail, VerificationError.Key02);
             }
 

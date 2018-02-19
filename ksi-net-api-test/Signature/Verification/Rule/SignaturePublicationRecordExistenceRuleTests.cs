@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -17,10 +17,6 @@
  * reserves and retains all trademark rights.
  */
 
-using System;
-using System.IO;
-using Guardtime.KSI.Exceptions;
-using Guardtime.KSI.Signature;
 using Guardtime.KSI.Signature.Verification;
 using Guardtime.KSI.Signature.Verification.Rule;
 using Guardtime.KSI.Test.Properties;
@@ -29,86 +25,29 @@ using NUnit.Framework;
 namespace Guardtime.KSI.Test.Signature.Verification.Rule
 {
     [TestFixture]
-    public class SignaturePublicationRecordExistenceRuleTests
+    public class SignaturePublicationRecordExistenceRuleTests : RuleTestsBase
     {
-        [Test]
-        public void TestMissingContext()
-        {
-            SignaturePublicationRecordExistenceRule rule = new SignaturePublicationRecordExistenceRule();
-
-            // Argument null exception when no context
-            Assert.Throws<ArgumentNullException>(delegate
-            {
-                rule.Verify(null);
-            });
-        }
-
-        [Test]
-        public void TestContextMissingSignature()
-        {
-            SignaturePublicationRecordExistenceRule rule = new SignaturePublicationRecordExistenceRule();
-
-            // Verification exception on missing KSI signature
-            Assert.Throws<KsiVerificationException>(delegate
-            {
-                TestVerificationContext context = new TestVerificationContext();
-
-                rule.Verify(context);
-            });
-        }
+        public override VerificationRule Rule => new SignaturePublicationRecordExistenceRule();
 
         [Test]
         public void TestRfc3161SignaturePublicationRecord()
         {
-            SignaturePublicationRecordExistenceRule rule = new SignaturePublicationRecordExistenceRule();
-
             // Check legacy signature
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Legacy_Ok_With_Publication_Record), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext
-                {
-                    Signature = new KsiSignatureFactory().Create(stream)
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            CreateSignatureAndVerify(Resources.KsiSignature_Legacy_Ok_With_Publication_Record, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestSignaturePublicationRecord()
         {
-            SignaturePublicationRecordExistenceRule rule = new SignaturePublicationRecordExistenceRule();
-
             // Check signature
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok_With_Publication_Record), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext
-                {
-                    Signature = new KsiSignatureFactory().Create(stream)
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Ok, verificationResult.ResultCode);
-            }
+            CreateSignatureAndVerify(Resources.KsiSignature_Ok_With_Publication_Record, VerificationResultCode.Ok);
         }
 
         [Test]
         public void TestSignatureMissingPublicationRecord()
         {
-            SignaturePublicationRecordExistenceRule rule = new SignaturePublicationRecordExistenceRule();
-
-            // Check invalid signature without publication record
-            using (FileStream stream = new FileStream(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok), FileMode.Open))
-            {
-                TestVerificationContext context = new TestVerificationContext
-                {
-                    Signature = new KsiSignatureFactory().Create(stream)
-                };
-
-                VerificationResult verificationResult = rule.Verify(context);
-                Assert.AreEqual(VerificationResultCode.Na, verificationResult.ResultCode);
-            }
+            // Check signature without publication record
+            CreateSignatureAndVerify(Resources.KsiSignature_Ok, VerificationResultCode.Na);
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -196,7 +196,7 @@ namespace Guardtime.KSI.Signature
             /// <summary>
             /// Machine identifier
             /// </summary>
-            public string MachineId => _machineId.Value;
+            public string MachineId => _machineId?.Value;
 
             /// <summary>
             /// A local sequence number of a request assigned by the machine that created the link

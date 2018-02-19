@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2017 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -20,15 +20,15 @@
 namespace Guardtime.KSI.Crypto
 {
     /// <summary>
-    /// Certificate subject rdn component
+    /// RDN within subject of a certificate.
     /// </summary>
     public class CertificateSubjectRdn
     {
         /// <summary>
-        /// Create Certificate subject rdn component instance
+        /// Create certificate subject RDN instance
         /// </summary>
-        /// <param name="oid"></param>
-        /// <param name="value"></param>
+        /// <param name="oid">Oid or name</param>
+        /// <param name="value">Value</param>
         public CertificateSubjectRdn(string oid, string value)
         {
             Oid = oid;
@@ -36,12 +36,12 @@ namespace Guardtime.KSI.Crypto
         }
 
         /// <summary>
-        /// Oid representing an RDN.
+        /// Oid or name.
         /// </summary>
         public string Oid { get; set; }
 
         /// <summary>
-        /// RDN component value.
+        /// Value.
         /// </summary>
         public string Value { get; set; }
     }
