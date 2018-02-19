@@ -1,5 +1,5 @@
 Version 3.10
-2018-02-19 3.10.X
+2018-02-19 3.10.523
 
 * FEATURE: Added High availability services (KSINETAPI-122)
 * FEATURE: Handle pushed configuration updates from Aggregator and Extender (KSINETAPI-128)
