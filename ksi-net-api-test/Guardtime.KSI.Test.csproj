@@ -1832,9 +1832,6 @@
     <None Include="resources\signature\shared\policy-verification-signatures\resources\cert-file-for-deprecated-algorithm-in-calendar-chain.pem">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\shared\policy-verification-signatures\resources\cert-for-publication-based-verification-gen2.pem">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="resources\signature\shared\policy-verification-signatures\resources\extender-response-for-CAL-03.tlv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -1850,7 +1847,7 @@
     <None Include="resources\signature\shared\policy-verification-signatures\resources\publications-file-for-deprecated-algorithm-in-calendar-chain.bin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="resources\signature\shared\policy-verification-signatures\resources\publications-file-for-publication-based-verification-gen2.bin">
+    <None Include="resources\signature\shared\policy-verification-signatures\resources\publications-file-resigned.bin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="resources\signature\shared\policy-verification-signatures\resources\publications-file.bin">
