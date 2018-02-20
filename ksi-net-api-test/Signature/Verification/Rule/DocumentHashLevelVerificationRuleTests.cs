@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2013-2016 Guardtime, Inc.
+ * Copyright 2013-2018 Guardtime, Inc.
  *
  * This file is part of the Guardtime client SDK.
  *
@@ -34,7 +34,8 @@ namespace Guardtime.KSI.Test.Signature.Verification.Rule
         [Test]
         public void TestDocumentHashWithNoLevel()
         {
-            CreateSignatureAndVerify(Resources.KsiSignature_Ok, new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")), VerificationResultCode.Ok);
+            CreateSignatureAndVerify(Resources.KsiSignature_Ok, new DataHash(Base16.Decode("0111A700B0C8066C47ECBA05ED37BC14DCADB238552D86C659342D1D7E87B8772D")),
+                VerificationResultCode.Ok);
         }
 
         [Test]
