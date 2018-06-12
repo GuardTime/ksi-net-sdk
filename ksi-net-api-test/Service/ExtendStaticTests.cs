@@ -217,12 +217,12 @@ namespace Guardtime.KSI.Test.Service
         [Test]
         public void ExtendStaticInvalidCalendarHashChainTest()
         {
-            IKsiSignature signature = new KsiSignatureFactory().Create(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok)));
+            IKsiSignature signature = new KsiSignatureFactory().Create(File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok_Only_Aggregtion_Chains)));
             Ksi ksi = GetStaticKsi(Resources.KsiService_ExtendResponsePdu_Invalid_Signature, 1207047688);
 
             KsiSignatureInvalidContentException ex = Assert.Throws<KsiSignatureInvalidContentException>(delegate
             {
-                ksi.Extend(signature, signature.CalendarHashChain.PublicationData);
+                ksi.Extend(signature);
             });
 
             Assert.That(ex.Message.StartsWith("Signature verification failed"), "Unexpected exception message: " + ex.Message);
@@ -287,12 +287,12 @@ namespace Guardtime.KSI.Test.Service
         public void LegacyExtendStaticInvalidSignatureTest()
         {
             IKsiSignature signature = new KsiSignatureFactory(new EmptyVerificationPolicy()).Create(
-                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Invalid_Calendar_Chain_Input_Hash)));
+                File.ReadAllBytes(Path.Combine(TestSetup.LocalPath, Resources.KsiSignature_Ok_Only_Aggregtion_Chains)));
             Ksi ksi = GetStaticKsi(Resources.KsiService_LegacyExtendResponsePdu, 3491956840, null, PduVersion.v1);
 
             KsiSignatureInvalidContentException ex = Assert.Throws<KsiSignatureInvalidContentException>(delegate
             {
-                ksi.Extend(signature, signature.CalendarHashChain.PublicationData);
+                ksi.Extend(signature);
             });
 
             Assert.That(ex.Message.StartsWith("Signature verification failed"), "Unexpected exception message: " + ex.Message);

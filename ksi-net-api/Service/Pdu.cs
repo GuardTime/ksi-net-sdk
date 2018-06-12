@@ -247,7 +247,7 @@ namespace Guardtime.KSI.Service
 
             if (!calculatedMac.Equals(mac.Value))
             {
-                Logger.Warn("PDU MAC validation failed. Calculated MAC and given MAC do no match.");
+                Logger.Warn("PDU MAC validation failed. Calculated MAC and given MAC do not match.");
                 return false;
             }
 
