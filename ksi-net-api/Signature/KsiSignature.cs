@@ -260,6 +260,11 @@ namespace Guardtime.KSI.Signature
                 throw new ArgumentNullException(nameof(calendarHashChain));
             }
 
+            if (CalendarHashChain != null && !CalendarHashChain.AreRightLinksEqual(calendarHashChain))
+            {
+                throw new KsiException("Right links of signature calendar hash chain and extended calendar hash chain do not match");
+            }
+
             if (publicationRecord == null)
             {
                 publicationRecord = new PublicationRecordInSignature(false, false, calendarHashChain.PublicationData);
