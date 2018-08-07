@@ -1,12 +1,12 @@
 Version 3.11
-2018-08-07 3.11.523
+2018-08-07 3.11.534
 
 * IMPROVEMENT: Calendar chain consistency check in extending (KSINETAPI-145)
 * IMPROVEMENT: Replace Keyless Signature Infrastructure with KSI Blockchain (KSINETAPI-146)
 
 
 Version 3.10
-2018-02-19 3.10.523
+2018-02-19 3.10.524
 
 * FEATURE: Added High availability services (KSINETAPI-122)
 * FEATURE: Handle pushed configuration updates from Aggregator and Extender (KSINETAPI-128)
