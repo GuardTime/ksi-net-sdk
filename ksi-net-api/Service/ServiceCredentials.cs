@@ -41,7 +41,7 @@ namespace Guardtime.KSI.Service
         }
 
         /// <summary>
-        ///     Create servoce credentials object from login ID and login key as string.
+        ///     Create service credentials object from login ID and login key as string.
         /// </summary>
         /// <param name="loginId">login ID</param>
         /// <param name="loginKey">login key</param>
